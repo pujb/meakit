@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_psth_by_trigger</title>
+  <meta name="keywords" content="util_psth_by_trigger">
+  <meta name="description" content="UTIL_PSTH_BY_TRIGGER 工具函数：利用MCS的信息，计算PSTH">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_psth_by_trigger
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PSTH_BY_TRIGGER 工具函数：利用MCS的信息，计算PSTH</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ ax_x result ] = util_psth_by_trigger( triggerif,spif,chid,binsize,timescope,trigger_range,isManualTrigger,isNormalized) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PSTH_BY_TRIGGER 工具函数：利用MCS的信息，计算PSTH
+   triggerif = trigger information from mcd file
+   spif = spike information from mcd file
+   binsize = bin width of each histogram in millisecond
+   timescope = [start end], of the time scope of counting spikes
+   trigger_range = [start end], triggers counts into the psth
+   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike
+   isNormalized = 是否归一化，如果不归一化，则是Counts/Bin，但是如果归一化的话，
+                  用的算法和NEX是一样的，Nex是除以Trigger的数目来归一的。
+   ax_x = X坐标轴
+   result = Y值
+   
+   示例：
+   [x y] = util_psth_by_trigger(triggerif,spif,87,5,[-50 450],[1 20],1,1)
+   是计算通道87上，每5ms一个bin，Trigger前后-50,450间的psth，计算Trigger的范围
+   是第1-20个Trigger，这个Trigger是忽略Trigger前后0.5 ms（手动提Trigger的伪信息）
+   的信息，并归一化。
+
+   蒲江波 2009年5月</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="script_trigger_psth_amplitude_distribution.html" class="code" title="function [] = script_trigger_psth_amplitude_distribution()">script_trigger_psth_amplitude_distribution</a>	SCRIPT_TRIGGER_PSTH_AMPLITUDE_DISTRIBUTION 脚本：处理刺激Trigger后的Spike统计信息</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ ax_x result ] = util_psth_by_trigger( triggerif, </a><span class="keyword">...</span>
+0002                                             spif, <span class="keyword">...</span>
+0003                                             chid, <span class="keyword">...</span>
+0004                                             binsize, <span class="keyword">...</span>
+0005                                             timescope, <span class="keyword">...</span>
+0006                                             trigger_range, <span class="keyword">...</span>
+0007                                             isManualTrigger, <span class="keyword">...</span>
+0008                                             isNormalized)
+0009 <span class="comment">%UTIL_PSTH_BY_TRIGGER 工具函数：利用MCS的信息，计算PSTH</span>
+0010 <span class="comment">%   triggerif = trigger information from mcd file</span>
+0011 <span class="comment">%   spif = spike information from mcd file</span>
+0012 <span class="comment">%   binsize = bin width of each histogram in millisecond</span>
+0013 <span class="comment">%   timescope = [start end], of the time scope of counting spikes</span>
+0014 <span class="comment">%   trigger_range = [start end], triggers counts into the psth</span>
+0015 <span class="comment">%   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike</span>
+0016 <span class="comment">%   isNormalized = 是否归一化，如果不归一化，则是Counts/Bin，但是如果归一化的话，</span>
+0017 <span class="comment">%                  用的算法和NEX是一样的，Nex是除以Trigger的数目来归一的。</span>
+0018 <span class="comment">%   ax_x = X坐标轴</span>
+0019 <span class="comment">%   result = Y值</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   示例：</span>
+0022 <span class="comment">%   [x y] = util_psth_by_trigger(triggerif,spif,87,5,[-50 450],[1 20],1,1)</span>
+0023 <span class="comment">%   是计算通道87上，每5ms一个bin，Trigger前后-50,450间的psth，计算Trigger的范围</span>
+0024 <span class="comment">%   是第1-20个Trigger，这个Trigger是忽略Trigger前后0.5 ms（手动提Trigger的伪信息）</span>
+0025 <span class="comment">%   的信息，并归一化。</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%   蒲江波 2009年5月</span>
+0028 
+0029 <span class="comment">% 通道序号转换</span>
+0030 hwid = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(chid);
+0031 
+0032 <span class="comment">% 计算开始和终止统计的时间区间，要注意，给出的时间区间必须是能够包含0点的</span>
+0033 firstbin = timescope(1);
+0034 lastbin = timescope(2);
+0035 edges = firstbin : binsize : lastbin;
+0036 
+0037 <span class="comment">% 返回ax_x，是X轴的坐标系</span>
+0038 ax_x = edges;
+0039 
+0040 <span class="comment">% 检查时间区间内是否包含0点</span>
+0041 <span class="keyword">if</span> isempty(find(edges==0, 1))
+0042     error(<span class="string">'Zero must be contained in the time scope.'</span>);
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% 为提高运行速度，预先创建FOR循环中反复用的变量</span>
+0046 this_spif_spiketime = spif.spiketimes{hwid}; <span class="comment">% 运行PSTH通道的SPIF信息复制本</span>
+0047 result_pre = []; <span class="comment">% 用于将各次Trigger的信息相连接。</span>
+0048 
+0049 <span class="keyword">for</span> i = trigger_range(1):trigger_range(2)
+0050     <span class="comment">% 在给定的Trigger中遍历</span>
+0051     this_trigger_time = triggerif.times(i); <span class="comment">% 每次Trigger的具体时间</span>
+0052     
+0053     <span class="comment">% 在SPIF中寻找在给定Trigger周围timescope范围内的Spike，并做直方图统计</span>
+0054         
+0055     <span class="comment">% 将SPIF中在给定Trigger时间范围内的Spike的Timing都转换成以Trigger作为参考系的时间点</span>
+0056     <span class="comment">% 首先找到在Trigger范围(timescope)内的时间点</span>
+0057     this_before = this_trigger_time + timescope(1); <span class="comment">% Trigger前后的实际时间位置</span>
+0058     this_after = this_trigger_time + timescope(2);
+0059     
+0060     <span class="comment">% 计算扫描区间</span>
+0061     this_scanned_range = this_spif_spiketime( <span class="keyword">...</span>
+0062         this_spif_spiketime &gt;= this_before &amp; this_spif_spiketime &lt;= this_after);
+0063    
+0064     <span class="comment">% 然后把这些时间点转化成以Trigger为参考系的时间值</span>
+0065     this_scanned_range = this_scanned_range - this_trigger_time;
+0066     
+0067     <span class="comment">% 若Spike发生在距离Trigger很近的时间段，认为是假信号(0.5 ms内都不算)</span>
+0068     <span class="keyword">if</span> isManualTrigger
+0069         this_scanned_range(abs(this_scanned_range) &lt;= 0.5) = [];
+0070     <span class="keyword">end</span>
+0071     
+0072     <span class="keyword">if</span> ~isempty(this_scanned_range)
+0073         <span class="comment">% 将结果连接成一个向量</span>
+0074         <span class="keyword">if</span> size(this_scanned_range,1) &lt;= size(this_scanned_range,2)
+0075             result_pre = [result_pre this_scanned_range];
+0076         <span class="keyword">else</span>
+0077             result_pre = [result_pre this_scanned_range'];
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080 <span class="keyword">end</span>
+0081 
+0082 result = histc(result_pre,edges);
+0083 
+0084 <span class="comment">% 是否归一化</span>
+0085 <span class="keyword">if</span> isNormalized
+0086     result = result / (trigger_range(2) - trigger_range(1) + 1);
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">end</span>
+0090</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

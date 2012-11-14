@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_nn</title>
+  <meta name="keywords" content="find_nn">
+  <meta name="description" content="FIND_NN Finds k nearest neigbors for all datapoints in the dataset">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>find_nn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FIND_NN Finds k nearest neigbors for all datapoints in the dataset</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [D, ni] = find_nn(X, k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">FIND_NN Finds k nearest neigbors for all datapoints in the dataset
+
+    [D, ni] = find_nn(X, k)
+
+ Finds the k nearest neighbors for all datapoints in the dataset X.
+ In X, rows correspond to the observations and columns to the
+ dimensions. The value of k is the number of neighbors that is
+ stored. The function returns a sparse distance matrix D, in which
+ only the distances to the k nearest neighbors are stored. For
+ equal datapoints, the distance is set to a tolerance value.
+ The method is relatively slow, but has a memory requirement of O(nk).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li><li><a href="find_nn_adaptive.html" class="code" title="function [D, max_k_val, no_dims] = find_nn_adaptive(X)">find_nn_adaptive</a>	FIND_NN Constructs nearest neighbor graph using adaptive nbhd selection</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/intrinsic_dim.html" class="code" title="function no_dims = intrinsic_dim(X, method)">intrinsic_dim</a>	INTRINSIC_DIM Eestimate the intrinsic dimensionality of dataset X</li><li><a href="fastmvu.html" class="code" title="function [mappedX, mapping] = fastmvu(X, no_dims, k, finetune, eig_impl)">fastmvu</a>	FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm</li><li><a href="hlle.html" class="code" title="function mappedX = hlle(X, no_dims, k, eig_impl)">hlle</a>	HLLE Runs the Hessian LLE algorithm</li><li><a href="isomap.html" class="code" title="function [mappedX, mapping] = isomap(X, no_dims, k)">isomap</a>	ISOMAP Runs the Isomap algorithm</li><li><a href="landmark_isomap.html" class="code" title="function [mappedX, mapping] = landmark_isomap(X, no_dims, k, percentage)">landmark_isomap</a>	ISOMAP Runs the Isomap algorithm</li><li><a href="laplacian_eigen.html" class="code" title="function [mappedX, mapping] = laplacian_eigen(X, no_dims, k, sigma, eig_impl)">laplacian_eigen</a>	LAPLACIAN_EIGEN Performs non-linear dimensionality reduction using Laplacian Eigenmaps</li><li><a href="llc.html" class="code" title="function mappedX = llc(X, neighbor, no_dims, R, Z, eig_impl)">llc</a>	LLC Runs the LLC algorithm (given information on the formed factor analyzers)</li><li><a href="lle.html" class="code" title="function [mappedX, mapping] = lle(X, no_dims, k, eig_impl)">lle</a>	LLE Runs the locally linear embedding algorithm</li><li><a href="lltsa.html" class="code" title="function [mappedX, mapping] = lltsa(X, no_dims, k, eig_impl)">lltsa</a>	LLTSA Runs the linear local tangent space alignment algorithm</li><li><a href="lmvu.html" class="code" title="function [mappedX, mapping] = lmvu(X, no_dims, K, LL)">lmvu</a>	LMVU Performs Landmark MVU on dataset X</li><li><a href="lpp.html" class="code" title="function [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl)">lpp</a>	LPP Perform linearity preserving projection</li><li><a href="ltsa.html" class="code" title="function mappedX = ltsa(X, no_dims, k, eig_impl)">ltsa</a>	LTSA Runs the local tangent space alignment algorithm</li><li><a href="npe.html" class="code" title="function [mappedX, mapping] = npe(X, no_dims, k, eig_impl)">npe</a>	NPE Perform the Neighborhood Preserving Embedding algorithm</li><li><a href="spe.html" class="code" title="function Y = spe(X, no_dims, varargin)">spe</a>	SPE Perform the Stochastic Proximity Embedding algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [D, ni] = find_nn(X, k)</a>
+0002 <span class="comment">%FIND_NN Finds k nearest neigbors for all datapoints in the dataset</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    [D, ni] = find_nn(X, k)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Finds the k nearest neighbors for all datapoints in the dataset X.</span>
+0007 <span class="comment">% In X, rows correspond to the observations and columns to the</span>
+0008 <span class="comment">% dimensions. The value of k is the number of neighbors that is</span>
+0009 <span class="comment">% stored. The function returns a sparse distance matrix D, in which</span>
+0010 <span class="comment">% only the distances to the k nearest neighbors are stored. For</span>
+0011 <span class="comment">% equal datapoints, the distance is set to a tolerance value.</span>
+0012 <span class="comment">% The method is relatively slow, but has a memory requirement of O(nk).</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0017 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0018 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0019 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0020 <span class="comment">% maintain the name of the original author.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0023 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0024 
+0025 
+0026     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>) || isempty(k)
+0027         k = 12;
+0028     <span class="keyword">end</span>
+0029     
+0030     <span class="comment">% Perform adaptive neighborhood selection if desired</span>
+0031     <span class="keyword">if</span> ischar(k)
+0032         [D, max_k] = <a href="find_nn_adaptive.html" class="code" title="function [D, max_k_val, no_dims] = find_nn_adaptive(X)">find_nn_adaptive</a>(X);
+0033         ni = zeros(size(X, 1), max_k);
+0034         <span class="keyword">for</span> i=1:size(X, 1)
+0035             tmp = find(D(i,:) ~= 0);
+0036             tmp(tmp == i) = [];
+0037             tmp = [tmp(2:end) zeros(1, max_k - length(tmp) + 1)];
+0038             ni(i,:) = tmp;
+0039         <span class="keyword">end</span>
+0040     
+0041     <span class="comment">% Perform normal neighborhood selection</span>
+0042     <span class="keyword">else</span>
+0043 
+0044         <span class="comment">% Memory conservative implementation</span>
+0045         k = k + 1;
+0046         <span class="keyword">if</span> size(X, 1) &gt; 2000
+0047             X = X';
+0048             n = size(X, 2);
+0049             D = zeros(n, k);
+0050             XX = sum(X .^ 2, 1);
+0051             onez = ones(1,n);
+0052             <span class="keyword">if</span> nargout &gt; 1, ni = zeros(n, k, <span class="string">'uint16'</span>); <span class="keyword">end</span>
+0053             <span class="keyword">for</span> i=1:n
+0054                 p = X(:,i);
+0055                 xx = sum(p .^ 2);
+0056                 xX = p' * X;
+0057                 d = bsxfun(@plus, XX - 2 * xX, xx);
+0058                 [d, ind] = sort(d);
+0059                 d = sqrt(d(1:k));
+0060                 ind = ind(1:k);
+0061                 d(d == 0) = 1e-7;
+0062                 D(i,:) = d;
+0063                 ni(i,:) = ind;
+0064             <span class="keyword">end</span>
+0065             D = sparse(repmat((1:size(ni, 1))', [1 size(ni, 2)]), double(ni(:)), double(D(:)), size(ni, 1), size(ni, 1));
+0066 
+0067         <span class="comment">% Faster implementation</span>
+0068         <span class="keyword">else</span>
+0069             n = size(X, 1);
+0070             D = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X', X');
+0071             [foo, ind] = sort(D, 2);
+0072             flat = repmat((1:n)', 1, n - k) + n * ind(:,k+1:end) - n;
+0073             D(flat(:)) = 0;
+0074             D(1:n+1:end) = 1e-7;
+0075             D = sparse(double(D));
+0076 
+0077             <span class="keyword">if</span> nargout &gt; 1, ni = uint16(ind(:,1:k)); <span class="keyword">end</span>
+0078         <span class="keyword">end</span>
+0079         <span class="keyword">if</span> nargout &gt; 1
+0080             ni = ni(:,2:end);
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

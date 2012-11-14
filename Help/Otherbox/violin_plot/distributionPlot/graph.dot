@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  distributionPlot -> histogram;
+  histogram -> countEntries;
+
+  countEntries [URL="countEntries.html"];
+  distributionPlot [URL="distributionPlot.html"];
+  histogram [URL="histogram.html"];
+}

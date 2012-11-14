@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of landmark_isomap</title>
+  <meta name="keywords" content="landmark_isomap">
+  <meta name="description" content="ISOMAP Runs the Isomap algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>landmark_isomap
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>ISOMAP Runs the Isomap algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = landmark_isomap(X, no_dims, k, percentage) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">ISOMAP Runs the Isomap algorithm
+
+   [mappedX, mapping] = landmark_isomap(X, no_dims, k, percentage); 
+
+ The functions runs the Landmark Isomap algorithm on dataset X to reduce the
+ dimensionality of the dataset to no_dims. The number of neighbors used in
+ the compuations is set by k (default = 12). The variable percentage has to be
+ between 0 and 1, and determines the number of landmarks that is used (default = 0.1).
+
+ If the neighborhood graph that is constructed is not completely
+ connected, only the largest connected component is embedded. The indices
+ of this component are returned in mapping.conn_comp.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="components.html" class="code" title="function blocks = components(A)">components</a>	COMPONENTS Finds connected components in a graph defined by a adjacency matrix</li><li><a href="dijkstra.html" class="code" title="function D = dijkstra( G , S )">dijkstra</a>	--------------------------------------------------------------------</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = landmark_isomap(X, no_dims, k, percentage)</a>
+0002 <span class="comment">%ISOMAP Runs the Isomap algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = landmark_isomap(X, no_dims, k, percentage);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The functions runs the Landmark Isomap algorithm on dataset X to reduce the</span>
+0007 <span class="comment">% dimensionality of the dataset to no_dims. The number of neighbors used in</span>
+0008 <span class="comment">% the compuations is set by k (default = 12). The variable percentage has to be</span>
+0009 <span class="comment">% between 0 and 1, and determines the number of landmarks that is used (default = 0.1).</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% If the neighborhood graph that is constructed is not completely</span>
+0012 <span class="comment">% connected, only the largest connected component is embedded. The indices</span>
+0013 <span class="comment">% of this component are returned in mapping.conn_comp.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0018 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0019 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0020 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0021 <span class="comment">% maintain the name of the original author.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0024 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0025 
+0026 
+0027     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0028         no_dims = 2;
+0029     <span class="keyword">end</span>
+0030     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0031         k = 12;
+0032     <span class="keyword">end</span>
+0033     <span class="keyword">if</span> ~exist(<span class="string">'percentage'</span>, <span class="string">'var'</span>)
+0034         percentage = 0.2;
+0035     <span class="keyword">end</span>
+0036 
+0037     <span class="comment">% Construct neighborhood graph</span>
+0038     disp(<span class="string">'Constructing neighborhood graph...'</span>); 
+0039     D = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k);
+0040     
+0041     <span class="comment">% Select largest connected component</span>
+0042     blocks = <a href="components.html" class="code" title="function blocks = components(A)">components</a>(D)';
+0043     count = zeros(1, max(blocks));
+0044     <span class="keyword">for</span> i=1:max(blocks)
+0045         count(i) = length(find(blocks == i));
+0046     <span class="keyword">end</span>
+0047     [count, block_no] = max(count);
+0048     conn_comp = find(blocks == block_no);    
+0049     D = D(conn_comp, conn_comp);
+0050     mapping.D = D;
+0051     n = size(D, 1);
+0052 
+0053     <span class="comment">% Compute shortest paths</span>
+0054     disp(<span class="string">'Computing shortest paths...'</span>);
+0055     landmarks = randperm(n);
+0056     landmarks = landmarks(1:round(percentage * n));
+0057     nl = length(landmarks); 
+0058     D = <a href="dijkstra.html" class="code" title="function D = dijkstra( G , S )">dijkstra</a>(D, landmarks);
+0059     D = full(D)';
+0060     mapping.DD = D;
+0061     mapping.landmarks = landmarks;
+0062 
+0063     <span class="comment">% Do not embed in more dimensions than (nl - 1)</span>
+0064     <span class="keyword">if</span> no_dims &gt; nl - 1
+0065         no_dims = nl - 1;
+0066         warning([<span class="string">'Target dimensionality reduced to '</span> num2str(no_dims) <span class="string">'...'</span>]);
+0067     <span class="keyword">end</span>
+0068     
+0069     <span class="comment">% Performing MDS using eigenvector implementation</span>
+0070     disp(<span class="string">'Constructing low-dimensional embedding...'</span>); 
+0071     D = D .^ 2;
+0072     subB = -.5 .* (bsxfun(@minus, bsxfun(@minus, D, sum(D, 2) ./ nl), sum(D, 1) ./ n) + sum(D(:)) ./ (n * nl));
+0073     subB2 = subB' * subB;
+0074     subB2(isnan(subB2)) = 0;
+0075     subB2(isinf(subB2)) = 0;
+0076     [alpha, beta] = eig(subB2);
+0077     val = beta .^ (1 / 2);
+0078     mapping.invVal = inv(val);
+0079     <a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = subB * alpha * mapping.invVal;
+0080     <span class="keyword">if</span> size(<a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>, 2) &lt; no_dims
+0081         no_dims = size(<a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>, 2);
+0082         warning([<span class="string">'Target dimensionality reduced to '</span> num2str(no_dims) <span class="string">'...'</span>]);
+0083     <span class="keyword">end</span>
+0084     
+0085     <span class="comment">% Computing final embedding</span>
+0086     [val, ind] = sort(real(diag(val)), <span class="string">'descend'</span>); 
+0087     <a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = <a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(:,ind(1:no_dims));
+0088     val = val(1:no_dims);
+0089     mappedX = real(bsxfun(@times, <a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>, sqrt(val)'));
+0090     
+0091     <span class="comment">% Store data for out-of-sample extension</span>
+0092     mapping.conn_comp = conn_comp;
+0093     mapping.k = k;
+0094     mapping.X = X(conn_comp,:);
+0095     mapping.alpha = alpha;
+0096     mapping.beta = beta;
+0097     mapping.no_dims = no_dims;
+0098     
+0099</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

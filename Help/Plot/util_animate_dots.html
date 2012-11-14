@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_animate_dots</title>
+  <meta name="keywords" content="util_animate_dots">
+  <meta name="description" content="UNTITLED Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_animate_dots
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UNTITLED Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = util_animate_dots( x, y, steps ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UNTITLED Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_plot_scatter_with_lines.html" class="code" title="function [] = util_plot_scatter_with_lines( x, y, varargin )">util_plot_scatter_with_lines</a>	UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = util_animate_dots( x, y, steps )</a>
+0002 <span class="comment">%UNTITLED Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 
+0005 <span class="keyword">for</span> i = 1:length(x)/steps
+0006     section_start = (i-1) * steps;
+0007     section_end = i * steps - 1;
+0008     <span class="keyword">if</span> section_start &lt; 1
+0009         section_start = 1;
+0010     <span class="keyword">end</span>
+0011     <span class="keyword">if</span> section_end &gt; length(x)
+0012         section_end = length(x);
+0013     <span class="keyword">end</span>
+0014     section = (section_start : section_end);
+0015     <a href="util_plot_scatter_with_lines.html" class="code" title="function [] = util_plot_scatter_with_lines( x, y, varargin )">util_plot_scatter_with_lines</a>(x(section),y(section), <span class="string">'labels'</span>, {<span class="string">'PC 1'</span>, <span class="string">'PC 2'</span>}, <span class="string">'lineoff'</span>, 1, <span class="string">'holdon'</span>, 1)
+0016     drawnow
+0017     pause(0.001)
+0018 <span class="keyword">end</span>
+0019 
+0020 <span class="keyword">end</span>
+0021</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cfa</title>
+  <meta name="keywords" content="cfa">
+  <meta name="description" content="CFA Performs manifold charting on dataset X">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>cfa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CFA Performs manifold charting on dataset X</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = cfa(X, no_dims, no_analyzers, no_iterations) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">CFA Performs manifold charting on dataset X 
+
+   mappedX = cfa(X, no_dims, no_analyzers, no_iterations)
+
+ Performs manifold charting on dataset X to reduce its dimensionality to
+ no_dims dimensions. The variable no_analyzers determines the number of
+ local factor analyzers that is used in the mixture of factor analyzers
+ (default = 40). The variable no_iterations sets the number of
+ iterations that is employed in the EM algorithm (default = 200).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = cfa(X, no_dims, no_analyzers, no_iterations)</a>
+0002 <span class="comment">%CFA Performs manifold charting on dataset X</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = cfa(X, no_dims, no_analyzers, no_iterations)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Performs manifold charting on dataset X to reduce its dimensionality to</span>
+0007 <span class="comment">% no_dims dimensions. The variable no_analyzers determines the number of</span>
+0008 <span class="comment">% local factor analyzers that is used in the mixture of factor analyzers</span>
+0009 <span class="comment">% (default = 40). The variable no_iterations sets the number of</span>
+0010 <span class="comment">% iterations that is employed in the EM algorithm (default = 200).</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technologyy</span>
+0021 
+0022 
+0023     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0024         no_dims = 2;
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> ~exist(<span class="string">'no_analyzers'</span>, <span class="string">'var'</span>)
+0027         no_analyzers = 40;
+0028     <span class="keyword">end</span>
+0029     <span class="keyword">if</span> ~exist(<span class="string">'no_iterations'</span>, <span class="string">'var'</span>)
+0030         no_iterations = 200;
+0031     <span class="keyword">end</span>
+0032     
+0033     <span class="comment">% Make sure data is zero-mean, unit-variance</span>
+0034     X = X - repmat(mean(X, 1), [size(X, 1) 1]);
+0035     X = X ./ repmat(var(X, 1), [size(X, 1) 1]);
+0036     
+0037     <span class="comment">% Initialize some parameters</span>
+0038     min_var = 1e-5;                     <span class="comment">% minimum STD of Gaussians</span>
+0039     X = X';
+0040     [D n] = size(X);
+0041     c = no_analyzers;
+0042     d = no_dims;
+0043    
+0044     <span class="comment">% Randomly initialize the parameters of the CFA model</span>
+0045     SigmaN = repmat(eye(d), [1 1 n]);
+0046     Z = rand(d, n) * .1;
+0047     Pi = repmat(1 / c, [1 c]);
+0048     Kappa = rand(d, c) * .1;
+0049     Mu = randn(D, c) * .1;
+0050     SigmaC = repmat(eye(d), [1 1 c]);
+0051     Lambda = rand(D, d, c) * .1;
+0052     Psi = zeros(D, D, c);
+0053     <span class="keyword">for</span> j=1:c
+0054         tmp = zeros(D, D);
+0055         tmp(1:size(tmp, 2) + 1:end) = rand(D, 1) * .05;
+0056         Psi(:,:,j) = tmp + tmp';
+0057     <span class="keyword">end</span>
+0058     
+0059     <span class="comment">% Perform the EM algorithm for the optimization</span>
+0060     iter = 0;
+0061     <span class="keyword">while</span> iter &lt; no_iterations
+0062 
+0063         <span class="comment">% E-step</span>
+0064         <span class="comment">% ====================================================</span>
+0065         
+0066         <span class="comment">% Do some precomputations for speed</span>
+0067         invPsi = zeros(size(Psi));
+0068         detSigmaC = zeros(1, c);
+0069         detPsi = zeros(1, c);
+0070         logPi = zeros(1, c);
+0071         <span class="keyword">for</span> j=1:c
+0072             invPsi(:,:,j) = inv(Psi(:,:,j) + eye(D));
+0073             detSigmaC(j) = det(SigmaC(:,:,j));
+0074             detPsi(j) = det(Psi(:,:,j));
+0075             logPi(j) = log(Pi(j));
+0076         <span class="keyword">end</span>
+0077         
+0078         <span class="comment">% Compute matrices Epsilon, Vc, and m</span>
+0079         Eps = zeros(n, c);
+0080         Vc = zeros(d, d, c);
+0081         m = zeros(d, c);
+0082         const = ((D + d) / 2) * log(2 * pi);
+0083         <span class="keyword">for</span> j=1:c
+0084             
+0085             <span class="comment">% Precomputations</span>
+0086             Xnc = X - repmat(Mu(:,j), [1 n]);
+0087             Znc = Z - repmat(Kappa(:,j), [1 n]);
+0088             tmpProd = Lambda(:,:,j)' * invPsi(:,:,j) * Lambda(:,:,j);
+0089             
+0090             <span class="comment">% Compute Epsilon</span>
+0091             <span class="keyword">for</span> i=1:n            
+0092                 normX = (Xnc(:,i) - Lambda(:,:,j) * Znc(:,i));
+0093                 Eps(i, j) = -logPi(j) + const <span class="keyword">...</span>
+0094                             + (.5 * log(detSigmaC(j))) + (.5 * detPsi(j)) <span class="keyword">...</span>
+0095                             + (.5 * trace(SigmaC(:,:,j) * (SigmaN(:,:,i) + Znc(:,i) * Znc(:,i)'))) <span class="keyword">...</span>
+0096                             + (.5 * trace(SigmaN(:,:,i) * tmpProd)) <span class="keyword">...</span>
+0097                             + (.5 * normX' * invPsi(:,:,j) * normX);
+0098             <span class="keyword">end</span>
+0099             
+0100             <span class="comment">% Compute Vc and m</span>
+0101             Vc(:,:,j) = inv(SigmaC(:,:,j) + eps * eye(d)) + tmpProd;
+0102             m(:,j) = Kappa(:,j) + (Vc(:,:,j) \ Lambda(:,:,j)') * invPsi(:,:,j) * mean(Xnc, 2);
+0103         <span class="keyword">end</span>
+0104         
+0105         <span class="comment">% Update estimate of Q</span>
+0106         Q = (repmat(sum(exp(-Eps), 2), [1 c]) .^ -1) .* exp(-Eps);
+0107         
+0108         <span class="comment">% Update estimate of SigmaN</span>
+0109         <span class="keyword">for</span> i=1:n
+0110             tmp = zeros(d, d);
+0111             <span class="keyword">for</span> j=1:c
+0112                 tmp = tmp + Q(i, j) * Vc(:,:,j);
+0113             <span class="keyword">end</span>
+0114             
+0115             <span class="comment">% Compute covariance matrix</span>
+0116             SigmaN(:,:,i) = inv(tmp + eps * eye(d));           <span class="comment">% code above gave us inv(SigmaN)</span>
+0117         <span class="keyword">end</span>
+0118         
+0119         <span class="comment">% Update estimate of Z (= mappedX)</span>
+0120         <span class="keyword">for</span> i=1:n
+0121             tmp = zeros(d, 1);
+0122             <span class="keyword">for</span> j=1:c
+0123                 tmp = tmp + (Q(i, j) * Vc(:,:,j) * m(:,j));
+0124             <span class="keyword">end</span>
+0125             Z(:,i) = SigmaN(:,:,i) * tmp;
+0126         <span class="keyword">end</span>
+0127         
+0128         <span class="comment">% M-step</span>
+0129         <span class="comment">% ====================================================</span>
+0130         
+0131         <span class="comment">% Update estimate of Pi</span>
+0132         Pi = sum(Q, 1) ./ n;
+0133         
+0134         <span class="comment">% Update estimate of Mu and Kappa</span>
+0135         <span class="keyword">for</span> j=1:c
+0136             tmpQ = Q(:,c) ./ sum(Q(:,c));
+0137             Mu(:,c) = sum(repmat(tmpQ', [D 1]) .* X, 2);
+0138             Kappa(:,c) = sum(repmat(tmpQ', [d 1]) .* Z, 2);
+0139         <span class="keyword">end</span>
+0140         
+0141         <span class="comment">% Update estimate of SigmaC</span>
+0142         <span class="keyword">for</span> j=1:c
+0143             tmp = 0;
+0144             tmpQ = Q(:,c) ./ sum(Q(:,c));
+0145             <span class="keyword">for</span> i=1:n
+0146                 Znc = Z(:,i) - Kappa(:,j);
+0147                 tmp = tmp + (tmpQ(i) * (SigmaN(:,:,i) + Znc * Znc'));
+0148             <span class="keyword">end</span>
+0149             
+0150             <span class="comment">% Enforce some variance</span>
+0151             tmp(1:size(tmp, 1) + 1:end) = max(min_var, tmp(1:size(tmp, 1) + 1:end));
+0152             SigmaC(:,:,j) = tmp;
+0153         <span class="keyword">end</span>
+0154         
+0155         <span class="comment">% Update estimate of Lambda</span>
+0156         <span class="keyword">for</span> j=1:c
+0157             Sc = zeros(D, d);
+0158             tmpQ = Q(:,j) ./ sum(Q(:,j));
+0159             Xnc = X - repmat(Mu(:,j), [1 n]);
+0160             Znc = Z - repmat(Kappa(:,j), [1 n]);
+0161             <span class="keyword">for</span> i=1:n
+0162                 Sc = Sc + tmpQ(i) * (Xnc(:,i) * Znc(:,i)');
+0163             <span class="keyword">end</span>
+0164             Lambda(:,:,j) = Sc / (SigmaC(:,:,j) + eps * eye(d));
+0165         <span class="keyword">end</span>
+0166         
+0167         <span class="comment">% Update estimate of Psi</span>
+0168         <span class="keyword">for</span> j=1:c
+0169             tmpPsi = zeros(D, D);
+0170             tmpQ = Q(:,j) ./ sum(Q(:,j));
+0171             Xnc = X - repmat(Mu(:,j), [1 n]);
+0172             Znc = Z - repmat(Kappa(:,j), [1 n]);
+0173             tmpProd = Lambda(:,:,j) * SigmaN(:,:,i) * Lambda(:,:,j)';
+0174             <span class="keyword">for</span> i=1:n
+0175                 tmpPsi(1:size(tmpPsi, 2) + 1:end) = tmpPsi(1:size(tmpPsi, 2) + 1:end) + <span class="keyword">...</span>
+0176                     tmpQ(i) * (((Xnc(:,i) - Lambda(:,:,j) * Znc(:,i)) .^ 2)' + tmpProd(1:size(tmpProd, 2) + 1:end));
+0177             <span class="keyword">end</span>
+0178             Psi(:,:,c) = tmpPsi;
+0179         <span class="keyword">end</span>
+0180         
+0181         <span class="comment">% Update number of iterations</span>
+0182         iter = iter + 1;
+0183         <span class="keyword">if</span> rem(iter, 5) == 0
+0184             fprintf(<span class="string">'.'</span>);
+0185         <span class="keyword">end</span>
+0186     <span class="keyword">end</span>
+0187     
+0188     <span class="comment">% Transpose to get lowdimensional data representation</span>
+0189     mappedX = Z';
+0190</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

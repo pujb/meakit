@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_row_sum</title>
+  <meta name="keywords" content="test_row_sum">
+  <meta name="description" content="timing test for row_sum">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_row_sum
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>timing test for row_sum</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> timing test for row_sum</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="../../../Otherbox/lightspeed/row_sum.html" class="code" title="function s = row_sum(x)">row_sum</a>	ROW_SUM   Sum for each row.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% timing test for row_sum</span>
+0002 
+0003 <span class="comment">% each trial should take the same amount of time</span>
+0004 <span class="comment">% if not, then you are not managing the cache properly</span>
+0005 tim = [];
+0006 <span class="keyword">for</span> k = 1:6
+0007   x = randn(1024*k/4, 400);
+0008   niter = floor(120/k);
+0009 
+0010   tic; <span class="keyword">for</span> i = 1:niter sum(x,2); <span class="keyword">end</span>; tim(k,1) = toc;
+0011   tic; <span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/row_sum.html" class="code" title="function s = row_sum(x)">row_sum</a>(x); <span class="keyword">end</span>; tim(k,2) = toc;
+0012   tic; <span class="keyword">for</span> i = 1:niter x*ones(<a href="../../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>(x),1); <span class="keyword">end</span>; tim(k,3) = toc;
+0013   tic; <span class="keyword">for</span> i = 1:niter sum(x')'; <span class="keyword">end</span>; tim(k,4) = toc;
+0014 <span class="keyword">end</span>
+0015 figure(1)
+0016 clf
+0017 plot(tim)
+0018 xlabel(<span class="string">'trial'</span>)
+0019 ylabel(<span class="string">'time (sec)'</span>)
+0020 legend(<span class="string">'sum(x,2)'</span>, <span class="string">'rowsum'</span>, <span class="string">'product'</span>, <span class="string">'sum(x'')'''</span>, 2)
+0021 tim(<span class="keyword">end</span>,1)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of set</title>
+  <meta name="keywords" content="set">
+  <meta name="description" content="TEMPLATE/SET Edit data stored in a Template object">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html m2html --><!-- menu.html @template -->
+<h1>set
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>TEMPLATE/SET Edit data stored in a Template object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function tpl = set(tpl,action,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">TEMPLATE/SET Edit data stored in a Template object
+  TPL = SET(TPL,ACTION,VARARGIN)
+     ACTION 'root'
+     ACTION 'unknowns'
+     ACTION 'file'
+     ACTION 'block'
+     ACTION 'var'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/private/loadtpl.html" class="code" title="function tpl = loadtpl(tpl,handle)">loadtpl</a>	TEMPLATE/LOADTPL Read a template from file</li><li><a href="set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Calculation/util_get_datapoint_potential.html" class="code" title="function [ pot ] = util_get_datapoint_potential( datax, datay, bin_table)">util_get_datapoint_potential</a>	UNTITLED Summary of this function goes here</li><li><a href="../../../Common/util_set_colorbar.html" class="code" title="function [ handle ] = util_set_colorbar( map )">util_set_colorbar</a>	UTIL_SET_COLORBAR Get a styled colorbar</li><li><a href="../../../IO/mcd/neuroshare/Matlab/Example.html" class="code" title="function Example()">Example</a>	Prompt for the correct DLL</li><li><a href="../../../Otherbox/InteractivePeakfinder2/rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>	RTSLID Slider widget that responds to dragging realtime</li><li><a href="../../../Otherbox/ami/ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">ami</a>	AMI computes and plots average mutual information (ami) and correlation for</li><li><a href="../../../Otherbox/arrow/arrow.html" class="code" title="function [h,yy,zz] = arrow(varargin)">arrow</a>	ARROW  Draw a line with an arrowhead.</li><li><a href="../../../Otherbox/arrow/plot_arrow.html" class="code" title="function handles = plot_arrow( x1,y1,x2,y2,varargin )">plot_arrow</a>	</li><li><a href="../../../Otherbox/barweb/barweb.html" class="code" title="function handles = barweb(barvalues, errors, width, groupnames, bw_title, bw_xlabel, bw_ylabel, bw_colormap, gridstatus, bw_legend, error_sides, legend_type)">barweb</a>	</li><li><a href="../../../Otherbox/confplot/confidence_plot_test.html" class="code" title="">confidence_plot_test</a>	</li><li><a href="../../../Otherbox/confplot/confplot.html" class="code" title="function varargout = confplot(varargin)">confplot</a>	CONFPLOT Linear plot with continuous confidence/error boundaries.</li><li><a href="../../../Otherbox/distribution_fit/DistributionFit.html" class="code" title="function [pdffit,offset,A,B,resnorm,mode,medpdf,h] = distributionfit(data,distribution,nbins,figureWH)">DistributionFit</a>	function [pdffit,offset,A,B,resnorm,mode,medpdf,ndata,h] = distributionfit(data,distribution,nbins,figureWH)</li><li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/gui/adaptive_callback.html" class="code" title="">adaptive_callback</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/case1.html" class="code" title="">case1</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/choose_method.html" class="code" title="function varargout = choose_method(varargin)">choose_method</a>	CHOOSE_METHOD M-file for choose_method.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/ded.html" class="code" title="function ded(cc,hs,he)">ded</a>	cc - edit number</li><li><a href="../../../Otherbox/drtoolbox/gui/drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/lnst.html" class="code" title="function lnst(hs,he)">lnst</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/load_data.html" class="code" title="function varargout = load_data(varargin)">load_data</a>	LOAD_DATA M-file for load_data.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/load_data_1_var.html" class="code" title="function varargout = load_data_1_var(varargin)">load_data_1_var</a>	LOAD_DATA_1_VAR M-file for load_data_1_var.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/load_data_vars.html" class="code" title="function varargout = load_data_vars(varargin)">load_data_vars</a>	LOAD_DATA_VARS M-file for load_data_vars.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/load_xls.html" class="code" title="function varargout = load_xls(varargin)">load_xls</a>	LOAD_XLS M-file for load_xls.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/mapping_parameters.html" class="code" title="function varargout = mapping_parameters(varargin)">mapping_parameters</a>	MAPPING_PARAMETERS M-file for mapping_parameters.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/no_history.html" class="code" title="function varargout = no_history(varargin)">no_history</a>	NO_HISTORY M-file for no_history.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/not_calculated.html" class="code" title="function varargout = not_calculated(varargin)">not_calculated</a>	NOT_CALCULATED M-file for not_calculated.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/not_loaded.html" class="code" title="function varargout = not_loaded(varargin)">not_loaded</a>	NOT_LOADED M-file for not_loaded.fig</li><li><a href="../../../Otherbox/drtoolbox/gui/plot12n.html" class="code" title="function plot12n(name,data)">plot12n</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/plotn.html" class="code" title="function plotn(name,data)">plotn</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/scatter12n.html" class="code" title="function scatter12n(name,data,labels)">scatter12n</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/scattern.html" class="code" title="function scattern(name,data,varargin)">scattern</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/update_kernel_uipanel.html" class="code" title="">update_kernel_uipanel</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/gui/update_type_uipanel.html" class="code" title="">update_type_uipanel</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/drtoolbox/techniques/jdqr.html" class="code" title="function varargout=jdqr(varargin)">jdqr</a>	JDQR computes a partial Schur decomposition of a square matrix or operator.</li><li><a href="../../../Otherbox/export_fig/export_fig.html" class="code" title="function [im alpha] = export_fig(varargin)">export_fig</a>	EXPORT_FIG  Exports figures suitable for publication</li><li><a href="../../../Otherbox/export_fig/isolate_axes.html" class="code" title="function fh = isolate_axes(ah, vis)">isolate_axes</a>	ISOLATE_AXES Isolate the specified axes in a figure on their own</li><li><a href="../../../Otherbox/export_fig/print2array.html" class="code" title="function A = print2array(fig, res, renderer)">print2array</a>	PRINT2ARRAY  Exports a figure to an image array</li><li><a href="../../../Otherbox/export_fig/print2eps.html" class="code" title="function print2eps(name, fig, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li><li><a href="../../../Otherbox/fractal/boxcount/randcantor.html" class="code" title="function c = randcantor(p,n,d,varargin)">randcantor</a>	RANDCANTOR  1D, 2D or 3D generalized random Cantor set</li><li><a href="../../../Otherbox/grabit/grabit.html" class="code" title="function grabit(fname)">grabit</a>	GRABIT Extracts data points from an image file.</li><li><a href="../../../Otherbox/lightspeed/graphics/color_plot.html" class="code" title="function color_plot(x,colors,varargin)">color_plot</a>	COLOR_PLOT    Scatterplot with colored points.</li><li><a href="../../../Otherbox/lightspeed/graphics/draw_line_clip.html" class="code" title="function h = draw_line_clip(m,b,a, linespec, varargin)">draw_line_clip</a>	DRAW_LINE_CLIP  Draw a line defined by an equation.</li><li><a href="../../../Otherbox/lightspeed/graphics/labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li><li><a href="../../../Otherbox/lightspeed/graphics/linechart.html" class="code" title="function linechart(y,color,varargin)">linechart</a>	LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.</li><li><a href="../../../Otherbox/lightspeed/graphics/mobile_points.html" class="code" title="function h = mobile_points(n, linespec)">mobile_points</a>	Places n random points in the style given by linespec (e.g. 'bo').</li><li><a href="../../../Otherbox/lightspeed/graphics/mobile_text.html" class="code" title="function h = mobile_text(varargin)">mobile_text</a>	MOBILE_TEXT('str1', 'str2', ...) places each string in a random position</li><li><a href="../../../Otherbox/lightspeed/graphics/move_obj.html" class="code" title="function move_obj(arg)">move_obj</a>	callback function for draggable objects</li><li><a href="../../../Otherbox/lightspeed/graphics/plot_errorbars.html" class="code" title="function plot_errorbars(means,stderrs,rownames)">plot_errorbars</a>	plot_errorbars(means,stderrs,rownames)</li><li><a href="../../../Otherbox/lightspeed/graphics/send_to_back.html" class="code" title="function send_to_back(handles)">send_to_back</a>	send_to_back(handles) puts the given objects underneath the other objects in the figure.</li><li><a href="../../../Otherbox/lightspeed/graphics/set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>	SET_LINESPEC    Set the color and line style of a graphics object.</li><li><a href="../../../Otherbox/lsm/csim/demos/first_model.html" class="code" title="">first_model</a>	</li><li><a href="../../../Otherbox/lsm/csim/demos/simple_circuit.html" class="code" title="">simple_circuit</a>	This is a short demo which shows how to use CSIM</li><li><a href="../../../Otherbox/lsm/utilities/record_movie.html" class="code" title="function M = record_movie(response, frameSize, optFrameTimes, optFilter, optMakeColorBar, optMakeTimeIndex)">record_movie</a>	RECORD_MOVIE Play/Record a 2D movie of a given response (or stimulus)</li><li><a href="parse.html" class="code" title="function [tpl, str] = parse(tpl,target,handle,append)">parse</a>	TEMPLATE/PARSE Fill in replacement fields with the class properties</li><li><a href="../../../Otherbox/m2html/@template/private/loadtpl.html" class="code" title="function tpl = loadtpl(tpl,handle)">loadtpl</a>	TEMPLATE/LOADTPL Read a template from file</li><li><a href="set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="template.html" class="code" title="function tpl = template(root,unknowns)">template</a>	TEMPLATE HTML Template Toolbox Constructor</li><li><a href="../../../Otherbox/m2html/m2html.html" class="code" title="function m2html(varargin)">m2html</a>	M2HTML - Documentation Generator for Matlab M-files and Toolboxes in HTML</li><li><a href="../../../Otherbox/m2html/mwizard.html" class="code" title="function mwizard(file)">mwizard</a>	MWIZARD - M2HTML Graphical User Interface</li><li><a href="../../../Otherbox/m2html/mwizard2.html" class="code" title="function mwizard(file)">mwizard2</a>	MWIZARD - M2HTML Graphical User Interface</li><li><a href="../../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li><li><a href="../../../Otherbox/panel/@panel/export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="../../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/@panel/private/subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="../../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li><li><a href="../../../Otherbox/panel/@panel/subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li><li><a href="../../../Otherbox/panel/panel_demo_2.html" class="code" title="">panel_demo_2</a>	% PANEL DEMO 2</li><li><a href="../../../Otherbox/panel/panel_demo_9.html" class="code" title="">panel_demo_9</a>	% PANEL DEMO 9</li><li><a href="../../../Otherbox/panel/panel_demo_A.html" class="code" title="">panel_demo_A</a>	% PANEL DEMO A</li><li><a href="../../../Otherbox/plfit/plplot.html" class="code" title="function h=plplot(x, xmin, alpha)">plplot</a>	PLPLOT visualizes a power-law distributional model with empirical data.</li><li><a href="../../../Otherbox/shadowplot/shadowplot.html" class="code" title="function varargout = shadowplot(varargin)">shadowplot</a>	SHADOWPLOT    Add a shadow to an existing surface or patch plot</li><li><a href="../../../Otherbox/violin_plot/distributionPlot/distributionPlot.html" class="code" title="function handles = distributionPlot(varargin)">distributionPlot</a>	DISTRIBUTIONPLOT plots distributions similar to boxplot</li><li><a href="../../../Otherbox/w_cohere/w_cohere.html" class="code" title="function Cohere_w = w_cohere(x,y,fs_o,Dt,t_step,fs_d,w_name,Scale)">w_cohere</a>	This function estimates and plots a wavelet-based magnitude-squared (MS)</li><li><a href="../../../Plot/util_plot_8s_into_arraymap.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap( data, closed )">util_plot_8s_into_arraymap</a>	UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</li><li><a href="../../../Plot/util_plot_8s_into_arraymap_bar.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap_bar( data, closed, haveBaseline)">util_plot_8s_into_arraymap_bar</a>	UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</li><li><a href="../../../Plot/util_plot_8s_into_dotsgraph.html" class="code" title="function [ the_frame ] = util_plot_8s_into_dotsgraph( varargin )">util_plot_8s_into_dotsgraph</a>	UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图</li><li><a href="../../../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>	UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</li><li><a href="../../../Plot/util_plot_channel_of_state.html" class="code" title="function [ ch_state ] = util_plot_channel_of_state( network_vectors, seq, clu_sub, threshold, method, varargin )">util_plot_channel_of_state</a>	UTIL_PLOT_CHANNEL_OF_STATE Visualize the network states by showing</li><li><a href="../../../Plot/util_plot_raster_image.html" class="code" title="function [] = util_plot_raster_image( spif, gnd, bin, def_colormap)">util_plot_raster_image</a>	UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method</li><li><a href="../../../Plot/util_plot_raster_simple.html" class="code" title="function [] = util_plot_raster_simple( spif, gnd, bin, draw_command, quickmode )">util_plot_raster_simple</a>	UTIL_PLOT_RASTER_SIMPLE Plot the RASTER PLOT using simple plotting methods</li><li><a href="../../../Plot/util_plot_scatter_with_lines.html" class="code" title="function [] = util_plot_scatter_with_lines( x, y, varargin )">util_plot_scatter_with_lines</a>	UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.</li><li><a href="../../../Plot/util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>	UTIL_PLOT_SPSA Generate the SPSA (Rate) graph</li><li><a href="../../../Plot/util_plot_state_trans.html" class="code" title="function [ elec_cluster ] = util_plot_state_trans( network_vector, seq, clu_sub, elec, varargin )">util_plot_state_trans</a>	UTIL_PLOT_STATE_TRANS Plot the state transitions of the selected</li><li><a href="../../../Plot/util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li><li><a href="../../../Plot/util_set_xtick.html" class="code" title="function util_set_xtick( rate, bin )">util_set_xtick</a>	UTIL_SET_XTICK Set X axis by bin-width and numbers.</li><li><a href="../../../Scripts/util_script_print_channel_firing_rate_sd.html" class="code" title="function [] = util_script_print_channel_firing_rate_sd( spif, output_folder )">util_script_print_channel_firing_rate_sd</a>	UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.</li><li><a href="../../../Stimulation/generate_gif_for_animation.html" class="code" title="function [] = generate_gif_for_animation( movie_frames )">generate_gif_for_animation</a>	GENERATE_GIF_FOR_ANIMATION 通过Movie帧生成GIF动画</li><li><a href="../../../Stimulation/util_loadstimulation_fromxml.html" class="code" title="function [ sti_seq ] = util_loadstimulation_fromxml( filename )">util_loadstimulation_fromxml</a>	UTIL_LOADSTIMULATION_FROMXML 工具函数：从给定的XML文件中载入刺激方案</li><li><a href="../../../Stimulation/util_sti_all_responses.html" class="code" title="function [ elecs responses_timing responses_amplitude ] = util_sti_all_responses( varargin )">util_sti_all_responses</a>	UTIL_STI_ALL_RESPONSES 工具函数：提取刺激后指定时间窗内所有电极的响应</li><li><a href="../../../Stimulation/util_sti_responses_elictedby_one_elec.html" class="code" title="function [ result num ] = util_sti_responses_elictedby_one_elec( varargin )">util_sti_responses_elictedby_one_elec</a>	UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function tpl = set(tpl,action,varargin)</a>
+0002 <span class="comment">%TEMPLATE/SET Edit data stored in a Template object</span>
+0003 <span class="comment">%  TPL = SET(TPL,ACTION,VARARGIN)</span>
+0004 <span class="comment">%     ACTION 'root'</span>
+0005 <span class="comment">%     ACTION 'unknowns'</span>
+0006 <span class="comment">%     ACTION 'file'</span>
+0007 <span class="comment">%     ACTION 'block'</span>
+0008 <span class="comment">%     ACTION 'var'</span>
+0009 
+0010 <span class="comment">%  Copyright (C) 2003 Guillaume Flandin &lt;Guillaume@artefact.tk&gt;</span>
+0011 <span class="comment">%  $Revision: 1.0 $Date: 2003/05/05 22:19:51 $</span>
+0012 
+0013 error(nargchk(3,5,nargin));
+0014 
+0015 <span class="keyword">switch</span> lower(action)
+0016     <span class="keyword">case</span> <span class="string">'root'</span>
+0017         error(nargchk(3,3,nargin));
+0018         <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>)
+0019             tpl.root = varargin{1};
+0020         <span class="keyword">else</span>
+0021             error(<span class="string">'[Template] No such directory.'</span>);
+0022         <span class="keyword">end</span>
+0023     <span class="keyword">case</span> <span class="string">'unknowns'</span>
+0024         error(nargchk(3,3,nargin));
+0025         <span class="keyword">if</span> ismember(varargin{1},{<span class="string">'remove'</span> <span class="string">'comment'</span> <span class="string">'keep'</span>})
+0026             tpl.unknowns = varargin{1};
+0027         <span class="keyword">else</span>
+0028             error(<span class="string">'[Template] Unknowns: ''remove'', ''comment'' or ''keep''.'</span>);
+0029         <span class="keyword">end</span>
+0030     <span class="keyword">case</span> <span class="string">'file'</span>
+0031         error(nargchk(4,4,nargin));
+0032         <span class="keyword">if</span> iscellstr(varargin{1})
+0033             <span class="keyword">for</span> i=1:length(varargin{1})
+0034                 ind = find(ismember(tpl.handles,varargin{1}{i}));
+0035                 <span class="keyword">if</span> isempty(ind)
+0036                     tpl.handles{end+1} = varargin{1}{i};
+0037                     <span class="keyword">if</span> strcmp(varargin{2}{i}(1),filesep) <span class="comment">%- absolute path (Unix)</span>
+0038                         tpl.file{end+1} = varargin{2}{i};
+0039                     <span class="keyword">else</span> <span class="comment">%- relative path</span>
+0040                         tpl.file{end+1} = fullfile(tpl.root,varargin{2}{i});
+0041                     <span class="keyword">end</span>
+0042                 <span class="keyword">else</span>
+0043                     <span class="keyword">if</span> strcmp(varargin{2}{i}(1),filesep) <span class="comment">%- absolute path (Unix)</span>
+0044                         tpl.file{ind} = varargin{2}{i};
+0045                     <span class="keyword">else</span> <span class="comment">%- relative path</span>
+0046                         tpl.file{ind} = fullfile(tpl.root,varargin{2}{i});
+0047                     <span class="keyword">end</span>
+0048                 <span class="keyword">end</span>
+0049             <span class="keyword">end</span>
+0050         <span class="keyword">elseif</span> ischar(varargin{1})
+0051             tpl = <a href="set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(tpl,<span class="string">'file'</span>,cellstr(varargin{1}),cellstr(varargin{2}));
+0052         <span class="keyword">else</span>
+0053             error(<span class="string">'[Template] Badly formed handles.'</span>);
+0054         <span class="keyword">end</span>
+0055     <span class="keyword">case</span> <span class="string">'block'</span>
+0056         error(nargchk(4,5,nargin));
+0057         tpl = <a href="../../../Otherbox/m2html/@template/private/loadtpl.html" class="code" title="function tpl = loadtpl(tpl,handle)">loadtpl</a>(tpl,varargin{1});
+0058         <span class="keyword">if</span> nargin == 4
+0059             name = varargin{2};
+0060         <span class="keyword">else</span>
+0061             name = varargin{3};
+0062         <span class="keyword">end</span>
+0063         str = <a href="get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(tpl,<span class="string">'var'</span>,varargin{1});
+0064         blk = <span class="string">''</span>;
+0065         <span class="comment">%- look like this (keep the same number (1) of spaces between characters!)</span>
+0066         <span class="comment">%  &lt;!-- BEGIN ??? --&gt;</span>
+0067         <span class="comment">%  &lt;!-- END ??? --&gt;</span>
+0068         
+0069         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%% WIH REGEXP %%%%%%%%%%%%%%%%%%%%%%%%</span>
+0070         <span class="comment">% reg = ['&lt;!--\s+BEGIN ' varargin{2} '\s+--&gt;(.*)\n\s*&lt;!--\s+END ' varargin{2} '\s+--&gt;'];</span>
+0071         <span class="comment">% [b, e] = regexp(str,reg,'once');</span>
+0072         <span class="comment">% if ~isempty(b), blk = str(b:e); end %- should also remove BEGIN and END comments</span>
+0073         <span class="comment">% str = regexprep(str,reg,['{' name '}']);</span>
+0074         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0075         
+0076         <span class="comment">%%%%%%%%%%%%%%%%%%%%%% WIHTOUT REGEXP %%%%%%%%%%%%%%%%%%%%%%%</span>
+0077         indbegin = findstr(str,[<span class="string">'&lt;!-- BEGIN '</span> varargin{2} <span class="string">' --&gt;'</span>]);
+0078         indend   = findstr(str,[<span class="string">'&lt;!-- END '</span> varargin{2} <span class="string">' --&gt;'</span>]);
+0079         <span class="keyword">if</span> ~isempty(indbegin) &amp; ~isempty(indend)
+0080            blk = str(indbegin+length([<span class="string">'&lt;!-- BEGIN '</span> varargin{2} <span class="string">' --&gt;'</span>])+1:indend-1);
+0081            str = [str(1:indbegin-1) <span class="string">'{'</span> name <span class="string">'}'</span> str(indend+length([<span class="string">'&lt;!-- END '</span> varargin{2} <span class="string">' --&gt;'</span>])+1:end)];
+0082         <span class="keyword">end</span>
+0083         <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0084         
+0085         tpl = <a href="set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(tpl,<span class="string">'var'</span>,varargin{2},blk);
+0086         tpl = <a href="set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(tpl,<span class="string">'var'</span>,varargin{1},str);
+0087     <span class="keyword">case</span> <span class="string">'var'</span>
+0088         error(nargchk(3,4,nargin));
+0089         <span class="keyword">if</span> iscellstr(varargin{1})
+0090             <span class="keyword">for</span> i=1:length(varargin{1})
+0091                 ind = find(ismember(tpl.varkeys,varargin{1}{i}));
+0092                 <span class="keyword">if</span> isempty(ind)
+0093                     tpl.varkeys{end+1} = varargin{1}{i};
+0094                     <span class="keyword">if</span> nargin == 4
+0095                         tpl.varvals{end+1} = varargin{2}{i};
+0096                     <span class="keyword">else</span>
+0097                         tpl.varvals{end+1} = <span class="string">''</span>;
+0098                     <span class="keyword">end</span>
+0099                 <span class="keyword">else</span>
+0100                     tpl.varvals{ind} = varargin{2}{i};
+0101                 <span class="keyword">end</span>
+0102             <span class="keyword">end</span>
+0103         <span class="keyword">elseif</span> ischar(varargin{1})
+0104             tpl = <a href="set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(tpl,<span class="string">'var'</span>,cellstr(varargin{1}),cellstr(varargin{2}));
+0105         <span class="keyword">else</span>
+0106             error(<span class="string">'[Template] Badly formed variable names.'</span>);
+0107         <span class="keyword">end</span>
+0108     <span class="keyword">otherwise</span>
+0109         error(<span class="string">'[Template] Unknown action to perform.'</span>);
+0110 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

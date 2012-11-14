@@ -1,0 +1,17 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  klsymdivergence -> kldivergence;
+  mutualinformation -> condentropy;
+  mutualinformation -> entropy;
+  redundancy -> entropy;
+  redundancy -> mutualinformation;
+  symmetricuncertainty -> redundancy;
+
+  condentropy [URL="condentropy.html"];
+  entropy [URL="entropy.html"];
+  kldivergence [URL="kldivergence.html"];
+  klsymdivergence [URL="klsymdivergence.html"];
+  mutualinformation [URL="mutualinformation.html"];
+  redundancy [URL="redundancy.html"];
+  symmetricuncertainty [URL="symmetricuncertainty.html"];
+}

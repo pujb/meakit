@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of translatelabel</title>
+  <meta name="keywords" content="translatelabel">
+  <meta name="description" content="user can insert &quot;$&quot; character to be replaced by">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html panel --><!-- ../menu.html @panel --><!-- menu.html private -->
+<h1>translatelabel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>user can insert &quot;$&quot; character to be replaced by</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function s = translatelabel(s, eng_scale_mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> user can insert &quot;$&quot; character to be replaced by
+ engineering scale mode character. if it's already been
+ replaced, it's been replaced by {{{x}}}, which renders
+ just as &quot;x&quot; since it's latex-interpreted. therefore, we
+ can start by changing strings of this type back to &quot;$&quot;.
+ note that if the mode is '', then x is the empty string.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>	user can insert "$" character to be replaced by</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>	user can insert "$" character to be replaced by</li><li><a href="../../../../Otherbox/panel/@panel/subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s = translatelabel(s, eng_scale_mode)</a>
+0002 
+0003 <span class="comment">% user can insert &quot;$&quot; character to be replaced by</span>
+0004 <span class="comment">% engineering scale mode character. if it's already been</span>
+0005 <span class="comment">% replaced, it's been replaced by {{{x}}}, which renders</span>
+0006 <span class="comment">% just as &quot;x&quot; since it's latex-interpreted. therefore, we</span>
+0007 <span class="comment">% can start by changing strings of this type back to &quot;$&quot;.</span>
+0008 <span class="comment">% note that if the mode is '', then x is the empty string.</span>
+0009 
+0010 <span class="keyword">if</span> nargin == 1
+0011     
+0012     <span class="keyword">if</span> iscell(s)
+0013         <span class="keyword">for</span> i = 1:length(s)
+0014             s{i} = <a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>(s{i});
+0015         <span class="keyword">end</span>
+0016         <span class="keyword">return</span>
+0017     <span class="keyword">end</span>
+0018     
+0019     <span class="comment">% reverse translation</span>
+0020     s = strrep(s, <span class="string">'{{{}}}'</span>, <span class="string">'{{{ }}}'</span>); <span class="comment">% handle empty string case</span>
+0021     l = length(s);
+0022     f = strfind(s, <span class="string">'{{{'</span>);
+0023     <span class="keyword">for</span> i = f
+0024         <span class="keyword">if</span> (l - i) &lt; 6
+0025             <span class="keyword">continue</span>
+0026         <span class="keyword">end</span>
+0027         <span class="keyword">if</span> ~strcmp(s(i+(4:6)), <span class="string">'}}}'</span>)
+0028             <span class="keyword">continue</span>
+0029         <span class="keyword">end</span>
+0030         s(i:i+6) = <span class="string">'{{{$}}}'</span>;
+0031     <span class="keyword">end</span>
+0032     s = strrep(s, <span class="string">'{{{$}}}'</span>, <span class="string">'$'</span>);
+0033     
+0034 <span class="keyword">else</span>
+0035 
+0036     <span class="keyword">if</span> iscell(s)
+0037         <span class="keyword">for</span> i = 1:length(s)
+0038             s{i} = <a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>(s{i}, eng_scale_mode);
+0039         <span class="keyword">end</span>
+0040         <span class="keyword">return</span>
+0041     <span class="keyword">end</span>
+0042 
+0043     <span class="comment">% forward translation</span>
+0044     <span class="keyword">if</span> any(s == <span class="string">'$'</span>)
+0045         <span class="keyword">if</span> eng_scale_mode == <span class="string">'u'</span>
+0046             eng_scale_mode = <span class="string">'\mu'</span>;
+0047         <span class="keyword">end</span>
+0048         s = strrep(s, <span class="string">'$'</span>, [<span class="string">'{{{'</span> eng_scale_mode <span class="string">'}}}'</span>]);
+0049     <span class="keyword">end</span>
+0050     
+0051 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of glia_Ca_3_3</title>
+  <meta name="keywords" content="glia_Ca_3_3">
+  <meta name="description" content="GLIA_CA Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Model --><!-- menu.html gcd -->
+<h1>glia_Ca_3_3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GLIA_CA Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ C1,P1,H1 ] = glia_Ca_3_3(C,P,H,location_release_amount,Row,Col)  %#codegen </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">GLIA_CA Summary of this function goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ C1,P1,H1 ] = glia_Ca_3_3(C,P,H,location_release_amount,Row,Col)  </a><span class="comment">%#codegen</span>
+0002 <span class="comment">%GLIA_CA Summary of this function goes here</span>
+0003 
+0004 <span class="comment">%% Parameters</span>
+0005 deltaT=0.001;       <span class="comment">%% Time step interval (s),i.e. 1ms</span>
+0006 taoh=2.0;           <span class="comment">%% the time constant for the dynamics of h, unit : s</span>
+0007 b=0.111;            <span class="comment">%% Fraction of open IP3 receptors at [Ca2+]=0</span>
+0008 V1=0.889;           <span class="comment">%% the proportion of IP3Rs that are activated by the binding of Ca2+</span>
+0009 kp=0.17;            <span class="comment">%% the linear rate of IP3 breakdown, unit : /s</span>
+0010 mu0=0.567;          <span class="comment">%% the proportion of IP3Rs that are activated at [IP3] =0μM</span>
+0011 mu1=0.433;          <span class="comment">%% the proportion of IP3Rs that are activated by bound IP3</span>
+0012 
+0013 kflux=16.2*400;     <span class="comment">%% the maximum total Ca2+ flux through all IP3Rs, unit : μM/s</span>
+0014 gamma=2.0*400;      <span class="comment">%% the maximmum rate of Ca2+ pumping from the cytosol, unit : μM/s</span>
+0015 k1=0.7*400;         <span class="comment">%% Kinetic constant, unit : μM</span>
+0016 k2=0.7*400;         <span class="comment">%% Kinetic constant, unit : μM</span>
+0017 kgamma=0.1*400;     <span class="comment">%% Kinetic constant of calcium pumps of ER, unit : μM</span>
+0018 Dp=300/400;         <span class="comment">%% the cytosolic diffusion coefficients of IP3, unit : (μm)^2/s</span>
+0019 Dc=20/400;          <span class="comment">%% the cytosolic diffusion coefficients of Ca2+, unit : (μm)^2/s</span>
+0020 kmu=4*400;          <span class="comment">%%  Kinetic constant of mu, unit : μM</span>
+0021 peq=0.28*400;       <span class="comment">%% IP3 resting concentration, unit : uM</span>
+0022 
+0023 Fp=5/20;            <span class="comment">%% IP3 permeability of the cell membrane, unit : μm/s</span>
+0024 Fc=1.1/20;          <span class="comment">%% Ca2+ permeability of the cell membrane, unit : μm/s</span>
+0025 
+0026 C1=ones(150,150);   <span class="comment">%% the cytosolic free calcium concentration, unit : μM</span>
+0027 P1=ones(150,150);   <span class="comment">%% the cytosolic IP3 concentration, unit : μM</span>
+0028 H1=ones(150,150);   <span class="comment">%% the proportion of IP3Rs that have not been closed by Ca2+</span>
+0029 
+0030 
+0031 <span class="comment">%% Calculation</span>
+0032 ip3_rel=find(location_release_amount(:,3)~=0);
+0033 <span class="keyword">for</span> i=1:length(ip3_rel)
+0034     x=ceil(location_release_amount(ip3_rel(i),1)/20);
+0035     y=ceil(location_release_amount(ip3_rel(i),2)/20);
+0036     P(x,y)=P(x,y)+location_release_amount(ip3_rel(i),3)*0.009;
+0037 <span class="keyword">end</span>
+0038 
+0039 C=C*400;
+0040 P=P*400;
+0041 
+0042 <span class="keyword">for</span> j=2:(Col-1)
+0043     <span class="keyword">for</span> i=2:(Row-1)
+0044         old_cij = C(i,j);
+0045         old_pij = P(i,j);
+0046         old_hij = H(i,j);
+0047         C1(i,j)=old_cij+deltaT*(Dc*(C(i+1,j)-2*old_cij+C(i-1,j)+C(i,j+1)-2*old_cij+C(i,j-1))+kflux*(mu0+mu1*P(i,j)/(kmu+P(i,j)))*H(i,j)*(b+V1*old_cij/(k1+old_cij))-gamma*old_cij/(kgamma+old_cij));
+0048         P1(i,j)=old_pij+deltaT*(Dp*(P(i+1,j)-2*old_pij+P(i-1,j)+P(i,j+1)-2*old_pij+P(i,j-1))+kp*(peq-old_pij));
+0049         H1(i,j)=old_hij+deltaT*(k2^2/(k2^2+old_cij^2)-old_hij)/taoh;
+0050         <span class="keyword">if</span>(mod(i,3)==0)
+0051             C1(i,j)=C1(i,j)-deltaT*(old_cij-C(i+1,j))*Fc;
+0052             C1(i+1,j)=C1(i+1,j)+deltaT*(old_cij-C(i+1,j))*Fc;
+0053             P1(i,j)=P1(i,j)-deltaT*(old_pij-P(i+1,j))*Fp;
+0054             P1(i+1,j)=P1(i+1,j)+deltaT*(old_pij-P(i+1,j))*Fp;
+0055         <span class="keyword">end</span>
+0056         <span class="keyword">if</span>(mod(j,3)==0)
+0057             C1(i,j)=C1(i,j)-deltaT*(old_cij-C(i,j+1))*Fc;
+0058             C1(i,j+1)=C1(i,j+1)+deltaT*(old_cij-C(i,j+1))*Fc;
+0059             P1(i,j)=P1(i,j)-deltaT*(old_pij-P(i,j+1))*Fp;
+0060             P1(i,j+1)=P1(i,j+1)+deltaT*(old_pij-P(i,j+1))*Fp;
+0061         <span class="keyword">end</span>
+0062     <span class="keyword">end</span>
+0063 <span class="keyword">end</span>
+0064 
+0065 C1(1,2:(Col-1))=C1(2,2:(Col-1));
+0066 C1(Row,2:(Col-1))=C1(Row-1,2:(Col-1));
+0067 C1(2:(Row-1),1)=C1(2:(Row-1),2);
+0068 C1(2:(Row-1),Col)=C1(2:(Row-1),(Col-1));
+0069 C1(1,1)=C1(2,2);
+0070 C1(1,Col)=C1(2,(Col-1));
+0071 C1(Row,1)=C1(Row-1,2);
+0072 C1(Row,Col)=C1(Row-1,(Col-1));
+0073 
+0074 P1(1,2:(Col-1))=P1(2,2:(Col-1));
+0075 P1(Row,2:(Col-1))=P1(Row-1,2:(Col-1));
+0076 P1(2:(Row-1),1)=P1(2:(Row-1),2);
+0077 P1(2:(Row-1),Col)=P1(2:(Row-1),(Col-1));
+0078 P1(1,1)=P1(2,2);
+0079 P1(1,Col)=P1(2,(Col-1));
+0080 P1(Row,1)=P1(Row-1,2);
+0081 P1(Row,Col)=P1(Row-1,(Col-1));
+0082 
+0083 H1(1,2:(Col-1))=H1(2,2:(Col-1));
+0084 H1(Row,2:(Col-1))=H1(Row-1,2:(Col-1));
+0085 H1(2:(Row-1),1)=H1(2:(Row-1),2);
+0086 H1(2:(Row-1),Col)=H1(2:(Row-1),(Col-1));
+0087 H1(1,1)=H1(2,2);
+0088 H1(1,Col)=H1(2,(Col-1));
+0089 H1(Row,1)=H1(Row-1,2);
+0090 H1(Row,Col)=H1(Row-1,(Col-1));
+0091 
+0092 C1=C1/400;
+0093 P1=P1/400;
+0094 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

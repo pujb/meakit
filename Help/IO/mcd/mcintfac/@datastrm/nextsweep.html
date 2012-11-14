@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nextsweep</title>
+  <meta name="keywords" content="nextsweep">
+  <meta name="description" content="nextsweep - reads the next sweep (datastream method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>nextsweep
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>nextsweep - reads the next sweep (datastream method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function a = nextsweep(d,varargin); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> nextsweep - reads the next sweep (datastream method)
+ a = nextsweep(d,varargin) takes an datastrm object and 
+ starttime / endtime (within sweep) as optional 2. and 3. parameter
+
+ optional 4. and further parameters: 
+ 'hold' for holding file position (don't move to next sweep)
+ 'originorder' for not sorting channels in 8x8 mea configuration
+ return value is a cell with sweepStartTime (ms) and sweepValues (AD values)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="getstreamnumber.html" class="code" title="function streamnumber=getstreamnumber(d,streamname);">getstreamnumber</a>	getstreamnumber - returns streamnumber of streamname (datastream method)</li><li><a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="../../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="nextraw.html" class="code" title="function c = nextraw(d,startTime,endTime,varargin);">nextraw</a>	nextraw - calls nextsweep to read in continous raw (datastream method)</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a = nextsweep(d,varargin);</a>
+0002 <span class="comment">% nextsweep - reads the next sweep (datastream method)</span>
+0003 <span class="comment">% a = nextsweep(d,varargin) takes an datastrm object and</span>
+0004 <span class="comment">% starttime / endtime (within sweep) as optional 2. and 3. parameter</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% optional 4. and further parameters:</span>
+0007 <span class="comment">% 'hold' for holding file position (don't move to next sweep)</span>
+0008 <span class="comment">% 'originorder' for not sorting channels in 8x8 mea configuration</span>
+0009 <span class="comment">% return value is a cell with sweepStartTime (ms) and sweepValues (AD values)</span>
+0010 
+0011 rawData=(strcmp(d.DataType,<span class="string">'raw triggered'</span>));
+0012 rawData=rawData|(strcmp(<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'DataType'</span>),<span class="string">'raw continous'</span>));
+0013 <span class="keyword">if</span> ~rawData    
+0014     error([<span class="string">'nextsweep works only on raw continous and raw triggered not on '</span> d.DataType]);
+0015 <span class="keyword">end</span>;
+0016 
+0017 <span class="comment">%default configuration</span>
+0018 returnunit=<span class="string">'AD'</span>;
+0019 hold=0;
+0020 fill68=1;
+0021 <span class="comment">%default configuration end</span>
+0022 originorder=<span class="string">'off'</span>;
+0023 sweeplength=(d.MicrosecondsPerTick*d.total_window_ticks)/1000;
+0024 <span class="keyword">if</span> size(varargin,2)==0
+0025    startTime=0;
+0026    endTime=sweeplength;
+0027 <span class="keyword">elseif</span> size(varargin,2)==2
+0028    startTime=varargin{1};
+0029    endTime    =min(varargin{2},sweeplength);
+0030 <span class="keyword">elseif</span> size(varargin,2)&gt;=3
+0031     startTime=varargin{1};
+0032    endTime    =min(varargin{2},sweeplength);
+0033    <span class="keyword">for</span> i=3:2:size(varargin,2)
+0034         <span class="keyword">switch</span> lower(varargin{i})
+0035             <span class="keyword">case</span> {<span class="string">'returnunit'</span>},
+0036                 returnunit=varargin{i+1};
+0037             <span class="keyword">case</span> {<span class="string">'hold'</span>},
+0038                 hold=strcmp(lower(varargin{i+1}),<span class="string">'on'</span>);
+0039             <span class="keyword">case</span> {<span class="string">'originorder'</span>},
+0040                 fill68=~strcmp(lower(varargin{i+1}),<span class="string">'on'</span>);
+0041                 originorder=lower(varargin{i+1});
+0042         <span class="keyword">end</span>
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">else</span> error(<span class="string">'nextsweep takes 1, 3 or more parameters'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="keyword">if</span> (strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0048    msPerTick=<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'MicrosecondsPerTick'</span>)/1000;
+0049     <span class="keyword">if</span> strcmp(<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'DataType'</span>),<span class="string">'raw continous'</span>)
+0050         error(<span class="string">'please use nextdata for raw continous'</span>);
+0051     <span class="keyword">end</span>
+0052     tmp.function=<span class="string">'GetSweepNumber'</span>;
+0053     test=mcstreammex(tmp);
+0054     <span class="keyword">if</span> test.SweepNumber&gt;length(d.sweepStartTime)
+0055         error(<span class="string">'end of file reached'</span>)
+0056     <span class="keyword">end</span>
+0057     a.sweepStartTime=d.sweepStartTime(test.SweepNumber);
+0058    endTime=endTime-rem(endTime,msPerTick);
+0059    startTime=startTime-rem(startTime,msPerTick);
+0060    startend=[startTime endTime]+a.sweepStartTime;
+0061     <span class="keyword">if</span> ~hold
+0062         tmp.function=<span class="string">'SetSweepNumber'</span>;
+0063         tmp.SweepNumber=test.SweepNumber+1;
+0064         test=mcstreammex(tmp);
+0065    <span class="keyword">end</span>
+0066    spikestream=<a href="getstreamnumber.html" class="code" title="function streamnumber=getstreamnumber(d,streamname);">getstreamnumber</a>(d,<span class="string">'Spikes 1'</span>);
+0067    <span class="keyword">if</span> (spikestream &gt; 0)
+0068       sinfo=<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'StreamInfo'</span>);
+0069       pre=sinfo{spikestream}.PreTrigger;
+0070       post=sinfo{spikestream}.PostTrigger; <span class="comment">%not used</span>
+0071         ce=zeros(64,(endTime-startTime+post)/msPerTick)+d.ZeroADValue;
+0072       cs=<a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(d,<span class="string">'streamname'</span>,<span class="string">'Spikes 1'</span>,<span class="string">'originorder'</span>,<span class="string">'off'</span>,<span class="string">'startend'</span>,startend,<span class="string">'warning'</span>,<span class="string">'off'</span>);
+0073       <span class="keyword">for</span> ic=1:64
+0074          spkt=cs.spiketimes{ic};
+0075          spkv=cs.spikevalues{ic};
+0076          <span class="keyword">for</span> is=1:length(spkt)
+0077             spkstart=max(round((spkt(is)-pre-startend(1))/msPerTick),1);
+0078             ce(ic,[spkstart:spkstart+size(spkv,1)-1])=spkv(:,is)';
+0079          <span class="keyword">end</span>
+0080       <span class="keyword">end</span>
+0081        a.sweepValues = ce(:,1:(endTime-startTime)/msPerTick);
+0082    <span class="keyword">else</span>
+0083         ce=<a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(d,<span class="string">'streamname'</span>,<span class="string">'Electrode Raw Data'</span>,<span class="string">'originorder'</span>,originorder,<span class="string">'startend'</span>,startend,<span class="string">'warning'</span>,<span class="string">'off'</span>);
+0084        ca=<a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(d,<span class="string">'streamname'</span>,<span class="string">'Analog Raw Data'</span>,<span class="string">'sorterleft'</span>,[[1:60] 1 2 3 4]-1,<span class="string">'originorder'</span>,originorder,<span class="string">'startend'</span>,startend,<span class="string">'warning'</span>,<span class="string">'off'</span>);
+0085       <span class="keyword">if</span>(size(ca.data,2)==0)
+0086          <span class="comment">% catches an error in MCRACK 1.29</span>
+0087          ca.data=zeros(4,size(ce.data,2));
+0088       <span class="keyword">end</span>;
+0089        a.sweepValues = [ce.data;ca.data];
+0090    <span class="keyword">end</span>
+0091    
+0092    
+0093     <span class="keyword">if</span>(returnunit==<span class="string">'uV'</span> | returnunit==<span class="string">'礦'</span> | returnunit==<span class="string">'uv'</span>)
+0094         a.sweepValues = (a.sweepValues-d.ZeroADValue) * d.MicrovoltsPerAD;    <span class="comment">% auf uV umrechnen</span>
+0095     <span class="keyword">elseif</span>(returnunit==<span class="string">'mV'</span> | returnunit==<span class="string">'mv'</span>)
+0096         a.sweepValues = (a.sweepValues-d.ZeroADValue) * (d.MicrovoltsPerAD/1000);    <span class="comment">% auf mV umrechnen</span>
+0097     <span class="keyword">elseif</span>(returnunit==<span class="string">'V'</span> | returnunit==<span class="string">'v'</span>)
+0098         a.sweepValues = (a.sweepValues-d.ZeroADValue) * (d.MicrovoltsPerAD/1000000);    <span class="comment">% auf V umrechnen</span>
+0099     <span class="keyword">end</span>;
+0100    a.startend = [startTime,endTime];
+0101     <span class="keyword">return</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 <span class="keyword">if</span> ftell(d.fid)==d.filesize
+0105     error(<span class="string">'end of file reached'</span>)
+0106 <span class="keyword">end</span>;
+0107 
+0108 startPos=ceil(startTime*1000/d.MicrosecondsPerTick);        <span class="comment">% in ticks</span>
+0109 endPos=floor(endTime*1000/d.MicrosecondsPerTick);             <span class="comment">% in ticks</span>
+0110 
+0111 <span class="comment">% ---- some preparations ------------------------------------------------------------------------------------------</span>
+0112 <span class="keyword">if</span> fill68
+0113     sweepValues = zeros(68, endPos-startPos)+d.ZeroADValue;        <span class="comment">% accelerates the actual reading process</span>
+0114     sortedChannelID=d.sorterleft(d.HardwareChannelID)';
+0115 <span class="keyword">else</span>
+0116     sweepValues = zeros(d.NChannels, endPos-startPos)+d.ZeroADValue;        <span class="comment">% accelerates the actual reading process</span>
+0117     sortedChannelID=[1:d.NChannels];
+0118 <span class="keyword">end</span>;
+0119 <span class="comment">% ---- read analog data ------------------------------------------------------------------------------------------</span>
+0120 
+0121 
+0122 origPos=ftell(d.fid);
+0123 samplecounter = 0;
+0124 started=0;
+0125 <span class="keyword">while</span> samplecounter &lt; d.total_window_ticks
+0126     lastPos=ftell(d.fid);
+0127     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);            <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0128     <span class="keyword">if</span> samplecounter == 0
+0129         sweepStartTime = (timebin(2)*2^32+timebin(1))*d.MicrosecondsPerTick/1000;
+0130     <span class="keyword">end</span>;
+0131     nSamples = fread(d.fid, 1, <span class="string">'ushort'</span>);                <span class="comment">% Anzahl der samples pro Kanal</span>
+0132    <span class="keyword">switch</span> started
+0133        <span class="keyword">case</span> 0
+0134            <span class="keyword">if</span> samplecounter+nSamples&gt;startPos
+0135             fseek(d.fid,(startPos-samplecounter)*d.NChannels*2,0);            <span class="comment">% go ahead</span>
+0136                 <span class="keyword">if</span> samplecounter+nSamples&gt;=endPos
+0137                 started=2;
+0138                     sweepValues(sortedChannelID,1:endPos-startPos) <span class="keyword">...</span>
+0139                         = fread(d.fid, [d.NChannels,endPos-startPos], <span class="string">'ushort'</span>);
+0140                     fseek(d.fid,(samplecounter+nSamples-endPos)*d.NChannels*2,0);            <span class="comment">% go ahead</span>
+0141                 <span class="keyword">else</span>
+0142                 started=1;
+0143                     sweepValues(sortedChannelID,1:samplecounter+nSamples-startPos) <span class="keyword">...</span>
+0144                         = fread(d.fid, [d.NChannels,samplecounter+nSamples-startPos], <span class="string">'ushort'</span>);
+0145                 <span class="keyword">end</span>;
+0146          <span class="keyword">else</span>
+0147                 fseek(d.fid,nSamples*d.NChannels*2,0);            <span class="comment">% go ahead</span>
+0148             <span class="keyword">end</span>;
+0149       <span class="keyword">case</span> 1
+0150            <span class="keyword">if</span> samplecounter+nSamples&lt;endPos
+0151                 sweepValues(sortedChannelID,samplecounter-startPos+1: <span class="keyword">...</span>
+0152                         samplecounter+nSamples-startPos) <span class="keyword">...</span>
+0153                     = fread(d.fid, [d.NChannels,nSamples], <span class="string">'ushort'</span>);
+0154          <span class="keyword">else</span>
+0155              started=2;
+0156                 sweepValues(sortedChannelID,samplecounter-startPos+1:endPos-startPos) <span class="keyword">...</span>
+0157                     = fread(d.fid, [d.NChannels,endPos-samplecounter], <span class="string">'ushort'</span>);
+0158                 fseek(d.fid,(samplecounter+nSamples-endPos)*d.NChannels*2,0);            <span class="comment">% go ahead</span>
+0159             <span class="keyword">end</span>;
+0160       <span class="keyword">case</span> 2
+0161             fseek(d.fid,nSamples*d.NChannels*2,0);            <span class="comment">% go ahead</span>
+0162     <span class="keyword">end</span>;
+0163     samplecounter = samplecounter + nSamples;
+0164     <span class="keyword">if</span> (ftell(d.fid)-lastPos)~=((nSamples*d.NChannels*2)+10)
+0165         error(<span class="string">'illogical in nextsweep.m or corrupted file'</span>);
+0166     <span class="keyword">end</span>;
+0167 <span class="comment">%    disp(['samplecounter: ' int2str(samplecounter) ', #Samples = ' int2str(nSamples)])</span>
+0168 <span class="comment">%  disp(['pos ' num2str(ftell(d.fid))]);</span>
+0169 <span class="keyword">end</span>;
+0170 
+0171 <span class="keyword">if</span> hold
+0172     fseek(d.fid,origPos-ftell(d.fid),0);
+0173 <span class="keyword">end</span>;
+0174 
+0175 <span class="comment">% ------- Spannungen in 礦 umrechnen ----------------------------------------------</span>
+0176 
+0177 <span class="keyword">if</span>(returnunit==<span class="string">'uV'</span> | returnunit==<span class="string">'礦'</span> | returnunit==<span class="string">'uv'</span>)
+0178     sweepValues = (sweepValues-d.ZeroADValue) * d.MicrovoltsPerAD;    <span class="comment">% auf uV umrechnen</span>
+0179 <span class="keyword">elseif</span>(returnunit==<span class="string">'mV'</span> | returnunit==<span class="string">'mv'</span>)
+0180     sweepValues = (sweepValues-d.ZeroADValue) * (d.MicrovoltsPerAD/1000);    <span class="comment">% auf mV umrechnen</span>
+0181 <span class="keyword">elseif</span>(returnunit==<span class="string">'V'</span> | returnunit==<span class="string">'v'</span>)
+0182     sweepValues = (sweepValues-d.ZeroADValue) * (d.MicrovoltsPerAD/1000000);    <span class="comment">% auf V umrechnen</span>
+0183 <span class="keyword">end</span>;
+0184 
+0185 a.sweepStartTime = sweepStartTime;
+0186 a.sweepValues = sweepValues;
+0187 a.startend = [startTime,endTime];</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of clustering_coef_wd</title>
+  <meta name="keywords" content="clustering_coef_wd">
+  <meta name="description" content="CLUSTERING_COEF_WD     Clustering coefficient">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>clustering_coef_wd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CLUSTERING_COEF_WD     Clustering coefficient</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function C=clustering_coef_wd(W) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">CLUSTERING_COEF_WD     Clustering coefficient
+
+   C = clustering_coef_wd(W);
+
+   The weighted clustering coefficient is the average &quot;intensity&quot; of 
+   triangles around a node.
+
+   Input:      W,      weighted directed connection matrix
+
+   Output:     C,      clustering coefficient vector
+
+   Reference: Fagiolo (2007) Phys Rev E 76:026107.
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function C=clustering_coef_wd(W)</a>
+0002 <span class="comment">%CLUSTERING_COEF_WD     Clustering coefficient</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   C = clustering_coef_wd(W);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   The weighted clustering coefficient is the average &quot;intensity&quot; of</span>
+0007 <span class="comment">%   triangles around a node.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Input:      W,      weighted directed connection matrix</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Output:     C,      clustering coefficient vector</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Reference: Fagiolo (2007) Phys Rev E 76:026107.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0017 
+0018 
+0019 <span class="comment">%Methodological note (also see clustering_coef_bd)</span>
+0020 <span class="comment">%The weighted modification is as follows:</span>
+0021 <span class="comment">%- The numerator: adjacency matrix is replaced with weights matrix ^ 1/3</span>
+0022 <span class="comment">%- The denominator: no changes from the binary version</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%The above reduces to symmetric and/or binary versions of the clustering</span>
+0025 <span class="comment">%coefficient for respective graphs.</span>
+0026 
+0027 A=W~=0;                     <span class="comment">%adjacency matrix</span>
+0028 S=W.^(1/3)+(W.').^(1/3);    <span class="comment">%symmetrized weights matrix ^1/3</span>
+0029 K=sum(A+A.',2);                <span class="comment">%total degree (in + out)</span>
+0030 cyc3=diag(S^3)/2;           <span class="comment">%number of 3-cycles (ie. directed triangles)</span>
+0031 K(cyc3==0)=inf;             <span class="comment">%if no 3-cycles exist, make C=0 (via K=inf)</span>
+0032 CYC3=K.*(K-1)-2*diag(A^2);    <span class="comment">%number of all possible 3-cycles</span>
+0033 C=cyc3./CYC3;               <span class="comment">%clustering coefficient</span>
+0034</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

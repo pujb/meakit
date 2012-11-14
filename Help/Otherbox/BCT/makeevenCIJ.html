@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of makeevenCIJ</title>
+  <meta name="keywords" content="makeevenCIJ">
+  <meta name="description" content="MAKEEVENCIJ        Synthetic modular small-world network">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>makeevenCIJ
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MAKEEVENCIJ        Synthetic modular small-world network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function  [CIJ] = makeevenCIJ(N,K,sz_cl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MAKEEVENCIJ        Synthetic modular small-world network
+
+   CIJ = makeevenCIJ(N,K,sz_cl);
+
+   This function generates a random, directed network with a specified 
+   number of fully connected modules linked together by evenly distributed
+   remaining random connections.
+
+   Inputs:     N,      number of vertices (must be power of 2)
+               K,      number of edges
+               sz_cl,  size of clusters (power of 2)
+
+   Outputs:    CIJ,    connection matrix
+
+   Notes:  N must be a power of 2.
+           A warning is generated if all modules contain more edges than K.
+           Cluster size is 2^sz_cl;
+
+
+   Olaf Sporns, Indiana University, 2005/2007</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function  [CIJ] = makeevenCIJ(N,K,sz_cl)</a>
+0002 <span class="comment">%MAKEEVENCIJ        Synthetic modular small-world network</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   CIJ = makeevenCIJ(N,K,sz_cl);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function generates a random, directed network with a specified</span>
+0007 <span class="comment">%   number of fully connected modules linked together by evenly distributed</span>
+0008 <span class="comment">%   remaining random connections.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Inputs:     N,      number of vertices (must be power of 2)</span>
+0011 <span class="comment">%               K,      number of edges</span>
+0012 <span class="comment">%               sz_cl,  size of clusters (power of 2)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Outputs:    CIJ,    connection matrix</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Notes:  N must be a power of 2.</span>
+0017 <span class="comment">%           A warning is generated if all modules contain more edges than K.</span>
+0018 <span class="comment">%           Cluster size is 2^sz_cl;</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Olaf Sporns, Indiana University, 2005/2007</span>
+0022 
+0023 <span class="comment">% compute number of hierarchical levels and adjust cluster size</span>
+0024 mx_lvl = floor(log2(N));
+0025 sz_cl = sz_cl-1;
+0026 
+0027 <span class="comment">% make a stupid little template</span>
+0028 t = ones(2).*2;
+0029 
+0030 <span class="comment">% check N against number of levels</span>
+0031 Nlvl = 2^mx_lvl;
+0032 <span class="keyword">if</span> (Nlvl~=N) 
+0033     disp(<span class="string">'Warning: N must be a power of 2'</span>); 
+0034 <span class="keyword">end</span>;
+0035 N = Nlvl;
+0036 
+0037 <span class="comment">% create hierarchical template</span>
+0038 <span class="keyword">for</span> lvl=1:mx_lvl-1
+0039    CIJ = ones(2^(lvl+1),2^(lvl+1));
+0040    group1 = [1:size(CIJ,1)/2];
+0041    group2 = [size(CIJ,1)/2+1:size(CIJ,1)];
+0042    CIJ(group1,group1) = t;
+0043    CIJ(group2,group2) = t;
+0044    CIJ = CIJ+ones(size(CIJ,1),size(CIJ,1));
+0045    t = CIJ;
+0046 <span class="keyword">end</span>;
+0047 s = size(CIJ,1);
+0048 CIJ = CIJ-ones(s,s)-mx_lvl.*eye(s);
+0049 
+0050 <span class="comment">% assign connection probabilities</span>
+0051 <span class="comment">%CIJp = mx_lvl-CIJ-sz_cl;</span>
+0052 <span class="comment">%CIJp = (CIJp&gt;0).*CIJp;</span>
+0053 CIJp = (CIJ&gt;=(mx_lvl-sz_cl));
+0054 
+0055 <span class="comment">% determine number of remaining (non-cluster) connections and their</span>
+0056 <span class="comment">% possible positions</span>
+0057 <span class="comment">%CIJc = (CIJp==0);</span>
+0058 CIJc = (CIJp==1);
+0059 remK = K-nnz(CIJc);
+0060 <span class="keyword">if</span> (remK&lt;0) 
+0061     disp(<span class="string">'Warning: K is too small, output matrix contains clusters only'</span>);
+0062 <span class="keyword">end</span>;
+0063 [a,b] = find(~(CIJc+eye(N)));
+0064 
+0065 <span class="comment">% assign 'remK' randomly distributed connections</span>
+0066 rp = randperm(length(a));
+0067 a = a(rp(1:remK));
+0068 b = b(rp(1:remK));
+0069 <span class="keyword">for</span> i=1:remK
+0070    CIJc(a(i),b(i)) = 1;
+0071 <span class="keyword">end</span>;
+0072 
+0073 <span class="comment">% prepare for output</span>
+0074 CIJ = CIJc;
+0075</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

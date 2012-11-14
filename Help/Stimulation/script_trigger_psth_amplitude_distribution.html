@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of script_trigger_psth_amplitude_distribution</title>
+  <meta name="keywords" content="script_trigger_psth_amplitude_distribution">
+  <meta name="description" content="SCRIPT_TRIGGER_PSTH_AMPLITUDE_DISTRIBUTION 脚本：处理刺激Trigger后的Spike统计信息">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>script_trigger_psth_amplitude_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>SCRIPT_TRIGGER_PSTH_AMPLITUDE_DISTRIBUTION 脚本：处理刺激Trigger后的Spike统计信息</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = script_trigger_psth_amplitude_distribution() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">SCRIPT_TRIGGER_PSTH_AMPLITUDE_DISTRIBUTION 脚本：处理刺激Trigger后的Spike统计信息
+   1：程序运行时要求输入一个MCD文件（SPIKE）
+   2：若有多个Trigger数据流存在，程序要求用户选择
+   其他参数请酌情手动调整 -_-!...
+
+   蒲江波 - 2009年5月22日
+   蒲江波 - 2009年5月31日
+       引入统一的util_load_spike_trigger_mcdstream_whold_length()函数来提取spif/trigger
+       信息。
+   蒲江波 - 2009年7月3日
+       Bug Fix: 修复了若没有响应时，psth_y为空的Bug。</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="util_psth_by_trigger.html" class="code" title="function [ ax_x result ] = util_psth_by_trigger( triggerif,spif,chid,binsize,timescope,trigger_range,isManualTrigger,isNormalized)">util_psth_by_trigger</a>	UTIL_PSTH_BY_TRIGGER 工具函数：利用MCS的信息，计算PSTH</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = script_trigger_psth_amplitude_distribution()</a>
+0002 <span class="comment">%SCRIPT_TRIGGER_PSTH_AMPLITUDE_DISTRIBUTION 脚本：处理刺激Trigger后的Spike统计信息</span>
+0003 <span class="comment">%   1：程序运行时要求输入一个MCD文件（SPIKE）</span>
+0004 <span class="comment">%   2：若有多个Trigger数据流存在，程序要求用户选择</span>
+0005 <span class="comment">%   其他参数请酌情手动调整 -_-!...</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   蒲江波 - 2009年5月22日</span>
+0008 <span class="comment">%   蒲江波 - 2009年5月31日</span>
+0009 <span class="comment">%       引入统一的util_load_spike_trigger_mcdstream_whold_length()函数来提取spif/trigger</span>
+0010 <span class="comment">%       信息。</span>
+0011 <span class="comment">%   蒲江波 - 2009年7月3日</span>
+0012 <span class="comment">%       Bug Fix: 修复了若没有响应时，psth_y为空的Bug。</span>
+0013 
+0014 <span class="comment">% 打开文件，读取mcd数据流</span>
+0015 [D spif triggerif] = <a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>();
+0016 
+0017 <span class="comment">% 获取通道号</span>
+0018 chid = input(<span class="string">'请输入通道号：'</span>);
+0019 
+0020 <span class="comment">% Bin的大小（即是时间的Bin也是幅度的跳跃Bin，当然可以自己改）</span>
+0021 binsize = 5;
+0022 
+0023 <span class="comment">% 获取Trigger的总数目</span>
+0024 trigger_total_counts = size(triggerif.times,2);
+0025 disp([<span class="string">'总共有 '</span> num2str(trigger_total_counts) <span class="string">'个Trigger'</span>]);
+0026 
+0027 <span class="comment">% 设置每个步长里面要计算多少个Trigger</span>
+0028 trigger_step_counts = 20;
+0029 
+0030 <span class="comment">% 设置PSTH覆盖的时间范围</span>
+0031 psth_range = [-50 450];
+0032 
+0033 <span class="comment">% 计算PSTH和PS幅度分布</span>
+0034 
+0035 <span class="keyword">for</span> i = 1:trigger_step_counts:trigger_total_counts
+0036     trigger_end = i + trigger_step_counts - 1;
+0037     disp([<span class="string">'正在处理第'</span> num2str(i) <span class="string">'到'</span> num2str(trigger_end) <span class="string">'个Trigger的信息'</span>]);
+0038     
+0039     [psth_x psth_y] = <a href="util_psth_by_trigger.html" class="code" title="function [ ax_x result ] = util_psth_by_trigger( triggerif,spif,chid,binsize,timescope,trigger_range,isManualTrigger,isNormalized)">util_psth_by_trigger</a>( triggerif, spif, chid, binsize, psth_range, [i trigger_end], 1, 1 );
+0040 <span class="comment">%     [psAMP_x psAMP_y] = util_psth_amplitude_by_trigger( triggerif, spif, D, chid, binsize, psth_range, [i trigger_end], 1, 1, 2 );</span>
+0041     
+0042 <span class="comment">%     if isempty(psth_y)</span>
+0043 <span class="comment">%         psth_y = zeros(1, size(psth_x, 2));</span>
+0044 <span class="comment">%     end</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%     figure, bar(psth_x, psth_y), title(['PSTH' num2str(i) '-' num2str(trigger_end)]),xlabel('Time(ms)'),ylabel('Probability');</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%     if ~isempty(psAMP_y)</span>
+0049 <span class="comment">%         figure, bar(psAMP_x, psAMP_y), title(['AMPLITUDE - PSTH' num2str(i) '-' num2str(trigger_end)]),xlabel('Amplitude(uV)'),ylabel('Probability');</span>
+0050 <span class="comment">%     end</span>
+0051         
+0052     
+0053     
+0054 <span class="keyword">end</span>
+0055 
+0056 
+0057 <span class="keyword">end</span>
+0058</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

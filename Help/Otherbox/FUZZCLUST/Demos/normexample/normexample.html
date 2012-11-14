@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of normexample</title>
+  <meta name="keywords" content="normexample">
+  <meta name="description" content="normalization example">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html FUZZCLUST --><!-- # Demos --><!-- menu.html normexample -->
+<h1>normexample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>normalization example</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">normalization example</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">%normalization example</span>
+0002 close all
+0003 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0004 path(path,<span class="string">'..\..\FUZZCLUST'</span>)
+0005 <span class="comment">%the data</span>
+0006 load data3.txt
+0007 data.X = data3;
+0008 <span class="comment">%normalization</span>
+0009 figure(2)
+0010 subplot(3,1,1),plot(data.X(:,1),data.X(:,2),<span class="string">'.'</span>)
+0011 data = <a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>)
+0012 subplot(3,1,2),plot(data.X(:,1),data.X(:,2),<span class="string">'x'</span>)
+0013 data = <a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'var'</span>)
+0014 subplot(3,1,3),plot(data.X(:,1),data.X(:,2),<span class="string">'+'</span>)
+0015</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of hlle</title>
+  <meta name="keywords" content="hlle">
+  <meta name="description" content="HLLE Runs the Hessian LLE algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>hlle
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>HLLE Runs the Hessian LLE algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = hlle(X, no_dims, k, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">HLLE Runs the Hessian LLE algorithm
+
+   mappedX = hlle(X, no_dims, k, eig_impl)
+
+ Runs the Hessian LLE algorithm on dataset X to reduce its dimensionality
+ to no_dims. The variable k specifies the number of nearest negihbors that
+ is used.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="jdqr.html" class="code" title="function varargout=jdqr(varargin)">jdqr</a>	JDQR computes a partial Schur decomposition of a square matrix or operator.</li><li><a href="mgs.html" class="code" title="function [Q, R] = mgs(A)">mgs</a>	MGS Performs a modified Gram-Schmidt orthogonalization</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = hlle(X, no_dims, k, eig_impl)</a>
+0002 <span class="comment">%HLLE Runs the Hessian LLE algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = hlle(X, no_dims, k, eig_impl)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Runs the Hessian LLE algorithm on dataset X to reduce its dimensionality</span>
+0007 <span class="comment">% to no_dims. The variable k specifies the number of nearest negihbors that</span>
+0008 <span class="comment">% is used.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0013 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0014 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0015 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0016 <span class="comment">% maintain the name of the original author.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0019 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0020 
+0021 
+0022     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0023         no_dims = 2;
+0024     <span class="keyword">end</span>
+0025     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0026         k = 12;
+0027     <span class="keyword">end</span>
+0028     <span class="keyword">if</span> ~exist(<span class="string">'eig_impl'</span>, <span class="string">'var'</span>)
+0029         eig_impl = <span class="string">'Matlab'</span>;
+0030     <span class="keyword">end</span>
+0031 
+0032     <span class="comment">% Compute nearest neighbors</span>
+0033     <span class="keyword">if</span> ischar(k)
+0034         warning(<span class="string">'Adaptive neighborhood selection often leads to problems in Hessian LLE.'</span>);
+0035     <span class="keyword">end</span>
+0036     disp(<span class="string">'Finding nearest neighbors...'</span>);
+0037     [D, nind] = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k);
+0038     max_k = size(nind, 2);
+0039     
+0040     <span class="comment">% Size of original data</span>
+0041     n = size(X, 1);
+0042     
+0043     <span class="comment">% Extra term count for quadratic form</span>
+0044     dp = no_dims * (no_dims + 1) / 2;
+0045     W = sparse([], [], [], dp * n, n, dp * n * max_k);
+0046 
+0047     <span class="comment">% For all datapoints</span>
+0048     disp(<span class="string">'Building Hessian estimator for neighboring points...'</span>);
+0049     <span class="keyword">for</span> i=1:n
+0050         <span class="comment">% Center datapoints by substracting their mean</span>
+0051         tmp_ind = nind(i,:);
+0052         tmp_ind = tmp_ind(tmp_ind ~= 0);
+0053         kt = length(tmp_ind);
+0054         thisx = X(tmp_ind,:);
+0055         thisx = (thisx - repmat(mean(thisx, 1), kt, 1))';
+0056 
+0057         <span class="comment">% Compute local coordinates (using SVD)</span>
+0058         [U, D, Vpr] = svd(thisx);
+0059         <span class="keyword">if</span> size(Vpr, 2) &lt; no_dims
+0060             no_dims = size(Vpr, 2);
+0061             dp = no_dims * (no_dims + 1) / 2;
+0062             warning([<span class="string">'Target dimensionality reduced to '</span> num2str(no_dims) <span class="string">'...'</span>]);
+0063         <span class="keyword">end</span>
+0064         V = Vpr(:,1:no_dims);
+0065         <span class="comment">% Basically, the above is applying PCA to the neighborhood of Xi. The PCA mapping that is found</span>
+0066         <span class="comment">% (and that is contained in V) is an approximation for the tangent space at Xi.</span>
+0067 
+0068         <span class="comment">% Build Hessian estimator</span>
+0069         <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> Yi; <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> Pii;
+0070         ct = 0;
+0071         <span class="keyword">for</span> mm=1:no_dims
+0072             startp = V(:,mm);
+0073             <span class="keyword">for</span> nn=1:length(mm:no_dims)
+0074                 indles = mm:no_dims;
+0075                 Yi(:,ct+nn) = startp .* (V(:,indles(nn)));
+0076             <span class="keyword">end</span>
+0077             ct = ct + length(mm:no_dims);
+0078         <span class="keyword">end</span>
+0079         Yi = [repmat(1, kt, 1) V Yi];
+0080                 
+0081         <span class="comment">% Gram-Schmidt orthogonalization (works different from Matlab QR function)</span>
+0082         [Yt, Orig] = <a href="mgs.html" class="code" title="function [Q, R] = mgs(A)">mgs</a>(Yi);
+0083         Pii = Yt(:,no_dims + 2:end)';
+0084         
+0085         <span class="comment">% Double check weights sum to 1</span>
+0086         <span class="keyword">for</span> j=1:dp
+0087             <span class="keyword">if</span> sum(Pii(j,:)) &gt; 0.0001
+0088                 tpp = Pii(j,:) ./ sum(Pii(j,:)); 
+0089             <span class="keyword">else</span>
+0090                 tpp = Pii(j,:);
+0091             <span class="keyword">end</span>
+0092             
+0093             <span class="comment">% Fill weight matrix</span>
+0094             W((i - 1) * dp + j, tmp_ind) = tpp;
+0095         <span class="keyword">end</span>
+0096     <span class="keyword">end</span>
+0097 
+0098     <span class="comment">% The weight matrix W is now entirely filled, perform eigenanalysis of W</span>
+0099     disp(<span class="string">'Computing HLLE embedding (eigenanalysis)...'</span>);
+0100 
+0101     <span class="comment">% Make sparse matrix that is inproduct of W</span>
+0102     G = W' * W;
+0103     G(isnan(G)) = 0;
+0104     G = sparse(G);
+0105     
+0106     <span class="comment">% Clear some memory</span>
+0107     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> X thisx W D nind U D Vpr;
+0108 
+0109     <span class="comment">% Perform eigendecomposition</span>
+0110     tol = 0;
+0111     <span class="keyword">if</span> strcmp(eig_impl, <span class="string">'JDQR'</span>)
+0112         options.Disp = 0;
+0113         options.LSolver = <span class="string">'bicgstab'</span>;
+0114         [mappedX, eigenvals] = <a href="jdqr.html" class="code" title="function varargout=jdqr(varargin)">jdqr</a>(G, no_dims + 1, tol, options);
+0115     <span class="keyword">else</span>
+0116         options.disp = 0;
+0117         options.issym = 1;
+0118         options.isreal = 1;
+0119         [mappedX, eigenvals] = eigs(G, no_dims + 1, tol, options);
+0120     <span class="keyword">end</span>
+0121     
+0122     <span class="comment">% Sort eigenvalues and eigenvectors</span>
+0123     [eigenvals, ind] = sort(diag(eigenvals), <span class="string">'ascend'</span>);
+0124     <span class="keyword">if</span> size(mappedX, 2) &lt; no_dims + 1, no_dims = size(mappedX, 2) - 1; <span class="keyword">end</span>
+0125     mappedX = mappedX(:,ind(2:no_dims + 1)); 
+0126    
+0127     <span class="comment">% Extract nonzero coordinates</span>
+0128     mappedX = mappedX(:,1:no_dims)' * sqrt(n);
+0129     mappedX = mappedX';
+0130</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

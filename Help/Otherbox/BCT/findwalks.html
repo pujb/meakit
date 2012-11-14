@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of findwalks</title>
+  <meta name="keywords" content="findwalks">
+  <meta name="description" content="FINDWALKS      Network walks">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>findwalks
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FINDWALKS      Network walks</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Wq,twalk,wlq] = findwalks(CIJ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">FINDWALKS      Network walks
+
+   [Wq,twalk,wlq] = findwalks(CIJ);
+
+   Walks are sequences of linked nodes, that may visit a single node more
+   than once. This function finds the number of walks of a given length, 
+   between any two nodes.
+
+   Input:      CIJ         binary (directed/undirected) connection matrix
+
+   Outputs:    Wq          3D matrix, Wq(i,j,q) is the number of walks
+                           from 'i' to 'j' of length 'q'.
+               twalk       total number of walks found
+               wlq         walk length distribution as function of 'q'
+
+   Notes: Wq grows very quickly for larger N,K,q. Weights are discarded.
+
+   Algorithm: algebraic path count
+
+
+   Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Wq,twalk,wlq] = findwalks(CIJ)</a>
+0002 <span class="comment">%FINDWALKS      Network walks</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [Wq,twalk,wlq] = findwalks(CIJ);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Walks are sequences of linked nodes, that may visit a single node more</span>
+0007 <span class="comment">%   than once. This function finds the number of walks of a given length,</span>
+0008 <span class="comment">%   between any two nodes.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      CIJ         binary (directed/undirected) connection matrix</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Outputs:    Wq          3D matrix, Wq(i,j,q) is the number of walks</span>
+0013 <span class="comment">%                           from 'i' to 'j' of length 'q'.</span>
+0014 <span class="comment">%               twalk       total number of walks found</span>
+0015 <span class="comment">%               wlq         walk length distribution as function of 'q'</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Notes: Wq grows very quickly for larger N,K,q. Weights are discarded.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Algorithm: algebraic path count</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0023 
+0024 <span class="comment">% ensure CIJ is binary...</span>
+0025 CIJ = double(CIJ~=0);
+0026 
+0027 N = size(CIJ,1);
+0028 Wq = zeros(N,N,N);
+0029 CIJpwr = CIJ;
+0030 Wq(:,:,1) = CIJ;
+0031 <span class="keyword">for</span> q=2:N
+0032    CIJpwr = CIJpwr*CIJ;
+0033    Wq(:,:,q) = CIJpwr;
+0034 <span class="keyword">end</span>;
+0035 
+0036 <span class="comment">% total number of walks</span>
+0037 twalk = sum(sum(sum(Wq)));
+0038 
+0039 <span class="comment">% walk length distribution</span>
+0040 wlq = reshape(sum(sum(Wq)),1,N);
+0041</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RSana</title>
+  <meta name="keywords" content="RSana">
+  <meta name="description" content="Syntax: [logRS,logERS,V]=RSana(x,n,method,q)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html fractal -->
+<h1>RSana
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Syntax: [logRS,logERS,V]=RSana(x,n,method,q)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [logRS,logERS,V]=RSana(x,n,method,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">Syntax: [logRS,logERS,V]=RSana(x,n,method,q)
+____________________________________________
+
+ Performs R/S analysis on a time series.
+
+ logRS is the log(R/S).
+ logERS is the Expectation of log(R/S).
+ V is the V statistic.
+ x is the time series.
+ n is the vector with the sub-periods.
+ method can take one of the following values
+  'Hurst' for the Hurst-Mandelbrot variation.
+  'Lo' for the Lo variation.
+  'MW' for the Moody-Wu variation.
+  'Parzen' for the Parzen variation.
+ q can be either
+  a (non-negative) integer.
+  'auto' for the Lo's suggested value.
+
+
+ References:
+
+ Peters E (1991): Chaos and Order in the Capital Markets. Willey
+
+ Peters E (1996): Fractal Market Analysis. Wiley
+
+ Lo A (1991): Long term memory in stock market prices. Econometrica
+ 59: 1279-1313
+
+ Moody J, Wu L (1996): Improved estimates for Rescaled Range and Hurst
+ exponents. Neural Networks in Financial Engineering, eds. Refenes A-P
+ Abu-Mustafa Y, Moody J, Weigend A: 537-553, Word Scientific
+
+ Hauser M (1997): Semiparametric and nonparametric testing for long
+ memory: A Monte Carlo study. Empirical Economics 22: 247-271
+
+
+ Alexandros Leontitsis
+ Department of Education
+ University of Ioannina
+ 45110 - Dourouti
+ Ioannina
+ Greece
+
+ University e-mail: me00743@cc.uoi.gr
+ Lifetime e-mail: leoaleq@yahoo.com
+ Homepage: http://www.geocities.com/CapeCanaveral/Lab/1421
+
+ 1 Jan 2004.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [logRS,logERS,V]=RSana(x,n,method,q)</a>
+0002 <span class="comment">%Syntax: [logRS,logERS,V]=RSana(x,n,method,q)</span>
+0003 <span class="comment">%____________________________________________</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Performs R/S analysis on a time series.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% logRS is the log(R/S).</span>
+0008 <span class="comment">% logERS is the Expectation of log(R/S).</span>
+0009 <span class="comment">% V is the V statistic.</span>
+0010 <span class="comment">% x is the time series.</span>
+0011 <span class="comment">% n is the vector with the sub-periods.</span>
+0012 <span class="comment">% method can take one of the following values</span>
+0013 <span class="comment">%  'Hurst' for the Hurst-Mandelbrot variation.</span>
+0014 <span class="comment">%  'Lo' for the Lo variation.</span>
+0015 <span class="comment">%  'MW' for the Moody-Wu variation.</span>
+0016 <span class="comment">%  'Parzen' for the Parzen variation.</span>
+0017 <span class="comment">% q can be either</span>
+0018 <span class="comment">%  a (non-negative) integer.</span>
+0019 <span class="comment">%  'auto' for the Lo's suggested value.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% References:</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Peters E (1991): Chaos and Order in the Capital Markets. Willey</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Peters E (1996): Fractal Market Analysis. Wiley</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Lo A (1991): Long term memory in stock market prices. Econometrica</span>
+0029 <span class="comment">% 59: 1279-1313</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Moody J, Wu L (1996): Improved estimates for Rescaled Range and Hurst</span>
+0032 <span class="comment">% exponents. Neural Networks in Financial Engineering, eds. Refenes A-P</span>
+0033 <span class="comment">% Abu-Mustafa Y, Moody J, Weigend A: 537-553, Word Scientific</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% Hauser M (1997): Semiparametric and nonparametric testing for long</span>
+0036 <span class="comment">% memory: A Monte Carlo study. Empirical Economics 22: 247-271</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% Alexandros Leontitsis</span>
+0040 <span class="comment">% Department of Education</span>
+0041 <span class="comment">% University of Ioannina</span>
+0042 <span class="comment">% 45110 - Dourouti</span>
+0043 <span class="comment">% Ioannina</span>
+0044 <span class="comment">% Greece</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% University e-mail: me00743@cc.uoi.gr</span>
+0047 <span class="comment">% Lifetime e-mail: leoaleq@yahoo.com</span>
+0048 <span class="comment">% Homepage: http://www.geocities.com/CapeCanaveral/Lab/1421</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% 1 Jan 2004.</span>
+0051 
+0052 <span class="keyword">if</span> nargin&lt;1 | isempty(x)==1
+0053    error(<span class="string">'You should provide a time series.'</span>);
+0054 <span class="keyword">else</span>
+0055    <span class="comment">% x must be a vector</span>
+0056    <span class="keyword">if</span> min(size(x))&gt;1
+0057       error(<span class="string">'Invalid time series.'</span>);
+0058    <span class="keyword">end</span>
+0059    x=x(:);
+0060    <span class="comment">% N is the time series length</span>
+0061    N=length(x);
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="keyword">if</span> nargin&lt;2 | isempty(n)==1
+0065    n=1;
+0066 <span class="keyword">else</span>
+0067    <span class="comment">% n must be either a scalar or a vector</span>
+0068    <span class="keyword">if</span> min(size(n))&gt;1
+0069       error(<span class="string">'n must be either a scalar or a vector.'</span>);
+0070    <span class="keyword">end</span>
+0071    <span class="comment">% n must be integer</span>
+0072    <span class="keyword">if</span> n-round(n)~=0
+0073        error(<span class="string">'n must be integer.'</span>);
+0074    <span class="keyword">end</span>
+0075    <span class="comment">% n must be positive</span>
+0076    <span class="keyword">if</span> n&lt;=0
+0077       error(<span class="string">'n must be positive.'</span>);
+0078    <span class="keyword">end</span>
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="keyword">if</span> nargin&lt;4 | isempty(q)==1
+0082    q=0;
+0083 <span class="keyword">else</span>
+0084     <span class="keyword">if</span> q==<span class="string">'auto'</span>
+0085         t=autocorr(x,1);
+0086         t=t(2);
+0087         q=((3*N/2)^(1/3))*(2*t/(1-t^2))^(2/3);
+0088     <span class="keyword">else</span>
+0089         <span class="comment">% q must be a scalar</span>
+0090         <span class="keyword">if</span> sum(size(q))&gt;2
+0091             error(<span class="string">'q must be scalar.'</span>);
+0092         <span class="keyword">end</span>
+0093         <span class="comment">% q must be integer</span>
+0094         <span class="keyword">if</span> q-round(q)~=0
+0095             error(<span class="string">'q must be integer.'</span>);
+0096         <span class="keyword">end</span>
+0097         <span class="comment">% q must be positive</span>
+0098         <span class="keyword">if</span> q&lt;0
+0099             error(<span class="string">'q must be positive.'</span>);
+0100         <span class="keyword">end</span>
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 
+0105 <span class="keyword">for</span> i=1:length(n)
+0106     
+0107     <span class="comment">% Calculate the sub-periods</span>
+0108     a=floor(N/n(i));
+0109     
+0110     <span class="comment">% Make the sub-periods matrix</span>
+0111     X=reshape(x(1:a*n(i)),n(i),a);
+0112     
+0113     <span class="comment">% Estimate the mean of each sub-period</span>
+0114     ave=mean(X);
+0115     
+0116     <span class="comment">% Remove the mean from each sub-period</span>
+0117     cumdev=X-ones(n(i),1)*ave;
+0118     
+0119     <span class="comment">% Estimate the cumulative deviation from the mean</span>
+0120     cumdev=cumsum(cumdev);
+0121     
+0122     <span class="comment">% Estimate the standard deviation</span>
+0123     <span class="keyword">switch</span> method
+0124     <span class="keyword">case</span> <span class="string">'Hurst'</span>
+0125         <span class="comment">% Hurst-Mandelbrot variation</span>
+0126         stdev=std(X);
+0127     <span class="keyword">case</span> <span class="string">'Lo'</span>
+0128         <span class="comment">% Lo variation</span>
+0129         <span class="keyword">for</span> j=1:a
+0130             sq=0;
+0131             <span class="keyword">for</span> k=0:q
+0132                 v(k+1)=sum(X(k+1:n(i),j)'*X(1:n(i)-k,j))/(n(i)-1);
+0133                 <span class="keyword">if</span> k&gt;0
+0134                     sq=sq+(1-k/(q+1))*v(k+1);
+0135                 <span class="keyword">end</span>
+0136             <span class="keyword">end</span>
+0137             stdev(j)=sqrt(v(1)+2*sq);
+0138         <span class="keyword">end</span>
+0139     <span class="keyword">case</span> <span class="string">'MW'</span>
+0140         <span class="comment">% Moody-Wu variation</span>
+0141         <span class="keyword">for</span> j=1:a
+0142             sq1=0;
+0143             sq2=0;
+0144             <span class="keyword">for</span> k=0:q
+0145                 v(k+1)=sum(X(k+1:n(i),j)'*X(1:n(i)-k,j))/(n(i)-1);
+0146                 <span class="keyword">if</span> k&gt;0
+0147                     sq1=sq1+(1-k/(q+1))*(n(i)-k)/n(i)/n(i);
+0148                     sq2=sq2+(1-k/(q+1))*v(k+1);
+0149                 <span class="keyword">end</span>
+0150             <span class="keyword">end</span>
+0151             stdev(j)=sqrt((1+2*sq1)*v(1)+2*sq2);
+0152         <span class="keyword">end</span>
+0153     <span class="keyword">case</span> <span class="string">'Parzen'</span>
+0154         <span class="comment">% Parzen variation</span>
+0155         <span class="keyword">if</span> mod(q,2)~=0
+0156             error(<span class="string">'For the &quot;Parzen&quot; variation q must be dived by 2.'</span>);
+0157         <span class="keyword">end</span>
+0158         <span class="keyword">for</span> j=1:a
+0159             sq1=0;
+0160             sq2=0;
+0161             <span class="keyword">for</span> k=0:q
+0162                 v(k+1)=sum(X(k+1:n(i),j)'*X(1:n(i)-k,j))/(n(i)-1);
+0163                 <span class="keyword">if</span> k&gt;0 &amp; k&lt;=q/2
+0164                     sq1=sq1+(1-6*(k/q)^2+6*(k/q)^3)*v(k+1);
+0165                 <span class="keyword">elseif</span> k&gt;0 &amp; k&gt;q/2
+0166                     sq2=sq2+(1-(k/q)^3)*v(k+1);
+0167                 <span class="keyword">end</span>
+0168             <span class="keyword">end</span>
+0169             stdev(j)=sqrt(v(1)+2*sq1+2*sq2);
+0170         <span class="keyword">end</span>
+0171     <span class="keyword">otherwise</span>
+0172         error(<span class="string">'You should provide another value for &quot;method&quot;.'</span>);
+0173     <span class="keyword">end</span>
+0174     
+0175     <span class="comment">% Estiamte the rescaled range</span>
+0176     rs=(max(cumdev)-min(cumdev))./stdev;
+0177     
+0178     <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> stdev
+0179     
+0180     <span class="comment">% Take the logarithm of the mean R/S</span>
+0181     logRS(i,1)=log10(mean(rs));
+0182     
+0183     <span class="keyword">if</span> nargout&gt;1
+0184         
+0185         <span class="comment">% Initial calculations fro the log(E(R/S))</span>
+0186         j=1:n(i)-1;
+0187         s=sqrt((n(i)-j)./j);
+0188         s=sum(s);
+0189         
+0190         <span class="comment">% The estimation of log(E(R/S))</span>
+0191         logERS(i,1)=log10(s/sqrt(n(i)*pi/2));
+0192         
+0193         <span class="comment">% Other estimations of log(E(R/S))</span>
+0194         <span class="comment">%logERS(i,1)=log10((n(i)-0.5)/n(i)*s/sqrt(n(i)*pi/2));</span>
+0195         <span class="comment">%logERS(i,1)=log10(sqrt(n(i)*pi/2));</span>
+0196         
+0197     <span class="keyword">end</span>
+0198     
+0199     <span class="keyword">if</span> nargout&gt;2
+0200         <span class="comment">% Estimate V</span>
+0201         V(i,1)=mean(rs)/sqrt(n(i));
+0202     <span class="keyword">end</span>
+0203 
+0204 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

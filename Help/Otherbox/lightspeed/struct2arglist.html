@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of struct2arglist</title>
+  <meta name="keywords" content="struct2arglist">
+  <meta name="description" content="STRUCT2ARGLIST  Convert structure to cell array of fields/values.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>struct2arglist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STRUCT2ARGLIST  Convert structure to cell array of fields/values.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c = struct2arglist(s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">STRUCT2ARGLIST  Convert structure to cell array of fields/values.
+ STRUCT2ARGLIST(S) returns a cell array {'field1',value1,'field2',value2,...}
+ It is the opposite of MAKESTRUCT.
+
+ Example:
+   function f(varargin)
+   opt.FontSize = 10;
+   opt = setfields(opt,makestruct(varargin),'ignore');
+   varargin = struct2arglist(opt);
+   g(varargin{:});
+
+ See also <a href="makestruct.html" class="code" title="function s = makestruct(varargin)">MAKESTRUCT</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = struct2arglist(s)</a>
+0002 <span class="comment">%STRUCT2ARGLIST  Convert structure to cell array of fields/values.</span>
+0003 <span class="comment">% STRUCT2ARGLIST(S) returns a cell array {'field1',value1,'field2',value2,...}</span>
+0004 <span class="comment">% It is the opposite of MAKESTRUCT.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Example:</span>
+0007 <span class="comment">%   function f(varargin)</span>
+0008 <span class="comment">%   opt.FontSize = 10;</span>
+0009 <span class="comment">%   opt = setfields(opt,makestruct(varargin),'ignore');</span>
+0010 <span class="comment">%   varargin = struct2arglist(opt);</span>
+0011 <span class="comment">%   g(varargin{:});</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also MAKESTRUCT.</span>
+0014 
+0015 <span class="comment">% Written by Tom Minka</span>
+0016 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0017 
+0018 f = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(s);
+0019 c = cell(1,2*length(f));
+0020 <span class="keyword">for</span> i = 1:length(f)
+0021   c{2*i-1} = f{i};
+0022   c{2*i} = s.(f{i});
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

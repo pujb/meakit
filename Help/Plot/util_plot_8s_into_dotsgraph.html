@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_8s_into_dotsgraph</title>
+  <meta name="keywords" content="util_plot_8s_into_dotsgraph">
+  <meta name="description" content="UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_8s_into_dotsgraph
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ the_frame ] = util_plot_8s_into_dotsgraph( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图
+   是plot_mea_dotsgraph函数的升级版本。
+   能够将一个8*8的矩阵，绘制成根据数值大小变换直径和着色的圆点图
+
+   输入参数：
+       the_matrix：8*8的输入矩阵
+       haveAxes：是否要有坐标轴（默认有），不绘制坐标轴则会自动标记四周电极
+       haveGrid：是否要有网格（默认没有）
+       haveIndicator：是否显示最大值点（默认没有）
+       isFigureWindowStayedOpen：绘图完成后是否保持窗口打开（默认打开，但也可不打开，因为已经保存结果the_frame）
+       the_title：题目（默认有值）
+   输出参数：
+       the_frame：保存成1帧
+
+   See also plot_mea_dotsgraph
+
+   蒲江波 2009年11月24日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Stimulation/animation_response_score.html" class="code" title="function [ movie_frm ] = animation_response_score( result_cell_array )">animation_response_score</a>	ANIMATION_RESPONSE_SCORE 将成绩Cell矩阵的内容绘制成动画</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ the_frame ] = util_plot_8s_into_dotsgraph( varargin )</a>
+0002 <span class="comment">%UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图</span>
+0003 <span class="comment">%   是plot_mea_dotsgraph函数的升级版本。</span>
+0004 <span class="comment">%   能够将一个8*8的矩阵，绘制成根据数值大小变换直径和着色的圆点图</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   输入参数：</span>
+0007 <span class="comment">%       the_matrix：8*8的输入矩阵</span>
+0008 <span class="comment">%       haveAxes：是否要有坐标轴（默认有），不绘制坐标轴则会自动标记四周电极</span>
+0009 <span class="comment">%       haveGrid：是否要有网格（默认没有）</span>
+0010 <span class="comment">%       haveIndicator：是否显示最大值点（默认没有）</span>
+0011 <span class="comment">%       isFigureWindowStayedOpen：绘图完成后是否保持窗口打开（默认打开，但也可不打开，因为已经保存结果the_frame）</span>
+0012 <span class="comment">%       the_title：题目（默认有值）</span>
+0013 <span class="comment">%   输出参数：</span>
+0014 <span class="comment">%       the_frame：保存成1帧</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   See also plot_mea_dotsgraph</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   蒲江波 2009年11月24日</span>
+0019 
+0020 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0021 
+0022 <span class="comment">% 参数分析</span>
+0023 
+0024 <span class="keyword">if</span> ~exist(<span class="string">'the_matrix'</span>, <span class="string">'var'</span>)
+0025     error(<span class="string">'THE_MATRIX must be provided.'</span>);
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> ~exist(<span class="string">'haveAxes'</span>, <span class="string">'var'</span>)
+0029     haveAxes = 1;
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">if</span> ~exist(<span class="string">'haveGrid'</span>, <span class="string">'var'</span>)
+0033     haveGrid = 0;
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="keyword">if</span> ~exist(<span class="string">'haveIndicator'</span>, <span class="string">'var'</span>)
+0037     haveIndicator = 0;
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> ~exist(<span class="string">'isFigureWindowStayedOpen'</span>, <span class="string">'var'</span>)
+0041     isFigureWindowStayedOpen = 1;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> ~exist(<span class="string">'the_title'</span>, <span class="string">'var'</span>)
+0045     the_title = <span class="string">'Network Status'</span>;
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">% 取得矩阵的大小（本函数事实上兼容更大矩阵的绘制）</span>
+0049 networksize = length(the_matrix);
+0050 s = 0;
+0051 
+0052 <span class="comment">% 绘图参数量</span>
+0053 scatterX = zeros(networksize^2,1);
+0054 scatterY = zeros(networksize^2,1);
+0055 scatterS = zeros(networksize^2,1);
+0056 
+0057 <span class="comment">% 颜色</span>
+0058 scatterC = zeros(networksize^2,3);
+0059 value_max = max( max(the_matrix) );
+0060 value_min = min(min(the_matrix));
+0061 colorscaling = value_max - value_min + 0.001;
+0062 
+0063 <span class="comment">% 绘制电极圆点</span>
+0064 multiply_factor = 300;
+0065 
+0066 <span class="keyword">for</span> i = 1:networksize
+0067     <span class="keyword">for</span> j = 1:networksize
+0068         s = s+1;
+0069         scatterX(s,1) = i;
+0070         scatterY(s,1) = j;
+0071         scatterS(s,1) = the_matrix(i,j) / value_max * multiply_factor + 0.001;
+0072         
+0073         <span class="keyword">if</span> i==1&amp;&amp;j==1 || i==1&amp;&amp;j==8 || i==8&amp;&amp;j==1 || i==8&amp;&amp;j==8
+0074             scatterC(s,:) = [1 1 1];
+0075         <span class="keyword">else</span>
+0076             scatterC(s,:) = [(the_matrix(i,j) - value_min) / colorscaling 0 0];
+0077         <span class="keyword">end</span>
+0078     <span class="keyword">end</span>
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="comment">% 实际绘图语句</span>
+0082 scatter(scatterX,scatterY,scatterS, scatterC, <span class="string">'filled'</span>);
+0083 
+0084 <span class="comment">% 绘制BAR（根据value_max,min标记）</span>
+0085 <span class="keyword">if</span> haveIndicator
+0086     size_max = max( scatterS );
+0087     size_min = min( scatterS );
+0088 
+0089     color_max = [(value_max - value_min) / colorscaling 0 0];
+0090     color_min = [0 0 0];
+0091 
+0092     bar_location_x = 9;
+0093     bar_location_ymax = 7;
+0094     bar_location_ymin = 8;
+0095 
+0096     hold on
+0097     scatter(bar_location_x, bar_location_ymax, size_max, color_max, <span class="string">'filled'</span>);
+0098     
+0099     label_max = num2str( fix( value_max ) );
+0100     <span class="keyword">if</span> length( label_max ) == 3
+0101         label_location_fix = 0.2;
+0102     <span class="keyword">elseif</span> length( label_max ) == 2
+0103         label_location_fix = 0.12;
+0104     <span class="keyword">elseif</span> length( label_max ) == 1
+0105         label_location_fix = 0.1;
+0106     <span class="keyword">else</span>
+0107         label_location_fix = 0;
+0108     <span class="keyword">end</span>
+0109     text(bar_location_x - label_location_fix, bar_location_ymax, label_max);
+0110     hold off
+0111 <span class="keyword">end</span>
+0112 
+0113 <span class="comment">% 绘制坐标轴</span>
+0114 xlabel(<span class="string">'MEA Columns'</span>);
+0115 ylabel(<span class="string">'MEA Rows'</span>);
+0116 axis([0 (networksize+2) 0 (networksize+1)]);
+0117 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YDir'</span>,<span class="string">'reverse'</span>)
+0118 
+0119 <span class="keyword">if</span> haveAxes
+0120     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'XColor'</span>, [0 0 0]);
+0121     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'YColor'</span>, [0 0 0]);
+0122 <span class="keyword">else</span>
+0123     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'XColor'</span>, [1 1 1]);
+0124     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'YColor'</span>, [1 1 1]);
+0125     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'XTick'</span>, []);
+0126     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'YTick'</span>, []);
+0127     <span class="comment">% 标记四周电极</span>
+0128     text(0.9, 1, <span class="string">'11'</span>);
+0129     text(0.9, 8, <span class="string">'18'</span>);
+0130     text(7.85, 1, <span class="string">'81'</span>);
+0131     text(7.85, 8, <span class="string">'88'</span>);
+0132 <span class="keyword">end</span>
+0133 
+0134 title(the_title,<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>);
+0135 
+0136 <span class="keyword">if</span> haveGrid
+0137     grid on;
+0138 <span class="keyword">end</span>
+0139 
+0140 <span class="comment">% 保存绘图结果</span>
+0141 the_frame = getframe;
+0142 
+0143 <span class="keyword">if</span> ~isFigureWindowStayedOpen
+0144     close(gcf);
+0145 <span class="keyword">end</span>
+0146    
+0147 <span class="keyword">end</span>
+0148</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

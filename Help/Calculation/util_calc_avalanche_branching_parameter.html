@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_avalanche_branching_parameter</title>
+  <meta name="keywords" content="util_calc_avalanche_branching_parameter">
+  <meta name="description" content="UTIL_CALC_AVALANCHE_BRANCHING_PARAMETER Calculate the branching parameter">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_avalanche_branching_parameter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_AVALANCHE_BRANCHING_PARAMETER Calculate the branching parameter</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ bp bp_std bp_sem bp_1 bp_1_std bp_1_sem ] = util_calc_avalanche_branching_parameter( ava_length, ava_vector, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_AVALANCHE_BRANCHING_PARAMETER Calculate the branching parameter
+of neuronal avalanches.
+   Based on the results of avalanche detection. We first calculate the
+   number of ancestors and descendants in each avalanche (na, nd).
+   Then, d = nd / na. (if length = 1, then nd = 0).
+   Then, pd = the probability of d's existence.
+   Finally, bp = sum(d*pd);
+
+   Reference:
+              Journal of Neuroscience Methods 169 (2008) 405–416 - 'spk'
+              The Journal of Neuroscience 23(35) (2003) 11167–11177 - 'elec'
+
+   Input:
+           ava_length:   The length of each avalanche (number of bins)
+           ava_vector:   Which electrodes are active in each bin
+           method:       'elec': Electrode ancestor / descendant [default]
+                         'spk' : Spike ancestor / descendant
+           network_vectors: The returned network_vectors after detecting
+                         avalanches. (needed when method = 'spk')
+           ava_loc:      The start bin of each avalanche.
+                         (needed when method = 'spk')
+           precision:    Bin precision, default = 0.001
+   Output:
+           bp:           Branching parameter (sigma).
+           bp_1:         Assuming only one ancestor.
+   
+   Example:
+           [ bp ] = util_calc_avalanche_branching_parameter( lengths,
+           vectors, 'method', 'spk', 'network_vectors', network_vectors,
+           'ava_loc', locations );
+       
+           [ bp ] = util_calc_avalanche_branching_parameter( lengths,
+           vectors );
+
+   Created on Sep/16/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-03-07  Change the algorithm to match the new storage
+                       pattern of &quot;ava_vector&quot; which is the output of
+                       util_detect_avalanche (a.k.a vector).
+       PJB#2011-03-08  Adding bp_1 output.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_calc_sem.html" class="code" title="function [ sem ] = util_calc_sem( vector )">util_calc_sem</a>	UTIL_CALC_SEM Get the standard error of the mean (SEM)</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/avalanche.html" class="code" title="">avalanche</a>	</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter.html" class="code" title="function [ sizes alpha bp bp_1 mean_isi mean_rate ] = util_loop_calc_avalanche_parameter( filename, gnd, result_dir )">util_loop_calc_avalanche_parameter</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETER Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ bp bp_std bp_sem bp_1 bp_1_std bp_1_sem ] = util_calc_avalanche_branching_parameter( ava_length, ava_vector, varargin )</a>
+0002 <span class="comment">%UTIL_CALC_AVALANCHE_BRANCHING_PARAMETER Calculate the branching parameter</span>
+0003 <span class="comment">%of neuronal avalanches.</span>
+0004 <span class="comment">%   Based on the results of avalanche detection. We first calculate the</span>
+0005 <span class="comment">%   number of ancestors and descendants in each avalanche (na, nd).</span>
+0006 <span class="comment">%   Then, d = nd / na. (if length = 1, then nd = 0).</span>
+0007 <span class="comment">%   Then, pd = the probability of d's existence.</span>
+0008 <span class="comment">%   Finally, bp = sum(d*pd);</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Reference:</span>
+0011 <span class="comment">%              Journal of Neuroscience Methods 169 (2008) 405–416 - 'spk'</span>
+0012 <span class="comment">%              The Journal of Neuroscience 23(35) (2003) 11167–11177 - 'elec'</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Input:</span>
+0015 <span class="comment">%           ava_length:   The length of each avalanche (number of bins)</span>
+0016 <span class="comment">%           ava_vector:   Which electrodes are active in each bin</span>
+0017 <span class="comment">%           method:       'elec': Electrode ancestor / descendant [default]</span>
+0018 <span class="comment">%                         'spk' : Spike ancestor / descendant</span>
+0019 <span class="comment">%           network_vectors: The returned network_vectors after detecting</span>
+0020 <span class="comment">%                         avalanches. (needed when method = 'spk')</span>
+0021 <span class="comment">%           ava_loc:      The start bin of each avalanche.</span>
+0022 <span class="comment">%                         (needed when method = 'spk')</span>
+0023 <span class="comment">%           precision:    Bin precision, default = 0.001</span>
+0024 <span class="comment">%   Output:</span>
+0025 <span class="comment">%           bp:           Branching parameter (sigma).</span>
+0026 <span class="comment">%           bp_1:         Assuming only one ancestor.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   Example:</span>
+0029 <span class="comment">%           [ bp ] = util_calc_avalanche_branching_parameter( lengths,</span>
+0030 <span class="comment">%           vectors, 'method', 'spk', 'network_vectors', network_vectors,</span>
+0031 <span class="comment">%           'ava_loc', locations );</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%           [ bp ] = util_calc_avalanche_branching_parameter( lengths,</span>
+0034 <span class="comment">%           vectors );</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   Created on Sep/16/2010 By Pu Jiangbo</span>
+0037 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%   $Revision:</span>
+0040 <span class="comment">%       PJB#2011-03-07  Change the algorithm to match the new storage</span>
+0041 <span class="comment">%                       pattern of &quot;ava_vector&quot; which is the output of</span>
+0042 <span class="comment">%                       util_detect_avalanche (a.k.a vector).</span>
+0043 <span class="comment">%       PJB#2011-03-08  Adding bp_1 output.</span>
+0044 
+0045 
+0046 <span class="comment">% Check parameters</span>
+0047 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0048 
+0049 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0050     method = <span class="string">'elec'</span>;
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> ~exist(<span class="string">'precision'</span>, <span class="string">'var'</span>)
+0054     precision = 0.001;
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">if</span> strcmpi(method, <span class="string">'spk'</span>)
+0058     <span class="keyword">if</span> ~exist(<span class="string">'network_vectors'</span>, <span class="string">'var'</span>) || ~exist(<span class="string">'ava_loc'</span>, <span class="string">'var'</span>)
+0059         error(<span class="string">'network_vectors and ava_loc must be provided.'</span>);
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'elec'</span>)
+0062     <span class="comment">% do nothing</span>
+0063 <span class="keyword">else</span>
+0064     error([<span class="string">'Not supported method - '</span> method]);
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">% Number of avalanches</span>
+0068 num_ava = length(ava_length);
+0069 
+0070 <span class="keyword">if</span> strcmpi(method, <span class="string">'spk'</span>)
+0071     <span class="comment">% LFP ancestors / descendants, refer to JNM paper.</span>
+0072     
+0073     <span class="comment">% init</span>
+0074     d = zeros(1, num_ava);
+0075     
+0076     <span class="comment">% loop to find d</span>
+0077     <span class="keyword">for</span> i = 1:num_ava
+0078         <span class="keyword">if</span> ava_length(i) == 1
+0079             d(i) = 0;   <span class="comment">% Because nd = 0</span>
+0080         <span class="keyword">else</span>
+0081             d(i) = sum(network_vectors(:, ava_loc(i) + 1)) / sum(network_vectors(:, ava_loc(i)));
+0082         <span class="keyword">end</span>
+0083     <span class="keyword">end</span>
+0084     
+0085     <span class="comment">% Calc the probability of each d</span>
+0086     bp = 0;
+0087     edges = [0:precision:max(d)];
+0088     pd = histc(d, edges) / length(d);
+0089     <span class="keyword">for</span> i = 1:length(edges)
+0090         <span class="keyword">if</span> i &lt; length(edges)
+0091             values = d( (d &gt;= edges(i)) &amp; (d &lt; edges(i+1)));
+0092         <span class="keyword">else</span>
+0093             values = d( (d &gt;= edges(i)) );
+0094         <span class="keyword">end</span>
+0095         bp = bp + sum(values * pd(i));
+0096     <span class="keyword">end</span>
+0097 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'elec'</span>)
+0098     <span class="comment">% Electrode ancestors / descendants, refer to JNS / JNM paper.</span>
+0099     <span class="comment">% Please note, we do not follows the algorithms in JNS paper exactly.</span>
+0100     <span class="comment">% But the basic concept is identical.</span>
+0101     
+0102     <span class="comment">% init</span>
+0103     d = zeros(1, num_ava, <span class="string">'double'</span>);
+0104     n_a_individual = zeros(1, num_ava, <span class="string">'double'</span>);
+0105     n_d_individual = zeros(1, num_ava, <span class="string">'double'</span>);
+0106     
+0107     <span class="comment">% Collecting ancestors and descendants in all avalanches</span>
+0108     <span class="keyword">for</span> i = 1:num_ava
+0109         current_avalanche_frames = ava_vector{i};
+0110         <span class="comment">% Collecting number of electrode ancestors in each avalanche</span>
+0111         n_a_individual(i) = length(current_avalanche_frames{1});
+0112         <span class="comment">% Collecting number of electrode descendants in each avalanche</span>
+0113         <span class="keyword">if</span> size(current_avalanche_frames, 2) &gt;= 2
+0114             n_d_individual(i) = length(current_avalanche_frames{2});
+0115         <span class="keyword">else</span>
+0116             n_d_individual(i) = 0;
+0117         <span class="keyword">end</span>
+0118         
+0119         <span class="comment">%d(i) = ( n_d_individual(i) / n_a_individual(i) );</span>
+0120         d(i) = round(n_d_individual(i) / n_a_individual(i));
+0121     <span class="keyword">end</span>
+0122 
+0123     bp = mean(d);
+0124     bp_std = std(d);
+0125     bp_sem = <a href="../Common/util_calc_sem.html" class="code" title="function [ sem ] = util_calc_sem( vector )">util_calc_sem</a>(d);
+0126     
+0127     bp_1 = mean(n_d_individual);
+0128     bp_1_std = std(n_d_individual);
+0129     bp_1_sem = <a href="../Common/util_calc_sem.html" class="code" title="function [ sem ] = util_calc_sem( vector )">util_calc_sem</a>(n_d_individual);
+0130 <span class="keyword">end</span>
+0131 
+0132 <span class="keyword">end</span>
+0133</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

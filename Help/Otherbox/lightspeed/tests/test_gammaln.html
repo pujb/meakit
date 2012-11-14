@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_gammaln</title>
+  <meta name="keywords" content="test_gammaln">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_gammaln
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 pairs = [0.1 2.2527126517342059598697; <span class="keyword">...</span>
+0002             0.6 .39823385806923489961685; <span class="keyword">...</span>
+0003             0.7 .26086724653166651438573; <span class="keyword">...</span>
+0004             1.0 0; <span class="keyword">...</span>
+0005             2.0 0; <span class="keyword">...</span>
+0006             3.4 1.0923280598027415674947; <span class="keyword">...</span>
+0007             4.0 1.791759469228055000812477; <span class="keyword">...</span>
+0008             8.0 8.525161361065414300165531; <span class="keyword">...</span>
+0009             64.0 201.00931639928152667928; <span class="keyword">...</span>
+0010             256.0 1161.71210111840065079];
+0011 err = [];
+0012 <span class="keyword">for</span> i = 1:<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(pairs)
+0013     err(i) = abs(gammaln(pairs(i,1)) - pairs(i,2))/pairs(i,1);    
+0014 <span class="keyword">end</span>
+0015 <span class="keyword">if</span> max(err) &gt; 1e-10
+0016     err
+0017     error(<span class="string">'maximum err &gt; 1e-10'</span>)
+0018 <span class="keyword">end</span>
+0019 err = [];
+0020 <span class="keyword">for</span> i = 1:<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(pairs)
+0021     err(i) = abs(gammaln(pairs(i,1),1) - pairs(i,2))/pairs(i,1);    
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> max(err) &gt; 1e-10
+0024     err
+0025     error(<span class="string">'maximum err &gt; 1e-10'</span>)
+0026 <span class="keyword">end</span>
+0027 err = abs(gammaln(1.1,2) - 0.920726359734123);
+0028 <span class="keyword">if</span> err &gt; 1e-10
+0029     error(<span class="string">'gammaln(1.1,2) != 0.920726359734123'</span>);
+0030 <span class="keyword">end</span>
+0031 <span class="keyword">if</span> gammaln(0) ~= Inf
+0032   error(<span class="string">'gammaln(0) should be Inf'</span>);
+0033 <span class="keyword">end</span>
+0034 <span class="keyword">if</span> ~isnan(gammaln(-1))
+0035   <span class="comment">%error('gammaln(-1) should be NaN');</span>
+0036 <span class="keyword">end</span>
+0037 <span class="keyword">if</span> gammaln(Inf) ~= Inf
+0038   error(<span class="string">'gammaln(Inf) should be Inf'</span>);
+0039 <span class="keyword">end</span>
+0040 <span class="comment">% should be NaN?</span>
+0041 <span class="comment">%gammaln(-Inf)</span>
+0042 <span class="keyword">if</span> ~isnan(gammaln(NaN))
+0043   error(<span class="string">'gammaln(NaN) should be NaN'</span>);
+0044 <span class="keyword">end</span>
+0045</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

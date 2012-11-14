@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of wishpdfln</title>
+  <meta name="keywords" content="wishpdfln">
+  <meta name="description" content="WISHPDFLN    Logarithm of Wishart probability density function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>wishpdfln
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>WISHPDFLN    Logarithm of Wishart probability density function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function lp = wishpdfln(x,a,b,inverse) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">WISHPDFLN    Logarithm of Wishart probability density function.
+  See WISHPDF for argument description.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="logdet.html" class="code" title="function y = logdet(A)">logdet</a>	LOGDET  Logarithm of determinant for positive-definite matrix</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="wishpdf.html" class="code" title="function p = wishpdf(varargin)">wishpdf</a>	WISHPDF     Wishart probability density function.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function lp = wishpdfln(x,a,b,inverse)</a>
+0002 <span class="comment">%WISHPDFLN    Logarithm of Wishart probability density function.</span>
+0003 <span class="comment">%  See WISHPDF for argument description.</span>
+0004 
+0005 <span class="comment">% Written by Tom Minka</span>
+0006 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0007 
+0008 <span class="keyword">if</span> nargin &lt; 3
+0009   B = [];
+0010 <span class="keyword">end</span>
+0011 <span class="keyword">if</span> nargin &lt; 4
+0012   inverse = 0;
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> inverse
+0016   X = inv(X);
+0017 <span class="keyword">end</span>
+0018 <span class="keyword">if</span> isempty(B)
+0019   XB = X;
+0020   logDetB = 0;
+0021 <span class="keyword">else</span>
+0022   XB = X*B;
+0023   logDetB = <a href="logdet.html" class="code" title="function y = logdet(A)">logdet</a>(B);
+0024 <span class="keyword">end</span>
+0025 d = <a href="rows.html" class="code" title="function r = rows(x)">rows</a>(x);
+0026 d2 = (d+1)/2;
+0027 <span class="keyword">if</span> inverse
+0028   d2 = -d2;
+0029 <span class="keyword">end</span>
+0030 logDetXB = (a-d2)*<a href="logdet.html" class="code" title="function y = logdet(A)">logdet</a>(XB);
+0031 lp = logDetXB - trace(XB) + d2*logDetB - gammaln(a,d);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

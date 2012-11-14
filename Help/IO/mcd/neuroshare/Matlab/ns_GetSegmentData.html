@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_GetSegmentData</title>
+  <meta name="keywords" content="ns_GetSegmentData">
+  <meta name="description" content="ns_GetSegmentData   Retrieves segment data by index">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_GetSegmentData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_GetSegmentData   Retrieves segment data by index</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = ns_GetSegmentData(hFile, EntityID, Index); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_GetSegmentData   Retrieves segment data by index
+
+   Usage:
+      [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = 
+                               ns_GetSegmentData(hFile, EntityID, Index)
+
+   Description:
+       Returns the Segment data values in entry Index of the entity
+       EntityID from the file referenced by hFile. The data values are
+       returned in Data. The timestamp of the entry id returned in
+       TimeStamp. The number of samples written to Data is returned in
+       SampleCount. 
+       The data variable should be accessed as a 2-dimensional array for
+       samples and sources.  
+
+   Parameters:
+       hFile        Handle/Indentification number to an open file.
+       EntityID    Identification number of the entity in the data file.
+       Index        Index number of the requested Segment data item.
+
+   Remarks:
+       A zero unit ID is unclassified, then follow unit 1, 2, 3, etc. Unit
+       255 is noise.
+
+   Return Values:
+       TimeStamp    Time stamp of the requested Segment data item.
+       Data        Variable to receive the requested data.
+       SampleCount    Number of samples returned in the data variable.
+       UnitID        Unit classification code for the Segment Entity.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_BADFILE        Invalid file handle passed to 
+                                       function
+                       ns_BADENTITY    Invalid or inappropriate entity 
+                                       identifier specified
+                       ns_BADINDEX        Invalid entity index specified
+                       ns_FILEERROR    File access or read error
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 10/24/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Example.html" class="code" title="function Example()">Example</a>	Prompt for the correct DLL</li><li><a href="Neuroshare.html" class="code" title="">Neuroshare</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = ns_GetSegmentData(hFile, EntityID, Index);</a>
+0002 
+0003 <span class="comment">%ns_GetSegmentData   Retrieves segment data by index</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%      [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] =</span>
+0007 <span class="comment">%                               ns_GetSegmentData(hFile, EntityID, Index)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Description:</span>
+0010 <span class="comment">%       Returns the Segment data values in entry Index of the entity</span>
+0011 <span class="comment">%       EntityID from the file referenced by hFile. The data values are</span>
+0012 <span class="comment">%       returned in Data. The timestamp of the entry id returned in</span>
+0013 <span class="comment">%       TimeStamp. The number of samples written to Data is returned in</span>
+0014 <span class="comment">%       SampleCount.</span>
+0015 <span class="comment">%       The data variable should be accessed as a 2-dimensional array for</span>
+0016 <span class="comment">%       samples and sources.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   Parameters:</span>
+0019 <span class="comment">%       hFile        Handle/Indentification number to an open file.</span>
+0020 <span class="comment">%       EntityID    Identification number of the entity in the data file.</span>
+0021 <span class="comment">%       Index        Index number of the requested Segment data item.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Remarks:</span>
+0024 <span class="comment">%       A zero unit ID is unclassified, then follow unit 1, 2, 3, etc. Unit</span>
+0025 <span class="comment">%       255 is noise.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%   Return Values:</span>
+0028 <span class="comment">%       TimeStamp    Time stamp of the requested Segment data item.</span>
+0029 <span class="comment">%       Data        Variable to receive the requested data.</span>
+0030 <span class="comment">%       SampleCount    Number of samples returned in the data variable.</span>
+0031 <span class="comment">%       UnitID        Unit classification code for the Segment Entity.</span>
+0032 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0033 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0034 <span class="comment">%                   generated:</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%                       ns_BADFILE        Invalid file handle passed to</span>
+0037 <span class="comment">%                                       function</span>
+0038 <span class="comment">%                       ns_BADENTITY    Invalid or inappropriate entity</span>
+0039 <span class="comment">%                                       identifier specified</span>
+0040 <span class="comment">%                       ns_BADINDEX        Invalid entity index specified</span>
+0041 <span class="comment">%                       ns_FILEERROR    File access or read error</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0044 <span class="comment">%   Author: Almut Branner</span>
+0045 <span class="comment">%   Last modification: 10/24/2003</span>
+0046 
+0047 
+0048 [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = mexprog(11, hFile, EntityID - 1, Index - 1);
+0049 Data = squeeze(Data);
+0050 <span class="keyword">if</span> (size(Data, 2) == 1)
+0051     Data = Data';
+0052 <span class="keyword">end</span>;
+0053 
+0054 ind = find(UnitID == 1);
+0055 UnitID(ind) = 255;
+0056 
+0057 ind = find((UnitID &gt; 1) &amp; (UnitID &lt; 255));
+0058 UnitID(ind) = log2(UnitID(ind));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

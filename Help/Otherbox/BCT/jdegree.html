@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jdegree</title>
+  <meta name="keywords" content="jdegree">
+  <meta name="description" content="JDEGREE    Joint degree distribution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>jdegree
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>JDEGREE    Joint degree distribution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [J,J_od,J_id,J_bl] = jdegree(CIJ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">JDEGREE    Joint degree distribution
+
+   [J,J_od,J_id,J_bl] = jdegree(CIJ);
+
+   This function returns a matrix in which the value of each element (u,v)
+   corresponds to the number of nodes that have u outgoing connections 
+   and v incoming connections.
+
+   Input:      CIJ,    directed (weighted/binary) connection matrix
+
+   Outputs:    J,      joint degree distribution matrix (shifted by one)
+               J_od,   number of vertices with od&gt;id.
+               J_id,   number of vertices with id&gt;od.
+               J_bl,   number of vertices with id=od.
+
+   Note: Weights are discarded.
+
+
+   Olaf Sporns, Indiana University, 2002/2006/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [J,J_od,J_id,J_bl] = jdegree(CIJ)</a>
+0002 <span class="comment">%JDEGREE    Joint degree distribution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [J,J_od,J_id,J_bl] = jdegree(CIJ);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function returns a matrix in which the value of each element (u,v)</span>
+0007 <span class="comment">%   corresponds to the number of nodes that have u outgoing connections</span>
+0008 <span class="comment">%   and v incoming connections.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      CIJ,    directed (weighted/binary) connection matrix</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Outputs:    J,      joint degree distribution matrix (shifted by one)</span>
+0013 <span class="comment">%               J_od,   number of vertices with od&gt;id.</span>
+0014 <span class="comment">%               J_id,   number of vertices with id&gt;od.</span>
+0015 <span class="comment">%               J_bl,   number of vertices with id=od.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Note: Weights are discarded.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Olaf Sporns, Indiana University, 2002/2006/2008</span>
+0021 
+0022 
+0023 <span class="comment">% ensure CIJ is binary...</span>
+0024 CIJ = double(CIJ~=0);
+0025 
+0026 N = size(CIJ,1);
+0027 
+0028 id = sum(CIJ,1);    <span class="comment">% indegree = column sum of CIJ</span>
+0029 od = sum(CIJ,2)';   <span class="comment">% outdegree = row sum of CIJ</span>
+0030 
+0031 <span class="comment">% Create the joint degree distribution matrix</span>
+0032 <span class="comment">% Note:  the matrix is shifted by one, to accomodate zero id and od in the first row/column.</span>
+0033 <span class="comment">% Upper triangular part of the matrix has vertices with an excess of</span>
+0034 <span class="comment">%    outgoing edges (od&gt;id)</span>
+0035 <span class="comment">% Lower triangular part of the matrix has vertices with an excess of</span>
+0036 <span class="comment">%    outgoing edges (id&gt;od)</span>
+0037 <span class="comment">% Main diagonal has units with id=od</span>
+0038 
+0039 szJ = max(max(id,od))+1;
+0040 J = zeros(szJ);
+0041 
+0042 <span class="keyword">for</span> i=1:N
+0043    J(id(i)+1,od(i)+1) = J(id(i)+1,od(i)+1) + 1;
+0044 <span class="keyword">end</span>;
+0045 
+0046 J_od = sum(sum(triu(J,1)));
+0047 J_id = sum(sum(tril(J,-1)));
+0048 J_bl = sum(diag(J));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

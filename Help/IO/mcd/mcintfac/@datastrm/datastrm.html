@@ -1,0 +1,546 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datastrm</title>
+  <meta name="keywords" content="datastrm">
+  <meta name="description" content="DATASTRM		- data object constructor for opening data recorded with MC Rack">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>datastrm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>DATASTRM		- data object constructor for opening data recorded with MC Rack</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function d = datastrm(a,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> DATASTRM        - data object constructor for opening data recorded with MC Rack 
+
+ d = datastrm(a,varargin) is a datastrm constructor for MC Rack data files of all MC Rack versions 
+                           (MC Rack version 1 and above uses the OLE Server Object contained in MCStream.dll)
+                           (MC Rack version 0 is handled by a MATLAB reader and is retained for compatibilty)
+ &lt;a&gt; is a filename or a datastrm object or a struct containing fields of earlier datastrm versions.
+ &lt;d&gt; is a datastrm object with the header information contained in the MCRack file.
+
+ Following properties of the MCRack data file can be retrieved with getfield(d,'propertyxxx').
+ Many of them come as arrays as they depend on the MCRack stream(=buffer), of which more
+ than one can be contained in an MCRack data file (e.g. Trigger 1 and Spikes 1)
+ Please use getstreamnumber(d,'streamname') for converting stream name to stream id, which
+ must be used for indexing all stream dependent arrays.
+
+ All other methodes than datastrm,nextdata,getfield,getstreamnumber,ad2muvolt in datastrm 
+ directory are private or retained for compatibility and should not be used.
+
+ Following properties of the datastrm object are accessible with getfield(a,'eg_prop'):
+
+ filename                string
+ version                 string             of the datastrm object definition in matlab
+ softwareversion         string             of the MCRack version which recorded the opened data file
+ filesize                double             in byte
+ meatype                 string             '8x8' for MEA layout, all types of MEA's; 'nogrid' for hardware/in vivo layout
+ TotalChannels           double             number of hardware channel, can be up to 128 for 'nogrid' layout
+ NChannels2              double/stream      no. of channels recorded
+ ChannelNames2           cell string        strings of channel definitions, 
+                         array/stream       sorted in hardware aquisition order
+ HardwareChannelNames2   cell string        strings of channel definitions, 
+                         array/stream       sorted in recording order
+ ChannelID2              cell with double   linear channel ID (i.e. number of channel in MCRack channels page, 
+                         array/stream       e.g. 1=#11,2=#12,..,9=#21,10=#22,...),
+                                            sorted in hardware aquisition order
+ HardwareChannelID2      cell with double   hardware channel ID (=number of channel in hardware aquisition sequence),
+                         array/stream       e.g. 1=#11,2=#12,..,9=#21,10=#22,...),
+                                            sorted in recording order
+ MicrovoltsPerAD2        double/stream      礦 per AD unit
+ MicrosecondsPerTick     double             hardware sampling period
+ MillisamplesPerSecond2  double/stream      samples per second * 1000, (there will be a downsampling option 
+                                            for Filtered data in later MCRack version)
+ ZeroADValue2            double/stream      zero position of the AD conversion
+
+ recordingdate           double             start date and time  
+                                                  datestr(getfield(d,'recordingdate'),0) returns a formatted string
+ recordingStopDate       double             stop date and time  
+                                                  datestr(getfield(d,'recordingStopDate'),0) returns a formatted string
+                                            filelength in ms
+                                                  filelength=(getfield(d,'recordingStopDate')- 
+                                                                 getfield(d,'recordingdate'))*24*3600*1000 
+ sweepStartTime          0                  onset of each window of gap-free, continuous data, given in ms
+ sweepStopTime           0                  end of each window of gap-free, continuous data, given in ms
+
+ TimeWindow              struct             recording Time Window information (i.e. trigger conditions, extent)
+                Choice:  string             Start On Trigger, Start And Stop On Trigger, or Fixed Window
+                 Time1:  double                   in ms, depending on the Time Window selection either the 
+                                                        Window Distance or the Pre-Trigger interval
+                 Time2:  double                   in ms, depending on the Time Window selection either the 
+                                                         Window Extent, or the Post-Trigger interval with 
+                                                         Start And Stop On Trigger. 
+          StartTrigger:  string                   name of the selected starting trigger
+           StopTrigger:  string                   name of the selected stop trigger
+
+ StreamCount             double             no. of data stream in the record
+ StreamNames             cell str/stream    'name' of the 'instrument' used, e.g. 'Spikes 1', 'Trigger 2', 'Electrode Raw Data'
+ StreamInfo              cell with          cell array of structures with stream specific information 
+                         struct/stream
+
+ Case: 'spikes'
+            StreamName:  string             recorded stream/buffer
+              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params
+            PreTrigger:  double             pre-trigger interval in ms
+           PostTrigger:  double             post-trigger interval in ms
+              DeadTime:  double             'refractory period' in ms
+                 Level:  double/channel     trigger level in 礦 for each channel
+                 Slope:  double/channel     detection slope: 0 for negative, 1 for positive, -1 for absolute level
+          ChannelNames:  cell str/channel   channel names sorted as in Level and Slope
+
+ Case: 'params'
+            StreamName:  string             recorded stream/buffer
+              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params
+            Parameters:  cell string        actually return values of the analysis: 'min', 'max', 'tmin', 
+                         /parameter               'tmax', 'height', 'width', 'area', 'number', 'amplitude', or 'rate' 
+       InputBufferName:  cell string        analyzed data stream 
+        NumTimeWindows:  double             no. of Time Windows averaged
+      TimeWindowChoice:  string             'Start On Trigger', 'Start And Stop On Trigger', or 'Fixed Window'            
+       TimeWindowTime1:  double             depending on the Time Window selection either the Window Distance 
+                                                  or the Pre-Trigger
+       TimeWindowTime2:  double             depending on the Time Window selection either the Window Extent, 
+                                                  or the Post-Trigger interval with 'Start And Stop On Trigger'.
+TimeWindowStartTrigger:  string             name of the selected starting trigger
+ TimeWindowStopTrigger:  string             name of the selected stop trigger
+
+ Case: 'trigger'
+            StreamName:  string             recorded stream/buffer
+              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params
+             ChannelID:  double             corresponds to HardwareChannelID2 of the channel used as trigger
+              DeadTime:  double             'refractory period' in ms
+                 Level:  double             trigger level in 礦 for each channel
+                 Slope:  double             detection slope: 0 for negative, 1 for positive
+       InputBufferName:  'not recorded'     data stream used as trigger source
+
+ Case: 'other'
+            StreamName:  string             recorded stream/buffer
+              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params
+
+ Please refer to help nextdata for information on retrieving data
+
+ Author: Th. Knott, NMI Reutlingen, knott@nmi.de</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="rdrawhd.html" class="code" title="function a=rdrawhd(d)">rdrawhd</a>	rdrawhd - parses MCS data header (version 1) (datastream method)</li><li><a href="setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>	setfield - sets any field in datastream objects (datastream method)</li><li><a href="setpos.html" class="code" title="function a = setpos(d,posType,posValue);">setpos</a>	setpos - set the file position in a datastream (datastream method)</li><li><a href="../../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/setfield.html" class="code" title="function s = setfield(s,field,v)">setfield</a>	SETFIELD Set mutable structure field contents.</li><li><a href="../../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function d = datastrm(a,varargin)</a>
+0002 <span class="comment">% DATASTRM        - data object constructor for opening data recorded with MC Rack</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% d = datastrm(a,varargin) is a datastrm constructor for MC Rack data files of all MC Rack versions</span>
+0005 <span class="comment">%                           (MC Rack version 1 and above uses the OLE Server Object contained in MCStream.dll)</span>
+0006 <span class="comment">%                           (MC Rack version 0 is handled by a MATLAB reader and is retained for compatibilty)</span>
+0007 <span class="comment">% &lt;a&gt; is a filename or a datastrm object or a struct containing fields of earlier datastrm versions.</span>
+0008 <span class="comment">% &lt;d&gt; is a datastrm object with the header information contained in the MCRack file.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Following properties of the MCRack data file can be retrieved with getfield(d,'propertyxxx').</span>
+0011 <span class="comment">% Many of them come as arrays as they depend on the MCRack stream(=buffer), of which more</span>
+0012 <span class="comment">% than one can be contained in an MCRack data file (e.g. Trigger 1 and Spikes 1)</span>
+0013 <span class="comment">% Please use getstreamnumber(d,'streamname') for converting stream name to stream id, which</span>
+0014 <span class="comment">% must be used for indexing all stream dependent arrays.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% All other methodes than datastrm,nextdata,getfield,getstreamnumber,ad2muvolt in datastrm</span>
+0017 <span class="comment">% directory are private or retained for compatibility and should not be used.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Following properties of the datastrm object are accessible with getfield(a,'eg_prop'):</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% filename                string</span>
+0022 <span class="comment">% version                 string             of the datastrm object definition in matlab</span>
+0023 <span class="comment">% softwareversion         string             of the MCRack version which recorded the opened data file</span>
+0024 <span class="comment">% filesize                double             in byte</span>
+0025 <span class="comment">% meatype                 string             '8x8' for MEA layout, all types of MEA's; 'nogrid' for hardware/in vivo layout</span>
+0026 <span class="comment">% TotalChannels           double             number of hardware channel, can be up to 128 for 'nogrid' layout</span>
+0027 <span class="comment">% NChannels2              double/stream      no. of channels recorded</span>
+0028 <span class="comment">% ChannelNames2           cell string        strings of channel definitions,</span>
+0029 <span class="comment">%                         array/stream       sorted in hardware aquisition order</span>
+0030 <span class="comment">% HardwareChannelNames2   cell string        strings of channel definitions,</span>
+0031 <span class="comment">%                         array/stream       sorted in recording order</span>
+0032 <span class="comment">% ChannelID2              cell with double   linear channel ID (i.e. number of channel in MCRack channels page,</span>
+0033 <span class="comment">%                         array/stream       e.g. 1=#11,2=#12,..,9=#21,10=#22,...),</span>
+0034 <span class="comment">%                                            sorted in hardware aquisition order</span>
+0035 <span class="comment">% HardwareChannelID2      cell with double   hardware channel ID (=number of channel in hardware aquisition sequence),</span>
+0036 <span class="comment">%                         array/stream       e.g. 1=#11,2=#12,..,9=#21,10=#22,...),</span>
+0037 <span class="comment">%                                            sorted in recording order</span>
+0038 <span class="comment">% MicrovoltsPerAD2        double/stream      礦 per AD unit</span>
+0039 <span class="comment">% MicrosecondsPerTick     double             hardware sampling period</span>
+0040 <span class="comment">% MillisamplesPerSecond2  double/stream      samples per second * 1000, (there will be a downsampling option</span>
+0041 <span class="comment">%                                            for Filtered data in later MCRack version)</span>
+0042 <span class="comment">% ZeroADValue2            double/stream      zero position of the AD conversion</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% recordingdate           double             start date and time</span>
+0045 <span class="comment">%                                                  datestr(getfield(d,'recordingdate'),0) returns a formatted string</span>
+0046 <span class="comment">% recordingStopDate       double             stop date and time</span>
+0047 <span class="comment">%                                                  datestr(getfield(d,'recordingStopDate'),0) returns a formatted string</span>
+0048 <span class="comment">%                                            filelength in ms</span>
+0049 <span class="comment">%                                                  filelength=(getfield(d,'recordingStopDate')-</span>
+0050 <span class="comment">%                                                                 getfield(d,'recordingdate'))*24*3600*1000</span>
+0051 <span class="comment">% sweepStartTime          0                  onset of each window of gap-free, continuous data, given in ms</span>
+0052 <span class="comment">% sweepStopTime           0                  end of each window of gap-free, continuous data, given in ms</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% TimeWindow              struct             recording Time Window information (i.e. trigger conditions, extent)</span>
+0055 <span class="comment">%                Choice:  string             Start On Trigger, Start And Stop On Trigger, or Fixed Window</span>
+0056 <span class="comment">%                 Time1:  double                   in ms, depending on the Time Window selection either the</span>
+0057 <span class="comment">%                                                        Window Distance or the Pre-Trigger interval</span>
+0058 <span class="comment">%                 Time2:  double                   in ms, depending on the Time Window selection either the</span>
+0059 <span class="comment">%                                                         Window Extent, or the Post-Trigger interval with</span>
+0060 <span class="comment">%                                                         Start And Stop On Trigger.</span>
+0061 <span class="comment">%          StartTrigger:  string                   name of the selected starting trigger</span>
+0062 <span class="comment">%           StopTrigger:  string                   name of the selected stop trigger</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% StreamCount             double             no. of data stream in the record</span>
+0065 <span class="comment">% StreamNames             cell str/stream    'name' of the 'instrument' used, e.g. 'Spikes 1', 'Trigger 2', 'Electrode Raw Data'</span>
+0066 <span class="comment">% StreamInfo              cell with          cell array of structures with stream specific information</span>
+0067 <span class="comment">%                         struct/stream</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% Case: 'spikes'</span>
+0070 <span class="comment">%            StreamName:  string             recorded stream/buffer</span>
+0071 <span class="comment">%              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params</span>
+0072 <span class="comment">%            PreTrigger:  double             pre-trigger interval in ms</span>
+0073 <span class="comment">%           PostTrigger:  double             post-trigger interval in ms</span>
+0074 <span class="comment">%              DeadTime:  double             'refractory period' in ms</span>
+0075 <span class="comment">%                 Level:  double/channel     trigger level in 礦 for each channel</span>
+0076 <span class="comment">%                 Slope:  double/channel     detection slope: 0 for negative, 1 for positive, -1 for absolute level</span>
+0077 <span class="comment">%          ChannelNames:  cell str/channel   channel names sorted as in Level and Slope</span>
+0078 <span class="comment">%</span>
+0079 <span class="comment">% Case: 'params'</span>
+0080 <span class="comment">%            StreamName:  string             recorded stream/buffer</span>
+0081 <span class="comment">%              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params</span>
+0082 <span class="comment">%            Parameters:  cell string        actually return values of the analysis: 'min', 'max', 'tmin',</span>
+0083 <span class="comment">%                         /parameter               'tmax', 'height', 'width', 'area', 'number', 'amplitude', or 'rate'</span>
+0084 <span class="comment">%       InputBufferName:  cell string        analyzed data stream</span>
+0085 <span class="comment">%        NumTimeWindows:  double             no. of Time Windows averaged</span>
+0086 <span class="comment">%      TimeWindowChoice:  string             'Start On Trigger', 'Start And Stop On Trigger', or 'Fixed Window'</span>
+0087 <span class="comment">%       TimeWindowTime1:  double             depending on the Time Window selection either the Window Distance</span>
+0088 <span class="comment">%                                                  or the Pre-Trigger</span>
+0089 <span class="comment">%       TimeWindowTime2:  double             depending on the Time Window selection either the Window Extent,</span>
+0090 <span class="comment">%                                                  or the Post-Trigger interval with 'Start And Stop On Trigger'.</span>
+0091 <span class="comment">%TimeWindowStartTrigger:  string             name of the selected starting trigger</span>
+0092 <span class="comment">% TimeWindowStopTrigger:  string             name of the selected stop trigger</span>
+0093 <span class="comment">%</span>
+0094 <span class="comment">% Case: 'trigger'</span>
+0095 <span class="comment">%            StreamName:  string             recorded stream/buffer</span>
+0096 <span class="comment">%              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params</span>
+0097 <span class="comment">%             ChannelID:  double             corresponds to HardwareChannelID2 of the channel used as trigger</span>
+0098 <span class="comment">%              DeadTime:  double             'refractory period' in ms</span>
+0099 <span class="comment">%                 Level:  double             trigger level in 礦 for each channel</span>
+0100 <span class="comment">%                 Slope:  double             detection slope: 0 for negative, 1 for positive</span>
+0101 <span class="comment">%       InputBufferName:  'not recorded'     data stream used as trigger source</span>
+0102 <span class="comment">%</span>
+0103 <span class="comment">% Case: 'other'</span>
+0104 <span class="comment">%            StreamName:  string             recorded stream/buffer</span>
+0105 <span class="comment">%              DataType:  string             type of recorded stream: 'analog', 'trigger, 'spikes', 'params</span>
+0106 <span class="comment">%</span>
+0107 <span class="comment">% Please refer to help nextdata for information on retrieving data</span>
+0108 <span class="comment">%</span>
+0109 <span class="comment">% Author: Th. Knott, NMI Reutlingen, knott@nmi.de</span>
+0110 
+0111 <span class="comment">% internal variables and constants</span>
+0112 <span class="comment">% sorterleft            double  (1  68)      used to convert hardware aquisition order to linear channel order</span>
+0113 <span class="comment">%                                               linear_sorted_data(sorterleft)=hardware_sorted_data</span>
+0114 <span class="comment">% sorterright           double  (1  68)      used to convert hardware aquisition order to linear channel order</span>
+0115 <span class="comment">%                                               linear_sorted_data=hardware_data(sorterright)</span>
+0116 <span class="comment">% SamplesPerSegment     double/stream        no. of samples per data block in the file</span>
+0117 <span class="comment">%</span>
+0118 
+0119 <span class="comment">% variables retained for compatibility with MCRack V 0</span>
+0120 <span class="comment">% DataType                raw triggered</span>
+0121 <span class="comment">% fid                     -1</span>
+0122 <span class="comment">% BitFlipRemoveFactor     0</span>
+0123 <span class="comment">% id                      0</span>
+0124 <span class="comment">% NChannels               0</span>
+0125 <span class="comment">% ChannelNames</span>
+0126 <span class="comment">% HardwareChannelNames</span>
+0127 <span class="comment">% MicrovoltsPerAD         1</span>
+0128 <span class="comment">% ZeroADValue             2048                        zero position of the AD conversion</span>
+0129 <span class="comment">% ChannelID               0</span>
+0130 <span class="comment">% HardwareChannelID       0</span>
+0131 <span class="comment">% total_window_ticks      0</span>
+0132 <span class="comment">% offset_to_data          0</span>
+0133 <span class="comment">% sweepStartPointer       0</span>
+0134 <span class="comment">% windowTicksPos          0</span>
+0135 <span class="comment">% triggerChannel          -1</span>
+0136 <span class="comment">% spikeSize               0</span>
+0137 <span class="comment">% ticks_pre_event         0</span>
+0138 <span class="comment">% maxSpkPerSegmPerChanl   0</span>
+0139 <span class="comment">% nSpikesPerSegement      0</span>
+0140 <span class="comment">% nSpkPerSegPerChanl      0</span>
+0141 <span class="comment">% HeaderVersion           1</span>
+0142 <span class="comment">% fileaccess              ole</span>
+0143 <span class="comment">% TriggerStreamID         double (1  2)       ID of the data stream used as trigger source</span>
+0144 
+0145 
+0146 <span class="comment">% versioning remarks:</span>
+0147 <span class="comment">% - member variables without ..2 are always filled, (ThK)</span>
+0148 <span class="comment">% - with ..2 only by MCRack version 0 files (ThK)</span>
+0149 <span class="comment">% - d.ChannelNames and d.ChannelID retrieved from files recorded with MCRack v. 1.0 now</span>
+0150 <span class="comment">%      complies with the numbering scheme fitting the MEATools indexing style. (UE 12/1/98)</span>
+0151 
+0152 <span class="comment">% MCRack version 0: second par can be the BitFlipRemoveFactor (up to now only for spike data used)</span>
+0153 <span class="comment">% for removing spikes (bitflips) with peaks more than BitFlipRemoveFactor higher than left/right value</span>
+0154 <span class="comment">% reasonable size: 4</span>
+0155 
+0156 <span class="comment">% Author: Th. Knott, NMI Reutlingen</span>
+0157 
+0158 d.filename=<span class="string">''</span>;
+0159 d.fid=-1;
+0160 datastrmStruct = [];
+0161 
+0162 <span class="keyword">if</span> nargin == 0
+0163     a=<span class="string">'not assigned'</span>;
+0164 <span class="keyword">elseif</span> isa(a,<span class="string">'datastrm'</span>)
+0165    d = a;
+0166    <span class="keyword">if</span> (~strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0167        d.fid = fopen(d.filename);
+0168        <span class="keyword">if</span> d.fid == -1
+0169           warning([<span class="string">'file '</span> d.filename <span class="string">' does not exist'</span>]);
+0170       <span class="keyword">end</span>
+0171    <span class="keyword">end</span>;
+0172    <span class="keyword">return</span>;
+0173 <span class="keyword">elseif</span> isa(a,<span class="string">'struct'</span>)
+0174    <span class="comment">% help initializing earlier versions of datastrm</span>
+0175    datastrmStruct=a;
+0176     a=<span class="string">'not assigned'</span>;
+0177 <span class="keyword">elseif</span> isa(a,<span class="string">'char'</span>) &amp; strcmp(a,<span class="string">'open'</span>)
+0178    [fn path] = uigetfile(<span class="string">'*.*'</span>,<span class="string">'open data file'</span>);
+0179    <span class="keyword">if</span> (fn == 0) &amp; (path == 0)      <span class="comment">% 'cancel'-button pressed</span>
+0180      <span class="keyword">if</span> nargout == 1 
+0181         d = [];
+0182      <span class="keyword">end</span>
+0183      <span class="keyword">return</span> 
+0184    <span class="keyword">end</span>
+0185    a = [path fn];
+0186 <span class="keyword">end</span>
+0187 
+0188 <span class="keyword">if</span> ~strcmp(a,<span class="string">'not assigned'</span>)
+0189    d.filename = a;
+0190    d.fid = fopen(a);
+0191    <span class="keyword">if</span> (d.fid == -1)
+0192       error([<span class="string">'file '</span> d.filename <span class="string">' does not exist'</span>]);
+0193    <span class="keyword">end</span>
+0194 <span class="keyword">end</span>
+0195 
+0196 <span class="keyword">if</span> size(varargin,2)&gt;=1        
+0197     d.BitFlipRemoveFactor = 1/varargin{1}; <span class="comment">%factor for removing spikes (bitflips) with peaks</span>
+0198                                     <span class="comment">% more than BitFlipRemoveFactor higher than left/right value</span>
+0199 <span class="keyword">else</span>
+0200     d.BitFlipRemoveFactor = 0;
+0201 <span class="keyword">end</span>;
+0202 
+0203 <span class="comment">%general</span>
+0204 d.meatype=<span class="string">'8x8'</span>;
+0205 d.version=<span class="string">'2.4.9'</span>;
+0206 d.filesize=0;
+0207 d.id=0;
+0208 d.DataType=<span class="string">''</span>;
+0209 d.NChannels=0;
+0210 d.NChannels2=0;
+0211 d.ChannelNames = <span class="string">''</span>;
+0212 d.ChannelNames2 = <span class="string">''</span>;
+0213 d.HardwareChannelNames= <span class="string">''</span>;
+0214 d.HardwareChannelNames2= <span class="string">''</span>;
+0215 d.MicrovoltsPerAD=1;
+0216 d.MicrovoltsPerAD2=1;
+0217 d.MicrosecondsPerTick=40;
+0218 d.ZeroADValue=2048;
+0219 d.ZeroADValue2=2048;
+0220 d.ChannelID=0;
+0221 d.ChannelID2=0;
+0222 d.HardwareChannelID=0;
+0223 d.HardwareChannelID2=0;
+0224 d.sorterleft=[31,32,30,29,24,23,16,22,15,7,14,6,21,13,5,4,12,20,3,11,2,10,19,9,18,17,28,27,25,26,34,33,35,36,41,42,49,43,50,58,51,59,44,52,60,61,53,45,62,54,63,55,46,56,47,48,37,38,40,39,65,66,67,68,1,8,57,64,69:128];
+0225 d.sorterleft(65:128) = d.sorterleft(1:64) + 68;
+0226 d.sorterright=[65,21,19,16,15,12,10,66,24,22,20,17,14,11,9,7,26,25,23,18,13,8,6,5,29,30,28,27,4,3,1,2,32,31,33,34,57,58,60,59,35,36,38,43,48,53,55,56,37,39,41,44,47,50,52,54,67,40,42,45,46,49,51,68,61,62,63,64,69:128];
+0227 d.mea8x8ChannelNames={<span class="string">'11'</span>  <span class="string">'12'</span>  <span class="string">'13'</span>  <span class="string">'14'</span>  <span class="string">'15'</span>  <span class="string">'16'</span>  <span class="string">'17'</span>  <span class="string">'18'</span>  <span class="string">'21'</span>  <span class="string">'22'</span>  <span class="string">'23'</span>  <span class="string">'24'</span>  <span class="string">'25'</span>  <span class="string">'26'</span>  <span class="string">'27'</span>  <span class="string">'28'</span>  <span class="string">'31'</span>  <span class="string">'32'</span>  <span class="string">'33'</span>  <span class="string">'34'</span>  <span class="string">'35'</span>  <span class="string">'36'</span>  <span class="string">'37'</span>  <span class="string">'38'</span>  <span class="string">'41'</span>  <span class="string">'42'</span>  <span class="string">'43'</span>  <span class="string">'44'</span>  <span class="string">'45'</span>  <span class="string">'46'</span>  <span class="string">'47'</span>  <span class="string">'48'</span>  <span class="string">'51'</span>  <span class="string">'52'</span>  <span class="string">'53'</span>  <span class="string">'54'</span>  <span class="string">'55'</span>  <span class="string">'56'</span>  <span class="string">'57'</span>  <span class="string">'58'</span>  <span class="string">'61'</span>  <span class="string">'62'</span>  <span class="string">'63'</span>  <span class="string">'64'</span>  <span class="string">'65'</span>  <span class="string">'66'</span>  <span class="string">'67'</span>  <span class="string">'68'</span>  <span class="string">'71'</span>  <span class="string">'72'</span>  <span class="string">'73'</span>  <span class="string">'74'</span>  <span class="string">'75'</span>  <span class="string">'76'</span>  <span class="string">'77'</span>  <span class="string">'78'</span>  <span class="string">'81'</span>  <span class="string">'82'</span>  <span class="string">'83'</span>  <span class="string">'84'</span>  <span class="string">'85'</span>  <span class="string">'86'</span>  <span class="string">'87'</span>  <span class="string">'88'</span>};
+0228 <span class="comment">% with following code you get you hardchannel ID translated</span>
+0229 <span class="comment">% to MEA 8x8 layout independent of MCRack source type (works only with less than 61 channels!)</span>
+0230 <span class="comment">% streamnr=getstreamnumber(a,'Spikes 1');</span>
+0231 <span class="comment">% sorterleft=getfield(a,'sorterleft');</span>
+0232 <span class="comment">% mea8x8ChannelNames==getfield(a,'mea8x8ChannelNames');</span>
+0233 <span class="comment">% hwnamesall={mea8x8ChannelNames{sorterleft(1:60)}};</span>
+0234 <span class="comment">% hwstream=getfield(a,'HardwareChannelID2');</span>
+0235 <span class="comment">% hwnames= hwnamesall(hwstream{streamnr})</span>
+0236 d.total_window_ticks=0;
+0237 d.offset_to_data = 0;
+0238 d.recordingdate = 0;
+0239 d.recordingStopDate = 0;
+0240 d.sweepStartTime = 0;         <span class="comment">%for spikes used as segment start time</span>
+0241 d.sweepStartPointer = 0;      <span class="comment">%for spikes used as segment start pointer</span>
+0242 d.windowTicksPos = 0;
+0243 d.triggerChannel = -1;
+0244 <span class="comment">%spikes</span>
+0245 d.spikeSize = 0;              <span class="comment">%code optimizations assume this not to be changed within a file</span>
+0246 d.ticks_pre_event = 0; 
+0247 d.maxSpkPerSegmPerChanl = 0;  <span class="comment">%upper limit for memory needed per segment while reading spikes as spikes</span>
+0248 d.nSpikesPerSegement = 0;     <span class="comment">%upper limit for memory needed per segment while reading spikes as sparse</span>
+0249 d.nSpkPerSegPerChanl = 0;     <span class="comment">%number of spike per segment per channel in 4-bit code</span>
+0250 d.HeaderVersion=-1;
+0251 d.fileaccess=<span class="string">'file'</span>;
+0252 d.MillisamplesPerSecond=0;
+0253 d.MillisamplesPerSecond2=0;
+0254 d.StreamCount=0;
+0255 d.StreamNames={};
+0256 d.StreamInfo={};
+0257 d.SamplesPerSegment = 0;
+0258 d.TriggerStreamID=0;
+0259 d.TimeWindow.Choice=0;
+0260 d.TimeWindow.Time1=0;
+0261 d.TimeWindow.Time2=0;
+0262 d.TimeWindow.StartTrigger=0;
+0263 d.TimeWindow.StopTrigger=0;
+0264 d.softwareversion=0;
+0265 d.TotalChannels = 64;
+0266 d.sweepStopTime = 0;         
+0267 
+0268 <span class="keyword">if</span> ~isempty(datastrmStruct)
+0269    structFields=<a href="../../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(datastrmStruct);
+0270    <span class="keyword">for</span> idx=1:length(structFields)
+0271       d=<a href="setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>(d,structFields{idx},<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(datastrmStruct,structFields{idx}));
+0272    <span class="keyword">end</span>
+0273 <span class="keyword">end</span>
+0274 d = class(d,<span class="string">'datastrm'</span>);
+0275 
+0276 <span class="keyword">if</span> ~strcmp(a,<span class="string">'not assigned'</span>)
+0277     fseek(d.fid,0,1);
+0278     d.filesize=ftell(d.fid);
+0279    fseek(d.fid,0,-1);
+0280     newd=<a href="rdrawhd.html" class="code" title="function a=rdrawhd(d)">rdrawhd</a>(d);
+0281     <span class="keyword">if</span>(strcmp(class(newd),<span class="string">'char'</span>) &amp; strcmp(newd,<span class="string">'invalid file'</span>))    <span class="comment">%not old mcrack version</span>
+0282         fclose(d.fid);
+0283         tmp.function=<span class="string">'OpenFile'</span>;
+0284         tmp.Filename=d.filename;
+0285         retStruct.HeaderVersion=1;
+0286         retStruct=mcstreammex(tmp);
+0287         d.fid=-1;
+0288         d.HeaderVersion=retStruct.HeaderVersion;
+0289         d.softwareversion=retStruct.SoftwareVersion;
+0290         d.fileaccess=<span class="string">'ole'</span>;
+0291         d.MillisamplesPerSecond=retStruct.MillisamplesPerSecond;
+0292         d.MillisamplesPerSecond2=retStruct.MillisamplesPerSecond2;
+0293         d.MicrosecondsPerTick=1000000/(d.MillisamplesPerSecond/1000);
+0294         d.ZeroADValue2=retStruct.ZeroADValue;
+0295         <span class="keyword">for</span> i=1:length(retStruct.UnitsPerAD)
+0296             <span class="keyword">if</span>(<a href="../../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(retStruct.UnitSign(i))==<span class="string">'V'</span>)
+0297                 d.MicrovoltsPerAD2(i)=retStruct.UnitsPerAD(i)*1000000;
+0298             <span class="keyword">else</span>
+0299                 warning(<span class="string">'unknown UnitSign in OLE-read file, MicrovoltsPerAD set to default'</span>);
+0300             <span class="keyword">end</span>
+0301         <span class="keyword">end</span>
+0302         d.StreamCount=retStruct.StreamCount;
+0303         d.StreamNames=retStruct.StreamNames;
+0304         d.StreamInfo=retStruct.StreamInfo;
+0305         d.SamplesPerSegment=retStruct.SamplesPerSegment;
+0306         d.NChannels2=retStruct.ChannelCount;
+0307         d.HardwareChannelID2=cell(d.StreamCount,1);
+0308         d.HardwareChannelNames2=cell(d.StreamCount,1);
+0309         d.ChannelID2=cell(d.StreamCount,1);
+0310         d.ChannelNames2=cell(d.StreamCount,1);
+0311         d.sweepStartTime=retStruct.SweepStartTime;
+0312       d.sweepStopTime=retStruct.SweepStopTime;
+0313       <span class="keyword">if</span> retStruct.TriggerStreamID(1)&gt;-1
+0314             tmp=d.StreamInfo{retStruct.TriggerStreamID(1)+1};
+0315             <span class="keyword">if</span> ~isempty(tmp)
+0316                 d.triggerChannel=tmp.Channel;
+0317             <span class="keyword">end</span>
+0318         <span class="keyword">end</span>
+0319       d.TriggerStreamID=retStruct.TriggerStreamID;
+0320       tmpTW=retStruct.TimeWindow;
+0321       d.TimeWindow.Choice=tmpTW.Choice;
+0322       d.TimeWindow.Time1=tmpTW.Time1;
+0323       d.TimeWindow.Time2=tmpTW.Time2;
+0324       d.TimeWindow.StartTrigger=tmpTW.StartTrigger;
+0325       d.TimeWindow.StopTrigger=tmpTW.StopTrigger;
+0326         d.total_window_ticks=d.TimeWindow.Time2*(d.MillisamplesPerSecond/1000000);
+0327       <span class="comment">%        d.TimeWindow=retStruct.TimeWindow;</span>
+0328 
+0329 
+0330       <span class="comment">% read the meatype if it was set with writemeatype</span>
+0331 
+0332       <span class="keyword">switch</span> retStruct.SourceType
+0333       <span class="keyword">case</span> 0
+0334           d.meatype=<span class="string">'nogrid'</span>;
+0335       <span class="keyword">case</span> 1
+0336           d.meatype=<span class="string">'8x8'</span>;
+0337       <span class="keyword">case</span> 2
+0338           d.meatype=<span class="string">'2x8x8'</span>;
+0339       <span class="keyword">end</span>
+0340 
+0341       d.TotalChannels = retStruct.TotalChannels;
+0342         <span class="keyword">for</span> i=1:d.StreamCount
+0343             validChannels=find(retStruct.ChannelID(:,i)+1)+(i-1)*max(d.NChannels2);
+0344             d.HardwareChannelID2{i}=retStruct.ChannelID(validChannels)+1;
+0345          d.HardwareChannelNames2{i}=retStruct.ChannelNames(validChannels);
+0346          <span class="keyword">if</span> strcmp(d.meatype,<span class="string">'nogrid'</span>) 
+0347             tmpsort = d.HardwareChannelID2{i};
+0348             tmpsortIdx = [1:length(d.HardwareChannelID2{i})];
+0349          <span class="keyword">else</span>
+0350             [tmpsort,tmpsortIdx] = sort(d.HardwareChannelID2{i});
+0351          <span class="keyword">end</span>
+0352          d.ChannelNames2{i}=d.HardwareChannelNames2{i}(tmpsortIdx); 
+0353          d.ChannelID2{i}=d.sorterleft(tmpsort)';
+0354          <span class="keyword">if</span>(strcmp(d.StreamNames(i),<span class="string">'Electrode Raw Data'</span>) | <span class="keyword">...</span>
+0355                     strcmp(d.StreamNames{i}(1:5),<span class="string">'Analog Raw Data'</span>))
+0356                 <span class="keyword">if</span> length(d.sweepStartTime)&gt;1
+0357                     d.DataType=<span class="string">'raw triggered'</span>;
+0358                     <span class="comment">% d.total_window_ticks=retStruct.SweepLength*(d.MillisamplesPerSecond/1000000);</span>
+0359                 <span class="keyword">else</span>
+0360                     d.DataType=<span class="string">'raw continous'</span>;
+0361                 <span class="keyword">end</span>
+0362                 <span class="keyword">if</span>(strcmp(d.StreamNames(i),<span class="string">'Electrode Raw Data'</span>))
+0363                     d.ZeroADValue=d.ZeroADValue2(i);
+0364                     d.MicrovoltsPerAD=d.MicrovoltsPerAD2(i);
+0365                     d.NChannels=d.NChannels2(i);
+0366                     d.ChannelID=d.ChannelID2{i};
+0367                     d.HardwareChannelID=d.HardwareChannelID2{i};
+0368                     d.HardwareChannelNames=d.HardwareChannelNames2{i};
+0369                     d.ChannelNames=d.ChannelNames2{i};
+0370                 <span class="keyword">end</span>
+0371             <span class="keyword">end</span>
+0372         <span class="keyword">end</span>
+0373         tmp=retStruct.RecordingDate;
+0374       d.recordingdate=datenum(tmp(1),tmp(2),tmp(3),tmp(4),tmp(5),tmp(6));
+0375         tmp=retStruct.RecordingStopDate;
+0376       d.recordingStopDate=datenum(tmp(1),tmp(2),tmp(3),tmp(4),tmp(5),tmp(6));
+0377        disp([<span class="string">'Recording date:  '</span> datestr(d.recordingdate,0)]);
+0378         disp([<span class="string">'streams in OLE-opened file:'</span> ])
+0379         disp(d.StreamNames)
+0380    <span class="keyword">else</span>           <span class="comment">% i.e. file recorded with old MCRack version</span>
+0381       d=newd;
+0382         d.HardwareChannelID=d.ChannelID;
+0383         d.triggerChannel=d.sorterleft(d.triggerChannel+1);                          <span class="comment">% 31=#47 default!</span>
+0384       
+0385       d=<a href="setpos.html" class="code" title="function a = setpos(d,posType,posValue);">setpos</a>(d,<span class="string">'sweep'</span>,1);
+0386       d.ChannelID= d.sorterleft(d.HardwareChannelID);                               
+0387       d.HardwareChannelNames=d.ChannelNames;
+0388       d.triggerChannel=d.sorterleft(d.triggerChannel+1);                            <span class="comment">% 31=#47 default!</span>
+0389       d.ChannelNames = d.HardwareChannelNames;
+0390    <span class="keyword">end</span>
+0391 <span class="keyword">end</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

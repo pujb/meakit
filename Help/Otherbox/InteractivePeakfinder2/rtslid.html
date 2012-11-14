@@ -1,0 +1,509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of rtslid</title>
+  <meta name="keywords" content="rtslid">
+  <meta name="description" content="RTSLID Slider widget that responds to dragging realtime">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>rtslid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RTSLID Slider widget that responds to dragging realtime</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h = rtslid(fig,f,hh,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RTSLID Slider widget that responds to dragging realtime
+ NOTE: This version modified by commenting out lines 337 and 373 
+ to prevent crash on Matlab 20078 and 2009m as per Michael Coen
+       h2 = RTSLID(h,@Fcn,h3) places a slider on the figure
+       with handle h, and returns the handle to the slider
+       in h2.  The second argument is a pointer to a
+       function that takes a two input arguments, which
+       should be the function you wish to be responding to
+       changes in the slider position.  The first of these
+       input arguments will be a number between 0 and 1
+       (if using the default scale) that corresponds to the
+       slider vertical position, while the second is the
+       handle of the axes to that responds to the slider
+       movement (as a result of Fnc). This handle should be
+       passed to RTSLID as the third input argument h3.
+
+       Alternatively instead of passing a function handle
+       as the second argument, a set of commands can be
+       passed as a string.  In order to use the slider
+       output value in such a set of commands, the lower
+       case variable 'out' should be used which contains
+       this number (Look at bottom of DEMO1.m for example).
+
+       h2 = RTSLID(h,@fcn,h3,style) allows the user to
+       specify the style of the slider by including an
+       optional third input argument.
+       The different styles affect the slider's response
+       to mouse movement, and are:
+
+               0 - (Default) Jumps to the mouse pointer
+                   on click, and locks to the mouse on drag.
+               1 - Only moves with mouse drags.
+
+       Additional parameters are passed as parameter pairs,
+       ie. rtslid(h,@fcn,h3,'param1',v1,'param2',v2,'...).
+       Inclusion of the fourth argument 'style' is optional.
+       These parameter names are listed below (all parameter
+       names are case insensitive) and all are optional:
+
+               'POSITION'  -   Control the position and size
+                               of the slider by passing a
+                               four element vector in the
+                               range [0 to 1] as a multiple
+                               of current figure size.
+                               Use [x y width height].
+                               {Default: [0.03 0.1 0.03 0.8]}
+               'BACK'      -   Either a string of the name
+                               of a valid colormap, or a 3-
+                               element RGB vector in the
+                               range [0 to 1].
+                               {Default: 'jet'}
+               'SCALE'     -   A two element vector of the
+                               lower and upper output limits
+                               for the slider.
+                               {Default: [0 1]}
+               'LABEL'     -   A string for the slider label.
+                               {Default: ''}
+               'DEF'       -   A default initial value (with
+                               respect to the SCALE), although
+                               does not cause output.
+                               {Default: 0.5}
+               'BUTMOT'    -   Additional mouse callback for
+                               WindowButtonMotionFcn of the
+                               slider figure, to allow other
+                               processes to use this callback.
+                               {Default: ''}
+               'MOUSEDOWN' -   Additional mouse callback for
+                               WindowButtonDownFcn of the
+                               slider figure, to allow other
+                               processes to use this callback.
+                               {Default: ''}
+               'MOUSEUP'   -   Additional mouse callback for
+                               WindowButtonDownFcn of the
+                               slider figure, to allow other
+                               processes to use this callback.
+                               {Default: ''}
+
+   matthew jones (matt_jones@fastmail.fm), 2004</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>	Interactive findpeaks script for pre-defined data in x,y.</li><li><a href="FindPeakSlidersG.html" class="code" title="">FindPeakSlidersG</a>	Interactive findpeaks script with peak-zoom feature,</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function butdownfcn(in,varargin)</a></li><li><a href="#_sub2" class="code">function butupfcn(in,varargin)</a></li><li><a href="#_sub3" class="code">function butmotfcn0(in,varargin)</a></li><li><a href="#_sub4" class="code">function butmotfcn1(in,varargin)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = rtslid(fig,f,hh,varargin)</a>
+0002 
+0003 <span class="comment">%RTSLID Slider widget that responds to dragging realtime</span>
+0004 <span class="comment">% NOTE: This version modified by commenting out lines 337 and 373</span>
+0005 <span class="comment">% to prevent crash on Matlab 20078 and 2009m as per Michael Coen</span>
+0006 <span class="comment">%       h2 = RTSLID(h,@Fcn,h3) places a slider on the figure</span>
+0007 <span class="comment">%       with handle h, and returns the handle to the slider</span>
+0008 <span class="comment">%       in h2.  The second argument is a pointer to a</span>
+0009 <span class="comment">%       function that takes a two input arguments, which</span>
+0010 <span class="comment">%       should be the function you wish to be responding to</span>
+0011 <span class="comment">%       changes in the slider position.  The first of these</span>
+0012 <span class="comment">%       input arguments will be a number between 0 and 1</span>
+0013 <span class="comment">%       (if using the default scale) that corresponds to the</span>
+0014 <span class="comment">%       slider vertical position, while the second is the</span>
+0015 <span class="comment">%       handle of the axes to that responds to the slider</span>
+0016 <span class="comment">%       movement (as a result of Fnc). This handle should be</span>
+0017 <span class="comment">%       passed to RTSLID as the third input argument h3.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%       Alternatively instead of passing a function handle</span>
+0020 <span class="comment">%       as the second argument, a set of commands can be</span>
+0021 <span class="comment">%       passed as a string.  In order to use the slider</span>
+0022 <span class="comment">%       output value in such a set of commands, the lower</span>
+0023 <span class="comment">%       case variable 'out' should be used which contains</span>
+0024 <span class="comment">%       this number (Look at bottom of DEMO1.m for example).</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%       h2 = RTSLID(h,@fcn,h3,style) allows the user to</span>
+0027 <span class="comment">%       specify the style of the slider by including an</span>
+0028 <span class="comment">%       optional third input argument.</span>
+0029 <span class="comment">%       The different styles affect the slider's response</span>
+0030 <span class="comment">%       to mouse movement, and are:</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%               0 - (Default) Jumps to the mouse pointer</span>
+0033 <span class="comment">%                   on click, and locks to the mouse on drag.</span>
+0034 <span class="comment">%               1 - Only moves with mouse drags.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%       Additional parameters are passed as parameter pairs,</span>
+0037 <span class="comment">%       ie. rtslid(h,@fcn,h3,'param1',v1,'param2',v2,'...).</span>
+0038 <span class="comment">%       Inclusion of the fourth argument 'style' is optional.</span>
+0039 <span class="comment">%       These parameter names are listed below (all parameter</span>
+0040 <span class="comment">%       names are case insensitive) and all are optional:</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%               'POSITION'  -   Control the position and size</span>
+0043 <span class="comment">%                               of the slider by passing a</span>
+0044 <span class="comment">%                               four element vector in the</span>
+0045 <span class="comment">%                               range [0 to 1] as a multiple</span>
+0046 <span class="comment">%                               of current figure size.</span>
+0047 <span class="comment">%                               Use [x y width height].</span>
+0048 <span class="comment">%                               {Default: [0.03 0.1 0.03 0.8]}</span>
+0049 <span class="comment">%               'BACK'      -   Either a string of the name</span>
+0050 <span class="comment">%                               of a valid colormap, or a 3-</span>
+0051 <span class="comment">%                               element RGB vector in the</span>
+0052 <span class="comment">%                               range [0 to 1].</span>
+0053 <span class="comment">%                               {Default: 'jet'}</span>
+0054 <span class="comment">%               'SCALE'     -   A two element vector of the</span>
+0055 <span class="comment">%                               lower and upper output limits</span>
+0056 <span class="comment">%                               for the slider.</span>
+0057 <span class="comment">%                               {Default: [0 1]}</span>
+0058 <span class="comment">%               'LABEL'     -   A string for the slider label.</span>
+0059 <span class="comment">%                               {Default: ''}</span>
+0060 <span class="comment">%               'DEF'       -   A default initial value (with</span>
+0061 <span class="comment">%                               respect to the SCALE), although</span>
+0062 <span class="comment">%                               does not cause output.</span>
+0063 <span class="comment">%                               {Default: 0.5}</span>
+0064 <span class="comment">%               'BUTMOT'    -   Additional mouse callback for</span>
+0065 <span class="comment">%                               WindowButtonMotionFcn of the</span>
+0066 <span class="comment">%                               slider figure, to allow other</span>
+0067 <span class="comment">%                               processes to use this callback.</span>
+0068 <span class="comment">%                               {Default: ''}</span>
+0069 <span class="comment">%               'MOUSEDOWN' -   Additional mouse callback for</span>
+0070 <span class="comment">%                               WindowButtonDownFcn of the</span>
+0071 <span class="comment">%                               slider figure, to allow other</span>
+0072 <span class="comment">%                               processes to use this callback.</span>
+0073 <span class="comment">%                               {Default: ''}</span>
+0074 <span class="comment">%               'MOUSEUP'   -   Additional mouse callback for</span>
+0075 <span class="comment">%                               WindowButtonDownFcn of the</span>
+0076 <span class="comment">%                               slider figure, to allow other</span>
+0077 <span class="comment">%                               processes to use this callback.</span>
+0078 <span class="comment">%                               {Default: ''}</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">%   matthew jones (matt_jones@fastmail.fm), 2004</span>
+0081 
+0082 DEFstyle = 0;
+0083 DEFback = <span class="string">'jet'</span>;
+0084 DEFscale = [0 1];
+0085 DEFlabel = <span class="string">''</span>;
+0086 DEFdef = 0.5;
+0087 
+0088 style = DEFstyle;
+0089 back = DEFback;
+0090 scale = DEFscale;
+0091 label = DEFlabel;
+0092 def = DEFdef;
+0093 
+0094 butmot = <span class="string">''</span>;
+0095 mousedown = <span class="string">''</span>;
+0096 mouseup = <span class="string">''</span>;
+0097 
+0098 <span class="keyword">if</span> nargin&gt;3,    <span class="comment">% Set the style and any other parameters</span>
+0099     [style,args] = parseparams(varargin);
+0100     <span class="keyword">if</span> (length(style)==0),
+0101         style = 0;
+0102     <span class="keyword">else</span>
+0103         style = style{1};
+0104     <span class="keyword">end</span>
+0105     <span class="keyword">try</span>
+0106         <span class="keyword">for</span> l=1:(length(args)/2),
+0107             inparam = args((l*2)-1);
+0108             <span class="keyword">switch</span> upper(inparam{1}),
+0109             <span class="keyword">case</span> <span class="string">'POSITION'</span> <span class="comment">% Adjust the size and position of slider</span>
+0110                 inparam = args(l*2);
+0111                 pos = inparam{1};
+0112             <span class="keyword">case</span> <span class="string">'BACK'</span>     <span class="comment">% Change the background colour</span>
+0113                 inparam = args(l*2);
+0114                 back = inparam{1};
+0115             <span class="keyword">case</span> <span class="string">'SCALE'</span>    <span class="comment">% Change the output scale limits</span>
+0116                 inparam = args(l*2);
+0117                 scale = inparam{1};
+0118             <span class="keyword">case</span> <span class="string">'LABEL'</span>    <span class="comment">% Give the slider a label</span>
+0119                 inparam = args(l*2);
+0120                 label = inparam{1};
+0121             <span class="keyword">case</span> <span class="string">'DEF'</span>      <span class="comment">% Set the initial position</span>
+0122                 inparam = args(l*2);
+0123                 def = inparam{1};
+0124             <span class="keyword">case</span> <span class="string">'BUTMOT'</span>   <span class="comment">% Add extra WindowButtonMotionFcn commands</span>
+0125                 inparam = args(l*2);
+0126                 butmot = inparam{1};
+0127             <span class="keyword">case</span> <span class="string">'MOUSEDOWN'</span>   <span class="comment">% Add extra WindowButtonDownFcn commands</span>
+0128                 inparam = args(l*2);
+0129                 mousedown = inparam{1};
+0130             <span class="keyword">case</span> <span class="string">'MOUSEUP'</span>   <span class="comment">% Add extra WindowButtonUpFcn commands</span>
+0131                 inparam = args(l*2);
+0132                 mouseup = inparam{1};
+0133             <span class="keyword">end</span>
+0134         <span class="keyword">end</span>
+0135     <span class="keyword">catch</span>
+0136         error(<span class="string">'Incorrect input arguments!'</span>);
+0137     <span class="keyword">end</span>
+0138 <span class="keyword">end</span>
+0139 
+0140 def2 = (def-scale(1))*(1000/(scale(2)-scale(1)));   <span class="comment">% The initial position now in range [0 1000]</span>
+0141 
+0142 figure(fig);
+0143 params.fig = fig;   <span class="comment">% Set so that focus returns to slider figure ofter plotting</span>
+0144 params.butmot = butmot;
+0145 params.mousedown = mousedown;
+0146 params.mouseup = mouseup;
+0147 
+0148 params2 = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig,<span class="string">'UserData'</span>);
+0149 <span class="keyword">if</span> (length(params2)==0),    <span class="comment">% If there are no sliders already,</span>
+0150                             <span class="comment">% initialise the first elements of 'params'.</span>
+0151                             
+0152     <span class="keyword">if</span> exist(<span class="string">'pos'</span>),        <span class="comment">% Draw the slider on its own axes</span>
+0153         h = axes(<span class="string">'Position'</span>,pos);
+0154     <span class="keyword">else</span>
+0155         h = axes(<span class="string">'Position'</span>,[0.03 0.1 0.03 0.8]);
+0156     <span class="keyword">end</span>
+0157 
+0158     <span class="keyword">if</span> ischar(back),        <span class="comment">% Any string wll cause the background to be 'jet'</span>
+0159         <span class="keyword">try</span>
+0160             eval([<span class="string">'colormap('''</span>,back,<span class="string">''');'</span>]);
+0161         <span class="keyword">catch</span>
+0162             error(<span class="string">'If passing a string for background, string must be valid colormap!'</span>);
+0163         <span class="keyword">end</span>
+0164         back = repmat(linspace(0,1,1000).',[1,10]);
+0165         imagesc(back);
+0166     <span class="keyword">else</span>                    <span class="comment">% Or construct an RGB matrix m for the background</span>
+0167         m = ones(1000,10,3);
+0168         <span class="keyword">for</span> l=1:3,
+0169             m(:,:,l) = back(l)*m(:,:,l);
+0170         <span class="keyword">end</span>
+0171         image(m);
+0172     <span class="keyword">end</span>
+0173             
+0174     title(label);
+0175     
+0176     <span class="comment">% Make the slider look nice</span>
+0177     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'XTick'</span>,[],<span class="string">'XTickLabel'</span>,<span class="string">''</span>,<span class="string">'YTick'</span>,[],<span class="string">'YTickLabel'</span>,<span class="string">''</span>,<span class="string">'YDir'</span>,<span class="string">'normal'</span>,<span class="string">'LineWidth'</span>,2);
+0178     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig,<span class="string">'DoubleBuffer'</span>,<span class="string">'on'</span>);   <span class="comment">% Double buffering required for smooth display</span>
+0179 
+0180     <span class="comment">% Draw the small black box that indicates current position</span>
+0181     ind = patch([0 0 10 10],[def2-20 def2+20 def2+20 def2-20],[0.25 0.25 0.25]);axis tight;
+0182 
+0183     params.mdown = 0;   <span class="comment">% Initialise mousedown state</span>
+0184     params.ind = ind;   <span class="comment">% Save the handle to the position indicator</span>
+0185     params.funhand{1} = f;  <span class="comment">% Save the function handle or string</span>
+0186     params.h = h;       <span class="comment">% Save the handle to this slider</span>
+0187     params.h2 = hh;     <span class="comment">% Save the handle to the plotting axes (for this slider)</span>
+0188     <span class="keyword">if</span> exist(<span class="string">'scale'</span>),  <span class="comment">% Set the output limits</span>
+0189         params.scale{1} = scale;
+0190     <span class="keyword">else</span>
+0191         params.scale{1} = DEFscale;
+0192     <span class="keyword">end</span>
+0193     params.noslids = 1; <span class="comment">% Keep tab of how many sliders in this figure</span>
+0194 <span class="keyword">else</span>
+0195     <span class="keyword">if</span> (params2.noslids&lt;8), <span class="comment">% If there is one or more sliders on this figure (and less</span>
+0196                             <span class="comment">% than an upper limit), concatenate fields of 'params'</span>
+0197         params.noslids = params2.noslids+1; <span class="comment">% Keep tab of how many sliders in this figure</span>
+0198         <span class="keyword">if</span> exist(<span class="string">'pos'</span>),    <span class="comment">% Draw the slider on its own axes</span>
+0199             h = axes(<span class="string">'Position'</span>,pos);
+0200         <span class="keyword">else</span>
+0201             h = axes(<span class="string">'Position'</span>,[(((params.noslids-1)*0.06)+0.03) 0.1 0.03 0.8]);
+0202         <span class="keyword">end</span>
+0203         
+0204         <span class="keyword">if</span> ischar(back),    <span class="comment">% Any string wll cause the background to be 'jet'</span>
+0205             back = repmat(linspace(0,1,1000).',[1,10]);
+0206             imagesc(back);
+0207         <span class="keyword">else</span>                <span class="comment">% Or construct an RGB matrix m for the background</span>
+0208             m = ones(1000,10,3);
+0209             <span class="keyword">for</span> l=1:3,
+0210                 m(:,:,l) = back(l)*m(:,:,l);
+0211             <span class="keyword">end</span>
+0212             image(m);
+0213         <span class="keyword">end</span>
+0214     
+0215         title(label);
+0216         
+0217         <span class="comment">% Make the slider look nice</span>
+0218         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'XTick'</span>,[],<span class="string">'XTickLabel'</span>,<span class="string">''</span>,<span class="string">'YTick'</span>,[],<span class="string">'YTickLabel'</span>,<span class="string">''</span>,<span class="string">'YDir'</span>,<span class="string">'normal'</span>,<span class="string">'LineWidth'</span>,2);
+0219         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig,<span class="string">'DoubleBuffer'</span>,<span class="string">'on'</span>);
+0220     
+0221         <span class="comment">% Draw the small black box that indicates current position</span>
+0222         ind = patch([0 0 10 10],[def2-20 def2+20 def2+20 def2-20],[0.25 0.25 0.25]);axis tight;
+0223  
+0224         <span class="comment">% Copy old parameters and concatenate new values</span>
+0225         params.mdown = [params2.mdown 0];   <span class="comment">% Initialise new mousedown state</span>
+0226         params.ind = [params2.ind ind];     <span class="comment">% Save the handle to the position indicator</span>
+0227         params.funhand = params2.funhand;   <span class="comment">% Save the function handle or string</span>
+0228         params.funhand{params.noslids} = f;
+0229         params.h = [params2.h h];           <span class="comment">% Save the handle to this slider</span>
+0230         params.h2 = [params2.h2 hh];        <span class="comment">% Save the handle to the plotting axes (for this slider)</span>
+0231         <span class="keyword">for</span> l=1:(params.noslids-1),
+0232             params.scale{l} = params2.scale{l};
+0233         <span class="keyword">end</span>
+0234         <span class="keyword">if</span> exist(<span class="string">'scale'</span>),  <span class="comment">% Set the output limits</span>
+0235             params.scale{params.noslids} = scale;
+0236         <span class="keyword">else</span>
+0237             params.scale{params.noslids} = DEFscale;
+0238         <span class="keyword">end</span>
+0239         params.style = params2.style;       <span class="comment">% Copy list of slider styles</span>
+0240         params.motfcn = params2.motfcn;     <span class="comment">% Copy the WindowButtonMotionFcn list</span>
+0241         params.current = params2.current;   <span class="comment">% Copy the 'current' slider positions</span>
+0242     <span class="keyword">end</span>
+0243 
+0244 <span class="keyword">end</span>
+0245 
+0246 <span class="keyword">if</span> (style==0),
+0247     params.style(params.noslids) = 0;               <span class="comment">% Set the slider style</span>
+0248     params.motfcn{params.noslids} = {@<a href="#_sub3" class="code" title="subfunction butmotfcn0(in,varargin)">butmotfcn0</a>};  <span class="comment">% Set the corresponding WindowButtonMotionFcn</span>
+0249 <span class="keyword">else</span>
+0250     params.style(params.noslids) = 1;               <span class="comment">% Set the slider style</span>
+0251     params.current(params.noslids) = def2;          <span class="comment">% Initialise slider position (only required for style 1)</span>
+0252     params.motfcn{params.noslids} = {@<a href="#_sub4" class="code" title="subfunction butmotfcn1(in,varargin)">butmotfcn1</a>};  <span class="comment">% Set the corresponding WindowButtonMotionFcn</span>
+0253 <span class="keyword">end</span>
+0254 
+0255 <span class="comment">% Now save these params and set the figure's mouse callback functions</span>
+0256 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig,<span class="string">'UserData'</span>,params,<span class="string">'WindowButtonDownFcn'</span>,{@<a href="#_sub1" class="code" title="subfunction butdownfcn(in,varargin)">butdownfcn</a>},<span class="string">'WindowButtonUpFcn'</span>,{@<a href="#_sub2" class="code" title="subfunction butupfcn(in,varargin)">butupfcn</a>});
+0257 
+0258 
+0259 <span class="comment">% Callback functions defined here to keep any variables created</span>
+0260 <span class="comment">% localto these functions.</span>
+0261 <span class="comment">%------------------------------------------------------------------------%</span>
+0262 <a name="_sub1" href="#_subfunctions" class="code">function butdownfcn(in,varargin)</a>
+0263 
+0264 params=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'UserData'</span>);     <span class="comment">% Get current parameters</span>
+0265 <span class="keyword">for</span> l=1:params.noslids,
+0266     p=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(params.h(l),<span class="string">'CurrentPoint'</span>);
+0267     <span class="keyword">if</span> ((p(1)&gt;0) &amp; (p(1)&lt;10.7) &amp; (p(3)&gt;0) &amp; (p(3)&lt;1000)),   <span class="comment">% Find out if mouse is on slider l</span>
+0268         params.mdown(l)=1;                                  <span class="comment">% Set slider MouseDown sate to 1</span>
+0269         <span class="keyword">if</span> (params.style(l)==0),                            <span class="comment">% If jump-to-click style, use new</span>
+0270             params.old=p(3);                                <span class="comment">% mouse position as output</span>
+0271             params.current(l)=p(3);                         <span class="comment">% Save current position</span>
+0272             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(params.ind(l),<span class="string">'YData'</span>,[p(3)-20 p(3)+20 p(3)+20 p(3)-20]);   <span class="comment">% Update indicator</span>
+0273             scal=params.scale{l};
+0274             out=(p(3)*(scal(2)-scal(1))/1000);              <span class="comment">% Convert output to desired scale</span>
+0275             out=out+scal(1);
+0276         <span class="keyword">else</span>                                                <span class="comment">% Else use old position for output</span>
+0277             scal=params.scale{l};
+0278             out=(params.current(l)*(scal(2)-scal(1))/1000); <span class="comment">% Convert output to desired scale</span>
+0279             out=out+scal(1);
+0280             params.old=p(3);
+0281         <span class="keyword">end</span>
+0282         axes(params.h2(l));
+0283         <span class="keyword">if</span> ischar(params.funhand{l}),                       <span class="comment">% If passed string as function</span>
+0284             eval(params.funhand{l});                        <span class="comment">% evaluate using eval()</span>
+0285         <span class="keyword">else</span>                                                <span class="comment">% Else if passed function handle</span>
+0286             feval(params.funhand{l},out,params.h2(l));      <span class="comment">% evaluate using feval()</span>
+0287         <span class="keyword">end</span>
+0288         figure(params.fig);
+0289         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'UserData'</span>,params,<span class="string">'WindowButtonMotionFcn'</span>,params.motfcn{l});    <span class="comment">% Save new params and</span>
+0290     <span class="keyword">end</span>;                                                                        <span class="comment">% activate slider's Motion Function</span>
+0291 <span class="keyword">end</span>
+0292 <span class="keyword">if</span> (length(params.mousedown)&gt;0),    <span class="comment">% If additional MouseDown parameters passed,</span>
+0293     eval(params.mousedown);         <span class="comment">% evaluate these too.</span>
+0294 <span class="keyword">end</span>
+0295 
+0296 
+0297 <span class="comment">%------------------------------------------------------------------------%</span>
+0298 <a name="_sub2" href="#_subfunctions" class="code">function butupfcn(in,varargin)</a>
+0299 
+0300 params=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'UserData'</span>); <span class="comment">% Get old parameters</span>
+0301 <span class="keyword">for</span> l=1:params.noslids,
+0302      params.mdown(l) = 0;   <span class="comment">% Set ALL slider MouseDown states to zero</span>
+0303 <span class="keyword">end</span>
+0304 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'UserData'</span>,params); <span class="comment">% Save these new states</span>
+0305 
+0306 <span class="keyword">if</span> (length(params.butmot)==0),  <span class="comment">% If no additional ButMot commands passed,</span>
+0307     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'WindowButtonMotionFcn'</span>,<span class="string">''</span>);    <span class="comment">% Clear figure WindowButtonMotionFcn</span>
+0308 <span class="keyword">else</span>                            <span class="comment">% Otherwise set it to these extra commands</span>
+0309     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'WindowButtonMotionFcn'</span>,params.butmot);
+0310 <span class="keyword">end</span>
+0311     
+0312 <span class="keyword">if</span> (length(params.mouseup)&gt;0),  <span class="comment">% Evaluate any additional MouseUp commands passed</span>
+0313     eval(params.mouseup);
+0314 <span class="keyword">end</span>
+0315 
+0316 
+0317 <span class="comment">%------------------------------------------------------------------------%</span>
+0318 <a name="_sub3" href="#_subfunctions" class="code">function butmotfcn0(in,varargin)</a>
+0319 <span class="comment">% Mouse motion function for style 0 (only active during mouse press)</span>
+0320 
+0321 params = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'UserData'</span>); <span class="comment">% Get the saved parameters</span>
+0322 <span class="keyword">for</span> l=1:params.noslids,
+0323    <span class="keyword">if</span> (params.mdown(l)),
+0324        p = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(params.h(l),<span class="string">'CurrentPoint'</span>);   <span class="comment">% Get mouse position relative to the slider axis</span>
+0325        p = p(3);                              <span class="comment">% Jump to mouse position</span>
+0326        p = max([0 min([1000 p])]);            <span class="comment">% Constrain position</span>
+0327        <span class="keyword">if</span> (abs(params.old-p)&gt;0),            <span class="comment">% Only act if mouse has moved</span>
+0328            scal = params.scale{l};            <span class="comment">% Get the lower and upper limits</span>
+0329            out = (p*(scal(2)-scal(1))/1000);  <span class="comment">% Convert from [0 to 1000] to new scale</span>
+0330            out = out+scal(1);
+0331            axes(params.h2(l));              <span class="comment">% Avoid plotting on the slider axis</span>
+0332            <span class="keyword">if</span> ischar(params.funhand{l}),    <span class="comment">% If string passed as function</span>
+0333                eval(params.funhand{l});     <span class="comment">% Evaluate the string</span>
+0334            <span class="keyword">else</span>                             <span class="comment">% Else if function handle passed</span>
+0335                feval(params.funhand{l},out,params.h2(l));   <span class="comment">% Perform function</span>
+0336            <span class="keyword">end</span>
+0337            <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(params.ind(l),<span class="string">'YData'</span>,[p-20 p+20 p+20 p-20]);<span class="comment">% Update position indicator</span>
+0338 <span class="comment">%           figure(params.fig);              % Make sure focus returns to slider after plotting</span>
+0339        <span class="keyword">end</span>
+0340    <span class="keyword">end</span>
+0341 <span class="keyword">end</span>
+0342 params.old = p;             <span class="comment">% Save old mouse position (vertical only)</span>
+0343 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'UserData'</span>,params); <span class="comment">% Save all parameters</span>
+0344 <span class="keyword">if</span> (length(params.butmot)&gt;0),   <span class="comment">% Evaluate any extra ButMot functions passed to rtslid</span>
+0345     eval(params.butmot);
+0346 <span class="keyword">end</span>
+0347 
+0348 
+0349 <span class="comment">%------------------------------------------------------------------------%</span>
+0350 <a name="_sub4" href="#_subfunctions" class="code">function butmotfcn1(in,varargin)</a>
+0351 <span class="comment">% Mouse motion function for style 1 (only active during mouse press)</span>
+0352 
+0353 params = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'UserData'</span>); <span class="comment">% Get the saved parameters</span>
+0354 <span class="keyword">for</span> l=1:params.noslids,
+0355     <span class="keyword">if</span> (params.mdown(l)),                       <span class="comment">% If mouse was clicked on slider l</span>
+0356         p = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(params.h(l),<span class="string">'CurrentPoint'</span>);    <span class="comment">% Get mouse position relative to the slider axis</span>
+0357         dy = p(3)-params.old;                   <span class="comment">% Calculate change in mouse position</span>
+0358         <span class="keyword">if</span> (abs(dy)&gt;0),                         <span class="comment">% If mouse has moved</span>
+0359             p2 = params.current(l)+dy;          <span class="comment">% Find new slider position</span>
+0360             params.old = p(3);                  <span class="comment">% Save this new mouse position</span>
+0361             p2=max([0 min([1000 p2])]);         <span class="comment">% Constrain position</span>
+0362             params.current(l) = p2;             <span class="comment">% Save current slider position</span>
+0363             scal = params.scale{l};             <span class="comment">% Get the lower and upper limits</span>
+0364             out = (p2*(scal(2)-scal(1))/1000);  <span class="comment">% Convert from [0 to 1000] to new scale</span>
+0365             out = out+scal(1);
+0366             axes(params.h2(l));                 <span class="comment">% Avoid plotting on the slider axis</span>
+0367             <span class="keyword">if</span> ischar(params.funhand{l}),       <span class="comment">% If string passed as function</span>
+0368                 eval(params.funhand{l});        <span class="comment">% Evaluate the string</span>
+0369             <span class="keyword">else</span>                                <span class="comment">% Else if function handle passed</span>
+0370                 feval(params.funhand{l},out,params.h2(l));  <span class="comment">% Perform function</span>
+0371             <span class="keyword">end</span>
+0372             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(params.ind(l),<span class="string">'YData'</span>,[p2-20 p2+20 p2+20 p2-20]);<span class="comment">% Update position indicator</span>
+0373 <span class="comment">%            figure(params.fig);                 % Make sure focus returns to slider after plotting</span>
+0374         <span class="keyword">end</span>
+0375     <span class="keyword">end</span>
+0376     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'UserData'</span>,params); <span class="comment">% Save all parameters</span>
+0377 <span class="keyword">end</span>
+0378 <span class="keyword">if</span> (length(params.butmot)&gt;0),   <span class="comment">% Evaluate any extra ButMot functions passed to rtslid</span>
+0379     eval(params.butmot);
+0380 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

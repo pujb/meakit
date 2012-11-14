@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of motif4struct_wei</title>
+  <meta name="keywords" content="motif4struct_wei">
+  <meta name="description" content="MOTIF4STRUCT_WEI       Intensity and coherence of structural class-4 motifs">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>motif4struct_wei
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MOTIF4STRUCT_WEI       Intensity and coherence of structural class-4 motifs</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [I Q F]=motif4struct_wei(W) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MOTIF4STRUCT_WEI       Intensity and coherence of structural class-4 motifs
+
+   [I Q F] = motif4struct_wei(W);
+
+   Structural motifs are patterns of local connectivity. Motif frequency
+   is the frequency of occurrence of motifs around a node. Motif intensity
+   and coherence are weighted generalizations of motif frequency. 
+
+   Input:      W,      weighted directed connection matrix
+                       (all weights must be between 0 and 1)
+
+   Output:     I,      motif intensity matrix
+               Q,      motif coherence matrix
+               F,      morif frequency matrix
+
+   Note: Average intensity and coherence are given by I./F and Q./F.
+
+   Reference: Onnela et al. (2005) Phys Rev E 71:065103
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [I Q F]=motif4struct_wei(W)</a>
+0002 <span class="comment">%MOTIF4STRUCT_WEI       Intensity and coherence of structural class-4 motifs</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [I Q F] = motif4struct_wei(W);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Structural motifs are patterns of local connectivity. Motif frequency</span>
+0007 <span class="comment">%   is the frequency of occurrence of motifs around a node. Motif intensity</span>
+0008 <span class="comment">%   and coherence are weighted generalizations of motif frequency.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      W,      weighted directed connection matrix</span>
+0011 <span class="comment">%                       (all weights must be between 0 and 1)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Output:     I,      motif intensity matrix</span>
+0014 <span class="comment">%               Q,      motif coherence matrix</span>
+0015 <span class="comment">%               F,      morif frequency matrix</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Note: Average intensity and coherence are given by I./F and Q./F.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Reference: Onnela et al. (2005) Phys Rev E 71:065103</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0023 
+0024 <span class="keyword">persistent</span> M4 M4n ID4 N4
+0025 <span class="keyword">if</span> isempty(N4)
+0026     load motif34lib M4 M4n ID4 N4               <span class="comment">%load motif data</span>
+0027 <span class="keyword">end</span>
+0028 
+0029 n=length(W);                                    <span class="comment">%number of vertices in W</span>
+0030 I=zeros(199,n);                                 <span class="comment">%intensity</span>
+0031 Q=zeros(199,n);                                 <span class="comment">%coherence</span>
+0032 F=zeros(199,n);                                 <span class="comment">%frequency</span>
+0033 
+0034 A=1*(W~=0);                                     <span class="comment">%adjacency matrix</span>
+0035 As=A|A.';                                       <span class="comment">%symmetrized adjacency</span>
+0036 
+0037 <span class="keyword">for</span> u=1:n-3                                     <span class="comment">%loop u 1:n-2</span>
+0038     V1=[false(1,u) As(u,u+1:n)];                <span class="comment">%v1: neibs of u (&gt;u)</span>
+0039     <span class="keyword">for</span> v1=find(V1)
+0040         V2=[false(1,u) As(v1,u+1:n)];           <span class="comment">%v2: all neibs of v1 (&gt;u)</span>
+0041         V2(V1)=0;                               <span class="comment">%not already in V1</span>
+0042         V2=V2|([false(1,v1) As(u,v1+1:n)]);     <span class="comment">%and all neibs of u (&gt;v1)</span>
+0043         <span class="keyword">for</span> v2=find(V2)
+0044             vz=max(v1,v2);                      <span class="comment">%vz: largest rank node</span>
+0045             V3=([false(1,u) As(v2,u+1:n)]);     <span class="comment">%v3: all neibs of v2 (&gt;u)</span>
+0046             V3(V2)=0;                           <span class="comment">%not already in V1&amp;V2</span>
+0047             V3=V3|([false(1,v2) As(v1,v2+1:n)]);<span class="comment">%and all neibs of v1 (&gt;v2)</span>
+0048             V3(V1)=0;                           <span class="comment">%not already in V1</span>
+0049             V3=V3|([false(1,vz) As(u,vz+1:n)]); <span class="comment">%and all neibs of u (&gt;vz)</span>
+0050             <span class="keyword">for</span> v3=find(V3)
+0051 
+0052                 w=[W(v1,u) W(v2,u) W(v3,u) W(u,v1) W(v2,v1) W(v3,v1)<span class="keyword">...</span>
+0053                     W(u,v2) W(v1,v2) W(v3,v2) W(u,v3) W(v1,v3) W(v2,v3)];
+0054                 s=uint64(sum(10.^(11:-1:0).*[A(v1,u) A(v2,u) A(v3,u)<span class="keyword">...</span>
+0055                     A(u,v1) A(v2,v1) A(v3,v1) A(u,v2) A(v1,v2)<span class="keyword">...</span>
+0056                     A(v3,v2) A(u,v3) A(v1,v3) A(v2,v3)]));
+0057                 ind=(s==M4n);
+0058 
+0059                 M=w.*M4(ind,:);
+0060                 id=ID4(ind);
+0061                 l=N4(ind);
+0062                 x=sum(M,2)/l;                   <span class="comment">%arithmetic mean</span>
+0063                 M(M==0)=1;                      <span class="comment">%enable geometric mean</span>
+0064                 i=prod(M,2)^(1/l);              <span class="comment">%intensity</span>
+0065                 q=i/x;                          <span class="comment">%coherence</span>
+0066 
+0067                 <span class="comment">%then add to cumulative count</span>
+0068                 I(id,[u v1 v2 v3])=I(id,[u v1 v2 v3])+[i i i i];
+0069                 Q(id,[u v1 v2 v3])=Q(id,[u v1 v2 v3])+[q q q q];
+0070                 F(id,[u v1 v2 v3])=F(id,[u v1 v2 v3])+[1 1 1 1];
+0071             <span class="keyword">end</span>
+0072         <span class="keyword">end</span>
+0073     <span class="keyword">end</span>
+0074 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

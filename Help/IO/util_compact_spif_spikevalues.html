@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_compact_spif_spikevalues</title>
+  <meta name="keywords" content="util_compact_spif_spikevalues">
+  <meta name="description" content="UTIL_COMPACT_SPIF_SPIKEVALUES 工具函数：将SPIF中SPIKEVALUE信息压缩">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_compact_spif_spikevalues
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_COMPACT_SPIF_SPIKEVALUES 工具函数：将SPIF中SPIKEVALUE信息压缩</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ compacted ] = util_compact_spif_spikevalues( spv ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_COMPACT_SPIF_SPIKEVALUES 工具函数：将SPIF中SPIKEVALUE信息压缩
+   将SPIF中SPIKEVALUE表中，每一个SPIKE的信息缩减为只包含最大值和最小值。
+   这样在处理较大SPIKE文件（尤其是长时间记录文件）时，可以不至于内存报错。
+
+   蒲江波 2009年6月17日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_load_spike_from_mcdraw.html" class="code" title="function [ D spif raw] = util_load_spike_from_mcdraw ( varargin )">util_load_spike_from_mcdraw</a>	UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike</li><li><a href="util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ compacted ] = util_compact_spif_spikevalues( spv )</a>
+0002 <span class="comment">%UTIL_COMPACT_SPIF_SPIKEVALUES 工具函数：将SPIF中SPIKEVALUE信息压缩</span>
+0003 <span class="comment">%   将SPIF中SPIKEVALUE表中，每一个SPIKE的信息缩减为只包含最大值和最小值。</span>
+0004 <span class="comment">%   这样在处理较大SPIKE文件（尤其是长时间记录文件）时，可以不至于内存报错。</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   蒲江波 2009年6月17日</span>
+0007 
+0008 compacted = cell(64,1);
+0009 <span class="keyword">for</span> i = 1:64
+0010     compacted{i} = [max( spv{i} ); min( spv{i} )];
+0011 <span class="keyword">end</span>
+0012 
+0013 <span class="keyword">end</span>
+0014</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

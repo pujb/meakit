@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_A</title>
+  <meta name="keywords" content="panel_demo_A">
+  <meta name="description" content="% PANEL DEMO A">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_A
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO A</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO A
+%
+% (a) Create an axis panel object and plot something
+% (b-g) Illustrate various tick label modes</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO A</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an axis panel object and plot something</span>
+0005 <span class="comment">%% (b-g) Illustrate various tick label modes</span>
+0006 
+0007 
+0008 
+0009 <span class="comment">%% (a)</span>
+0010 
+0011 <span class="comment">% clear or create figure and create root panel covering</span>
+0012 <span class="comment">% whole figure</span>
+0013 clf
+0014 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0015 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(p);
+0016 
+0017 <span class="comment">% plot a graph</span>
+0018 plot(randn(1000,1));
+0019 axis([0 1000 -3 3])
+0020 
+0021 
+0022 
+0023 <span class="comment">%% (b)</span>
+0024 
+0025 <span class="comment">% ok</span>
+0026 disp(<span class="string">'Default (automatic tick labelling)'</span>);
+0027 pause(1)
+0028 
+0029 
+0030 
+0031 <span class="comment">%% (c)</span>
+0032 
+0033 <span class="comment">% change to engineering scale mode</span>
+0034 p.xscale = <span class="string">'k'</span>;
+0035 p.xlabel = <span class="string">'$sample'</span>;
+0036 
+0037 <span class="comment">% ok</span>
+0038 disp(<span class="string">'Engineering scale mode (kilo prefix)'</span>);
+0039 pause(1)
+0040 
+0041 
+0042 
+0043 <span class="comment">%% (d)</span>
+0044 
+0045 <span class="comment">% change scale</span>
+0046 p.xscale = <span class="string">'m'</span>;
+0047 
+0048 <span class="comment">% ok</span>
+0049 disp(<span class="string">'Engineering scale mode (milli prefix)'</span>);
+0050 pause(1)
+0051 
+0052 
+0053 
+0054 <span class="comment">%% (e)</span>
+0055 
+0056 <span class="comment">% change scale</span>
+0057 p.xscale = false;
+0058 
+0059 <span class="comment">% ok</span>
+0060 disp(<span class="string">'Return to default scale mode (not engineering scale mode, normal automatic tick labelling)'</span>);
+0061 pause(1)
+0062 
+0063 
+0064 
+0065 <span class="comment">%% (f)</span>
+0066 
+0067 <span class="comment">% set ticks explicitly (if you don't do this, then</span>
+0068 <span class="comment">% xticklabels set explicitly may not match the ticks)</span>
+0069 p.xtick = 0:200:1000;
+0070 
+0071 <span class="comment">% change scale</span>
+0072 p.xticklabel = {<span class="string">'0'</span> <span class="string">'200'</span> <span class="string">'400'</span> <span class="string">'600'</span> <span class="string">'800'</span> <span class="string">'1000'</span>};
+0073 
+0074 <span class="comment">% ok</span>
+0075 disp(<span class="string">'Explicit tick labelling (this is risky unless you first explicitly set the ticks!)'</span>);
+0076 pause(1)
+0077 
+0078 
+0079 
+0080 <span class="comment">%% (g)</span>
+0081 
+0082 <span class="comment">% revert to automatic ticks</span>
+0083 p.xtick = false;
+0084 
+0085 <span class="comment">% change scale</span>
+0086 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'xticklabelmode'</span>, <span class="string">'auto'</span>);
+0087 
+0088 <span class="comment">% ok</span>
+0089 disp(<span class="string">'Back to default scale mode again'</span>);
+0090 
+0091 
+0092 
+0093</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

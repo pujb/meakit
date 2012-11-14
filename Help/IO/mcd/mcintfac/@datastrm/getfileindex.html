@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getfileindex</title>
+  <meta name="keywords" content="getfileindex">
+  <meta name="description" content="getfileindex - generate an index of entries in datastream objects (datastrm method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>getfileindex
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>getfileindex - generate an index of entries in datastream objects (datastrm method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function a = getfileindex(d); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> getfileindex - generate an index of entries in datastream objects (datastrm method)
+ a = getfileindex(d) takes a datastrm object &lt;d&gt; and 
+ and makes an index of entries (filepositions).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="setpos.html" class="code" title="function a = setpos(d,posType,posValue);">setpos</a>	setpos - set the file position in a datastream (datastream method)</li><li><a href="setpos_silent.html" class="code" title="function a = setpos(d,posType,posValue);">setpos_silent</a>	setpos_silent - set the file position in a datastream (datastream method)</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a = getfileindex(d);</a>
+0002 <span class="comment">% getfileindex - generate an index of entries in datastream objects (datastrm method)</span>
+0003 <span class="comment">% a = getfileindex(d) takes a datastrm object &lt;d&gt; and</span>
+0004 <span class="comment">% and makes an index of entries (filepositions).</span>
+0005 
+0006 fseek(d.fid,d.offset_to_data,-1);
+0007 
+0008 nSweep=floor((d.filesize-d.offset_to_data+1)/(d.total_window_ticks*d.NChannels*2));
+0009                 <span class="comment">%nSweep is only a estimate!!</span>
+0010 d.sweepStartTime = zeros(nSweep,1);
+0011 d.sweepStartPointer = zeros(nSweep,1);
+0012 i=0;
+0013 <span class="keyword">while</span> ftell(d.fid)&lt;d.filesize
+0014     i=i+1;
+0015     samplecounter = 0;
+0016     <span class="keyword">while</span> samplecounter &lt; d.total_window_ticks
+0017         timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);            <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0018         <span class="keyword">if</span> isempty(timebin)
+0019             i=i-1;
+0020             <span class="keyword">break</span>;
+0021         <span class="keyword">end</span>;
+0022         <span class="keyword">if</span> samplecounter == 0
+0023             d.sweepStartTime(i) = (timebin(2)*2^32+timebin(1))*d.MicrosecondsPerTick/1000;
+0024             d.sweepStartPointer(i) = ftell(d.fid)-8;
+0025         <span class="keyword">end</span>;
+0026         nSamples = fread(d.fid, 1, <span class="string">'ushort'</span>);                <span class="comment">% Anzahl der samples pro Kanal</span>
+0027         <span class="keyword">if</span> isempty(nSamples)
+0028             i=i-1;
+0029             <span class="keyword">break</span>;
+0030         <span class="keyword">end</span>;
+0031         fseek(d.fid,nSamples*d.NChannels*2,0);
+0032         samplecounter=samplecounter+nSamples;
+0033     <span class="keyword">end</span>;
+0034 <span class="keyword">end</span>;
+0035 d.sweepStartTime = d.sweepStartTime(1:i);
+0036 d.sweepStartPointer = d.sweepStartPointer(1:i);
+0037 
+0038 fseek(d.fid,d.offset_to_data,-1);
+0039 a=d;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

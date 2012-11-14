@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mi_infty</title>
+  <meta name="keywords" content="mi_infty">
+  <meta name="description" content="MI_INFTY extrapolate mutual information to infinite data size">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html lsm --><!-- ../menu.html utilities --><!-- menu.html mutual_information -->
+<h1>mi_infty
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>MI_INFTY extrapolate mutual information to infinite data size</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [resMIinfty, resMImodel, resCC] = mi_infty(argN,argMI,optOrder) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> MI_INFTY extrapolate mutual information to infinite data size
+ 
+  Syntax
+
+    [MIinfty,MImodel,CC] = MI_INFTY(N,MIraw,order)
+
+  Arguments
+
+    MIraw   ... vector of raw/direkt MI measurements
+        N   ... vector of sample sizes; N(i) is the number of samples
+                from which MIraw(i) was directly estimated
+      order ... optional order of model to fit (see Algorithm)
+ 
+    MIinfty ... extrapolation of mutual information to infinite sample size
+    MImodel ... mutual information predicted by model
+         CC ... correlation coefficient of the extrapolation
+
+  Description
+
+    MIinfty = MI_INFTY(N,MIraw) calculates the mutual
+    information MIinfty which one would expect to see for an infinite
+    number of samples given that for N(i) samples the direkt
+    measurement MIraw(i) (e.g. with mibayes) was obtained.
+
+    [MIinfty,MImodel,CC] = MI_INFTY(N,MIraw,order) allows you to
+    specify the order of the model which is used for extrapolation
+    (see Algorithm) and returns the correlation coefficient CC of the
+    fit of the model as well as the model output (see below).
+
+  Algorithm
+  
+    The parameters I0, I1, ..., Iorder of a model of the form 
+
+      Imodel = I0 + I1 * N^-1 + I2 * N^-2 + ... + Iorder * N^-order
+
+    are fitted with a linear regression to the data MI and N. I0 is
+    then considered as the infinite limit mututal information
+    MIinfty. See Strong et al 1998, Physical Review Letters,
+    80(1):197-200 for details. CC is the correlation coefficient
+    between the model-output Imodel and MIraw.
+
+  See also <a href="mibayes.html" class="code" title="">MIBAYES</a>, <a href="mi_from_count.html" class="code" title="function [MI,Hx,Hy,Hxy] = mi_from_count(argNXY)">MI_FROM_COUNT</a>.
+
+  Author
+
+    Thomas Natschlaeger, Feb. 2002, tnatschl@igi.tu-graz.ac.at</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/lsm/utilities/corr_coef.html" class="code" title="function cc=corr_coef(x,y)">corr_coef</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [resMIinfty, resMImodel, resCC] = mi_infty(argN,argMI,optOrder)</a>
+0002 <span class="comment">% MI_INFTY extrapolate mutual information to infinite data size</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  Syntax</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    [MIinfty,MImodel,CC] = MI_INFTY(N,MIraw,order)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  Arguments</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    MIraw   ... vector of raw/direkt MI measurements</span>
+0011 <span class="comment">%        N   ... vector of sample sizes; N(i) is the number of samples</span>
+0012 <span class="comment">%                from which MIraw(i) was directly estimated</span>
+0013 <span class="comment">%      order ... optional order of model to fit (see Algorithm)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    MIinfty ... extrapolation of mutual information to infinite sample size</span>
+0016 <span class="comment">%    MImodel ... mutual information predicted by model</span>
+0017 <span class="comment">%         CC ... correlation coefficient of the extrapolation</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%  Description</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    MIinfty = MI_INFTY(N,MIraw) calculates the mutual</span>
+0022 <span class="comment">%    information MIinfty which one would expect to see for an infinite</span>
+0023 <span class="comment">%    number of samples given that for N(i) samples the direkt</span>
+0024 <span class="comment">%    measurement MIraw(i) (e.g. with mibayes) was obtained.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    [MIinfty,MImodel,CC] = MI_INFTY(N,MIraw,order) allows you to</span>
+0027 <span class="comment">%    specify the order of the model which is used for extrapolation</span>
+0028 <span class="comment">%    (see Algorithm) and returns the correlation coefficient CC of the</span>
+0029 <span class="comment">%    fit of the model as well as the model output (see below).</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%  Algorithm</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    The parameters I0, I1, ..., Iorder of a model of the form</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%      Imodel = I0 + I1 * N^-1 + I2 * N^-2 + ... + Iorder * N^-order</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    are fitted with a linear regression to the data MI and N. I0 is</span>
+0038 <span class="comment">%    then considered as the infinite limit mututal information</span>
+0039 <span class="comment">%    MIinfty. See Strong et al 1998, Physical Review Letters,</span>
+0040 <span class="comment">%    80(1):197-200 for details. CC is the correlation coefficient</span>
+0041 <span class="comment">%    between the model-output Imodel and MIraw.</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%  See also MIBAYES, MI_FROM_COUNT.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%  Author</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    Thomas Natschlaeger, Feb. 2002, tnatschl@igi.tu-graz.ac.at</span>
+0048 
+0049 <span class="comment">% $Author: tnatschl $, $Revison$, $Date: 2003/05/26 12:42:24 $</span>
+0050 <span class="comment">% $Cross-Reference$</span>
+0051 
+0052   <span class="keyword">if</span> nargin &lt; 3, optOrder = []; <span class="keyword">end</span>
+0053   <span class="keyword">if</span> isempty(optOrder) optOrder = 1; <span class="keyword">end</span>
+0054   
+0055   order = optOrder;
+0056   n     = argN(:);
+0057   mi    = argMI(:);
+0058 
+0059   <span class="keyword">if</span> length(n) &gt; 2
+0060     powersOfN = repmat(n,[1 order+1]).^repmat([0:-1:-order],[length(n) 1]);
+0061     
+0062 <span class="comment">% do linear regression: result: b</span>
+0063     [Q, R]=qr(powersOfN,0);
+0064     b = R\(Q'*mi);
+0065     
+0066     resMIinfty = b(1);
+0067     resMImodel = powersOfN*b;
+0068     resCC=<a href="../../../../Otherbox/lsm/utilities/corr_coef.html" class="code" title="function cc=corr_coef(x,y)">corr_coef</a>(mi,resMImodel);
+0069   <span class="keyword">else</span>
+0070     resMIinfty = NaN;
+0071     resMImodel = NaN;
+0072     resCC=NaN;
+0073   <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

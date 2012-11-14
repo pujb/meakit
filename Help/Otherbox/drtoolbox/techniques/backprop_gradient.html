@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of backprop_gradient</title>
+  <meta name="keywords" content="backprop_gradient">
+  <meta name="description" content="BACKPROP Compute the cost gradient for CG optimization of a neural network">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>backprop_gradient
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BACKPROP Compute the cost gradient for CG optimization of a neural network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [C, dC] = backprop_gradient(v, network, X, targets) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">BACKPROP Compute the cost gradient for CG optimization of a neural network
+
+   [C, dC] = backprop_gradient(v, network, X, targets)
+
+ Compute the value of the cost function, as well as the corresponding 
+ gradient for conjugate-gradient optimization of a neural network.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [C, dC] = backprop_gradient(v, network, X, targets)</a>
+0002 <span class="comment">%BACKPROP Compute the cost gradient for CG optimization of a neural network</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [C, dC] = backprop_gradient(v, network, X, targets)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Compute the value of the cost function, as well as the corresponding</span>
+0007 <span class="comment">% gradient for conjugate-gradient optimization of a neural network.</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0011 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0012 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0013 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0014 <span class="comment">% maintain the name of the original author.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0017 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0018 
+0019 
+0020     <span class="comment">% Initialize some variables</span>
+0021     n = size(X, 1);
+0022     no_layers = length(network);
+0023     middle_layer = ceil(no_layers / 2);
+0024 
+0025     <span class="comment">% Deconvert the weights and store them in the network</span>
+0026     ind = 1;
+0027     <span class="keyword">for</span> i=1:no_layers
+0028         network{i}.W        = reshape(v(ind:ind - 1 + numel(network{i}.W)),        size(network{i}.W));         ind = ind + numel(network{i}.W);
+0029         network{i}.bias_upW = reshape(v(ind:ind - 1 + numel(network{i}.bias_upW)), size(network{i}.bias_upW));  ind = ind + numel(network{i}.bias_upW);
+0030     <span class="keyword">end</span>
+0031     
+0032     <span class="comment">% Run the data through the network</span>
+0033     activations = cell(1, no_layers + 1);
+0034     activations{1} = [X ones(n, 1)];
+0035     <span class="keyword">for</span> i=1:no_layers
+0036         <span class="keyword">if</span> i ~= middle_layer
+0037             activations{i + 1} = [1 ./ (1 + exp(-(activations{i} * [network{i}.W; network{i}.bias_upW]))) ones(n, 1)];
+0038         <span class="keyword">else</span>
+0039             activations{i + 1} = [activations{i} * [network{i}.W; network{i}.bias_upW] ones(n, 1)];
+0040         <span class="keyword">end</span>
+0041     <span class="keyword">end</span>  
+0042 
+0043     <span class="comment">% Compute value of cost function (= cross-correlation)</span>
+0044     C = (-1 / n) .* sum(sum(targets  .* log(    activations{end}(:,1:end - 1) + realmin) + <span class="keyword">...</span>
+0045                        (1 - targets) .* log(1 - activations{end}(:,1:end - 1) + realmin)));
+0046     
+0047     <span class="comment">% Compute gradients</span>
+0048     dW = cell(1, no_layers);
+0049     db = cell(1, no_layers);
+0050     Ix = (activations{end}(:,1:end - 1) - targets) ./ n;                                              <span class="comment">% cross-correlation derivative</span>
+0051     <span class="keyword">for</span> i=no_layers:-1:1
+0052 
+0053         <span class="comment">% Compute update</span>
+0054         delta = activations{i}' * Ix;
+0055         dW{i} = delta(1:end - 1,:);
+0056         db{i} = delta(<span class="keyword">end</span>,:);
+0057 
+0058         <span class="comment">% Backpropagate error</span>
+0059         <span class="keyword">if</span> i &gt; 1
+0060             <span class="keyword">if</span> i ~= middle_layer + 1
+0061                 Ix = (Ix * [network{i}.W; network{i}.bias_upW]') .* activations{i} .* (1 - activations{i});
+0062             <span class="keyword">else</span>
+0063                 Ix = Ix * [network{i}.W; network{i}.bias_upW]';
+0064             <span class="keyword">end</span>
+0065             Ix = Ix(:,1:end - 1);
+0066         <span class="keyword">end</span>
+0067     <span class="keyword">end</span>
+0068 
+0069     <span class="comment">% Convert gradient information</span>
+0070     dC = repmat(0, [numel(v) 1]);
+0071     ind = 1;
+0072     <span class="keyword">for</span> i=1:no_layers
+0073         dC(ind:ind - 1 + numel(dW{i})) = dW{i}(:); ind = ind + numel(dW{i});
+0074         dC(ind:ind - 1 + numel(db{i})) = db{i}(:); ind = ind + numel(db{i});
+0075     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

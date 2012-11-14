@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of threshold_absolute</title>
+  <meta name="keywords" content="threshold_absolute">
+  <meta name="description" content="THRESHOLD_ABSOLUTE    Absolute thresholding">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>threshold_absolute
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>THRESHOLD_ABSOLUTE    Absolute thresholding</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function W = threshold_absolute(W, thr) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> THRESHOLD_ABSOLUTE    Absolute thresholding
+ 
+   W_thr = threshold_absolute(W, thr);
+
+   This function thresholds the connectivity matrix by absolute weight
+   magnitude. All weights below the given threshold, and all weights
+   on the main diagonal (self-self connections) are set to 0.
+
+   Inputs: W           weighted or binary connectivity matrix
+           thr         weight treshold
+
+   Output: W_thr       thresholded connectivity matrix
+
+
+   Mika Rubinov, UNSW, 2009-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function W = threshold_absolute(W, thr)</a>
+0002 <span class="comment">% THRESHOLD_ABSOLUTE    Absolute thresholding</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   W_thr = threshold_absolute(W, thr);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function thresholds the connectivity matrix by absolute weight</span>
+0007 <span class="comment">%   magnitude. All weights below the given threshold, and all weights</span>
+0008 <span class="comment">%   on the main diagonal (self-self connections) are set to 0.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Inputs: W           weighted or binary connectivity matrix</span>
+0011 <span class="comment">%           thr         weight treshold</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Output: W_thr       thresholded connectivity matrix</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Mika Rubinov, UNSW, 2009-2010</span>
+0017 
+0018 W(1:size(W,1)+1:end)=0;                 <span class="comment">%clear diagonal</span>
+0019 W(W&lt;thr)=0;                             <span class="comment">%apply threshold</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

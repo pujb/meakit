@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_setup_model</title>
+  <meta name="keywords" content="util_setup_model">
+  <meta name="description" content="UTIL_SETUP_MODEL Init the network model.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Model -->
+<h1>util_setup_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_SETUP_MODEL Init the network model.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ connections neuron_e_i_type neuron_self_firing_type ] = util_setup_model( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_SETUP_MODEL Init the network model.
+   Input:
+       neuron_number:          The number of neurons. [default:1000]
+       synapse_mean_number:    The average number of synapses of one
+                               neuron. [default:50]
+       synapse_err_number:     The deviation number of synases from the
+                               mean. [default:15]
+                               &quot;50+/-15, it follows Gaussian Distribution&quot;
+       area_side_length:       The side length of the square area. Unit:
+                               micro meter. [default:3000]
+       excitatory_percent:     The percentage of excitatory neurons in
+                               total. [default:0.7]
+       self_firing_percent:    The percentage of self-firing neurons in
+                               total. [default:0.3]
+       standard_of_nearby:     The standard of judging near-by neurons.
+                               All neurons of which distance to the
+                               current neuron &lt;= this standard will be
+                               connected to the current neuron. Unit:
+                               micro meter. [default:15]
+       dist_limit_scope:       When we are arranging the location of
+                               neurons, it cannot be exactly the same
+                               value as the distribution wants. So this
+                               value can use to setup a range of
+                               acceptance. [default:20]
+   Output:
+       connection:             A structure holds all connections
+                               (neuron-ids and the corresponding
+                               connection length).
+       neuron_e_i_type:        To indicate the id (index) of neuron,
+                               whether it is excitatory or inhibitory.
+       neuron_self_firing_type:To indicate the id (index) of neuron,
+                               whether it is self-firing.
+
+   Created on Oct/20/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ connections neuron_e_i_type neuron_self_firing_type ] = util_setup_model( varargin )</a>
+0002 <span class="comment">%UTIL_SETUP_MODEL Init the network model.</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%       neuron_number:          The number of neurons. [default:1000]</span>
+0005 <span class="comment">%       synapse_mean_number:    The average number of synapses of one</span>
+0006 <span class="comment">%                               neuron. [default:50]</span>
+0007 <span class="comment">%       synapse_err_number:     The deviation number of synases from the</span>
+0008 <span class="comment">%                               mean. [default:15]</span>
+0009 <span class="comment">%                               &quot;50+/-15, it follows Gaussian Distribution&quot;</span>
+0010 <span class="comment">%       area_side_length:       The side length of the square area. Unit:</span>
+0011 <span class="comment">%                               micro meter. [default:3000]</span>
+0012 <span class="comment">%       excitatory_percent:     The percentage of excitatory neurons in</span>
+0013 <span class="comment">%                               total. [default:0.7]</span>
+0014 <span class="comment">%       self_firing_percent:    The percentage of self-firing neurons in</span>
+0015 <span class="comment">%                               total. [default:0.3]</span>
+0016 <span class="comment">%       standard_of_nearby:     The standard of judging near-by neurons.</span>
+0017 <span class="comment">%                               All neurons of which distance to the</span>
+0018 <span class="comment">%                               current neuron &lt;= this standard will be</span>
+0019 <span class="comment">%                               connected to the current neuron. Unit:</span>
+0020 <span class="comment">%                               micro meter. [default:15]</span>
+0021 <span class="comment">%       dist_limit_scope:       When we are arranging the location of</span>
+0022 <span class="comment">%                               neurons, it cannot be exactly the same</span>
+0023 <span class="comment">%                               value as the distribution wants. So this</span>
+0024 <span class="comment">%                               value can use to setup a range of</span>
+0025 <span class="comment">%                               acceptance. [default:20]</span>
+0026 <span class="comment">%   Output:</span>
+0027 <span class="comment">%       connection:             A structure holds all connections</span>
+0028 <span class="comment">%                               (neuron-ids and the corresponding</span>
+0029 <span class="comment">%                               connection length).</span>
+0030 <span class="comment">%       neuron_e_i_type:        To indicate the id (index) of neuron,</span>
+0031 <span class="comment">%                               whether it is excitatory or inhibitory.</span>
+0032 <span class="comment">%       neuron_self_firing_type:To indicate the id (index) of neuron,</span>
+0033 <span class="comment">%                               whether it is self-firing.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%   Created on Oct/20/2010 By Pu Jiangbo</span>
+0036 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0037 
+0038 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0039 
+0040 <span class="keyword">if</span> ~exist(<span class="string">'neuron_number'</span>, <span class="string">'var'</span>)
+0041     <span class="comment">% The number of neurons</span>
+0042     neuron_number = 1000;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> ~exist(<span class="string">'synapse_mean_number'</span>, <span class="string">'var'</span>)
+0046     <span class="comment">% The mean number of synapses of each neuron</span>
+0047     synapse_mean_number = 50;
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">if</span> ~exist(<span class="string">'synapse_err_number'</span>, <span class="string">'var'</span>)
+0051     <span class="comment">% The variation of mean number of synapses of each neuron</span>
+0052     synapse_err_number = 15;
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">if</span> ~exist(<span class="string">'area_side_length'</span>, <span class="string">'var'</span>)
+0056     <span class="comment">% The designated area is 3000 * 3000</span>
+0057     area_side_length = 3000;
+0058 <span class="keyword">end</span>
+0059 
+0060 
+0061 
+0062 
+0063 <span class="keyword">end</span>
+0064</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

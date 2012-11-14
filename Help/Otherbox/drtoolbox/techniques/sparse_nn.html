@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sparse_nn</title>
+  <meta name="keywords" content="sparse_nn">
+  <meta name="description" content="SPARSE_NN">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>sparse_nn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SPARSE_NN</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [edgesrow, edgescol,edgesdist] = sparse_nn(snn) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">SPARSE_NN</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="cca.html" class="code" title="function [Z, ccaEigen, ccaDetails] = cca(X, Y, EDGES, OPTS)">cca</a>	</li><li><a href="sdecca2.html" class="code" title="function  [P, newY, L, newV, idx]= sdecca2(Y, snn, regularizer, relative)">sdecca2</a>	doing semidefinitve embedding/MVU with output being parameterized by graph</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">%SPARSE_NN</span>
+0002 <span class="comment">%</span>
+0003 
+0004 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0005 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0006 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0007 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0008 <span class="comment">% maintain the name of the original author.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0011 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0012 
+0013 <a name="_sub0" href="#_subfunctions" class="code">function [edgesrow, edgescol,edgesdist] = sparse_nn(snn)</a>
+0014     <span class="comment">% turn into sparse nearest neighbor graph snn into edgesrow and edgescol index</span>
+0015     N = size(snn,1);
+0016     edgescol = zeros(N+1,1);
+0017     nnzer = nnz(snn);
+0018     edgesrow = zeros(nnzer,1);
+0019     edgesdist = zeros(nnzer,1);
+0020 
+0021     edgescol(1) = 0;
+0022     <span class="keyword">for</span> jdx=1:N
+0023         lst = find(snn(:, jdx)&gt;0);
+0024         <span class="comment">%lst = lst(find(lst&gt;jdx));</span>
+0025         edgescol(jdx+1) = edgescol(jdx)+length(lst);
+0026         edgesrow(edgescol(jdx)+1:edgescol(jdx+1)) = lst-1;
+0027         edgesdist(edgescol(jdx)+1:edgescol(jdx+1))=snn(lst,jdx);
+0028     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

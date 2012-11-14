@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of render</title>
+  <meta name="keywords" content="render">
+  <meta name="description" content="render(p)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>render
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>render(p)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function render(p) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> render(p)
+
+ render the panel &quot;p&quot; (which must be a root panel). if
+ &quot;autorender&quot; is on, this is called automatically with
+ every change to a panel. if not, you will need to call
+ this manually once you have finished building your figure,
+ before your changes will be rendered.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/@panel/private/subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li><li><a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li><li><a href="../../../Otherbox/panel/panel_demo_4.html" class="code" title="">panel_demo_4</a>	% PANEL DEMO 4</li><li><a href="../../../Otherbox/panel/panel_demo_B.html" class="code" title="">panel_demo_B</a>	% PANEL DEMO B</li><li><a href="../../../Otherbox/panel/panel_render_all.html" class="code" title="function panel_render_all">panel_render_all</a>	panel_render_all</li><li><a href="../../../Otherbox/panel/panel_resizefcn.html" class="code" title="function panel_resizefcn(varargin)">panel_resizefcn</a>	this stub gets the root panel from the callback</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function render(p)</a>
+0002 
+0003 
+0004 
+0005 <span class="comment">% render(p)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% render the panel &quot;p&quot; (which must be a root panel). if</span>
+0008 <span class="comment">% &quot;autorender&quot; is on, this is called automatically with</span>
+0009 <span class="comment">% every change to a panel. if not, you will need to call</span>
+0010 <span class="comment">% this manually once you have finished building your figure,</span>
+0011 <span class="comment">% before your changes will be rendered.</span>
+0012 
+0013 <span class="comment">% data we'll compute once and pass to sub-render</span>
+0014 renderer = [];
+0015 
+0016 <span class="comment">% if figure has been destroyed, don't bother</span>
+0017 <span class="keyword">if</span> ~ishandle(p.fig)
+0018     warning(<span class="string">'not rendering deleted figure panels'</span>);
+0019     <span class="keyword">return</span>
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="comment">% if figure has been destroyed, don't bother</span>
+0023 <span class="keyword">if</span> isempty(p.id)
+0024     warning(<span class="string">'not rendering unattached panel'</span>);
+0025     <span class="keyword">return</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">% get figure width and height on screen</span>
+0029 <span class="keyword">switch</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig,<span class="string">'Units'</span>)
+0030     <span class="keyword">case</span> <span class="string">'points'</span>
+0031         dpi = 72;
+0032         pp = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'position'</span>);
+0033         renderer.size_fig_mm = pp(3:4) / dpi * 25.4;
+0034     <span class="keyword">case</span> <span class="string">'inches'</span>
+0035         pp = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'position'</span>);
+0036         renderer.size_fig_mm = pp(3:4) * 25.4;
+0037     <span class="keyword">case</span> <span class="string">'centimeters'</span>
+0038         pp = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'position'</span>);
+0039         renderer.size_fig_mm = pp(3:4) * 10.0;
+0040     <span class="keyword">case</span> <span class="string">'characters'</span>
+0041         pp = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'position'</span>);
+0042         pp = pp .* [1 1 5 13]; <span class="comment">% convert to pixels, then treat as pixels</span>
+0043         dpi = 96;
+0044         renderer.size_fig_mm = pp(3:4) / dpi * 25.4;
+0045     <span class="keyword">case</span> <span class="string">'pixels'</span>
+0046         dpi = 96;
+0047         pp = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'position'</span>);
+0048         renderer.size_fig_mm = pp(3:4) / dpi * 25.4;
+0049     <span class="keyword">case</span> <span class="string">'normalized'</span>
+0050         error(<span class="string">'cannot render panel - figure units are set to &quot;normalized&quot;, which gives no absolute size reference'</span>);
+0051     <span class="keyword">otherwise</span>
+0052         error([<span class="string">'case not coded (Units='</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'Units'</span>) <span class="string">')'</span>]);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% can only call render on root panel</span>
+0056 [P, root] = <a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(p);
+0057 <span class="keyword">if</span> P.panel.parent
+0058     error(<span class="string">'can only call render() on root panel'</span>);
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">if</span> root.print
+0062     <span class="comment">% render for printing rather than for screen display</span>
+0063     <span class="keyword">switch</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'PaperUnits'</span>)
+0064         <span class="keyword">case</span> <span class="string">'inches'</span>
+0065             conv = 25.4;
+0066         <span class="keyword">case</span> <span class="string">'centimeters'</span>
+0067             conv = 10;
+0068         <span class="keyword">case</span> <span class="string">'points'</span>
+0069             conv = 0.35278;
+0070         <span class="keyword">otherwise</span>
+0071             error([<span class="string">'case not coded (PaperUnits='</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'PaperUnits'</span>) <span class="string">')'</span>]);
+0072     <span class="keyword">end</span>
+0073     pp = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'PaperPosition'</span>);
+0074     renderer.size_fig_mm = pp(3:4) * conv;
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">% start by rendering into whole client area [l b w h]</span>
+0078 renderer.into = [0 0 1 1];
+0079 
+0080 <span class="comment">% get units</span>
+0081 renderer.units = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'units'</span>);
+0082 
+0083 <span class="comment">% call subroutine</span>
+0084 P = <a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(p);
+0085 <a href="../../../Otherbox/panel/@panel/private/subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>(p, P, renderer, root.print);
+0086 
+0087 
+0088</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_GetEventData</title>
+  <meta name="keywords" content="ns_GetEventData">
+  <meta name="description" content="ns_GetEventData   Retrieves event data by index">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_GetEventData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_GetEventData   Retrieves event data by index</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, TimeStamp, Data, DataSize] = ns_GetEventData(hFile, EntityID, Index); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_GetEventData   Retrieves event data by index
+
+   Usage:
+      [ns_RESULT, TimeStamp, Data, DataSize] = 
+                                   ns_GetEventData(hFile, EntityID, Index)
+
+   Description:
+       Returns the data values from the file referenced by hFile and the
+       Event Entity EntityID.  The Event data entry specified by Index
+       is written to Data and the timestamp of the entry is returned to
+       TimeStamp.  Upon return of the function, the value at DataSize
+       contains the number of bytes actually written to Data.
+
+   Parameters:
+       hFile            Handle/Indentification number to an open file.
+       EntityID        Identification number of the entity in the data
+                       file.
+       Index            The index number of the requested Event data item.
+
+   Return Values:
+       TimeStamp        Variable that receives the timestamp of the Event
+                       data item.
+       Data            Variable that receives the data for the Event entry.
+                       The format of Event data is specified by the member
+                       EventType in ns_EVENTINFO.
+       DataSize        Variable that receives the actual number of bytes
+                       of data retrieved in the data buffer.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_BADFILE        Invalid file handle passed to 
+                                       function
+                       ns_BADENTITY    Invalid or inappropriate entity 
+                                       identifier specified
+                       ns_BADINDEX        Invalid entity index specified
+                       ns_FILEERROR    File access or read error
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 8/11/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Neuroshare.html" class="code" title="">Neuroshare</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, TimeStamp, Data, DataSize] = ns_GetEventData(hFile, EntityID, Index);</a>
+0002 
+0003 <span class="comment">%ns_GetEventData   Retrieves event data by index</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%      [ns_RESULT, TimeStamp, Data, DataSize] =</span>
+0007 <span class="comment">%                                   ns_GetEventData(hFile, EntityID, Index)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Description:</span>
+0010 <span class="comment">%       Returns the data values from the file referenced by hFile and the</span>
+0011 <span class="comment">%       Event Entity EntityID.  The Event data entry specified by Index</span>
+0012 <span class="comment">%       is written to Data and the timestamp of the entry is returned to</span>
+0013 <span class="comment">%       TimeStamp.  Upon return of the function, the value at DataSize</span>
+0014 <span class="comment">%       contains the number of bytes actually written to Data.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Parameters:</span>
+0017 <span class="comment">%       hFile            Handle/Indentification number to an open file.</span>
+0018 <span class="comment">%       EntityID        Identification number of the entity in the data</span>
+0019 <span class="comment">%                       file.</span>
+0020 <span class="comment">%       Index            The index number of the requested Event data item.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Return Values:</span>
+0023 <span class="comment">%       TimeStamp        Variable that receives the timestamp of the Event</span>
+0024 <span class="comment">%                       data item.</span>
+0025 <span class="comment">%       Data            Variable that receives the data for the Event entry.</span>
+0026 <span class="comment">%                       The format of Event data is specified by the member</span>
+0027 <span class="comment">%                       EventType in ns_EVENTINFO.</span>
+0028 <span class="comment">%       DataSize        Variable that receives the actual number of bytes</span>
+0029 <span class="comment">%                       of data retrieved in the data buffer.</span>
+0030 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0031 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0032 <span class="comment">%                   generated:</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%                       ns_BADFILE        Invalid file handle passed to</span>
+0035 <span class="comment">%                                       function</span>
+0036 <span class="comment">%                       ns_BADENTITY    Invalid or inappropriate entity</span>
+0037 <span class="comment">%                                       identifier specified</span>
+0038 <span class="comment">%                       ns_BADINDEX        Invalid entity index specified</span>
+0039 <span class="comment">%                       ns_FILEERROR    File access or read error</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0042 <span class="comment">%   Author: Almut Branner</span>
+0043 <span class="comment">%   Last modification: 8/11/2003</span>
+0044 
+0045 [ns_RESULT, TimeStamp, Data, DataSize] = mexprog(6, hFile, EntityID - 1, Index - 1);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

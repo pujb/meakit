@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of esa_modified</title>
+  <meta name="keywords" content="esa_modified">
+  <meta name="description" content="ESA    Color map providing ESA corporate design colours.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html colormaps -->
+<h1>esa_modified
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ESA    Color map providing ESA corporate design colours.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h = esa_modified(m) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">ESA    Color map providing ESA corporate design colours.
+   ESA(M) returns an M-by-3 matrix of the colormap.
+   ESA, by itself, is the same length as the current colormap.
+
+   For example, to reset the colormap of the current figure:
+
+             colormap(esa)
+
+   See also HOT, HSV, GRAY, PINK, COOL, BONE, COPPER, FLAG,
+   COLORMAP, RGBPLOT.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Plot/util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>	UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = esa_modified(m)</a>
+0002 <span class="comment">%ESA    Color map providing ESA corporate design colours.</span>
+0003 <span class="comment">%   ESA(M) returns an M-by-3 matrix of the colormap.</span>
+0004 <span class="comment">%   ESA, by itself, is the same length as the current colormap.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   For example, to reset the colormap of the current figure:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%             colormap(esa)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   See also HOT, HSV, GRAY, PINK, COOL, BONE, COPPER, FLAG,</span>
+0011 <span class="comment">%   COLORMAP, RGBPLOT.</span>
+0012 
+0013 <span class="comment">% Copyright (c) 2004-2006 by AMRON</span>
+0014 <span class="comment">% Norbert Marwan, Potsdam University, Germany</span>
+0015 <span class="comment">% http://www.agnld.uni-potsdam.de</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Last Revision: 2006-03-16</span>
+0018 <span class="comment">% Version: 2.2</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Changed by Jiangbo Pu, Replace the white by light blue</span>
+0021 
+0022 <span class="keyword">if</span> nargin &lt; 1
+0023     m = size(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'colormap'</span>),1); 
+0024 <span class="keyword">else</span>
+0025     <span class="keyword">if</span> isempty(m), m = size(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'colormap'</span>),1); <span class="keyword">end</span>
+0026     <span class="keyword">if</span> ischar(m), m = str2double(m); <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 
+0029 h = [     
+0030     0.3569    0.4667    0.8000;
+0031     0.3781    0.4863    0.8080;
+0032     0.3994    0.5059    0.8161;
+0033     0.4207    0.5255    0.8241;
+0034     0.4420    0.5451    0.8321;
+0035     0.4633    0.5647    0.8401;
+0036     0.4846    0.5843    0.8482;
+0037     0.5059    0.6039    0.8562;
+0038     0.5272    0.6235    0.8642;
+0039     0.5485    0.6431    0.8723;
+0040     0.5697    0.6627    0.8803;
+0041     0.5910    0.6824    0.8883;
+0042     0.6123    0.7020    0.8964;
+0043     0.6336    0.7216    0.9044;
+0044     0.6549    0.7412    0.9124;
+0045     0.6762    0.7608    0.9204;
+0046     0.6975    0.7804    0.9285;
+0047     0.7188    0.8000    0.9365;
+0048     0.7401    0.8196    0.9445;
+0049     0.7613    0.8392    0.9526;
+0050     0.7826    0.8588    0.9606;
+0051     0.8039    0.8784    0.9686;
+0052     0.8128    0.8725    0.9317;
+0053     0.8217    0.8667    0.8948;
+0054     0.8307    0.8608    0.8580;
+0055     0.8396    0.8549    0.8211;
+0056     0.8485    0.8490    0.7842;
+0057     0.8574    0.8431    0.7473;
+0058     0.8663    0.8372    0.7104;
+0059     0.8752    0.8314    0.6735;
+0060     0.8841    0.8255    0.6366;
+0061     0.8930    0.8196    0.5997;
+0062     0.9020    0.8137    0.5628;
+0063     0.9109    0.8078    0.5259;
+0064     0.9198    0.8019    0.4890;
+0065     0.9287    0.7961    0.4521;
+0066     0.9376    0.7902    0.4152;
+0067     0.9465    0.7843    0.3784;
+0068     0.9554    0.7784    0.3415;
+0069     0.9643    0.7725    0.3046;
+0070     0.9733    0.7666    0.2677;
+0071     0.9822    0.7608    0.2308;
+0072     0.9911    0.7549    0.1939;
+0073     1.0000    0.7490    0.1570;
+0074     1.0000    0.7301    0.1570;
+0075     1.0000    0.7112    0.1570;
+0076     1.0000    0.6923    0.1570;
+0077     1.0000    0.6734    0.1570;
+0078     1.0000    0.6545    0.1570;
+0079     1.0000    0.6356    0.1570;
+0080     1.0000    0.6167    0.1570;
+0081     1.0000    0.5978    0.1570;
+0082     1.0000    0.5789    0.1570;
+0083     1.0000    0.5600    0.1570;
+0084     1.0000    0.5411    0.1570;
+0085     1.0000    0.5222    0.1570;
+0086     1.0000    0.5033    0.1570;
+0087     1.0000    0.4844    0.1570;
+0088     1.0000    0.4655    0.1570;
+0089     1.0000    0.4466    0.1570;
+0090     1.0000    0.4277    0.1570;
+0091     1.0000    0.4088    0.1570;
+0092     1.0000    0.3899    0.1570;
+0093     1.0000    0.3710    0.1570;
+0094 ];
+0095 
+0096 <span class="keyword">if</span> m ~= length(h)
+0097     H = resample(h, m,length(h));
+0098     H(H &gt; 1) = 1;
+0099     H(H &lt; 0) = 0;
+0100     h = H;
+0101 <span class="keyword">end</span>
+0102</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

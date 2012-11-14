@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of trigamma</title>
+  <meta name="keywords" content="trigamma">
+  <meta name="description" content="TRIGAMMA   Trigamma function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>trigamma
+&nbsp;&nbsp;<img src="../../c.png" alt="Windows 32" border="0" title="Windows 32"></h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>TRIGAMMA   Trigamma function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function y = trigamma(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">TRIGAMMA   Trigamma function.
+ TRIGAMMA(X) returns trigamma(x) = d**2 log(gamma(x)) / dx**2
+ If X is a matrix, returns the trigamma function evaluated at each element.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="trigamma.html" class="code" title="function y = trigamma(x)">trigamma</a>	TRIGAMMA   Trigamma function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_trigamma.html" class="code" title="">test_trigamma</a>	</li><li><a href="trigamma.html" class="code" title="function y = trigamma(x)">trigamma</a>	TRIGAMMA   Trigamma function.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y = trigamma(x)</a>
+0002 <span class="comment">%TRIGAMMA   Trigamma function.</span>
+0003 <span class="comment">% TRIGAMMA(X) returns trigamma(x) = d**2 log(gamma(x)) / dx**2</span>
+0004 <span class="comment">% If X is a matrix, returns the trigamma function evaluated at each element.</span>
+0005 
+0006 <span class="comment">% Reference:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    B Schneider,</span>
+0009 <span class="comment">%    Trigamma Function,</span>
+0010 <span class="comment">%    Algorithm AS 121,</span>
+0011 <span class="comment">%    Applied Statistics,</span>
+0012 <span class="comment">%    Volume 27, Number 1, page 97-99, 1978.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% From http://www.psc.edu/~burkardt/src/dirichlet/dirichlet.f</span>
+0015 
+0016 small = 1e-4;
+0017 large = 8;
+0018 c = pi^2/6;
+0019 c1 = -2.404113806319188570799476;
+0020 b2 =  1/6;
+0021 b4 = -1/30;
+0022 b6 =  1/42;
+0023 b8 = -1/30;
+0024 b10 = 5/66;
+0025 
+0026 <span class="comment">% Initialize</span>
+0027 y = zeros(size(x));
+0028 
+0029 <span class="comment">% illegal values</span>
+0030 i = find(isnan(x) | (x == -inf));
+0031 <span class="keyword">if</span> ~isempty(i)
+0032   y(i) = nan;
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% zero or negative integer</span>
+0036 i = find((x &lt;= 0) &amp; (floor(x)==x));
+0037 <span class="keyword">if</span> ~isempty(i)
+0038   y(i) = Inf;
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% Negative non-integer</span>
+0042 i = find((x &lt; 0) &amp; (floor(x) ~= x));
+0043 <span class="keyword">if</span> ~isempty(i)
+0044   <span class="comment">% Use the derivative of the digamma reflection formula:</span>
+0045   <span class="comment">% -trigamma(-x) = trigamma(x+1) - (pi*csc(pi*x))^2</span>
+0046   y(i) = -<a href="trigamma.html" class="code" title="function y = trigamma(x)">trigamma</a>(-x(i)+1) + (pi*csc(-pi*x(i))).^2;
+0047 <span class="keyword">end</span>
+0048   
+0049 <span class="comment">% Small value approximation</span>
+0050 i = find(x &gt; 0 &amp; x &lt;= small);
+0051 <span class="keyword">if</span> ~isempty(i)
+0052   y(i) = 1./(x(i).*x(i)) + c + c1*x(i);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% Reduce to trigamma(x+n) where ( X + N ) &gt;= large.</span>
+0056 <span class="keyword">while</span>(1)
+0057   i = find(x &gt; small &amp; x &lt; large);
+0058   <span class="keyword">if</span> isempty(i)
+0059     <span class="keyword">break</span>
+0060   <span class="keyword">end</span>
+0061   y(i) = y(i) + 1./(x(i).*x(i));
+0062   x(i) = x(i) + 1;
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">% Apply asymptotic formula when X &gt;= large</span>
+0066 i = find(x &gt;= large);
+0067 <span class="keyword">if</span> ~isempty(i)
+0068   z = 1./(x(i).*x(i));
+0069   y(i) = y(i) + 0.5*z + (1.0 + z.*(b2 + z.*(b4 + z.*(b6 + z.*(b8 + z.*b10))))) ./ x(i);
+0070 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of spe</title>
+  <meta name="keywords" content="spe">
+  <meta name="description" content="SPE Perform the Stochastic Proximity Embedding algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>spe
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SPE Perform the Stochastic Proximity Embedding algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Y = spe(X, no_dims, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">SPE Perform the Stochastic Proximity Embedding algorithm
+
+   Y = spe(X, no_dims, 'Global')
+   Y = spe(X, no_dims, 'Local', k)
+
+ Perform the Stochastic Proximity Embedding algorithm. The SPE algorithm
+ can be compared to the MDS algorithm, although it is much more efficient.
+ The total number of updates necessary after the random initialization is
+ usually less than n^2 (where n is the number of datapoints). X is the set
+ of datapoints on which SPE has to be applied, and no_dims the number of
+ dimensions in the embedding space. If the method is used with the 'Global'
+ switch, a minimization of the traditional MDS raw stress function is 
+ performed (the default). Execution with the 'Local' switch only retains 
+ Euclidean distances in the local neighborhood of the datapoints. The size
+ of the neighborhood is defined by the variable k (default = 12).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Y = spe(X, no_dims, varargin)</a>
+0002 <span class="comment">%SPE Perform the Stochastic Proximity Embedding algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   Y = spe(X, no_dims, 'Global')</span>
+0005 <span class="comment">%   Y = spe(X, no_dims, 'Local', k)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Perform the Stochastic Proximity Embedding algorithm. The SPE algorithm</span>
+0008 <span class="comment">% can be compared to the MDS algorithm, although it is much more efficient.</span>
+0009 <span class="comment">% The total number of updates necessary after the random initialization is</span>
+0010 <span class="comment">% usually less than n^2 (where n is the number of datapoints). X is the set</span>
+0011 <span class="comment">% of datapoints on which SPE has to be applied, and no_dims the number of</span>
+0012 <span class="comment">% dimensions in the embedding space. If the method is used with the 'Global'</span>
+0013 <span class="comment">% switch, a minimization of the traditional MDS raw stress function is</span>
+0014 <span class="comment">% performed (the default). Execution with the 'Local' switch only retains</span>
+0015 <span class="comment">% Euclidean distances in the local neighborhood of the datapoints. The size</span>
+0016 <span class="comment">% of the neighborhood is defined by the variable k (default = 12).</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0021 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0022 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0023 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0024 <span class="comment">% maintain the name of the original author.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0027 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0028 
+0029     <span class="keyword">if</span> nargin &lt;= 2
+0030         variant = <span class="string">'Global'</span>;
+0031     <span class="keyword">else</span>
+0032         variant = varargin{1};
+0033     <span class="keyword">end</span>
+0034     <span class="keyword">if</span> strcmp(variant, <span class="string">'Local'</span>)
+0035         <span class="keyword">if</span> nargin &gt; 3, k = varargin{2};
+0036         <span class="keyword">else</span> k = 12; <span class="keyword">end</span>
+0037     <span class="keyword">end</span>
+0038     <span class="keyword">if</span> ~strcmp(variant, <span class="string">'Global'</span>) &amp;&amp; ~strcmp(variant, <span class="string">'Local'</span>)
+0039         error(<span class="string">'Unknown parameter.'</span>);
+0040     <span class="keyword">end</span>
+0041     <span class="keyword">if</span> exist(<span class="string">'k'</span>, <span class="string">'var'</span>) &amp;&amp; ischar(k)
+0042         error(<span class="string">'Adaptive neighborhood selection is not yet supported in SPE.'</span>);
+0043     <span class="keyword">end</span>
+0044     
+0045     <span class="comment">% Initialize parameters</span>
+0046     lambda = 1;                                         <span class="comment">% initial learning parameter</span>
+0047     s = 100;                                            <span class="comment">% number of updates per iteration</span>
+0048     max_iter = 20000 + round(.04 * size(X, 1) ^ 2);     <span class="comment">% number of iterations</span>
+0049     tol = 1e-5;                                         <span class="comment">% regularlization parameter</span>
+0050     n = size(X, 1);                                     <span class="comment">% number of datapoints</span>
+0051     <span class="keyword">if</span> strcmp(variant, <span class="string">'Local'</span>)
+0052         max_iter = max_iter * 3;
+0053     <span class="keyword">end</span>
+0054     
+0055     <span class="comment">% Compute proximity matrix in original space</span>
+0056     <span class="keyword">if</span> strcmp(variant, <span class="string">'Global'</span>)
+0057         R = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X', X');
+0058         R = R / max(max(R)) * sqrt(2);
+0059     <span class="keyword">else</span>
+0060         [R, n_ind] = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k);
+0061     <span class="keyword">end</span>
+0062     
+0063     <span class="comment">% Initialize datapoints randomly</span>
+0064     Y = rand(n, no_dims);
+0065     
+0066     <span class="comment">% Perform SPE</span>
+0067     <span class="keyword">for</span> i=1:max_iter
+0068         <span class="keyword">if</span> rem(i, 10000) == 0
+0069             disp([<span class="string">'Iteration '</span> num2str(i) <span class="string">' of '</span> num2str(max_iter) <span class="string">'...'</span>]);
+0070         <span class="keyword">end</span>
+0071         
+0072         <span class="comment">% Select points that should be updated</span>
+0073         J = randperm(n);
+0074         ind1 = J(1:s); 
+0075         <span class="keyword">if</span> strcmp(variant, <span class="string">'Global'</span>)
+0076             ind2 = J(s+1:2*s);
+0077         <span class="keyword">else</span>
+0078             ind2 = double(n_ind(ind1,:))';
+0079             J = round(rand(1, size(ind2, 2)) * (k - 1)) + 1;
+0080             J = J + ((0:length(J) - 1) * k);
+0081             ind2 = ind2(J);
+0082         <span class="keyword">end</span>
+0083         
+0084         <span class="comment">% Compute distances between points in embedded space</span>
+0085         D = sqrt(sum((Y(ind1,:) - Y(ind2,:)) .^ 2, 2));
+0086         
+0087         <span class="comment">% Get corresponding distances in real space</span>
+0088         Rt = R((ind1 - 1) * size(R, 1) + ind2)';
+0089         
+0090         <span class="comment">% Update locations of points</span>
+0091         Y(ind1,:) = Y(ind1,:) + lambda * (1/2) * repmat(((Rt - D) ./ (D + tol)), 1, no_dims) .* (Y(ind1,:) - Y(ind2,:));
+0092         Y(ind2,:) = Y(ind2,:) + lambda * (1/2) * repmat(((Rt - D) ./ (D + tol)), 1, no_dims) .* (Y(ind2,:) - Y(ind1,:));
+0093         
+0094         <span class="comment">% Update learning parameter</span>
+0095         lambda = lambda - (lambda / max_iter);        
+0096     <span class="keyword">end</span>
+0097</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

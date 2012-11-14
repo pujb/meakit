@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fa</title>
+  <meta name="keywords" content="fa">
+  <meta name="description" content="FA Perform factor analysis (FA) on dataset X">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>fa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FA Perform factor analysis (FA) on dataset X</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = fa(X, no_dims) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">FA Perform factor analysis (FA) on dataset X
+
+   mappedX = fa(X, no_dims)
+
+ Perform factor analysis on dataset X in order to reduce its
+ dimensionality to no_dims dimensions. The reduced data representation is
+ returned in mappedX.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = fa(X, no_dims)</a>
+0002 <span class="comment">%FA Perform factor analysis (FA) on dataset X</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = fa(X, no_dims)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Perform factor analysis on dataset X in order to reduce its</span>
+0007 <span class="comment">% dimensionality to no_dims dimensions. The reduced data representation is</span>
+0008 <span class="comment">% returned in mappedX.</span>
+0009 
+0010 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0011 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0012 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0013 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0014 <span class="comment">% maintain the name of the original author.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0017 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0018 
+0019 
+0020     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0021         no_dims = 2;
+0022     <span class="keyword">end</span>
+0023     
+0024     <span class="comment">% Make sure data is zero-mean</span>
+0025     mapping.mean = mean(X, 1);
+0026     X = X - repmat(mapping.mean, [size(X, 1) 1]);
+0027 
+0028     <span class="comment">% Initialize some variables</span>
+0029     X = X';
+0030     [D, n] = size(X);
+0031     epsilon = 1e-5;
+0032     iter = 0;
+0033     max_iter = 200;
+0034 
+0035     <span class="comment">% Initialize FA model</span>
+0036     Sig = eye(D);               <span class="comment">% initial variances</span>
+0037     A = rand(D, no_dims);       <span class="comment">% initial linear mapping</span>
+0038 
+0039     <span class="comment">% Main loop</span>
+0040     <span class="keyword">while</span> iter &lt; max_iter
+0041        
+0042         <span class="comment">% Update number of iterations</span>
+0043         iter = iter + 1;
+0044         <span class="keyword">if</span> rem(iter, 5) == 0
+0045             fprintf(<span class="string">'.'</span>);
+0046         <span class="keyword">end</span>
+0047 
+0048         <span class="comment">% Perform E-step</span>
+0049         invC = inv(A * A' + Sig);                               <span class="comment">% compute inverse of covariance matrix</span>
+0050         M = A' * invC * X;
+0051         SC = n * (eye(no_dims) - A' * invC * A) + M * M';
+0052 
+0053         <span class="comment">% Perform M-step</span>
+0054         A = (X * M') * inv(SC);
+0055         Sig = (diag(diag(X * X' - A * M * X')) / n) + epsilon;
+0056 
+0057         <span class="comment">% Compute log-likelihood of FA model</span>
+0058         newll = 0.5 * (log(det(invC)) - sum(sum((invC * X) .* X)) / n);
+0059 
+0060         <span class="comment">% Check for convergence</span>
+0061         <span class="keyword">if</span> iter ~=1 &amp;&amp; abs(newll - ll) &lt; epsilon
+0062             <span class="keyword">break</span>;
+0063         <span class="keyword">end</span>
+0064         ll = newll;
+0065     <span class="keyword">end</span>
+0066     
+0067     <span class="comment">% Apply linear mapping</span>
+0068     mapping.M = A;
+0069     mappedX = X' * mapping.M;
+0070     disp(<span class="string">' '</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

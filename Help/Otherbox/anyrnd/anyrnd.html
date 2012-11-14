@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of anyrnd</title>
+  <meta name="keywords" content="anyrnd">
+  <meta name="description" content="r= ANYRND(F,M,N) returns a matrix of random numbers of size M by N">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html anyrnd -->
+<h1>anyrnd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>r= ANYRND(F,M,N) returns a matrix of random numbers of size M by N</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function r= anyrnd(f,M,N) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">r= ANYRND(F,M,N) returns a matrix of random numbers of size M by N 
+    generated from an user-defined frequency distribution F. F can be 
+    specified as a 2-column vector where first column are the centers 
+    of bins and second column are frequencies. F can also be a 1-column 
+    vector of values, in which case a frequency distribution is generated 
+    with HIST using 100 bins. It works better the more detailed is the 
+    distribution (obviously).
+  
+    Example:
+    x= linspace(0,10*6.28,1000)';
+    y= 10*sin(x);
+    [n,v]= hist(y,100);    %Generate freq. dist.
+    f= [v',n'];                %Put it in f
+    r= anyrnd(f,1000,1); %Call anyrnd
+    hist(y,50);hold on;    %Plot both dist.
+    hist(r,50);
+ 
+    Author: F. de Castro</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Model/util_generate_neurons.html" class="code" title="function [csim_electrodes csim_neurons csim_synapses] = util_generate_neurons( varargin )">util_generate_neurons</a>	UNTITLED Summary of this function goes here</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r= anyrnd(f,M,N)</a>
+0002 <span class="comment">%r= ANYRND(F,M,N) returns a matrix of random numbers of size M by N</span>
+0003 <span class="comment">%    generated from an user-defined frequency distribution F. F can be</span>
+0004 <span class="comment">%    specified as a 2-column vector where first column are the centers</span>
+0005 <span class="comment">%    of bins and second column are frequencies. F can also be a 1-column</span>
+0006 <span class="comment">%    vector of values, in which case a frequency distribution is generated</span>
+0007 <span class="comment">%    with HIST using 100 bins. It works better the more detailed is the</span>
+0008 <span class="comment">%    distribution (obviously).</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Example:</span>
+0011 <span class="comment">%    x= linspace(0,10*6.28,1000)';</span>
+0012 <span class="comment">%    y= 10*sin(x);</span>
+0013 <span class="comment">%    [n,v]= hist(y,100);    %Generate freq. dist.</span>
+0014 <span class="comment">%    f= [v',n'];                %Put it in f</span>
+0015 <span class="comment">%    r= anyrnd(f,1000,1); %Call anyrnd</span>
+0016 <span class="comment">%    hist(y,50);hold on;    %Plot both dist.</span>
+0017 <span class="comment">%    hist(r,50);</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    Author: F. de Castro</span>
+0020 
+0021 <span class="comment">%-- Generate freq. dist. if needed</span>
+0022 <span class="keyword">if</span> size(f,2) == 2
+0023     v= f(:,1); n= f(:,2);
+0024 <span class="keyword">else</span>
+0025     [n,v]= hist(f(:,1),100);
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">%-- Initialize</span>
+0029 r= zeros(M,N);
+0030 fcum= zeros(length(f),1);
+0031 s= sum(n);
+0032 maxf= max(f);
+0033 
+0034 <span class="comment">%-- Cummulative frequencies</span>
+0035 fcum(1)= n(1)/s;
+0036 <span class="keyword">for</span> j= 2:length(n)
+0037     fcum(j)= fcum(j-1)+ n(j)/s;
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="comment">%-- Random picking</span>
+0041 <span class="keyword">for</span> k= 1:N
+0042     <span class="keyword">for</span> j= 1:M
+0043         loe= find(fcum &gt;= rand);
+0044         r(j,k)= v(loe(1));
+0045     <span class="keyword">end</span>
+0046 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

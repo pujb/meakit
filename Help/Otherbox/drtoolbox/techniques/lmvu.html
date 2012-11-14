@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of lmvu</title>
+  <meta name="keywords" content="lmvu">
+  <meta name="description" content="LMVU Performs Landmark MVU on dataset X">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>lmvu
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LMVU Performs Landmark MVU on dataset X</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = lmvu(X, no_dims, K, LL) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">LMVU Performs Landmark MVU on dataset X
+
+   [mappedX, mapping] = lmvu(X, no_dims, k1, k2)
+
+ The function performs Landmark MVU on the DxN dataset X. The value of k1
+ represents the number of nearest neighbors that is employed in the MVU 
+ constraints. The value of k2 represents the number of nearest neighbors
+ that is employed to compute the reconstruction weights (for embedding the
+ non-landmark points).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li><li><a href="csdp.html" class="code" title="function [x,y,z,info]=csdp(At,b,c,K,pars)">csdp</a>	CSDP Uses CSDP to solve a problem in SeDuMi format</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Q = getPia(B, LL, X, neighbors)</a></li><li><a href="#_sub2" class="code">function [A, b, AAomit, bbomit] = getConstraints(AA, Pia, bb, B, Const, pars)</a></li><li><a href="#_sub3" class="code">function v = vec(M)</a></li><li><a href="#_sub4" class="code">function M = mat(C)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = lmvu(X, no_dims, K, LL)</a>
+0002 <span class="comment">%LMVU Performs Landmark MVU on dataset X</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = lmvu(X, no_dims, k1, k2)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The function performs Landmark MVU on the DxN dataset X. The value of k1</span>
+0007 <span class="comment">% represents the number of nearest neighbors that is employed in the MVU</span>
+0008 <span class="comment">% constraints. The value of k2 represents the number of nearest neighbors</span>
+0009 <span class="comment">% that is employed to compute the reconstruction weights (for embedding the</span>
+0010 <span class="comment">% non-landmark points).</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023 
+0024     <span class="keyword">if</span> ~exist(<span class="string">'K'</span>, <span class="string">'var'</span>)
+0025         K = 3;
+0026     <span class="keyword">end</span>
+0027     <span class="keyword">if</span> ~exist(<span class="string">'LL'</span>, <span class="string">'var'</span>)
+0028         LL = 12;
+0029     <span class="keyword">end</span>
+0030     
+0031     <span class="comment">% Save some data for out-of-sample extension</span>
+0032     <span class="keyword">if</span> ischar(K)
+0033         error(<span class="string">'Adaptive neighborhood selection not supported for landmark MVU.'</span>);
+0034     <span class="keyword">end</span>
+0035     mapping.k1 = K;
+0036     mapping.k2 = LL;
+0037     mapping.X = X;
+0038 
+0039     <span class="comment">% Initialize some variables</span>
+0040     N = size(X, 2);     <span class="comment">% number of datapoints</span>
+0041     B = ceil(0.02 * N); <span class="comment">% number of landmark points</span>
+0042 
+0043     <span class="comment">% Set some parameters parameters</span>
+0044     pars.ep = eps;
+0045     pars.fastmode = 1;
+0046     pars.warmup = K * B / N;
+0047     pars.verify = 1;
+0048     pars.angles = 1;
+0049     pars.maxiter = 100;
+0050     pars.noise = 0;
+0051     pars.ignore = 0.1;
+0052     pars.penalty = 1;
+0053     pars.factor = 0.9999;
+0054 
+0055     <span class="comment">% Identify nearest neighbors</span>
+0056     disp(<span class="string">'Identifying nearest neighbors...'</span>);
+0057     KK = max(LL, K);
+0058     X = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X, X);          <span class="comment">% memory-intensive: O(n^{2}) !!!</span>
+0059     [foo, neighbors] = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, KK);
+0060     neighbors = neighbors';
+0061     
+0062     <span class="comment">% Get inverse of reconstruction weight matrix</span>
+0063     Pia = <a href="#_sub1" class="code" title="subfunction Q = getPia(B, LL, X, neighbors)">getPia</a>(B, LL, X, neighbors);
+0064     
+0065     <span class="comment">% Generate SDP problem</span>
+0066     disp(<span class="string">'Generating SDP problem...'</span>);
+0067     neighbors = neighbors(1:K,:);
+0068     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> temp index sorted
+0069     nck = nchoosek(1:K + 1, 2);
+0070     AA = zeros(N * K, 2);
+0071     pos3 = 1;
+0072     <span class="keyword">for</span> i=1:N
+0073         ne = neighbors(:,i);
+0074         nne = [ne; i];
+0075         pairs = nne(nck);
+0076         js = pairs(:,1);
+0077         ks = pairs(:,2);
+0078         AA(pos3:pos3 + length(js) - 1,:) = sort([js ks], 2);
+0079         pos3 = pos3 + length(js);
+0080         <span class="keyword">if</span> i == B
+0081             AA = unique(AA, <span class="string">'rows'</span>);
+0082             ForceC = size(AA, 1);
+0083         <span class="keyword">end</span>
+0084         <span class="keyword">if</span> pos3 &gt; size(AA, 1) &amp;&amp; i &lt; N
+0085             AA = unique(AA, <span class="string">'rows'</span>);
+0086             pos3 = size(AA, 1) + 1;
+0087             AA = [AA; zeros(round(N / (N - i) * pos3), 2)];
+0088             fprintf(<span class="string">'.'</span>);
+0089         <span class="keyword">end</span>
+0090     <span class="keyword">end</span>
+0091     AA = unique(AA, <span class="string">'rows'</span>);
+0092     AA = AA(2:<span class="keyword">end</span>,:);
+0093     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> neighbors ne v2 v3 js ks
+0094     bb = zeros(1, size(AA, 1));
+0095     <span class="keyword">for</span> i=1:size(AA, 1)
+0096         bb(i) = sum((X(:,AA(i, 1)) - X(:,AA(i, 2))) .^ 2);
+0097     <span class="keyword">end</span>
+0098     disp(<span class="string">' '</span>);
+0099 
+0100     <span class="comment">% Reduce the number of forced vectors</span>
+0101     ii = (1:ForceC)';
+0102     jj = zeros(1, size(AA, 1));
+0103     jj(ii) = 1; 
+0104     jj = find(jj == 0);
+0105     jj1 = jj(jj &lt;= ForceC);
+0106     jj2 = jj(jj &gt;  ForceC);
+0107     jj2 = jj2(randperm(length(jj2)));
+0108     jj1 = jj1(randperm(length(jj1)));
+0109     corder = [ii; jj1'; jj2'];
+0110     AA = AA(corder,:);
+0111     bb = bb(corder);
+0112     ForceC = length(ii);
+0113     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> temp jj1 jj2 jj ii
+0114     Const = max(round(pars.warmup * size(AA, 1)), ForceC);
+0115     [A, b, AA, bb] = <a href="#_sub2" class="code" title="subfunction [A, b, AAomit, bbomit] = getConstraints(AA, Pia, bb, B, Const, pars)">getConstraints</a>(AA, Pia, bb, B, Const, pars);
+0116     Qt = sum(Pia, 1)' * sum(Pia, 1);
+0117     A = [Qt(:)'; A];
+0118     b = [0; b];
+0119     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> K;
+0120     solved = 0;
+0121 
+0122     <span class="comment">% Start SDP iterations</span>
+0123     disp(<span class="string">'Perform semi-definite programming...'</span>);
+0124     disp(<span class="string">'CSDP OUTPUT ============================================================================='</span>);
+0125     <span class="keyword">while</span> solved == 0
+0126         
+0127         <span class="comment">% Initialize some variables</span>
+0128         c = -<a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(Pia' * Pia);
+0129         flags.s = B;
+0130         flags.l = size(A, 1) - 1;
+0131         A = [[zeros(1,flags.l); speye(flags.l)] A];
+0132 
+0133         <span class="comment">% Set c (employ penalty)</span>
+0134         c = [ones(ForceC, 1) .* max(max(c)); zeros(flags.l - ForceC, 1); c];
+0135 
+0136         <span class="comment">% Launch the CSDP solver</span>
+0137         options.maxiter=pars.maxiter;
+0138         [x, d, z, info] = <a href="csdp.html" class="code" title="function [x,y,z,info]=csdp(At,b,c,K,pars)">csdp</a>(A, b, c, flags, options);
+0139         K = <a href="#_sub4" class="code" title="subfunction M = mat(C)">mat</a>(x(flags.l + 1:flags.l + flags.s ^ 2));
+0140 
+0141         <span class="comment">% Check whether a solution is reached</span>
+0142         solved = isempty(AA);
+0143         A = A(:,flags.l + 1:end);
+0144         xx = K(:);
+0145         <span class="keyword">if</span> size(AA, 1)
+0146             Aold = size(A,1);
+0147             total = 0;
+0148             <span class="keyword">while</span> size(A, 1) - Aold &lt; Const &amp;&amp; ~isempty(AA)
+0149                 [newA, newb, AA, bb] = <a href="#_sub2" class="code" title="subfunction [A, b, AAomit, bbomit] = getConstraints(AA, Pia, bb, B, Const, pars)">getConstraints</a>(AA, Pia, bb, B, Const, pars);
+0150                 jj = find(newA * xx - newb &gt; pars.ignore * abs(newb));
+0151                 <span class="keyword">if</span> info == 2
+0152                     jj = 1:size(newA, 1);
+0153                 <span class="keyword">end</span>
+0154                 total = total + length(jj);
+0155                 A(size(A,1) + 1:size(A,1) + length(jj),:) = newA(jj,:);
+0156                 b(length(b) + 1:length(b) + length(jj)) = newb(jj);
+0157             <span class="keyword">end</span>
+0158             <span class="keyword">if</span> total == 0
+0159                 solved = 1;
+0160             <span class="keyword">end</span>
+0161         <span class="keyword">else</span>
+0162             solved=1;
+0163         <span class="keyword">end</span>
+0164         <span class="keyword">if</span> solved == 1 &amp;&amp; pars.maxiter &lt; 100
+0165             pars.maxiter = 100;
+0166         <span class="keyword">end</span>
+0167     <span class="keyword">end</span>
+0168     disp(<span class="string">'========================================================================================='</span>);
+0169 
+0170     <span class="comment">% Perform eigendecomposition of kernel matrix to compute Y</span>
+0171     disp(<span class="string">'Perform eigendecomposition to obtain low-dimensional data representation...'</span>);
+0172     [V, D] = eig(K);
+0173     V = V * sqrt(D);
+0174     Y = (V(:,end:-1:1))';
+0175     mappedX = Y * Pia';
+0176 
+0177     <span class="comment">% Reorder data in original order</span>
+0178     mappedX = mappedX(1:no_dims,:);
+0179     
+0180     <span class="comment">% Set some information for the out-of-sample extension</span>
+0181     mapping.Y = Y;
+0182     mapping.D = X;
+0183     mapping.no_landmarks = B;
+0184     mapping.no_dims = no_dims;
+0185     
+0186     
+0187 
+0188 <span class="comment">% Function that computes LLE weight matrix</span>
+0189 <a name="_sub1" href="#_subfunctions" class="code">function Q = getPia(B, LL, X, neighbors)</a>
+0190 
+0191     <span class="comment">% Initialize some variables</span>
+0192     N = size(X,2);
+0193 
+0194     <span class="comment">% Compute reconstruction weights</span>
+0195     disp(<span class="string">'Computing reconstruction weights...'</span>);
+0196     tol = 1e-7;
+0197     Pia = sparse([], [], [], B, N);
+0198     <span class="keyword">for</span> i=1:N
+0199         z = X(:,neighbors(:,i)) - repmat(X(:,i), 1, LL);
+0200         C = z' * z;
+0201         C = C + tol * trace(C) * eye(LL) / LL;
+0202         invC = inv(C);
+0203         Pia(neighbors(:,i),i) = sum(invC)' / sum(sum(invC));
+0204     <span class="keyword">end</span>
+0205 
+0206     <span class="comment">% Fill sparse LLE weight matrix</span>
+0207     M = speye(N) + sparse([], [], [], N, N, N * LL .^ 2);
+0208     <span class="keyword">for</span> i=1:N
+0209         j = neighbors(:,i);
+0210         w = Pia(j, i);
+0211         M(i, j) = M(i, j) - w';
+0212         M(j, i) = M(j, i) - w;
+0213         M(j, j) = M(j, j) + w * w';
+0214     <span class="keyword">end</span>
+0215 
+0216     <span class="comment">% Invert LLE weight matrix</span>
+0217     disp(<span class="string">'Invert reconstruction weight matrix...'</span>);
+0218     Q = -M(B + 1:<span class="keyword">end</span>, B + 1:end) \ M(B + 1:<span class="keyword">end</span>, 1:B);
+0219     Q = [eye(B); Q];
+0220 
+0221 
+0222 
+0223 <span class="comment">% Functions that constructs the constraints for the SDP</span>
+0224 <a name="_sub2" href="#_subfunctions" class="code">function [A, b, AAomit, bbomit] = getConstraints(AA, Pia, bb, B, Const, pars)</a>
+0225     
+0226     <span class="comment">% Initialize some variables</span>
+0227     pos2 = 0;
+0228     perm = 1:size(AA,1);
+0229     <span class="keyword">if</span> size(AA, 1) &gt; Const
+0230         AAomit = AA(perm(Const + 1:end),:);
+0231         bbomit = bb(perm(Const + 1:end));
+0232         AA = AA(perm(1:Const),:);
+0233         bb = bb(perm(1:Const));
+0234     <span class="keyword">else</span>
+0235         AAomit = [];
+0236         bbomit = [];
+0237     <span class="keyword">end</span>
+0238 
+0239     <span class="comment">% Allocate some memory</span>
+0240     <span class="keyword">persistent</span> reqmem;
+0241     <span class="keyword">if</span> isempty(reqmem)
+0242         A2 = zeros(size(AA, 1) * B, 3);
+0243     <span class="keyword">else</span>
+0244         A2 = zeros(reqmem, 3);
+0245     <span class="keyword">end</span>
+0246 
+0247     <span class="comment">% Set the constraints</span>
+0248     pos = 0;
+0249     <span class="keyword">for</span> j=1:size(AA, 1)
+0250 
+0251         <span class="comment">% Evaluate for current row in AA</span>
+0252         ii = AA(j, 1);
+0253         jj = AA(j, 2);
+0254         Q = Pia(ii,:)' * Pia(ii,:) - 2 .* Pia(jj,:)' * Pia(ii,:) + Pia(jj,:)' * Pia(jj,:);
+0255         Q = (Q + Q') ./ 2;
+0256         it = find(abs(Q) &gt; pars.ep .^ 2);
+0257 
+0258         <span class="comment">% Constraint found</span>
+0259         <span class="keyword">if</span> ~isempty(it)
+0260             
+0261             <span class="comment">% Allocate more memory if needed</span>
+0262             pos = pos + 1;
+0263             <span class="keyword">if</span> pos2 + length(it) &gt; size(A2, 1)             
+0264                 A2 = [A2; zeros(ceil((size(AA, 1) - j) / j * size(A2, 1)), 3)];
+0265             <span class="keyword">end</span>
+0266             
+0267             <span class="comment">% Set constraint</span>
+0268             A2(1 + pos2:pos2 + length(it), 1) = ones(length(it), 1) .* pos;
+0269             A2(1 + pos2:pos2 + length(it), 2) = it;
+0270             A2(1 + pos2:pos2 + length(it), 3) = full(Q(it));
+0271             pos2 = pos2 + length(it);
+0272         <span class="keyword">end</span>
+0273     <span class="keyword">end</span>
+0274 
+0275     <span class="comment">% Construct sparse constraint matrix</span>
+0276     reqmem = pos2;
+0277     A2 = A2(1:pos2,:);
+0278     A = sparse(A2(:,1), A2(:,2), A2(:,3), size(AA,1), B .^ 2);
+0279     b = bb';
+0280 
+0281 
+0282 
+0283 <span class="comment">% Function that vectorizes a matrix</span>
+0284 <a name="_sub3" href="#_subfunctions" class="code">function v = vec(M)</a>
+0285     v = M(:);
+0286 
+0287 
+0288     
+0289 <span class="comment">% Function that matrixizes a vector</span>
+0290 <a name="_sub4" href="#_subfunctions" class="code">function M = mat(C)</a>
+0291     r = round(sqrt(size(C, 1)));
+0292     M = reshape(C, r, r);
+0293</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

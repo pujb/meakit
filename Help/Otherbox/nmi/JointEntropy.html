@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of JointEntropy</title>
+  <meta name="keywords" content="JointEntropy">
+  <meta name="description" content="JointEntropy: Returns joint entropy (in bits) of each column of 'X'">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html nmi -->
+<h1>JointEntropy
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>JointEntropy: Returns joint entropy (in bits) of each column of 'X'</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function H = JointEntropy(X) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> JointEntropy: Returns joint entropy (in bits) of each column of 'X'
+ by Will Dwinnell
+
+ H = JointEntropy(X)
+
+ H = calculated joint entropy (in bits)
+ X = data to be analyzed
+
+ Last modified: Aug-29-2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Entropy.html" class="code" title="function H = Entropy(X)">Entropy</a>	Entropy: Returns entropy (in bits) of each column of 'X'</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="MutualInformation.html" class="code" title="function I = MutualInformation(X,Y);">MutualInformation</a>	MutualInformation: returns mutual information (in bits) of the 'X' and 'Y'</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% JointEntropy: Returns joint entropy (in bits) of each column of 'X'</span>
+0002 <span class="comment">% by Will Dwinnell</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% H = JointEntropy(X)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% H = calculated joint entropy (in bits)</span>
+0007 <span class="comment">% X = data to be analyzed</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Last modified: Aug-29-2006</span>
+0010 
+0011 <a name="_sub0" href="#_subfunctions" class="code">function H = JointEntropy(X)</a>
+0012 
+0013 <span class="comment">% Sort to get identical records together</span>
+0014 X = sortrows(X);
+0015 
+0016 <span class="comment">% Find elemental differences from predecessors</span>
+0017 DeltaRow = (X(2:<span class="keyword">end</span>,:) ~= X(1:end-1,:));
+0018 
+0019 <span class="comment">% Summarize by record</span>
+0020 Delta = [1; any(DeltaRow')'];
+0021 
+0022 <span class="comment">% Generate vector symbol indices</span>
+0023 VectorX = cumsum(Delta);
+0024 
+0025 <span class="comment">% Calculate entropy the usual way on the vector symbols</span>
+0026 H = <a href="Entropy.html" class="code" title="function H = Entropy(X)">Entropy</a>(VectorX);
+0027 
+0028 
+0029 <span class="comment">% God bless Claude Shannon.</span>
+0030 
+0031 <span class="comment">% EOF</span>
+0032 
+0033</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fastmvu</title>
+  <meta name="keywords" content="fastmvu">
+  <meta name="description" content="FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>fastmvu
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = fastmvu(X, no_dims, k, finetune, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm
+
+   [mappedX, mapping] = fastmvu(X, no_dims, k, finetune)
+
+ Computes a low dimensional embedding of data points using the Fast
+ Maximum Variance Unfolding algorithm. The data is specified in an NxD 
+ data matrix X. The lowdimensional representation is returned in mappedX.
+ Information on the mapping is returned in the mapping struct.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li><li><a href="components.html" class="code" title="function blocks = components(A)">components</a>	COMPONENTS Finds connected components in a graph defined by a adjacency matrix</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="hillclimber2c.html" class="code" title="function [x,obj] = hillclimber2c(DD, x, varargin)">hillclimber2c</a>	HILLCLIMBER Performs hillclimbing using initial solution</li><li><a href="jdqr.html" class="code" title="function varargout=jdqr(varargin)">jdqr</a>	JDQR computes a partial Schur decomposition of a square matrix or operator.</li><li><a href="sdecca2.html" class="code" title="function  [P, newY, L, newV, idx]= sdecca2(Y, snn, regularizer, relative)">sdecca2</a>	doing semidefinitve embedding/MVU with output being parameterized by graph</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = fastmvu(X, no_dims, k, finetune, eig_impl)</a>
+0002 <span class="comment">%FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = fastmvu(X, no_dims, k, finetune)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Computes a low dimensional embedding of data points using the Fast</span>
+0007 <span class="comment">% Maximum Variance Unfolding algorithm. The data is specified in an NxD</span>
+0008 <span class="comment">% data matrix X. The lowdimensional representation is returned in mappedX.</span>
+0009 <span class="comment">% Information on the mapping is returned in the mapping struct.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0024         no_dims = 2;
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0027         k = 12;
+0028     <span class="keyword">end</span>
+0029     <span class="keyword">if</span> ~exist(<span class="string">'finetune'</span>, <span class="string">'var'</span>)
+0030         finetune = true;
+0031     <span class="keyword">end</span>
+0032     <span class="keyword">if</span> ~exist(<span class="string">'eig_impl'</span>, <span class="string">'var'</span>)
+0033         eig_impl = <span class="string">'Matlab'</span>;
+0034     <span class="keyword">end</span>
+0035 
+0036     <span class="comment">% Initialize some parameters</span>
+0037     maxiter = 10000;                    <span class="comment">% maximum number of iterations</span>
+0038     eta = 1e-5 ;                        <span class="comment">% regularization parameter</span>
+0039     initial_dims = 2 * no_dims;         <span class="comment">% dimensionality of first guess</span>
+0040     
+0041     <span class="comment">% Compute sparse distance matrix D on dataset X</span>
+0042     disp(<span class="string">'Constructing neighborhood graph...'</span>);
+0043     D = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k);
+0044     D(D ~= 0) = 1;
+0045     
+0046     <span class="comment">% Select largest connected component</span>
+0047     blocks = <a href="components.html" class="code" title="function blocks = components(A)">components</a>(D)';
+0048     count = zeros(1, max(blocks));
+0049     <span class="keyword">for</span> i=1:max(blocks)
+0050         count(i) = length(find(blocks == i));
+0051     <span class="keyword">end</span>
+0052     [count, block_no] = max(count);
+0053     conn_comp = find(blocks == block_no);
+0054     D = D(conn_comp,:);
+0055     D = D(:,conn_comp);
+0056     mapping.conn_comp = conn_comp;
+0057     mapping.D = D;
+0058 
+0059     <span class="comment">% Perform eigendecomposition of the graph Laplacian</span>
+0060     disp(<span class="string">'Perform eigendecomposition of graph Laplacian...'</span>);
+0061     DD = diag(sum(D, 2));                       <span class="comment">% degree matrix</span>
+0062     L = DD - D;                                 <span class="comment">% graph Laplacian</span>
+0063     L(isnan(L)) = 0;
+0064     L(isinf(L)) = 0;
+0065     <span class="keyword">if</span> strcmp(eig_impl, <span class="string">'JDQR'</span>)
+0066         options.Disp = 0;
+0067         options.LSolver = <span class="string">'bicgstab'</span>;
+0068         [laplX, lambda] = <a href="jdqr.html" class="code" title="function varargout=jdqr(varargin)">jdqr</a>(L, initial_dims + 1, <span class="string">'SR'</span>, options);          <span class="comment">% only need bottom (initial_dims + 1) eigenvectors</span>
+0069     <span class="keyword">else</span>
+0070         options.disp = 0;
+0071         options.isreal = 1;
+0072         options.issym = 1;
+0073         [laplX, lambda] = eigs(L, initial_dims + 1, <span class="string">'SR'</span>, options);             <span class="comment">% only need bottom (initial_dims + 1) eigenvectors</span>
+0074     <span class="keyword">end</span>
+0075     [lambda, ind] = sort(diag(lambda), <span class="string">'ascend'</span>);
+0076     laplX = real(laplX(:,ind(2:initial_dims + 1)));
+0077     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> DD L
+0078 
+0079     <span class="comment">% Maximize sum of pairwise distances while retaining distances inside</span>
+0080     <span class="comment">% neighborhood graph distances. I.e. perform SDP optimization, starting</span>
+0081     <span class="comment">% with eigendecomposition of the Laplacian. The constraints of the</span>
+0082     <span class="comment">% optimization are formed by the upper triangle of D.</span>
+0083     disp(<span class="string">'Perform semi-definite programming...'</span>);
+0084     disp(<span class="string">'CSDP OUTPUT ============================================================================='</span>);
+0085     <span class="keyword">try</span> 
+0086         [LL, mappedX, L, newV, idx] = <a href="sdecca2.html" class="code" title="function  [P, newY, L, newV, idx]= sdecca2(Y, snn, regularizer, relative)">sdecca2</a>(laplX', triu(D), eta, 0);
+0087     <span class="keyword">catch</span>
+0088         error(<span class="string">'Error while performing SDP. Maybe the binaries of CSDP are not suitable for your platform.'</span>);
+0089     <span class="keyword">end</span>
+0090     disp(<span class="string">'========================================================================================='</span>);
+0091     
+0092     <span class="comment">% Perform initial conjugate gradient search (in initial-dimensional space)</span>
+0093     <span class="keyword">if</span> finetune
+0094         disp(<span class="string">'Finetune initial solution using conjugate gradient descent...'</span>);
+0095         mappedX = <a href="hillclimber2c.html" class="code" title="function [x,obj] = hillclimber2c(DD, x, varargin)">hillclimber2c</a>(D, mappedX, <span class="string">'maxiter'</span>, maxiter, <span class="string">'eta'</span>, eta);
+0096     <span class="keyword">end</span>
+0097 
+0098     <span class="comment">% Perform PCA to remove noise and further reduce dimensionality</span>
+0099     disp(<span class="string">'Perform PCA to obtain final solution...'</span>);
+0100     [mappedX, mapping2] = <a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>(mappedX', <span class="string">'PCA'</span>, no_dims);
+0101 
+0102     <span class="comment">% Finetune final solution</span>
+0103     <span class="keyword">if</span> finetune
+0104         mappedX = mappedX';
+0105         disp(<span class="string">'Finetune final solution using conjugate gradient descent...'</span>);
+0106         mappedX = <a href="hillclimber2c.html" class="code" title="function [x,obj] = hillclimber2c(DD, x, varargin)">hillclimber2c</a>(D, mappedX, <span class="string">'maxiter'</span>, maxiter, <span class="string">'eta'</span>, 0);
+0107         mappedX = mappedX';
+0108     <span class="keyword">end</span>
+0109     
+0110     <span class="comment">% Save data for the out-of-sample extension</span>
+0111     mapping.k = k;
+0112     mapping.L = L;
+0113     mapping.X = X;
+0114     mapping.newV = newV;
+0115     mapping.idx = idx;
+0116     mapping.vec = laplX;
+0117     mapping.pca_map = mapping2;
+0118     mapping.pca_map.name = <span class="string">'PCA'</span>;
+0119     mapping.finetune = finetune;
+0120</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FuzSam</title>
+  <meta name="keywords" content="FuzSam">
+  <meta name="description" content="rand('seed',120)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>FuzSam
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>rand('seed',120)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result = FuzSam(proj,result,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">rand('seed',120)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/FUZZCLUST/Demos/projection/visual_call.html" class="code" title="">visual_call</a>	Calling function of the visualization functions</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = FuzSam(proj,result,param)</a>
+0002 <span class="comment">%rand('seed',120)</span>
+0003 
+0004 <span class="comment">%Adapt the data</span>
+0005 P = proj.P;             <span class="comment">%P projected data or dimension</span>
+0006 d = result.data.d;      <span class="comment">%d distances</span>
+0007 f = result.data.f;      <span class="comment">%f partition matrix</span>
+0008 m = param.m;            <span class="comment">%m fuzzy exponent</span>
+0009 maxstep = param.max;
+0010 alpha = param.alpha;
+0011 <span class="comment">% compute data dimensions</span>
+0012 [np,nc]=size(d);        <span class="comment">%number of data and number of clusters</span>
+0013 orig_si = size(d); 
+0014 <span class="comment">% noc = orig_si(1);</span>
+0015 <span class="comment">% nc = orig_si(2); %</span>
+0016 
+0017 <span class="keyword">if</span> prod(size(P))==1,    <span class="comment">%output dimension given</span>
+0018   odim = P; 
+0019   P = rand(np,odim)-0.5;
+0020   <span class="comment">%P = 2*rand(np,odim)-1;</span>
+0021 <span class="keyword">else</span>                    <span class="comment">%initial projection matrix given</span>
+0022   si = size(P);
+0023   odim = si(end);
+0024 <span class="keyword">end</span>
+0025 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0026 
+0027 np_x_1  = ones(np, 1); 
+0028 nc_x_1  = ones(nc, 1); 
+0029 odim_x_1 = ones(odim,1); 
+0030 <span class="comment">% xu = zeros(np, odim);       %projected data matrix</span>
+0031 <span class="comment">% xd = zeros(np, odim);       %projected distance matrix</span>
+0032 <span class="comment">% dq = zeros(np, 1);</span>
+0033 <span class="comment">% dr = zeros(np, 1);</span>
+0034 <span class="comment">%alpha = 0.4;                %gradient method step size</span>
+0035 
+0036 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0037 tic
+0038 fprintf(2, <span class="string">'iterating                    \r'</span>);
+0039 
+0040 <span class="comment">% initializing</span>
+0041 x  = P ;
+0042 fm = f.^m;
+0043 sumf = sum(fm);
+0044 xv = (fm'*x)./(sumf'*ones(1,2));;   <span class="comment">%projected cluster centers</span>
+0045 
+0046 c = sum(x) / np;<span class="comment">% move the center of mass to the center</span>
+0047 x = x - c(np_x_1, :);
+0048 xv = xv - c(nc_x_1, :); 
+0049 
+0050 <span class="keyword">for</span> i=1:maxstep;
+0051   <span class="keyword">for</span> j = 1:np,
+0052     xd      = - xv + x(j*nc_x_1,:);
+0053     xd2     = xd.^2;
+0054     dpj     = sqrt(sum(xd2'))';
+0055     dq      = d(j,:)' - dpj;
+0056     dr      =  dpj;
+0057     index     = find(dr ~= 0);
+0058     term    = dq(index) ./ dr(index).* [ones(1,nc).*fm(j,:)]';
+0059     e1      = sum(xd(index,:) .* term(:,odim_x_1));
+0060     term2   = ((1.0 + dq(index) ./ dpj(index)) ./ dpj(index)) ./ dr(index).*[ones(1,nc).*fm(j,:)]';
+0061     e2      = sum(term) - sum(xd2(index,:) .* term2(:,odim_x_1));
+0062     xu(j,:) = x(j,:) + alpha * e1 ./ abs(e2);
+0063   <span class="keyword">end</span>
+0064 x=xu;
+0065 c = mean(x);
+0066 x = x - c(np_x_1, :);
+0067 xv = (fm'*x)./(sumf'*ones(1,2));
+0068  
+0069   <span class="keyword">if</span> 1, 
+0070     clf
+0071     plot(x(:,1), x(:,2), <span class="string">'o'</span>);
+0072     hold on
+0073     plot(xv(:,1), xv(:,2), <span class="string">'r*'</span>);
+0074     <span class="comment">%projeval(x,xv,m,nc,fm);</span>
+0075     hold off
+0076     title(<span class="string">'Fuzzy Sammon mapping - training'</span>)
+0077     drawnow
+0078   <span class="keyword">end</span>
+0079   fprintf(2, <span class="string">'\r%d iterations'</span>, i);
+0080 <span class="keyword">end</span>   
+0081 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0082 
+0083 <span class="comment">% reshape</span>
+0084 orig_si(end) = odim; 
+0085 P = reshape(x, orig_si);
+0086 
+0087 <span class="comment">%results</span>
+0088 result.proj.vp=xv;
+0089 result.proj.P=x;
+0090</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pvpmod</title>
+  <meta name="keywords" content="pvpmod">
+  <meta name="description" content="PVPMOD             - evaluate parameter/value pairs">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html IO --><!-- # mcd --><!-- menu.html mcintfac -->
+<h1>pvpmod
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PVPMOD             - evaluate parameter/value pairs</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function pvpmod(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> PVPMOD             - evaluate parameter/value pairs
+ pvpmod(x), where x is a cell array with an even number of cells, assigns
+ the value x(i+1) to the parameter defined by the string x(i) in the
+ calling workspace. This is useful to evaluate  &lt;varargin&gt; contents in an
+ mfile, e.g. to change default settings  of any variable initialized
+ before pvpmod(x) is called. 
+ Alternatively, &lt;x&gt; can be a structure where the fieldnames will become
+ variable names and the field contents will become the contents of the new
+ variables.
+
+ Example
+ assume x is a cell array of parameter/value pairs such as used to modify
+ plots. Then
+ x = {'fontname', 'helvetica', 'fontsize', 8};
+ pvpmod(varargin) 
+ will create variables with names created from x{1:2:end} with the
+ corresponding values x{2:2:end} in the calling workspace 
+
+ (c) U. Egert 1998</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Calculation/util_calc_avalanche_branching_parameter.html" class="code" title="function [ bp bp_std bp_sem bp_1 bp_1_std bp_1_sem ] = util_calc_avalanche_branching_parameter( ava_length, ava_vector, varargin )">util_calc_avalanche_branching_parameter</a>	UTIL_CALC_AVALANCHE_BRANCHING_PARAMETER Calculate the branching parameter</li><li><a href="../../../Calculation/util_calc_burstiness_index.html" class="code" title="function [ bi ] = util_calc_burstiness_index( varargin )">util_calc_burstiness_index</a>	UTIL_CALC_BURSTINESS_INDEX 工具函数：计算给定数据的BI值</li><li><a href="../../../Calculation/util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li><li><a href="../../../Calculation/util_calc_isi.html" class="code" title="function [ isi, seq, ts, mean_isi, std_isi ] = util_calc_isi( spif, varargin )">util_calc_isi</a>	UTIL_CALC_ISI Get inter-spike intervals between selected channels and time</li><li><a href="../../../Calculation/util_calc_network_vector.html" class="code" title="function [ network_vectors seq ] = util_calc_network_vector( spif, excluded_ch, varargin )">util_calc_network_vector</a>	UTIL_CALC_NETWORK_VECTOR Get the network activity vectors</li><li><a href="../../../Calculation/util_calc_pcc_from_rate.html" class="code" title="function [ pcc ] = util_calc_pcc_from_rate( spif, varargin )">util_calc_pcc_from_rate</a>	UTIL_CALC_PCC_FROM_RATE Get Pearson Corr. between electrodes v.s. Time</li><li><a href="../../../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../../../Calculation/util_calc_raw_spont_cch.html" class="code" title="function [ lags cch peak] = util_calc_raw_spont_cch( varargin )">util_calc_raw_spont_cch</a>	UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</li><li><a href="../../../Calculation/util_calc_sd_from_rate.html" class="code" title="function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin )">util_calc_sd_from_rate</a>	UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike</li><li><a href="../../../Calculation/util_calc_similarity_matrix.html" class="code" title="function [ matrix ] = util_calc_similarity_matrix( network_vectors, varargin )">util_calc_similarity_matrix</a>	UTIL_CALC_SIMILARITY_MATRIX Get the similarity matrix from network firing</li><li><a href="../../../Calculation/util_calc_synchrony.html" class="code" title="function [ Q q Qn qn ] = util_calc_synchrony( spif, chlist, varargin )">util_calc_synchrony</a>	UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels</li><li><a href="../../../Calculation/util_detect_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin )">util_detect_avalanche</a>	UTIL_DETECT_AVALANCHE Detecting the neural avalanches</li><li><a href="../../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li><li><a href="../../../Calculation/util_extract_cluster.html" class="code" title="function [ subscript ] = util_extract_cluster( data, clu_result, threshold, varargin )">util_extract_cluster</a>	UTIL_EXTRACT_CLUSTER Get the specified cluster from the whole set.</li><li><a href="../../../Calculation/util_get_assortativity.html" class="code" title="function A = util_get_assortativity( network_connection_matrix, varargin )">util_get_assortativity</a>	UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network</li><li><a href="../../../Calculation/util_get_betweenness.html" class="code" title="function bc = util_get_betweenness( network_connection_matrix, varargin )">util_get_betweenness</a>	UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network</li><li><a href="../../../Calculation/util_get_fractal_DFA.html" class="code" title="function [DFA_mean DFA_std DFA_sem DFA_list] = util_get_fractal_DFA( spif, gnds, varargin )">util_get_fractal_DFA</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li><li><a href="../../../Calculation/util_get_fractal_dim.html" class="code" title="function [DF_mean DF_std DF_sem DF_list] = util_get_fractal_dim( spif, gnds, varargin )">util_get_fractal_dim</a>	UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.</li><li><a href="../../../Calculation/util_get_fractal_hurst.html" class="code" title="function [H_mean H_std H_sem H_list] = util_get_fractal_hurst( spif, gnds, varargin )">util_get_fractal_hurst</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li><li><a href="../../../Common/util_disp_hyperlink.html" class="code" title="function [] = util_disp_hyperlink( text, varargin )">util_disp_hyperlink</a>	UTIL_DISP_HYPERLINK 工具函数：在命令窗口显示蓝色的超链接文字</li><li><a href="../../../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../../../Common/util_get_dirfiles.html" class="code" title="function [ filelist ] = util_get_dirfiles( varargin )">util_get_dirfiles</a>	UTIL_GET_DIRFILES Get the files in the given dir.</li><li><a href="../../../Common/util_perform_op_in_directory.html" class="code" title="function [ varargout ] = util_perform_op_in_directory( given_dir, op, result_dir, filematch, var_to_save, varargin )">util_perform_op_in_directory</a>	UTIL_PERFORM_OP_IN_DIRECTORY Perform the same operation on each file in</li><li><a href="../../../Common/util_remove_colrow_based_on_mean.html" class="code" title="function [result] = util_remove_colrow_based_on_mean(matrix, threshold, varargin)">util_remove_colrow_based_on_mean</a>	UTIL_REMOVE_COLROW_BASED_ON_MEAN Remove the column / row of the matrix by</li><li><a href="../../../Common/util_trim_spif.html" class="code" title="function spif = util_trim_spif( spif, starttime, stoptime, varargin )">util_trim_spif</a>	UTIL_TRIM_SPIF Trim Spif into a small segment.</li><li><a href="../../../IO/util_connect_spif_spiketimes.html" class="code" title="function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin )">util_connect_spif_spiketimes</a>	UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个</li><li><a href="../../../IO/util_get_nsfile_info.html" class="code" title="function [ info ] = util_get_nsfile_info( handle, property_name, varargin )">util_get_nsfile_info</a>	UTIL_GET_NSFILE_INFO Get file info from a opened handle</li><li><a href="../../../IO/util_load_raw.html" class="code" title="function [ rawif ] = util_load_raw( varargin )">util_load_raw</a>	UTIL_LOAD_RAW Get the raw data stream from a data file.</li><li><a href="../../../IO/util_load_spike_from_mcdraw.html" class="code" title="function [ D spif raw] = util_load_spike_from_mcdraw ( varargin )">util_load_spike_from_mcdraw</a>	UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike</li><li><a href="../../../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="../../../IO/util_load_spike_trigger_mcdstream_from_multiple_files.html" class="code" title="function [ spif triggerif ] = util_load_spike_trigger_mcdstream_from_multiple_files( varargin )">util_load_spike_trigger_mcdstream_from_multiple_files</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM_WHOLE_LENGTH_FROM_MULTIPLE_FILES 工具函数：从多个MCD文件中获取SPIF/TRIGGERIF信息</li><li><a href="../../../IO/util_print_bins_with_files.html" class="code" title="function bin_table = util_print_bins_with_files( varargin )">util_print_bins_with_files</a>	UTIL_PRINT_BINS_WITH_FILES Print out how many bins in each data file.</li><li><a href="../../../IO/util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>	UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time</li><li><a href="../../../Model/util_generate_neurons.html" class="code" title="function [csim_electrodes csim_neurons csim_synapses] = util_generate_neurons( varargin )">util_generate_neurons</a>	UNTITLED Summary of this function goes here</li><li><a href="../../../Model/util_setup_model.html" class="code" title="function [ connections neuron_e_i_type neuron_self_firing_type ] = util_setup_model( varargin )">util_setup_model</a>	UTIL_SETUP_MODEL Init the network model.</li><li><a href="../../../Plot/util_plot_8s_into_dotsgraph.html" class="code" title="function [ the_frame ] = util_plot_8s_into_dotsgraph( varargin )">util_plot_8s_into_dotsgraph</a>	UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图</li><li><a href="../../../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>	UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</li><li><a href="../../../Plot/util_plot_channel_of_state.html" class="code" title="function [ ch_state ] = util_plot_channel_of_state( network_vectors, seq, clu_sub, threshold, method, varargin )">util_plot_channel_of_state</a>	UTIL_PLOT_CHANNEL_OF_STATE Visualize the network states by showing</li><li><a href="../../../Plot/util_plot_scatter_with_lines.html" class="code" title="function [] = util_plot_scatter_with_lines( x, y, varargin )">util_plot_scatter_with_lines</a>	UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.</li><li><a href="../../../Plot/util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>	UTIL_PLOT_SPSA Generate the SPSA (Rate) graph</li><li><a href="../../../Plot/util_plot_state_trans.html" class="code" title="function [ elec_cluster ] = util_plot_state_trans( network_vector, seq, clu_sub, elec, varargin )">util_plot_state_trans</a>	UTIL_PLOT_STATE_TRANS Plot the state transitions of the selected</li><li><a href="../../../Plot/util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li><li><a href="../../../Stimulation/util_sti_all_responses.html" class="code" title="function [ elecs responses_timing responses_amplitude ] = util_sti_all_responses( varargin )">util_sti_all_responses</a>	UTIL_STI_ALL_RESPONSES 工具函数：提取刺激后指定时间窗内所有电极的响应</li><li><a href="../../../Stimulation/util_sti_calc_test_response_count_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_response_count_multiple_arraywide( varargin )">util_sti_calc_test_response_count_multiple_arraywide</a>	UTIL_STI_CALC_RESPONSE_COUNT_MULTIPLE_ARRAYWIDE 计算每个电极在刺激期间的响应Spike数目</li><li><a href="../../../Stimulation/util_sti_calc_test_score_arraywide.html" class="code" title="function [ score_vector ] = util_sti_calc_test_score_arraywide( varargin )">util_sti_calc_test_score_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩</li><li><a href="../../../Stimulation/util_sti_calc_test_score_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_score_multiple_arraywide( varargin )">util_sti_calc_test_score_multiple_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE 计算每个电极在刺激期间的Score</li><li><a href="../../../Stimulation/util_sti_responses_elictedby_one_elec.html" class="code" title="function [ result num ] = util_sti_responses_elictedby_one_elec( varargin )">util_sti_responses_elictedby_one_elec</a>	UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pvpmod(x)</a>
+0002 <span class="comment">% PVPMOD             - evaluate parameter/value pairs</span>
+0003 <span class="comment">% pvpmod(x), where x is a cell array with an even number of cells, assigns</span>
+0004 <span class="comment">% the value x(i+1) to the parameter defined by the string x(i) in the</span>
+0005 <span class="comment">% calling workspace. This is useful to evaluate  &lt;varargin&gt; contents in an</span>
+0006 <span class="comment">% mfile, e.g. to change default settings  of any variable initialized</span>
+0007 <span class="comment">% before pvpmod(x) is called.</span>
+0008 <span class="comment">% Alternatively, &lt;x&gt; can be a structure where the fieldnames will become</span>
+0009 <span class="comment">% variable names and the field contents will become the contents of the new</span>
+0010 <span class="comment">% variables.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Example</span>
+0013 <span class="comment">% assume x is a cell array of parameter/value pairs such as used to modify</span>
+0014 <span class="comment">% plots. Then</span>
+0015 <span class="comment">% x = {'fontname', 'helvetica', 'fontsize', 8};</span>
+0016 <span class="comment">% pvpmod(varargin)</span>
+0017 <span class="comment">% will create variables with names created from x{1:2:end} with the</span>
+0018 <span class="comment">% corresponding values x{2:2:end} in the calling workspace</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% (c) U. Egert 1998</span>
+0021 
+0022 <span class="comment">%############################################</span>
+0023 <span class="comment">% this loop is assigns the parameter/value pairs in x to the calling</span>
+0024 <span class="comment">% workspace.</span>
+0025 
+0026 <span class="keyword">if</span> ~isempty(x)
+0027     <span class="keyword">if</span> length(x)==1 &amp; isstruct(x{1})
+0028         x=x{1};
+0029         allfields=<a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(x);
+0030         <span class="keyword">for</span> k = 1:length(allfields)
+0031             assignin(<span class="string">'caller'</span>, allfields{k}, x.allfields{k});
+0032         <span class="keyword">end</span>;
+0033     <span class="keyword">elseif</span> mod(length(x),2)==0
+0034         <span class="keyword">for</span> k = 1:2:size(x,2)
+0035             assignin(<span class="string">'caller'</span>, x{k}, x{k+1});
+0036         <span class="keyword">end</span>;
+0037     <span class="keyword">else</span>
+0038         error(<span class="string">'pvpmod needs either a structure or a cellarray with parameter/value pairs'</span>)
+0039     <span class="keyword">end</span>;
+0040 <span class="keyword">end</span>;
+0041 <span class="comment">%############################################</span>
+0042</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

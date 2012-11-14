@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_normcdf</title>
+  <meta name="keywords" content="test_normcdf">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_normcdf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/normcdf.html" class="code" title="function p = normcdf(x,m,s)">normcdf</a>	NORMCDF   Normal Cumulative Density Function.</li><li><a href="../../../Otherbox/lightspeed/normcdfln.html" class="code" title="function e = normcdfln(x)">normcdfln</a>	NORMCDFLN   log of normal cumulative density function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 x = linspace(-20,2,100);
+0002 w = exp(-0.5*x.^2 -0.5*log(2*pi));
+0003 f = exp(-<a href="../../../Otherbox/lightspeed/normcdfln.html" class="code" title="function e = normcdfln(x)">normcdfln</a>(x));
+0004 g = 1./<a href="../../../Otherbox/lightspeed/normcdf.html" class="code" title="function p = normcdf(x,m,s)">normcdf</a>(x);
+0005 <span class="comment">%g = exp((log(1+exp(0.88+x))./1.5).^2);</span>
+0006 <span class="comment">%g = exp(0.5*log(2*pi) +0.5*x.^2 + log(x));</span>
+0007 plot(x, f.*w, x, g.*w)
+0008 legend(<span class="string">'exp(-normcdfln)'</span>,<span class="string">'1/normcdf'</span>);
+0009 
+0010 <span class="keyword">if</span> 0
+0011   true = -27.3843074988;
+0012   [abs(log(<a href="../../../Otherbox/lightspeed/normcdf.html" class="code" title="function p = normcdf(x,m,s)">normcdf</a>(-7))-true) abs(<a href="../../../Otherbox/lightspeed/normcdfln.html" class="code" title="function e = normcdfln(x)">normcdfln</a>(-7)-true)]
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> 0
+0016   <span class="comment">%matnet</span>
+0017   <span class="comment">%imports('c:/Documents and Settings/minka/Depots/Infer/Core/bin/Debug/Core.dll')</span>
+0018   h = g;
+0019   <span class="keyword">for</span> i = 1:length(x)
+0020     h(i) = 1./cl.MMath.NormalCdf(x(i));
+0021   <span class="keyword">end</span>
+0022   <span class="comment">%h = 0.5*(-x + sqrt(x.*x + 8/pi));</span>
+0023   plot(x, f.*w, x, g.*w, x, h.*w)
+0024   legend(<span class="string">'exp(-normcdfln)'</span>,<span class="string">'1/normcdf'</span>, <span class="string">'1/normcdf2'</span>);
+0025   
+0026   plot(x, f.*w - h.*w)
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% evalf(subs(t=1e-4,subs(x=2*(1-t)/t,erfc(x)*exp(x*x))),100);</span>
+0030 
+0031 <span class="keyword">if</span> 0
+0032 <span class="comment">% test approximations</span>
+0033 a = exp(sqrt(2/pi));
+0034 b = 1/log(2/pi*a);
+0035 g = log(a-1 + exp(x.*exp(1./(x.^2 + b))));
+0036 g = log(a-1 + exp(x));
+0037 plot(x, f, x, g)
+0038 plot(x, log(exp(f)+1-a)./x)
+0039 plot(x, 1./log(log(exp(f)+1-a)./x))
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">% read `/u/tpminka/src/maple/gauss_cdf`;</span>
+0043 <span class="comment">% f := 1/sqrt(2*Pi)*exp(-1/2*x^2)/gauss_cdf(-x);</span>
+0044 <span class="comment">% g := exp(sqrt(2/Pi))-1+exp(x);</span>
+0045 <span class="comment">% plot(f, x=0..50);</span>
+0046 <span class="comment">% h := log(exp(f*sqrt(Pi/2)-1)+1);</span>
+0047 <span class="comment">% h := log(exp(f - sqrt(2/Pi))+1);</span>
+0048 <span class="comment">% h := 1/log(log(exp(f) +1-exp(sqrt(2/Pi)))/x);</span>
+0049 <span class="comment">% asympt(h,x);</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

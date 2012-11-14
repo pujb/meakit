@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ndsum</title>
+  <meta name="keywords" content="ndsum">
+  <meta name="description" content="NDSUM    Multi-dimensional summation.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>ndsum
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>NDSUM    Multi-dimensional summation.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = ndsum(x,dim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> NDSUM    Multi-dimensional summation.
+ NDSUM(X,DIM) sums out the dimensions in DIM, and squeezes the result.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="addflops.html" class="code" title="function f = addflops(fl)">addflops</a>	ADDFLOPS   Increment the global flopcount variable.</li><li><a href="mysqueeze.html" class="code" title="function x = mysqueeze(x)">mysqueeze</a>	Like squeeze(x), but row vectors become columns.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_ndsum.html" class="code" title="">test_ndsum</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function x = ndsum(x,dim)</a>
+0002 <span class="comment">% NDSUM    Multi-dimensional summation.</span>
+0003 <span class="comment">% NDSUM(X,DIM) sums out the dimensions in DIM, and squeezes the result.</span>
+0004 
+0005 <span class="comment">% Written by Tom Minka</span>
+0006 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0007 
+0008 <span class="keyword">if</span> 0
+0009   <span class="comment">% permutation takes too long</span>
+0010   x = permute_to_front(x,dim);
+0011   sz = size(x);
+0012   msz = sz(1:length(dim));
+0013   ksz = sz(length(dim)+1:end);
+0014   x = reshape(x,[prod(msz) ksz]);
+0015   x = sum(x);
+0016   x = <a href="mysqueeze.html" class="code" title="function x = mysqueeze(x)">mysqueeze</a>(x);
+0017 <span class="keyword">else</span>
+0018   sz = size(x);
+0019   <span class="keyword">for</span> i=1:length(dim)
+0020     x = sum(x, dim(i));
+0021   <span class="keyword">end</span>
+0022   <a href="addflops.html" class="code" title="function f = addflops(fl)">addflops</a>(prod(sz)-numel(x));
+0023   <span class="comment">%x = mysqueeze(x);</span>
+0024   sz(dim) = [];
+0025   x = reshape(x,[sz 1 1]);
+0026 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

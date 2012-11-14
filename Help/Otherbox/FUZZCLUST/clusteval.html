@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of clusteval</title>
+  <meta name="keywords" content="clusteval">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>clusteval
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function eval = clusteval(new,result,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/motorcycle/FCMcall.html" class="code" title="">FCMcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/motorcycle/GGcall.html" class="code" title="">GGcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/motorcycle/GKcall.html" class="code" title="">GKcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/FCMcall.html" class="code" title="">FCMcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/GGcall.html" class="code" title="">GGcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/GKcall.html" class="code" title="">GKcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clustevalexample/evalexample.html" class="code" title="">evalexample</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/comparing/FCMcall.html" class="code" title="">FCMcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/comparing/GGcall.html" class="code" title="">GGcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/comparing/GKcall.html" class="code" title="">GKcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/optnumber/optnumber.html" class="code" title="">optnumber</a>	calling function to search the optimal number of clusters</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function eval = clusteval(new,result,param)</a>
+0002 
+0003 v = result.cluster.v;
+0004 c = size(result.cluster.v,1);<span class="comment">%c = param.c;</span>
+0005 <span class="keyword">if</span> exist(<span class="string">'param.m'</span>)==1, m = param.m;<span class="keyword">else</span> m = 2;<span class="keyword">end</span>;
+0006  
+0007 X=new.X;
+0008 [N,n] = size(X);
+0009 X1 = ones(N,1);
+0010 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0011 <span class="keyword">if</span> <a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(result.cluster,<span class="string">'M'</span>)<span class="comment">%GK</span>
+0012     M = result.cluster.M;
+0013     <span class="keyword">for</span> j = 1 : c,
+0014         xv = X - X1*v(j,:);
+0015         d(:,j) = sum((xv*M(:,:,j).*xv),2);
+0016     <span class="keyword">end</span>
+0017     distout=sqrt(d);
+0018     <span class="comment">%Update the partition matrix</span>
+0019     d = (d+1e-10).^(-1/(m-1));
+0020     f0 = (d ./ (sum(d,2)*ones(1,c)));
+0021 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0022 <span class="keyword">elseif</span> <a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(result.cluster,<span class="string">'P'</span>)<span class="comment">%GG</span>
+0023     A = result.cluster.P;
+0024     f = result.data.f; 
+0025     fm = f.^m;
+0026     <span class="keyword">for</span> j = 1 : c,                        
+0027         xv = X - X1*v(j,:);
+0028         Pi(:,:,j)=1/N*sum(fm(:,j));
+0029         A = result.cluster.P(:,:,j);
+0030         d(:,j) = 1/(det(pinv(A))^(1/2))*1/Pi(:,:,j)*exp(1/2*sum((xv*pinv(A).*xv),2));
+0031     <span class="keyword">end</span>
+0032     distout=sqrt(d);  
+0033     <span class="comment">%Update the partition matrix</span>
+0034     <span class="keyword">if</span> m&gt;1
+0035           d = (d+1e-10).^(-1/(m-1));
+0036       <span class="keyword">else</span>
+0037           d = (d+1e-10).^(-1);
+0038       <span class="keyword">end</span>    
+0039     f0 = (d ./ (sum(d,2)*ones(1,c)));
+0040 
+0041 <span class="keyword">else</span>        <span class="comment">%FCM</span>
+0042      <span class="keyword">for</span> j = 1 : c,
+0043       xv = X - X1*v(j,:);
+0044       d(:,j) = sum((xv*eye(n).*xv),2);
+0045     <span class="keyword">end</span>;
+0046     distout=sqrt(d);
+0047     d = (d+1e-10).^(-1/(m-1));
+0048     f0 = (d ./ (sum(d,2)*ones(1,c)));
+0049 <span class="keyword">end</span>
+0050 <span class="comment">%results</span>
+0051     eval.d = distout;
+0052     eval.f = f0;
+0053 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0054 <span class="comment">%Visualization</span>
+0055 
+0056 <span class="keyword">if</span> n == 2   <span class="comment">%in 2dimensional case draw a contour map</span>
+0057     lower1=min(X(:,1));upper1=max(X(:,1));scale1=(upper1-lower1)/200;
+0058     lower2=min(X(:,2));upper2=max(X(:,2));scale2=(upper2-lower2)/200;
+0059     [x,y] = meshgrid(lower1:scale1:upper1, lower2:scale2:upper2);
+0060     pair = [x(:) y(:)];
+0061     [pair1,pair2] = size(pair);
+0062     X1 = ones(pair1,1);
+0063     d=zeros(pair1,c);  <span class="comment">%resize the distance matrix</span>
+0064     
+0065     
+0066     <span class="keyword">if</span> <a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(result.cluster,<span class="string">'M'</span>)<span class="comment">%GK</span>
+0067         <span class="keyword">for</span> j = 1 : c,
+0068             xv = pair - X1*v(j,:);
+0069             d(:,j) = sum((xv*M(:,:,j).*xv),2);
+0070         <span class="keyword">end</span>
+0071         distout=sqrt(d);
+0072         d = (d+1e-10).^(-1/(m-1));
+0073         f0 = (d ./ (sum(d,2)*ones(1,c)));
+0074         
+0075     <span class="keyword">elseif</span> <a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(result.cluster,<span class="string">'P'</span>)<span class="comment">%GG</span>
+0076         <span class="keyword">for</span> j = 1 : c,                        
+0077             xv = pair - X1*v(j,:);
+0078             Pi(:,:,j)=1/N*sum(fm(:,j));
+0079             A = result.cluster.P(:,:,j);
+0080             d(:,j) = 1/(det(pinv(A))^(1/2))*1/Pi(:,:,j)*exp(1/2*sum((xv*pinv(A).*xv),2));
+0081         <span class="keyword">end</span>
+0082         distout=sqrt(d);  
+0083         <span class="keyword">if</span> m&gt;1
+0084             d = (d+1e-10).^(-1/(m-1));
+0085         <span class="keyword">else</span>
+0086             d = (d+1e-10).^(-1);
+0087         <span class="keyword">end</span>    
+0088         f0 = (d ./ (sum(d,2)*ones(1,c)));
+0089     <span class="keyword">else</span>   <span class="comment">%FCM</span>
+0090         <span class="keyword">for</span> i = 1 : c,
+0091             xv = pair - ones(pair1,1)*v(i,:);
+0092             d(:,i)= sum((xv*eye(2).*xv),2);<span class="comment">%</span>
+0093         <span class="keyword">end</span>;
+0094         distout=sqrt(d);
+0095         d = (d+1e-10).^(-1/(m-1));
+0096         f0 = (d ./ (sum(d,2)*ones(1,c)));
+0097     <span class="keyword">end</span>
+0098     f=max(f0')';
+0099     Z= reshape(f,size(x,1),size(x,2));
+0100     contour(x,y,Z);
+0101     drawnow
+0102 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

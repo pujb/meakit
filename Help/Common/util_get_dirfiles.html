@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_dirfiles</title>
+  <meta name="keywords" content="util_get_dirfiles">
+  <meta name="description" content="UTIL_GET_DIRFILES Get the files in the given dir.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_get_dirfiles
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_DIRFILES Get the files in the given dir.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ filelist ] = util_get_dirfiles( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_DIRFILES Get the files in the given dir.
+   Input:
+           given_dir:  The given directory, if not exist, the current
+                       directory is used. [default: pwd]
+           wildchar:   The file extensions.
+                       [default: '*.*']
+           sorttype:   Sorting method.
+                       'byDateAsc':    By date, ascending. [default]
+                       'byDateDes':    By date, descending.
+                       'byRecAsc':     By recording start, ascending.
+                       'byRecDes':     By recording start, ascending.
+                       'no':           No sorting.
+           genfull:    If true, return full path. [default]
+   Output:
+           filelist:   File listing.
+
+   Example:
+           [ filelist ] = util_get_dirfiles( 'sorttype', 'byDateDes',
+           'genfull', false )
+
+   Created on Aug/17/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../IO/util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>	UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_perform_op_in_directory.html" class="code" title="function [ varargout ] = util_perform_op_in_directory( given_dir, op, result_dir, filematch, var_to_save, varargin )">util_perform_op_in_directory</a>	UTIL_PERFORM_OP_IN_DIRECTORY Perform the same operation on each file in</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fullpaths = make_full_path(given_dir, filename_cell)</a></li><li><a href="#_sub2" class="code">function relpaths = make_rel_path(filename_cell)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ filelist ] = util_get_dirfiles( varargin )</a>
+0002 <span class="comment">%UTIL_GET_DIRFILES Get the files in the given dir.</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           given_dir:  The given directory, if not exist, the current</span>
+0005 <span class="comment">%                       directory is used. [default: pwd]</span>
+0006 <span class="comment">%           wildchar:   The file extensions.</span>
+0007 <span class="comment">%                       [default: '*.*']</span>
+0008 <span class="comment">%           sorttype:   Sorting method.</span>
+0009 <span class="comment">%                       'byDateAsc':    By date, ascending. [default]</span>
+0010 <span class="comment">%                       'byDateDes':    By date, descending.</span>
+0011 <span class="comment">%                       'byRecAsc':     By recording start, ascending.</span>
+0012 <span class="comment">%                       'byRecDes':     By recording start, ascending.</span>
+0013 <span class="comment">%                       'no':           No sorting.</span>
+0014 <span class="comment">%           genfull:    If true, return full path. [default]</span>
+0015 <span class="comment">%   Output:</span>
+0016 <span class="comment">%           filelist:   File listing.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   Example:</span>
+0019 <span class="comment">%           [ filelist ] = util_get_dirfiles( 'sorttype', 'byDateDes',</span>
+0020 <span class="comment">%           'genfull', false )</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Created on Aug/17/2010 By Pu Jiangbo</span>
+0023 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0024 
+0025 <span class="comment">% Analyze parameter</span>
+0026 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0027 
+0028 <span class="keyword">if</span> ~exist(<span class="string">'given_dir'</span>, <span class="string">'var'</span>)
+0029     given_dir = pwd;
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">if</span> ~exist(<span class="string">'wildchar'</span>, <span class="string">'var'</span>)
+0033     wildchar = <span class="string">'*.*'</span>;
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="keyword">if</span> ~exist(<span class="string">'sorttype'</span>, <span class="string">'var'</span>)
+0037     sorttype = <span class="string">'byDateAsc'</span>;
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> ~exist(<span class="string">'genfull'</span>, <span class="string">'var'</span>)
+0041     genfull = true;
+0042 <span class="keyword">end</span>
+0043 
+0044 
+0045 <span class="comment">% CD to the given_dir</span>
+0046 pwd_push = pwd;
+0047 cd(given_dir);
+0048 
+0049 <span class="comment">% dir (excluding those files that dir cannot query)</span>
+0050 listings = dir(wildchar);
+0051 listings = listings(~cellfun(@isempty,{listings(:).date}));
+0052 
+0053 <span class="comment">% Remove directories if any</span>
+0054 listings([listings.isdir] == 1) = [];
+0055 
+0056 <span class="keyword">if</span> isempty(listings)
+0057     filelist = [];
+0058     cd(pwd_push);
+0059     <span class="keyword">return</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="keyword">if</span> length(listings) == 1 || strcmpi(sorttype, <span class="string">'no'</span>)
+0063     filelist = {listings(:).name}';
+0064     <span class="comment">% Full path</span>
+0065     <span class="keyword">if</span> genfull
+0066         filelist = <a href="#_sub1" class="code" title="subfunction fullpaths = make_full_path(given_dir, filename_cell)">make_full_path</a>(given_dir, filelist);
+0067     <span class="keyword">end</span>
+0068     cd(pwd_push);
+0069     <span class="keyword">return</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% Sort</span>
+0073 <span class="keyword">if</span> strcmpi(sorttype, <span class="string">'byDateAsc'</span>)
+0074     [~, order] = sort([listings(:).datenum]);
+0075     filelist = {listings(order).name}';
+0076     <span class="comment">% Full path</span>
+0077     <span class="keyword">if</span> genfull
+0078         filelist = <a href="#_sub1" class="code" title="subfunction fullpaths = make_full_path(given_dir, filename_cell)">make_full_path</a>(given_dir, filelist);
+0079     <span class="keyword">end</span>
+0080 <span class="keyword">elseif</span> strcmpi(sorttype, <span class="string">'byDateDes'</span>)
+0081     [~, order] = sort([listings(:).datenum], <span class="string">'descend'</span>);
+0082     filelist = {listings(order).name}';
+0083     <span class="comment">% Full path</span>
+0084     <span class="keyword">if</span> genfull
+0085         filelist = <a href="#_sub1" class="code" title="subfunction fullpaths = make_full_path(given_dir, filename_cell)">make_full_path</a>(given_dir, filelist);
+0086     <span class="keyword">end</span>
+0087 <span class="keyword">elseif</span> strcmpi(sorttype, <span class="string">'byRecAsc'</span>)
+0088     filelist = <a href="#_sub1" class="code" title="subfunction fullpaths = make_full_path(given_dir, filename_cell)">make_full_path</a>(given_dir, {listings.name});
+0089     [filelist, ~, ~] = <a href="../IO/util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>( filelist, length(listings), <span class="string">'method'</span>, <span class="string">'RecAsc'</span> );
+0090     <span class="comment">% Full path</span>
+0091     <span class="keyword">if</span> ~genfull
+0092         filelist = <a href="#_sub2" class="code" title="subfunction relpaths = make_rel_path(filename_cell)">make_rel_path</a>(filelist);
+0093     <span class="keyword">end</span>
+0094 <span class="keyword">elseif</span> strcmpi(sorttype, <span class="string">'byRecDes'</span>)
+0095     filelist = <a href="#_sub1" class="code" title="subfunction fullpaths = make_full_path(given_dir, filename_cell)">make_full_path</a>(given_dir, {listings.name});
+0096     [filelist, ~, ~] = <a href="../IO/util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>( filelist, length(listings), <span class="string">'method'</span>, <span class="string">'RecDes'</span> );
+0097     <span class="comment">% Full path</span>
+0098     <span class="keyword">if</span> ~genfull
+0099         filelist = <a href="#_sub2" class="code" title="subfunction relpaths = make_rel_path(filename_cell)">make_rel_path</a>(filelist);
+0100     <span class="keyword">end</span>
+0101 <span class="keyword">else</span>
+0102     cd(pwd_push);
+0103     error(<span class="string">'Not supported yet.'</span>);
+0104 <span class="keyword">end</span>
+0105 
+0106 cd(pwd_push);
+0107 
+0108 <span class="keyword">end</span>
+0109 
+0110 
+0111 <a name="_sub1" href="#_subfunctions" class="code">function fullpaths = make_full_path(given_dir, filename_cell)</a>
+0112 <span class="comment">%MAKE_FULL_PATH Generate full path from the cell array.</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">%   Created on Aug/17/2010 By Pu Jiangbo</span>
+0115 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0116 
+0117 fullpaths = cell(length(filename_cell), 1);
+0118 
+0119 <span class="keyword">for</span> i = 1:length(filename_cell)
+0120     fullpaths{i} = fullfile(given_dir, filename_cell{i});
+0121 <span class="keyword">end</span>
+0122 
+0123 <span class="keyword">end</span>
+0124 
+0125 <a name="_sub2" href="#_subfunctions" class="code">function relpaths = make_rel_path(filename_cell)</a>
+0126 <span class="comment">%MAKE_REL_PATH Get the filename from full path</span>
+0127 <span class="comment">%</span>
+0128 <span class="comment">%   Created on Aug/17/2010 By Pu Jiangbo</span>
+0129 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0130 
+0131 relpaths = cell(length(filename_cell), 1);
+0132 
+0133 <span class="keyword">for</span> i = 1:length(filename_cell)
+0134     [~, name, ext] = fileparts(filename_cell{i});
+0135     relpaths{i} = [name ext];
+0136 <span class="keyword">end</span>
+0137 
+0138 <span class="keyword">end</span>
+0139</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

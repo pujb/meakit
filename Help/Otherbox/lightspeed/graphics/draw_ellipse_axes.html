@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of draw_ellipse_axes</title>
+  <meta name="keywords" content="draw_ellipse_axes">
+  <meta name="description" content="DRAW_ELLIPSE_AXES(x, c, linespec)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>draw_ellipse_axes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>DRAW_ELLIPSE_AXES(x, c, linespec)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function h = draw_ellipse_axes(x, c, linespec) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> DRAW_ELLIPSE_AXES(x, c, linespec)
+   Draws the major and minor axes of ellipses.
+   Ellipses are centered at x with covariance matrix c.
+   x is a matrix of columns.  c is a positive definite matrix.
+   linespec is optional.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>	SET_LINESPEC    Set the color and line style of a graphics object.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_draw.html" class="code" title="">test_draw</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = draw_ellipse_axes(x, c, linespec)</a>
+0002 <span class="comment">% DRAW_ELLIPSE_AXES(x, c, linespec)</span>
+0003 <span class="comment">%   Draws the major and minor axes of ellipses.</span>
+0004 <span class="comment">%   Ellipses are centered at x with covariance matrix c.</span>
+0005 <span class="comment">%   x is a matrix of columns.  c is a positive definite matrix.</span>
+0006 <span class="comment">%   linespec is optional.</span>
+0007 
+0008 [v,e] = eig(c);
+0009 v = v*sqrt(e);
+0010 
+0011 h = [];
+0012 <span class="keyword">for</span> j = 1:<a href="../../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>(v)
+0013   x1 = repmat(x(1,:),2,1) + repmat([-1;1]*v(1,j),1,<a href="../../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>(x));
+0014   x2 = repmat(x(2,:),2,1) + repmat([-1;1]*v(2,j),1,<a href="../../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>(x));
+0015   h = [h line(x1,x2)];
+0016 <span class="keyword">end</span>
+0017 <span class="keyword">if</span> nargin &gt; 2
+0018   <a href="set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>(h,linespec);
+0019 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

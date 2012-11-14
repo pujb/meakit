@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getpos</title>
+  <meta name="keywords" content="getpos">
+  <meta name="description" content="getpos - return the current position of the datastrm object (datastrm method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>getpos
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>getpos - return the current position of the datastrm object (datastrm method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function a = getpos(d,posType); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> getpos - return the current position of the datastrm object (datastrm method)
+ a = getpos(d,posType) takes an datastrm object and the position type ('time','sweep','segment')
+ return value is the current position of the datastrm object</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Plot/util_plot_8s_into_arraymap.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap( data, closed )">util_plot_8s_into_arraymap</a>	UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</li><li><a href="../../../../Plot/util_plot_8s_into_arraymap_bar.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap_bar( data, closed, haveBaseline)">util_plot_8s_into_arraymap_bar</a>	UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a = getpos(d,posType);</a>
+0002 <span class="comment">% getpos - return the current position of the datastrm object (datastrm method)</span>
+0003 <span class="comment">% a = getpos(d,posType) takes an datastrm object and the position type ('time','sweep','segment')</span>
+0004 <span class="comment">% return value is the current position of the datastrm object</span>
+0005 
+0006 <span class="keyword">if</span> (strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0007     error([mfilename <span class="string">' not yet adapted for OLE-Object'</span>]);
+0008 <span class="keyword">end</span>;
+0009 
+0010 <span class="keyword">if</span> (nargin == 1)
+0011   posType = <span class="string">'sweep'</span>;
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="keyword">if</span> strcmp(posType,<span class="string">'sweep'</span>) | strcmp(posType,<span class="string">'segment'</span>)
+0015   a = find(d.sweepStartPointer == ftell(d.fid));
+0016 <span class="keyword">else</span> <span class="comment">% posType == 'time'</span>
+0017   a = d.sweepStartTime(find(d.sweepStartPointer == ftell(d.fid)));
+0018 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of glob</title>
+  <meta name="keywords" content="glob">
+  <meta name="description" content="GLOB   Filename expansion via wildcards.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>glob
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GLOB   Filename expansion via wildcards.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [names,isdirs] = glob(pattern,prefix) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">GLOB   Filename expansion via wildcards.
+ GLOB(PATTERN) returns a cell array of file/directory names which match the 
+ PATTERN.  
+ [NAMES,ISDIRS] = GLOB(PATTERN) also returns a logical vector indicating 
+ which are directories.
+
+ Two types of wildcards are supported:
+ * matches zero or more characters, besides /
+ ** matches zero or more characters, including /, ending with a /
+ *** is interpreted as ** followed by *, which means it matches zero or
+ more characters, including /
+
+ For example, 'a*b' matches 'ab','acb','acdb', but not 'a/b'.
+ 'a**b' matches 'ab','a/b','ac/b','ac/d/b', but not 'acb' or 'a/cb'.
+ 'a***b' matches all of the above plus 'a/cb','ac/d/cb',etc.
+
+ 'a//b' is not considered a valid filename, so 'a/*/b' will not return
+ 'a//b' or 'a/b'.
+
+ Examples:
+   % if 'work' is a subdirectory, this returns only 'work', not its contents:
+   glob('work')
+   % returns 'work/fun.m' (not 'fun.m'):
+   glob('work/fun.m')
+   % all m-files in 'work', prefixed with 'work/':
+   glob('work/*.m')
+   % all files named 'fun.m' in 'work' or any subdirectory of 'work':
+   glob('work/**fun.m') 
+   % all m-files in 'work' or any subdirectory of 'work':
+   glob('work/***.m')
+   % all files named 'fun.m' any subdirectory of 'work' (but not 'work'):
+   glob('work/**/fun.m') 
+   % all files named 'fun.m' in any subdirectory of '.':
+   glob('**fun.m') 
+   % all files in all subdirectories:
+   glob('***') 
+
+ See also <a href="globstrings.html" class="code" title="function results = globstrings(patterns, strs);">globstrings</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="glob.html" class="code" title="function [names,isdirs] = glob(pattern,prefix)">glob</a>	GLOB   Filename expansion via wildcards.</li><li><a href="../../Otherbox/m2html/private/strtok.html" class="code" title="function [token, remainder, quotient] = strtok(string, delimiters)">strtok</a>	Modified version of STRTOK to also return the quotient</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="glob.html" class="code" title="function [names,isdirs] = glob(pattern,prefix)">glob</a>	GLOB   Filename expansion via wildcards.</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function files = stripdots(files)</a></li><li><a href="#_sub2" class="code">function c = cellcat(c,c2)</a></li><li><a href="#_sub3" class="code">function tf = iswild(pattern)</a></li><li><a href="#_sub4" class="code">function s = regexp_quote(s)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [names,isdirs] = glob(pattern,prefix)</a>
+0002 <span class="comment">%GLOB   Filename expansion via wildcards.</span>
+0003 <span class="comment">% GLOB(PATTERN) returns a cell array of file/directory names which match the</span>
+0004 <span class="comment">% PATTERN.</span>
+0005 <span class="comment">% [NAMES,ISDIRS] = GLOB(PATTERN) also returns a logical vector indicating</span>
+0006 <span class="comment">% which are directories.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Two types of wildcards are supported:</span>
+0009 <span class="comment">% * matches zero or more characters, besides /</span>
+0010 <span class="comment">% ** matches zero or more characters, including /, ending with a /</span>
+0011 <span class="comment">% *** is interpreted as ** followed by *, which means it matches zero or</span>
+0012 <span class="comment">% more characters, including /</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% For example, 'a*b' matches 'ab','acb','acdb', but not 'a/b'.</span>
+0015 <span class="comment">% 'a**b' matches 'ab','a/b','ac/b','ac/d/b', but not 'acb' or 'a/cb'.</span>
+0016 <span class="comment">% 'a***b' matches all of the above plus 'a/cb','ac/d/cb',etc.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% 'a//b' is not considered a valid filename, so 'a/*/b' will not return</span>
+0019 <span class="comment">% 'a//b' or 'a/b'.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Examples:</span>
+0022 <span class="comment">%   % if 'work' is a subdirectory, this returns only 'work', not its contents:</span>
+0023 <span class="comment">%   glob('work')</span>
+0024 <span class="comment">%   % returns 'work/fun.m' (not 'fun.m'):</span>
+0025 <span class="comment">%   glob('work/fun.m')</span>
+0026 <span class="comment">%   % all m-files in 'work', prefixed with 'work/':</span>
+0027 <span class="comment">%   glob('work/*.m')</span>
+0028 <span class="comment">%   % all files named 'fun.m' in 'work' or any subdirectory of 'work':</span>
+0029 <span class="comment">%   glob('work/**fun.m')</span>
+0030 <span class="comment">%   % all m-files in 'work' or any subdirectory of 'work':</span>
+0031 <span class="comment">%   glob('work/***.m')</span>
+0032 <span class="comment">%   % all files named 'fun.m' any subdirectory of 'work' (but not 'work'):</span>
+0033 <span class="comment">%   glob('work/**/fun.m')</span>
+0034 <span class="comment">%   % all files named 'fun.m' in any subdirectory of '.':</span>
+0035 <span class="comment">%   glob('**fun.m')</span>
+0036 <span class="comment">%   % all files in all subdirectories:</span>
+0037 <span class="comment">%   glob('***')</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% See also globstrings.</span>
+0040 
+0041 <span class="comment">% Written by Tom Minka, 28-Apr-2004 (revised 2007)</span>
+0042 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0043 
+0044 <span class="keyword">if</span> nargin &lt; 2
+0045   prefix = <span class="string">''</span>;
+0046 <span class="keyword">end</span>
+0047 
+0048 names = {};
+0049 isdirs = [];
+0050 <span class="keyword">if</span> isempty(pattern)
+0051   <span class="keyword">return</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="comment">% break the pattern into path components</span>
+0055 pattern = strrep(pattern,<span class="string">'\'</span>,<span class="string">'/'</span>);
+0056 [first,rest] = <a href="../../Otherbox/m2html/private/strtok.html" class="code" title="function [token, remainder, quotient] = strtok(string, delimiters)">strtok</a>(pattern,<span class="string">'/'</span>);
+0057 <span class="comment">% when recursing, remove the leading / from rest</span>
+0058 <span class="keyword">if</span> ~isempty(rest)
+0059   rest = rest(2:end);
+0060 <span class="keyword">end</span>
+0061 <span class="comment">% special case for absolute paths</span>
+0062 <span class="keyword">if</span> pattern(1) == <span class="string">'/'</span>
+0063   prefix  = <span class="string">'/'</span>;
+0064 <span class="keyword">end</span>
+0065 <span class="comment">% absolute path tests:</span>
+0066 <span class="comment">% glob('/*.sys')</span>
+0067 <span class="comment">% glob('/sho/**/*.sln')</span>
+0068 <span class="comment">% glob('/sho***.sln')</span>
+0069 
+0070 i = strfind(first,<span class="string">'**'</span>);
+0071 <span class="keyword">if</span> ~isempty(i)
+0072   <span class="comment">% double-star pattern</span>
+0073   i = i(1); <span class="comment">% process first occurrence</span>
+0074   rest = fullfile(first((i+2):end),rest);
+0075   first = first(1:(i-1));
+0076   new_pattern = [first rest];
+0077   <span class="comment">% if the pattern was 'a**b/c', new_pattern is 'ab/c'</span>
+0078   [names,isdirs] = <a href="glob.html" class="code" title="function [names,isdirs] = glob(pattern,prefix)">glob</a>(new_pattern,prefix);
+0079   first = [first <span class="string">'*'</span>];
+0080   rest = [<span class="string">'**'</span> rest];
+0081   <span class="comment">% if the pattern was 'a**b/c', it is now 'a*/**b/c'</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="comment">% expand the first component</span>
+0085 fullfirst = fullfile(prefix,first);
+0086 <span class="keyword">if</span> ~<a href="#_sub3" class="code" title="subfunction tf = iswild(pattern)">iswild</a>(fullfirst) &amp; isdir(fullfirst)
+0087   first_files = struct(<span class="string">'name'</span>,first,<span class="string">'isdir'</span>,1);
+0088 <span class="keyword">else</span>
+0089   first_files = <a href="#_sub1" class="code" title="subfunction files = stripdots(files)">stripdots</a>(dir(fullfirst));
+0090 <span class="keyword">end</span>
+0091 <span class="comment">% for each match, add it to the results or recurse on the rest of the pattern</span>
+0092 <span class="keyword">for</span> i = 1:length(first_files)
+0093   new_prefix = fullfile(prefix,first_files(i).name);
+0094   <span class="keyword">if</span> isempty(rest)
+0095     names{end+1} = new_prefix;
+0096     isdirs(end+1) = first_files(i).isdir;
+0097   <span class="keyword">elseif</span> first_files(i).isdir
+0098     [new_names, new_isdirs] = <a href="glob.html" class="code" title="function [names,isdirs] = glob(pattern,prefix)">glob</a>(rest,new_prefix);
+0099     names = <a href="#_sub2" class="code" title="subfunction c = cellcat(c,c2)">cellcat</a>(names, new_names);
+0100     isdirs = [isdirs; new_isdirs];
+0101   <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 names = names(:);
+0104 isdirs = isdirs(:);
+0105 
+0106 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0107 
+0108 <a name="_sub1" href="#_subfunctions" class="code">function files = stripdots(files)</a>
+0109 <span class="comment">% omit . and .. from the results of DIR</span>
+0110 
+0111 names = {files.name};
+0112 ok = (~strcmp(names,<span class="string">'.'</span>) &amp; ~strcmp(names,<span class="string">'..'</span>));
+0113 files = files(ok);
+0114 
+0115 <a name="_sub2" href="#_subfunctions" class="code">function c = cellcat(c,c2)</a>
+0116 
+0117 c = {c{:} c2{:}};
+0118 
+0119 <a name="_sub3" href="#_subfunctions" class="code">function tf = iswild(pattern)</a>
+0120 
+0121 tf = ~isempty(strfind(pattern,<span class="string">'*'</span>));
+0122 
+0123 <a name="_sub4" href="#_subfunctions" class="code">function s = regexp_quote(s)</a>
+0124 
+0125 regexprep(s,<span class="string">'[!#]^'</span>,<span class="string">'#^'</span>);
+0126 regexprep(s,<span class="string">'[!#]$'</span>,<span class="string">'#$'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

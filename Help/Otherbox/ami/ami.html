@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ami</title>
+  <meta name="keywords" content="ami">
+  <meta name="description" content="AMI computes and plots average mutual information (ami) and correlation for">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html ami -->
+<h1>ami
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>AMI computes and plots average mutual information (ami) and correlation for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [amis corrs] = ami(xy,nBins,nLags) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> AMI computes and plots average mutual information (ami) and correlation for
+     lagged vector of univariate or bivariate time series.
+
+ USAGE:
+       [amis corrs] = ami(xy,nBins,nLags)
+
+ INPUT:
+       xy:    either univariate (x) or bivariate ([x y]) time series data               
+              If bivariate time series are given then x should be independent
+              variable and y should be dependent variable. Ami and correlation of 
+              x is calculated for lag time series of y. 
+              If univariate time series is given then autocorrelation is calculated 
+              instead of cross correlation.%              
+       nBins: number of bins for time series data to compute distribution which is 
+              required to compute ami. nBins should be either vector of 2 elements 
+              (for bivariate) or scalar (univariate).
+            nLags: number of lags to compute ami and correlation.Computation is done for 
+              lags values of 0:nLags.
+      
+ OUTPUT:
+       amis:  vector of average mutual information for time lags of 0:nLags
+       corrs: vector of correlation (or autocorrelation for univariate) for 
+              time lags of 0:nLags
+
+ EXAMPLES:
+      % Create bivariate time series data xy
+      xy = rand(1000,2);
+      nBins = [15 10];
+      nLags = 25;
+      [amis corrs]= ami(xy,nBins,nLags);    
+
+ See also <a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">AMI</a>, <a href="probxy.html" class="code" title="function pxy = probxy(varargin)">PROBXY</a>, <a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">RHIST</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>	PROB calculates probability distribution of y among nBins number of bins</li><li><a href="probxy.html" class="code" title="function pxy = probxy(varargin)">probxy</a>	PROBXY calculates joint probability distribution of x and y among nBinsX</li><li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="demoami.html" class="code" title="function demoami">demoami</a>	DEMOAMI demos function ami for bivariate time series data</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [amis corrs] = ami(xy,nBins,nLags)</a>
+0002 <span class="comment">% AMI computes and plots average mutual information (ami) and correlation for</span>
+0003 <span class="comment">%     lagged vector of univariate or bivariate time series.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% USAGE:</span>
+0006 <span class="comment">%       [amis corrs] = ami(xy,nBins,nLags)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% INPUT:</span>
+0009 <span class="comment">%       xy:    either univariate (x) or bivariate ([x y]) time series data</span>
+0010 <span class="comment">%              If bivariate time series are given then x should be independent</span>
+0011 <span class="comment">%              variable and y should be dependent variable. Ami and correlation of</span>
+0012 <span class="comment">%              x is calculated for lag time series of y.</span>
+0013 <span class="comment">%              If univariate time series is given then autocorrelation is calculated</span>
+0014 <span class="comment">%              instead of cross correlation.%</span>
+0015 <span class="comment">%       nBins: number of bins for time series data to compute distribution which is</span>
+0016 <span class="comment">%              required to compute ami. nBins should be either vector of 2 elements</span>
+0017 <span class="comment">%              (for bivariate) or scalar (univariate).</span>
+0018 <span class="comment">%            nLags: number of lags to compute ami and correlation.Computation is done for</span>
+0019 <span class="comment">%              lags values of 0:nLags.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% OUTPUT:</span>
+0022 <span class="comment">%       amis:  vector of average mutual information for time lags of 0:nLags</span>
+0023 <span class="comment">%       corrs: vector of correlation (or autocorrelation for univariate) for</span>
+0024 <span class="comment">%              time lags of 0:nLags</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% EXAMPLES:</span>
+0027 <span class="comment">%      % Create bivariate time series data xy</span>
+0028 <span class="comment">%      xy = rand(1000,2);</span>
+0029 <span class="comment">%      nBins = [15 10];</span>
+0030 <span class="comment">%      nLags = 25;</span>
+0031 <span class="comment">%      [amis corrs]= ami(xy,nBins,nLags);</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% See also AMI, PROBXY, RHIST</span>
+0034 
+0035 <span class="comment">% Copyright 2004-2005 by Durga Lal Shrestha.</span>
+0036 <span class="comment">% eMail: durgals@hotmail.com</span>
+0037 <span class="comment">% $Date: 2005/06/27</span>
+0038 <span class="comment">% $Revision: 1.1.0 $ $Date: 2005/07/01 $</span>
+0039 
+0040 <span class="comment">% ***********************************************************************</span>
+0041 <span class="comment">%% INPUT ARGUMENTS CHECK</span>
+0042 <span class="keyword">if</span> nargin &lt; 3,
+0043     error(<span class="string">'Not enough input arguments!'</span>);
+0044 <span class="keyword">end</span>
+0045 <span class="keyword">if</span> nargin &gt; 3,
+0046     error(<span class="string">'Too many input arguments!'</span>);
+0047 <span class="keyword">end</span>
+0048 [m, n] = size(xy);
+0049 <span class="keyword">if</span> n &gt; m
+0050   xy = xy';    <span class="comment">% Column vectors</span>
+0051   [m, n] = size(xy);
+0052 <span class="keyword">end</span>
+0053 <span class="keyword">if</span> n &gt; 2 
+0054   error(<span class="string">'Invalid time series data: Time series should be univariate or bivariate'</span>)
+0055 <span class="keyword">elseif</span> n == 2
+0056   x = xy(:,1);
+0057   y = xy(:,2);
+0058 <span class="keyword">elseif</span> m == 1 | n == 1
+0059   y = xy(:);
+0060   x = xy;
+0061 <span class="keyword">end</span>
+0062 nBins = nBins(:);
+0063 <span class="keyword">if</span> size(nBins,1)&gt; 2 | size(nBins,2)&gt; 1|isempty(nBins)
+0064    error(<span class="string">'Invalid bin size: It should be either vector of 2 elements or scalar'</span>)
+0065 <span class="keyword">elseif</span> size(nBins,1)== 2 &amp; n == 2
+0066   xBin = floor(nBins(1));
+0067   yBin = floor(nBins(2));
+0068 <span class="keyword">elseif</span> (size(nBins,1) == 1 &amp; n == 2 )| n == 1 
+0069   xBin =  floor(nBins(1));
+0070   yBin = xBin;
+0071 <span class="keyword">else</span>
+0072    error(<span class="string">'Invalid bin size: It should be either vector of 2 elements or scalar'</span>)
+0073 <span class="keyword">end</span>
+0074 <span class="keyword">if</span> ~isscalar(nLags)| nLags &lt; 0
+0075   error(<span class="string">'Invalid lag: It should be a positive scalar'</span>)
+0076 <span class="keyword">end</span>
+0077 <span class="keyword">if</span> nLags &gt; m
+0078   error(<span class="string">'Invalid lag: It should not be greater than length of time series data'</span>)
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="comment">%**************************************************************************</span>
+0082 <span class="comment">%% AVERAGE MUTUAL INFORMATION AND CORRELATION COMPUTATION</span>
+0083 nLags = floor(nLags);
+0084 amis = zeros(nLags+1,1);
+0085 corrs = zeros(nLags+1,1);
+0086 <span class="keyword">for</span> i = 1:nLags+1 
+0087     xlag = x(1:length(x)-i+1);
+0088     ylag = y(i:length(x));
+0089     [px xBinComputed] = <a href="prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>(xlag,xBin);
+0090     [py yBinComputed] = <a href="prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>(ylag,yBin);
+0091     pxy = <a href="probxy.html" class="code" title="function pxy = probxy(varargin)">probxy</a>([xlag ylag], xBinComputed, yBinComputed);
+0092     amixy = 0;
+0093     <span class="keyword">for</span> j = 1 :xBinComputed
+0094         <span class="keyword">for</span> k = 1 :yBinComputed
+0095             <span class="keyword">if</span> pxy(j,k)~= 0
+0096                 amixy= amixy + pxy(j,k).*log2(pxy(j,k)./px(j)./py(k));
+0097             <span class="keyword">end</span>
+0098         <span class="keyword">end</span>
+0099     <span class="keyword">end</span>
+0100     amis(i) = amixy;       <span class="comment">% Average mutual information</span>
+0101     correlation =  corrcoef([xlag ylag]);  
+0102     corrs(i) = correlation(1,2);  <span class="comment">% Correlation</span>
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="comment">%**************************************************************************</span>
+0106 <span class="comment">%% PLOT</span>
+0107 <span class="keyword">if</span> nLags &gt; 1 
+0108   t = 0:nLags;
+0109   [AX,H1,H2] = plotyy(t,corrs,t,amis,<span class="string">'plot'</span>);
+0110   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(AX(1),<span class="string">'Ylabel'</span>),<span class="string">'String'</span>,<span class="string">'Correlation'</span>)
+0111   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(H1,<span class="string">'LineWidth'</span>,2)
+0112   yLimit = ylim;
+0113   ylim([yLimit(1) 1]);
+0114   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(AX(2),<span class="string">'Ylabel'</span>),<span class="string">'String'</span>,<span class="string">'AMI'</span>)
+0115   legend(H1,<span class="string">'Correlation'</span>,<span class="string">'Location'</span>,<span class="string">'NorthWest'</span>)
+0116   legend(H2,<span class="string">'AMI'</span> )
+0117   xlabel(<span class="string">'Time Lag'</span>)
+0118   title(<span class="string">'Correlation and Average Mutual Information'</span>)
+0119 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

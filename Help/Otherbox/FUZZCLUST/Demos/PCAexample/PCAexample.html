@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PCAexample</title>
+  <meta name="keywords" content="PCAexample">
+  <meta name="description" content="generate PCA example">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html FUZZCLUST --><!-- # Demos --><!-- menu.html PCAexample -->
+<h1>PCAexample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>generate PCA example</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> generate PCA example</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/Demos/comparing/nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>	data normalization</li><li><a href="../../../../Otherbox/FUZZCLUST/PCA.html" class="code" title="function result = PCA(data,param,result)">PCA</a>	%beletehet� hogy veszi e bementnek az eigenvektoroat, if existes t閙a</li><li><a href="../../../../Otherbox/FUZZCLUST/nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/projeval.html" class="code" title="function perf = projeval(result,param)">projeval</a>	function perf =projeval(x,v,m,c,f)</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">% generate PCA example</span>
+0002 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0003 close all
+0004 path(path,<span class="string">'..\..\FUZZCLUST'</span>)
+0005 
+0006 data.X = <a href="nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>(2,50,3,1);
+0007 
+0008 figure(1)
+0009 plot3(data.X(:,1),data.X(:,2),data.X(:,3),<span class="string">'.'</span>)
+0010 grid on
+0011 
+0012 <span class="comment">%FCM clustering</span>
+0013 param.c = 2;
+0014 param.m = 2;
+0015 result = <a href="../../../../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>(data,param)
+0016 
+0017 <span class="comment">%PCA projection</span>
+0018 param.q = 2;
+0019 result = <a href="../../../../Otherbox/FUZZCLUST/PCA.html" class="code" title="function result = PCA(data,param,result)">PCA</a>(data,param,result);
+0020 figure(2)
+0021 plot(result.proj.P(:,1),result.proj.P(:,2),<span class="string">'.'</span>)
+0022 hold on
+0023 plot(result.proj.vp(:,1),result.proj.vp(:,2),<span class="string">'r*'</span>)
+0024 perf = <a href="../../../../Otherbox/FUZZCLUST/projeval.html" class="code" title="function perf = projeval(result,param)">projeval</a>(result,param);
+0025 
+0026 perf</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ind2subv</title>
+  <meta name="keywords" content="ind2subv">
+  <meta name="description" content="IND2SUBV   Subscript vector from linear index.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>ind2subv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>IND2SUBV   Subscript vector from linear index.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function sub = ind2subv(siz,index) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">IND2SUBV   Subscript vector from linear index.
+ IND2SUBV(SIZ,IND) returns a vector of the equivalent subscript values 
+ corresponding to a single index into an array of size SIZ.
+ If IND is a vector, then the result is a matrix, with subscript vectors
+ as rows.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>	fromJava    Convert from Java to Matlab.</li><li><a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function sub = ind2subv(siz,index)</a>
+0002 <span class="comment">%IND2SUBV   Subscript vector from linear index.</span>
+0003 <span class="comment">% IND2SUBV(SIZ,IND) returns a vector of the equivalent subscript values</span>
+0004 <span class="comment">% corresponding to a single index into an array of size SIZ.</span>
+0005 <span class="comment">% If IND is a vector, then the result is a matrix, with subscript vectors</span>
+0006 <span class="comment">% as rows.</span>
+0007 
+0008 <span class="comment">% Written by Tom Minka</span>
+0009 <span class="comment">% Part of Tom Minka's lightspeed package.</span>
+0010 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0011 
+0012 n = length(siz);
+0013 cum_size = cumprod(siz(:)');
+0014 prev_cum_size = [1 cum_size(1:end-1)];
+0015 index = index(:) - 1;
+0016 sub = rem(repmat(index,1,n),repmat(cum_size,length(index),1));
+0017 sub = floor(sub ./ repmat(prev_cum_size,length(index),1))+1;
+0018 
+0019 <span class="comment">% slow way</span>
+0020 <span class="comment">%for dim = n:-1:1</span>
+0021 <span class="comment">%  sub(:,dim) = floor(index/cum_size(dim))+1;</span>
+0022 <span class="comment">%  index = rem(index,cum_size(dim));</span>
+0023 <span class="comment">%end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plot_arrow</title>
+  <meta name="keywords" content="plot_arrow">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html arrow -->
+<h1>plot_arrow
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function handles = plot_arrow( x1,y1,x2,y2,varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">
+ plot_arrow - plots an arrow to the current plot
+
+ format:   handles = plot_arrow( x1,y1,x2,y2 [,options...] )
+
+ input:    x1,y1   - starting point
+           x2,y2   - end point
+           options - come as pairs of &quot;property&quot;,&quot;value&quot; as defined for &quot;line&quot; and &quot;patch&quot;
+                     controls, see matlab help for listing of these properties.
+                     note that not all properties where added, one might add them at the end of this file.
+                     
+                     additional options are:
+                     'headwidth':  relative to complete arrow size, default value is 0.07
+                     'headheight': relative to complete arrow size, default value is 0.15
+                     (encoded are maximal values if pixels, for the case that the arrow is very long)
+
+ output:   handles - handles of the graphical elements building the arrow
+
+ Example:  plot_arrow( -1,-1,15,12,'linewidth',2,'color',[0.5 0.5 0.5],'facecolor',[0.5 0.5 0.5] );
+           plot_arrow( 0,0,5,4,'linewidth',2,'headwidth',0.25,'headheight',0.33 );
+           plot_arrow;   % will launch demo</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="plot_arrow.html" class="code" title="function handles = plot_arrow( x1,y1,x2,y2,varargin )">plot_arrow</a>	</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="plot_arrow.html" class="code" title="function handles = plot_arrow( x1,y1,x2,y2,varargin )">plot_arrow</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function handles = plot_arrow( x1,y1,x2,y2,varargin )</a>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% plot_arrow - plots an arrow to the current plot</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% format:   handles = plot_arrow( x1,y1,x2,y2 [,options...] )</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% input:    x1,y1   - starting point</span>
+0008 <span class="comment">%           x2,y2   - end point</span>
+0009 <span class="comment">%           options - come as pairs of &quot;property&quot;,&quot;value&quot; as defined for &quot;line&quot; and &quot;patch&quot;</span>
+0010 <span class="comment">%                     controls, see matlab help for listing of these properties.</span>
+0011 <span class="comment">%                     note that not all properties where added, one might add them at the end of this file.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%                     additional options are:</span>
+0014 <span class="comment">%                     'headwidth':  relative to complete arrow size, default value is 0.07</span>
+0015 <span class="comment">%                     'headheight': relative to complete arrow size, default value is 0.15</span>
+0016 <span class="comment">%                     (encoded are maximal values if pixels, for the case that the arrow is very long)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% output:   handles - handles of the graphical elements building the arrow</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Example:  plot_arrow( -1,-1,15,12,'linewidth',2,'color',[0.5 0.5 0.5],'facecolor',[0.5 0.5 0.5] );</span>
+0021 <span class="comment">%           plot_arrow( 0,0,5,4,'linewidth',2,'headwidth',0.25,'headheight',0.33 );</span>
+0022 <span class="comment">%           plot_arrow;   % will launch demo</span>
+0023 
+0024 <span class="comment">% =============================================</span>
+0025 <span class="comment">% for debug - demo - can be erased</span>
+0026 <span class="comment">% =============================================</span>
+0027 <span class="keyword">if</span> (nargin==0)
+0028     figure;
+0029     axis;
+0030     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( gca,<span class="string">'nextplot'</span>,<span class="string">'add'</span> );
+0031     <span class="keyword">for</span> x = 0:0.3:2*pi
+0032         color = [rand rand rand];
+0033         h = <a href="plot_arrow.html" class="code" title="function handles = plot_arrow( x1,y1,x2,y2,varargin )">plot_arrow</a>( 1,1,50*rand*cos(x),50*rand*sin(x),<span class="keyword">...</span>
+0034             <span class="string">'color'</span>,color,<span class="string">'facecolor'</span>,color,<span class="string">'edgecolor'</span>,color );
+0035         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( h,<span class="string">'linewidth'</span>,2 );
+0036     <span class="keyword">end</span>
+0037     hold off;
+0038     <span class="keyword">return</span>
+0039 <span class="keyword">end</span>
+0040 <span class="comment">% =============================================</span>
+0041 <span class="comment">% end of for debug</span>
+0042 <span class="comment">% =============================================</span>
+0043 
+0044 
+0045 <span class="comment">% =============================================</span>
+0046 <span class="comment">% constants (can be edited)</span>
+0047 <span class="comment">% =============================================</span>
+0048 alpha       = 0.15;   <span class="comment">% head length</span>
+0049 beta        = 0.07;   <span class="comment">% head width</span>
+0050 max_length  = 22;
+0051 max_width   = 10;
+0052 
+0053 
+0054 <span class="comment">% =============================================</span>
+0055 <span class="comment">% check if head properties are given</span>
+0056 <span class="comment">% =============================================</span>
+0057 <span class="comment">% if ratio is always fixed, this section can be removed!</span>
+0058 <span class="keyword">if</span> ~isempty( varargin )
+0059     <span class="keyword">for</span> c = 1:floor(length(varargin)/2)
+0060         <span class="keyword">try</span>
+0061             <span class="keyword">switch</span> lower(varargin{c*2-1})
+0062                 <span class="comment">% head properties - do nothing, since handled above already</span>
+0063             <span class="keyword">case</span> <span class="string">'headheight'</span>,alpha = max( min( varargin{c*2},1 ),0.01 );
+0064             <span class="keyword">case</span> <span class="string">'headwidth'</span>, beta = max( min( varargin{c*2},1 ),0.01 );
+0065             <span class="keyword">end</span>
+0066         <span class="keyword">catch</span>
+0067             fprintf( <span class="string">'unrecognized property or value for: %s\n'</span>,varargin{c*2-1} );
+0068         <span class="keyword">end</span>
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% =============================================</span>
+0073 <span class="comment">% calculate the arrow head coordinates</span>
+0074 <span class="comment">% =============================================</span>
+0075 den         = x2 - x1 + eps;                                <span class="comment">% make sure no devision by zero occurs</span>
+0076 teta        = atan( (y2-y1)/den ) + pi*(x2&lt;x1) - pi/2;      <span class="comment">% angle of arrow</span>
+0077 cs          = cos(teta);                                    <span class="comment">% rotation matrix</span>
+0078 ss          = sin(teta);
+0079 R           = [cs -ss;ss cs];
+0080 line_length = sqrt( (y2-y1)^2 + (x2-x1)^2 );                <span class="comment">% sizes</span>
+0081 head_length = min( line_length*alpha,max_length );
+0082 head_width  = min( line_length*beta,max_length );
+0083 x0          = x2*cs + y2*ss;                                <span class="comment">% build head coordinats</span>
+0084 y0          = -x2*ss + y2*cs;
+0085 coords      = R*[x0 x0+head_width/2 x0-head_width/2; y0 y0-head_length y0-head_length];
+0086 
+0087 <span class="comment">% =============================================</span>
+0088 <span class="comment">% plot arrow  (= line + patch of a triangle)</span>
+0089 <span class="comment">% =============================================</span>
+0090 h1          = plot( [x1,x2],[y1,y2],<span class="string">'k'</span> );
+0091 h2          = patch( coords(1,:),coords(2,:),[0 0 0] );
+0092     
+0093 <span class="comment">% =============================================</span>
+0094 <span class="comment">% return handles</span>
+0095 <span class="comment">% =============================================</span>
+0096 handles = [h1 h2];
+0097 
+0098 <span class="comment">% =============================================</span>
+0099 <span class="comment">% check if styling is required</span>
+0100 <span class="comment">% =============================================</span>
+0101 <span class="comment">% if no styling, this section can be removed!</span>
+0102 <span class="keyword">if</span> ~isempty( varargin )
+0103     <span class="keyword">for</span> c = 1:floor(length(varargin)/2)
+0104         <span class="keyword">try</span>
+0105             <span class="keyword">switch</span> lower(varargin{c*2-1})
+0106 
+0107              <span class="comment">% only patch properties</span>
+0108             <span class="keyword">case</span> <span class="string">'edgecolor'</span>,   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( h2,<span class="string">'EdgeColor'</span>,varargin{c*2} );
+0109             <span class="keyword">case</span> <span class="string">'facecolor'</span>,   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( h2,<span class="string">'FaceColor'</span>,varargin{c*2} );
+0110             <span class="keyword">case</span> <span class="string">'facelighting'</span>,<a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( h2,<span class="string">'FaceLighting'</span>,varargin{c*2} );
+0111             <span class="keyword">case</span> <span class="string">'edgelighting'</span>,<a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( h2,<span class="string">'EdgeLighting'</span>,varargin{c*2} );
+0112                 
+0113             <span class="comment">% only line properties</span>
+0114             <span class="keyword">case</span> <span class="string">'color'</span>    , <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( h1,<span class="string">'Color'</span>,varargin{c*2} );
+0115                
+0116             <span class="comment">% shared properties</span>
+0117             <span class="keyword">case</span> <span class="string">'linestyle'</span>, <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( handles,<span class="string">'LineStyle'</span>,varargin{c*2} );
+0118             <span class="keyword">case</span> <span class="string">'linewidth'</span>, <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( handles,<span class="string">'LineWidth'</span>,varargin{c*2} );
+0119             <span class="keyword">case</span> <span class="string">'parent'</span>,    <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>( handles,<span class="string">'parent'</span>,varargin{c*2} );
+0120                 
+0121             <span class="comment">% head properties - do nothing, since handled above already</span>
+0122             <span class="keyword">case</span> <span class="string">'headwidth'</span>,;
+0123             <span class="keyword">case</span> <span class="string">'headheight'</span>,;
+0124                 
+0125             <span class="keyword">end</span>
+0126         <span class="keyword">catch</span>
+0127             fprintf( <span class="string">'unrecognized property or value for: %s\n'</span>,varargin{c*2-1} );
+0128         <span class="keyword">end</span>
+0129     <span class="keyword">end</span>
+0130 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

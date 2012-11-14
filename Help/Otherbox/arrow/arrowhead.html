@@ -1,0 +1,387 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of arrowhead</title>
+  <meta name="keywords" content="arrowhead">
+  <meta name="description" content="arrowhead   Draw an arrowhead">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html arrow -->
+<h1>arrowhead
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>arrowhead   Draw an arrowhead</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function handle = arrowhead(x,y,clr,Asize,head) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">  arrowhead   Draw an arrowhead</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function handle = arrowhead(x,y,clr,Asize,head)</a>
+0002 
+0003 <span class="comment">%  arrowhead   Draw an arrowhead</span>
+0004 
+0005 <span class="comment">%      This program was written to place arrowheads on trajectories</span>
+0006 <span class="comment">%      calculated using one of MATLAB's ode solvers.  However, the program</span>
+0007 <span class="comment">%      does not require the solvers, it only requires two points as shown</span>
+0008 <span class="comment">%      in the figures below.</span>
+0009 
+0010 <span class="comment">%                (x2,y2)                    (x2,y2)</span>
+0011 <span class="comment">%      head=1       o               head=2     o</span>
+0012 <span class="comment">%                  /|\                        /|\</span>
+0013 <span class="comment">%                 / | \                      / | \</span>
+0014 <span class="comment">%                /  |  \                    /  o  \</span>
+0015 <span class="comment">%               /   |   \                  / / . \ \</span>
+0016 <span class="comment">%              o----o----o                o/   .   \o</span>
+0017 <span class="comment">%                   .                          .</span>
+0018 <span class="comment">%                   .                          .</span>
+0019 <span class="comment">%           (x1,y1) o                  (x1,y1) o</span>
+0020 
+0021 <span class="comment">%                (x2,y2)                    (x2,y2)</span>
+0022 <span class="comment">%      head=3       o               head=4     o</span>
+0023 <span class="comment">%                  /|\                        /|\</span>
+0024 <span class="comment">%                 / | \                      / | \</span>
+0025 <span class="comment">%                /  |  \                    /  |  \</span>
+0026 <span class="comment">%               / _-o-_ \                  /   |   \</span>
+0027 <span class="comment">%              o    .    o                o_   |   _o</span>
+0028 <span class="comment">%                   .                         -o-</span>
+0029 <span class="comment">%                   .                          .</span>
+0030 <span class="comment">%           (x1,y1) o                  (x1,y1) o</span>
+0031 
+0032 <span class="comment">%      The program draws the arrowhead, and does not draw the shaft.  Also,</span>
+0033 <span class="comment">%      the point (x1,y1) is only used to determine the direction of the</span>
+0034 <span class="comment">%      arrowhead, and has no affect on the size of the arrowhead.</span>
+0035      
+0036 <span class="comment">%      arrowhead(x,y,color,Asize,head)</span>
+0037 
+0038 <span class="comment">%      required arguments:  the values of x=[x1 x2] and y=[y1 y2]</span>
+0039 <span class="comment">%      optional arguments:</span>
+0040 <span class="comment">%         color: a string, using the same format as for the plot command</span>
+0041 <span class="comment">%         Asize = [Asize(1) Asize(2)]: this rescales the arrowhead</span>
+0042 <span class="comment">%             Asize(1) = the length in changed by this factor (default=1)</span>
+0043 <span class="comment">%             Asize(2) = the width in changed by this factor (default=1)</span>
+0044 <span class="comment">%         head: an integer, this specifies the shape of the arrow head</span>
+0045 <span class="comment">%             head = 1 straight back (the default)</span>
+0046 <span class="comment">%             head = 2 slanted back</span>
+0047 <span class="comment">%             head = 3 curved back</span>
+0048 <span class="comment">%             head = 4 bowed-out back</span>
+0049 
+0050 <span class="comment">%        EXAMPLES: The figures produced by the following commands are</span>
+0051 <span class="comment">%        on the MATLAB web-site (where you downloaded this program)</span>
+0052 
+0053 <span class="comment">%     Examples involving an ODE solver:</span>
+0054 <span class="comment">%     [t,y] = ode45(@rhs,[0 100],[0 1]);</span>
+0055 <span class="comment">%     hold on</span>
+0056 <span class="comment">%     plot(y(:,1),y(:,2))</span>
+0057 <span class="comment">%     i=3; ii=i+2; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)]);</span>
+0058 <span class="comment">%     i=16; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'r');</span>
+0059 <span class="comment">%     i=65; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'m',[1.3 1.1],2);</span>
+0060 <span class="comment">%     i=72; ii=i+2; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],[],[1.1 1],3);</span>
+0061 <span class="comment">%     i=80; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'k',[],3);</span>
+0062 <span class="comment">%     i=100; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'g',[],4);</span>
+0063 
+0064 <span class="comment">%     Examples involving an ODE solver and log coordinates</span>
+0065 <span class="comment">%     [t,y] = ode45(@rhs,[0 100],[0 1]);</span>
+0066 <span class="comment">%     loglog(y(:,1),y(:,2))</span>
+0067 <span class="comment">%     hold on</span>
+0068 <span class="comment">%     i=3; ii=i+2; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)]);</span>
+0069 <span class="comment">%     i=16; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'r');</span>
+0070 <span class="comment">%     i=65; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'m',[1.3 1.1],2);</span>
+0071 <span class="comment">%     i=72; ii=i+2; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],[],[1.1 1],3);</span>
+0072 <span class="comment">%     i=80; ii=i+2; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'k',[],3);</span>
+0073 <span class="comment">%     i=100; ii=i+1; arrowhead([y(i,1) y(ii,1)],[y(i,2) y(ii,2)],'g',[],4);</span>
+0074 
+0075 <span class="comment">%     Examples not involving an ODE solver:</span>
+0076 <span class="comment">%     axis([-6 6 0 0.4]);</span>
+0077 <span class="comment">%     arrowhead([-6 -3.3],[0.3 0.3],[],[3 3]);</span>
+0078 <span class="comment">%     arrowhead([-6 -0.7],[0.3 0.3],'r',[3 3],3);</span>
+0079 <span class="comment">%     arrowhead([-6 1.8],[0.3 0.3],'k',[3 3],2);</span>
+0080 <span class="comment">%     arrowhead([-6 5.3],[0.3 0.3],'m',[3 3],4);</span>
+0081 <span class="comment">%     arrowhead([6 -5.8],[0.1 0.1],'m',[3 3]);</span>
+0082 <span class="comment">%     arrowhead([6 -3],[0.1 0.1],'y',[3 3],3);</span>
+0083 <span class="comment">%     arrowhead([6 -0.5],[0.1 0.1],'c',[3 3],2);</span>
+0084 <span class="comment">%     arrowhead([6 2.5],[0.1 0.1],'g',[3 3],4);</span>
+0085 
+0086 <span class="comment">%     As indicated in the above four figures, the arrowhead is centered on the</span>
+0087 <span class="comment">%     line through (x1,y1), (x2,y2), with the front of the arrowhead at (x2,y2).</span>
+0088 <span class="comment">%     In the above ODE examples these points are from the computed solution.</span>
+0089 <span class="comment">%     In this context, (x1,y1) is the solution at time t1, while (x2,y2) is the</span>
+0090 <span class="comment">%     solution at time t2, where t1 &lt; t2.  Depending on how picky you are about</span>
+0091 <span class="comment">%     the arrowhead being centered on the solution curve, you can adjust t1 to</span>
+0092 <span class="comment">%     rotate the arrowhead's direction.</span>
+0093 
+0094 <span class="comment">%     The default length and width of the arrowhead are determined by the height</span>
+0095 <span class="comment">%     and width of the currently active plot, or subplot, window.  By default</span>
+0096 <span class="comment">%        the width of the arrowhead is 1/50 of the figure's smallest dimension</span>
+0097 <span class="comment">%        (width/length), and the length of the arrowhead is 2.8 times the width. These</span>
+0098 <span class="comment">%     values can be adjusted using the Asize argument.  If this is done, it is likely</span>
+0099 <span class="comment">%        that values between 0.2 and 4.0 will suffice, but any positive value can be</span>
+0100 <span class="comment">%        used. Also, the code calculates the arrowhead placement using figure (screen)</span>
+0101 <span class="comment">%        coordinates, and then converts this to axis coordinates. This means that it</span>
+0102 <span class="comment">%        should not be necessary to use the pbaspect or daspect commands.</span>
+0103 
+0104 <span class="comment">%   Copyright(c) 2009 Version 1.1</span>
+0105 <span class="comment">%   Mark H. Holmes</span>
+0106 
+0107 <span class="comment">%   Revision History:</span>
+0108 <span class="comment">%</span>
+0109 <span class="comment">%     01/31/09 - Major rewrite of the code (v 1.1)</span>
+0110 <span class="comment">%                Now works with log and semilog coordinates;</span>
+0111 <span class="comment">%         Added another arrowhead type;</span>
+0112 <span class="comment">%         Fixed a couple of errors.</span>
+0113 <span class="comment">%     10/02/08 - First release (v 1.0)</span>
+0114 
+0115 handle = [];
+0116 
+0117 <span class="comment">% errors</span>
+0118 <span class="keyword">if</span> nargin &lt; 2
+0119     error(<span class="string">'You need to specify two points'</span>);
+0120 <span class="keyword">end</span>
+0121 <span class="keyword">if</span> (length(x) ~= 2) || (length(y) ~= 2),
+0122     error(<span class="string">'x and y vectors must each have two components'</span>);
+0123 <span class="keyword">end</span>
+0124 <span class="keyword">if</span> (x(1) == x(2)) &amp;&amp; (y(1) == y(2)),
+0125     error(<span class="string">'The two points are equal - cannot determine direction!'</span>);
+0126 <span class="keyword">end</span>
+0127 
+0128 <span class="comment">% set the defaults</span>
+0129 <span class="keyword">if</span> nargin &lt;= 2
+0130     clr = <span class="string">'b'</span>;
+0131 <span class="keyword">end</span>
+0132 <span class="keyword">if</span> nargin &lt;= 3
+0133     Asize = [1 1];
+0134 <span class="keyword">end</span>
+0135 <span class="keyword">if</span> nargin &lt;= 4
+0136     head = 1;
+0137 <span class="keyword">end</span>
+0138 
+0139 <span class="comment">% check if variables left empty</span>
+0140 <span class="keyword">if</span> isempty(clr)
+0141     clr = <span class="string">'b'</span>; 
+0142 <span class="keyword">end</span>;
+0143 <span class="keyword">if</span> isempty(Asize)
+0144     Asize = [1 1];
+0145 <span class="keyword">end</span>;
+0146 <span class="keyword">if</span> isempty(head)
+0147     head = 1;
+0148 <span class="keyword">end</span>
+0149 
+0150 <span class="comment">% determine and remember the hold status, toggle if necessary</span>
+0151 <span class="keyword">if</span> ishold,
+0152     WasHold = 1;
+0153 <span class="keyword">else</span>
+0154     WasHold = 0;
+0155     hold on;
+0156 <span class="keyword">end</span>
+0157 
+0158 x1 = x(1); x2 = x(2); y1 = y(1); y2 = y(2);
+0159 
+0160 <span class="comment">% get the axis dimensions</span>
+0161 Scales = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'Position'</span>);
+0162 
+0163 xlog=strcmp(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'Xscale'</span>), <span class="string">'log'</span>);
+0164 ylog=strcmp(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'Yscale'</span>), <span class="string">'log'</span>);
+0165 
+0166 <span class="comment">% get ranges for axis</span>
+0167 Size =  axis;
+0168 a = Size(1); b= Size(2); c= Size(3); d=Size(4);
+0169 
+0170 <span class="comment">% 2*Whead = width of arrow head</span>
+0171 Whead = min(Scales(3),Scales(4))/50;
+0172 
+0173 <span class="comment">% Lhead = length of arrow head</span>
+0174 Lhead = 2.8*Whead;
+0175 
+0176 <span class="comment">% user adjustment</span>
+0177 Whead = Asize(2)*Whead;
+0178 Lhead = Asize(1)*Lhead;
+0179 
+0180 <span class="comment">% estimate the figure to axis scaling</span>
+0181 v1 = 0.08*Scales(3);  v2 = 0.08*Scales(4);
+0182 v3 = 0.84*Scales(3);  v4 = 0.84*Scales(4);
+0183 
+0184 <span class="comment">% calculate the midpoint for the back of arrowhead</span>
+0185 <span class="keyword">if</span> xlog==1
+0186     la=log10(a); lab=log10(b)-la;
+0187     xv=[log10(x1)-la   log10(x2)-la]/lab;
+0188 <span class="keyword">else</span>
+0189     xv = [x1-a x2-a]/(b-a);
+0190 <span class="keyword">end</span>;
+0191 XX = [v1 v1] + v3*xv;
+0192 <span class="comment">% XX = [X1 X2]</span>
+0193 <span class="keyword">if</span> ylog==1
+0194     lc=log10(c); lcd=log10(d)-lc;
+0195     yv=[log10(y1)-lc   log10(y2)-lc]/lcd;
+0196 <span class="keyword">else</span>
+0197     yv = [y1-c y2-c]/(d-c);
+0198 <span class="keyword">end</span>;
+0199 YY = [v2 v2] + v4*yv;
+0200 <span class="comment">% YY = [Y1 Y2]</span>
+0201 Z3 = [XX(2) YY(2)] - Lhead * [XX(2)-XX(1)  YY(2)-YY(1)]/norm([XX(2)-XX(1)  YY(2)-YY(1)]);
+0202 <span class="comment">% Z3 = [X3 Y3];</span>
+0203 
+0204 <span class="comment">%  calculate the back two tips of the arrowhead</span>
+0205 <span class="keyword">if</span> x1==x2
+0206     q = [ 1 0 ];
+0207 <span class="keyword">else</span>
+0208     q = [-(YY(2)-YY(1)) / (XX(2)-XX(1))  1]/norm([-(YY(2)-YY(1)) / (XX(2)-XX(1))  1]);
+0209 <span class="keyword">end</span>;
+0210 ZA = Z3 + Whead * q;
+0211 <span class="comment">% ZA = [XA YA]</span>
+0212 ZB = Z3 - Whead * q;
+0213 <span class="comment">% ZB = [XB YB]</span>
+0214 <span class="keyword">if</span> xlog==1
+0215     xx(1) = 10^(la + lab*(ZA(1)-v1)/v3);
+0216     xx(2) = 10^(la + lab*(ZB(1)-v1)/v3);
+0217 <span class="keyword">else</span>
+0218     xx = [a a] + (b-a)*[ZA(1)-v1 ZB(1)-v1]/v3;
+0219 <span class="keyword">end</span>;
+0220 <span class="comment">% xx = [xa xb]</span>
+0221 <span class="keyword">if</span> ylog==1
+0222     yy(1) = 10^(lc + lcd*(ZA(2)-v2)/v4);
+0223     yy(2) = 10^(lc + lcd*(ZB(2)-v2)/v4);
+0224     y3 = 10^(lc + lcd*(Z3(2)-v2)/v4);
+0225 <span class="keyword">else</span>
+0226     yy = [c c] + (d-c)*[ZA(2)-v2 ZB(2)-v2]/v4;
+0227     y3 = c + (d-c)*(Z3(2)-v2)/v4;
+0228 <span class="keyword">end</span>;
+0229 <span class="comment">% yy = [ya yb]</span>
+0230 xa=xx(1); xb=xx(2);
+0231 ya=yy(1); yb=yy(2);
+0232 
+0233 <span class="comment">% the polygon forming the arrowhead</span>
+0234 <span class="keyword">if</span> head==1
+0235     xd = [x2 xa xb];
+0236     yd = [y2 ya yb];
+0237 <span class="keyword">elseif</span> head==2
+0238     LL=0.7*Lhead;
+0239     Z4 = [XX(2) YY(2)] - LL * [XX(2)-XX(1)  YY(2)-YY(1)]/norm([XX(2)-XX(1)  YY(2)-YY(1)]);
+0240     <span class="keyword">if</span> xlog==1
+0241         x4 = 10^(la + lab*(Z4(1)-v1)/v3);
+0242     <span class="keyword">else</span>
+0243         x4 = a + (b-a)*(Z4(1)-v1)/v3;
+0244     <span class="keyword">end</span>;
+0245     <span class="keyword">if</span> ylog==1
+0246         y4 = 10^(lc + lcd*(Z4(2)-v2)/v4);
+0247     <span class="keyword">else</span>
+0248         y4 = c + (d-c)*(Z4(2)-v2)/v4;
+0249     <span class="keyword">end</span>;
+0250     <span class="comment">% Z4 = [X4 Y4]</span>
+0251     xd = [x2 xa x4 xb];
+0252     yd = [y2 ya y4 yb];
+0253 <span class="keyword">elseif</span> head==3
+0254     beta = 2;
+0255     gam = 0.25;
+0256     Z2 = [XX(2)  YY(2)];
+0257     Z23 = Z2 - Z3;
+0258     nZB3 = norm(ZB-Z3);
+0259     nn=6;
+0260     <span class="keyword">for</span> i=1:nn
+0261         ZL = Z3 + (ZB-Z3)*(i-1)/(nn-1);
+0262         fac = 1 - (norm(ZL-Z3)/nZB3)^beta;
+0263         ZD = ZL + gam*fac*Z23;
+0264         ZLL = Z3 - (ZB-Z3)*(i-1)/(nn-1);
+0265         ZDD = ZLL + gam*fac*Z23;
+0266         <span class="keyword">if</span> xlog==1
+0267             xm = 10^(la + lab*(ZD(1)-v1)/v3);
+0268             xmm = 10^(la + lab*(ZDD(1)-v1)/v3);
+0269         <span class="keyword">else</span>
+0270             xm = a + (b-a)*(ZD(1)-v1)/v3;
+0271             xmm = a + (b-a)*(ZDD(1)-v1)/v3;
+0272         <span class="keyword">end</span>;
+0273         <span class="keyword">if</span> ylog==1
+0274             ym = 10^(lc + lcd*(ZD(2)-v2)/v4);
+0275             ymm = 10^(lc + lcd*(ZDD(2)-v2)/v4);
+0276         <span class="keyword">else</span>
+0277             ym = c + (d-c)*(ZD(2)-v2)/v4;
+0278             ymm = c + (d-c)*(ZDD(2)-v2)/v4;
+0279         <span class="keyword">end</span>;
+0280         <span class="keyword">if</span> i==1
+0281             xd = [xm];  yd=[ym];
+0282         <span class="keyword">else</span>
+0283             xd = [xmm xd xm];  yd=[ymm yd ym];
+0284         <span class="keyword">end</span>;
+0285     <span class="keyword">end</span>;
+0286     xd = [x2 xd];
+0287     yd = [y2 yd];
+0288 <span class="keyword">elseif</span>
+0289     beta = 2;
+0290     gam = 0.2;
+0291     Z2 = [XX(2)  YY(2)];
+0292     Z23 = Z2 - Z3;
+0293     nZB3 = norm(ZB-Z3);
+0294     nn=6;
+0295     <span class="keyword">for</span> i=1:nn
+0296         ZL = Z3 + (ZB-Z3)*(i-1)/(nn-1);
+0297         fac = 1 - (norm(ZL-Z3)/nZB3)^beta;
+0298         ZD = ZL - gam*fac*Z23;
+0299         ZLL = Z3 - (ZB-Z3)*(i-1)/(nn-1);
+0300         ZDD = ZLL - gam*fac*Z23;
+0301         <span class="keyword">if</span> xlog==1
+0302             xm = 10^(la + lab*(ZD(1)-v1)/v3);
+0303             xmm = 10^(la + lab*(ZDD(1)-v1)/v3);
+0304         <span class="keyword">else</span>
+0305             xm = a + (b-a)*(ZD(1)-v1)/v3;
+0306             xmm = a + (b-a)*(ZDD(1)-v1)/v3;
+0307         <span class="keyword">end</span>;
+0308         <span class="keyword">if</span> ylog==1
+0309             ym = 10^(lc + lcd*(ZD(2)-v2)/v4);
+0310             ymm = 10^(lc + lcd*(ZDD(2)-v2)/v4);
+0311         <span class="keyword">else</span>
+0312             ym = c + (d-c)*(ZD(2)-v2)/v4;
+0313             ymm = c + (d-c)*(ZDD(2)-v2)/v4;
+0314         <span class="keyword">end</span>;
+0315 
+0316         <span class="keyword">if</span> i==1
+0317             xd = [xm];  yd=[ym];
+0318         <span class="keyword">else</span>
+0319             xd = [xmm xd xm];  yd=[ymm yd ym];
+0320         <span class="keyword">end</span>;
+0321     <span class="keyword">end</span>;
+0322     xd = [x2 xd];
+0323     yd = [y2 yd];
+0324 <span class="keyword">end</span>
+0325 
+0326 <span class="comment">% draw the arrowhead</span>
+0327 fill(xd,yd,clr,<span class="string">'EdgeColor'</span>,clr);
+0328 
+0329 <span class="comment">% restore original axe ranges and hold status</span>
+0330 axis(Size);
+0331 <span class="keyword">if</span> ~WasHold,
+0332     hold off
+0333 <span class="keyword">end</span>
+0334 
+0335 
+0336 
+0337 
+0338 
+0339</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

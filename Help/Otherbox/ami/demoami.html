@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demoami</title>
+  <meta name="keywords" content="demoami">
+  <meta name="description" content="DEMOAMI demos function ami for bivariate time series data">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html ami -->
+<h1>demoami
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DEMOAMI demos function ami for bivariate time series data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function demoami </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> DEMOAMI demos function ami for bivariate time series data
+
+ USAGE:
+       demoami
+
+ INPUT:
+       
+ OUTPUT:
+      amis:   vector of average mutual information for time lags of 0:nLags
+     corrs:   vector of correlation (or autocorrelation for univariate) for 
+              time lags of 0:nLags
+
+ EXAMPLES:  
+
+ See also <a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">AMI</a>, <a href="probxy.html" class="code" title="function pxy = probxy(varargin)">PROBXY</a>, <a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">RHIST</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">ami</a>	AMI computes and plots average mutual information (ami) and correlation for</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function demoami</a>
+0002 <span class="comment">% DEMOAMI demos function ami for bivariate time series data</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% USAGE:</span>
+0005 <span class="comment">%       demoami</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% INPUT:</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% OUTPUT:</span>
+0010 <span class="comment">%      amis:   vector of average mutual information for time lags of 0:nLags</span>
+0011 <span class="comment">%     corrs:   vector of correlation (or autocorrelation for univariate) for</span>
+0012 <span class="comment">%              time lags of 0:nLags</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% EXAMPLES:</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also AMI, PROBXY, RHIST</span>
+0017 
+0018 <span class="comment">% Copyright 2004-2005 by Durga Lal Shrestha.</span>
+0019 <span class="comment">% eMail: durgals@hotmail.com</span>
+0020 <span class="comment">% $Date: 2005/06/27</span>
+0021 <span class="comment">% $Revision: 1.1.0 $ $Date: 2005/07/01 $</span>
+0022 
+0023 <span class="comment">% ***********************************************************************</span>
+0024 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0025 close all
+0026 clc
+0027 mydata = load(<span class="string">'data.txt'</span>)';
+0028 lag = 25;
+0029 nBins = [15 15];
+0030 [iy ry] = <a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">ami</a>(mydata,nBins,lag);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

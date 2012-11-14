@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of autoencoder_ea</title>
+  <meta name="keywords" content="autoencoder_ea">
+  <meta name="description" content="AUTOENCODER_EA Trains an autoencoder using an evolutionary algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>autoencoder_ea
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>AUTOENCODER_EA Trains an autoencoder using an evolutionary algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedA, mapping] = autoencoder_ea(A, no_dims) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">AUTOENCODER_EA Trains an autoencoder using an evolutionary algorithm
+
+   [mappedX, mapping] = autoencoder_ea(X, no_dims)
+
+ Trains an autoencoder using an evolutionary algorithm. The autoencoder is
+ trained in such a way, that it reduces the dimensionality of dataset X to
+ no_dims (default = 2). The network is a 4-layer feedforward neural network
+ with sigmoid functions in the first 3 layers and linear functions in the 
+ last layer. 
+ The function returns the reduced data in mappedX, and the network layer
+ weights in mapping.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedA, mapping] = autoencoder_ea(A, no_dims)</a>
+0002 <span class="comment">%AUTOENCODER_EA Trains an autoencoder using an evolutionary algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = autoencoder_ea(X, no_dims)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Trains an autoencoder using an evolutionary algorithm. The autoencoder is</span>
+0007 <span class="comment">% trained in such a way, that it reduces the dimensionality of dataset X to</span>
+0008 <span class="comment">% no_dims (default = 2). The network is a 4-layer feedforward neural network</span>
+0009 <span class="comment">% with sigmoid functions in the first 3 layers and linear functions in the</span>
+0010 <span class="comment">% last layer.</span>
+0011 <span class="comment">% The function returns the reduced data in mappedX, and the network layer</span>
+0012 <span class="comment">% weights in mapping.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0017 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0018 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0019 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0020 <span class="comment">% maintain the name of the original author.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0023 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0024 
+0025 
+0026     <span class="comment">% Compute number of nodes in each layer based on input</span>
+0027     layer1_size = ceil(size(A, 2) * 1.2) + 20;
+0028     layer2_size = ceil(size(A, 2) / 2) + 10;
+0029     layer3_size = ceil(size(A, 2) / 4) + 5;
+0030     layer4_size = no_dims;
+0031     <span class="keyword">if</span> layer3_size &lt;= no_dims,      layer3_size = no_dims + 1;      <span class="keyword">end</span>
+0032     <span class="keyword">if</span> layer2_size &lt;= layer3_size,  layer2_size = layer3_size + 1;  <span class="keyword">end</span>
+0033     <span class="keyword">if</span> layer1_size &lt;= layer2_size,  layer1_size = layer2_size + 1;  <span class="keyword">end</span>
+0034     disp([<span class="string">'Performing training of '</span> num2str(size(A, 2)) <span class="string">'-&gt;'</span> num2str(layer1_size) <span class="string">'-'</span> num2str(layer2_size) <span class="string">'-'</span> num2str(layer3_size) <span class="string">'-&gt;'</span> num2str(no_dims) <span class="string">' network...'</span>]);
+0035         
+0036     <span class="comment">% Make sure data is zero-mean, unit variance</span>
+0037     mapping.mean = mean(A, 1);
+0038     mapping.var  = var(A, 1);
+0039     A = A -  repmat(mapping.mean, [size(A, 1) 1]);
+0040     A = A ./ repmat(mapping.var,  [size(A, 1) 1]);
+0041 
+0042     <span class="comment">% Initialize variables</span>
+0043     no_ind = 200;                       <span class="comment">% number of individiuals</span>
+0044     no_gen = 30;                        <span class="comment">% number of generations</span>
+0045     sel_perc = .5;                      <span class="comment">% percentage of individuals to select</span>
+0046     mut_prob = 0.4;                     <span class="comment">% mutation probability</span>
+0047     mut_s = 1.0;                        <span class="comment">% variance of mutation amount</span>
+0048     fitnesses = nan(no_ind, 1);         <span class="comment">% fitness array</span>
+0049     [n, d] = size(A);                   <span class="comment">% number of samples and their dimensionality</span>
+0050     net_size = ((d+1) * layer1_size + (layer1_size+1) * layer2_size + (layer2_size+1) * layer3_size + (layer3_size+1) * layer4_size);     <span class="comment">% size of individual</span>
+0051     best_fit = Inf;                     <span class="comment">% best fitness until now</span>
+0052     best_ind = nan(1, net_size);        <span class="comment">% best indiviual until now</span>
+0053     weights = rand(no_ind, net_size);   <span class="comment">% weight initialization</span>
+0054     disp([<span class="string">'Number of weights to learn: '</span> num2str(net_size)]);
+0055     
+0056     <span class="comment">% Run evolutionary algorithm</span>
+0057     <span class="keyword">for</span> i=1:no_gen
+0058         
+0059         <span class="comment">% Evaluate individuals in population</span>
+0060         <span class="keyword">for</span> j=1:no_ind
+0061             <span class="comment">% Extract layer weigths</span>
+0062             ind_b = 1; ind_e = (d+1) * layer1_size;
+0063                 w1 = weights(j, ind_b:ind_e);
+0064                 w1 = reshape(w1, [d+1 layer1_size]);
+0065             ind_b = ind_e + 1; ind_e = ind_e + (layer1_size+1) * layer2_size;
+0066                 w2 = weights(j, ind_b:ind_e);
+0067                 w2 = reshape(w2, [(layer1_size+1) layer2_size]);
+0068             ind_b = ind_e + 1; ind_e = ind_e + (layer2_size+1) * layer3_size;
+0069                 w3 = weights(j, ind_b:ind_e);
+0070                 w3 = reshape(w3, [(layer2_size+1) layer3_size]);
+0071             ind_b = ind_e + 1; ind_e = ind_e + (layer3_size+1) * layer4_size;
+0072                 w4 = weights(j, ind_b:ind_e);
+0073                 w4 = reshape(w4, [(layer3_size+1) layer4_size]);
+0074             w5 = w4';
+0075             w6 = w3';
+0076             w7 = w2';
+0077             w8 = w1';
+0078             
+0079             <span class="comment">% Compute output of network</span>
+0080             w1probs = [1 ./ (1 + exp(-[A ones(n, 1)] * w1))         ones(n, 1)];
+0081             w2probs = [1 ./ (1 + exp(-w1probs * w2))                ones(n, 1)];
+0082             w3probs = [1 ./ (1 + exp(-w2probs * w3))                ones(n, 1)];
+0083             w4probs = w3probs * w4;
+0084             w5probs = 1 ./ (1 + exp(-w4probs  * w5));   w5probs = w5probs(:,1:end-1);
+0085             w6probs = 1 ./ (1 + exp(-w5probs * w6));    w6probs = w6probs(:,1:end-1);
+0086             w7probs = 1 ./ (1 + exp(-w6probs * w7));    w7probs = w7probs(:,1:end-1);
+0087             dataout =  1 ./ (1 + exp(-w7probs * w8));   dataout = dataout(:,1:end-1);  
+0088             
+0089             <span class="comment">% Compute MSE between input and output</span>
+0090             fitnesses(j) = mean(mean((A - dataout) .^ 2));
+0091         <span class="keyword">end</span>
+0092         
+0093         <span class="comment">% Select best individuals (lower fitness is better)</span>
+0094         [fitnesses, ind] = sort(fitnesses);
+0095         weights = repmat(weights(ind(1:floor(sel_perc * no_ind)),:), [floor(1 / sel_perc) 1]);
+0096         <span class="keyword">if</span> size(weights, 1) &lt; no_ind
+0097             weights = [weights; rand(no_ind, size(weights, 1), net_size)];
+0098         <span class="keyword">end</span>
+0099         
+0100         <span class="comment">% Store best individual until now</span>
+0101         <span class="keyword">if</span> fitnesses(1) &lt; best_fit
+0102             best_fit = fitnesses(1);
+0103             best_ind = weights(ind(1),:);
+0104         <span class="keyword">end</span>
+0105         
+0106         <span class="comment">% Perform mutations</span>
+0107         weights = weights + ((rand(size(weights)) &lt; mut_prob) .* randn(size(weights)) * mut_s);
+0108         
+0109         <span class="comment">% Display on information on current iteration</span>
+0110         disp([<span class="string">'Iteration '</span> num2str(i) <span class="string">': Average fitness '</span> num2str(mean(fitnesses)) <span class="string">' and best fitness '</span> num2str(min(fitnesses)) <span class="string">'.'</span>]);
+0111     <span class="keyword">end</span>    
+0112     
+0113     <span class="comment">% Use best individual to produce mapped data</span>
+0114     ind_b = 1; ind_e = (d+1) * layer1_size;
+0115         w1 = weights(j, ind_b:ind_e);
+0116         w1 = reshape(w1, [(d+1) layer1_size]);
+0117     ind_b = ind_e + 1; ind_e = ind_e + (layer1_size+1) * layer2_size;
+0118         w2 = weights(j, ind_b:ind_e);
+0119         w2 = reshape(w2, [(layer1_size+1) layer2_size]);
+0120     ind_b = ind_e + 1; ind_e = ind_e + (layer2_size+1) * layer3_size;
+0121         w3 = weights(j, ind_b:ind_e);
+0122         w3 = reshape(w3, [(layer2_size+1) layer3_size]);
+0123     ind_b = ind_e + 1; ind_e = ind_e + (layer3_size+1) * layer4_size;
+0124         w4 = weights(j, ind_b:ind_e);
+0125         w4 = reshape(w4, [(layer3_size+1) layer4_size]);
+0126     w5 = w4';
+0127     w6 = w3';
+0128     w7 = w2';
+0129     w8 = w1';
+0130     
+0131     <span class="comment">% Insert data into network (to get mappedA and reconstruction)</span>
+0132     w1probs = [1 ./ (1 + exp(-[A ones(n, 1)] * w1))     ones(n, 1)];
+0133     w2probs = [1 ./ (1 + exp(-w1probs * w2))            ones(n, 1)];
+0134     w3probs = [1 ./ (1 + exp(-w2probs * w3))            ones(n, 1)];
+0135     mappedA = w3probs * w4;
+0136     w5probs = 1 ./ (1 + exp(-w4probs * w5));   w5probs = w5probs(:,1:end-1);
+0137     w6probs = 1 ./ (1 + exp(-w5probs * w6));   w6probs = w6probs(:,1:end-1);
+0138     w7probs = 1 ./ (1 + exp(-w6probs * w7));   w7probs = w7probs(:,1:end-1);
+0139     mapping.recon = 1 ./ (1 + exp(-w7probs * w8));
+0140     mapping.recon = mapping.recon(:,1:end-1);
+0141   
+0142     <span class="comment">% Store network</span>
+0143     mapping.w1 = w1;
+0144     mapping.w2 = w2;
+0145     mapping.w3 = w3;
+0146     mapping.w4 = w4;
+0147     
+0148     disp(<span class="string">'Done.'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

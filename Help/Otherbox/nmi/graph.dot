@@ -1,0 +1,16 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ConditionalEntropy -> Entropy;
+  ConditionalEntropy -> MutualInformation;
+  JointEntropy -> Entropy;
+  MutualInformation -> Entropy;
+  MutualInformation -> JointEntropy;
+  nmi -> MI;
+
+  ConditionalEntropy [URL="ConditionalEntropy.html"];
+  Entropy [URL="Entropy.html"];
+  JointEntropy [URL="JointEntropy.html"];
+  MI [URL="MI.html"];
+  MutualInformation [URL="MutualInformation.html"];
+  nmi [URL="nmi.html"];
+}

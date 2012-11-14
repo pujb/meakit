@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of movingslope</title>
+  <meta name="keywords" content="movingslope">
+  <meta name="description" content="movingslope: estimate local slope for a sequence of points, using a sliding window">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html movingslope -->
+<h1>movingslope
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>movingslope: estimate local slope for a sequence of points, using a sliding window</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function Dvec = movingslope(vec,supportlength,modelorder,dt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> movingslope: estimate local slope for a sequence of points, using a sliding window
+ usage: Dvec = movingslope(vec)
+ usage: Dvec = movingslope(vec,supportlength)
+ usage: Dvec = movingslope(vec,supportlength,modelorder)
+ usage: Dvec = movingslope(vec,supportlength,modelorder,dt)
+
+
+ movingslope uses filter to determine the slope of a curve stored
+ as an equally (unit) spaced sequence of points. A patch is applied
+ at each end where filter will have problems. A non-unit spacing
+ can be supplied.
+
+ Note that with a 3 point window and equally spaced data sequence,
+ this code should be similar to gradient. However, with wider
+ windows this tool will be more robust to noisy data sequences.
+
+
+ arguments: (input)
+  vec - row of column vector, to be differentiated. vec must be of
+        length at least 2.
+
+  supportlength - (OPTIONAL) scalar integer - defines the number of
+        points used for the moving window. supportlength may be no
+        more than the length of vec.
+
+        supportlength must be at least 2, but no more than length(vec)
+
+        If supportlength is an odd number, then the sliding window
+        will be central. If it is an even number, then the window
+        will be slid backwards by one element. Thus a 2 point window
+        will result in a backwards differences used, except at the
+        very first point, where a forward difference will be used.
+
+        DEFAULT: supportlength = 3
+
+  modelorder - (OPTIONAL) - scalar - Defines the order of the windowed
+        model used to estimate the slope. When model order is 1, the
+        model is a linear one. If modelorder is less than supportlength-1.
+        then the sliding window will be a regression one. If modelorder
+        is equal to supportlength-1, then the window will result in a
+        sliding Lagrange interpolant.
+
+        modelorder must be at least 1, but not exceeding
+        min(10,supportlength-1)
+
+        DEFAULT: modelorder = 1
+
+  dt - (OPTIONAL) - scalar - spacing for sequences which do not have
+        a unit spacing.
+
+        DEFAULT: dt = 1
+
+ arguments: (output)
+  Dvec = vector of derivative estimates, Dvec will be of the same size
+        and shape as is vec.
+ 
+
+ Example:
+  Estimate the first derivative using a 7 point window with first through
+  fourth order models in the sliding window. Note that the higher order
+  approximations provide better accuracy on this curve with no noise.
+  
+  t = 0:.1:1;
+  vec = exp(t);
+
+  Dvec = movingslope(vec,7,1,.1)
+  Dvec =
+  Columns 1 through 7
+    1.3657  1.3657  1.3657  1.3657  1.5093  1.668  1.8435
+  Columns 8 through 11
+    2.0373  2.0373  2.0373  2.0373
+
+  Dvec = movingslope(vec,7,2,.1)
+  Dvec =
+  Columns 1 through 7
+    0.95747 1.0935  1.2296  1.3657  1.5093  1.668  1.8435
+  Columns 8 through 11
+    2.0373  2.2403  2.4433  2.6463
+
+  Dvec = movingslope(vec,7,3,.1)
+  Dvec =
+  Columns 1 through 7
+    1.0027  1.1049  1.2206  1.3498  1.4918  1.6487  1.8221
+  Columns 8 through 11
+    2.0137  2.2268  2.4602  2.7138
+
+  Dvec = movingslope(vec,7,4,.1)
+  Dvec =
+    Columns 1 through 7
+    0.99988 1.1052  1.2214  1.3498  1.4918  1.6487  1.8221
+  Columns 8 through 11
+    2.0137  2.2255  2.4597  2.7181
+
+
+ Example:
+  Estimate the slope of a noisy curve, using a locally quadratic
+  approximation. In this case, use a straight line so that we know
+  the true slope should be 1. Use a wide window, since we have
+  noisy data.
+  
+  t = 0:100;
+  vec = t + randn(size(t));
+  Dvec = movingslope(vec,10,2,1)
+  mean(Dvec)
+  ans = 
+     1.0013
+  std(Dvec)
+  ans =
+     0.10598
+
+  By way of comparison, gradient gives a much noisier estimate
+  of the slope of this curve.
+
+  std(gradient(vec))
+  ans =
+     0.69847
+
+
+ Example:
+  As a time test, generate random data vector of length 500000.
+  Compute the slopes using a window of width 10.
+
+  vec = rand(1,500000);
+  tic
+  Dvec = movingslope(vec,10,2);
+  toc
+
+  Elapsed time is 0.626021 seconds.
+
+
+ See also: gradient
+
+
+ Author: John D'Errico
+ e-mail: woodchips@rochester.rr.com
+ Release: 1.0
+ Release date: 10/19/07</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li><li><a href="movingslope.html" class="code" title="function Dvec = movingslope(vec,supportlength,modelorder,dt)">movingslope</a>	movingslope: estimate local slope for a sequence of points, using a sliding window</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="movingslope.html" class="code" title="function Dvec = movingslope(vec,supportlength,modelorder,dt)">movingslope</a>	movingslope: estimate local slope for a sequence of points, using a sliding window</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function coef = getcoef(t,supportlength,modelorder)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Dvec = movingslope(vec,supportlength,modelorder,dt)</a>
+0002 <span class="comment">% movingslope: estimate local slope for a sequence of points, using a sliding window</span>
+0003 <span class="comment">% usage: Dvec = movingslope(vec)</span>
+0004 <span class="comment">% usage: Dvec = movingslope(vec,supportlength)</span>
+0005 <span class="comment">% usage: Dvec = movingslope(vec,supportlength,modelorder)</span>
+0006 <span class="comment">% usage: Dvec = movingslope(vec,supportlength,modelorder,dt)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% movingslope uses filter to determine the slope of a curve stored</span>
+0010 <span class="comment">% as an equally (unit) spaced sequence of points. A patch is applied</span>
+0011 <span class="comment">% at each end where filter will have problems. A non-unit spacing</span>
+0012 <span class="comment">% can be supplied.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Note that with a 3 point window and equally spaced data sequence,</span>
+0015 <span class="comment">% this code should be similar to gradient. However, with wider</span>
+0016 <span class="comment">% windows this tool will be more robust to noisy data sequences.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% arguments: (input)</span>
+0020 <span class="comment">%  vec - row of column vector, to be differentiated. vec must be of</span>
+0021 <span class="comment">%        length at least 2.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%  supportlength - (OPTIONAL) scalar integer - defines the number of</span>
+0024 <span class="comment">%        points used for the moving window. supportlength may be no</span>
+0025 <span class="comment">%        more than the length of vec.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%        supportlength must be at least 2, but no more than length(vec)</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%        If supportlength is an odd number, then the sliding window</span>
+0030 <span class="comment">%        will be central. If it is an even number, then the window</span>
+0031 <span class="comment">%        will be slid backwards by one element. Thus a 2 point window</span>
+0032 <span class="comment">%        will result in a backwards differences used, except at the</span>
+0033 <span class="comment">%        very first point, where a forward difference will be used.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%        DEFAULT: supportlength = 3</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%  modelorder - (OPTIONAL) - scalar - Defines the order of the windowed</span>
+0038 <span class="comment">%        model used to estimate the slope. When model order is 1, the</span>
+0039 <span class="comment">%        model is a linear one. If modelorder is less than supportlength-1.</span>
+0040 <span class="comment">%        then the sliding window will be a regression one. If modelorder</span>
+0041 <span class="comment">%        is equal to supportlength-1, then the window will result in a</span>
+0042 <span class="comment">%        sliding Lagrange interpolant.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">%        modelorder must be at least 1, but not exceeding</span>
+0045 <span class="comment">%        min(10,supportlength-1)</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%        DEFAULT: modelorder = 1</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%  dt - (OPTIONAL) - scalar - spacing for sequences which do not have</span>
+0050 <span class="comment">%        a unit spacing.</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">%        DEFAULT: dt = 1</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% arguments: (output)</span>
+0055 <span class="comment">%  Dvec = vector of derivative estimates, Dvec will be of the same size</span>
+0056 <span class="comment">%        and shape as is vec.</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% Example:</span>
+0060 <span class="comment">%  Estimate the first derivative using a 7 point window with first through</span>
+0061 <span class="comment">%  fourth order models in the sliding window. Note that the higher order</span>
+0062 <span class="comment">%  approximations provide better accuracy on this curve with no noise.</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">%  t = 0:.1:1;</span>
+0065 <span class="comment">%  vec = exp(t);</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">%  Dvec = movingslope(vec,7,1,.1)</span>
+0068 <span class="comment">%  Dvec =</span>
+0069 <span class="comment">%  Columns 1 through 7</span>
+0070 <span class="comment">%    1.3657  1.3657  1.3657  1.3657  1.5093  1.668  1.8435</span>
+0071 <span class="comment">%  Columns 8 through 11</span>
+0072 <span class="comment">%    2.0373  2.0373  2.0373  2.0373</span>
+0073 <span class="comment">%</span>
+0074 <span class="comment">%  Dvec = movingslope(vec,7,2,.1)</span>
+0075 <span class="comment">%  Dvec =</span>
+0076 <span class="comment">%  Columns 1 through 7</span>
+0077 <span class="comment">%    0.95747 1.0935  1.2296  1.3657  1.5093  1.668  1.8435</span>
+0078 <span class="comment">%  Columns 8 through 11</span>
+0079 <span class="comment">%    2.0373  2.2403  2.4433  2.6463</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">%  Dvec = movingslope(vec,7,3,.1)</span>
+0082 <span class="comment">%  Dvec =</span>
+0083 <span class="comment">%  Columns 1 through 7</span>
+0084 <span class="comment">%    1.0027  1.1049  1.2206  1.3498  1.4918  1.6487  1.8221</span>
+0085 <span class="comment">%  Columns 8 through 11</span>
+0086 <span class="comment">%    2.0137  2.2268  2.4602  2.7138</span>
+0087 <span class="comment">%</span>
+0088 <span class="comment">%  Dvec = movingslope(vec,7,4,.1)</span>
+0089 <span class="comment">%  Dvec =</span>
+0090 <span class="comment">%    Columns 1 through 7</span>
+0091 <span class="comment">%    0.99988 1.1052  1.2214  1.3498  1.4918  1.6487  1.8221</span>
+0092 <span class="comment">%  Columns 8 through 11</span>
+0093 <span class="comment">%    2.0137  2.2255  2.4597  2.7181</span>
+0094 <span class="comment">%</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% Example:</span>
+0097 <span class="comment">%  Estimate the slope of a noisy curve, using a locally quadratic</span>
+0098 <span class="comment">%  approximation. In this case, use a straight line so that we know</span>
+0099 <span class="comment">%  the true slope should be 1. Use a wide window, since we have</span>
+0100 <span class="comment">%  noisy data.</span>
+0101 <span class="comment">%</span>
+0102 <span class="comment">%  t = 0:100;</span>
+0103 <span class="comment">%  vec = t + randn(size(t));</span>
+0104 <span class="comment">%  Dvec = movingslope(vec,10,2,1)</span>
+0105 <span class="comment">%  mean(Dvec)</span>
+0106 <span class="comment">%  ans =</span>
+0107 <span class="comment">%     1.0013</span>
+0108 <span class="comment">%  std(Dvec)</span>
+0109 <span class="comment">%  ans =</span>
+0110 <span class="comment">%     0.10598</span>
+0111 <span class="comment">%</span>
+0112 <span class="comment">%  By way of comparison, gradient gives a much noisier estimate</span>
+0113 <span class="comment">%  of the slope of this curve.</span>
+0114 <span class="comment">%</span>
+0115 <span class="comment">%  std(gradient(vec))</span>
+0116 <span class="comment">%  ans =</span>
+0117 <span class="comment">%     0.69847</span>
+0118 <span class="comment">%</span>
+0119 <span class="comment">%</span>
+0120 <span class="comment">% Example:</span>
+0121 <span class="comment">%  As a time test, generate random data vector of length 500000.</span>
+0122 <span class="comment">%  Compute the slopes using a window of width 10.</span>
+0123 <span class="comment">%</span>
+0124 <span class="comment">%  vec = rand(1,500000);</span>
+0125 <span class="comment">%  tic</span>
+0126 <span class="comment">%  Dvec = movingslope(vec,10,2);</span>
+0127 <span class="comment">%  toc</span>
+0128 <span class="comment">%</span>
+0129 <span class="comment">%  Elapsed time is 0.626021 seconds.</span>
+0130 <span class="comment">%</span>
+0131 <span class="comment">%</span>
+0132 <span class="comment">% See also: gradient</span>
+0133 <span class="comment">%</span>
+0134 <span class="comment">%</span>
+0135 <span class="comment">% Author: John D'Errico</span>
+0136 <span class="comment">% e-mail: woodchips@rochester.rr.com</span>
+0137 <span class="comment">% Release: 1.0</span>
+0138 <span class="comment">% Release date: 10/19/07</span>
+0139 
+0140 <span class="comment">% how long is vec? is it a vector?</span>
+0141 <span class="keyword">if</span> (nargin==0)
+0142   help <a href="movingslope.html" class="code" title="function Dvec = movingslope(vec,supportlength,modelorder,dt)">movingslope</a>
+0143   <span class="keyword">return</span>
+0144 <span class="keyword">end</span>
+0145 <span class="keyword">if</span> ~isvector(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)
+0146   error(<span class="string">'vec must be a row or column vector'</span>)
+0147 <span class="keyword">end</span>
+0148 n = length(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>);
+0149 
+0150 <span class="comment">% supply defaults</span>
+0151 <span class="keyword">if</span> (nargin&lt;4) || isempty(dt)
+0152   dt = 1;
+0153 <span class="keyword">end</span>
+0154 <span class="keyword">if</span> (nargin&lt;3) || isempty(modelorder)
+0155   modelorder = 1;
+0156 <span class="keyword">end</span>
+0157 <span class="keyword">if</span> (nargin&lt;2) || isempty(supportlength)
+0158   supportlength = 3;
+0159 <span class="keyword">end</span>
+0160 
+0161 <span class="comment">% check the parameters for problems</span>
+0162 <span class="keyword">if</span> (length(supportlength)~=1) || (supportlength&lt;=1) || (supportlength&gt;n) || (supportlength~=floor(supportlength))
+0163   error(<span class="string">'supportlength must be a scalar integer, &gt;= 2, and no more than length(vec)'</span>)
+0164 <span class="keyword">end</span>
+0165 <span class="keyword">if</span> (length(modelorder)~=1) || (modelorder&lt;1) || (modelorder&gt;min(10,supportlength-1)) || (modelorder~=floor(modelorder))
+0166   error(<span class="string">'modelorder must be a scalar integer, &gt;= 1, and no more than min(10,supportlength-1)'</span>)
+0167 <span class="keyword">end</span>
+0168 <span class="keyword">if</span> (length(dt)~=1) || (dt&lt;0)
+0169   error(<span class="string">'dt must be a positive scalar numeric variable'</span>)
+0170 <span class="keyword">end</span>
+0171 
+0172 <span class="comment">% now build the filter coefficients to estimate the slope</span>
+0173 <span class="keyword">if</span> mod(supportlength,2) == 1
+0174   parity = 1; <span class="comment">% odd parity</span>
+0175 <span class="keyword">else</span>
+0176   parity = 0;
+0177 <span class="keyword">end</span>
+0178 s = (supportlength-parity)/2;
+0179 t = ((-s+1-parity):s)';
+0180 coef = <a href="#_sub1" class="code" title="subfunction coef = getcoef(t,supportlength,modelorder)">getcoef</a>(t,supportlength,modelorder);
+0181 
+0182 <span class="comment">% Apply the filter to the entire vector</span>
+0183 f = filter(-coef,1,<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>);
+0184 Dvec = zeros(size(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>));
+0185 Dvec(s+(1:(n-supportlength+1))) = f(supportlength:end);
+0186 
+0187 <span class="comment">% patch each end</span>
+0188 <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(:);
+0189 <span class="keyword">for</span> i = 1:s
+0190   <span class="comment">% patch the first few points</span>
+0191   t = (1:supportlength)' - i;
+0192   coef = <a href="#_sub1" class="code" title="subfunction coef = getcoef(t,supportlength,modelorder)">getcoef</a>(t,supportlength,modelorder);
+0193   
+0194   Dvec(i) = coef*<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(1:supportlength);
+0195   
+0196   <span class="comment">% patch the end points</span>
+0197   <span class="keyword">if</span> i&lt;(s + parity)
+0198     t = (1:supportlength)' - supportlength + i - 1;
+0199     coef = <a href="#_sub1" class="code" title="subfunction coef = getcoef(t,supportlength,modelorder)">getcoef</a>(t,supportlength,modelorder);
+0200     Dvec(n - i + 1) = coef*<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(n + (0:(supportlength-1)) + 1 - supportlength);
+0201   <span class="keyword">end</span>
+0202 <span class="keyword">end</span>
+0203 
+0204 <span class="comment">% scale by the supplied spacing</span>
+0205 Dvec = Dvec/dt;
+0206 <span class="comment">% all done</span>
+0207 
+0208 <span class="keyword">end</span> <span class="comment">% mainline end</span>
+0209 
+0210 <span class="comment">% =========================================================</span>
+0211 <span class="comment">% subfunction, used to compute the filter coefficients</span>
+0212 <a name="_sub1" href="#_subfunctions" class="code">function coef = getcoef(t,supportlength,modelorder)</a>
+0213 <span class="comment">% Note: bsxfun would have worked here as well, but some people</span>
+0214 <span class="comment">% might not yet have that release of matlab.</span>
+0215 A = repmat(t,1,modelorder+1).^repmat(0:modelorder,supportlength,1);
+0216 pinvA = pinv(A);
+0217 <span class="comment">% we only need the linear term</span>
+0218 coef = pinvA(2,:);
+0219 <span class="keyword">end</span> <span class="comment">% nested function end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

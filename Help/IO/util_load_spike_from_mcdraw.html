@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_load_spike_from_mcdraw</title>
+  <meta name="keywords" content="util_load_spike_from_mcdraw">
+  <meta name="description" content="UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_load_spike_from_mcdraw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ D spif raw] = util_load_spike_from_mcdraw ( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike
+   输入参数：
+       filename = 要处理的文件名，默认无
+       segment_size = 如果要分段处理，每段的长度（ms），默认60000
+       startend = [start end] 起止时间，默认是全程，单位是ms
+       gnd = [15 16 ...]，接地电极号码，默认是15
+       threshold = n，n倍STD，Spike提取的阈值，默认是？
+       threshold_sample_startend = [start end] ms，采样STD的时间范围，默认是segment_size
+       PLP = n ms，Spike的峰宽，默认是2 ms
+       RP = n ms，Spike提取的不应期，默认是1 ms
+       NPA，是选择负向峰，还是选择最大绝对值峰（即不论正负向），默认true，选择负向峰
+   输出参数：
+       D，文件对象
+       spif，Spike信息结构体
+       raw，可选，若需要raw数据时可返回。注意，数据过长时会Out of Memory.
+
+   蒲江波 - 2010年5月21日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_convert_ms2dp.html" class="code" title="function [ number_of_datapoints ] = util_convert_ms2dp( timems, MicrosecondsPerTick )">util_convert_ms2dp</a>	UTIL_CONVERT_MS2DP 工具函数：计算给定时间长度包含多少个数据点</li><li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../Convertion/util_locate_index_by_millisecond.html" class="code" title="function [ indexer ] = util_locate_index_by_millisecond( timems, MicrosecondsPerTick, startms )">util_locate_index_by_millisecond</a>	UTIL_LOCATE_INDEX_BY_MILLISECOND 工具函数：从时间（ms）反推该时间对应信号在记录矩阵中的位置</li><li><a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="util_compact_spif_spikevalues.html" class="code" title="function [ compacted ] = util_compact_spif_spikevalues( spv )">util_compact_spif_spikevalues</a>	UTIL_COMPACT_SPIF_SPIKEVALUES 工具函数：将SPIF中SPIKEVALUE信息压缩</li><li><a href="util_connect_spif_spiketimes.html" class="code" title="function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin )">util_connect_spif_spiketimes</a>	UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个</li><li><a href="util_connect_spif_spikevalues.html" class="code" title="function [ connected ] = util_connect_spif_spikevalues( spv1, spv2 )">util_connect_spif_spikevalues</a>	UTIL_CONNECT_SPIF_SPIKEVALUES 工具函数：将两个Spikevalues连接成一个</li><li><a href="util_find_rawstream.html" class="code" title="function [ number raw_stream ] = util_find_rawstream( D )">util_find_rawstream</a>	UTIL_FIND_SPIKESTREAM 工具函数：找到MCD文件中的Raw数据流</li><li><a href="../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li><li><a href="../SpikeDet/PTSD/SpkDet_PTSD_SA.html" class="code" title="function [spikesValue, spikesTime]= SpkDet_PTSD_SA(data, thresh, plp, rp, npa);">SpkDet_PTSD_SA</a>	=================================================================</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ D spif raw] = util_load_spike_from_mcdraw ( varargin )</a>
+0002 <span class="comment">%UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike</span>
+0003 <span class="comment">%   输入参数：</span>
+0004 <span class="comment">%       filename = 要处理的文件名，默认无</span>
+0005 <span class="comment">%       segment_size = 如果要分段处理，每段的长度（ms），默认60000</span>
+0006 <span class="comment">%       startend = [start end] 起止时间，默认是全程，单位是ms</span>
+0007 <span class="comment">%       gnd = [15 16 ...]，接地电极号码，默认是15</span>
+0008 <span class="comment">%       threshold = n，n倍STD，Spike提取的阈值，默认是？</span>
+0009 <span class="comment">%       threshold_sample_startend = [start end] ms，采样STD的时间范围，默认是segment_size</span>
+0010 <span class="comment">%       PLP = n ms，Spike的峰宽，默认是2 ms</span>
+0011 <span class="comment">%       RP = n ms，Spike提取的不应期，默认是1 ms</span>
+0012 <span class="comment">%       NPA，是选择负向峰，还是选择最大绝对值峰（即不论正负向），默认true，选择负向峰</span>
+0013 <span class="comment">%   输出参数：</span>
+0014 <span class="comment">%       D，文件对象</span>
+0015 <span class="comment">%       spif，Spike信息结构体</span>
+0016 <span class="comment">%       raw，可选，若需要raw数据时可返回。注意，数据过长时会Out of Memory.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   蒲江波 - 2010年5月21日</span>
+0019 
+0020 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0021 
+0022 <span class="comment">% 参数分析</span>
+0023 
+0024 <span class="keyword">if</span> nargout == 3
+0025     needraw = true;
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> exist(<span class="string">'filename'</span>, <span class="string">'var'</span>)
+0029     [~] = evalc(<span class="string">'D = datastrm(filename)'</span>);
+0030 <span class="keyword">else</span>
+0031     [~] = evalc(<span class="string">'D = datastrm(''open'')'</span>);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="keyword">if</span> isempty(D)
+0035     error(<span class="string">'A MCD file must be selected.'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> exist(<span class="string">'segment_size'</span>, <span class="string">'var'</span>)
+0039     limited_size = segment_size;
+0040 <span class="keyword">else</span>
+0041     limited_size = 60000; <span class="comment">% 1min</span>
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> ~exist(<span class="string">'gnd'</span>, <span class="string">'var'</span>)
+0045     gnd = 15;
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">if</span> ~exist(<span class="string">'threshold'</span>, <span class="string">'var'</span>)
+0049     threshold = 10;
+0050 <span class="keyword">end</span>
+0051 
+0052 <span class="keyword">if</span> ~exist(<span class="string">'PLP'</span>, <span class="string">'var'</span>)
+0053     PLP = 2;
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="keyword">if</span> ~exist(<span class="string">'RP'</span>, <span class="string">'var'</span>)
+0057     RP = 1;
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">if</span> ~exist(<span class="string">'NPA'</span>, <span class="string">'var'</span>)
+0061     NPA = true;
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">% 起止时间</span>
+0065 <span class="keyword">if</span> exist(<span class="string">'startend'</span>, <span class="string">'var'</span>)
+0066     start_time = startend(1); <span class="comment">% *1000</span>
+0067     stop_time = startend(2); <span class="comment">% *1000</span>
+0068     <span class="keyword">if</span> start_time &lt; <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStartTime'</span>)
+0069         warning(<span class="string">'UTIL:SPIKEDET'</span>, <span class="string">'Start time must be bigger than sweepStartTime, is automatically set to sweepStartTime.'</span>);
+0070         start_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStartTime'</span>);
+0071     <span class="keyword">end</span>
+0072     <span class="keyword">if</span> stop_time &gt; <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0073         warning(<span class="string">'UTIL:SPIKEDET'</span>, <span class="string">'Stop time must be smaller than sweepStopTime, is automatically set to sweepStopTime.'</span>);
+0074         stop_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">else</span>
+0077     start_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStartTime'</span>);
+0078     stop_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="comment">% STD采样起止时间</span>
+0082 <span class="keyword">if</span> exist(<span class="string">'threshold_sample_startend'</span>, <span class="string">'var'</span>)
+0083     thsample_start_time = threshold_sample_startend(1);
+0084     thsample_end_time = threshold_sample_startend(2);
+0085     <span class="keyword">if</span> thsample_start_time &lt; start_time
+0086         warning(<span class="string">'UTIL:SPIKEDET'</span>, <span class="string">'Threshold sampling start time must be bigger than start time, is automatically set to start time.'</span>);
+0087         thsample_start_time = start_time;
+0088     <span class="keyword">end</span>
+0089     <span class="keyword">if</span> thsample_end_time &gt; end_time
+0090         warning(<span class="string">'UTIL:SPIKEDET'</span>, <span class="string">'Threshold sampling end time must be smaller than start time, is automatically set to end time.'</span>);
+0091         thsample_end_time = end_time;
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">else</span>
+0094     thsample_start_time = start_time;
+0095     thsample_end_time = end_time;
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="comment">% 显示文件信息</span>
+0099 disp([<span class="string">'Start:'</span> datestr(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingdate'</span>)) <span class="string">', Stop: '</span>  datestr(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingdate'</span>)) <span class="string">', Length: '</span> num2str(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>)) <span class="string">' ms.'</span>]);
+0100 
+0101 <span class="comment">% 显示提取Spike的参数信息</span>
+0102 disp([<span class="string">'Threshold = '</span> num2str(threshold) <span class="string">' * STD; STD Sampling = ['</span> num2str(thsample_start_time) <span class="string">' '</span> num2str(thsample_start_time) <span class="string">'] ms.'</span> ]);
+0103 disp([<span class="string">'PLP = '</span> num2str(PLP) <span class="string">'ms, RP = '</span> num2str(RP) <span class="string">'ms.'</span>]);
+0104 <span class="keyword">if</span> NPA
+0105     disp(<span class="string">'Only negative peak is detected.'</span>);
+0106 <span class="keyword">else</span>
+0107     disp(<span class="string">'Both positive and negative peak can be detected.'</span>);
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="comment">% 进入实质处理部分</span>
+0111 <span class="comment">% 获取时间分辨率</span>
+0112 timeres = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'MicrosecondsPerTick'</span>);
+0113 
+0114 <span class="comment">% 将时间从ms转换为数据点</span>
+0115 PLP = <a href="../Common/util_convert_ms2dp.html" class="code" title="function [ number_of_datapoints ] = util_convert_ms2dp( timems, MicrosecondsPerTick )">util_convert_ms2dp</a>(PLP, timeres);
+0116 RP = <a href="../Common/util_convert_ms2dp.html" class="code" title="function [ number_of_datapoints ] = util_convert_ms2dp( timems, MicrosecondsPerTick )">util_convert_ms2dp</a>(RP, timeres);
+0117 
+0118 <span class="comment">% 将采样起止时间从ms的时间位置转换为数据点位置</span>
+0119 thsample_start_time = <a href="../Convertion/util_locate_index_by_millisecond.html" class="code" title="function [ indexer ] = util_locate_index_by_millisecond( timems, MicrosecondsPerTick, startms )">util_locate_index_by_millisecond</a>(thsample_start_time, timeres, 0);
+0120 thsample_end_time = <a href="../Convertion/util_locate_index_by_millisecond.html" class="code" title="function [ indexer ] = util_locate_index_by_millisecond( timems, MicrosecondsPerTick, startms )">util_locate_index_by_millisecond</a>(thsample_end_time, timeres, 0);
+0121 
+0122 <span class="comment">% 读取数据流</span>
+0123 <span class="comment">% 找到Raw数据流</span>
+0124 [stream_number raw_streamname] = <a href="util_find_rawstream.html" class="code" title="function [ number raw_stream ] = util_find_rawstream( D )">util_find_rawstream</a>(D);
+0125 <span class="keyword">if</span> stream_number &lt; 1
+0126     error(<span class="string">'没有Raw数据流'</span>);
+0127 <span class="keyword">elseif</span> stream_number &gt; 1
+0128     <span class="comment">% 有多于一个的Raw数据流</span>
+0129     <span class="comment">% 列出Raw数据流的名称，让用户选择</span>
+0130     <span class="keyword">for</span> i = 1:stream_number
+0131         disp(raw_streamname{i});
+0132     <span class="keyword">end</span>
+0133     user_entry = input(<span class="string">'请输入想要计算的序号：'</span>);
+0134     
+0135     raw_streamname_selected = raw_streamname{user_entry};
+0136 <span class="keyword">else</span>
+0137     raw_streamname_selected = raw_streamname{1};
+0138 <span class="keyword">end</span>
+0139 
+0140 <span class="comment">% 至此，获得了Raw数据流的名字，储存在raw_streamname_selected里</span>
+0141 
+0142 <span class="comment">% 读取Raw信息</span>
+0143 
+0144 <span class="keyword">if</span> (stop_time - start_time) &gt; limited_size;
+0145     <span class="comment">% 太长，分段读取，拼合</span>
+0146     
+0147     <span class="comment">% 处理RAW数据流部分</span>
+0148     h = waitbar(100, <span class="string">'Processing RAW data...'</span>);
+0149     
+0150     <span class="comment">% 建立用于存放最终结果的SPIF结构体，cell外面围的{}很重要，去掉会出错。</span>
+0151     spif = struct(<span class="string">'spiketimes'</span>, {cell(64,1)}, <span class="string">'spikevalues'</span>, {cell(64,1)}, <span class="string">'startend'</span>, [start_time stop_time]);
+0152     
+0153     <span class="comment">% 首先循环（即，可以用limited_size整除的）</span>
+0154     <span class="keyword">for</span> i = start_time:limited_size:stop_time
+0155         spif_segment = <a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(D, <span class="string">'streamname'</span>, spike_streamname_selected, <span class="string">'startend'</span>, [i i+limited_size]);
+0156         spif.spiketimes = <a href="util_connect_spif_spiketimes.html" class="code" title="function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin )">util_connect_spif_spiketimes</a>(spif.spiketimes, spif_segment.spiketimes);
+0157         <span class="comment">% 如果指定了compact参数，则会压缩spikevalue表</span>
+0158         <span class="keyword">if</span> (isCompact)
+0159             spif_segment.spikevalues = <a href="util_compact_spif_spikevalues.html" class="code" title="function [ compacted ] = util_compact_spif_spikevalues( spv )">util_compact_spif_spikevalues</a>(spif_segment.spikevalues);
+0160         <span class="keyword">end</span>
+0161         spif.spikevalues = <a href="util_connect_spif_spikevalues.html" class="code" title="function [ connected ] = util_connect_spif_spikevalues( spv1, spv2 )">util_connect_spif_spikevalues</a>(spif.spikevalues, spif_segment.spikevalues);
+0162         
+0163         waitbar(i/(stop_time - start_time), h, [<span class="string">'Processed SPIF: '</span> num2str(fix(i/1000/60)) <span class="string">' minutes'</span>]);
+0164         <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> spif_segment;
+0165     <span class="keyword">end</span>
+0166     close(h);
+0167     
+0168     <span class="comment">% BUGFIX</span>
+0169     <span class="comment">% 不需要计算剩余部分的，因为在最后一次i里面，虽然i+limited_size是&gt;stop_time的，但是nextdata会自动读</span>
+0170     <span class="comment">% 到stoptime为止，还计算剩余部分是一个冗余</span>
+0171     <span class="comment">% 计算残余的部分</span>
+0172     <span class="comment">% spif_segment = nextdata(D, 'streamname', spike_streamname_selected, 'startend', [i stop_time]);</span>
+0173     <span class="comment">% spif.spiketimes = util_connect_spif_spiketimes(spif.spiketimes, spif_segment.spiketimes);</span>
+0174     <span class="comment">% 如果指定了compact参数，则会压缩spikevalue表（残余部分）</span>
+0175     <span class="comment">% if (isCompact)</span>
+0176     <span class="comment">%    spif_segment.spikevalues = util_compact_spif_spikevalues(spif_segment.spikevalues);</span>
+0177     <span class="comment">% end</span>
+0178     <span class="comment">% spif.spikevalues = util_connect_spif_spikevalues(spif.spikevalues, spif_segment.spikevalues);</span>
+0179 <span class="keyword">else</span>
+0180     <span class="comment">% 正常读取</span>
+0181     
+0182     <span class="comment">% 获得RAW信息</span>
+0183     rawif = <a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(D,<span class="string">'streamname'</span>, raw_streamname_selected,<span class="string">'startend'</span>,[start_time stop_time]);
+0184 
+0185     <span class="comment">% 循环每个通道</span>
+0186     <span class="keyword">for</span> hwid = 1:64
+0187         <span class="comment">% 判断是否属于不需要处理的电极</span>
+0188         <span class="keyword">if</span> ~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>( <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid), [11 18 81 88 gnd] )
+0189             <span class="comment">% 提取SPIKE</span>
+0190             [spv, spt]= <a href="../SpikeDet/PTSD/SpkDet_PTSD_SA.html" class="code" title="function [spikesValue, spikesTime]= SpkDet_PTSD_SA(data, thresh, plp, rp, npa);">SpkDet_PTSD_SA</a>(rawif.data(hwid,:)', threshold * std(y(thsample_start_time:thsample_end_time)), PLP, RP, NPA);
+0191         
+0192         <span class="keyword">end</span>
+0193     <span class="keyword">end</span>
+0194     
+0195     
+0196 <span class="keyword">end</span>
+0197 
+0198 <span class="comment">% 显示Spike的个数</span>
+0199 disp([<span class="string">'Total Spikes'</span>]);
+0200 
+0201 <span class="keyword">end</span>
+0202</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

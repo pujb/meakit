@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prob</title>
+  <meta name="keywords" content="prob">
+  <meta name="description" content="PROB calculates probability distribution of y among nBins number of bins">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html ami -->
+<h1>prob
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PROB calculates probability distribution of y among nBins number of bins</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [py nBins]= prob(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> PROB calculates probability distribution of y among nBins number of bins
+
+ USAGE:
+       [py nBins]= prob(y)
+       [py nBins]= prob(y,maxBins)
+
+ INPUT:
+         y:   data
+      maxBins:   number of bins to compute the distribution of y among maxBins
+      
+ OUTPUT:
+        py:    probability distribution of y
+     nBins:    number of bins computed such that any of bins does not
+               have zero probability distribution
+
+ EXAMPLES:
+
+ See also <a href="prob.html" class="code" title="function [py nBins]= prob(varargin)">PROB</a>, <a href="probxy.html" class="code" title="function pxy = probxy(varargin)">PROBXY</a>, <a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">RHIST</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">rhist</a>	RHIST   Relative Histogram.</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/BCT/makefractalCIJ.html" class="code" title="function  [CIJ,K] = makefractalCIJ(mx_lvl,E,sz_cl)">makefractalCIJ</a>	MAKEFRACTALCIJ     Synthetic hierarchical modular network</li><li><a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">ami</a>	AMI computes and plots average mutual information (ami) and correlation for</li><li><a href="../../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>	UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</li><li><a href="../../Scripts/avalanche.html" class="code" title="">avalanche</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function trueOrFalse = isZeroDistribution(y,nBins)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [py nBins]= prob(varargin)</a>
+0002 <span class="comment">% PROB calculates probability distribution of y among nBins number of bins</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% USAGE:</span>
+0005 <span class="comment">%       [py nBins]= prob(y)</span>
+0006 <span class="comment">%       [py nBins]= prob(y,maxBins)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% INPUT:</span>
+0009 <span class="comment">%         y:   data</span>
+0010 <span class="comment">%      maxBins:   number of bins to compute the distribution of y among maxBins</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% OUTPUT:</span>
+0013 <span class="comment">%        py:    probability distribution of y</span>
+0014 <span class="comment">%     nBins:    number of bins computed such that any of bins does not</span>
+0015 <span class="comment">%               have zero probability distribution</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% EXAMPLES:</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% See also PROB, PROBXY, RHIST</span>
+0020 
+0021 <span class="comment">% Copyright 2004-2005 by Durga Lal Shrestha.</span>
+0022 <span class="comment">% eMail: durgals@hotmail.com</span>
+0023 <span class="comment">% $Date: 2005/06/27</span>
+0024 <span class="comment">% $Revision: 1.1.0 $ $Date: 2005/07/01 $</span>
+0025 
+0026 <span class="comment">% ***********************************************************************</span>
+0027 <span class="comment">%% INPUT ARGUMENTS CHECK</span>
+0028 error(nargchk(1,2,nargin));
+0029 y = varargin{1};
+0030 <span class="keyword">if</span>  nargin == 1    
+0031     maxBins = 10;
+0032 <span class="keyword">else</span>
+0033     maxBins = varargin{2};
+0034 <span class="keyword">end</span>
+0035 <span class="keyword">if</span> ~isvector(y)
+0036     error(<span class="string">'Invalid data size: y should be vector'</span>)
+0037 <span class="keyword">else</span>
+0038     y = y(:);
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">%**************************************************************************</span>
+0042 <span class="comment">%% Computation</span>
+0043 
+0044 preBin = 0;
+0045 isNotZeroBin = false;
+0046 iter = 0;
+0047 cBin = maxBins;
+0048 <span class="keyword">while</span> preBin ~= cBin
+0049     zeroDistribution = <a href="#_sub1" class="code" title="subfunction trueOrFalse = isZeroDistribution(y,nBins)">isZeroDistribution</a>(y,cBin);
+0050     iter = iter+1;
+0051     <span class="keyword">if</span> ~zeroDistribution <span class="comment">% not zero distribution; increase bin</span>
+0052         <span class="keyword">if</span> iter == 1 <span class="comment">% if first iteration then accept user provided number of bins</span>
+0053             <span class="keyword">break</span>
+0054         <span class="keyword">end</span>
+0055         tmpBin = cBin;
+0056         nonZeroBin = cBin;
+0057         cBin = floor((zeroBin+nonZeroBin)/2);
+0058         preBin = tmpBin; 
+0059         isNotZeroBin = true;
+0060     <span class="keyword">else</span>        <span class="comment">% zero distribution; reduce bin</span>
+0061         <span class="keyword">if</span> ~isNotZeroBin    <span class="comment">% if previous number of bins contains zero</span>
+0062             preBin = cBin;    <span class="comment">% distribution, then decreases by factor of 2</span>
+0063             zeroBin = cBin;
+0064             cBin = floor(cBin/2);
+0065         <span class="keyword">else</span>
+0066             tmpBin = cBin;     <span class="comment">% if previous number of bins does not contain zero</span>
+0067             zeroBin = cBin;    <span class="comment">% distribution, then decreases by taking average</span>
+0068             cBin = floor((zeroBin+nonZeroBin)/2);
+0069             preBin = tmpBin;
+0070         <span class="keyword">end</span>        
+0071     <span class="keyword">end</span>       
+0072 <span class="keyword">end</span>
+0073 nBins = cBin;
+0074 py = <a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">rhist</a>(y,nBins);
+0075 <span class="comment">%</span>
+0076 <span class="comment">%**************************************************************************</span>
+0077 <span class="comment">%% INTERNAL FUNCTION TO CHECK WHETHER A GIVEN NUMBER OF BINS CONTAINS ZERO</span>
+0078 <span class="comment">% DISTRIBUTION OF DATA IN ATLEAST ONE OF THE BINS.</span>
+0079 <a name="_sub1" href="#_subfunctions" class="code">function trueOrFalse = isZeroDistribution(y,nBins)</a>
+0080 <span class="comment">% ISZERODISTRIBUTION returns &quot;True&quot; if atleast one of the bins contains zero</span>
+0081 <span class="comment">%                    distribution of data, otherwise &quot;False&quot;</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">% USAGE:</span>
+0084 <span class="comment">%       zeroOrOne = isZeroDistribution(y,nBins)</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">% INPUT:</span>
+0087 <span class="comment">%            y:   data</span>
+0088 <span class="comment">%           nBins:   number of bins to compute the distribution of y among nBins</span>
+0089 <span class="comment">%</span>
+0090 <span class="comment">% OUTPUT:</span>
+0091 <span class="comment">%   trueOrFalse:  &quot;True&quot; if atleast one of the bins contains zero Distribution</span>
+0092 <span class="comment">%                 of data, otherwise &quot;False&quot;</span>
+0093 <span class="comment">%</span>
+0094 <span class="comment">% See also PROB, PROBXY, RHIST</span>
+0095 
+0096 <span class="comment">% Copyright 2004-2005 by Durga Lal Shrestha.</span>
+0097 <span class="comment">% eMail: durgals@hotmail.com</span>
+0098 <span class="comment">% $Date: 2005/06/27</span>
+0099 <span class="comment">% $Revision: 1.1.0 $ $Date: 2005/07/01 $</span>
+0100 <span class="comment">%</span>
+0101 <span class="comment">% ***********************************************************************</span>
+0102 <span class="comment">%% INPUT ARGUMENTS CHECK</span>
+0103 error(nargchk(2,2,nargin));
+0104 
+0105 <span class="keyword">if</span> ~isvector(y)
+0106     error(<span class="string">'Invalid data size: y should be vector'</span>)
+0107 <span class="keyword">else</span>
+0108     y = y(:);
+0109 <span class="keyword">end</span>
+0110 <span class="comment">%</span>
+0111 <span class="comment">%**************************************************************************</span>
+0112 <span class="comment">%% COMPUTATION</span>
+0113 [nn x]=<a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">rhist</a>(y,nBins);
+0114 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> x;
+0115 z = find(nn == 0);
+0116 <span class="keyword">if</span> length(z)&gt;0
+0117     trueOrFalse = true;  <span class="comment">% zero distribution of data</span>
+0118 <span class="keyword">else</span>
+0119     trueOrFalse = false;
+0120 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

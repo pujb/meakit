@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cycprob</title>
+  <meta name="keywords" content="cycprob">
+  <meta name="description" content="CYCPROB       Cycle probability">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>cycprob
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CYCPROB       Cycle probability</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [fcyc,pcyc] = cycprob(Pq) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> CYCPROB       Cycle probability
+
+   [fcyc,pcyc] = cycprob(Pq);
+
+   Cycles are paths which begin and end at the same node. Cycle 
+   probability for path length d, is the fraction of all paths of length 
+   d-1 that may be extended to form cycles of length d.
+
+   Input:      Pq,     3D matrix, with Pq(i,j,q) = number of paths from 
+                       'i' to 'j' of length 'q' (produced by 'findpaths')
+
+   Outputs:    fcyc,   fraction of all paths that are cycles for each path
+                       length 'q'. 
+               pcyc,   probability that a non-cyclic path of length 'q-1' 
+                       can be extended to form a cycle of length 'q', for 
+                       each path length 'q', 
+
+
+ Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fcyc,pcyc] = cycprob(Pq)</a>
+0002 <span class="comment">% CYCPROB       Cycle probability</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [fcyc,pcyc] = cycprob(Pq);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Cycles are paths which begin and end at the same node. Cycle</span>
+0007 <span class="comment">%   probability for path length d, is the fraction of all paths of length</span>
+0008 <span class="comment">%   d-1 that may be extended to form cycles of length d.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      Pq,     3D matrix, with Pq(i,j,q) = number of paths from</span>
+0011 <span class="comment">%                       'i' to 'j' of length 'q' (produced by 'findpaths')</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Outputs:    fcyc,   fraction of all paths that are cycles for each path</span>
+0014 <span class="comment">%                       length 'q'.</span>
+0015 <span class="comment">%               pcyc,   probability that a non-cyclic path of length 'q-1'</span>
+0016 <span class="comment">%                       can be extended to form a cycle of length 'q', for</span>
+0017 <span class="comment">%                       each path length 'q',</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0021 
+0022 
+0023 <span class="comment">% Note: fcyc(1) must be zero, as there cannot be cycles of length one.</span>
+0024 fcyc = zeros(1,size(Pq,3));
+0025 <span class="keyword">for</span> q=1:size(Pq,3)
+0026    <span class="keyword">if</span>(sum(sum(Pq(:,:,q)))&gt;0)
+0027       fcyc(q) = sum(diag(Pq(:,:,q)))/sum(sum(Pq(:,:,q)));
+0028    <span class="keyword">else</span>
+0029       fcyc(q) = 0;
+0030    <span class="keyword">end</span>;
+0031 <span class="keyword">end</span>;
+0032 
+0033 <span class="comment">% Note: pcyc(1) is not defined (set to zero).</span>
+0034 <span class="comment">% Note: pcyc(2) is equal to the fraction of reciprocal connections,</span>
+0035 <span class="comment">%       'frecip', delivered by 'reciprocal.m'.</span>
+0036 <span class="comment">% Note: there are no non-cyclic paths of length N and no cycles of length N+1</span>
+0037 pcyc = zeros(1,size(Pq,3));
+0038 <span class="keyword">for</span> q=2:size(Pq,3)
+0039    <span class="keyword">if</span>((sum(sum(Pq(:,:,q-1)))-sum(diag(Pq(:,:,q-1))))&gt;0)
+0040       pcyc(q) = sum(diag(Pq(:,:,q)))/<span class="keyword">...</span>
+0041                 (sum(sum(Pq(:,:,q-1)))-sum(diag(Pq(:,:,q-1))));
+0042    <span class="keyword">else</span>
+0043       pcyc(q) = 0;
+0044    <span class="keyword">end</span>;
+0045 <span class="keyword">end</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

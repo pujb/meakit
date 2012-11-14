@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of countEntries</title>
+  <meta name="keywords" content="countEntries">
+  <meta name="description" content="COUNTENTRIES returns all unique entries (sorted) in the array m and how many times the respective entries occured">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- # violin_plot --><!-- menu.html distributionPlot -->
+<h1>countEntries
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>COUNTENTRIES returns all unique entries (sorted) in the array m and how many times the respective entries occured</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [uniqueEntries,numberOfOccurences,whereIdx] = countEntries(m,isRow, keepNaN) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">COUNTENTRIES returns all unique entries (sorted) in the array m and how many times the respective entries occured
+
+SYNOPSIS [uniqueEntries,numberOfOccurences] = countEntries(m,isRow)
+
+INPUT  m          : any matrix (not cells or structs)
+       isRow(opt) : should rows be counted or not [1/{0}]
+                       (if it's cols, transpose m before calling the function!)
+       keepNaN (opt) : count NaN as entry? [{1}/0] If 0, NaNs (or
+                       NaN-containing rows) are removed after sorting, so
+                       that whereIdx still refers to the original position
+                       of the uniqueEntries in the input array.
+
+OUTPUT uniqueEntries : unique(m)
+       numberOfOccurences : how many times the unique entries appear in m
+       whereIdx      : where in m do the entries appear? (m = uniqueEntries(whereIdx,:))
+
+c: 11/03, jonas
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="histogram.html" class="code" title="function [N,X,sp] = histogram(varargin)">histogram</a>	HISTOGRAM generates a histogram using the "optimal" number of bins</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [uniqueEntries,numberOfOccurences,whereIdx] = countEntries(m,isRow, keepNaN)</a>
+0002 <span class="comment">%COUNTENTRIES returns all unique entries (sorted) in the array m and how many times the respective entries occured</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%SYNOPSIS [uniqueEntries,numberOfOccurences] = countEntries(m,isRow)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%INPUT  m          : any matrix (not cells or structs)</span>
+0007 <span class="comment">%       isRow(opt) : should rows be counted or not [1/{0}]</span>
+0008 <span class="comment">%                       (if it's cols, transpose m before calling the function!)</span>
+0009 <span class="comment">%       keepNaN (opt) : count NaN as entry? [{1}/0] If 0, NaNs (or</span>
+0010 <span class="comment">%                       NaN-containing rows) are removed after sorting, so</span>
+0011 <span class="comment">%                       that whereIdx still refers to the original position</span>
+0012 <span class="comment">%                       of the uniqueEntries in the input array.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%OUTPUT uniqueEntries : unique(m)</span>
+0015 <span class="comment">%       numberOfOccurences : how many times the unique entries appear in m</span>
+0016 <span class="comment">%       whereIdx      : where in m do the entries appear? (m = uniqueEntries(whereIdx,:))</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%c: 11/03, jonas</span>
+0019 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0020 
+0021 
+0022 <span class="comment">%---test input</span>
+0023 <span class="keyword">if</span> iscell(m) || isstruct(m)
+0024     error(<span class="string">'cells and structs are not supportet as input'</span>);
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">if</span> nargin &lt; 2 || isempty(isRow)
+0028     doRow = 0;
+0029 <span class="keyword">else</span>
+0030     <span class="keyword">if</span> isRow == 1;
+0031         doRow = 1;
+0032     <span class="keyword">elseif</span> isRow == 0
+0033         doRow = 0;
+0034     <span class="keyword">else</span>
+0035         error(<span class="string">'input argument isRow has to be 1 or 0!'</span>)
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 <span class="keyword">if</span> nargin &lt; 3 || isempty(keepNaN)
+0039     keepNaN = true;
+0040 <span class="keyword">end</span>
+0041 <span class="comment">%---end test input</span>
+0042 
+0043 
+0044 
+0045 <span class="keyword">if</span> ~doRow <span class="comment">%do the fast method</span>
+0046     
+0047     <span class="comment">%make m into a vector</span>
+0048     m = m(:);
+0049     
+0050     <span class="comment">%get unique Entries. sort them first, though</span>
+0051     m = sort(m);
+0052     
+0053     [uniqueEntries, uniqueIdx, whereIdx] = unique(m);
+0054     
+0055     <span class="keyword">if</span> ~keepNaN
+0056         <span class="comment">% remove NaN, inf</span>
+0057         badIdx = find(~isfinite(uniqueEntries));
+0058         uniqueEntries(badIdx) = [];
+0059         uniqueIdx(badIdx) = [];
+0060         whereIdx(ismember(whereIdx,badIdx)) = [];
+0061     <span class="keyword">end</span>
+0062     
+0063     <span class="comment">%uniqueIdx returns the last occurence of the respective unique entry</span>
+0064     <span class="comment">%having sorted m before, we can now count the number of occurences</span>
+0065     <span class="keyword">if</span> size(uniqueEntries,1)&gt;size(uniqueEntries,2)
+0066         uniqueIdx = [0;uniqueIdx];
+0067     <span class="keyword">else</span>
+0068         uniqueIdx = [0,uniqueIdx];
+0069     <span class="keyword">end</span>
+0070     
+0071     numberOfOccurences = diff(uniqueIdx); 
+0072     
+0073 <span class="keyword">else</span> <span class="comment">%do it the complicated way</span>
+0074     
+0075     <span class="comment">%we do not care about the ordering of the matrix here: if the user</span>
+0076     <span class="comment">%specified rows, he/she wanted a columnVector as output (or should read the help)</span>
+0077     [uniqueEntries, dummy, uniqueIdx] = unique(m,<span class="string">'rows'</span>);
+0078     
+0079     <span class="comment">%rember output</span>
+0080     whereIdx = uniqueIdx;
+0081     
+0082     <span class="keyword">if</span> ~keepNaN
+0083         <span class="comment">% remove NaN, inf</span>
+0084         badIdx = find(any(~isfinite(uniqueEntries),2));
+0085         uniqueEntries(badIdx,:) = [];
+0086         whereIdx(ismember(whereIdx,badIdx)) = [];
+0087         uniqueIdx = whereIdx;
+0088     <span class="keyword">end</span>
+0089     
+0090     <span class="comment">%uniqueIdx returns the indexList where uniqueEntriy #x occurs.</span>
+0091     <span class="comment">%We will now sort this list and take a diff to find where this index</span>
+0092     <span class="comment">%changes.</span>
+0093     <span class="comment">%adding zero and length(uniqueIndex) to the vector, we can now via</span>
+0094     <span class="comment">%another diff see how many entries there are (see example)</span>
+0095     
+0096     <span class="comment">%example m: [11,11,22,33,33,22,22,22,44,11]</span>
+0097     <span class="comment">%corresponding uniqueEntries, uniqueIdx: [11,22,33,44] / [1 1 2 3 3 2 2 2 4 1]</span>
+0098     
+0099     <span class="comment">%sort: [1     1     1     2     2     2     2     3     3     4]</span>
+0100     sortedIdx = sort(uniqueIdx);
+0101     
+0102     <span class="comment">%diff: [0     0     1     0     0     0     1     0     1]</span>
+0103     sortedIdxDiff = diff(sortedIdx);
+0104     
+0105     <span class="comment">%find and add entries: [0     3     7     9    10]</span>
+0106     changeValueIdx = [0;find(sortedIdxDiff);length(uniqueIdx)];
+0107     
+0108     <span class="comment">%diff again for the numberOfOccurences: [3     4     2     1]</span>
+0109     numberOfOccurences = diff(changeValueIdx);
+0110 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

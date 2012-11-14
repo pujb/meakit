@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nca</title>
+  <meta name="keywords" content="nca">
+  <meta name="description" content="NCA Performs NCA on the specified dataset">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>nca
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NCA Performs NCA on the specified dataset</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = nca(X, labels, no_dims, lambda) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">NCA Performs NCA on the specified dataset
+
+   [mappedX, mapping] = nca(X, labels, no_dims, lambda)
+
+ Performs linear Neighborhood Components Analysis (NCA) on the 
+ dataset specified through X and labels to reduce the data dimensionality 
+ to no_dims dimensions. If valid_X and valid_labels are specified, the
+ function uses early stopping based on NN errors.
+ The function returns a embedded data in mappedX, as well as th mapping.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>	Minimize a continuous differentialble multivariate function. Starting point</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = nca(X, labels, no_dims, lambda)</a>
+0002 <span class="comment">%NCA Performs NCA on the specified dataset</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = nca(X, labels, no_dims, lambda)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Performs linear Neighborhood Components Analysis (NCA) on the</span>
+0007 <span class="comment">% dataset specified through X and labels to reduce the data dimensionality</span>
+0008 <span class="comment">% to no_dims dimensions. If valid_X and valid_labels are specified, the</span>
+0009 <span class="comment">% function uses early stopping based on NN errors.</span>
+0010 <span class="comment">% The function returns a embedded data in mappedX, as well as th mapping.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0015 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0016 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0017 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0018 <span class="comment">% maintain the name of the original author.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0021 <span class="comment">% University California, San Diego / Delft University of Technologyy</span>
+0022 
+0023 
+0024 
+0025     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>) || isempty(no_dims)
+0026         no_dims = size(X, 2);
+0027     <span class="keyword">end</span>
+0028     <span class="keyword">if</span> ~exist(<span class="string">'lambda'</span>, <span class="string">'var'</span>) || isempty(lambda)
+0029         lambda = 0;
+0030     <span class="keyword">end</span>
+0031     
+0032     <span class="comment">% Make sure data is zero mean</span>
+0033     mapping.mean = mean(X, 1);
+0034     X = bsxfun(@minus, X, mapping.mean);
+0035 
+0036     <span class="comment">% Initialize some variables</span>
+0037     max_iter = 200;
+0038     [n, d] = size(X);
+0039     batch_size = min(5000, n);
+0040     no_batches = ceil(n / batch_size);
+0041     max_iter = ceil(max_iter / no_batches);
+0042     [lablist, foo, labels] = unique(labels);
+0043     A = randn(d, no_dims) * .01;
+0044     converged = false;
+0045     iter = 0;
+0046     
+0047     <span class="comment">% Main iteration loop</span>
+0048     <span class="keyword">while</span> iter &lt; max_iter &amp;&amp; ~converged
+0049         
+0050         <span class="comment">% Loop over batches</span>
+0051         iter = iter + 1;
+0052         disp([<span class="string">'Iteration '</span> num2str(iter) <span class="string">' of '</span> num2str(max_iter) <span class="string">'...'</span>]);
+0053         ind = randperm(n);
+0054         <span class="keyword">for</span> batch=1:batch_size:n
+0055     
+0056             <span class="comment">% Run NCA minimization using three linesearches</span>
+0057             cur_X    = double(X(ind(batch:min([batch + batch_size - 1 n])),:));
+0058             cur_labels = labels(ind(batch:min([batch + batch_size - 1 n])));
+0059             [A, f] = <a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>(A(:), <span class="string">'nca_lin_grad'</span>, 5, cur_X, cur_labels, no_dims, lambda);
+0060             A = reshape(A, [d no_dims]);
+0061             <span class="keyword">if</span> isempty(f) || f(end) - f(1) &gt; -1e-4
+0062                 disp(<span class="string">'Converged!'</span>);
+0063                 converged = true;
+0064             <span class="keyword">end</span>
+0065         <span class="keyword">end</span>
+0066     <span class="keyword">end</span>
+0067     
+0068     <span class="comment">% Compute embedding</span>
+0069     mapping.M = A;
+0070     mappedX = X * mapping.M;
+0071</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

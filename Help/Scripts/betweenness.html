@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of betweenness</title>
+  <meta name="keywords" content="betweenness">
+  <meta name="description" content="本脚本可用于将CCpeak等网络拓扑结构矩阵转换成对称形式，并计算可通过计算其中的betweeness来获得Hub Neuron">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Scripts -->
+<h1>betweenness
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>本脚本可用于将CCpeak等网络拓扑结构矩阵转换成对称形式，并计算可通过计算其中的betweeness来获得Hub Neuron</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = betweenness() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment"> 本脚本可用于将CCpeak等网络拓扑结构矩阵转换成对称形式，并计算可通过计算其中的betweeness来获得Hub Neuron
+ Identify hub neurons in the network</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = betweenness()</a>
+0002 <span class="comment">% 本脚本可用于将CCpeak等网络拓扑结构矩阵转换成对称形式，并计算可通过计算其中的betweeness来获得Hub Neuron</span>
+0003 <span class="comment">% Identify hub neurons in the network</span>
+0004 
+0005 <span class="comment">% CCPEAK is extracted by mutual information method</span>
+0006 network_matrix = (CCpeak + CCpeak');
+0007 <span class="keyword">for</span> i = 1:64
+0008     <span class="keyword">for</span> j = 1:64
+0009         <span class="keyword">if</span> network_matrix(i,j) &lt; 0.1
+0010             network_matrix(i,j) = 0;
+0011         <span class="keyword">end</span>
+0012     <span class="keyword">end</span>
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="comment">% Calc the betweenness in this unidirectional weighted network</span>
+0016 BC = getbc(network_matrix);
+0017 
+0018 <span class="comment">% Generate the list of electrodes</span>
+0019 elecs = (1:64);
+0020 
+0021 <span class="comment">% Output the hub electrodes list</span>
+0022 <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(elecs(BC &gt; 100))
+0023 BC(BC &gt; 100)'
+0024 
+0025 topoplotgy(CCpeak,0);
+0026 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

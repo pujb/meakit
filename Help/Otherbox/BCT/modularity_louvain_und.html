@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modularity_louvain_und</title>
+  <meta name="keywords" content="modularity_louvain_und">
+  <meta name="description" content="MODULARITY_LOUVAIN_UND     Optimal community structure and modularity">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>modularity_louvain_und
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MODULARITY_LOUVAIN_UND     Optimal community structure and modularity</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Ci Q]=modularity_louvain_und(W,hierarchy) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MODULARITY_LOUVAIN_UND     Optimal community structure and modularity
+
+   Ci = modularity_louvain_und(W);
+   [Ci Q] = modularity_louvain_und(W);
+   [Ci_h Q_h] = modularity_louvain_und(W,1);
+
+   The optimal community structure is a subdivision of the network into
+   nonoverlapping groups of nodes in a way that maximizes the number of
+   within-group edges, and minimizes the number of between-group edges. 
+   The modularity is a statistic that quantifies the degree to which the
+   network may be subdivided into such clearly delineated groups. 
+
+   The Louvain algorithm is a fast and accurate community detection 
+   algorithm (as of writing). The algorithm may also be used to detect
+   hierarchical community structure.
+
+   Input:      W       undirected (weighted or binary) connection matrix.
+               h,      optional argument
+                       h=1 enables hierarchical output (see below).
+
+   Outputs:    1. Classic
+                       Ci,     community structure
+                       Q,      modularity
+               2. Hierarchical (if h=1)
+                       Ci_h,   community structure at each hierarchy
+                               (access as Ci_h{1}, Ci_h{2}, ...)
+                       Q_h,    modularity at each hierarhcy
+                               (access as Q_h{1}, Q_h{2}, ...)
+
+   Note: Ci and Q may vary from run to run, due to heuristics in the
+   algorithm. Consequently, it may be worth to compare multiple runs.
+
+   Reference: Blondel et al. (2008)  J. Stat. Mech. P10008.
+
+   Mika Rubinov, UNSW, 2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Ci Q]=modularity_louvain_und(W,hierarchy)</a>
+0002 <span class="comment">%MODULARITY_LOUVAIN_UND     Optimal community structure and modularity</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   Ci = modularity_louvain_und(W);</span>
+0005 <span class="comment">%   [Ci Q] = modularity_louvain_und(W);</span>
+0006 <span class="comment">%   [Ci_h Q_h] = modularity_louvain_und(W,1);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   The optimal community structure is a subdivision of the network into</span>
+0009 <span class="comment">%   nonoverlapping groups of nodes in a way that maximizes the number of</span>
+0010 <span class="comment">%   within-group edges, and minimizes the number of between-group edges.</span>
+0011 <span class="comment">%   The modularity is a statistic that quantifies the degree to which the</span>
+0012 <span class="comment">%   network may be subdivided into such clearly delineated groups.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   The Louvain algorithm is a fast and accurate community detection</span>
+0015 <span class="comment">%   algorithm (as of writing). The algorithm may also be used to detect</span>
+0016 <span class="comment">%   hierarchical community structure.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   Input:      W       undirected (weighted or binary) connection matrix.</span>
+0019 <span class="comment">%               h,      optional argument</span>
+0020 <span class="comment">%                       h=1 enables hierarchical output (see below).</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Outputs:    1. Classic</span>
+0023 <span class="comment">%                       Ci,     community structure</span>
+0024 <span class="comment">%                       Q,      modularity</span>
+0025 <span class="comment">%               2. Hierarchical (if h=1)</span>
+0026 <span class="comment">%                       Ci_h,   community structure at each hierarchy</span>
+0027 <span class="comment">%                               (access as Ci_h{1}, Ci_h{2}, ...)</span>
+0028 <span class="comment">%                       Q_h,    modularity at each hierarhcy</span>
+0029 <span class="comment">%                               (access as Q_h{1}, Q_h{2}, ...)</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   Note: Ci and Q may vary from run to run, due to heuristics in the</span>
+0032 <span class="comment">%   algorithm. Consequently, it may be worth to compare multiple runs.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%   Reference: Blondel et al. (2008)  J. Stat. Mech. P10008.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   Mika Rubinov, UNSW, 2010</span>
+0037 
+0038 <span class="comment">%   Modification History:</span>
+0039 <span class="comment">%   Feb 2010: Original</span>
+0040 <span class="comment">%   Jun 2010: Fix infinite loops: replace &gt;/&lt; 0 with &gt;/&lt; 1e-10</span>
+0041 
+0042 
+0043 W=+W;                                       <span class="comment">%convert from logical</span>
+0044 n=length(W);                                <span class="comment">%number of nodes</span>
+0045 s=sum(W(:));                                <span class="comment">%weight of edges</span>
+0046 h=1;                                        <span class="comment">%hierarchy index</span>
+0047 Ci{h}=1:n;                                   <span class="comment">%hierarchical module assignments</span>
+0048 Q{h}=-1;                                       <span class="comment">%hierarchical modularity values</span>
+0049 n0=n;                                       <span class="comment">%number of nodes</span>
+0050 
+0051 <span class="keyword">while</span> 1
+0052     K=sum(W);                               <span class="comment">%node degree</span>
+0053     Km=K;                                   <span class="comment">%module degree</span>
+0054     Knm=W;                                  <span class="comment">%node-to-module degree</span>
+0055 
+0056     M=1:n;                                  <span class="comment">%initial module assignments</span>
+0057     Nm=ones(1,n);                           <span class="comment">%number of nodes in modules</span>
+0058 
+0059     flag=true;                              <span class="comment">%flag for within-hierarchy search</span>
+0060     <span class="keyword">while</span> flag
+0061         flag=false;
+0062 
+0063         <span class="keyword">for</span> i=randperm(n)                   <span class="comment">%loop over all nodes in random order</span>
+0064             dQ=(Knm(i,:)-Knm(i,M(i))+W(i,i)) - K(i).*(Km-Km(M(i))+K(i))/s;
+0065             dQ(M(i))=0;                     <span class="comment">%(line above) algorithm condition</span>
+0066 
+0067             max_dQ=max(dQ);                 <span class="comment">%find maximal increase in modularity</span>
+0068             <span class="keyword">if</span> max_dQ&gt;1e-10;                <span class="comment">%if maximal increase is positive</span>
+0069                 j=find(dQ==max_dQ,1);
+0070 
+0071                 Knm(:,j)=Knm(:,j)+W(:,i);   <span class="comment">%change node-to-module degrees</span>
+0072                 Knm(:,M(i))=Knm(:,M(i))-W(:,i);
+0073 
+0074                 Km(j)=Km(j)+K(i);           <span class="comment">%change module degrees</span>
+0075                 Km(M(i))=Km(M(i))-K(i);
+0076 
+0077                 Nm(j)=Nm(j)+1;              <span class="comment">%change number of nodes in modules</span>
+0078                 Nm(M(i))=Nm(M(i))-1;
+0079 
+0080                 M(i)=j;                     <span class="comment">%reassign module</span>
+0081                 flag=true;
+0082             <span class="keyword">end</span>
+0083         <span class="keyword">end</span>
+0084     <span class="keyword">end</span>
+0085 
+0086     [x x M1]=unique(M);                     <span class="comment">%new module assignments (NB: size(M1)=size(M))</span>
+0087 
+0088     h=h+1;
+0089     Ci{h}=zeros(1,n0);
+0090     <span class="keyword">for</span> i=1:n                               <span class="comment">%loop through initial module assignments</span>
+0091         Ci{h}(Ci{h-1}==i)=M1(i);            <span class="comment">%assign new modules</span>
+0092     <span class="keyword">end</span>
+0093 
+0094     n=max(M1);                              <span class="comment">%new number of modules</span>
+0095     W1=zeros(n);                            <span class="comment">%new weighted matrix</span>
+0096     <span class="keyword">for</span> i=1:n
+0097         <span class="keyword">for</span> j=i:n
+0098             w=sum(sum(W(M1==i,M1==j)));     <span class="comment">%pool weights of nodes in same module</span>
+0099             W1(i,j)=w;
+0100             W1(j,i)=w;
+0101         <span class="keyword">end</span>
+0102     <span class="keyword">end</span>
+0103     W=W1;
+0104 
+0105     Q{h}=sum(diag(W))/s-sum(sum((W/s)^2));  <span class="comment">%compute modularity</span>
+0106     <span class="keyword">if</span> Q{h}-Q{h-1}&lt;1e-10                    <span class="comment">%if modularity does not increase</span>
+0107         <span class="keyword">break</span>
+0108     <span class="keyword">end</span>
+0109 <span class="keyword">end</span>
+0110 
+0111 Ci([1 end])=[];
+0112 Q([1 end])=[];
+0113 
+0114 <span class="keyword">if</span> nargin==1 || hierarchy==0
+0115     Ci=Ci{end};
+0116     Q=Q{end};
+0117 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

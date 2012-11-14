@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_8s_into_arraymap_bar</title>
+  <meta name="keywords" content="util_plot_8s_into_arraymap_bar">
+  <meta name="description" content="UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_8s_into_arraymap_bar
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ handle ] = util_plot_8s_into_arraymap_bar( data, closed, haveBaseline) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）
+   将输入的数据按照指定要求绘制成8*8排布的柱状图
+
+   输入参数：
+       closed：接地电极或其他不想显示的电极（如[15 33]）
+       data：输入的用于绘图的数据，该数据需要遵循一定的格式
+           如data.ch11.x,y中是要绘图的数据
+       haveBaseline：要不要Baseline（Bar底下的一根线）
+       
+   输出参数：
+       handle：图像句柄
+
+   蒲江波 2010年5月6日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../IO/mcd/mcintfac/@datastrm/getpos.html" class="code" title="function a = getpos(d,posType);">getpos</a>	getpos - return the current position of the datastrm object (datastrm method)</li><li><a href="../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Stimulation/process_sti_result_by_stiID_by_delays_response_per.html" class="code" title="">process_sti_result_by_stiID_by_delays_response_per</a>	PROCESS_STI_RESULT_BY_STIID_BY_DELAYS_RESPONSE_PER</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [pos] = getpos(channelID)</a></li><li><a href="#_sub2" class="code">function [val] = getbigger(a,b)</a></li><li><a href="#_sub3" class="code">function [val] = getsmaller(a,b)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ handle ] = util_plot_8s_into_arraymap_bar( data, closed, haveBaseline)</a>
+0002 <span class="comment">%UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</span>
+0003 <span class="comment">%   将输入的数据按照指定要求绘制成8*8排布的柱状图</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   输入参数：</span>
+0006 <span class="comment">%       closed：接地电极或其他不想显示的电极（如[15 33]）</span>
+0007 <span class="comment">%       data：输入的用于绘图的数据，该数据需要遵循一定的格式</span>
+0008 <span class="comment">%           如data.ch11.x,y中是要绘图的数据</span>
+0009 <span class="comment">%       haveBaseline：要不要Baseline（Bar底下的一根线）</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   输出参数：</span>
+0012 <span class="comment">%       handle：图像句柄</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   蒲江波 2010年5月6日</span>
+0015 
+0016 figure(<span class="string">'Name'</span>,<span class="string">'MEA Plot'</span>)
+0017 axis off;
+0018 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'xtick'</span>,[],<span class="string">'ytick'</span>,[]);
+0019 
+0020 <span class="comment">% 初始化各向最大值</span>
+0021 max_X = -Inf;
+0022 min_X = Inf;
+0023 max_Y = -Inf;
+0024 min_Y = Inf;
+0025 
+0026 <span class="keyword">for</span> hwid = 1:64
+0027     <span class="comment">% 判断当前subplot位置</span>
+0028     <span class="keyword">if</span> ~(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 11 || <span class="keyword">...</span>
+0029          <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 18 || <span class="keyword">...</span>
+0030          <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 81 || <span class="keyword">...</span>
+0031          <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 88 || <span class="keyword">...</span>
+0032          ~isempty(find(closed == <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid), 1)))
+0033         <span class="comment">% 画数据</span>
+0034         subplot(8,8,<a href="../IO/mcd/mcintfac/@datastrm/getpos.html" class="code" title="function a = getpos(d,posType);">getpos</a>(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid)));
+0035         <span class="keyword">try</span>
+0036             h = bar(data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).x, data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y, <span class="string">'k'</span>);
+0037             <span class="keyword">if</span> ~haveBaseline
+0038                 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h(1),<span class="string">'Baseline'</span>),<span class="string">'LineStyle'</span>,<span class="string">'none'</span>);
+0039             <span class="keyword">end</span>
+0040             hold on;
+0041             errorbar(data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).x, data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y, data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).e,<span class="string">'k'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>);
+0042             hold off;
+0043         <span class="keyword">catch</span>
+0044             <span class="comment">% 无数据，则将此电极自动加入到closed列表</span>
+0045             closed = [closed <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid)];
+0046         <span class="keyword">end</span>
+0047         <span class="keyword">if</span> (isempty(find(closed==<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid), 1)))
+0048             <span class="comment">% 获取坐标轴值</span>
+0049             max_X = <a href="#_sub2" class="code" title="subfunction [val] = getbigger(a,b)">getbigger</a>(max_X, max(data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).x));
+0050             max_Y = <a href="#_sub2" class="code" title="subfunction [val] = getbigger(a,b)">getbigger</a>(max_Y, max(data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y));
+0051             min_X = <a href="#_sub3" class="code" title="subfunction [val] = getsmaller(a,b)">getsmaller</a>(min_X, min(data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).x));
+0052             min_Y = <a href="#_sub3" class="code" title="subfunction [val] = getsmaller(a,b)">getsmaller</a>(min_Y, min(data.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y));
+0053         <span class="keyword">end</span>
+0054         
+0055         <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'xtick'</span>,[],<span class="string">'ytick'</span>,[])
+0056         axis off;
+0057         drawnow;
+0058     <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% Bar图特别调整</span>
+0062 max_X = max_X + 0.5;
+0063 min_X = min_X - 0.5;
+0064 max_Y = max_Y;  <span class="comment">% 酌情调整</span>
+0065 
+0066 <span class="comment">% 再次循环统一坐标轴</span>
+0067 <span class="keyword">for</span> hwid = 1:64
+0068     <span class="comment">% 判断当前subplot位置</span>
+0069     <span class="keyword">if</span> (<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 88)
+0070         <span class="comment">% 画比例尺</span>
+0071         subplot(8,8,<a href="../IO/mcd/mcintfac/@datastrm/getpos.html" class="code" title="function a = getpos(d,posType);">getpos</a>(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid)));
+0072         plot([max_X max_X], [min_Y max_Y],<span class="string">'k'</span>);
+0073         hold on;
+0074         plot([min_X max_X], [min_Y min_Y],<span class="string">'k'</span>);
+0075         hold off;
+0076         text(max_X,max_Y,num2str(max_Y));
+0077         text(max_X,min_Y,[<span class="string">'('</span> num2str(max_X) <span class="string">','</span> num2str(min_Y) <span class="string">')'</span>]);
+0078         text(min_X,min_Y,num2str(min_X));
+0079     <span class="keyword">elseif</span> (find(closed == <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid)))
+0080         <span class="comment">% 画X</span>
+0081         subplot(8,8,<a href="../IO/mcd/mcintfac/@datastrm/getpos.html" class="code" title="function a = getpos(d,posType);">getpos</a>(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid)));
+0082         plot([min_X max_X],[max_Y min_Y],<span class="string">'k'</span>);
+0083         hold on;
+0084         plot([min_X max_X],[min_Y max_Y],<span class="string">'k'</span>);
+0085         hold off;
+0086     <span class="keyword">end</span>
+0087     
+0088     subplot(8,8,<a href="../IO/mcd/mcintfac/@datastrm/getpos.html" class="code" title="function a = getpos(d,posType);">getpos</a>(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid)));
+0089     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'xtick'</span>,[],<span class="string">'ytick'</span>,[])
+0090     <span class="keyword">if</span> (<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 11 || <span class="keyword">...</span>
+0091         <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 18 || <span class="keyword">...</span>
+0092         <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 81 || <span class="keyword">...</span>
+0093         <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 88)
+0094         axis off;
+0095     <span class="keyword">else</span>
+0096         axis on;
+0097         box off;
+0098         <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'XColor'</span>,[1 1 1], <span class="string">'YColor'</span>, [1 1 1]);
+0099     <span class="keyword">end</span>
+0100     <span class="comment">% 统一设置最大最小值</span>
+0101     xlim([min_X max_X]);
+0102     ylim([min_Y max_Y]);
+0103     drawnow;
+0104 <span class="keyword">end</span>
+0105 
+0106 
+0107 handle = gcf;
+0108 
+0109 <span class="keyword">end</span>
+0110 
+0111 
+0112 <a name="_sub1" href="#_subfunctions" class="code">function [pos] = getpos(channelID)</a>
+0113 <span class="comment">%GETPOS 辅助函数：计算某通道在8*8图上的index位置</span>
+0114 <span class="comment">%   蒲江波 2010年5月6日</span>
+0115 
+0116 chID = num2str(channelID);
+0117 colID = str2num(chID(1));
+0118 rowID = str2num(chID(2));
+0119 
+0120 pos = (rowID - 1) * 8 + colID;
+0121 
+0122 <span class="keyword">end</span>
+0123 
+0124 <a name="_sub2" href="#_subfunctions" class="code">function [val] = getbigger(a,b)</a>
+0125 <span class="comment">%GETBIGGER 辅助函数：返回a,b中较大的数</span>
+0126 <span class="comment">%   蒲江波 2010年5月6日</span>
+0127 
+0128 <span class="keyword">if</span> (a&gt;b)
+0129     val = a;
+0130 <span class="keyword">else</span>
+0131     val = b;
+0132 <span class="keyword">end</span>
+0133 
+0134 <span class="keyword">end</span>
+0135 
+0136 <a name="_sub3" href="#_subfunctions" class="code">function [val] = getsmaller(a,b)</a>
+0137 <span class="comment">%GETBIGGER 辅助函数：返回a,b中较小的数</span>
+0138 <span class="comment">%   蒲江波 2010年5月6日</span>
+0139 
+0140 <span class="keyword">if</span> (a&lt;b)
+0141     val = a;
+0142 <span class="keyword">else</span>
+0143     val = b;
+0144 <span class="keyword">end</span>
+0145 
+0146 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

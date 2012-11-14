@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of GKclust</title>
+  <meta name="keywords" content="GKclust">
+  <meta name="description" content="checking the parameters given">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>GKclust
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>checking the parameters given</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result = GKclust(data,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">checking the parameters given</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/motorcycle/GKcall.html" class="code" title="">GKcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/GKcall.html" class="code" title="">GKcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clustevalexample/evalexample.html" class="code" title="">evalexample</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/comparing/GKcall.html" class="code" title="">GKcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/optnumber/optnumber.html" class="code" title="">optnumber</a>	calling function to search the optimal number of clusters</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = GKclust(data,param)</a>
+0002 
+0003 <span class="comment">%checking the parameters given</span>
+0004 f0=param.c;
+0005 X=data.X;
+0006 
+0007 [N,n] = size(X);
+0008 [Nf0,nf0] = size(f0);
+0009 X1 = ones(N,1);
+0010 <span class="comment">%default parameters</span>
+0011 <span class="keyword">if</span> exist(<span class="string">'param.m'</span>)==1, m = param.m;<span class="keyword">else</span> m = 2;<span class="keyword">end</span>;
+0012 <span class="keyword">if</span> exist(<span class="string">'param.e'</span>)==1, e = param.m;<span class="keyword">else</span> e = 1e-4;<span class="keyword">end</span>;
+0013 <span class="keyword">if</span> exist(<span class="string">'param.ro'</span>)==1, rho=param.ro;
+0014 <span class="keyword">else</span> 
+0015     <span class="keyword">if</span> max(Nf0,nf0) == 1
+0016         rho = ones(1,param.c);
+0017     <span class="keyword">else</span>
+0018         rho = ones(1,size(f0,2));
+0019     <span class="keyword">end</span>
+0020 <span class="keyword">end</span>
+0021 <span class="keyword">if</span> exist(<span class="string">'param.gamma'</span>)==1, gamma = param.gamma;<span class="keyword">else</span> gamma = 0;<span class="keyword">end</span>;
+0022 <span class="keyword">if</span> exist(<span class="string">'param.beta'</span>)==1, beta = param.beta;<span class="keyword">else</span> beta = 1e15;<span class="keyword">end</span>;
+0023 
+0024 
+0025 
+0026 <span class="comment">% Initialize fuzzy partition matrix</span>
+0027 rand(<span class="string">'state'</span>,0)
+0028 <span class="keyword">if</span> max(Nf0,nf0) == 1,         <span class="comment">% only number of cluster given</span>
+0029   c = f0;
+0030   mm = mean(X);
+0031   aa = max(abs(X - ones(N,1)*mm));
+0032   v = 2*(ones(c,1)*aa).*(rand(c,n)-0.5) + ones(c,1)*mm; 
+0033   <span class="keyword">for</span> j = 1 : c,
+0034     xv = X - X1*v(j,:);
+0035     d(:,j) = sum((xv.^2),2);
+0036   <span class="keyword">end</span>;
+0037   d = (d+1e-10).^(-1/(m-1));
+0038   f0 = (d ./ (sum(d,2)*ones(1,c)));
+0039 <span class="keyword">else</span>        <span class="comment">%if the partition matrix was given</span>
+0040   c = size(f0,2);
+0041   fm = f0.^m; sumf = sum(fm);
+0042   v = (fm'*X)./(sumf'*ones(1,n));
+0043 <span class="keyword">end</span>;
+0044 
+0045 f = zeros(N,c);                 <span class="comment">% partition matrix</span>
+0046 iter = 0;                       <span class="comment">% iteration counter</span>
+0047 A0= eye(n)*det(cov(X)).^(1/n);  <span class="comment">% &quot;identity&quot; matr.</span>
+0048 
+0049 
+0050 
+0051 <span class="comment">% Iterate</span>
+0052 <span class="keyword">while</span>  max(max(f0-f)) &gt; e
+0053   iter = iter + 1;
+0054   f = f0;
+0055   <span class="comment">% Calculate centers</span>
+0056   fm = f.^m; sumf = sum(fm);
+0057   v = (fm'*X)./(sumf'*ones(1,n));
+0058   <span class="keyword">for</span> j = 1 : c,
+0059     xv = X - X1*v(j,:);
+0060     <span class="comment">% Calculate covariance matrix for each clusters</span>
+0061     A = ones(n,1)*fm(:,j)'.*xv'*xv/sumf(j);
+0062     <span class="comment">%Covariance estimating for the GK algorithm</span>
+0063     A =(1-gamma)*A+gamma*(A0.^(1/n));
+0064     <span class="keyword">if</span> cond(A)&gt; beta;
+0065         [ev,ed]=eig(A); edmax = max(diag(ed));
+0066         ed(beta*ed &lt; edmax) = edmax/beta;
+0067         A = ev*diag(diag(ed))*inv(ev);
+0068     <span class="keyword">end</span>;
+0069     <span class="comment">%Calculate distances</span>
+0070     M = (1/det(pinv(A))/rho(j))^(1/n)*pinv(A);
+0071     <span class="comment">%M(:,:,j) = (det(A)/rho(j)).^(1/n)*pinv(A);</span>
+0072     d(:,j) = sum((xv*M.*xv),2);
+0073   <span class="keyword">end</span>
+0074     
+0075   distout=sqrt(d);
+0076   
+0077   J(iter) = sum(sum(f0.*d));           <span class="comment">%calculate objective function</span>
+0078   <span class="comment">% Update f0</span>
+0079   d = (d+1e-10).^(-1/(m-1));
+0080   f0 = (d ./ (sum(d,2)*ones(1,c)));
+0081    
+0082 <span class="keyword">end</span>             <span class="comment">%end of iteration period</span>
+0083 
+0084 fm = f.^m; sumf = sum(fm);
+0085 
+0086 P = zeros(n,n,c);             <span class="comment">% covariance matrix</span>
+0087 M = P;                          <span class="comment">% norm-inducing matrix</span>
+0088 V = zeros(c,n);                <span class="comment">% eigenvectors</span>
+0089 D = V;                          <span class="comment">% eigenvalues</span>
+0090 
+0091 <span class="comment">% calculate P,V,D,M</span>
+0092 <span class="keyword">for</span> j = 1 : c,                        
+0093     xv = X - ones(N,1)*v(j,:);
+0094     <span class="comment">% Calculate covariance matrix</span>
+0095     A = ones(n,1)*fm(:,j)'.*xv'*xv/sumf(j);
+0096     <span class="comment">% Calculate eigen values and eigen vectors</span>
+0097     [ev,ed] = eig(A); ed = diag(ed)';
+0098     ev = ev(:,ed == min(ed));
+0099     <span class="comment">% Put cluster info in one matrix</span>
+0100     P(:,:,j) = A;
+0101     M(:,:,j) = (det(A)/rho(j)).^(1/n)*pinv(A);
+0102     V(j,:) = ev';
+0103     D(j,:) = ed;
+0104 <span class="keyword">end</span>
+0105 
+0106 
+0107 
+0108 <span class="comment">%result outputs</span>
+0109 result.data.f = f0;
+0110 result.data.d = distout;
+0111 result.cluster.v = v;
+0112 result.cluster.P = P;
+0113 result.cluster.M = M;
+0114 result.cluster.V = V;
+0115 result.cluster.D = D;
+0116 result.iter = iter;
+0117 result.cost = J;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,6 @@
+EXPORTS
+mexFunction
+emlrtMexFcnProperties
+util_sub_normalized_dot_product
+util_sub_normalized_dot_product_initialize
+util_sub_normalized_dot_product_terminate

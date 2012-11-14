@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_solve_tri</title>
+  <meta name="keywords" content="test_solve_tri">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_solve_tri
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/flops_inv.html" class="code" title="function f = flops_inv(n)">flops_inv</a>	FLOPS_INV    Flops for matrix inversion.</li><li><a href="../../../Otherbox/lightspeed/flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>	FLOPS_SOLVE_TRI   Flops for triangular left division.</li><li><a href="../../../Otherbox/lightspeed/inv_triu.html" class="code" title="function x = inv_triu(U)">inv_triu</a>	INV_TRIU     Invert upper triangular matrix.</li><li><a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li><li><a href="../../../Otherbox/lightspeed/solve_tril.html" class="code" title="function x = solve_tril(T,b)">solve_tril</a>	SOLVE_TRIL      Left division by lower triangular matrix.</li><li><a href="../../../Otherbox/lightspeed/solve_triu.html" class="code" title="function x = solve_triu(T,b)">solve_triu</a>	SOLVE_TRIU      Left division by upper triangular matrix.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 [dummy,T] = lu(rand(5));
+0002 b = rand(5,1);
+0003 <span class="comment">%fprintf('The columns should be equal:\n');</span>
+0004 r = [<a href="../../../Otherbox/lightspeed/solve_triu.html" class="code" title="function x = solve_triu(T,b)">solve_triu</a>(T,b) T\b];
+0005 assert(all(abs(r(:,1) - r(:,2)) &lt; 1e-10))
+0006 r = [<a href="../../../Otherbox/lightspeed/solve_tril.html" class="code" title="function x = solve_tril(T,b)">solve_tril</a>(T',b) T'\b];
+0007 assert(all(abs(r(:,1) - r(:,2)) &lt; 1e-10))
+0008 fprintf(<span class="string">'Verified that solve_triu and solve_tril results match backslash.\n'</span>);
+0009 
+0010 d = 100;
+0011 niter = (20000/d)^2;
+0012 A = rand(d);
+0013 [dummy,T] = lu(A);
+0014 b = rand(d,1);
+0015 tic; <span class="keyword">for</span> i = 1:niter T\b; <span class="keyword">end</span>; t1=toc/niter;
+0016 tic; <span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/solve_triu.html" class="code" title="function x = solve_triu(T,b)">solve_triu</a>(T,b); <span class="keyword">end</span>; t2=toc/niter;
+0017 fprintf(<span class="string">'backslash: \t%g\nsolve_triu: \t%g (%g times faster)\n'</span>,t1,t2,t1/t2);
+0018 <span class="comment">% backslash is detecting triangularity as a preprocessing step, which doubles</span>
+0019 <span class="comment">% the time.</span>
+0020 <span class="comment">%fprintf('by flops, should be %g times faster\n',...</span>
+0021 <span class="comment">%    flops_solve(T,b)/flops_solve_tri(T,b));</span>
+0022 
+0023 niter = ceil(niter/d);
+0024 tic; <span class="keyword">for</span> i = 1:niter inv(T); <span class="keyword">end</span>; t1=toc/niter;
+0025 <span class="comment">%I = eye(size(T));</span>
+0026 <span class="comment">%tic; for i = 1:niter solve_triu(T,I); end; t2=toc;</span>
+0027 tic; <span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/inv_triu.html" class="code" title="function x = inv_triu(U)">inv_triu</a>(T); <span class="keyword">end</span>; t2=toc/niter;
+0028 fprintf(<span class="string">'inv: \t%g\ninv_triu: \t%g (%g times faster)\n'</span>,t1,t2,t1/t2);
+0029 fprintf(<span class="string">'by flops, should be %g times faster\n'</span>,<span class="keyword">...</span>
+0030     <a href="../../../Otherbox/lightspeed/flops_inv.html" class="code" title="function f = flops_inv(n)">flops_inv</a>(<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(T))/<a href="../../../Otherbox/lightspeed/flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>(T,eye(size(T))));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of highlight</title>
+  <meta name="keywords" content="highlight">
+  <meta name="description" content="HIGHLIGHT - Syntax Highlighting of Matlab M-files in HTML, LaTeX, RTF and XML.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html highlight -->
+<h1>highlight
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>HIGHLIGHT - Syntax Highlighting of Matlab M-files in HTML, LaTeX, RTF and XML.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function highlight(mfile,options,outfile) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">HIGHLIGHT - Syntax Highlighting of Matlab M-files in HTML, LaTeX, RTF and XML.
+  HIGHLIGHT(MFILE) takes an M-file MFILE in input and writes on disk an HTML
+  file with the same basename ('foo.m' =&gt; 'foo.html') adding colored syntax 
+  highlighting on comment, string and Matlab keyword elements.
+  HIGHLIGHT(MFILE,OPTIONS) with OPTIONS being string 'html', 'xhtml', 'tex', 
+  'rtf' or 'xml', allows to choose the output format between HTML, XHTML, LaTeX
+  RTF or XML. The same rule is used to determine the name of the output file.
+  HIGHLIGHT(MFILE,OPTIONS) allows to specify some options in a structure:
+     options.type - Output file type 
+             [ {'html'} | 'tex' | 'rtf' | 'xml' | 'xhtml']
+     options.tabs - Replace '\t' in source code by n white space
+                           [ 0 ... {4}  ... n]
+     options.linenb - Display line number in front of each line [ 0 | {1} ]
+  HIGHLIGHT(MFILE,OPTIONS,OUTFILE) allows to specify the name of the output 
+  file. OUTFILE can also be a file handle. In that case, no header will be 
+  written, only the highlighted Matlab code will be sent to the OUTFILE stream.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>	setfield - sets any field in datastream objects (datastream method)</li><li><a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../Otherbox/lightspeed/@mutable/setfield.html" class="code" title="function s = setfield(s,field,v)">setfield</a>	SETFIELD Set mutable structure field contents.</li><li><a href="../../Otherbox/m2html/@template/private/finish.html" class="code" title="function str = finish(str,unknowns)">finish</a>	TEMPLATE/FINISH Apply given strategy to unknown fields in a string</li><li><a href="../../Otherbox/m2html/private/splitcode.html" class="code" title="function splitc = splitcode(code)">splitcode</a>	SPLITCODE Split a line of Matlab code in string, comment and other</li><li><a href="../../Otherbox/m2html/private/strtok.html" class="code" title="function [token, remainder, quotient] = strtok(string, delimiters)">strtok</a>	Modified version of STRTOK to also return the quotient</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function write_highlighted_code(mfid,outfid,opt)</a></li><li><a href="#_sub2" class="code">function html_file_start(fid,mfile)</a></li><li><a href="#_sub3" class="code">function html_file_end(fid)</a></li><li><a href="#_sub4" class="code">function format = html_format</a></li><li><a href="#_sub5" class="code">function str = html_special_char(str)</a></li><li><a href="#_sub6" class="code">function xhtml_file_start(fid,mfile)</a></li><li><a href="#_sub7" class="code">function xhtml_file_end(fid)</a></li><li><a href="#_sub8" class="code">function format = xhtml_format</a></li><li><a href="#_sub9" class="code">function str = xhtml_special_char(str)</a></li><li><a href="#_sub10" class="code">function xml_file_start(fid,mfile)</a></li><li><a href="#_sub11" class="code">function xml_file_end(fid)</a></li><li><a href="#_sub12" class="code">function format = xml_format</a></li><li><a href="#_sub13" class="code">function str = xml_special_char(str)</a></li><li><a href="#_sub14" class="code">function tex_file_start(fid,mfile)</a></li><li><a href="#_sub15" class="code">function tex_file_end(fid)</a></li><li><a href="#_sub16" class="code">function format = tex_format</a></li><li><a href="#_sub17" class="code">function str = tex_special_char(str)</a></li><li><a href="#_sub18" class="code">function rtf_file_start(fid,mfile)</a></li><li><a href="#_sub19" class="code">function rtf_file_end(fid)</a></li><li><a href="#_sub20" class="code">function format = rtf_format</a></li><li><a href="#_sub21" class="code">function str = rtf_special_char(str)</a></li><li><a href="#_sub22" class="code">function matlabKeywords = getMatlabKeywords</a></li><li><a href="#_sub23" class="code">function mKeySort = getMatlabKeywordsSorted</a></li><li><a href="#_sub24" class="code">function str = horztab(str,n)</a></li><li><a href="#_sub25" class="code">function splitc = splitcode(code)</a></li><li><a href="#_sub26" class="code">function [token, remainder, quotient] = strtok(string, delimiters)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function highlight(mfile,options,outfile)</a>
+0002 <span class="comment">%HIGHLIGHT - Syntax Highlighting of Matlab M-files in HTML, LaTeX, RTF and XML.</span>
+0003 <span class="comment">%  HIGHLIGHT(MFILE) takes an M-file MFILE in input and writes on disk an HTML</span>
+0004 <span class="comment">%  file with the same basename ('foo.m' =&gt; 'foo.html') adding colored syntax</span>
+0005 <span class="comment">%  highlighting on comment, string and Matlab keyword elements.</span>
+0006 <span class="comment">%  HIGHLIGHT(MFILE,OPTIONS) with OPTIONS being string 'html', 'xhtml', 'tex',</span>
+0007 <span class="comment">%  'rtf' or 'xml', allows to choose the output format between HTML, XHTML, LaTeX</span>
+0008 <span class="comment">%  RTF or XML. The same rule is used to determine the name of the output file.</span>
+0009 <span class="comment">%  HIGHLIGHT(MFILE,OPTIONS) allows to specify some options in a structure:</span>
+0010 <span class="comment">%     options.type - Output file type</span>
+0011 <span class="comment">%             [ {'html'} | 'tex' | 'rtf' | 'xml' | 'xhtml']</span>
+0012 <span class="comment">%     options.tabs - Replace '\t' in source code by n white space</span>
+0013 <span class="comment">%                           [ 0 ... {4}  ... n]</span>
+0014 <span class="comment">%     options.linenb - Display line number in front of each line [ 0 | {1} ]</span>
+0015 <span class="comment">%  HIGHLIGHT(MFILE,OPTIONS,OUTFILE) allows to specify the name of the output</span>
+0016 <span class="comment">%  file. OUTFILE can also be a file handle. In that case, no header will be</span>
+0017 <span class="comment">%  written, only the highlighted Matlab code will be sent to the OUTFILE stream.</span>
+0018 
+0019 <span class="comment">%  Output file can be customized (font style, font color, font size, ...):</span>
+0020 <span class="comment">%     o HTML: use CSS (Cascading Style Sheets) to define 'comment', 'string',</span>
+0021 <span class="comment">%       'keyword', 'cont' and 'code' SPAN elements and 'mcode' PRE tag.</span>
+0022 <span class="comment">%     o LaTeX: packages 'alltt' and 'color' are required, you can modify colors</span>
+0023 <span class="comment">%       in defining colors 'string', 'comment' and 'keyword' using command</span>
+0024 <span class="comment">%                      \definecolor{mycolor}{rgb}{a,b,c}</span>
+0025 <span class="comment">%     o RTF: Colors are defined in the Color Table at the beginning of the</span>
+0026 <span class="comment">%       document. See Rich Text Format Specifications for more details:</span>
+0027 <span class="comment">%       &lt;http://msdn.microsoft.com/library/en-us/dnrtfspec/html/rtfspec.asp&gt;</span>
+0028 <span class="comment">%     o XML: you will find the DTD of the resulting XML file in matlab.dtd</span>
+0029 <span class="comment">%       You can then use XSL to transform your XML file in what you want.</span>
+0030 <span class="comment">%       For example, mat2html.xsl transforms your XML file in HTML as it would</span>
+0031 <span class="comment">%       be if you would have used highlight.m to to so.</span>
+0032 <span class="comment">%       On Matlab 6.5, the command is:</span>
+0033 <span class="comment">%               xslt highlight.xml mat2html.xsl highlight.html</span>
+0034 <span class="comment">%       On Linux, using libxslt &lt;http://xmlsoft.org/XSLT/&gt;, the command is:</span>
+0035 <span class="comment">%               xsltproc -o highlight.html mat2html.xsl highlight.xml</span>
+0036 
+0037 <span class="comment">%  Copyright (C) 2003 Guillaume Flandin &lt;Guillaume@artefact.tk&gt;</span>
+0038 <span class="comment">%  $Revision: 1.1 $Date: 2003/09/07 15:39:33 $</span>
+0039 
+0040 <span class="comment">%  This program is free software; you can redistribute it and/or</span>
+0041 <span class="comment">%  modify it under the terms of the GNU General Public License</span>
+0042 <span class="comment">%  as published by the Free Software Foundation; either version 2</span>
+0043 <span class="comment">%  of the License, or any later version.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%  This program is distributed in the hope that it will be useful,</span>
+0046 <span class="comment">%  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0047 <span class="comment">%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0048 <span class="comment">%  GNU General Public License for more details.</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">%  You should have received a copy of the GNU General Public License</span>
+0051 <span class="comment">%  along with this program; if not, write to the Free Software</span>
+0052 <span class="comment">%  Foundation Inc, 59 Temple Pl. - Suite 330, Boston, MA 02111-1307, USA.</span>
+0053 
+0054 <span class="comment">% Suggestions for improvement and fixes are always welcome, although no</span>
+0055 <span class="comment">% guarantee is made whether and when they will be implemented.</span>
+0056 <span class="comment">% Send requests to Guillaume@artefact.tk</span>
+0057 
+0058 <span class="comment">% TODO % Improve distinction between 'end' keyword and array subscript</span>
+0059 <span class="comment">% TODO % Smart indentation is *very* buggy (unusable =&gt; undocumented)</span>
+0060 <span class="comment">% TODO % Handle wrap mode for long lines in LaTeX mode (and in HTML)</span>
+0061 <span class="comment">% TODO % Improve the XSL transformer from XML to LaTeX</span>
+0062 
+0063 <span class="comment">%- Set up options</span>
+0064 error(nargchk(1,3,nargin));
+0065 
+0066 opt = struct(<span class="string">'type'</span>,   <span class="string">'html'</span>, <span class="keyword">...</span>
+0067              <span class="string">'tabs'</span>,   4, <span class="keyword">...</span>
+0068              <span class="string">'linenb'</span>, 1, <span class="keyword">...</span>
+0069              <span class="string">'indent'</span>, 0);
+0070 <span class="keyword">if</span> nargin &gt;= 2
+0071     <span class="keyword">if</span> isstruct(options)
+0072         names = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(options);
+0073         <span class="keyword">for</span> i=1:length(names)
+0074             opt = <a href="../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>(opt,names{i},<a href="../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(options,names{i}));
+0075         <span class="keyword">end</span>
+0076     <span class="keyword">elseif</span> ischar(options)
+0077         opt.type = options;
+0078     <span class="keyword">else</span>
+0079         error(<span class="string">'Bad input argument.'</span>);
+0080     <span class="keyword">end</span>
+0081 <span class="keyword">end</span>
+0082 <span class="keyword">if</span> strcmp(lower(opt.type),<span class="string">'latex'</span>), opt.type = <span class="string">'tex'</span>; <span class="keyword">end</span>
+0083 <span class="keyword">if</span> strcmp(lower(opt.type),<span class="string">'xml'</span>), opt.linenb = 1; <span class="keyword">end</span>
+0084 
+0085 <span class="comment">%- If no output filename is provided, one is chosen according to mfile</span>
+0086 <span class="keyword">if</span> nargin &lt; 3
+0087     [pathstr, name, ext] = fileparts(mfile);
+0088     outfile = fullfile(pathstr, [name, <span class="string">'.'</span> lower(opt.type)]);
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">%- If an output filename is provided, a standard header is created</span>
+0092 <span class="keyword">if</span> ischar(outfile)
+0093     outfid = fopen(outfile,<span class="string">'wt'</span>);
+0094     <span class="keyword">if</span> outfid == -1
+0095         error(sprintf(<span class="string">'Cannot open '</span>,outfile));
+0096     <span class="keyword">end</span>
+0097     feval([lower(opt.type) <span class="string">'_file_start'</span>],outfid,mfile);
+0098 <span class="comment">%- Otherwise a file handle is provided</span>
+0099 <span class="keyword">else</span>
+0100     outfid = outfile;
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="comment">%- Open the Matlab mfile to be highlighted</span>
+0104 mfid = fopen(mfile,<span class="string">'rt'</span>);
+0105 <span class="keyword">if</span> mfid == -1
+0106     error(sprintf(<span class="string">'Cannot open '</span>,mfile));
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="comment">%- Write the syntax highlighted mfile code in the output file</span>
+0110 <a href="#_sub1" class="code" title="subfunction write_highlighted_code(mfid,outfid,opt)">write_highlighted_code</a>(mfid,outfid,opt)
+0111 
+0112 <span class="comment">%- Close the Matlab mfile and potentially the output file</span>
+0113 fclose(mfid);
+0114 <span class="keyword">if</span> ischar(outfile), 
+0115     feval([lower(opt.type) <span class="string">'_file_end'</span>],outfid);
+0116     fclose(outfid); 
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="comment">%===============================================================================</span>
+0120 <a name="_sub1" href="#_subfunctions" class="code">function write_highlighted_code(mfid,outfid,opt)</a>
+0121     matlabKeywords = <a href="#_sub22" class="code" title="subfunction matlabKeywords = getMatlabKeywords">getMatlabKeywords</a>;
+0122     mKeySort       = <a href="#_sub23" class="code" title="subfunction mKeySort = getMatlabKeywordsSorted">getMatlabKeywordsSorted</a>;
+0123     out_format     = feval([lower(opt.type) <span class="string">'_format'</span>]);
+0124     strtok_delim   = sprintf(<span class="string">' \t\n\r(){}[]&lt;&gt;+-*~!|\\@&amp;/.,:;=&quot;''%'</span>);
+0125     
+0126     fprintf(outfid,out_format.pre_start);
+0127     nbline = 1;
+0128     nbblanks = 0;
+0129     flagnextline = 0;
+0130     <span class="keyword">while</span> 1
+0131         tline = fgetl(mfid);
+0132         <span class="keyword">if</span> ~ischar(tline), <span class="keyword">break</span>, <span class="keyword">end</span>
+0133         tline = feval([lower(opt.type) <span class="string">'_special_char'</span>],<a href="#_sub24" class="code" title="subfunction str = horztab(str,n)">horztab</a>(tline,opt.tabs));
+0134         <span class="comment">%- Display the line number at each line</span>
+0135         <span class="keyword">if</span> opt.linenb
+0136             fprintf(outfid,out_format.nb_line,nbline);
+0137             nbline = nbline + 1;
+0138         <span class="keyword">end</span>
+0139         <span class="comment">%- Remove blanks at the beginning of the line</span>
+0140         <span class="keyword">if</span> opt.indent
+0141             tline = fliplr(deblank(fliplr(tline)));
+0142         <span class="keyword">end</span>
+0143         nbblanks = nbblanks + flagnextline;
+0144         flagnextline = 0;
+0145         <span class="comment">%- Split code into meaningful chunks</span>
+0146         splitc = <a href="../../Otherbox/m2html/private/splitcode.html" class="code" title="function splitc = splitcode(code)">splitcode</a>(tline);
+0147         newline = <span class="string">''</span>;
+0148         <span class="keyword">for</span> i=1:length(splitc)
+0149             <span class="keyword">if</span> isempty(splitc{i})
+0150             <span class="keyword">elseif</span> splitc{i}(1) == <span class="string">''''</span>
+0151                 newline = [newline sprintf(out_format.string,splitc{i})];
+0152             <span class="keyword">elseif</span> splitc{i}(1) == <span class="string">'%'</span>
+0153                 newline = [newline sprintf(out_format.comment,splitc{i})];
+0154             <span class="keyword">elseif</span> ~isempty(strmatch(<span class="string">'...'</span>,splitc{i}))
+0155                 newline = [newline sprintf(out_format.cont,<span class="string">'...'</span>)];
+0156                 <span class="keyword">if</span> ~isempty(splitc{i}(4:end))
+0157                     newline = [newline sprintf(out_format.comment,splitc{i}(4:end))];
+0158                 <span class="keyword">end</span>
+0159             <span class="keyword">else</span>
+0160                 <span class="comment">%- Look for Matlab keywords</span>
+0161                 r = splitc{i};
+0162                 stringcode = <span class="string">''</span>;
+0163                 <span class="keyword">while</span> 1
+0164                     [t,r,q] = <a href="../../Otherbox/m2html/private/strtok.html" class="code" title="function [token, remainder, quotient] = strtok(string, delimiters)">strtok</a>(r,strtok_delim);
+0165                     stringcode = [stringcode q];
+0166                     <span class="keyword">if</span> isempty(t), <span class="keyword">break</span>, <span class="keyword">end</span>;
+0167                     isNextIncr  = any(strcmp(t,mKeySort.nextincr));
+0168                     isNextIncr2 = any(strcmp(t,mKeySort.nextincr2));
+0169                     isCurrDecr  = any(strcmp(t,mKeySort.currdecr));
+0170                     isNextDecr  = any(strcmp(t,mKeySort.nextdecr));
+0171                     isOther     = any(strcmp(t,mKeySort.other));
+0172                     <span class="keyword">if</span> isNextDecr <span class="comment">% if strcmp(t,'end')</span>
+0173                         <span class="comment">% 'end' is keyword or array subscript ?</span>
+0174                         rr = fliplr(deblank(fliplr(r)));
+0175                         icomma = strmatch(<span class="string">','</span>,rr);
+0176                         isemicolon = strmatch(<span class="string">';'</span>,rr);
+0177                         <span class="keyword">if</span> ~(isempty(rr) | ~isempty([icomma isemicolon]))
+0178                             isNextDecr = 0;
+0179                         <span class="keyword">else</span>
+0180                             nbblanks = nbblanks - 1;
+0181                             flagnextline = flagnextline + 1;
+0182                         <span class="keyword">end</span>
+0183                         <span class="comment">% TODO % false detection of a([end,1])</span>
+0184                     <span class="keyword">end</span>
+0185                     <span class="keyword">if</span> isNextIncr, flagnextline = flagnextline + 1; <span class="keyword">end</span>
+0186                     <span class="keyword">if</span> isNextIncr2, flagnextline = flagnextline + 2; <span class="keyword">end</span>
+0187                     <span class="keyword">if</span> isNextDecr, flagnextline = flagnextline - 1; <span class="keyword">end</span>
+0188                     <span class="keyword">if</span> isCurrDecr, nbblanks = nbblanks - 1; <span class="keyword">end</span>
+0189                     <span class="comment">% if any(strcmp(t,matlabKeywords))</span>
+0190                     <span class="keyword">if</span> isNextIncr | isNextIncr2 |isCurrDecr | isNextDecr | isOther
+0191                         <span class="keyword">if</span> ~isempty(stringcode)
+0192                             newline = [newline sprintf(out_format.code,stringcode)];
+0193                             stringcode = <span class="string">''</span>;
+0194                         <span class="keyword">end</span>
+0195                         newline = [newline sprintf(out_format.keyword,t)];
+0196                     <span class="keyword">else</span>
+0197                         stringcode = [stringcode t];
+0198                     <span class="keyword">end</span>
+0199                 <span class="keyword">end</span>
+0200                 <span class="keyword">if</span> ~isempty(stringcode)
+0201                     newline = [newline sprintf(out_format.code,stringcode)];
+0202                 <span class="keyword">end</span>
+0203             <span class="keyword">end</span>
+0204         <span class="keyword">end</span>
+0205         <span class="keyword">if</span> ~opt.indent, nbblanks = 0; <span class="keyword">end</span>
+0206         <span class="comment">%- Print the syntax highlighted line</span>
+0207         fprintf(outfid,out_format.line,[blanks(nbblanks*opt.tabs) newline]);
+0208     <span class="keyword">end</span>
+0209     fprintf(outfid,out_format.pre_end);
+0210 
+0211 <span class="comment">%===============================================================================</span>
+0212 <span class="comment">%                                  HTML FORMAT                                 %</span>
+0213 <span class="comment">%===============================================================================</span>
+0214 <a name="_sub2" href="#_subfunctions" class="code">function html_file_start(fid,mfile)</a>
+0215     fprintf(fid,[ <span class="keyword">...</span>
+0216     <span class="string">'&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;\n'</span> <span class="keyword">...</span>
+0217     <span class="string">'\t&quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;\n'</span> <span class="keyword">...</span>
+0218     <span class="string">'&lt;html&gt;\n&lt;head&gt;\n&lt;title&gt;%s&lt;/title&gt;\n'</span> <span class="keyword">...</span>
+0219     <span class="string">'&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=iso-8859-1&quot;&gt;\n'</span> <span class="keyword">...</span>
+0220     <span class="string">'&lt;meta name=&quot;generator&quot; content=&quot;highlight.m &amp;copy; 2003 Guillaume Flandin&quot;&gt;\n'</span> <span class="keyword">...</span>
+0221     <span class="string">'&lt;style type=&quot;text/css&quot;&gt;\n'</span> <span class="keyword">...</span>
+0222     <span class="string">'  .comment {color: #228B22;}\n'</span> <span class="keyword">...</span>
+0223     <span class="string">'  .string {color: #B20000;}\n'</span> <span class="keyword">...</span>
+0224     <span class="string">'  .keyword, .cont {color: #0000FF;}\n'</span> <span class="keyword">...</span>
+0225     <span class="string">'  .cont {text-decoration: underline;}\n'</span> <span class="keyword">...</span>
+0226     <span class="string">'  .code {color: #000000;}\n'</span> <span class="keyword">...</span>
+0227     <span class="string">'&lt;/style&gt;\n'</span> <span class="keyword">...</span>
+0228     <span class="string">'&lt;/head&gt;\n&lt;body&gt;\n'</span>],mfile);
+0229 
+0230 <span class="comment">%-------------------------------------------------------------------------------</span>
+0231 <a name="_sub3" href="#_subfunctions" class="code">function html_file_end(fid)</a>
+0232     fprintf(fid,<span class="string">'\n&lt;/body&gt;\n&lt;/html&gt;'</span>);
+0233 
+0234 <span class="comment">%-------------------------------------------------------------------------------</span>
+0235 <a name="_sub4" href="#_subfunctions" class="code">function format = html_format</a>
+0236     format.string    = <span class="string">'&lt;span class=&quot;string&quot;&gt;%s&lt;/span&gt;'</span>;
+0237     format.comment   = <span class="string">'&lt;span class=&quot;comment&quot;&gt;%s&lt;/span&gt;'</span>;
+0238     format.code      = <span class="string">'%s'</span>; <span class="comment">%'&lt;span class=&quot;code&quot;&gt;%s&lt;/span&gt;';</span>
+0239     format.keyword   = <span class="string">'&lt;span class=&quot;keyword&quot;&gt;%s&lt;/span&gt;'</span>;
+0240     format.cont      = <span class="string">'&lt;span class=&quot;cont&quot;&gt;%s&lt;/span&gt;'</span>;
+0241     format.pre_start = <span class="string">'&lt;pre class=&quot;mcode&quot;&gt;'</span>;
+0242     format.pre_end   = <span class="string">'&lt;/pre&gt;\n'</span>;
+0243     format.nb_line   = <span class="string">'%04d '</span>;
+0244     format.line      = <span class="string">'%s\n'</span>;
+0245 
+0246 <span class="comment">%-------------------------------------------------------------------------------</span>
+0247 <a name="_sub5" href="#_subfunctions" class="code">function str = html_special_char(str)</a>
+0248     <span class="comment">%- See http://www.w3.org/TR/html4/charset.html#h-5.3.2</span>
+0249     str = strrep(str,<span class="string">'&amp;'</span>,<span class="string">'&amp;amp;'</span>);
+0250     str = strrep(str,<span class="string">'&lt;'</span>,<span class="string">'&amp;lt;'</span>);
+0251     str = strrep(str,<span class="string">'&gt;'</span>,<span class="string">'&amp;gt;'</span>);
+0252     str = strrep(str,<span class="string">'&quot;'</span>,<span class="string">'&amp;quot;'</span>);
+0253 
+0254 <span class="comment">%===============================================================================</span>
+0255 <span class="comment">%                                  XHTML FORMAT                                %</span>
+0256 <span class="comment">%===============================================================================</span>
+0257 <a name="_sub6" href="#_subfunctions" class="code">function xhtml_file_start(fid,mfile)</a>
+0258     fprintf(fid,[ <span class="keyword">...</span>
+0259     <span class="string">'&lt;?xml version=&quot;1.0&quot;?&gt;\n'</span> <span class="keyword">...</span>
+0260     <span class="string">'&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; '</span> <span class="keyword">...</span>
+0261     <span class="string">'&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;\n'</span> <span class="keyword">...</span>
+0262     <span class="string">'&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; lang=&quot;en&quot; xml:lang=&quot;en&quot;&gt;\n'</span> <span class="keyword">...</span>
+0263     <span class="string">'&lt;head&gt;\n&lt;title&gt;%s&lt;/title&gt;\n'</span> <span class="keyword">...</span>
+0264     <span class="string">'&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=iso-8859-1&quot; /&gt;\n'</span> <span class="keyword">...</span>
+0265     <span class="string">'&lt;meta name=&quot;generator&quot; content=&quot;highlight.m &amp;copy; 2003 Guillaume Flandin&quot; /&gt;\n'</span> <span class="keyword">...</span>
+0266     <span class="string">'&lt;style type=&quot;text/css&quot;&gt;\n'</span> <span class="keyword">...</span>
+0267     <span class="string">'  .comment {color: #228B22;}\n'</span> <span class="keyword">...</span>
+0268     <span class="string">'  .string {color: #B20000;}\n'</span> <span class="keyword">...</span>
+0269     <span class="string">'  .keyword, .cont {color: #0000FF;}\n'</span> <span class="keyword">...</span>
+0270     <span class="string">'  .cont {text-decoration: underline;}\n'</span> <span class="keyword">...</span>
+0271     <span class="string">'  .code {color: #000000;}\n'</span> <span class="keyword">...</span>
+0272     <span class="string">'&lt;/style&gt;\n'</span> <span class="keyword">...</span>
+0273     <span class="string">'&lt;/head&gt;\n&lt;body&gt;\n'</span>],mfile);
+0274 
+0275 <span class="comment">%-------------------------------------------------------------------------------</span>
+0276 <a name="_sub7" href="#_subfunctions" class="code">function xhtml_file_end(fid)</a>
+0277     fprintf(fid,<span class="string">'\n&lt;/body&gt;\n&lt;/html&gt;'</span>);
+0278 
+0279 <span class="comment">%-------------------------------------------------------------------------------</span>
+0280 <a name="_sub8" href="#_subfunctions" class="code">function format = xhtml_format</a>
+0281     format.string    = <span class="string">'&lt;span class=&quot;string&quot;&gt;%s&lt;/span&gt;'</span>;
+0282     format.comment   = <span class="string">'&lt;span class=&quot;comment&quot;&gt;%s&lt;/span&gt;'</span>;
+0283     format.code      = <span class="string">'%s'</span>; <span class="comment">%'&lt;span class=&quot;code&quot;&gt;%s&lt;/span&gt;';</span>
+0284     format.keyword   = <span class="string">'&lt;span class=&quot;keyword&quot;&gt;%s&lt;/span&gt;'</span>;
+0285     format.cont      = <span class="string">'&lt;span class=&quot;cont&quot;&gt;%s&lt;/span&gt;'</span>;
+0286     format.pre_start = <span class="string">'&lt;pre class=&quot;mcode&quot;&gt;'</span>;
+0287     format.pre_end   = <span class="string">'&lt;/pre&gt;\n'</span>;
+0288     format.nb_line   = <span class="string">'%04d '</span>;
+0289     format.line      = <span class="string">'%s\n'</span>;
+0290 
+0291 <span class="comment">%-------------------------------------------------------------------------------</span>
+0292 <a name="_sub9" href="#_subfunctions" class="code">function str = xhtml_special_char(str)</a>
+0293     <span class="comment">%- See http://www.w3.org/TR/html4/charset.html#h-5.3.2</span>
+0294     str = strrep(str,<span class="string">'&amp;'</span>,<span class="string">'&amp;amp;'</span>);
+0295     str = strrep(str,<span class="string">'&lt;'</span>,<span class="string">'&amp;lt;'</span>);
+0296     str = strrep(str,<span class="string">'&gt;'</span>,<span class="string">'&amp;gt;'</span>);
+0297     str = strrep(str,<span class="string">'&quot;'</span>,<span class="string">'&amp;quot;'</span>);
+0298 
+0299 
+0300 <span class="comment">%===============================================================================</span>
+0301 <span class="comment">%                                   XML FORMAT                                 %</span>
+0302 <span class="comment">%===============================================================================</span>
+0303 <a name="_sub10" href="#_subfunctions" class="code">function xml_file_start(fid,mfile)</a>
+0304     fprintf(fid,[ <span class="keyword">...</span>
+0305     <span class="string">'&lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot; ?&gt;\n'</span> <span class="keyword">...</span>
+0306     <span class="string">'&lt;!DOCTYPE mfile SYSTEM &quot;matlab.dtd&quot;&gt;\n'</span> <span class="keyword">...</span>
+0307     <span class="string">'&lt;mfile name=&quot;%s&quot;&gt;\n'</span>],mfile);
+0308 
+0309 <span class="comment">%-------------------------------------------------------------------------------</span>
+0310 <a name="_sub11" href="#_subfunctions" class="code">function xml_file_end(fid)</a>
+0311     fprintf(fid,<span class="string">'&lt;/mfile&gt;'</span>);
+0312 
+0313 <span class="comment">%-------------------------------------------------------------------------------</span>
+0314 <a name="_sub12" href="#_subfunctions" class="code">function format = xml_format</a>
+0315     format.string    = <span class="string">'&lt;string&gt;%s&lt;/string&gt;'</span>;
+0316     format.comment   = <span class="string">'&lt;comment&gt;%s&lt;/comment&gt;'</span>;
+0317     format.code      = <span class="string">'%s'</span>; <span class="comment">%'&lt;code&gt;%s&lt;/code&gt;';</span>
+0318     format.keyword   = <span class="string">'&lt;keyword&gt;%s&lt;/keyword&gt;'</span>;
+0319     format.cont      = <span class="string">'&lt;cont&gt;%s&lt;/cont&gt;'</span>;
+0320     format.pre_start = <span class="string">''</span>;
+0321     format.pre_end   = <span class="string">''</span>;
+0322     format.nb_line   = <span class="string">'&lt;line nb=&quot;%04d &quot;&gt;'</span>;
+0323     format.line      = <span class="string">'%s&lt;/line&gt;\n'</span>;
+0324 
+0325 <span class="comment">%-------------------------------------------------------------------------------</span>
+0326 <a name="_sub13" href="#_subfunctions" class="code">function str = xml_special_char(str)</a>
+0327     <span class="comment">%- See http://www.w3.org/TR/REC-xml#sec-predefined-ent</span>
+0328     str = strrep(str,<span class="string">'&amp;'</span>,<span class="string">'&amp;amp;'</span>);
+0329     str = strrep(str,<span class="string">'&lt;'</span>,<span class="string">'&amp;lt;'</span>);
+0330     str = strrep(str,<span class="string">'&gt;'</span>,<span class="string">'&amp;gt;'</span>);
+0331     str = strrep(str,<span class="string">'&quot;'</span>,<span class="string">'&amp;quot;'</span>);
+0332     <span class="comment">%str = strrep(str,'''','&amp;apos;');</span>
+0333     
+0334 <span class="comment">%===============================================================================</span>
+0335 <span class="comment">%                                  LaTeX FORMAT                                %</span>
+0336 <span class="comment">%===============================================================================</span>
+0337 <a name="_sub14" href="#_subfunctions" class="code">function tex_file_start(fid,mfile)</a>
+0338     fprintf(fid,[<span class="string">'\\documentclass[a4paper,10pt]{article}\n'</span> <span class="keyword">...</span>
+0339                  <span class="string">'    \\usepackage{alltt}\n'</span> <span class="keyword">...</span>
+0340                  <span class="string">'    \\usepackage{color}\n'</span> <span class="keyword">...</span>
+0341                  <span class="string">'    \\usepackage{fullpage}\n'</span> <span class="keyword">...</span>
+0342                  <span class="string">'    \\definecolor{string}{rgb}{0.7,0.0,0.0}\n'</span> <span class="keyword">...</span>
+0343                  <span class="string">'    \\definecolor{comment}{rgb}{0.13,0.54,0.13}\n'</span> <span class="keyword">...</span>
+0344                  <span class="string">'    \\definecolor{keyword}{rgb}{0.0,0.0,1.0}\n'</span> <span class="keyword">...</span>
+0345                  <span class="string">'    \\title{%s}\n'</span> <span class="keyword">...</span>
+0346                  <span class="string">'    \\author{\\textsc{Matlab}, The Mathworks, Inc.}\n'</span> <span class="keyword">...</span>
+0347                  <span class="string">'\\begin{document}\n'</span> <span class="keyword">...</span>
+0348                  <span class="string">'\\maketitle\n'</span>],mfile);
+0349 
+0350 <span class="comment">%-------------------------------------------------------------------------------</span>
+0351 <a name="_sub15" href="#_subfunctions" class="code">function tex_file_end(fid)</a>
+0352     fprintf(fid,<span class="string">'\\end{document}'</span>);
+0353 
+0354 <span class="comment">%-------------------------------------------------------------------------------</span>
+0355 <a name="_sub16" href="#_subfunctions" class="code">function format = tex_format</a>
+0356     format.string    = <span class="string">'\\textcolor{string}{%s}'</span>;
+0357     format.comment   = <span class="string">'textcolor{comment}{%s}'</span>; <span class="comment">% '%' has been replaced by '\%'</span>
+0358     format.code      = <span class="string">'%s'</span>;
+0359     format.keyword   = <span class="string">'\\textcolor{keyword}{%s}'</span>;
+0360     format.cont      = <span class="string">'\\textcolor{keyword}{\\underline{%s}}'</span>;
+0361     format.pre_start = <span class="string">'\\begin{alltt}\n'</span>;
+0362     format.pre_end   = <span class="string">'\\end{alltt}\n'</span>;
+0363     format.nb_line   = <span class="string">'%04d '</span>;
+0364     format.line      = <span class="string">'%s\n'</span>;
+0365 
+0366 <span class="comment">%-------------------------------------------------------------------------------</span>
+0367 <a name="_sub17" href="#_subfunctions" class="code">function str = tex_special_char(str)</a>
+0368     <span class="comment">% Special characters: # $ % &amp; ~ _ ^ \ { }</span>
+0369     str = strrep(str,<span class="string">'\'</span>,<span class="string">'\(\backslash\)'</span>); <span class="comment">% $\backslash$ or \textbackslash or \verb+\+</span>
+0370     str = strrep(str,<span class="string">'#'</span>,<span class="string">'\#'</span>);
+0371     str = strrep(str,<span class="string">'$'</span>,<span class="string">'\$'</span>);
+0372     str = strrep(str,<span class="string">'%'</span>,<span class="string">'\%'</span>);
+0373     str = strrep(str,<span class="string">'&amp;'</span>,<span class="string">'\&amp;'</span>);
+0374     str = strrep(str,<span class="string">'_'</span>,<span class="string">'\_'</span>);
+0375     str = strrep(str,<span class="string">'{'</span>,<span class="string">'\{'</span>);
+0376     str = strrep(str,<span class="string">'}'</span>,<span class="string">'\}'</span>);
+0377     str = strrep(str,<span class="string">'^'</span>,<span class="string">'\^{}'</span>);
+0378     str = strrep(str,<span class="string">'~'</span>,<span class="string">'\~{}'</span>); <span class="comment">% or \textasciitilde</span>
+0379 
+0380 <span class="comment">%===============================================================================</span>
+0381 <span class="comment">%                                   RTF FORMAT                                 %</span>
+0382 <span class="comment">%===============================================================================</span>
+0383 <a name="_sub18" href="#_subfunctions" class="code">function rtf_file_start(fid,mfile)</a>
+0384     fprintf(fid,[<span class="string">'{\\rtf1\\ansi\n\n'</span> <span class="keyword">...</span>
+0385                  <span class="string">'{\\fonttbl{\\f0\\fmodern\\fcharset0\\fprq1 Courier New;}}\n\n'</span> <span class="keyword">...</span>
+0386                  <span class="string">'{\\colortbl;\n'</span> <span class="keyword">...</span>
+0387                  <span class="string">'\\red0\\green0\\blue0;\n'</span> <span class="keyword">...</span>
+0388                  <span class="string">'\\red0\\green0\\blue255;\n'</span> <span class="keyword">...</span>
+0389                  <span class="string">'\\red33\\green138\\blue33;\n'</span> <span class="keyword">...</span>
+0390                  <span class="string">'\\red178\\green0\\blue0;}\n\n'</span> <span class="keyword">...</span>
+0391                  <span class="string">'{\\info{\\title %s}\n'</span> <span class="keyword">...</span>
+0392                  <span class="string">'{\\author HighLight.m Copyright 2003}\n'</span> <span class="keyword">...</span>
+0393                  <span class="string">'{\\creatim\\yr%s\\mo%s\\dy%s}'</span> <span class="keyword">...</span>
+0394                  <span class="string">'{\\*\\manager Guillaume Flandin}\n'</span> <span class="keyword">...</span>
+0395                  <span class="string">'{\\*\\company Artefact.tk}\n'</span> <span class="keyword">...</span>
+0396                  <span class="string">'{\\*\\hlinkbase http://www.madic.org/download/'</span> <span class="keyword">...</span><span class="comment"> </span>
+0397                  <span class="string">'matlab/highlight/}}\n\n'</span>],mfile,<span class="keyword">...</span>
+0398                  datestr(date,<span class="string">'yyyy'</span>),datestr(date,<span class="string">'mm'</span>),datestr(date,<span class="string">'dd'</span>));
+0399 
+0400 <span class="comment">%-------------------------------------------------------------------------------</span>
+0401 <a name="_sub19" href="#_subfunctions" class="code">function rtf_file_end(fid)</a>
+0402     fprintf(fid,<span class="string">'}'</span>);
+0403 
+0404 <span class="comment">%-------------------------------------------------------------------------------</span>
+0405 <a name="_sub20" href="#_subfunctions" class="code">function format = rtf_format</a>
+0406     format.string    = <span class="string">'{\\cf4 %s}'</span>;
+0407     format.comment   = <span class="string">'{\\cf3 %s}'</span>;
+0408     format.code      = <span class="string">'{%s}'</span>;
+0409     format.keyword   = <span class="string">'{\\cf2 %s}'</span>;
+0410     format.cont      = <span class="string">'{\\cf2 %s}'</span>;
+0411     format.pre_start = <span class="string">'{\\f0\\fs16{'</span>;
+0412     format.pre_end   = <span class="string">'}}'</span>;
+0413     format.nb_line   = <span class="string">'{%04d }'</span>;
+0414     format.line      = <span class="string">'%s\n\\par '</span>;
+0415 
+0416 <span class="comment">%-------------------------------------------------------------------------------</span>
+0417 <a name="_sub21" href="#_subfunctions" class="code">function str = rtf_special_char(str)</a>
+0418     str = strrep(str,<span class="string">'\'</span>,<span class="string">'\\'</span>);
+0419     str = strrep(str,<span class="string">'{'</span>,<span class="string">'\{'</span>);
+0420     str = strrep(str,<span class="string">'}'</span>,<span class="string">'\}'</span>);
+0421 
+0422 <span class="comment">%===============================================================================</span>
+0423 <span class="comment">%                                 MATLAB KEYWORDS                              %</span>
+0424 <span class="comment">%===============================================================================</span>
+0425 <a name="_sub22" href="#_subfunctions" class="code">function matlabKeywords = getMatlabKeywords</a>
+0426     <span class="comment">%matlabKeywords = iskeyword; % Matlab R13</span>
+0427     matlabKeywords = {<span class="string">'break'</span>, <span class="string">'case'</span>, <span class="string">'catch'</span>, <span class="string">'continue'</span>, <span class="string">'elseif'</span>, <span class="string">'else'</span>,<span class="keyword">...</span>
+0428                       <span class="string">'end'</span>, <span class="string">'for'</span>, <span class="string">'function'</span>, <span class="string">'global'</span>, <span class="string">'if'</span>, <span class="string">'otherwise'</span>, <span class="keyword">...</span>
+0429                       <span class="string">'persistent'</span>, <span class="string">'return'</span>, <span class="string">'switch'</span>, <span class="string">'try'</span>, <span class="string">'while'</span>};
+0430                       
+0431 <span class="comment">%-------------------------------------------------------------------------------</span>
+0432 <a name="_sub23" href="#_subfunctions" class="code">function mKeySort = getMatlabKeywordsSorted</a>
+0433     mKeySort.nextincr = {<span class="string">'for'</span>, <span class="string">'while'</span>, <span class="string">'if'</span>, <span class="string">'else'</span>, <span class="string">'elseif'</span>, <span class="keyword">...</span>
+0434                          <span class="string">'case'</span>, <span class="string">'otherwise'</span>, <span class="string">'try'</span>, <span class="string">'catch'</span>};
+0435     mKeySort.nextincr2 = {<span class="string">'switch'</span>};
+0436     mKeySort.currdecr = {<span class="string">'else'</span>, <span class="string">'elseif'</span>, <span class="string">'case'</span>, <span class="string">'otherwise'</span>, <span class="string">'catch'</span>};
+0437     mKeySort.nextdecr = {<span class="string">'end'</span>};
+0438     mKeySort.other    = {<span class="string">'break'</span>, <span class="string">'continue'</span>, <span class="string">'function'</span>, <span class="string">'global'</span>, <span class="keyword">...</span>
+0439                          <span class="string">'persistent'</span>, <span class="string">'return'</span>};
+0440 
+0441 <span class="comment">%===============================================================================</span>
+0442 <span class="comment">%                               HANDLE TAB CHARACTER                           %</span>
+0443 <span class="comment">%===============================================================================</span>
+0444 <a name="_sub24" href="#_subfunctions" class="code">function str = horztab(str,n)</a>
+0445     <span class="comment">%- For browsers, the horizontal tab character is the smallest non-zero</span>
+0446     <span class="comment">%- number of spaces necessary to line characters up along tab stops that are</span>
+0447     <span class="comment">%- every 8 characters: behaviour obtained when n = 0.</span>
+0448     <span class="keyword">if</span> n &gt; 0
+0449         str = strrep(str,sprintf(<span class="string">'\t'</span>),blanks(n));
+0450     <span class="keyword">end</span>
+0451 
+0452 <span class="comment">%===============================================================================</span>
+0453 <span class="comment">%                                MATLAB CODE PARSER                            %</span>
+0454 <span class="comment">%===============================================================================</span>
+0455 <a name="_sub25" href="#_subfunctions" class="code">function splitc = splitcode(code)</a>
+0456     <span class="comment">%Split a line of  Matlab code in string, comment and other</span>
+0457 
+0458     <span class="comment">%- Label quotes in {'transpose', 'beginstring', 'midstring', 'endstring'}</span>
+0459     iquote = findstr(code,<span class="string">''''</span>);
+0460     quotetransp = [double(<span class="string">'_''.)}]'</span>) <span class="keyword">...</span>
+0461                    double(<span class="string">'A'</span>):double(<span class="string">'Z'</span>) <span class="keyword">...</span>
+0462                    double(<span class="string">'0'</span>):double(<span class="string">'9'</span>) <span class="keyword">...</span>
+0463                    double(<span class="string">'a'</span>):double(<span class="string">'z'</span>)];
+0464     flagstring = 0;
+0465     flagdoublequote = 0;
+0466     jquote = [];
+0467     <span class="keyword">for</span> i=1:length(iquote)
+0468         <span class="keyword">if</span> ~flagstring
+0469             <span class="keyword">if</span> iquote(i) &gt; 1 &amp; any(quotetransp == double(code(iquote(i)-1)))
+0470                 <span class="comment">% =&gt; 'transpose';</span>
+0471             <span class="keyword">else</span>
+0472                 <span class="comment">% =&gt; 'beginstring';</span>
+0473                 jquote(size(jquote,1)+1,:) = [iquote(i) length(code)];
+0474                 flagstring = 1;
+0475             <span class="keyword">end</span>
+0476         <span class="keyword">else</span> <span class="comment">% if flagstring</span>
+0477             <span class="keyword">if</span> flagdoublequote | <span class="keyword">...</span>
+0478                (iquote(i) &lt; length(code) &amp; strcmp(code(iquote(i)+1),<span class="string">''''</span>))
+0479                 <span class="comment">% =&gt; 'midstring';</span>
+0480                 flagdoublequote = ~flagdoublequote;
+0481             <span class="keyword">else</span>
+0482                 <span class="comment">% =&gt; 'endstring';</span>
+0483                 jquote(size(jquote,1),2) = iquote(i);
+0484                 flagstring = 0;
+0485             <span class="keyword">end</span>
+0486         <span class="keyword">end</span>
+0487     <span class="keyword">end</span>
+0488 
+0489     <span class="comment">%- Find if a portion of code is a comment</span>
+0490     ipercent = findstr(code,<span class="string">'%'</span>);
+0491     jpercent = [];
+0492     <span class="keyword">for</span> i=1:length(ipercent)
+0493         <span class="keyword">if</span> isempty(jquote) | <span class="keyword">...</span>
+0494            ~any((ipercent(i) &gt; jquote(:,1)) &amp; (ipercent(i) &lt; jquote(:,2)))
+0495             jpercent = [ipercent(i) length(code)];
+0496             <span class="keyword">break</span>;
+0497         <span class="keyword">end</span>
+0498     <span class="keyword">end</span>
+0499 
+0500     <span class="comment">%- Find continuation punctuation '...'</span>
+0501     icont = findstr(code,<span class="string">'...'</span>);
+0502     <span class="keyword">for</span> i=1:length(icont)
+0503         <span class="keyword">if</span> (isempty(jquote) | <span class="keyword">...</span>
+0504             ~any((icont(i) &gt; jquote(:,1)) &amp; (icont(i) &lt; jquote(:,2)))) &amp; <span class="keyword">...</span>
+0505             (isempty(jpercent) | <span class="keyword">...</span>
+0506             icont(i) &lt; jpercent(1))
+0507             jpercent = [icont(i) length(code)];
+0508             <span class="keyword">break</span>;
+0509         <span class="keyword">end</span>
+0510     <span class="keyword">end</span>
+0511 
+0512     <span class="comment">%- Remove strings inside comments</span>
+0513     <span class="keyword">if</span> ~isempty(jpercent) &amp; ~isempty(jquote)
+0514         jquote(find(jquote(:,1) &gt; jpercent(1)),:) = [];
+0515     <span class="keyword">end</span>
+0516 
+0517     <span class="comment">%- Split code in a cell array of strings</span>
+0518     icode = [jquote ; jpercent];
+0519     splitc = {};
+0520     <span class="keyword">if</span> isempty(icode)
+0521         splitc{1} = code;
+0522     <span class="keyword">elseif</span> icode(1,1) &gt; 1
+0523         splitc{1} = code(1:icode(1,1)-1);
+0524     <span class="keyword">end</span>
+0525     <span class="keyword">for</span> i=1:size(icode,1)
+0526         splitc{end+1} = code(icode(i,1):icode(i,2));
+0527         <span class="keyword">if</span> i &lt; size(icode,1) &amp; icode(i+1,1) &gt; icode(i,2) + 1
+0528             splitc{end+1} = code((icode(i,2)+1):(icode(i+1,1)-1));
+0529         <span class="keyword">elseif</span> i == size(icode,1) &amp; icode(i,2) &lt; length(code)
+0530             splitc{end+1} = code(icode(i,2)+1:end);
+0531         <span class="keyword">end</span>
+0532     <span class="keyword">end</span>
+0533       
+0534 <span class="comment">%===============================================================================</span>
+0535 <span class="comment">%                           MODIFIED VERSION OF STRTOK                         %</span>
+0536 <span class="comment">%===============================================================================</span>
+0537 <a name="_sub26" href="#_subfunctions" class="code">function [token, remainder, quotient] = strtok(string, delimiters)</a>
+0538 <span class="comment">% Modified version of STRTOK to also return the quotient</span>
+0539 <span class="comment">% string = [quotient token remainder]</span>
+0540 <span class="comment">%STRTOK Find token in string.</span>
+0541 <span class="comment">%   STRTOK(S) returns the first token in the string S delimited</span>
+0542 <span class="comment">%   by &quot;white space&quot;.   Any leading white space characters are ignored.</span>
+0543 <span class="comment">%</span>
+0544 <span class="comment">%   STRTOK(S,D) returns the first token delimited by one of the</span>
+0545 <span class="comment">%   characters in D.  Any leading delimiter characters are ignored.</span>
+0546 <span class="comment">%</span>
+0547 <span class="comment">%   [T,R] = STRTOK(...) also returns the remainder of the original</span>
+0548 <span class="comment">%   string.</span>
+0549 <span class="comment">%   If the token is not found in S then R is an empty string and T</span>
+0550 <span class="comment">%   is same as S.</span>
+0551 <span class="comment">%</span>
+0552 <span class="comment">%   Copyright 1984-2002 The MathWorks, Inc.</span>
+0553 <span class="comment">%   $Revision: 5.14 $  $Date: 2002/04/09 00:33:38 $</span>
+0554 
+0555 token = []; remainder = []; quotient = string;
+0556 
+0557 len = length(string);
+0558 <span class="keyword">if</span> len == 0
+0559     <span class="keyword">return</span>
+0560 <span class="keyword">end</span>
+0561 
+0562 <span class="keyword">if</span> (nargin == 1)
+0563     delimiters = [9:13 32]; <span class="comment">% White space characters</span>
+0564 <span class="keyword">end</span>
+0565 
+0566 i = 1;
+0567 <span class="keyword">while</span> (any(string(i) == delimiters))
+0568     i = i + 1;
+0569     <span class="keyword">if</span> (i &gt; len), <span class="keyword">return</span>, <span class="keyword">end</span>
+0570 <span class="keyword">end</span>
+0571 start = i;
+0572 <span class="keyword">while</span> (~any(string(i) == delimiters))
+0573     i = i + 1;
+0574     <span class="keyword">if</span> (i &gt; len), <span class="keyword">break</span>, <span class="keyword">end</span>
+0575 <span class="keyword">end</span>
+0576 <a href="../../Otherbox/m2html/@template/private/finish.html" class="code" title="function str = finish(str,unknowns)">finish</a> = i - 1;
+0577 
+0578 token = string(start:<a href="../../Otherbox/m2html/@template/private/finish.html" class="code" title="function str = finish(str,unknowns)">finish</a>);
+0579 
+0580 <span class="keyword">if</span> (nargout &gt;= 2)
+0581     remainder = string(<a href="../../Otherbox/m2html/@template/private/finish.html" class="code" title="function str = finish(str,unknowns)">finish</a> + 1:length(string));
+0582 <span class="keyword">end</span>
+0583 
+0584 <span class="keyword">if</span> (nargout == 3 &amp; start &gt; 1)
+0585     quotient = string(1:start-1);
+0586 <span class="keyword">else</span>
+0587     quotient = [];
+0588 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

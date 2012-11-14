@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_script_print_channel_firing_rate_sd</title>
+  <meta name="keywords" content="util_script_print_channel_firing_rate_sd">
+  <meta name="description" content="UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Scripts -->
+<h1>util_script_print_channel_firing_rate_sd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = util_script_print_channel_firing_rate_sd( spif, output_folder ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.
+Each of them contains Rate/SD of one individual channel.
+   Input:
+           spif:   Spike information structure
+           output_folder:  Output folder which will contains result PNGs
+
+   Created on Jun/11/2012 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../Calculation/util_calc_sd_from_rate.html" class="code" title="function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin )">util_calc_sd_from_rate</a>	UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Otherbox/export_fig/export_fig.html" class="code" title="function [im alpha] = export_fig(varargin)">export_fig</a>	EXPORT_FIG  Exports figures suitable for publication</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = util_script_print_channel_firing_rate_sd( spif, output_folder )</a>
+0002 <span class="comment">%UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.</span>
+0003 <span class="comment">%Each of them contains Rate/SD of one individual channel.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           spif:   Spike information structure</span>
+0006 <span class="comment">%           output_folder:  Output folder which will contains result PNGs</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Created on Jun/11/2012 By Pu Jiangbo</span>
+0009 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0010 
+0011 <span class="comment">% Parameters</span>
+0012 binwidth = 1000;    <span class="comment">% Bin width for calculating SD window / Rate window</span>
+0013 bin_int = 150;      <span class="comment">% Bin width for calculating rate for SD (we should have smaller bin size to get the SD in binwidth)</span>
+0014 gnd = [];           <span class="comment">% Grounding</span>
+0015 threshold = 0;      <span class="comment">% Leave it to 0 to include all electrodes</span>
+0016 
+0017 <span class="comment">% Get firing rate</span>
+0018 [ ~,~,~,~, rate, ~,~,~ ] = <a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>( spif, <span class="string">'bin'</span>, binwidth, <span class="string">'gnd'</span>, gnd, <span class="string">'threshold'</span>, threshold, <span class="string">'mode'</span>, <span class="string">'electrode'</span> );
+0019 
+0020 <span class="comment">% Get SD from Rate</span>
+0021 [ elec_sd ] = <a href="../Calculation/util_calc_sd_from_rate.html" class="code" title="function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin )">util_calc_sd_from_rate</a>( spif, <span class="string">'bin'</span>, binwidth, <span class="string">'bin_int'</span>, bin_int, <span class="string">'gnd'</span>, gnd, <span class="string">'threshold'</span>, threshold );
+0022 
+0023 <span class="comment">% PLOT</span>
+0024 k = 1;
+0025 fig_filename = <span class="string">''</span>;
+0026 <span class="keyword">if</span> output_folder(end) ~= <span class="string">'\'</span>
+0027     output_folder = [output_folder <span class="string">'\'</span>];
+0028 <span class="keyword">end</span>
+0029 
+0030 figure
+0031 
+0032 <span class="keyword">for</span> i = 1:8
+0033     <span class="keyword">for</span> j = 1:8
+0034         subplot(2,1,1); plot(rate(:,k)); title(<span class="string">'Firing Rate (spikes/s)'</span>); xlabel(<span class="string">'Bin'</span>); ylabel(<span class="string">'Spikes / s'</span>); <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'xlim'</span>, [0 length(rate(:,k))])
+0035         subplot(2,1,2); plot(elec_sd(:,k)); title(<span class="string">'SD of Rate'</span>); xlabel(<span class="string">'Bin'</span>); ylabel(<span class="string">'SD'</span>); <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'xlim'</span>, [0 length(rate(:,k))])
+0036         fig_filename = [output_folder <span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(k)) <span class="string">'.png'</span>];
+0037         <a href="../Otherbox/export_fig/export_fig.html" class="code" title="function [im alpha] = export_fig(varargin)">export_fig</a>(fig_filename, <span class="string">'-png'</span>);
+0038         k = k + 1;
+0039     <span class="keyword">end</span>
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">end</span>
+0043</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

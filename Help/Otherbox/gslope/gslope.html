@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gslope</title>
+  <meta name="keywords" content="gslope">
+  <meta name="description" content="GSLOPE Estimate a slope from two mouse clicks.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html gslope -->
+<h1>gslope
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GSLOPE Estimate a slope from two mouse clicks.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function m = gslope(ignored) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">GSLOPE Estimate a slope from two mouse clicks.
+   GSLOPE creates a crosshair in the current figure and waits for two mouse
+   clicks. The slope of the line through the two click locations is
+   returned. Logarithmic scales are automatically accounted for.
+   
+   See also GINPUT.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function m = gslope(ignored)</a>
+0002 <span class="comment">%GSLOPE Estimate a slope from two mouse clicks.</span>
+0003 <span class="comment">%   GSLOPE creates a crosshair in the current figure and waits for two mouse</span>
+0004 <span class="comment">%   clicks. The slope of the line through the two click locations is</span>
+0005 <span class="comment">%   returned. Logarithmic scales are automatically accounted for.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   See also GINPUT.</span>
+0008 
+0009 <span class="comment">% Copyright 1999-2003 by Toby Driscoll (driscoll@math.udel.edu).</span>
+0010 
+0011 [x,y]=ginput(2);
+0012 <span class="keyword">if</span> nargin &gt; 0
+0013   line(x,y,<span class="string">'linesty'</span>,<span class="string">'none'</span>,<span class="string">'marker'</span>,<span class="string">'x'</span>,<span class="string">'linestyle'</span>,<span class="string">'--'</span>,<span class="string">'color'</span>,<span class="string">'k'</span>)
+0014 <span class="keyword">end</span>
+0015 <span class="keyword">if</span> strcmp(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'xsc'</span>),<span class="string">'log'</span>), x = log10(x); <span class="keyword">end</span>
+0016 <span class="keyword">if</span> strcmp(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'ysc'</span>),<span class="string">'log'</span>), y = log10(y); <span class="keyword">end</span>
+0017 m = diff(y)/diff(x);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

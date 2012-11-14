@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_wavelet</title>
+  <meta name="keywords" content="util_calc_wavelet">
+  <meta name="description" content="UTIL_CALC_WAVELET Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_wavelet
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_WAVELET Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ccfs, bound] = util_calc_wavelet(wavelet_data, Fs, FFTMax) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_WAVELET Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ccfs, bound] = util_calc_wavelet(wavelet_data, Fs, FFTMax)</a>
+0002 <span class="comment">%UTIL_CALC_WAVELET Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 
+0005 <span class="comment">% Wavelet form</span>
+0006 wname = <span class="string">'morl'</span>;
+0007 
+0008 <span class="comment">% Sampling period</span>
+0009 delta = 1/Fs;
+0010 
+0011 <span class="comment">% Frequency resolution</span>
+0012 Step = 0.2;
+0013 
+0014 <span class="comment">% Center frequency (Hz)</span>
+0015 cfreq = centfrq(wname, 8);
+0016 
+0017 <span class="comment">% Define the frequency</span>
+0018 Freq= (0.1:Step:FFTMax);
+0019 <span class="keyword">for</span> j = 1:size(Freq,2)
+0020     <span class="comment">% Frequency to scale</span>
+0021     ScaleW(j) = cfreq / (delta*Freq(j));
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% Wavelet02 calculation</span>
+0025 ccfs = cwt(wavelet_data, ScaleW, wname, <span class="string">'scal'</span>);
+0026 ccfs = ccfs .^ 2;
+0027 ccfs = rot90(ccfs); <span class="comment">% Rot array</span>
+0028 
+0029 <span class="comment">% Smooth</span>
+0030 <span class="comment">%ccfsS = smooth(ccfs, size(wavelet_data, 2)*3/100);</span>
+0031 ccfsS = smooth(ccfs, 3);
+0032 ccfs = reshape(ccfsS, size(ccfs,1), size(ccfs,2));
+0033 ccfs = rot90(ccfs);
+0034 ccfs = fliplr(ccfs);
+0035 ccfs = (ccfs) / (max(max(ccfs(1:(size(ccfs,1)-5),:)))); <span class="comment">% Normalize</span>
+0036 
+0037 <span class="comment">% Significant area</span>
+0038 nSTDs = 2.58;   <span class="comment">% 99% significant level</span>
+0039 nSTDs95 = 1.96; <span class="comment">% 95% significant level</span>
+0040 bound = mean(mean(ccfs,1)) + nSTDs95/(size(ccfs,1).^(1/2));
+0041 
+0042 
+0043 
+0044 <span class="keyword">end</span>
+0045</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

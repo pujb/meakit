@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randht</title>
+  <meta name="keywords" content="randht">
+  <meta name="description" content="RANDHT generates n observations distributed as some continous heavy-">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html plfit -->
+<h1>randht
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RANDHT generates n observations distributed as some continous heavy-</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x=randht(n, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> RANDHT generates n observations distributed as some continous heavy-
+ tailed distribution. Options are power law, log-normal, stretched 
+ exponential, power law with cutoff, and exponential. Can specify lower 
+ cutoff, if desired.
+ 
+    Example:
+       x = randht(10000,'powerlaw',alpha);
+       x = randht(10000,'xmin',xmin,'powerlaw',alpha);
+       x = randht(10000,'cutoff',alpha, lambda);
+       x = randht(10000,'exponential',lambda);
+       x = randht(10000,'lognormal',mu,sigma);
+       x = randht(10000,'stretched',lambda,beta);
+
+    See also <a href="plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">PLFIT</a>, <a href="plvar.html" class="code" title="function [alpha, xmin, n]=plvar(x, varargin)">PLVAR</a>, <a href="plpva.html" class="code" title="function [p,gof]=plpva(x, xmin, varargin)">PLPVA</a>
+
+    Source: http://www.santafe.edu/~aaronc/powerlaws/</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function x=randht(n, varargin)</a>
+0002 <span class="comment">% RANDHT generates n observations distributed as some continous heavy-</span>
+0003 <span class="comment">% tailed distribution. Options are power law, log-normal, stretched</span>
+0004 <span class="comment">% exponential, power law with cutoff, and exponential. Can specify lower</span>
+0005 <span class="comment">% cutoff, if desired.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Example:</span>
+0008 <span class="comment">%       x = randht(10000,'powerlaw',alpha);</span>
+0009 <span class="comment">%       x = randht(10000,'xmin',xmin,'powerlaw',alpha);</span>
+0010 <span class="comment">%       x = randht(10000,'cutoff',alpha, lambda);</span>
+0011 <span class="comment">%       x = randht(10000,'exponential',lambda);</span>
+0012 <span class="comment">%       x = randht(10000,'lognormal',mu,sigma);</span>
+0013 <span class="comment">%       x = randht(10000,'stretched',lambda,beta);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    See also PLFIT, PLVAR, PLPVA</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    Source: http://www.santafe.edu/~aaronc/powerlaws/</span>
+0018 
+0019 <span class="comment">% Version 1.0   (2007 May)</span>
+0020 <span class="comment">% Version 1.0.1 (2007 September)</span>
+0021 <span class="comment">% Version 1.0.2 (2008 April)</span>
+0022 <span class="comment">% Copyright (C) 2007 Aaron Clauset (Santa Fe Institute)</span>
+0023 <span class="comment">% Distributed under GPL 2.0</span>
+0024 <span class="comment">% http://www.gnu.org/copyleft/gpl.html</span>
+0025 <span class="comment">% RANDHT comes with ABSOLUTELY NO WARRANTY</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Notes:</span>
+0028 <span class="comment">%</span>
+0029 
+0030 type   = <span class="string">''</span>;
+0031 xmin   = 1;
+0032 alpha  = 2.5;
+0033 beta   = 1;
+0034 lambda = 1;
+0035 mu     = 1;
+0036 sigma  = 1;
+0037 <span class="keyword">persistent</span> rand_state;
+0038 
+0039 <span class="comment">% parse command-line parameters; trap for bad input</span>
+0040 i=1; 
+0041 <span class="keyword">while</span> i&lt;=length(varargin), 
+0042   argok = 1; 
+0043   <span class="keyword">if</span> ischar(varargin{i}), 
+0044     <span class="keyword">switch</span> varargin{i},
+0045         <span class="keyword">case</span> <span class="string">'xmin'</span>,            xmin = varargin{i+1}; i = i + 1;
+0046         <span class="keyword">case</span> <span class="string">'powerlaw'</span>,        type = <span class="string">'PL'</span>; alpha  = varargin{i+1}; i = i + 1;
+0047         <span class="keyword">case</span> <span class="string">'cutoff'</span>,          type = <span class="string">'PC'</span>; alpha  = varargin{i+1}; lambda = varargin{i+2}; i = i + 2;
+0048         <span class="keyword">case</span> <span class="string">'exponential'</span>,     type = <span class="string">'EX'</span>; lambda = varargin{i+1}; i = i + 1;
+0049         <span class="keyword">case</span> <span class="string">'lognormal'</span>,       type = <span class="string">'LN'</span>; mu = varargin{i+1}; sigma = varargin{i+2};i = i + 2;
+0050         <span class="keyword">case</span> <span class="string">'stretched'</span>,       type = <span class="string">'ST'</span>; lambda = varargin{i+1}; beta = varargin{i+2}; i = i + 2;
+0051         <span class="keyword">otherwise</span>, argok=0; 
+0052     <span class="keyword">end</span>
+0053   <span class="keyword">end</span>
+0054   <span class="keyword">if</span> ~argok, 
+0055     disp([<span class="string">'(RANDHT) Ignoring invalid argument #'</span> num2str(i+1)]); 
+0056   <span class="keyword">end</span>
+0057   i = i+1; 
+0058 <span class="keyword">end</span>
+0059 <span class="keyword">if</span> (~isscalar(n) || n&lt;1)
+0060     fprintf(<span class="string">'(RANDHT) Error: invalid ''n'' argument; using default.\n'</span>);
+0061     n = 10000;
+0062 <span class="keyword">end</span>;
+0063 <span class="keyword">if</span> (~isscalar(xmin) || xmin&lt;1)
+0064     fprintf(<span class="string">'(RANDHT) Error: invalid ''xmin'' argument; using default.\n'</span>);
+0065     xmin = 1;
+0066 <span class="keyword">end</span>;
+0067 <span class="keyword">if</span> isempty(rand_state)
+0068     rand_state = cputime;
+0069     rand(<span class="string">'twister'</span>,sum(100*clock));
+0070 <span class="keyword">end</span>;
+0071 
+0072 <span class="keyword">switch</span> type
+0073     <span class="keyword">case</span> <span class="string">'EX'</span>, x = xmin - (1/lambda)*log(1-rand(n,1));
+0074     <span class="keyword">case</span> <span class="string">'LN'</span>,
+0075         y = exp(mu+sigma*randn(10*n,1));
+0076         <span class="keyword">while</span> true
+0077             y(y&lt;xmin) = [];
+0078             q = length(y)-n;
+0079             <span class="keyword">if</span> (q==0), <span class="keyword">break</span>;
+0080             <span class="keyword">end</span>;
+0081             <span class="keyword">if</span> (q&gt;0),
+0082                 r = randperm(length(y));
+0083                 y(r(1:q)) = [];
+0084                 <span class="keyword">break</span>;
+0085             <span class="keyword">end</span>;
+0086             <span class="keyword">if</span> (q&lt;0),
+0087                 y = [y; exp(mu+sigma*randn(10*n,1))];
+0088             <span class="keyword">end</span>;
+0089         <span class="keyword">end</span>;
+0090         x = y;
+0091     <span class="keyword">case</span> <span class="string">'ST'</span>, x = (xmin^beta - (1/lambda)*log(1-rand(n,1))).^(1/beta);
+0092     <span class="keyword">case</span> <span class="string">'PC'</span>,
+0093         x = [];
+0094         y = xmin - (1/lambda)*log(1-rand(10*n,1));
+0095         <span class="keyword">while</span> true
+0096             y(rand(10*n,1)&gt;=(y./xmin).^(-alpha)) = [];
+0097             x = [x; y];
+0098             q = length(x)-n;
+0099             <span class="keyword">if</span> (q==0), <span class="keyword">break</span>;
+0100             <span class="keyword">end</span>;
+0101             <span class="keyword">if</span> (q&gt;0),
+0102                 r = randperm(length(x));
+0103                 x(r(1:q)) = [];
+0104                 <span class="keyword">break</span>;
+0105             <span class="keyword">end</span>;
+0106             <span class="keyword">if</span> (q&lt;0),
+0107                 y = xmin - (1/lambda)*log(1-rand(10*n,1));
+0108             <span class="keyword">end</span>;
+0109         <span class="keyword">end</span>;
+0110     <span class="keyword">otherwise</span>, x = xmin*(1-rand(n,1)).^(-1/(alpha-1));
+0111 <span class="keyword">end</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

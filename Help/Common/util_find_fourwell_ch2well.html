@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_find_fourwell_ch2well</title>
+  <meta name="keywords" content="util_find_fourwell_ch2well">
+  <meta name="description" content="UTIL_FIND_FOURWELL_CH2WELL Locate the hole where the electrode is in a">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_find_fourwell_ch2well
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_FIND_FOURWELL_CH2WELL Locate the hole where the electrode is in a</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ well, row, column ] = util_find_fourwell_ch2well( chID ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_FIND_FOURWELL_CH2WELL Locate the hole where the electrode is in a
+4-well MEA.
+
+   Input:      CHID (11 - 88)
+   Output:     well:   The hole id.
+               row/column. (0.5 = electrodes in the middle of two rows / cols)
+   Layout:
+           1  2
+           3  4
+
+   Created on Jul/12/2009 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ well, row, column ] = util_find_fourwell_ch2well( chID )</a>
+0002 <span class="comment">%UTIL_FIND_FOURWELL_CH2WELL Locate the hole where the electrode is in a</span>
+0003 <span class="comment">%4-well MEA.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Input:      CHID (11 - 88)</span>
+0006 <span class="comment">%   Output:     well:   The hole id.</span>
+0007 <span class="comment">%               row/column. (0.5 = electrodes in the middle of two rows / cols)</span>
+0008 <span class="comment">%   Layout:</span>
+0009 <span class="comment">%           1  2</span>
+0010 <span class="comment">%           3  4</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Created on Jul/12/2009 By Pu Jiangbo</span>
+0013 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0014 
+0015 <span class="comment">% WELL 1</span>
+0016 <span class="keyword">if</span> chID == 33
+0017     well = 1;
+0018     row = 1;
+0019     column = 1;
+0020     <span class="keyword">return</span>;
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">if</span> chID == 21
+0024     well = 1;
+0025     row = 1;
+0026     column = 2;
+0027     <span class="keyword">return</span>;    
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="keyword">if</span> chID == 31
+0031     well = 1;
+0032     row = 1;
+0033     column = 3;
+0034     <span class="keyword">return</span>;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">if</span> chID == 44
+0038     well = 1;
+0039     row = 1.5;
+0040     column = 4;
+0041     <span class="keyword">return</span>;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> chID == 12
+0045     well = 1;
+0046     row = 2;
+0047     column = 1;
+0048     <span class="keyword">return</span>;
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">if</span> chID == 22
+0052     well = 1;
+0053     row = 2;
+0054     column = 2;
+0055     <span class="keyword">return</span>;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> chID == 32
+0059     well = 1;
+0060     row = 2;
+0061     column = 3;
+0062     <span class="keyword">return</span>;
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">if</span> chID == 23
+0066     well = 1;
+0067     row = 2.5;
+0068     column = 4;
+0069     <span class="keyword">return</span>;
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">if</span> chID == 13
+0073     well = 1;
+0074     row = 3;
+0075     column = 1;
+0076     <span class="keyword">return</span>;
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> chID == 34
+0080     well = 1;
+0081     row = 3;
+0082     column = 2;
+0083     <span class="keyword">return</span>;
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="keyword">if</span> chID == 15
+0087     well = 1;
+0088     row = 3;
+0089     column = 3;
+0090     <span class="keyword">return</span>;
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">if</span> chID == 35
+0094     well = 1;
+0095     row = 3.5;
+0096     column = 4;
+0097     <span class="keyword">return</span>;
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="keyword">if</span> chID == 24
+0101     well = 1;
+0102     row = 4;
+0103     column = 1;
+0104     <span class="keyword">return</span>;
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="keyword">if</span> chID == 14
+0108     well = 1;
+0109     row = 4;
+0110     column = 2;
+0111     <span class="keyword">return</span>;
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="keyword">if</span> chID == 25
+0115     well = 1;
+0116     row = 4;
+0117     column = 3;
+0118     <span class="keyword">return</span>;
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="comment">% WELL 2</span>
+0122 
+0123 <span class="keyword">if</span> chID == 51
+0124     well = 2;
+0125     row = 1;
+0126     column = 1;
+0127     <span class="keyword">return</span>;
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="keyword">if</span> chID == 54
+0131     well = 2;
+0132     row = 1;
+0133     column = 2;
+0134     <span class="keyword">return</span>;
+0135 <span class="keyword">end</span>
+0136 
+0137 <span class="keyword">if</span> chID == 62
+0138     well = 2;
+0139     row = 1;
+0140     column = 3;
+0141     <span class="keyword">return</span>;
+0142 <span class="keyword">end</span>
+0143 
+0144 <span class="keyword">if</span> chID == 63
+0145     well = 2;
+0146     row = 1;
+0147     column = 4;
+0148     <span class="keyword">return</span>;
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="keyword">if</span> chID == 52
+0152     well = 2;
+0153     row = 2;
+0154     column = 1;
+0155     <span class="keyword">return</span>;
+0156 <span class="keyword">end</span>
+0157 
+0158 <span class="keyword">if</span> chID == 53
+0159     well = 2;
+0160     row = 2;
+0161     column = 2;
+0162     <span class="keyword">return</span>;
+0163 <span class="keyword">end</span>
+0164 
+0165 <span class="keyword">if</span> chID == 71
+0166     well = 2;
+0167     row = 2;
+0168     column = 3;
+0169     <span class="keyword">return</span>;
+0170 <span class="keyword">end</span>
+0171 
+0172 <span class="keyword">if</span> chID == 72
+0173     well = 2;
+0174     row = 2;
+0175     column = 4;
+0176     <span class="keyword">return</span>;
+0177 <span class="keyword">end</span>
+0178 
+0179 <span class="keyword">if</span> chID == 41
+0180     well = 2;
+0181     row = 3;
+0182     column = 1;
+0183     <span class="keyword">return</span>;
+0184 <span class="keyword">end</span>
+0185 
+0186 <span class="keyword">if</span> chID == 42
+0187     well = 2;
+0188     row = 3;
+0189     column = 2;
+0190     <span class="keyword">return</span>;
+0191 <span class="keyword">end</span>
+0192 
+0193 <span class="keyword">if</span> chID == 82
+0194     well = 2;
+0195     row = 3;
+0196     column = 3;
+0197     <span class="keyword">return</span>;
+0198 <span class="keyword">end</span>
+0199 
+0200 <span class="keyword">if</span> chID == 73
+0201     well = 2;
+0202     row = 3;
+0203     column = 4;
+0204     <span class="keyword">return</span>;
+0205 <span class="keyword">end</span>
+0206 
+0207 <span class="keyword">if</span> chID == 43
+0208     well = 2;
+0209     row = 4;
+0210     column = 1.5;
+0211     <span class="keyword">return</span>;
+0212 <span class="keyword">end</span>
+0213 
+0214 <span class="keyword">if</span> chID == 61
+0215     well = 2;
+0216     row = 4;
+0217     column = 2.5;
+0218     <span class="keyword">return</span>;
+0219 <span class="keyword">end</span>
+0220 
+0221 <span class="keyword">if</span> chID == 83
+0222     well = 2;
+0223     row = 4;
+0224     column = 3.5;
+0225     <span class="keyword">return</span>;
+0226 <span class="keyword">end</span>
+0227 
+0228 <span class="comment">% WELL 3</span>
+0229 
+0230 <span class="keyword">if</span> chID == 16
+0231     well = 3;
+0232     row = 1;
+0233     column = 1.5;
+0234     <span class="keyword">return</span>;
+0235 <span class="keyword">end</span>
+0236 
+0237 <span class="keyword">if</span> chID == 38
+0238     well = 3;
+0239     row = 1;
+0240     column = 2.5;
+0241     <span class="keyword">return</span>;
+0242 <span class="keyword">end</span>
+0243 
+0244 <span class="keyword">if</span> chID == 56
+0245     well = 3;
+0246     row = 1;
+0247     column = 3.5;
+0248     <span class="keyword">return</span>;
+0249 <span class="keyword">end</span>
+0250 
+0251 <span class="keyword">if</span> chID == 26
+0252     well = 3;
+0253     row = 2;
+0254     column = 1;
+0255     <span class="keyword">return</span>;
+0256 <span class="keyword">end</span>
+0257 
+0258 <span class="keyword">if</span> chID == 17
+0259     well = 3;
+0260     row = 2;
+0261     column = 2;
+0262     <span class="keyword">return</span>;
+0263 <span class="keyword">end</span>
+0264 
+0265 <span class="keyword">if</span> chID == 57
+0266     well = 3;
+0267     row = 2;
+0268     column = 3;
+0269     <span class="keyword">return</span>;
+0270 <span class="keyword">end</span>
+0271 
+0272 <span class="keyword">if</span> chID == 58
+0273     well = 3;
+0274     row = 2;
+0275     column = 4;
+0276     <span class="keyword">return</span>;
+0277 <span class="keyword">end</span>
+0278 
+0279 <span class="keyword">if</span> chID == 27
+0280     well = 3;
+0281     row = 3;
+0282     column = 1;
+0283     <span class="keyword">return</span>;
+0284 <span class="keyword">end</span>
+0285 
+0286 <span class="keyword">if</span> chID == 28
+0287     well = 3;
+0288     row = 3;
+0289     column = 2;
+0290     <span class="keyword">return</span>;
+0291 <span class="keyword">end</span>
+0292 
+0293 <span class="keyword">if</span> chID == 46
+0294     well = 3;
+0295     row = 3;
+0296     column = 3;
+0297     <span class="keyword">return</span>;
+0298 <span class="keyword">end</span>
+0299 
+0300 <span class="keyword">if</span> chID == 47
+0301     well = 3;
+0302     row = 3;
+0303     column = 4;
+0304     <span class="keyword">return</span>;
+0305 <span class="keyword">end</span>
+0306 
+0307 <span class="keyword">if</span> chID == 36
+0308     well = 3;
+0309     row = 4;
+0310     column = 1;
+0311     <span class="keyword">return</span>;
+0312 <span class="keyword">end</span>
+0313 
+0314 <span class="keyword">if</span> chID == 37
+0315     well = 3;
+0316     row = 4;
+0317     column = 2;
+0318     <span class="keyword">return</span>;
+0319 <span class="keyword">end</span>
+0320 
+0321 <span class="keyword">if</span> chID == 45
+0322     well = 3;
+0323     row = 4;
+0324     column = 3;
+0325     <span class="keyword">return</span>;
+0326 <span class="keyword">end</span>
+0327 
+0328 <span class="keyword">if</span> chID == 48
+0329     well = 3;
+0330     row = 4;
+0331     column = 4;
+0332     <span class="keyword">return</span>;
+0333 <span class="keyword">end</span>
+0334 
+0335 <span class="comment">% WELL 4</span>
+0336 
+0337 <span class="keyword">if</span> chID == 74
+0338     well = 4;
+0339     row = 1;
+0340     column = 2;
+0341     <span class="keyword">return</span>;
+0342 <span class="keyword">end</span>
+0343 
+0344 <span class="keyword">if</span> chID == 85
+0345     well = 4;
+0346     row = 1;
+0347     column = 3;
+0348     <span class="keyword">return</span>;
+0349 <span class="keyword">end</span>
+0350 
+0351 <span class="keyword">if</span> chID == 75
+0352     well = 4;
+0353     row = 1;
+0354     column = 4;
+0355     <span class="keyword">return</span>;
+0356 <span class="keyword">end</span>
+0357 
+0358 <span class="keyword">if</span> chID == 64
+0359     well = 4;
+0360     row = 1.5;
+0361     column = 1;
+0362     <span class="keyword">return</span>;
+0363 <span class="keyword">end</span>
+0364 
+0365 <span class="keyword">if</span> chID == 84
+0366     well = 4;
+0367     row = 2;
+0368     column = 2;
+0369     <span class="keyword">return</span>;
+0370 <span class="keyword">end</span>
+0371 
+0372 <span class="keyword">if</span> chID == 65
+0373     well = 4;
+0374     row = 2;
+0375     column = 3;
+0376     <span class="keyword">return</span>;
+0377 <span class="keyword">end</span>
+0378 
+0379 <span class="keyword">if</span> chID == 86
+0380     well = 4;
+0381     row = 2;
+0382     column = 4;
+0383     <span class="keyword">return</span>;
+0384 <span class="keyword">end</span>
+0385 
+0386 <span class="keyword">if</span> chID == 76
+0387     well = 4;
+0388     row = 2.5;
+0389     column = 1;
+0390     <span class="keyword">return</span>;
+0391 <span class="keyword">end</span>
+0392 
+0393 <span class="keyword">if</span> chID == 67
+0394     well = 4;
+0395     row = 3;
+0396     column = 2;
+0397     <span class="keyword">return</span>;
+0398 <span class="keyword">end</span>
+0399 
+0400 <span class="keyword">if</span> chID == 77
+0401     well = 4;
+0402     row = 3;
+0403     column = 3;
+0404     <span class="keyword">return</span>;
+0405 <span class="keyword">end</span>
+0406 
+0407 <span class="keyword">if</span> chID == 87
+0408     well = 4;
+0409     row = 3;
+0410     column = 4;
+0411     <span class="keyword">return</span>;
+0412 <span class="keyword">end</span>
+0413 
+0414 <span class="keyword">if</span> chID == 55
+0415     well = 4;
+0416     row = 3.5;
+0417     column = 1;
+0418     <span class="keyword">return</span>;
+0419 <span class="keyword">end</span>
+0420 
+0421 <span class="keyword">if</span> chID == 68
+0422     well = 4;
+0423     row = 4;
+0424     column = 2;
+0425     <span class="keyword">return</span>;
+0426 <span class="keyword">end</span>
+0427 
+0428 <span class="keyword">if</span> chID == 78
+0429     well = 4;
+0430     row = 4;
+0431     column = 3;
+0432     <span class="keyword">return</span>;
+0433 <span class="keyword">end</span>
+0434 
+0435 <span class="keyword">if</span> chID == 66
+0436     well = 4;
+0437     row = 4;
+0438     column = 4;
+0439     <span class="keyword">return</span>;
+0440 <span class="keyword">end</span>
+0441 
+0442 <span class="comment">% If we arrived here, there must be something wrong.</span>
+0443 error([<span class="string">'There is no an electrode labeled '</span> num2str(chID)]);
+0444 <span class="keyword">end</span>
+0445</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

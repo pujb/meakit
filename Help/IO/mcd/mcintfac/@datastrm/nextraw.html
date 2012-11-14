@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nextraw</title>
+  <meta name="keywords" content="nextraw">
+  <meta name="description" content="nextraw - calls nextsweep to read in continous raw (datastream method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>nextraw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>nextraw - calls nextsweep to read in continous raw (datastream method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function c = nextraw(d,startTime,endTime,varargin); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> nextraw - calls nextsweep to read in continous raw (datastream method)
+ c = nextraw(d,startTime,endTime,varargin) 
+ return value is a cell with sweepStartTimes (ms) and sweepValues (AD values)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="nextsweep.html" class="code" title="function a = nextsweep(d,varargin);">nextsweep</a>	nextsweep - reads the next sweep (datastream method)</li><li><a href="setpos.html" class="code" title="function a = setpos(d,posType,posValue);">setpos</a>	setpos - set the file position in a datastream (datastream method)</li><li><a href="../../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = nextraw(d,startTime,endTime,varargin);</a>
+0002 <span class="comment">% nextraw - calls nextsweep to read in continous raw (datastream method)</span>
+0003 <span class="comment">% c = nextraw(d,startTime,endTime,varargin)</span>
+0004 <span class="comment">% return value is a cell with sweepStartTimes (ms) and sweepValues (AD values)</span>
+0005 
+0006 
+0007 <span class="keyword">if</span> (strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0008     <span class="keyword">if</span> isempty(varargin)
+0009         a=<a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(d,<span class="string">'startend'</span>,[startTime,endTime]);
+0010     <span class="keyword">else</span>
+0011       tmp={<span class="string">'startend'</span>,[startTime,endTime],varargin{:}};
+0012         a=<a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(d,tmp{:});     
+0013     <span class="keyword">end</span>
+0014     c.sweepStartTime=startTime;
+0015     c.sweepValues=a.data;
+0016    c.startend = [startTime,endTime];
+0017     <span class="keyword">return</span>;
+0018 <span class="keyword">end</span>;
+0019 
+0020 <span class="keyword">if</span>(~strcmp(class(d),<span class="string">'datastrm'</span>))
+0021     error(<span class="string">'first argument must be a datastrm object'</span>);
+0022 <span class="keyword">end</span>;
+0023 rawData=strcmp(<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'DataType'</span>),<span class="string">'raw continous'</span>);
+0024 <span class="keyword">if</span> ~rawData
+0025     error([<span class="string">'nextraw works only on raw continous not on '</span> d.DataType]);
+0026 <span class="keyword">end</span>;
+0027 
+0028 startSweep=max(find(d.sweepStartTime&lt;=startTime));
+0029 endSweep    =min([find(d.sweepStartTime&gt;endTime);length(d.sweepStartTime)+1])-1;
+0030 
+0031 nSweeps=endSweep-startSweep+1;
+0032 
+0033 segCount=0;
+0034 msPerT=d.MicrosecondsPerTick/1000;
+0035 c.sweepStartTime=startTime;
+0036 c.sweepValues=[];
+0037 c.startend=[startTime,endTime];
+0038 d=<a href="setpos.html" class="code" title="function a = setpos(d,posType,posValue);">setpos</a>(d,<span class="string">'sweep'</span>,startSweep);
+0039 <span class="keyword">while</span> segCount&lt;nSweeps
+0040     startT= max([0;startTime-d.sweepStartTime(startSweep+segCount)]);
+0041     endT= min([1536;endTime-d.sweepStartTime(startSweep+segCount)]);
+0042     segCount=segCount+1;
+0043     <span class="keyword">if</span> isempty(varargin)
+0044         cneu=<a href="nextsweep.html" class="code" title="function a = nextsweep(d,varargin);">nextsweep</a>(d,startT,endT);
+0045     <span class="keyword">else</span>
+0046         cneu=<a href="nextsweep.html" class="code" title="function a = nextsweep(d,varargin);">nextsweep</a>(d,startT,endT,varargin);
+0047     <span class="keyword">end</span>
+0048     c.sweepValues=[c.sweepValues,cneu.sweepValues];
+0049 <span class="keyword">end</span>;
+0050</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

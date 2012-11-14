@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_4</title>
+  <meta name="keywords" content="panel_demo_4">
+  <meta name="description" content="% PANEL DEMO 4">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_4
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 4</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 4
+%
+% (a) Create an empty panel object
+% (b) Packing multiple panels, using different edges, and
+% using absolute positioning as well as relative
+% (c) Plotting into those panels, setting axis labels
+% (d) Explicit render
+% (e) Export to file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 4</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an empty panel object</span>
+0005 <span class="comment">%% (b) Packing multiple panels, using different edges, and</span>
+0006 <span class="comment">%% using absolute positioning as well as relative</span>
+0007 <span class="comment">%% (c) Plotting into those panels, setting axis labels</span>
+0008 <span class="comment">%% (d) Explicit render</span>
+0009 <span class="comment">%% (e) Export to file</span>
+0010 
+0011 
+0012 
+0013 <span class="comment">%% (a)</span>
+0014 
+0015 <span class="comment">% clear or create figure and create root panel covering</span>
+0016 <span class="comment">% whole figure</span>
+0017 tic
+0018 clf
+0019 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0020 
+0021 <span class="comment">% on complex panels, performance can be improved by turning</span>
+0022 <span class="comment">% off autorender (this avoids re-rendering the whole figure</span>
+0023 <span class="comment">% every time any setting is changed). leave autorender on</span>
+0024 <span class="comment">% whilst you're experimenting, so you'll see the effect of</span>
+0025 <span class="comment">% any changes you make immediately.</span>
+0026 p.autorender = false;
+0027 
+0028 
+0029 
+0030 <span class="comment">%% (b)</span>
+0031 
+0032 <span class="comment">% form an upper panel A and a lower panel B</span>
+0033 pA = p.pack(30);
+0034 pB = p.pack();
+0035 
+0036 <span class="comment">% pack pB on left-hand edge</span>
+0037 pB.edge = <span class="string">'l'</span>;
+0038 
+0039 <span class="comment">% pack two panels into B</span>
+0040 pC = pB.pack(20);
+0041 pD = pB.pack();
+0042 
+0043 <span class="comment">% pack D with some absolutely-positioned panels</span>
+0044 pD1 = pD.pack([0.0 0.3 0.3 0.7]);
+0045 pD2 = pD.pack([0.3 0.7 0.7 0.3]);
+0046 pD3 = pD.pack([0.7 0.0 0.3 0.7]);
+0047 pD4 = pD.pack([0.0 0.0 0.7 0.3]);
+0048 
+0049 <span class="comment">% and one in the middle that we can pack more</span>
+0050 <span class="comment">% relatively-positioned panels into</span>
+0051 pD5 = pD.pack([0.3 0.3 0.4 0.4]);
+0052 
+0053 <span class="comment">% pack those extra panels into the D central panel</span>
+0054 pE = pD5.pack(50);
+0055 pF = pD5.pack(50);
+0056 
+0057 
+0058 
+0059 <span class="comment">%% (c)</span>
+0060 
+0061 <span class="comment">% plot into panel</span>
+0062 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pA)
+0063 x = -100:100;
+0064 plot(x,x.^2/1000,<span class="string">'r'</span>)
+0065 pA.xlabel = <span class="string">'x is great'</span>;
+0066 pA.ylabel = <span class="string">'y is better'</span>;
+0067 
+0068 <span class="comment">% plot into panel (no plot, just show axis)</span>
+0069 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pC)
+0070 
+0071 <span class="comment">% plot into panel</span>
+0072 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pD1)
+0073 plot(randn(1000,3))
+0074 pC.xlabel = <span class="string">'foo'</span>;
+0075 pC.ylabel = <span class="string">'bar'</span>;
+0076 
+0077 <span class="comment">% plot into panel</span>
+0078 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pD2)
+0079 plot(randn(1000,3))
+0080 pD2.xlabel = <span class="string">'foo'</span>;
+0081 pD2.ylabel = <span class="string">'bar'</span>;
+0082 
+0083 <span class="comment">% plot into panel</span>
+0084 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pD3)
+0085 plot(randn(1000,3))
+0086 pD3.xlabel = <span class="string">'donkey'</span>;
+0087 pD3.ylabel = <span class="string">'kong'</span>;
+0088 
+0089 <span class="comment">% plot into panel</span>
+0090 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pD4)
+0091 plot(randn(1000,3))
+0092 pD4.xlabel = <span class="string">'foo'</span>;
+0093 pD4.ylabel = <span class="string">'bar'</span>;
+0094 
+0095 <span class="comment">% plot into panel (no plot, just show axis)</span>
+0096 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pE)
+0097 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pF)
+0098 
+0099 
+0100 
+0101 <span class="comment">%% (d)</span>
+0102 
+0103 <span class="comment">% since we turned off autorender, we have to render the</span>
+0104 <span class="comment">% layout manually once we've finished building it</span>
+0105 <a href="../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>(p);
+0106 toc
+0107 
+0108 
+0109 
+0110 <span class="comment">%% (e)</span>
+0111 
+0112 <span class="comment">% export the layout</span>
+0113 <a href="../../Otherbox/panel/@panel/export.html" class="code" title="function info = export(p, varargin)">export</a>(p, <span class="string">'-w200'</span>, <span class="string">'-h200'</span>, <span class="string">'-rf'</span>, <span class="string">'-opng'</span>, <span class="string">'panel_demo.png'</span>);
+0114</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

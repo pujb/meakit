@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of storeform</title>
+  <meta name="keywords" content="storeform">
+  <meta name="description" content="convert a value in some form (%, mm, cm, in)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html panel --><!-- ../menu.html @panel --><!-- menu.html private -->
+<h1>storeform
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>convert a value in some form (%, mm, cm, in)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function f = storeform(val, form, flags) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> convert a value in some form (%, mm, cm, in)
+ into a storable form (either -ve for percentages
+ or +ve for mm).
+
+ flags can include any of:
+
+   's'trict (don't allow percentages outside
+     0-100)
+
+   'f'ractions (allow percentages less than or
+     equal to 1% to be interpreted as fractions)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = storeform(val, form, flags)</a>
+0002 
+0003 
+0004 <span class="comment">% convert a value in some form (%, mm, cm, in)</span>
+0005 <span class="comment">% into a storable form (either -ve for percentages</span>
+0006 <span class="comment">% or +ve for mm).</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% flags can include any of:</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   's'trict (don't allow percentages outside</span>
+0011 <span class="comment">%     0-100)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   'f'ractions (allow percentages less than or</span>
+0014 <span class="comment">%     equal to 1% to be interpreted as fractions)</span>
+0015 
+0016 
+0017 <span class="keyword">switch</span>(form)
+0018 
+0019     <span class="keyword">case</span> <span class="string">'mm'</span>
+0020         f = val;
+0021         
+0022     <span class="keyword">case</span> <span class="string">'cm'</span>
+0023         f = val * 10;
+0024         
+0025     <span class="keyword">case</span> <span class="string">'in'</span>
+0026         f = val * 25.4;
+0027         
+0028     <span class="keyword">case</span> <span class="string">'%'</span>
+0029         <span class="keyword">if</span> any(flags == <span class="string">'s'</span>)
+0030             <span class="keyword">if</span> any(val &lt; 0) || any(val &gt; 100)
+0031                 error([<span class="string">'invalid percentage &quot;'</span> num2str(val) <span class="string">'&quot;'</span>]);
+0032             <span class="keyword">end</span>
+0033         <span class="keyword">end</span>
+0034         <span class="keyword">if</span> any(flags == <span class="string">'f'</span>)
+0035             <span class="keyword">if</span> all(val &lt;= 1)
+0036                 val = val * 100;
+0037             <span class="keyword">end</span>
+0038         <span class="keyword">end</span>
+0039         f = -val;
+0040     
+0041     <span class="keyword">otherwise</span>
+0042         error(<span class="string">'case not coded'</span>)
+0043     
+0044 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

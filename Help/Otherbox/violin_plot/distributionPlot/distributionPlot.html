@@ -1,0 +1,369 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distributionPlot</title>
+  <meta name="keywords" content="distributionPlot">
+  <meta name="description" content="DISTRIBUTIONPLOT plots distributions similar to boxplot">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- # violin_plot --><!-- menu.html distributionPlot -->
+<h1>distributionPlot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>DISTRIBUTIONPLOT plots distributions similar to boxplot</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function handles = distributionPlot(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">DISTRIBUTIONPLOT plots distributions similar to boxplot
+
+ SYNOPSIS: handles = distributionPlot(data,distWidth,showMM,xNames,histOpt,divFactor,invert)
+           handles = distributionPlot(ah,...)
+
+ INPUT data : cell array of length nData (with data shaped as vectors) or
+           m-by-nData array of values 
+       distWidth : (opt) width of distributions. 1 means that the maxima
+           of  two adjacent distributions might touch. Negative numbers
+           indicate that the distributions should have constant width, i.e
+           the density is only expressed through greylevels.
+           Values between 1 and 2 are like values between 0 and 1, except
+           that densities are not expressed via graylevels. Default: 1.9
+       showMM : (opt) if 1, mean and median are shown as red circles and
+                green squares, respectively. Default: 1
+                2: only mean
+                3: only median
+       xNames : (opt) cell array of length nData containing x-tick names
+               (instead of the default '1,2,3')
+       histOpt : (opt) histogram type to plot
+                   0 : use hist command (no smoothing, fixed number of
+                       bins)
+                   1 : smoothened histogram using ksdensity with
+                       Epanechnikov-kernel. Default.
+                   2 : histogram command (no smoothing, automatic
+                       determination of bin width)
+       divFactor : (opt) Parameter dependent on histOpt.
+                   histOpt == 0: divFactor = # of bins. Default: 25.
+                       Alternatively, pass a vector which will be
+                       interpreted as bin centers.
+                   histOpt == 1: divFactor decides by how much the default
+                       kernel-width is multiplied in order to avoid an
+                       overly smooth histogram. Default: 1/2
+                   histOpt == 2: divFactor decides by how much the
+                       automatic bin width is multiplied in order to have
+                       more (&lt;1) or less (&gt;1) detail. Default: 1
+                   histOpt == 3: divFacor specifies the bin locations
+       invert : (opt) if 1, image will be white on black. Default: 0
+       ah (opt) axes handle to plot the distribution. Default: gca
+
+ OUTPUT handles : 1-by-3 cell array with patch-handles for the
+                  distributions, plot handles for mean/median, and the
+                  axes handle
+
+ REMARKS
+
+ created with MATLAB ver.: 7.6.0.324 (R2008a) on Windows_NT
+
+ created by: Jonas Dorn
+ DATE: 08-Jul-2008
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="histogram.html" class="code" title="function [N,X,sp] = histogram(varargin)">histogram</a>	HISTOGRAM generates a histogram using the "optimal" number of bins</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function handles = distributionPlot(varargin)</a>
+0002 <span class="comment">%DISTRIBUTIONPLOT plots distributions similar to boxplot</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% SYNOPSIS: handles = distributionPlot(data,distWidth,showMM,xNames,histOpt,divFactor,invert)</span>
+0005 <span class="comment">%           handles = distributionPlot(ah,...)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% INPUT data : cell array of length nData (with data shaped as vectors) or</span>
+0008 <span class="comment">%           m-by-nData array of values</span>
+0009 <span class="comment">%       distWidth : (opt) width of distributions. 1 means that the maxima</span>
+0010 <span class="comment">%           of  two adjacent distributions might touch. Negative numbers</span>
+0011 <span class="comment">%           indicate that the distributions should have constant width, i.e</span>
+0012 <span class="comment">%           the density is only expressed through greylevels.</span>
+0013 <span class="comment">%           Values between 1 and 2 are like values between 0 and 1, except</span>
+0014 <span class="comment">%           that densities are not expressed via graylevels. Default: 1.9</span>
+0015 <span class="comment">%       showMM : (opt) if 1, mean and median are shown as red circles and</span>
+0016 <span class="comment">%                green squares, respectively. Default: 1</span>
+0017 <span class="comment">%                2: only mean</span>
+0018 <span class="comment">%                3: only median</span>
+0019 <span class="comment">%       xNames : (opt) cell array of length nData containing x-tick names</span>
+0020 <span class="comment">%               (instead of the default '1,2,3')</span>
+0021 <span class="comment">%       histOpt : (opt) histogram type to plot</span>
+0022 <span class="comment">%                   0 : use hist command (no smoothing, fixed number of</span>
+0023 <span class="comment">%                       bins)</span>
+0024 <span class="comment">%                   1 : smoothened histogram using ksdensity with</span>
+0025 <span class="comment">%                       Epanechnikov-kernel. Default.</span>
+0026 <span class="comment">%                   2 : histogram command (no smoothing, automatic</span>
+0027 <span class="comment">%                       determination of bin width)</span>
+0028 <span class="comment">%       divFactor : (opt) Parameter dependent on histOpt.</span>
+0029 <span class="comment">%                   histOpt == 0: divFactor = # of bins. Default: 25.</span>
+0030 <span class="comment">%                       Alternatively, pass a vector which will be</span>
+0031 <span class="comment">%                       interpreted as bin centers.</span>
+0032 <span class="comment">%                   histOpt == 1: divFactor decides by how much the default</span>
+0033 <span class="comment">%                       kernel-width is multiplied in order to avoid an</span>
+0034 <span class="comment">%                       overly smooth histogram. Default: 1/2</span>
+0035 <span class="comment">%                   histOpt == 2: divFactor decides by how much the</span>
+0036 <span class="comment">%                       automatic bin width is multiplied in order to have</span>
+0037 <span class="comment">%                       more (&lt;1) or less (&gt;1) detail. Default: 1</span>
+0038 <span class="comment">%                   histOpt == 3: divFacor specifies the bin locations</span>
+0039 <span class="comment">%       invert : (opt) if 1, image will be white on black. Default: 0</span>
+0040 <span class="comment">%       ah (opt) axes handle to plot the distribution. Default: gca</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% OUTPUT handles : 1-by-3 cell array with patch-handles for the</span>
+0043 <span class="comment">%                  distributions, plot handles for mean/median, and the</span>
+0044 <span class="comment">%                  axes handle</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% REMARKS</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% created with MATLAB ver.: 7.6.0.324 (R2008a) on Windows_NT</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% created by: Jonas Dorn</span>
+0051 <span class="comment">% DATE: 08-Jul-2008</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0054 
+0055 <span class="comment">%====================================</span>
+0056 <span class="comment">%% TEST INPUT</span>
+0057 <span class="comment">%====================================</span>
+0058 
+0059 <span class="comment">% set defaults</span>
+0060 def_xNames = [];
+0061 def_showMM = 1;
+0062 def_distWidth = 1.9;
+0063 def_histOpt = 1;
+0064 def_divFactor = [25,2,1];
+0065 def_invert = false;
+0066 useGray = true;
+0067 
+0068 <span class="keyword">if</span> nargin == 0
+0069     error(<span class="string">'not enough input arguments'</span>)
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% check for axes handle</span>
+0073 <span class="keyword">if</span> ~iscell(varargin{1}) &amp;&amp; length(varargin{1}) == 1 &amp;&amp; <span class="keyword">...</span>
+0074         ishandle(varargin{1}) &amp;&amp; strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(varargin{1},<span class="string">'Type'</span>),<span class="string">'axes'</span>)
+0075     ah = varargin{1};
+0076     data = varargin{2};
+0077     varargin(1:2) = [];
+0078     newAx = false;
+0079 <span class="keyword">else</span>
+0080     ah = gca;
+0081     data = varargin{1};
+0082     varargin(1) = [];
+0083     newAx = true;
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">% check data. If not cell, convert</span>
+0087 <span class="keyword">if</span> ~iscell(data)
+0088     [nPoints,nData] = size(data);
+0089     data = mat2cell(data,nPoints,ones(nData,1));
+0090 <span class="keyword">else</span>
+0091     <span class="comment">% get nData</span>
+0092     data = data(:);
+0093     nData = length(data);
+0094     <span class="comment">% make sure all are vectors</span>
+0095     badCol = ~cellfun(@isvector,data);
+0096     <span class="keyword">if</span> any(badCol)
+0097         warning(<span class="string">'DISTRIBUTIONPLOT:AUTORESHAPE'</span>,<span class="keyword">...</span>
+0098             <span class="string">'Elements %s of the cell array are not vectors. They will be reshaped automatically'</span>,<span class="keyword">...</span>
+0099             num2str(find(badCol)'));
+0100         data(badCol) = cellfun(@(x)(x(:)),data(badCol),<span class="string">'UniformOutput'</span>,false);
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 
+0105 <span class="comment">% check for names, defaults</span>
+0106 <span class="keyword">if</span> ~isempty(varargin) &amp;&amp; ~isempty(varargin{1})
+0107     distWidth = varargin{1};
+0108     <span class="keyword">if</span> distWidth == 0
+0109         error(<span class="string">'distWidth==0 will not plot anything'</span>)
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">else</span>
+0112     distWidth = def_distWidth;
+0113 <span class="keyword">end</span>
+0114 <span class="keyword">if</span> distWidth &gt; 1
+0115     distWidth = distWidth - 1;
+0116     useGray = false;
+0117 <span class="keyword">end</span>
+0118 <span class="keyword">if</span> length(varargin) &gt; 1 &amp;&amp; ~isempty(varargin{2})
+0119     showMM = varargin{2};
+0120 <span class="keyword">else</span>
+0121     showMM = def_showMM;
+0122 <span class="keyword">end</span>
+0123 <span class="keyword">if</span> length(varargin) &gt; 2 &amp;&amp; ~isempty(varargin{3})
+0124     xNames = varargin{3};
+0125 <span class="keyword">else</span>
+0126     xNames = def_xNames;
+0127 <span class="keyword">end</span>
+0128 <span class="keyword">if</span> length(varargin) &gt; 3 &amp;&amp; ~isempty(varargin{4})
+0129     histOpt = varargin{4};
+0130 <span class="keyword">else</span>
+0131     histOpt = def_histOpt;
+0132 <span class="keyword">end</span>
+0133 <span class="keyword">if</span> length(varargin) &gt; 4 &amp;&amp; ~isempty(varargin{5})
+0134     divFactor = varargin{5};
+0135 <span class="keyword">else</span>
+0136     divFactor = def_divFactor(histOpt+1);
+0137 <span class="keyword">end</span>
+0138 <span class="keyword">if</span> length(varargin) &gt; 5 &amp;&amp; ~isempty(varargin{6})
+0139     invert = varargin{6};
+0140 <span class="keyword">else</span>
+0141     invert = def_invert;
+0142 <span class="keyword">end</span>
+0143 
+0144 
+0145 <span class="comment">% set hold on</span>
+0146 holdState = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(ah,<span class="string">'NextPlot'</span>);
+0147 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>);
+0148 
+0149 <span class="comment">% if new axes: invert</span>
+0150 <span class="keyword">if</span> newAx &amp;&amp; invert
+0151     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'Color'</span>,<span class="string">'k'</span>)
+0152 <span class="keyword">end</span>
+0153 
+0154 <span class="comment">%===================================</span>
+0155 
+0156 
+0157 
+0158 <span class="comment">%===================================</span>
+0159 <span class="comment">%% PLOT DISTRIBUTIONS</span>
+0160 <span class="comment">%===================================</span>
+0161 
+0162 <span class="comment">% assign output</span>
+0163 hh = cell(nData,1);
+0164 [m,md] = deal(nan(nData,1));
+0165 
+0166 <span class="comment">% get base x-array</span>
+0167 xBase = abs(distWidth) .* [-0.5;0.5;0.5;-0.5];
+0168 
+0169 <span class="comment">% loop through data. Prepare patch input, then draw patch into gca</span>
+0170 <span class="keyword">for</span> iData = 1:nData
+0171     currentData = data{iData};
+0172     <span class="comment">% only plot if there is some finite data</span>
+0173     <span class="keyword">if</span> ~isempty(currentData) &amp;&amp; any(isfinite(currentData))
+0174         
+0175         <span class="keyword">switch</span> histOpt
+0176             <span class="keyword">case</span> 0
+0177                 <span class="comment">% use hist</span>
+0178                 [xHist,yHist] = hist(currentData,divFactor);
+0179                 
+0180             <span class="keyword">case</span> 1
+0181                 <span class="comment">% use ksdensity</span>
+0182                 
+0183                 <span class="comment">% make histogram (use ksdensity for now)</span>
+0184                 <span class="comment">% x,y are switched relative to normal histogram</span>
+0185                 [xHist,yHist,u] = ksdensity(currentData,<span class="string">'kernel'</span>,<span class="string">'epanechnikov'</span>);
+0186                 <span class="comment">% take smaller kernel to avoid over-smoothing</span>
+0187                 <span class="keyword">if</span> divFactor ~= 1
+0188                     [xHist,yHist] = ksdensity(currentData,<span class="string">'kernel'</span>,<span class="string">'epanechnikov'</span>,<span class="string">'width'</span>,u/divFactor);
+0189                 <span class="keyword">end</span>
+0190                 
+0191             <span class="keyword">case</span> 2
+0192                 <span class="comment">% use histogram</span>
+0193                 [xHist,yHist] = <a href="histogram.html" class="code" title="function [N,X,sp] = histogram(varargin)">histogram</a>(currentData,divFactor);
+0194         <span class="keyword">end</span>
+0195         
+0196         <span class="comment">% find y-step</span>
+0197         dy = min(diff(yHist));
+0198         
+0199         <span class="comment">% create x,y arrays</span>
+0200         nPoints = length(xHist);
+0201         xArray = repmat(xBase,1,nPoints);
+0202         yArray = repmat([-0.5;-0.5;0.5;0.5],1,nPoints);
+0203         
+0204         <span class="comment">% x is iData +/- almost 0.5, multiplied with the height of the</span>
+0205         <span class="comment">% histogram</span>
+0206         <span class="keyword">if</span> distWidth &gt; 0
+0207             xArray = xArray.*repmat(xHist,4,1)./max(xHist) + iData;
+0208         <span class="keyword">else</span>
+0209             xArray = xArray + iData;
+0210         <span class="keyword">end</span>
+0211         
+0212         <span class="comment">% yData is simply the bin locations</span>
+0213         yArray = repmat(yHist,4,1) + dy*yArray;
+0214         
+0215         <span class="comment">% add patch</span>
+0216         axes(ah);
+0217         <span class="keyword">if</span> invert
+0218             <span class="keyword">if</span> useGray
+0219                 hh{iData} = patch(xArray,yArray,repmat(xHist/max(xHist),[4,1,3]));
+0220             <span class="keyword">else</span>
+0221                 hh{iData} = patch(xArray,yArray,<span class="string">'w'</span>);
+0222             <span class="keyword">end</span>
+0223         <span class="keyword">else</span>
+0224             <span class="keyword">if</span> useGray
+0225                 hh{iData} = patch(xArray,yArray,repmat(1-xHist/max(xHist),[4,1,3]));
+0226             <span class="keyword">else</span>
+0227                 hh{iData} = patch(xArray,yArray,<span class="string">'k'</span>);
+0228             <span class="keyword">end</span>
+0229         <span class="keyword">end</span>
+0230         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hh{iData},<span class="string">'EdgeColor'</span>,<span class="string">'none'</span>)
+0231         
+0232         m(iData) = nanmean(currentData);
+0233         md(iData) = nanmedian(currentData);
+0234     <span class="keyword">end</span>
+0235 <span class="keyword">end</span> <span class="comment">% loop</span>
+0236 
+0237 <span class="keyword">if</span> showMM
+0238     <span class="comment">% plot mean, median. Mean is filled red circle, median is green square</span>
+0239     <span class="keyword">if</span> any(showMM==[1,2])
+0240         mh = plot(1:nData,m,<span class="string">'or'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+0241     <span class="keyword">end</span>
+0242     <span class="keyword">if</span> any(showMM==[1,3])
+0243         mdh = plot(1:nData,md,<span class="string">'sg'</span>);
+0244     <span class="keyword">end</span>
+0245 <span class="keyword">end</span>
+0246 
+0247 <span class="comment">% if ~empty, use xNames</span>
+0248 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah,<span class="string">'XTick'</span>,1:nData);
+0249 <span class="keyword">if</span> ~isempty(xNames)
+0250     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah,<span class="string">'XTickLabel'</span>,xNames)
+0251 <span class="keyword">end</span>
+0252 <span class="comment">% have plot start/end properly</span>
+0253 xlim([0,nData+1])
+0254 
+0255 <span class="comment">%==========================</span>
+0256 
+0257 
+0258 <span class="comment">%==========================</span>
+0259 <span class="comment">%% CLEANUP &amp; ASSIGN OUTPUT</span>
+0260 <span class="comment">%==========================</span>
+0261 
+0262 <span class="keyword">if</span> nargout &gt; 0
+0263     handles{1} = hh;
+0264     <span class="keyword">if</span> showMM
+0265         handles{2} = [mh;mdh];
+0266     <span class="keyword">end</span>
+0267     handles{3} = ah;
+0268 <span class="keyword">end</span>
+0269 
+0270 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah,<span class="string">'NextPlot'</span>,holdState);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

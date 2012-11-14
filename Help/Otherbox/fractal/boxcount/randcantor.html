@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randcantor</title>
+  <meta name="keywords" content="randcantor">
+  <meta name="description" content="RANDCANTOR  1D, 2D or 3D generalized random Cantor set">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html fractal --><!-- menu.html boxcount -->
+<h1>randcantor
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>RANDCANTOR  1D, 2D or 3D generalized random Cantor set</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function c = randcantor(p,n,d,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">RANDCANTOR  1D, 2D or 3D generalized random Cantor set
+   C = RANDCANTOR(P, N, D) generates a logical D-dimensional array (with
+   D=1, 2, or 3) of size N^D, containing a set of fractally-distributed 1.
+   The size N must be a power of 2. C is obtained by iteratively dividing
+   an initial set filled with 1 into 2^D subsets, multiplying each by 0
+   with probability P (with 0&lt;P&lt;1). The resulting array has a fractal
+   dimension DF = D + log(P)/log(2) &lt; D.
+
+   If the second and third input arguments are not specified, N=256 and
+   D=2 are taken by default (i.e. returns an array of size 256x256).
+
+   C = RANDCANTOR(P,N,D,'show') also displays the set (only for 1D and
+   2D). If no output argument, this option is selected by default.
+
+   Example:
+     c = randcantor(0.7, 1024, 2);
+     boxcount(c);
+
+   F. Moisy
+   Revision: 2.00,  Date: 2006/11/22</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="demo_df.html" class="code" title="">demo_df</a>	% Computing a fractal dimension with Matlab: 1D, 2D and 3D Box-counting</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function c=boxdiv1(c,p)</a></li><li><a href="#_sub2" class="code">function c=boxdiv2(c, p)</a></li><li><a href="#_sub3" class="code">function c=boxdiv3(c,p)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = randcantor(p,n,d,varargin)</a>
+0002 <span class="comment">%RANDCANTOR  1D, 2D or 3D generalized random Cantor set</span>
+0003 <span class="comment">%   C = RANDCANTOR(P, N, D) generates a logical D-dimensional array (with</span>
+0004 <span class="comment">%   D=1, 2, or 3) of size N^D, containing a set of fractally-distributed 1.</span>
+0005 <span class="comment">%   The size N must be a power of 2. C is obtained by iteratively dividing</span>
+0006 <span class="comment">%   an initial set filled with 1 into 2^D subsets, multiplying each by 0</span>
+0007 <span class="comment">%   with probability P (with 0&lt;P&lt;1). The resulting array has a fractal</span>
+0008 <span class="comment">%   dimension DF = D + log(P)/log(2) &lt; D.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   If the second and third input arguments are not specified, N=256 and</span>
+0011 <span class="comment">%   D=2 are taken by default (i.e. returns an array of size 256x256).</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   C = RANDCANTOR(P,N,D,'show') also displays the set (only for 1D and</span>
+0014 <span class="comment">%   2D). If no output argument, this option is selected by default.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Example:</span>
+0017 <span class="comment">%     c = randcantor(0.7, 1024, 2);</span>
+0018 <span class="comment">%     boxcount(c);</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   F. Moisy</span>
+0021 <span class="comment">%   Revision: 2.00,  Date: 2006/11/22</span>
+0022 
+0023 
+0024 <span class="comment">% History:</span>
+0025 <span class="comment">% 2001/02/26: v1.00, first version, boxdiv1.</span>
+0026 <span class="comment">% 2006/11/22: v2.00, joined boxdiv1,2,3.</span>
+0027 
+0028 error(nargchk(1,4,nargin));
+0029 
+0030 <span class="keyword">if</span> nargin==1
+0031     n = 256;
+0032     d = 2;
+0033 <span class="keyword">elseif</span> nargin==2
+0034     d = 2;
+0035 <span class="keyword">end</span>
+0036 <span class="keyword">switch</span> d
+0037     <span class="keyword">case</span> 1, c = <a href="#_sub1" class="code" title="subfunction c=boxdiv1(c,p)">boxdiv1</a>(true(1,n),p);
+0038     <span class="keyword">case</span> 2, c = <a href="#_sub2" class="code" title="subfunction c=boxdiv2(c, p)">boxdiv2</a>(true(n,n),p);
+0039     <span class="keyword">case</span> 3, c = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(true(n,n,n),p);
+0040     <span class="keyword">otherwise</span>, error(<span class="string">'Dimension should be 1, 2, or 3.'</span>);
+0041 <span class="keyword">end</span>
+0042 <span class="keyword">if</span> nargout==0 || any(strncmpi(varargin,<span class="string">'show'</span>,1))
+0043     <span class="keyword">switch</span> d
+0044         <span class="keyword">case</span> 1
+0045             imagesc(~c);
+0046             <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'PlotBoxAspectRatio'</span>,[40 1 1]);
+0047             <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'TickLength'</span>,[0 0]);
+0048             <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YTick'</span>,[]);
+0049             colormap gray
+0050         <span class="keyword">case</span> 2
+0051             imagesc(~c);
+0052             axis image
+0053             colormap gray
+0054         <span class="keyword">case</span> 3
+0055             warning(<span class="string">'No display of 3D sets. Use the syntax C = BOXDIV(...)'</span>);
+0056     <span class="keyword">end</span>
+0057 <span class="keyword">end</span>;
+0058 
+0059 <span class="keyword">if</span> nargout==0
+0060     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> c
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="comment">% -----------------------  1D boxdiv ------------------------------ %</span>
+0064 
+0065 <a name="_sub1" href="#_subfunctions" class="code">function c=boxdiv1(c,p)</a>
+0066 siz = length(c);
+0067 <span class="keyword">if</span> siz==1
+0068     c=true;
+0069 <span class="keyword">else</span>
+0070     siz2 = round(siz/2);
+0071     <span class="comment">% sub-line left</span>
+0072     c(1:siz2) = c(1:siz2) &amp; (rand&lt;p);
+0073     <span class="keyword">if</span> c(1)
+0074         c(1:siz2) = <a href="#_sub1" class="code" title="subfunction c=boxdiv1(c,p)">boxdiv1</a>(c(1:siz2),p);
+0075     <span class="keyword">end</span>
+0076 
+0077     <span class="comment">% sub-line right</span>
+0078     c((1+siz2):siz) = c((1+siz2):siz) &amp; (rand&lt;p);
+0079     <span class="keyword">if</span> c(1+siz2)
+0080         c((1+siz2):siz) = <a href="#_sub1" class="code" title="subfunction c=boxdiv1(c,p)">boxdiv1</a>(c((1+siz2):siz),p);
+0081     <span class="keyword">end</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 
+0085 <span class="comment">% -----------------------  2D boxdiv ------------------------------ %</span>
+0086 
+0087 <a name="_sub2" href="#_subfunctions" class="code">function c=boxdiv2(c, p)</a>
+0088 siz = length(c);
+0089 <span class="keyword">if</span> siz==1
+0090     c=true;
+0091 <span class="keyword">else</span>
+0092     siz2 = round(siz/2);
+0093 
+0094     <span class="comment">% sub-square top-left</span>
+0095     c(1:siz2, 1:siz2) = c(1:siz2, 1:siz2) &amp; (rand&lt;p);
+0096     <span class="keyword">if</span> c(1,1)
+0097         c(1:siz2,1:siz2) = <a href="#_sub2" class="code" title="subfunction c=boxdiv2(c, p)">boxdiv2</a>(c(1:siz2,1:siz2),p);
+0098     <span class="keyword">end</span>
+0099 
+0100     <span class="comment">% sub-square top-right</span>
+0101     c((1+siz2):siz,1:siz2) = c((1+siz2):siz,1:siz2) &amp; (rand&lt;p);
+0102     <span class="keyword">if</span> c(1+siz2,1)
+0103         c((1+siz2):siz,1:siz2) = <a href="#_sub2" class="code" title="subfunction c=boxdiv2(c, p)">boxdiv2</a>(c((1+siz2):siz,1:siz2),p);
+0104     <span class="keyword">end</span>
+0105 
+0106     <span class="comment">% sub-square bottom-left</span>
+0107     c(1:siz2,(1+siz2):siz) = c(1:siz2,(1+siz2):siz) &amp; (rand&lt;p);
+0108     <span class="keyword">if</span> c(1,1+siz2)
+0109         c(1:siz2,(1+siz2):siz) = <a href="#_sub2" class="code" title="subfunction c=boxdiv2(c, p)">boxdiv2</a>(c(1:siz2,(1+siz2):siz),p);
+0110     <span class="keyword">end</span>
+0111 
+0112     <span class="comment">% sub-square bottom-right</span>
+0113     c((1+siz2):siz,(1+siz2):siz) = c((1+siz2):siz,(1+siz2):siz) &amp; (rand&lt;p);
+0114     <span class="keyword">if</span> c(1+siz2,1+siz2)
+0115         c((1+siz2):siz,(1+siz2):siz) = <a href="#_sub2" class="code" title="subfunction c=boxdiv2(c, p)">boxdiv2</a>(c((1+siz2):siz,(1+siz2):siz),p);
+0116     <span class="keyword">end</span>
+0117 <span class="keyword">end</span>
+0118 
+0119 
+0120 <span class="comment">% -----------------------  3D boxdiv ------------------------------ %</span>
+0121 
+0122 <a name="_sub3" href="#_subfunctions" class="code">function c=boxdiv3(c,p)</a>
+0123 siz = length(c);
+0124 <span class="keyword">if</span> siz==1
+0125     c=true;
+0126 <span class="keyword">else</span>
+0127     siz2 = round(siz/2);
+0128 
+0129     <span class="comment">% sub-cube top-left  front</span>
+0130     c(1:siz2,1:siz2,1:siz2) = c(1:siz2,1:siz2,1:siz2) &amp; (rand&lt;p);
+0131     <span class="keyword">if</span> c(1,1,1)
+0132         c(1:siz2,1:siz2,1:siz2) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c(1:siz2,1:siz2,1:siz2),p);
+0133     <span class="keyword">end</span>
+0134 
+0135     <span class="comment">% sub-cube top-right  front</span>
+0136     c((1+siz2):siz,1:siz2,1:siz2) = c((1+siz2):siz,1:siz2,1:siz2) &amp; (rand&lt;p);
+0137     <span class="keyword">if</span> c(1+siz2,1,1)
+0138         c((1+siz2):siz,1:siz2,1:siz2) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c((1+siz2):siz,1:siz2,1:siz2),p);
+0139     <span class="keyword">end</span>
+0140 
+0141     <span class="comment">% sub-cube bottom-left  front</span>
+0142     c(1:siz2,(1+siz2):siz,1:siz2) = c(1:siz2,(1+siz2):siz,1:siz2) &amp; (rand&lt;p);
+0143     <span class="keyword">if</span> c(1,1+siz2,1)
+0144         c(1:siz2,(1+siz2):siz,1:siz2) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c(1:siz2,(1+siz2):siz,1:siz2),p);
+0145     <span class="keyword">end</span>
+0146 
+0147     <span class="comment">% sub-cube bottom-right  front</span>
+0148     c((1+siz2):siz,(1+siz2):siz,1:siz2) = c((1+siz2):siz,(1+siz2):siz,1:siz2) &amp; (rand&lt;p);
+0149     <span class="keyword">if</span> c(1+siz2,1+siz2,1)
+0150         c((1+siz2):siz,(1+siz2):siz,1:siz2) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c((1+siz2):siz,(1+siz2):siz,1:siz2),p);
+0151     <span class="keyword">end</span>
+0152 
+0153     <span class="comment">% sub-cube top-left  bottom</span>
+0154     c(1:siz2,1:siz2,(1+siz2):siz) = c(1:siz2,1:siz2,(1+siz2):siz) &amp; (rand&lt;p);
+0155     <span class="keyword">if</span> c(1,1,1+siz2)
+0156         c(1:siz2,1:siz2,(1+siz2):siz) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c(1:siz2,1:siz2,(1+siz2):siz),p);
+0157     <span class="keyword">end</span>
+0158 
+0159     <span class="comment">% sub-cube top-right  bottom</span>
+0160     c((1+siz2):siz,1:siz2,(1+siz2):siz) = c((1+siz2):siz,1:siz2,(1+siz2):siz) &amp; (rand&lt;p);
+0161     <span class="keyword">if</span> c(1+siz2,1,1+siz2)
+0162         c((1+siz2):siz,1:siz2,(1+siz2):siz) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c((1+siz2):siz,1:siz2,(1+siz2):siz),p);
+0163     <span class="keyword">end</span>
+0164 
+0165     <span class="comment">% sub-cube bottom-left  bottom</span>
+0166     c(1:siz2,(1+siz2):siz,(1+siz2):siz) = c(1:siz2,(1+siz2):siz,(1+siz2):siz) &amp; (rand&lt;p);
+0167     <span class="keyword">if</span> c(1,1+siz2,1+siz2)
+0168         c(1:siz2,(1+siz2):siz,(1+siz2):siz) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c(1:siz2,(1+siz2):siz,(1+siz2):siz),p);
+0169     <span class="keyword">end</span>
+0170 
+0171     <span class="comment">% sub-cube bottom-right  bottom</span>
+0172     c((1+siz2):siz,(1+siz2):siz,(1+siz2):siz) = c((1+siz2):siz,(1+siz2):siz,(1+siz2):siz) &amp; (rand&lt;p);
+0173     <span class="keyword">if</span> c(1+siz2,1+siz2,1+siz2)
+0174         c((1+siz2):siz,(1+siz2):siz,(1+siz2):siz) = <a href="#_sub3" class="code" title="subfunction c=boxdiv3(c,p)">boxdiv3</a>(c((1+siz2):siz,(1+siz2):siz,(1+siz2):siz),p);
+0175     <span class="keyword">end</span>
+0176 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of aRGB2IND</title>
+  <meta name="keywords" content="aRGB2IND">
+  <meta name="description" content="writted by Nicolae CINDEA">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html movie2gif -->
+<h1>aRGB2IND
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>writted by Nicolae CINDEA</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [X, map] = aRGB2IND(RGB) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> writted by Nicolae CINDEA</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="movie2gif.html" class="code" title="function movie2gif(mov, gifFile, varargin)">movie2gif</a>	Movie2Gif ver. 1.0</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [X, map] = aRGB2IND(RGB)</a>
+0002 
+0003 <span class="comment">% writted by Nicolae CINDEA</span>
+0004 
+0005 m = size(RGB, 1);
+0006 n = size(RGB, 2);
+0007 X = zeros(m, n);
+0008 map(1,:) = RGB(1, 1, :)./255;
+0009 
+0010 <span class="keyword">for</span> i = 1:m
+0011     <span class="keyword">for</span> j = 1:n
+0012         RGBij = double(reshape(RGB(i,j,:), 1, 3)./255);
+0013         isNotFound = true;
+0014         k = 0;
+0015         <span class="keyword">while</span> isNotFound &amp;&amp; k &lt; size(map, 1)
+0016             k = k + 1;
+0017             <span class="keyword">if</span> map(k,:) ==  RGBij
+0018                 isNotFound = false;
+0019             <span class="keyword">end</span>
+0020         <span class="keyword">end</span>
+0021         <span class="keyword">if</span> isNotFound
+0022             map = [map; RGBij];
+0023         <span class="keyword">end</span>
+0024         X(i,j) = double(k);
+0025     <span class="keyword">end</span>
+0026 <span class="keyword">end</span>
+0027 map = double(map);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

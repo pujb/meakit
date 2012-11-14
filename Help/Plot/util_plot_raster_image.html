@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_raster_image</title>
+  <meta name="keywords" content="util_plot_raster_image">
+  <meta name="description" content="UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_raster_image
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = util_plot_raster_image( spif, gnd, bin, def_colormap) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method
+   Compared to UTIL_PLOT_RASTER_SIMPLE, this function may get a cleaner
+   look when you give it a large data set.
+   
+   Input:
+       spif:   Spike information structure
+       gnd:    Grounding electrodes
+       bin:    Bin number.
+       def_colormap:   Colormap (You can use UTIL_MAKE_RASTER_COLORMAP.)
+
+   Example:
+       util_plot_raster_image(spif, 15, util_make_raster_colormap('hot'));
+
+   Jiangbo Pu / Dec-27-2009
+   Jiangbo Pu / Jun-01-2010
+       Add smoothing method.
+       Change the arguments of this function, removing spb,bin_number, we
+           will generate them inside the function.
+   Jiangbo Pu / May-16-2011
+       Support auto X range.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>	UTIL_PLOT_SPSA Generate the SPSA (Rate) graph</li><li><a href="util_set_xtick.html" class="code" title="function util_set_xtick( rate, bin )">util_set_xtick</a>	UTIL_SET_XTICK Set X axis by bin-width and numbers.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = util_plot_raster_image( spif, gnd, bin, def_colormap)</a>
+0002 <span class="comment">%UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method</span>
+0003 <span class="comment">%   Compared to UTIL_PLOT_RASTER_SIMPLE, this function may get a cleaner</span>
+0004 <span class="comment">%   look when you give it a large data set.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Input:</span>
+0007 <span class="comment">%       spif:   Spike information structure</span>
+0008 <span class="comment">%       gnd:    Grounding electrodes</span>
+0009 <span class="comment">%       bin:    Bin number.</span>
+0010 <span class="comment">%       def_colormap:   Colormap (You can use UTIL_MAKE_RASTER_COLORMAP.)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Example:</span>
+0013 <span class="comment">%       util_plot_raster_image(spif, 15, util_make_raster_colormap('hot'));</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Jiangbo Pu / Dec-27-2009</span>
+0016 <span class="comment">%   Jiangbo Pu / Jun-01-2010</span>
+0017 <span class="comment">%       Add smoothing method.</span>
+0018 <span class="comment">%       Change the arguments of this function, removing spb,bin_number, we</span>
+0019 <span class="comment">%           will generate them inside the function.</span>
+0020 <span class="comment">%   Jiangbo Pu / May-16-2011</span>
+0021 <span class="comment">%       Support auto X range.</span>
+0022 
+0023 <span class="comment">% First plot, SPSA</span>
+0024 subplot(2,1,1), <a href="util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>( spif, <span class="string">'bin'</span>, bin, <span class="string">'mode'</span>, <span class="string">'mean'</span>);  <span class="comment">% you can change 'mean' into 'sum'</span>
+0025 
+0026 <span class="comment">% Second plot, RASTER</span>
+0027 <span class="comment">% Get Spikes Per Bin of Each electrode</span>
+0028 [~, ~, ~, ~, spb] = <a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>(spif, <span class="string">'gnd'</span>, gnd, <span class="string">'bin'</span>, bin, <span class="string">'mode'</span>, <span class="string">'electrode'</span>);
+0029 
+0030 num_units = length(spif.spiketimes);
+0031 num_bin = size(spb,1);
+0032 
+0033 <span class="comment">% Smooth</span>
+0034 <span class="keyword">for</span> i=1:num_units
+0035     spb(:,i) = smooth(spb(:,i), 3, <span class="string">'moving'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% Remove GND</span>
+0039 <span class="keyword">if</span> ~isempty(gnd)
+0040     gnd = unique([gnd 11 88 81 18]);
+0041     spb(:, <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(gnd)) = [];
+0042     num_units = num_units - length(gnd);
+0043 <span class="keyword">end</span>
+0044 
+0045 subplot(2,1,2),imagesc(spb', [0 max(max(spb))]);
+0046 colormap(def_colormap);
+0047 
+0048 box off
+0049 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'TickDir'</span>,<span class="string">'Out'</span>)
+0050 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'TickLength'</span>,[0.005 0.01])
+0051 
+0052 ylabel(<span class="string">'Electrodes'</span>)
+0053 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YTick'</span>,[0.5 num_units + 0.5])
+0054 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YTickLabel'</span>,[1 num_units])
+0055 axis xy
+0056 
+0057 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'XMinorTick'</span>,<span class="string">'on'</span>)
+0058 
+0059 <span class="comment">% Set X Axis</span>
+0060 <a href="util_set_xtick.html" class="code" title="function util_set_xtick( rate, bin )">util_set_xtick</a>( zeros(size(spb, 1), 1), bin );
+0061 
+0062 <span class="keyword">end</span>
+0063</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

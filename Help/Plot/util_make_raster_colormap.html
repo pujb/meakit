@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_make_raster_colormap</title>
+  <meta name="keywords" content="util_make_raster_colormap">
+  <meta name="description" content="UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_make_raster_colormap
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [result] = util_make_raster_colormap(type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT
+   Usually, this function is used with UTIL_PLOT_RASTER_IMAGE.
+
+   Input:
+       type:   'hot', 'hot-modified' or 'gray', you may want to adjust it manually later.
+               'esa' / 'french' sometimes makes good figure too.
+   Output:
+       result: The generated colormap.
+
+   Example:
+       map = util_make_raster_colormap('hot');
+
+   Created on Dec/27/2009 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-06-01  Add 'hot' / 'hot-modified'
+                       Change 'gray' method
+       PJB#2010-09-04  Add 'esa' / 'french'
+       PJB#2010-09-30  Add 'hot-inv'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Otherbox/colormaps/esa.html" class="code" title="function h = esa(m)">esa</a>	ESA    Color map providing ESA corporate design colours.</li><li><a href="../Otherbox/colormaps/esa_modified.html" class="code" title="function h = esa_modified(m)">esa_modified</a>	ESA    Color map providing ESA corporate design colours.</li><li><a href="../Otherbox/colormaps/french.html" class="code" title="function h = french(m,flag)">french</a>	FRENCH    French's flag color map.</li><li><a href="util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>	UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>	UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</li><li><a href="util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [result] = util_make_raster_colormap(type)</a>
+0002 <span class="comment">%UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</span>
+0003 <span class="comment">%   Usually, this function is used with UTIL_PLOT_RASTER_IMAGE.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Input:</span>
+0006 <span class="comment">%       type:   'hot', 'hot-modified' or 'gray', you may want to adjust it manually later.</span>
+0007 <span class="comment">%               'esa' / 'french' sometimes makes good figure too.</span>
+0008 <span class="comment">%   Output:</span>
+0009 <span class="comment">%       result: The generated colormap.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Example:</span>
+0012 <span class="comment">%       map = util_make_raster_colormap('hot');</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Created on Dec/27/2009 By Pu Jiangbo</span>
+0015 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   $Revision:</span>
+0018 <span class="comment">%       PJB#2010-06-01  Add 'hot' / 'hot-modified'</span>
+0019 <span class="comment">%                       Change 'gray' method</span>
+0020 <span class="comment">%       PJB#2010-09-04  Add 'esa' / 'french'</span>
+0021 <span class="comment">%       PJB#2010-09-30  Add 'hot-inv'</span>
+0022 
+0023 <span class="keyword">if</span> nargin == 0
+0024     help <a href="util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>
+0025     <span class="keyword">return</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> strcmpi(type,<span class="string">'hot'</span>)
+0029     z = hot;
+0030     result = z;
+0031 <span class="keyword">elseif</span> strcmpi(type, <span class="string">'hot-inv'</span>)
+0032     z = hot;
+0033     result = [z(end:-1:1,1),z(end:-1:1,2),z(end:-1:1,3)];
+0034 <span class="keyword">elseif</span> strcmpi(type, <span class="string">'hot-modified'</span>)
+0035     z = hot;
+0036     <span class="comment">% Empty = white</span>
+0037     z(1,:) = [1 1 1];
+0038     <span class="comment">% One spike = black</span>
+0039     z(2,:) = [0 0 0];
+0040     result = z;
+0041 <span class="keyword">elseif</span> strcmpi(type, <span class="string">'gray'</span>)
+0042     z = gray;
+0043     result = [z(end:-1:1,1),z(end:-1:1,2),z(end:-1:1,3)];
+0044     <span class="comment">%result(2,:) = [0 0 0];</span>
+0045 <span class="keyword">elseif</span> strcmpi(type, <span class="string">'esa'</span>)
+0046     result = <a href="../Otherbox/colormaps/esa.html" class="code" title="function h = esa(m)">esa</a>();
+0047 <span class="keyword">elseif</span> strcmpi(type, <span class="string">'esa-modified'</span>)
+0048     result = <a href="../Otherbox/colormaps/esa_modified.html" class="code" title="function h = esa_modified(m)">esa_modified</a>();
+0049 <span class="keyword">elseif</span> strcmpi(type, <span class="string">'french'</span>)
+0050     result = <a href="../Otherbox/colormaps/french.html" class="code" title="function h = french(m,flag)">french</a>();
+0051 <span class="keyword">else</span>
+0052     error(<span class="string">'Not supported yet'</span>);
+0053 <span class="keyword">end</span>
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

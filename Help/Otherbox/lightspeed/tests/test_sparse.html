@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_sparse</title>
+  <meta name="keywords" content="test_sparse">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_sparse
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="keyword">if</span> 0
+0002     s = sparse([1 2],[1 2],[2 3]);
+0003     <span class="comment">%awf_sparse(int32([1 2]),int32([1 2]),[2 3])</span>
+0004     setnonzeros(s,[4 5])
+0005     <span class="keyword">return</span>
+0006 <span class="keyword">end</span>
+0007 
+0008 n = 1000;
+0009 s = rand(n,n);
+0010 [i,j,v] = find(s);
+0011 [m,n] = size(s);
+0012 tic, <span class="keyword">for</span> iter = 1:10, s = sparse(i,j,v,m,n); <span class="keyword">end</span>; t1=toc;
+0013 fprintf(<span class="string">'time for sparse = %g\n'</span>, t1);
+0014 <span class="comment">%tic, for iter = 1:10, s = awf_sparse(int32(i),int32(j),v); end; t1=toc;</span>
+0015 <span class="comment">%fprintf('time for awf_sparse = %g\n', t1);</span>
+0016 tic, <span class="keyword">for</span> iter = 1:10, s = setnonzeros(s,v); <span class="keyword">end</span>; t2=toc;
+0017 fprintf(<span class="string">'time for setnonzeros = %g (%g times faster)\n'</span>, t2, t1/t2);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

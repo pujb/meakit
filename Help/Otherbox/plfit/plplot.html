@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plplot</title>
+  <meta name="keywords" content="plplot">
+  <meta name="description" content="PLPLOT visualizes a power-law distributional model with empirical data.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html plfit -->
+<h1>plplot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PLPLOT visualizes a power-law distributional model with empirical data.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h=plplot(x, xmin, alpha) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> PLPLOT visualizes a power-law distributional model with empirical data.
+    Source: http://www.santafe.edu/~aaronc/powerlaws/
+ 
+    PLPLOT(x, xmin, alpha) plots (on log axes) the data contained in x 
+    and a power-law distribution of the form p(x) ~ x^-alpha for 
+    x &gt;= xmin. For additional customization, PLPLOT returns a pair of 
+    handles, one to the empirical and one to the fitted data series. By 
+    default, the empirical data is plotted as 'bo' and the fitted form is
+    plotted as 'k--'. PLPLOT automatically detects whether x is composed 
+    of real or integer values, and applies the appropriate plotting 
+    method. For discrete data, if min(x) &gt; 50, PLFIT uses the continuous 
+    approximation, which is a reliable in this regime.
+
+    Example:
+       xmin  = 5;
+       alpha = 2.5;
+       x = xmin.*(1-rand(10000,1)).^(-1/(alpha-1));
+       h = plplot(x,xmin,alpha);
+
+    For more information, try 'type plplot'
+
+    See also <a href="plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">PLFIT</a>, <a href="plvar.html" class="code" title="function [alpha, xmin, n]=plvar(x, varargin)">PLVAR</a>, <a href="plpva.html" class="code" title="function [p,gof]=plpva(x, xmin, varargin)">PLPVA</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h=plplot(x, xmin, alpha)</a>
+0002 <span class="comment">% PLPLOT visualizes a power-law distributional model with empirical data.</span>
+0003 <span class="comment">%    Source: http://www.santafe.edu/~aaronc/powerlaws/</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    PLPLOT(x, xmin, alpha) plots (on log axes) the data contained in x</span>
+0006 <span class="comment">%    and a power-law distribution of the form p(x) ~ x^-alpha for</span>
+0007 <span class="comment">%    x &gt;= xmin. For additional customization, PLPLOT returns a pair of</span>
+0008 <span class="comment">%    handles, one to the empirical and one to the fitted data series. By</span>
+0009 <span class="comment">%    default, the empirical data is plotted as 'bo' and the fitted form is</span>
+0010 <span class="comment">%    plotted as 'k--'. PLPLOT automatically detects whether x is composed</span>
+0011 <span class="comment">%    of real or integer values, and applies the appropriate plotting</span>
+0012 <span class="comment">%    method. For discrete data, if min(x) &gt; 50, PLFIT uses the continuous</span>
+0013 <span class="comment">%    approximation, which is a reliable in this regime.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    Example:</span>
+0016 <span class="comment">%       xmin  = 5;</span>
+0017 <span class="comment">%       alpha = 2.5;</span>
+0018 <span class="comment">%       x = xmin.*(1-rand(10000,1)).^(-1/(alpha-1));</span>
+0019 <span class="comment">%       h = plplot(x,xmin,alpha);</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    For more information, try 'type plplot'</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    See also PLFIT, PLVAR, PLPVA</span>
+0024 
+0025 <span class="comment">% Version 1.0   (2008 February)</span>
+0026 <span class="comment">% Copyright (C) 2008 Aaron Clauset (Santa Fe Institute)</span>
+0027 <span class="comment">% Distributed under GPL 2.0</span>
+0028 <span class="comment">% http://www.gnu.org/copyleft/gpl.html</span>
+0029 <span class="comment">% PLFIT comes with ABSOLUTELY NO WARRANTY</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% No notes</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">% reshape input vector</span>
+0035 x = reshape(x,numel(x),1);
+0036 <span class="comment">% initialize storage for output handles</span>
+0037 h = zeros(2,1);
+0038 
+0039 <span class="comment">% select method (discrete or continuous) for plotting</span>
+0040 <span class="keyword">if</span>     isempty(setdiff(x,floor(x))), f_dattype = <span class="string">'INTS'</span>;
+0041 <span class="keyword">elseif</span> isreal(x),    f_dattype = <span class="string">'REAL'</span>;
+0042 <span class="keyword">else</span>                 f_dattype = <span class="string">'UNKN'</span>;
+0043 <span class="keyword">end</span>;
+0044 <span class="keyword">if</span> strcmp(f_dattype,<span class="string">'INTS'</span>) &amp;&amp; min(x) &gt; 50,
+0045     f_dattype = <span class="string">'REAL'</span>;
+0046 <span class="keyword">end</span>;
+0047 
+0048 <span class="comment">% estimate xmin and alpha, accordingly</span>
+0049 <span class="keyword">switch</span> f_dattype,
+0050     
+0051     <span class="keyword">case</span> <span class="string">'REAL'</span>,
+0052         n = length(x);
+0053         c = [sort(x) (n:-1:1)'./n];
+0054         q = sort(x(x&gt;=xmin));
+0055         cf = [q (q./xmin).^(1-alpha)];
+0056         cf(:,2) = cf(:,2) .* c(find(c(:,1)&gt;=xmin,1,<span class="string">'first'</span>),2);
+0057 
+0058         figure;
+0059         h(1) = loglog(c(:,1),c(:,2),<span class="string">'bo'</span>,<span class="string">'MarkerSize'</span>,8,<span class="string">'MarkerFaceColor'</span>,[1 1 1]); hold on;
+0060         h(2) = loglog(cf(:,1),cf(:,2),<span class="string">'k--'</span>,<span class="string">'LineWidth'</span>,2); hold off;
+0061         xr  = [10.^floor(log10(min(x))) 10.^ceil(log10(max(x)))];
+0062         xrt = (round(log10(xr(1))):2:round(log10(xr(2))));
+0063         <span class="keyword">if</span> length(xrt)&lt;4, xrt = (round(log10(xr(1))):1:round(log10(xr(2)))); <span class="keyword">end</span>;
+0064         yr  = [10.^floor(log10(1/n)) 1];
+0065         yrt = (round(log10(yr(1))):2:round(log10(yr(2))));
+0066         <span class="keyword">if</span> length(yrt)&lt;4, yrt = (round(log10(yr(1))):1:round(log10(yr(2)))); <span class="keyword">end</span>;
+0067         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'XLim'</span>,xr,<span class="string">'XTick'</span>,10.^xrt);
+0068         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YLim'</span>,yr,<span class="string">'YTick'</span>,10.^yrt,<span class="string">'FontSize'</span>,16);
+0069         ylabel(<span class="string">'Pr(X \geq x)'</span>,<span class="string">'FontSize'</span>,16);
+0070         xlabel(<span class="string">'x'</span>,<span class="string">'FontSize'</span>,16)
+0071 
+0072     <span class="keyword">case</span> <span class="string">'INTS'</span>,
+0073         n = length(x);        
+0074         q = unique(x);
+0075         c = hist(x,q)'./n;
+0076         c = [[q; q(end)+1] 1-[0; cumsum(c)]]; c(c(:,2)&lt;10^-10,:) = [];
+0077         cf = ((xmin:q(end))'.^-alpha)./(<a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>(alpha) - sum((1:xmin-1).^-alpha));
+0078         cf = [(xmin:q(end)+1)' 1-[0; cumsum(cf)]];
+0079         cf(:,2) = cf(:,2) .* c(c(:,1)==xmin,2);
+0080 
+0081         figure;
+0082         h(1) = loglog(c(:,1),c(:,2),<span class="string">'bo'</span>,<span class="string">'MarkerSize'</span>,8,<span class="string">'MarkerFaceColor'</span>,[1 1 1]); hold on;
+0083         h(2) = loglog(cf(:,1),cf(:,2),<span class="string">'k--'</span>,<span class="string">'LineWidth'</span>,2); hold off;
+0084         xr  = [10.^floor(log10(min(x))) 10.^ceil(log10(max(x)))];
+0085         xrt = (round(log10(xr(1))):2:round(log10(xr(2))));
+0086         <span class="keyword">if</span> length(xrt)&lt;4, xrt = (round(log10(xr(1))):1:round(log10(xr(2)))); <span class="keyword">end</span>;
+0087         yr  = [10.^floor(log10(1/n)) 1];
+0088         yrt = (round(log10(yr(1))):2:round(log10(yr(2))));
+0089         <span class="keyword">if</span> length(yrt)&lt;4, yrt = (round(log10(yr(1))):1:round(log10(yr(2)))); <span class="keyword">end</span>;
+0090         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'XLim'</span>,xr,<span class="string">'XTick'</span>,10.^xrt);
+0091         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YLim'</span>,yr,<span class="string">'YTick'</span>,10.^yrt,<span class="string">'FontSize'</span>,16);
+0092         ylabel(<span class="string">'Pr(X \geq x)'</span>,<span class="string">'FontSize'</span>,16);
+0093         xlabel(<span class="string">'x'</span>,<span class="string">'FontSize'</span>,16)
+0094 
+0095     <span class="keyword">otherwise</span>,
+0096         fprintf(<span class="string">'(PLPLOT) Error: x must contain only reals or only integers.\n'</span>);
+0097         h = [];
+0098         <span class="keyword">return</span>;
+0099 <span class="keyword">end</span>;
+0100</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of rhist</title>
+  <meta name="keywords" content="rhist">
+  <meta name="description" content="RHIST   Relative Histogram.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html ami -->
+<h1>rhist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RHIST   Relative Histogram.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [no,xo] = rhist(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RHIST   Relative Histogram.
+   N = RHIST(Y) bins the elements of Y into 10 equally spaced containers
+   and returns the relative frequency of elements in each container. If Y is a
+   matrix, RHIST works down the columns.
+
+   N = RHIST(Y,M), where M is a scalar, uses M bins.
+
+   N = RHIST(Y,X), where X is a vector, returns the relative freqency of Y
+   among bins with centers specified by X. The first bin includes
+   data between -inf and the first center and the last bin
+   includes data between the last bin and inf. Note: Use HISTC if
+   it is more natural to specify bin edges instead. 
+
+   N = RHIST(Y,M,Any_Character) returns relative frequency density of
+   Y among bins.Any_Character is the any character inside single quotation
+   or any numeric value.
+   You can omit second optional argument using single quotation 
+   i.e. N = RHIST(Y,'',Any_Character) returns relative frequency density
+   for 10 bins.
+   It is to be noted that sum(N)equals unity for relative frequency 
+   while area under curve for relative frequency density equals unity.
+   Note that as size(Y,1) and M increases relative frequency density is
+   close to probability density for continous random variable.
+
+   [N,X] = RHIST(...) also returns the position of the bin centers in X.
+
+   RHIST(...) without output arguments produces a histogram of relative 
+   frequency or relative frequency densisty bar plot of the results. 
+   The bar edges on the first and last bins may extend to cover the min 
+   and max of the data unless a matrix of data is supplied.
+
+   RHIST(AX,...) plots into AX instead of GCA.
+
+   Class support for inputs Y, X: 
+      float: double, single
+
+   See also HIST.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>	PROB calculates probability distribution of y among nBins number of bins</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [no,xo] = rhist(varargin)</a>
+0002 <span class="comment">%RHIST   Relative Histogram.</span>
+0003 <span class="comment">%   N = RHIST(Y) bins the elements of Y into 10 equally spaced containers</span>
+0004 <span class="comment">%   and returns the relative frequency of elements in each container. If Y is a</span>
+0005 <span class="comment">%   matrix, RHIST works down the columns.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   N = RHIST(Y,M), where M is a scalar, uses M bins.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   N = RHIST(Y,X), where X is a vector, returns the relative freqency of Y</span>
+0010 <span class="comment">%   among bins with centers specified by X. The first bin includes</span>
+0011 <span class="comment">%   data between -inf and the first center and the last bin</span>
+0012 <span class="comment">%   includes data between the last bin and inf. Note: Use HISTC if</span>
+0013 <span class="comment">%   it is more natural to specify bin edges instead.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   N = RHIST(Y,M,Any_Character) returns relative frequency density of</span>
+0016 <span class="comment">%   Y among bins.Any_Character is the any character inside single quotation</span>
+0017 <span class="comment">%   or any numeric value.</span>
+0018 <span class="comment">%   You can omit second optional argument using single quotation</span>
+0019 <span class="comment">%   i.e. N = RHIST(Y,'',Any_Character) returns relative frequency density</span>
+0020 <span class="comment">%   for 10 bins.</span>
+0021 <span class="comment">%   It is to be noted that sum(N)equals unity for relative frequency</span>
+0022 <span class="comment">%   while area under curve for relative frequency density equals unity.</span>
+0023 <span class="comment">%   Note that as size(Y,1) and M increases relative frequency density is</span>
+0024 <span class="comment">%   close to probability density for continous random variable.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   [N,X] = RHIST(...) also returns the position of the bin centers in X.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   RHIST(...) without output arguments produces a histogram of relative</span>
+0029 <span class="comment">%   frequency or relative frequency densisty bar plot of the results.</span>
+0030 <span class="comment">%   The bar edges on the first and last bins may extend to cover the min</span>
+0031 <span class="comment">%   and max of the data unless a matrix of data is supplied.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   RHIST(AX,...) plots into AX instead of GCA.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%   Class support for inputs Y, X:</span>
+0036 <span class="comment">%      float: double, single</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%   See also HIST.</span>
+0039 
+0040 <span class="comment">%   Copyright 2004-2005 Durga Lal Shrestha.</span>
+0041 <span class="comment">%   $Revision: 1.1.0 $  $Date: 2005/6/22 14:30:00 $</span>
+0042 
+0043 <span class="comment">% Parse possible Axes input</span>
+0044 
+0045 error(nargchk(1,inf,nargin));
+0046 [cax,args,nargs] = axescheck(varargin{:});
+0047 
+0048 y = args{1};
+0049 <span class="keyword">if</span> nargs == 1
+0050     x = 10;
+0051 <span class="keyword">elseif</span> nargs == 2
+0052     x = args{2};
+0053 <span class="keyword">else</span>
+0054     <span class="keyword">if</span> isempty(args{2})
+0055         x = 10;
+0056     <span class="keyword">else</span>
+0057         x = args{2};
+0058     <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 <span class="keyword">if</span> min(size(y))==1, y = y(:); <span class="keyword">end</span>
+0061 [m,n] = size(y);
+0062 [nn,x]=hist(y,x); <span class="comment">% frequency</span>
+0063 nn = nn./m;     <span class="comment">% relative frequency</span>
+0064 
+0065 <span class="comment">%  relative frequency density</span>
+0066 <span class="keyword">if</span> nargs == 3 
+0067     binwidth = x(2)-x(1);
+0068     nn = nn./binwidth;  
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="keyword">if</span> nargout == 0
+0072   <span class="keyword">if</span> ~isempty(cax)
+0073     bar(cax,x,nn,[min(y(:)) max(y(:))],<span class="string">'hist'</span>);
+0074   <span class="keyword">else</span>
+0075     bar(x,nn,[min(y(:)) max(y(:))],<span class="string">'hist'</span>);
+0076   <span class="keyword">end</span>
+0077   xlabel(<span class="string">'y'</span>)
+0078   <span class="keyword">if</span> nargs == 3            
+0079     ylabel(<span class="string">'relative frequency density'</span>)
+0080   <span class="keyword">else</span>
+0081      ylabel(<span class="string">'relative frequency'</span>)
+0082   <span class="keyword">end</span>        
+0083 <span class="keyword">else</span>
+0084   no = nn;
+0085   xo = x;  
+0086 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

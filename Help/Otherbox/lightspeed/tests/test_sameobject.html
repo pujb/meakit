@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_sameobject</title>
+  <meta name="keywords" content="test_sameobject">
+  <meta name="description" content="Result should be 1 in both cases below.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_sameobject
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Result should be 1 in both cases below.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function test_sameobject </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> Result should be 1 in both cases below.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/sameobject.html" class="code" title="">sameobject</a>	SAMEOBJECT    Object identity</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function x = helper(a,b)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function test_sameobject</a>
+0002 <span class="comment">% Result should be 1 in both cases below.</span>
+0003 
+0004 a = rand(4);
+0005 b = a;
+0006 <span class="keyword">if</span> <a href="../../../Otherbox/lightspeed/sameobject.html" class="code" title="">sameobject</a>(a,b) ~= 1
+0007   error(<span class="string">'failed'</span>);
+0008 <span class="keyword">end</span>
+0009 <span class="keyword">if</span> <a href="#_sub1" class="code" title="subfunction x = helper(a,b)">helper</a>(a,a) ~= 1
+0010   error(<span class="string">'failed'</span>);
+0011 <span class="keyword">end</span>
+0012 disp(<span class="string">'Test passed.'</span>)
+0013 
+0014 <a name="_sub1" href="#_subfunctions" class="code">function x = helper(a,b)</a>
+0015 
+0016 x = <a href="../../../Otherbox/lightspeed/sameobject.html" class="code" title="">sameobject</a>(a,b);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

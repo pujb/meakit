@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of betweenness_bin</title>
+  <meta name="keywords" content="betweenness_bin">
+  <meta name="description" content="BETWEENNESS_BIN    Node betweenness centrality">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>betweenness_bin
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>BETWEENNESS_BIN    Node betweenness centrality</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function BC=betweenness_bin(G) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">BETWEENNESS_BIN    Node betweenness centrality
+
+   BC = betweenness_bin(A);
+
+   Node betweenness centrality is the fraction of all shortest paths in 
+   the network that contain a given node. Nodes with high values of 
+   betweenness centrality participate in a large number of shortest paths.
+
+   Input:      A,      binary (directed/undirected) connection matrix.
+
+   Output:     BC,     node betweenness centrality vector.
+
+   Note: Betweenness centrality may be normalised to [0,1] via BC/[(N-1)(N-2)]
+
+   Reference: Kintali (2008) arXiv:0809.1906v2 [cs.DS]
+              (generalised to directed and disconnected graphs)
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BC=betweenness_bin(G)</a>
+0002 <span class="comment">%BETWEENNESS_BIN    Node betweenness centrality</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   BC = betweenness_bin(A);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Node betweenness centrality is the fraction of all shortest paths in</span>
+0007 <span class="comment">%   the network that contain a given node. Nodes with high values of</span>
+0008 <span class="comment">%   betweenness centrality participate in a large number of shortest paths.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      A,      binary (directed/undirected) connection matrix.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Output:     BC,     node betweenness centrality vector.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Note: Betweenness centrality may be normalised to [0,1] via BC/[(N-1)(N-2)]</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Reference: Kintali (2008) arXiv:0809.1906v2 [cs.DS]</span>
+0017 <span class="comment">%              (generalised to directed and disconnected graphs)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0021 
+0022 
+0023 n=length(G);                <span class="comment">%number of nodes</span>
+0024 I=eye(n)~=0;                <span class="comment">%logical identity matrix</span>
+0025 d=1;                         <span class="comment">%path length</span>
+0026 NPd=G;                      <span class="comment">%number of paths of length |d|</span>
+0027 NSPd=NPd;                      <span class="comment">%number of shortest paths of length |d|</span>
+0028 NSP=NSPd; NSP(I)=1;            <span class="comment">%number of shortest paths of any length</span>
+0029 L=NSPd; L(I)=1;               <span class="comment">%length of shortest paths</span>
+0030 
+0031 <span class="comment">%calculate NSP and L</span>
+0032 <span class="keyword">while</span> find(NSPd,1);
+0033     d=d+1;
+0034     NPd=NPd*G;
+0035     NSPd=NPd.*(L==0);
+0036     NSP=NSP+NSPd;
+0037     L=L+d.*(NSPd~=0);
+0038 <span class="keyword">end</span>
+0039 L(~L)=inf; L(I)=0;          <span class="comment">%L for disconnected vertices is inf</span>
+0040 NSP(~NSP)=1;                <span class="comment">%NSP for disconnected vertices is 1</span>
+0041 
+0042 Gt=G.';
+0043 DP=zeros(n);                <span class="comment">%vertex on vertex dependency</span>
+0044 diam=d-1;                      <span class="comment">%graph diameter</span>
+0045 
+0046 <span class="comment">%calculate DP</span>
+0047 <span class="keyword">for</span> d=diam:-1:2
+0048     DPd1=(((L==d).*(1+DP)./NSP)*Gt).*((L==(d-1)).*NSP);
+0049     DP=DP + DPd1;       <span class="comment">%DPd1: dependencies on vertices |d-1| from source</span>
+0050 <span class="keyword">end</span>
+0051 
+0052 BC=sum(DP,1);               <span class="comment">%compute betweenness</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

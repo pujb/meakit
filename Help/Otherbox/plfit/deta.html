@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of deta</title>
+  <meta name="keywords" content="deta">
+  <meta name="description" content="DETA   Calculates Dirichlet functions of the form">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html plfit -->
+<h1>deta
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DETA   Calculates Dirichlet functions of the form</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [f] = deta(z,k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">DETA   Calculates Dirichlet functions of the form
+
+       f = sum((-1)^n/(k*n+1)^z)
+
+       over the entire complex plane
+       Z may be complex and any size
+       Best accuracy for Abs(z) &lt; 100
+
+       Usage: f = deta(z)
+          or  f = deta(z,k)
+
+       where k determines which Dirichlet function to sum
+       For Eta (Zeta, Lambda):   k=1
+       For Betad: k=2
+ 
+       This function can use a LOT of memory when size(z)
+       is large. Consider using the Memory and Pack commands.
+       Also, consider breaking z up into smaller chunks.
+
+       Requires a complex Gamma routine.
+       Tested under version 5.3.1
+  
+see also:  <a href="zeta.html" class="code" title="function [f] = zeta(z)">Zeta</a>, Eta, Lambda, Betad
+see also:  sym/zeta.m
+see also:  mhelp <a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li><li><a href="deta.html" class="code" title="function [f] = deta(z,k)">deta</a>	DETA   Calculates Dirichlet functions of the form</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="deta.html" class="code" title="function [f] = deta(z,k)">deta</a>	DETA   Calculates Dirichlet functions of the form</li><li><a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f] = deta(z,k)</a>
+0002 <span class="comment">%DETA   Calculates Dirichlet functions of the form</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%       f = sum((-1)^n/(k*n+1)^z)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%       over the entire complex plane</span>
+0007 <span class="comment">%       Z may be complex and any size</span>
+0008 <span class="comment">%       Best accuracy for Abs(z) &lt; 100</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%       Usage: f = deta(z)</span>
+0011 <span class="comment">%          or  f = deta(z,k)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%       where k determines which Dirichlet function to sum</span>
+0014 <span class="comment">%       For Eta (Zeta, Lambda):   k=1</span>
+0015 <span class="comment">%       For Betad: k=2</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%       This function can use a LOT of memory when size(z)</span>
+0018 <span class="comment">%       is large. Consider using the Memory and Pack commands.</span>
+0019 <span class="comment">%       Also, consider breaking z up into smaller chunks.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%       Requires a complex Gamma routine.</span>
+0022 <span class="comment">%       Tested under version 5.3.1</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%see also:  Zeta, Eta, Lambda, Betad</span>
+0025 <span class="comment">%see also:  sym/zeta.m</span>
+0026 <span class="comment">%see also:  mhelp zeta</span>
+0027 
+0028 <span class="comment">%Andrew Odlyzko has Riemann Zeta critical line zeros listed on:</span>
+0029 <span class="comment">%http://www.research.att.com/~amo/zeta_tables/index.html</span>
+0030 
+0031 <span class="comment">%Paul Godfrey</span>
+0032 <span class="comment">%pgodfrey@conexant.com</span>
+0033 <span class="comment">%March 24, 2001</span>
+0034 
+0035 <span class="keyword">if</span> nargin==1
+0036    k=1;
+0037 <span class="keyword">end</span>
+0038 k=k(1);
+0039 <span class="keyword">if</span> k&lt;1 | k&gt;2
+0040    warning(<span class="string">'Unknown function being calculated! Results valid only for Real(z)&gt;0.5'</span>)
+0041 <span class="comment">% k=1 --&gt; Eta --&gt; Zeta or Lambda --&gt; Bern numbers</span>
+0042 <span class="comment">% k=2 --&gt; Betad --&gt; Euler numbers</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 [sizz]=size(z);
+0046 z=z(:).'; <span class="comment">% make z a row vector</span>
+0047 rz=real(z);
+0048 iz=imag(z);
+0049 iszero=find(z==0);
+0050 iseven=find(z==(round(z/2)*2)       &amp; rz&lt;0 &amp; iz==0);
+0051 isodd= find(z==(round((z-1)/2)*2+1) &amp; rz&lt;0 &amp; iz==0);
+0052  
+0053 r=1/2; <span class="comment">% reflection point</span>
+0054 L=find(rz&lt; r);
+0055 <span class="keyword">if</span> ~isempty(L)
+0056    zL=z(L);
+0057    z(L)=1-zL;
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">%series coefficients were calculated using</span>
+0061 <span class="comment">% c(m)=sum from n=m to 64 of (binomial(n,m)/2^n) for m=0:64</span>
+0062 
+0063 <span class="comment">%coefficients are symmetrical about the 0.5 value. Each pair sums to +-1</span>
+0064 <span class="comment">%abs(coefficients) look like erfc(k*m)/2 due to binomial terms</span>
+0065 <span class="comment">%sum(cm) must = 0.5 = eta(0) = betad(0)</span>
+0066 <span class="comment">%worst case error occurs for z = 0.5 + i*large</span>
+0067 
+0068 cm= [ .99999999999999999997;
+0069      -.99999999999999999821;
+0070       .99999999999999994183;
+0071      -.99999999999999875788;
+0072       .99999999999998040668;
+0073      -.99999999999975652196;
+0074       .99999999999751767484;
+0075      -.99999999997864739190;
+0076       .99999999984183784058;
+0077      -.99999999897537734890;
+0078       .99999999412319859549;
+0079      -.99999996986230482845;
+0080       .99999986068828287678;
+0081      -.99999941559419338151;
+0082       .99999776238757525623;
+0083      -.99999214148507363026;
+0084       .99997457616475604912;
+0085      -.99992394671207596228;
+0086       .99978893483826239739;
+0087      -.99945495809777621055;
+0088       .99868681159465798081;
+0089      -.99704078337369034566;
+0090       .99374872693175507536;
+0091      -.98759401271422391785;
+0092       .97682326283354439220;
+0093      -.95915923302922997013;
+0094       .93198380256105393618;
+0095      -.89273040299591077603;
+0096       .83945793215750220154;
+0097      -.77148960729470505477;
+0098       .68992761745934847866;
+0099      -.59784149990330073143;
+0100       .50000000000000000000;
+0101      -.40215850009669926857;
+0102       .31007238254065152134;
+0103      -.22851039270529494523;
+0104       .16054206784249779846;
+0105      -.10726959700408922397;
+0106       .68016197438946063823e-1;
+0107      -.40840766970770029873e-1;
+0108       .23176737166455607805e-1;
+0109      -.12405987285776082154e-1;
+0110       .62512730682449246388e-2;
+0111      -.29592166263096543401e-2;
+0112       .13131884053420191908e-2;
+0113      -.54504190222378945440e-3;
+0114       .21106516173760261250e-3;
+0115      -.76053287924037718971e-4;
+0116       .25423835243950883896e-4;
+0117      -.78585149263697370338e-5;
+0118       .22376124247437700378e-5;
+0119      -.58440580661848562719e-6;
+0120       .13931171712321674741e-6;
+0121      -.30137695171547022183e-7;
+0122       .58768014045093054654e-8;
+0123      -.10246226511017621219e-8;
+0124       .15816215942184366772e-9;
+0125      -.21352608103961806529e-10;
+0126       .24823251635643084345e-11;
+0127      -.24347803504257137241e-12;
+0128       .19593322190397666205e-13;
+0129      -.12421162189080181548e-14;
+0130       .58167446553847312884e-16;
+0131      -.17889335846010823161e-17;
+0132       .27105054312137610850e-19];
+0133 
+0134 cm=flipud(cm).'; <span class="comment">% sum from small to big</span>
+0135 nmax=size(cm,2);
+0136 n=(1:k:k*nmax)';
+0137 n=flipud(n);
+0138 <span class="comment">% z is a  LR vector</span>
+0139 <span class="comment">% n is an UD vector</span>
+0140 [Z,N]=meshgrid(z,n);
+0141 
+0142 <span class="comment">% this can take a LOT of memory</span>
+0143 f=cm*(N.^-Z);
+0144 <span class="comment">% but it's really fast to form the series expansion N.^-Z</span>
+0145 <span class="comment">% and then sum it by an inner product cm*()  :)</span>
+0146 
+0147 <span class="comment">%reflect across 1/2</span>
+0148 <span class="keyword">if</span> ~isempty(L)
+0149     zz=z(L);
+0150     <span class="keyword">if</span> k==1
+0151     <span class="comment">% Eta function reflection</span>
+0152     <span class="comment">% for test: deta(1,1) should = log(2)</span>
+0153       t=(2-2.^(zz+1))./(2.^zz-2)./pi.^zz;
+0154       f(L)=t.*cos(pi/2*zz).*gamma(zz).*f(L);
+0155       <span class="keyword">if</span> ~isempty(iszero)
+0156          f(iszero)=0.5;
+0157       <span class="keyword">end</span>
+0158       <span class="keyword">if</span> ~isempty(iseven)
+0159          f(iseven)=0;
+0160       <span class="keyword">end</span>
+0161     <span class="keyword">end</span>
+0162     <span class="keyword">if</span> k==2
+0163     <span class="comment">% Betad function reflection</span>
+0164     <span class="comment">%for test: deta(0,2) should = 0.5</span>
+0165     <span class="comment">%for test: deta(1,2) should = pi/4</span>
+0166       f(L)=(2/pi).^zz.*sin(pi/2*zz).*gamma(zz).*f(L);
+0167       <span class="keyword">if</span> ~isempty(isodd)
+0168          f(isodd)=0;
+0169       <span class="keyword">end</span>
+0170     <span class="keyword">end</span>
+0171     <span class="keyword">if</span> k&gt;2
+0172     <span class="comment">% Insert reflection formula for other Dirichlet functions here</span>
+0173       f(L)=(1/pi).^zz.*gamma(zz).*f(L);
+0174       f(L)=NaN;
+0175     <span class="keyword">end</span>
+0176 <span class="keyword">end</span>
+0177 
+0178 f = reshape(f,sizz);
+0179 <span class="keyword">return</span>
+0180 
+0181 <span class="comment">%a demo of this routine is</span>
+0182 <span class="keyword">if</span> 1==2
+0183 x=0:1/16:1;
+0184 y=0:1/16:32;
+0185 [X,Y]=meshgrid(x,y);
+0186 z=X+i*Y;
+0187 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> X Y
+0188 f = <a href="deta.html" class="code" title="function [f] = deta(z,k)">deta</a>(z,1);
+0189 p=find(abs(f)&gt;5);
+0190 <span class="keyword">if</span> ~isempty(p)
+0191    f(p)=NaN;
+0192 <span class="keyword">end</span>
+0193 mesh(x,y,abs(f));
+0194 view([83 3]);
+0195 axis([0 1 0 32 0 6]);
+0196 rotate3d
+0197 <span class="keyword">return</span>
+0198 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of reconstruction_derivative</title>
+  <meta name="keywords" content="reconstruction_derivative">
+  <meta name="description" content="RECONSTRUCTION_DERIVATIVE Computes reconstruction error and derivative">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>reconstruction_derivative
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>RECONSTRUCTION_DERIVATIVE Computes reconstruction error and derivative</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [C, dC] = reconstruction_derivative(V, O, R) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">RECONSTRUCTION_DERIVATIVE Computes reconstruction error and derivative
+
+   [C, dC] = reconstruction_derivative(V, original, reconstruction)
+
+ Computes reconstruction error and derivative with respect to the affine 
+ transformation V that is applied on the reconstructions.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [C, dC] = reconstruction_derivative(V, O, R)</a>
+0002 <span class="comment">%RECONSTRUCTION_DERIVATIVE Computes reconstruction error and derivative</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [C, dC] = reconstruction_derivative(V, original, reconstruction)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Computes reconstruction error and derivative with respect to the affine</span>
+0007 <span class="comment">% transformation V that is applied on the reconstructions.</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0011 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0012 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0013 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0014 <span class="comment">% maintain the name of the original author.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0017 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0018 
+0019 
+0020     <span class="comment">% Retrieve the variables from the vector V</span>
+0021     alpha = V(1);
+0022     scale = V(2);
+0023     x0 = V(3);
+0024     y0 = V(4);
+0025     n = size(O, 1);
+0026 
+0027     <span class="comment">% Compute reconstruction error</span>
+0028     C1 = O(:,1) - (scale .* cos(alpha) .* R(:,1)) - (scale .* sin(alpha) .* R(:,2)) + (scale .* ((x0 .* cos(alpha)) + (y0 .* sin(alpha))));
+0029     C2 = O(:,2) + (scale .* sin(alpha) .* R(:,1)) - (scale .* cos(alpha) .* R(:,2)) - (scale .* ((x0 .* sin(alpha)) - (y0 .* cos(alpha))));
+0030     C = (1 / n) .* sum((C1 .^ 2) + (C2 .^ 2));
+0031     
+0032     <span class="comment">% Compute derivatives (over alpha, scale, x0, and y0)</span>
+0033     dC = repmat(0, [4 1]);
+0034     dC(1) = sum((2 .* C1 .* ((scale .* sin(alpha) .* R(:,1)) - (scale .* cos(alpha) .* R(:,2)) + (scale .* ((y0 .* cos(alpha)) - (x0 .* sin(alpha)))))) + <span class="keyword">...</span>
+0035                 (2 .* C2 .* ((scale .* cos(alpha) .* R(:,1)) + (scale .* sin(alpha) .* R(:,2)) + (scale .* ((x0 .* cos(alpha)) + (y0 .* sin(alpha))))))) ./ n;
+0036     dC(2) = sum((2 .* C1 .* ((-cos(alpha) .* R(:,1)) - (sin(alpha) .* R(:,2)) + (x0 .* cos(alpha) + y0 .* sin(alpha)))) + <span class="keyword">...</span>
+0037                 (2 .* C2 .* (( sin(alpha) .* R(:,1)) - (cos(alpha) .* R(:,2)) - (x0 .* sin(alpha) + y0 .* cos(alpha))))) ./ n;
+0038     dC(3) = sum((2 .* C1 .* scale .* cos(alpha)) - (2 .* C2 .* scale .* sin(alpha))) ./ n;
+0039     dC(4) = sum((2 .* C1 .* scale .* sin(alpha)) + (2 .* C2 .* scale .* cos(alpha))) ./ n;
+0040</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

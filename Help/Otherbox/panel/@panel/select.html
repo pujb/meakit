@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of select</title>
+  <meta name="keywords" content="select">
+  <meta name="description" content="select(p[, ax])">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>select
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>select(p[, ax])</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function ax_out = select(p, ax) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> select(p[, ax])
+
+ make axis associated with this panel the active axis for
+ plotting. if no axis is associated, create one if valid.
+ that is, calling select on an &quot;uncommitted&quot; panel commits
+ that panel as an &quot;axis panel&quot;.
+
+ if the axis to be associated with the panel has already
+ been created (e.g. it is a special-purpose axis such as a
+ colorbar), pass it in as the second argument, and the
+ committed panel will be associated with the passed axis
+ rather than create a new one of its own. this usage
+ suggested by Arthur Ward.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li><li><a href="../../../Otherbox/panel/panel_demo_1.html" class="code" title="">panel_demo_1</a>	% PANEL DEMO 1</li><li><a href="../../../Otherbox/panel/panel_demo_2.html" class="code" title="">panel_demo_2</a>	% PANEL DEMO 2</li><li><a href="../../../Otherbox/panel/panel_demo_3.html" class="code" title="">panel_demo_3</a>	% PANEL DEMO 3</li><li><a href="../../../Otherbox/panel/panel_demo_4.html" class="code" title="">panel_demo_4</a>	% PANEL DEMO 4</li><li><a href="../../../Otherbox/panel/panel_demo_5.html" class="code" title="">panel_demo_5</a>	% PANEL DEMO 5</li><li><a href="../../../Otherbox/panel/panel_demo_6.html" class="code" title="">panel_demo_6</a>	% PANEL DEMO 6</li><li><a href="../../../Otherbox/panel/panel_demo_7.html" class="code" title="">panel_demo_7</a>	% PANEL DEMO 7</li><li><a href="../../../Otherbox/panel/panel_demo_8.html" class="code" title="">panel_demo_8</a>	% PANEL DEMO 8</li><li><a href="../../../Otherbox/panel/panel_demo_9.html" class="code" title="">panel_demo_9</a>	% PANEL DEMO 9</li><li><a href="../../../Otherbox/panel/panel_demo_A.html" class="code" title="">panel_demo_A</a>	% PANEL DEMO A</li><li><a href="../../../Otherbox/panel/panel_demo_B.html" class="code" title="">panel_demo_B</a>	% PANEL DEMO B</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ax_out = select(p, ax)</a>
+0002 
+0003 <span class="comment">% select(p[, ax])</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% make axis associated with this panel the active axis for</span>
+0006 <span class="comment">% plotting. if no axis is associated, create one if valid.</span>
+0007 <span class="comment">% that is, calling select on an &quot;uncommitted&quot; panel commits</span>
+0008 <span class="comment">% that panel as an &quot;axis panel&quot;.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% if the axis to be associated with the panel has already</span>
+0011 <span class="comment">% been created (e.g. it is a special-purpose axis such as a</span>
+0012 <span class="comment">% colorbar), pass it in as the second argument, and the</span>
+0013 <span class="comment">% committed panel will be associated with the passed axis</span>
+0014 <span class="comment">% rather than create a new one of its own. this usage</span>
+0015 <span class="comment">% suggested by Arthur Ward.</span>
+0016 
+0017 
+0018 
+0019 P = <a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(p);
+0020 
+0021 <span class="keyword">if</span> P.panel.axis
+0022 
+0023     <span class="comment">% handle error</span>
+0024     <span class="keyword">if</span> nargin == 2
+0025         error(<span class="string">'panel already associated with an axis'</span>);
+0026     <span class="keyword">end</span>
+0027     
+0028     <span class="comment">% return existing axis</span>
+0029     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0,<span class="string">'CurrentFigure'</span>,p.fig)
+0030     ax = P.panel.axis;
+0031     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig,<span class="string">'CurrentAxes'</span>,ax);
+0032 
+0033 <span class="keyword">else</span>
+0034 
+0035     <span class="comment">% illegal if already has children</span>
+0036     <span class="keyword">if</span> ~isempty(P.panel.children)
+0037         error(<span class="string">'cannot associate axis with panel that already has child panels'</span>);
+0038     <span class="keyword">end</span>
+0039 
+0040     <span class="comment">% select figure</span>
+0041     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0,<span class="string">'CurrentFigure'</span>,p.fig)
+0042     
+0043     <span class="comment">% was axis supplied?</span>
+0044     <span class="keyword">if</span> nargin &lt; 2
+0045     
+0046         <span class="comment">% no, create axis</span>
+0047         ax = axes(<span class="string">'fontname'</span>, <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p,<span class="string">'fontname'</span>), <span class="string">'fontsize'</span>, <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p,<span class="string">'fontsize'</span>));
+0048         
+0049     <span class="keyword">end</span>
+0050     
+0051     <span class="comment">% make axis current</span>
+0052     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig,<span class="string">'CurrentAxes'</span>,ax);
+0053     
+0054     <span class="comment">% associate panel with axis</span>
+0055     P.panel.axis = ax;
+0056     <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0057 
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">% return axis handle</span>
+0061 <span class="keyword">if</span> nargout
+0062     ax_out = ax;
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">% autorender</span>
+0066 <span class="keyword">if</span> <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'autorender'</span>)
+0067     q = p;
+0068     ud = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0069     q.id = ud.panel.panelroot.rootpanelid;
+0070     <a href="render.html" class="code" title="function render(p)">render</a>(q)
+0071 <span class="keyword">end</span>
+0072 
+0073</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

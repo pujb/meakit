@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_OpenFile</title>
+  <meta name="keywords" content="ns_OpenFile">
+  <meta name="description" content="ns_OpenFile   Opens a neural data file">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_OpenFile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_OpenFile   Opens a neural data file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, hFile] = ns_OpenFile(filename); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_OpenFile   Opens a neural data file
+
+   Usage:
+       [ns_RESULT, hFile] = ns_OpenFile('filename.ext')
+
+   Description:
+       Opens the file specified by filename and returns a file handle, 
+       hFile, that is used to access the opened file.
+
+   Parameters:
+       filename    Pointer to a null-terminated string that specifies the
+                   name of the file to open. 
+
+   Return Values:
+       hFile        Handle/Indentification number to the opened file.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_TYPEERROR    Library unable to open file type
+                       ns_FILEERROR    File access or read error 
+
+   Remarks:
+       All files are opened for read-only, as no writing capabilities have
+       been implemented.  If the command succeeds in opening the file, the
+       application should call ns_CloseFile for each open file before 
+       terminating.
+
+       This function has to be called before any other Neuroshare function
+       is called. 
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 6/20/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Example.html" class="code" title="function Example()">Example</a>	Prompt for the correct DLL</li><li><a href="ExampleAnalog.html" class="code" title="function ExampleAnalog()">ExampleAnalog</a>	function OutputAnalogVector = ExampleAnalog()</li><li><a href="Neuroshare.html" class="code" title="">Neuroshare</a>	</li><li><a href="../../../../IO/util_load_nsfile.html" class="code" title="function [ handle ] = util_load_nsfile( filename )">util_load_nsfile</a>	UTIL_LOAD_NSFILE Read a data file in Neuroshare format then returns a handle.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, hFile] = ns_OpenFile(filename);</a>
+0002 
+0003 <span class="comment">%ns_OpenFile   Opens a neural data file</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%       [ns_RESULT, hFile] = ns_OpenFile('filename.ext')</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Description:</span>
+0009 <span class="comment">%       Opens the file specified by filename and returns a file handle,</span>
+0010 <span class="comment">%       hFile, that is used to access the opened file.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Parameters:</span>
+0013 <span class="comment">%       filename    Pointer to a null-terminated string that specifies the</span>
+0014 <span class="comment">%                   name of the file to open.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Return Values:</span>
+0017 <span class="comment">%       hFile        Handle/Indentification number to the opened file.</span>
+0018 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0019 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0020 <span class="comment">%                   generated:</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%                       ns_TYPEERROR    Library unable to open file type</span>
+0023 <span class="comment">%                       ns_FILEERROR    File access or read error</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   Remarks:</span>
+0026 <span class="comment">%       All files are opened for read-only, as no writing capabilities have</span>
+0027 <span class="comment">%       been implemented.  If the command succeeds in opening the file, the</span>
+0028 <span class="comment">%       application should call ns_CloseFile for each open file before</span>
+0029 <span class="comment">%       terminating.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%       This function has to be called before any other Neuroshare function</span>
+0032 <span class="comment">%       is called.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0035 <span class="comment">%   Author: Almut Branner</span>
+0036 <span class="comment">%   Last modification: 6/20/2003</span>
+0037 
+0038 [ns_RESULT, hFile] = mexprog(1, filename);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

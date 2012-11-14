@@ -1,0 +1,561 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_topo</title>
+  <meta name="keywords" content="util_plot_topo">
+  <meta name="description" content="UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_topo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping
+   Input:
+           w_elec:     Vector containning the sizes of each electrode.
+           w_link:     The correlation matrix of the array.
+                       w_link(i,j) is the weight from electrode i to j (hwid).
+           gnds:       Grounding electrodes.
+
+           maxmin:     [max min], if provided, only plot links within this range.
+                       This may be useful when comparing among different
+                       DIVs.
+                       default: [1 0]
+
+           unit:       'direct' / 'scaled'
+                       @direct[default]: Only plot data in [max min],
+                                         values &gt; max or &lt; min will not
+                                         plotted.
+                       @scaled: in percentage. Plot data from max% to
+                                         min%.
+
+           drawline:   'strong' links first, or 'weak' links first
+           selected_ch:
+                       if not provided, the program will plot all channels
+                       topology.
+                       if provided, the program will only plot connections
+                       related to selected channels.
+           issymmetric:
+                       When you are using 'selected_ch', if true, only draw lines from
+                       'selected_ch', but not lines to 'selected_ch'.
+                       When not using 'selected_ch', if true, only draw
+                       lines from a to b, but not b to a.
+                       default = false. 
+
+           method:     Drawing method. default = 'plot'
+                       plot: Solid single colored lines
+                       alpha: With alpha blending.
+
+   Please note: 
+           If one of w_elec and w_link is [], the program be still running. 
+
+   Explain:
+           Asymmetric, means the values between a &amp; b is different from b &amp; a.
+           Symmetric, we will only calculate once, then copy the value to
+           its symmetric pair.
+
+           show_axis:  Decides whether the axis will be shown, default = 0.
+
+           colormap_link:  The colormap of links.
+           color_empty_elec_face:
+           color_empty_elec_edge:
+           color_full_elec_face:
+           color_full_elec_edge:
+           width_empty_elec:
+           width_max_link:
+           width_min_link:
+           width_granularity:
+           size_empty_elec:
+           size_full_elec:
+           size_granularity:
+
+                       Please refer to the program, these values have
+                       their default value.
+   Output:
+           degree:     If provided w_link, and ~w_elec, this is the degree mapping
+                       which is w_elec actually.
+                       If w_elec is provided, then degree = w_elec.
+   Example:
+           util_plot_topo( [], matrix, [28],'drawline', 'weak', 'maxmin',
+           [1 0.1], 'unit', 'direct', 'selected_ch', [35], 'issymmetric', 1, 'show_axis', 1);
+
+
+   Created on Apr/01/2011 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-04-03  Bug fix. Now @direct mode, the data range among
+                       different trials can be fixed by [max min]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../Common/util_set_colorbar.html" class="code" title="function [ handle ] = util_set_colorbar( map )">util_set_colorbar</a>	UTIL_SET_COLORBAR Get a styled colorbar</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>	UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</li><li><a href="util_plot_curve.html" class="code" title="function util_plot_curve(x1,y1,x2,y2,  lwidth,lcolor,lalpha,  min_radian,modified_length,  method)">util_plot_curve</a>	UTIL_PLOT_CURVE Plot a curve from (x1,y1) to (x2,y2)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [x y] = sub_get_electrode_position(chid)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )</a>
+0002 <span class="comment">%UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           w_elec:     Vector containning the sizes of each electrode.</span>
+0005 <span class="comment">%           w_link:     The correlation matrix of the array.</span>
+0006 <span class="comment">%                       w_link(i,j) is the weight from electrode i to j (hwid).</span>
+0007 <span class="comment">%           gnds:       Grounding electrodes.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%           maxmin:     [max min], if provided, only plot links within this range.</span>
+0010 <span class="comment">%                       This may be useful when comparing among different</span>
+0011 <span class="comment">%                       DIVs.</span>
+0012 <span class="comment">%                       default: [1 0]</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%           unit:       'direct' / 'scaled'</span>
+0015 <span class="comment">%                       @direct[default]: Only plot data in [max min],</span>
+0016 <span class="comment">%                                         values &gt; max or &lt; min will not</span>
+0017 <span class="comment">%                                         plotted.</span>
+0018 <span class="comment">%                       @scaled: in percentage. Plot data from max% to</span>
+0019 <span class="comment">%                                         min%.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%           drawline:   'strong' links first, or 'weak' links first</span>
+0022 <span class="comment">%           selected_ch:</span>
+0023 <span class="comment">%                       if not provided, the program will plot all channels</span>
+0024 <span class="comment">%                       topology.</span>
+0025 <span class="comment">%                       if provided, the program will only plot connections</span>
+0026 <span class="comment">%                       related to selected channels.</span>
+0027 <span class="comment">%           issymmetric:</span>
+0028 <span class="comment">%                       When you are using 'selected_ch', if true, only draw lines from</span>
+0029 <span class="comment">%                       'selected_ch', but not lines to 'selected_ch'.</span>
+0030 <span class="comment">%                       When not using 'selected_ch', if true, only draw</span>
+0031 <span class="comment">%                       lines from a to b, but not b to a.</span>
+0032 <span class="comment">%                       default = false.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%           method:     Drawing method. default = 'plot'</span>
+0035 <span class="comment">%                       plot: Solid single colored lines</span>
+0036 <span class="comment">%                       alpha: With alpha blending.</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%   Please note:</span>
+0039 <span class="comment">%           If one of w_elec and w_link is [], the program be still running.</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%   Explain:</span>
+0042 <span class="comment">%           Asymmetric, means the values between a &amp; b is different from b &amp; a.</span>
+0043 <span class="comment">%           Symmetric, we will only calculate once, then copy the value to</span>
+0044 <span class="comment">%           its symmetric pair.</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%           show_axis:  Decides whether the axis will be shown, default = 0.</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%           colormap_link:  The colormap of links.</span>
+0049 <span class="comment">%           color_empty_elec_face:</span>
+0050 <span class="comment">%           color_empty_elec_edge:</span>
+0051 <span class="comment">%           color_full_elec_face:</span>
+0052 <span class="comment">%           color_full_elec_edge:</span>
+0053 <span class="comment">%           width_empty_elec:</span>
+0054 <span class="comment">%           width_max_link:</span>
+0055 <span class="comment">%           width_min_link:</span>
+0056 <span class="comment">%           width_granularity:</span>
+0057 <span class="comment">%           size_empty_elec:</span>
+0058 <span class="comment">%           size_full_elec:</span>
+0059 <span class="comment">%           size_granularity:</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%                       Please refer to the program, these values have</span>
+0062 <span class="comment">%                       their default value.</span>
+0063 <span class="comment">%   Output:</span>
+0064 <span class="comment">%           degree:     If provided w_link, and ~w_elec, this is the degree mapping</span>
+0065 <span class="comment">%                       which is w_elec actually.</span>
+0066 <span class="comment">%                       If w_elec is provided, then degree = w_elec.</span>
+0067 <span class="comment">%   Example:</span>
+0068 <span class="comment">%           util_plot_topo( [], matrix, [28],'drawline', 'weak', 'maxmin',</span>
+0069 <span class="comment">%           [1 0.1], 'unit', 'direct', 'selected_ch', [35], 'issymmetric', 1, 'show_axis', 1);</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">%   Created on Apr/01/2011 By Pu Jiangbo</span>
+0073 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">%   $Revision:</span>
+0076 <span class="comment">%       PJB#2011-04-03  Bug fix. Now @direct mode, the data range among</span>
+0077 <span class="comment">%                       different trials can be fixed by [max min]</span>
+0078 
+0079 
+0080 
+0081 
+0082 <span class="comment">% Check parameters</span>
+0083 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0084 
+0085 <span class="keyword">if</span> isempty(w_elec) &amp;&amp; isempty(w_link)
+0086     error(<span class="string">'w_elec and w_link is all empty, you should provide one at least.'</span>)
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> ~exist(<span class="string">'color_empty_elec_face'</span>, <span class="string">'var'</span>)
+0090     <span class="comment">% The face color of empty electrode outline</span>
+0091     color_empty_elec_face = [0.75 0.75 0.75];
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="keyword">if</span> ~exist(<span class="string">'color_empty_elec_edge'</span>, <span class="string">'var'</span>)
+0095     <span class="comment">% The line color of empty electrode outline</span>
+0096     color_empty_elec_edge = [0 0 0];
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="keyword">if</span> ~exist(<span class="string">'color_full_elec_face'</span>, <span class="string">'var'</span>)
+0100     <span class="comment">% The face color of empty electrode outline</span>
+0101     color_full_elec_face = [0 0 0];
+0102 <span class="keyword">end</span>
+0103 
+0104 <span class="keyword">if</span> ~exist(<span class="string">'color_full_elec_edge'</span>, <span class="string">'var'</span>)
+0105     <span class="comment">% The line color of empty electrode outline</span>
+0106     color_full_elec_edge = [0 0 0];
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="keyword">if</span> ~exist(<span class="string">'width_empty_elec'</span>, <span class="string">'var'</span>)
+0110     <span class="comment">% The line width of empty electrode outline</span>
+0111     width_empty_elec = 0.75;
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="keyword">if</span> ~exist(<span class="string">'width_max_link'</span>, <span class="string">'var'</span>)
+0115     <span class="comment">% The minimum line width of a link</span>
+0116     width_max_link = 10;
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="keyword">if</span> ~exist(<span class="string">'width_min_link'</span>, <span class="string">'var'</span>)
+0120     <span class="comment">% The minimum line width of a link</span>
+0121     width_min_link = 1;
+0122 <span class="keyword">end</span>
+0123 
+0124 <span class="keyword">if</span> ~exist(<span class="string">'width_granularity'</span>, <span class="string">'var'</span>)
+0125     <span class="comment">% The granularity between max/min width link</span>
+0126     width_granularity = 50;
+0127 <span class="keyword">end</span>
+0128 
+0129 <span class="keyword">if</span> ~exist(<span class="string">'size_empty_elec'</span>, <span class="string">'var'</span>)
+0130     <span class="comment">% The size of empty electrodes</span>
+0131     size_empty_elec = 2;
+0132 <span class="keyword">end</span>
+0133 
+0134 <span class="keyword">if</span> ~exist(<span class="string">'size_full_elec'</span>, <span class="string">'var'</span>)
+0135     <span class="comment">% The size of full electrodes</span>
+0136     size_full_elec = 17;
+0137 <span class="keyword">end</span>
+0138 
+0139 <span class="keyword">if</span> ~exist(<span class="string">'size_granularity'</span>, <span class="string">'var'</span>)
+0140     <span class="comment">% The granularity between max/min electrode size</span>
+0141     size_granularity = 50;
+0142 <span class="keyword">end</span>
+0143 
+0144 <span class="keyword">if</span> ~exist(<span class="string">'drawline'</span>, <span class="string">'var'</span>)
+0145     drawline = <span class="string">'strong'</span>;
+0146 <span class="keyword">end</span>
+0147 
+0148 <span class="keyword">if</span> ~exist(<span class="string">'show_axis'</span>, <span class="string">'var'</span>)
+0149     <span class="comment">% Show the axis</span>
+0150     show_axis = false;
+0151 <span class="keyword">end</span>
+0152 
+0153 <span class="keyword">if</span> ~exist(<span class="string">'colormap_link'</span>, <span class="string">'var'</span>)
+0154     h = figure();
+0155     colormap_link = <a href="util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>(<span class="string">'esa'</span>);
+0156     close(h);
+0157 <span class="keyword">end</span>
+0158 
+0159 <span class="keyword">if</span> ~exist(<span class="string">'maxmin'</span>, <span class="string">'var'</span>)
+0160     maxmin = [1 0];
+0161 <span class="keyword">end</span>
+0162 
+0163 <span class="keyword">if</span> ~exist(<span class="string">'unit'</span>, <span class="string">'var'</span>)
+0164     unit = <span class="string">'direct'</span>;
+0165 <span class="keyword">end</span>
+0166 
+0167 <span class="keyword">if</span> ~exist(<span class="string">'issymmetric'</span>, <span class="string">'var'</span>)
+0168     issymmetric = false;
+0169 <span class="keyword">end</span>
+0170 
+0171 <span class="keyword">if</span> ~exist(<span class="string">'selected_ch'</span>, <span class="string">'var'</span>)
+0172     selected_ch = [];
+0173 <span class="keyword">end</span>
+0174 
+0175 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0176     method = <span class="string">'plot'</span>;
+0177 <span class="keyword">end</span>
+0178 
+0179 <span class="comment">% Draw the 8*8 positions of all electrodes</span>
+0180 figure, hold on
+0181 <span class="keyword">for</span> i = 1:8
+0182     <span class="keyword">for</span> j = 1:8
+0183         curr_chid = i*10 + j;
+0184         <span class="keyword">if</span> <a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(curr_chid, [11 88 18 81 gnds])
+0185             <span class="keyword">continue</span>;
+0186         <span class="keyword">end</span>
+0187         plot(i, j, <span class="string">'o'</span>, <span class="string">'LineWidth'</span>, width_empty_elec, <span class="string">'MarkerEdgeColor'</span>, color_empty_elec_edge, <span class="string">'MarkerFaceColor'</span>, color_empty_elec_face, <span class="keyword">...</span>
+0188              <span class="string">'MarkerSize'</span>, size_empty_elec);
+0189     <span class="keyword">end</span>
+0190 <span class="keyword">end</span>
+0191 axis([0 9 0 9]); axis ij
+0192 <span class="keyword">if</span> ~show_axis
+0193     axis off;
+0194 <span class="keyword">end</span>
+0195 hold off;
+0196 
+0197 <span class="comment">% Rendering sequence (can be changed with switch 'drawline')</span>
+0198 <span class="comment">% Draw the strong links first, then the weak links to emphasize the weak</span>
+0199 <span class="comment">% links. Afterwards, the dots (electrodes)</span>
+0200 
+0201 <span class="comment">% Draw the links first, if we have w_link</span>
+0202 <span class="comment">% In w_link, w_link(i,j) is the weight from i to j.</span>
+0203 <span class="keyword">if</span> ~isempty(w_link)
+0204     <span class="comment">% Clean up the auto-correlation</span>
+0205     <span class="keyword">for</span> i = 1:64
+0206         w_link(i,i) = 0;
+0207     <span class="keyword">end</span>
+0208     
+0209     <span class="comment">% Get how many value level in the link matrix</span>
+0210     unique_values = unique(w_link(w_link &gt; 0)); <span class="comment">% Unique values in the w_link</span>
+0211     unique_values = unique_values(end:-1:1);     <span class="comment">% Revert, now from big to small</span>
+0212     
+0213     <span class="comment">% The real max/min</span>
+0214     real_max = unique_values(1);
+0215     real_min = unique_values(end);
+0216     
+0217     <span class="keyword">if</span> issymmetric || ~isempty(selected_ch)
+0218         <span class="comment">% Preserve old link</span>
+0219         original_w_link = w_link;
+0220     <span class="keyword">end</span>
+0221     
+0222     <span class="comment">% Process if provided selected_ch</span>
+0223     <span class="keyword">if</span> ~isempty(selected_ch)
+0224         hwid_list = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(selected_ch);
+0225         w_link = zeros(size(original_w_link), <span class="string">'double'</span>);
+0226         w_link(hwid_list, :) = original_w_link(hwid_list, :);
+0227         <span class="keyword">if</span> ~issymmetric
+0228             w_link(:, hwid_list) = original_w_link(:, hwid_list);
+0229         <span class="keyword">end</span>
+0230     <span class="keyword">else</span>
+0231         <span class="comment">% Remove symmetrical information</span>
+0232         <span class="keyword">if</span> issymmetric
+0233             <span class="keyword">for</span> i = 1:64
+0234                 <span class="keyword">for</span> j = i:64
+0235                     w_link(i,j) = 0;
+0236                 <span class="keyword">end</span>
+0237             <span class="keyword">end</span>
+0238         <span class="keyword">end</span>
+0239     <span class="keyword">end</span>
+0240     
+0241     <span class="comment">% The range max/min</span>
+0242     <span class="keyword">if</span> strcmpi(unit, <span class="string">'direct'</span>)
+0243         range_max = maxmin(1);
+0244         range_min = maxmin(2);
+0245 
+0246         <span class="comment">% Check range</span>
+0247         <span class="keyword">if</span> range_max &lt; range_min
+0248             error(<span class="string">'wrong input - maxmin.'</span>);
+0249         <span class="keyword">end</span>
+0250         
+0251         <span class="comment">% Check range with real max/min values</span>
+0252         <span class="comment">% Fix the range with user provided max/min</span>
+0253         disp([<span class="string">'User Max: '</span> num2str(range_max)])
+0254         disp([<span class="string">'Real Max: '</span> num2str(real_max)])
+0255         <span class="keyword">if</span> range_max &gt; real_max
+0256             <span class="comment">% The real_max is set to user-defined max(range_max)</span>
+0257             real_max = range_max;
+0258             disp(<span class="string">'Max value has been set to user-defined value.'</span>);
+0259         <span class="keyword">end</span>
+0260         
+0261         disp([<span class="string">'User Min: '</span> num2str(range_min)])
+0262         disp([<span class="string">'Real Min: '</span> num2str(real_min)])
+0263         <span class="keyword">if</span> range_min &lt; real_min
+0264             <span class="comment">% The real_min is set to user-defined min(range_min)</span>
+0265             real_min = range_min;
+0266             disp(<span class="string">'Min value has been set to user-defined value.'</span>);
+0267         <span class="keyword">end</span>
+0268     <span class="keyword">else</span>
+0269         <span class="comment">% the max/min is given in percentage</span>
+0270         <span class="comment">% convert it into direct value</span>
+0271         <span class="keyword">if</span> maxmin(1) &gt; 1 || maxmin(2) &lt; 0 || maxmin(1) &lt; maxmin(2)
+0272             error(<span class="string">'wrong input - maxmin.'</span>);
+0273         <span class="keyword">end</span>
+0274         range_max_index = round(length(unique_values) * (1-maxmin(1)));
+0275         range_min_index = round(length(unique_values) * (1-maxmin(2)));
+0276         <span class="keyword">if</span> range_max_index &lt; 1
+0277             range_max_index = 1;
+0278         <span class="keyword">end</span>
+0279         <span class="keyword">if</span> range_min_index &lt; 1
+0280             range_min_index = 1;
+0281         <span class="keyword">end</span>        
+0282         <span class="keyword">if</span> range_max_index &gt; length(unique_values)
+0283             range_max_index = length(unique_values);
+0284         <span class="keyword">end</span>
+0285         <span class="keyword">if</span> range_min_index &gt; length(unique_values)
+0286             range_min_index = length(unique_values);
+0287         <span class="keyword">end</span>
+0288         range_max = unique_values(range_max_index);
+0289         range_min = unique_values(range_min_index);
+0290     <span class="keyword">end</span>
+0291     <span class="comment">% Filtering the values</span>
+0292     <span class="comment">% Data&gt;Max or &lt;Min will not shown</span>
+0293     <span class="comment">% ===================&gt; Note: unique_values have changed its length</span>
+0294     unique_values(unique_values &gt; range_max | unique_values &lt; range_min) = [];
+0295     <span class="comment">% Define the drawing sequence</span>
+0296     <span class="keyword">if</span> strcmpi(drawline ,<span class="string">'strong'</span>)
+0297         <span class="comment">% Draw strong links first</span>
+0298         slicing = (1:length(unique_values));
+0299     <span class="keyword">elseif</span> strcmpi(drawline, <span class="string">'weak'</span>)
+0300         <span class="comment">% Draw weak links first</span>
+0301         slicing = (length(unique_values):-1:1);
+0302     <span class="keyword">else</span>
+0303         error(<span class="string">'wrong input - drawline.'</span>);
+0304     <span class="keyword">end</span>
+0305     
+0306     <span class="comment">% Determine the width space</span>
+0307     lwidth_space = linspace(width_min_link, width_max_link, width_granularity);
+0308     
+0309     <span class="comment">% Draw loop</span>
+0310     <span class="keyword">for</span> i = slicing
+0311         <span class="comment">% Get current value in the unique value list</span>
+0312         <span class="comment">% Note: Big to small</span>
+0313         current_value = unique_values(i);
+0314         <span class="comment">% Get the pairs with current weight</span>
+0315         <span class="comment">% w_link(i,j) is weight from i to j, i is ref_ch, j is obs_ch</span>
+0316         [ref_ch obs_ch] = find(w_link == current_value);
+0317         ref_ch = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(ref_ch);
+0318         obs_ch = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(obs_ch);
+0319         num_pairs = length(ref_ch); <span class="comment">% Number of pairs</span>
+0320         <span class="keyword">for</span> j = 1:num_pairs
+0321             [x1 y1] = <a href="#_sub1" class="code" title="subfunction [x y] = sub_get_electrode_position(chid)">sub_get_electrode_position</a>(ref_ch(j));
+0322             [x2 y2] = <a href="#_sub1" class="code" title="subfunction [x y] = sub_get_electrode_position(chid)">sub_get_electrode_position</a>(obs_ch(j));
+0323             width_color_indexer = fix(current_value/real_max * width_granularity);
+0324             <span class="keyword">if</span> width_color_indexer &lt; 1
+0325                 width_color_indexer = 1;
+0326             <span class="keyword">end</span>
+0327             <span class="keyword">if</span> width_color_indexer &gt; width_granularity
+0328                 width_color_indexer = width_granularity;
+0329             <span class="keyword">end</span>
+0330             lwidth = lwidth_space(width_color_indexer);
+0331             lcolor = colormap_link(width_color_indexer, :);
+0332             <span class="keyword">if</span> strcmpi(method, <span class="string">'plot'</span>)
+0333                 <a href="util_plot_curve.html" class="code" title="function util_plot_curve(x1,y1,x2,y2,  lwidth,lcolor,lalpha,  min_radian,modified_length,  method)">util_plot_curve</a>(x1,y1,x2,y2,lwidth,lcolor,[],[],[],<span class="string">'plot'</span>);
+0334             <span class="keyword">else</span>
+0335                 <a href="util_plot_curve.html" class="code" title="function util_plot_curve(x1,y1,x2,y2,  lwidth,lcolor,lalpha,  min_radian,modified_length,  method)">util_plot_curve</a>(x1,y1,x2,y2,lwidth,lcolor,[0.3 1],[],[],<span class="string">'alpha'</span>);
+0336                 <span class="comment">% ==========================</span>
+0337                 <span class="comment">% Other method could be used</span>
+0338                 <span class="comment">%util_plot_curve(x1,y1,x2,y2,lwidth,width_color_indexer*width_granularity/size(colormap_link, 1),[],[],[],'gradient');   % 64 is the length of colormap</span>
+0339             <span class="keyword">end</span>
+0340 
+0341         <span class="keyword">end</span>
+0342     <span class="keyword">end</span>
+0343     
+0344     <span class="comment">% Setup the colorbar</span>
+0345     cbar = <a href="../Common/util_set_colorbar.html" class="code" title="function [ handle ] = util_set_colorbar( map )">util_set_colorbar</a>(colormap_link);
+0346     <span class="comment">% Label selected range</span>
+0347     <span class="keyword">if</span> range_min ~= real_min
+0348         yticks = [1 fix(range_min/(real_max) * width_granularity)];
+0349         ytickl = {real_min, range_min};
+0350     <span class="keyword">else</span> 
+0351         yticks = 1;
+0352         ytickl = {real_min};
+0353     <span class="keyword">end</span>
+0354     <span class="keyword">if</span> range_max ~= real_max
+0355         yticks = [yticks fix(range_max/real_max * width_granularity) size(colormap_link, 1)];
+0356         ytickl = [ytickl, {range_max, real_max}];
+0357     <span class="keyword">else</span>
+0358         yticks = [yticks size(colormap_link, 1)];
+0359         ytickl = [ytickl, {real_max}];
+0360     <span class="keyword">end</span>
+0361     <span class="comment">% Check if overlapped</span>
+0362     [yticks overlapped_sorted_index] = unique(yticks);
+0363     ytickl = ytickl(overlapped_sorted_index);
+0364     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(cbar, <span class="string">'YTick'</span>, yticks);
+0365     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(cbar, <span class="string">'YTickLabel'</span>, ytickl);
+0366 <span class="keyword">end</span>
+0367 
+0368 <span class="comment">% Draw the electrode mapping</span>
+0369 <span class="comment">% Checking if we have w_elec</span>
+0370 <span class="keyword">if</span> isempty(w_elec)
+0371     <span class="comment">% The user didn't provide w_elec, which means w_elec is the degree of</span>
+0372     <span class="comment">% each electrode</span>
+0373     
+0374     <span class="comment">% Restore the oringial w_link if issymmetric or selected_ch have taken</span>
+0375     <span class="comment">% effect</span>
+0376     <span class="comment">% Note: the auto-correlation have been cleaned up already.</span>
+0377     <span class="keyword">if</span> issymmetric || ~isempty(selected_ch)
+0378         w_link = original_w_link;
+0379     <span class="keyword">end</span>
+0380     
+0381     <span class="comment">% Filtering w_link by range_min</span>
+0382     w_link(w_link &lt; range_min) = 0;
+0383     
+0384     <span class="comment">% init</span>
+0385     w_elec = zeros(1, 64);
+0386     
+0387     <span class="comment">% Calc connectivity degrees</span>
+0388     <span class="keyword">for</span> i = 1:64
+0389         w_elec(i) = length(find(w_link(i, :) ~= 0)) + length(find(w_link(:, i) ~= 0));
+0390     <span class="keyword">end</span>
+0391     
+0392     <span class="comment">% Get the max value for normalization</span>
+0393     <span class="comment">% (max degree will changed from trials to trials)</span>
+0394     max_w_elec = 60 - length(gnds);
+0395 <span class="keyword">else</span>
+0396     <span class="comment">% Get the max value for normalization</span>
+0397     max_w_elec = max(w_elec);
+0398 <span class="keyword">end</span>
+0399 
+0400 <span class="comment">% Do drawing (electrodes)</span>
+0401 <span class="comment">% Convert to axis position</span>
+0402 size_space = linspace(size_empty_elec, size_full_elec, size_granularity);
+0403 
+0404 hold on
+0405 <span class="keyword">for</span> i = 1:length(w_elec)
+0406     <span class="keyword">if</span> w_elec(i) ~= 0
+0407         [w_elec_pos_x w_elec_pos_y] = <a href="#_sub1" class="code" title="subfunction [x y] = sub_get_electrode_position(chid)">sub_get_electrode_position</a>(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(i));
+0408         size_indexer = fix(w_elec(i) / max_w_elec * size_granularity);
+0409         <span class="keyword">if</span> size_indexer &lt; 1
+0410             size_indexer = 1;
+0411         <span class="keyword">end</span>
+0412         <span class="keyword">if</span> size_indexer &gt; size_granularity
+0413             size_indexer = size_granularity;
+0414         <span class="keyword">end</span>
+0415         plot(w_elec_pos_x, w_elec_pos_y, <span class="string">'o'</span>, <span class="string">'MarkerSize'</span>, size_space(size_indexer), <span class="keyword">...</span>
+0416             <span class="string">'LineWidth'</span>, 1, <span class="string">'MarkerEdgeColor'</span>, color_full_elec_edge, <span class="string">'MarkerFaceColor'</span>, color_full_elec_face);
+0417     <span class="keyword">end</span>
+0418 <span class="keyword">end</span>
+0419 hold off
+0420 
+0421 degree = w_elec;
+0422 
+0423 <span class="keyword">end</span>
+0424 
+0425 
+0426 <a name="_sub1" href="#_subfunctions" class="code">function [x y] = sub_get_electrode_position(chid)</a>
+0427 <span class="comment">%SUB_GET_ELECTRODE_POSITION Get electrode position from chid</span>
+0428 <span class="comment">%   For example:    12 = [1, 2]</span>
+0429 <span class="comment">%                   87 = [8, 7]</span>
+0430 x = fix(chid / 10);
+0431 y = rem(chid, 10);
+0432 <span class="keyword">end</span>
+0433 
+0434</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

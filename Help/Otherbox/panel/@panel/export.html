@@ -1,0 +1,480 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of export</title>
+  <meta name="keywords" content="export">
+  <meta name="description" content="info = export(p, ...)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>export
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>info = export(p, ...)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function info = export(p, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> info = export(p, ...)
+
+ export the figure containing panel &quot;p&quot; to an image file.
+
+ additional arguments may be the filename (any string not
+ beginning &quot;-&quot;) or an option string, beginning with a &quot;-&quot;
+ character, followed by an option character, followed by
+ the option data. if you do not specify the filename
+ extension, one will be added for you suitable to the
+ output format. if you do not specify a filename, the name
+ &quot;export&quot; will be used. if you ask for an output &quot;info&quot;,
+ some results are returned.
+
+ export sizing should usually be achieved using the &quot;paper
+ model&quot;. therein, you specify the target (how much of one
+ column on a piece of paper), the orientation, and the
+ resolution (dpi), and the size is worked out for you
+ automagically. options concerned with controlling the
+ paper model are as follows.
+
+ PAPER MODEL:
+
+ -p paper type, A2-A6, letter (default is A4)
+ -l landscape mode (default is portrait)
+ -m margins in mm [specify 1 (all), 2 (x and y)
+    or 4 (left, bottom, right, top)] (default is 20mm all
+    round)
+ -i inter-column space in mm (default is 5mm)
+ -c number of columns (default is 1)
+ -f fill [(w)hole, (tt)wo thirds, (h)alf,
+    (t)hird, (q)uarter, (s)quare, or -f.&lt;number&gt;]
+    to fill a specified fractional part of the
+    available space (default is whole)
+
+ the procedure is to choose the size of paper that is
+ targeted (and its orientation), to specify the unused
+ margins around the edge (if you specify 4 margins, the
+ left-right and top-bottom sums will be the figures used to
+ deduce the size of the &quot;printable&quot; paper region), to
+ specify the number of columns (and inter-columns space if
+ more than one), and finally to dictate how much of the
+ height of one of those columns you want the figure to
+ occupy. note that no room is left automatically for a
+ caption. if the paper model is unsatisfactory, you can
+ specify the width and height explicitly, in which case all
+ paper model options are ignored.
+
+ ALTERNATIVE TO PAPER MODEL:
+
+ -w explicit width (default is to use paper model)
+ -h explicit height (default is to use paper model)
+
+ finally, a few options are provided to control how the
+ prepared figure is exported. note that dpi below 150 is
+ not recommended except for sizing drafts, since font and
+ line sizes are not rendered even vaguely accurately in
+ some cases.
+
+ EXPORT:
+
+ -rd (draft) 75 dpi
+ -rn (normal) 150 dpi (default)
+ -rf (final) 300 dpi
+ -rx (extreme) 600 dpi
+ -r# (custom) as specified, must be 75-2400
+    note that extreme is probably overkill even for
+    camera-ready, hence the name.
+ -s print sideways (default is to print upright)
+ -o output format [eps, jpg, png (default)]
+
+ EXAMPLES:
+
+ simple export of a sizing draft (75dpi) to fill a page of
+ A4 leaving no room for a caption, as a png file:
+
+ export(p, '-rd', 'myfig')
+
+ default export of a figure that is targeted to fill all of
+ one of two columns on a piece of landscape A5, leaving 15%
+ of the column for the caption:
+
+ export(p, '-pA5', '-l', '-c2', '-f.85')</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li><li><a href="../../../Otherbox/panel/panel_demo_4.html" class="code" title="">panel_demo_4</a>	% PANEL DEMO 4</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function info = export(p, varargin)</a>
+0002 
+0003 <span class="comment">% info = export(p, ...)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% export the figure containing panel &quot;p&quot; to an image file.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% additional arguments may be the filename (any string not</span>
+0008 <span class="comment">% beginning &quot;-&quot;) or an option string, beginning with a &quot;-&quot;</span>
+0009 <span class="comment">% character, followed by an option character, followed by</span>
+0010 <span class="comment">% the option data. if you do not specify the filename</span>
+0011 <span class="comment">% extension, one will be added for you suitable to the</span>
+0012 <span class="comment">% output format. if you do not specify a filename, the name</span>
+0013 <span class="comment">% &quot;export&quot; will be used. if you ask for an output &quot;info&quot;,</span>
+0014 <span class="comment">% some results are returned.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% export sizing should usually be achieved using the &quot;paper</span>
+0017 <span class="comment">% model&quot;. therein, you specify the target (how much of one</span>
+0018 <span class="comment">% column on a piece of paper), the orientation, and the</span>
+0019 <span class="comment">% resolution (dpi), and the size is worked out for you</span>
+0020 <span class="comment">% automagically. options concerned with controlling the</span>
+0021 <span class="comment">% paper model are as follows.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% PAPER MODEL:</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% -p paper type, A2-A6, letter (default is A4)</span>
+0026 <span class="comment">% -l landscape mode (default is portrait)</span>
+0027 <span class="comment">% -m margins in mm [specify 1 (all), 2 (x and y)</span>
+0028 <span class="comment">%    or 4 (left, bottom, right, top)] (default is 20mm all</span>
+0029 <span class="comment">%    round)</span>
+0030 <span class="comment">% -i inter-column space in mm (default is 5mm)</span>
+0031 <span class="comment">% -c number of columns (default is 1)</span>
+0032 <span class="comment">% -f fill [(w)hole, (tt)wo thirds, (h)alf,</span>
+0033 <span class="comment">%    (t)hird, (q)uarter, (s)quare, or -f.&lt;number&gt;]</span>
+0034 <span class="comment">%    to fill a specified fractional part of the</span>
+0035 <span class="comment">%    available space (default is whole)</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% the procedure is to choose the size of paper that is</span>
+0038 <span class="comment">% targeted (and its orientation), to specify the unused</span>
+0039 <span class="comment">% margins around the edge (if you specify 4 margins, the</span>
+0040 <span class="comment">% left-right and top-bottom sums will be the figures used to</span>
+0041 <span class="comment">% deduce the size of the &quot;printable&quot; paper region), to</span>
+0042 <span class="comment">% specify the number of columns (and inter-columns space if</span>
+0043 <span class="comment">% more than one), and finally to dictate how much of the</span>
+0044 <span class="comment">% height of one of those columns you want the figure to</span>
+0045 <span class="comment">% occupy. note that no room is left automatically for a</span>
+0046 <span class="comment">% caption. if the paper model is unsatisfactory, you can</span>
+0047 <span class="comment">% specify the width and height explicitly, in which case all</span>
+0048 <span class="comment">% paper model options are ignored.</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% ALTERNATIVE TO PAPER MODEL:</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% -w explicit width (default is to use paper model)</span>
+0053 <span class="comment">% -h explicit height (default is to use paper model)</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% finally, a few options are provided to control how the</span>
+0056 <span class="comment">% prepared figure is exported. note that dpi below 150 is</span>
+0057 <span class="comment">% not recommended except for sizing drafts, since font and</span>
+0058 <span class="comment">% line sizes are not rendered even vaguely accurately in</span>
+0059 <span class="comment">% some cases.</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% EXPORT:</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% -rd (draft) 75 dpi</span>
+0064 <span class="comment">% -rn (normal) 150 dpi (default)</span>
+0065 <span class="comment">% -rf (final) 300 dpi</span>
+0066 <span class="comment">% -rx (extreme) 600 dpi</span>
+0067 <span class="comment">% -r# (custom) as specified, must be 75-2400</span>
+0068 <span class="comment">%    note that extreme is probably overkill even for</span>
+0069 <span class="comment">%    camera-ready, hence the name.</span>
+0070 <span class="comment">% -s print sideways (default is to print upright)</span>
+0071 <span class="comment">% -o output format [eps, jpg, png (default)]</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% EXAMPLES:</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">% simple export of a sizing draft (75dpi) to fill a page of</span>
+0076 <span class="comment">% A4 leaving no room for a caption, as a png file:</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% export(p, '-rd', 'myfig')</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% default export of a figure that is targeted to fill all of</span>
+0081 <span class="comment">% one of two columns on a piece of landscape A5, leaving 15%</span>
+0082 <span class="comment">% of the column for the caption:</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">% export(p, '-pA5', '-l', '-c2', '-f.85')</span>
+0085 
+0086 
+0087 
+0088 <span class="comment">% if not root, find root</span>
+0089 p = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'root'</span>);
+0090 
+0091 <span class="comment">% get P</span>
+0092 P = <a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(p);
+0093 
+0094 <span class="comment">% default arguments</span>
+0095 pars = [];
+0096 pars.fmt = <span class="string">'png'</span>;
+0097 pars.dpi = 150;
+0098 pars.paper = <span class="string">'A4'</span>;
+0099 pars.landscape = false;
+0100 pars.fill = 1;
+0101 pars.cols = 1;
+0102 pars.intercolumnspacing = 5;
+0103 pars.margins = 20;
+0104 pars.file = <span class="string">'export'</span>;
+0105 pars.sideways = false;
+0106 pars.width = 0;
+0107 pars.height = 0;
+0108 
+0109 <span class="comment">% interpret arguments</span>
+0110 <span class="keyword">for</span> n = 2:nargin
+0111     
+0112     arg = varargin{n-1};
+0113     
+0114     <span class="keyword">if</span> ischar(arg)
+0115         
+0116         <span class="keyword">if</span> arg(1) == <span class="string">'-'</span>
+0117             <span class="keyword">switch</span> arg(2)
+0118                 
+0119                 <span class="keyword">case</span> <span class="string">'p'</span>
+0120                     <span class="comment">% paper type</span>
+0121                     <span class="keyword">switch</span>(arg(3:end))
+0122                         <span class="keyword">case</span> {<span class="string">'A0'</span>, <span class="string">'A1'</span>, <span class="string">'A2'</span>, <span class="string">'A3'</span>, <span class="string">'A4'</span>, <span class="string">'A5'</span>, <span class="string">'A6'</span>, <span class="string">'letter'</span>}
+0123                             pars.paper = arg(3:end);
+0124                             <span class="keyword">continue</span>
+0125                     <span class="keyword">end</span>
+0126                     
+0127                 <span class="keyword">case</span> <span class="string">'l'</span>
+0128                     <span class="comment">% landscape paper mode</span>
+0129                     pars.landscape = true;
+0130                     <span class="keyword">continue</span>
+0131                 
+0132                 <span class="keyword">case</span> <span class="string">'f'</span>
+0133                     <span class="comment">% fill</span>
+0134                     <span class="keyword">switch</span>(arg(3:end))
+0135                         <span class="keyword">case</span> <span class="string">'w'</span> <span class="comment">% whole</span>
+0136                             pars.fill = 1;
+0137                             <span class="keyword">continue</span>
+0138                         <span class="keyword">case</span> <span class="string">'tt'</span> <span class="comment">% two thirds</span>
+0139                             pars.fill = 2/3;
+0140                             <span class="keyword">continue</span>
+0141                         <span class="keyword">case</span> <span class="string">'h'</span> <span class="comment">% half</span>
+0142                             pars.fill = 1/2;
+0143                             <span class="keyword">continue</span>
+0144                         <span class="keyword">case</span> <span class="string">'t'</span> <span class="comment">% third</span>
+0145                             pars.fill = 1/3;
+0146                             <span class="keyword">continue</span>
+0147                         <span class="keyword">case</span> <span class="string">'q'</span> <span class="comment">% quarter</span>
+0148                             pars.fill = 1/4;
+0149                             <span class="keyword">continue</span>
+0150                         <span class="keyword">case</span> <span class="string">'s'</span> <span class="comment">% square</span>
+0151                             pars.fill = 0;
+0152                             <span class="keyword">continue</span>
+0153                     <span class="keyword">end</span>
+0154                     <span class="keyword">if</span> arg(3) == <span class="string">'.'</span>
+0155                         pars.fill = str2num(arg(3:end));
+0156                         <span class="keyword">continue</span>
+0157                     <span class="keyword">end</span>
+0158                     
+0159                 <span class="keyword">case</span> <span class="string">'c'</span>
+0160                     <span class="comment">% number of columns</span>
+0161                     pars.cols = str2num(arg(3:end));
+0162                     <span class="keyword">continue</span>
+0163                     
+0164                 <span class="keyword">case</span> <span class="string">'m'</span>
+0165                     <span class="comment">% margins (mm)</span>
+0166                     pars.margins = str2num(arg(3:end));
+0167                     sz = size(pars.margins);
+0168                     <span class="keyword">if</span> ~(ndims(sz) == 2 &amp;&amp; sz(1) == 1 &amp;&amp; (sz(2) == 1 || sz(2) == 2 || sz(2) == 4))
+0169                         error(<span class="string">'invalid margins (should be 1x1, 2, or 4)'</span>)
+0170                     <span class="keyword">end</span>
+0171                     <span class="keyword">continue</span>
+0172                     
+0173                 <span class="keyword">case</span> <span class="string">'i'</span>
+0174                     <span class="comment">% inter-column space (mm)</span>
+0175                     pars.intercolumnspacing = str2num(arg(3:end));
+0176                     <span class="keyword">continue</span>
+0177                     
+0178                 <span class="keyword">case</span> <span class="string">'r'</span>
+0179                     <span class="comment">% resolution</span>
+0180                     <span class="keyword">if</span> length(arg) == 3
+0181                         f = find(<span class="string">'dnfx'</span> == arg(3));
+0182                         <span class="keyword">if</span> ~isempty(f)
+0183                             dpis = [75 150 300 600];
+0184                             pars.dpi = dpis(f);
+0185                             <span class="keyword">continue</span>
+0186                         <span class="keyword">end</span>
+0187                     <span class="keyword">else</span>
+0188                         pars.dpi = str2num(arg(3:end));
+0189                         <span class="keyword">if</span> pars.dpi &lt; 75 | pars.dpi &gt; 2400
+0190                             error([<span class="string">'illegal DPI (must be 75-2400)'</span>]);
+0191                         <span class="keyword">end</span>
+0192                         <span class="keyword">continue</span>
+0193                     <span class="keyword">end</span>
+0194                     
+0195                 <span class="keyword">case</span> <span class="string">'w'</span>
+0196                     <span class="comment">% explicit width</span>
+0197                     pars.width = str2num(arg(3:end));
+0198                     <span class="keyword">continue</span>
+0199                 
+0200                 <span class="keyword">case</span> <span class="string">'h'</span>
+0201                     <span class="comment">% explicit height</span>
+0202                     pars.height = str2num(arg(3:end));
+0203                     <span class="keyword">continue</span>
+0204                 
+0205                 <span class="keyword">case</span> <span class="string">'s'</span>
+0206                     <span class="comment">% print sideways</span>
+0207                     pars.sideways = true;
+0208                     <span class="keyword">continue</span>
+0209                     
+0210                 <span class="keyword">case</span> <span class="string">'o'</span>
+0211                     <span class="comment">% output format</span>
+0212                     pars.fmt = arg(3:end);
+0213                     <span class="keyword">continue</span>
+0214 
+0215             <span class="keyword">end</span>
+0216         <span class="keyword">else</span>
+0217             pars.file = arg;
+0218             <span class="keyword">continue</span>
+0219         <span class="keyword">end</span>
+0220 
+0221         error([<span class="string">'unrecognised argument &quot;'</span> arg <span class="string">'&quot;'</span>]);
+0222         
+0223         <span class="keyword">end</span>
+0224 
+0225 <span class="keyword">end</span>
+0226 
+0227 <span class="comment">% make sure filename has extension</span>
+0228 <span class="keyword">if</span> ~any(pars.file == <span class="string">'.'</span>)
+0229     pars.file = [pars.file <span class="string">'.'</span> pars.fmt];
+0230 <span class="keyword">end</span>
+0231 
+0232 <span class="comment">% get space for figure</span>
+0233 <span class="keyword">switch</span> pars.paper
+0234     <span class="keyword">case</span> <span class="string">'A0'</span>
+0235         sz = [841 1189];
+0236     <span class="keyword">case</span> <span class="string">'A1'</span>
+0237         sz = [594 841];
+0238     <span class="keyword">case</span> <span class="string">'A2'</span>
+0239         sz = [420 594];
+0240     <span class="keyword">case</span> <span class="string">'A3'</span>
+0241         sz = [297 420];
+0242     <span class="keyword">case</span> <span class="string">'A4'</span>
+0243         sz = [210 297];
+0244     <span class="keyword">case</span> <span class="string">'A5'</span>
+0245         sz = [148 210];
+0246     <span class="keyword">case</span> <span class="string">'A6'</span>
+0247         sz = [105 148];
+0248     <span class="keyword">case</span> <span class="string">'letter'</span>
+0249         sz = [216 279];
+0250     <span class="keyword">otherwise</span>
+0251         error([<span class="string">'unrecognised paper size &quot;'</span> pars.paper <span class="string">'&quot;'</span>])
+0252 <span class="keyword">end</span>
+0253 
+0254 <span class="comment">% orientation of paper</span>
+0255 <span class="keyword">if</span> pars.landscape
+0256     sz = fliplr(sz);
+0257 <span class="keyword">end</span>
+0258 
+0259 <span class="comment">% paper margins (can be specified as singlet, doublet, or</span>
+0260 <span class="comment">% quadruplet)</span>
+0261 <span class="keyword">if</span> length(pars.margins) == 1
+0262     margins = [2 2] * pars.margins;
+0263 <span class="keyword">elseif</span> length(pars.margins) == 2
+0264     margins = 2 * pars.margins;
+0265 <span class="keyword">elseif</span> length(pars.margins) == 4
+0266     margins = pars.margins(1:2) + pars.margins(3:4);
+0267 <span class="keyword">else</span>
+0268     error(<span class="string">'invalid margins'</span>);
+0269 <span class="keyword">end</span>
+0270 sz = sz - margins;
+0271 
+0272 <span class="comment">% divide by columns</span>
+0273 w = (sz(1) + pars.intercolumnspacing) / pars.cols - pars.intercolumnspacing;
+0274 sz(1) = w;
+0275 
+0276 <span class="comment">% divide by fill</span>
+0277 <span class="keyword">if</span> pars.fill
+0278     <span class="comment">% ratio</span>
+0279     sz(2) = sz(2) * pars.fill;
+0280 <span class="keyword">else</span>
+0281     <span class="comment">% square</span>
+0282     sz(2) = sz(1);
+0283 <span class="keyword">end</span>
+0284 
+0285 <span class="comment">% orientation of figure is upright, unless printing</span>
+0286 <span class="comment">% sideways, in which case the printing space is rotated</span>
+0287 <span class="comment">% too</span>
+0288 <span class="keyword">if</span> pars.sideways
+0289     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig, <span class="string">'PaperOrientation'</span>, <span class="string">'landscape'</span>)
+0290     sz = fliplr(sz);
+0291 <span class="keyword">else</span>
+0292     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig, <span class="string">'PaperOrientation'</span>, <span class="string">'portrait'</span>)
+0293 <span class="keyword">end</span>
+0294 
+0295 <span class="comment">% explicit measurements override automatics</span>
+0296 <span class="keyword">if</span> pars.width
+0297     sz(1) = pars.width;
+0298 <span class="keyword">end</span>
+0299 <span class="keyword">if</span> pars.height
+0300     sz(2) = pars.height;
+0301 <span class="keyword">end</span>
+0302 
+0303 <span class="comment">% set size of figure</span>
+0304 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig, <span class="string">'PaperUnits'</span>, <span class="string">'centimeters'</span>);
+0305 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig, <span class="string">'PaperPosition'</span>, [0 0 sz] / 10);
+0306 psz = sz / 25.4 * pars.dpi;
+0307 disp([<span class="string">'exporting to '</span> int2str(sz(1)) <span class="string">'x'</span> int2str(sz(2)) <span class="string">'mm ('</span> int2str(psz(1)) <span class="string">'x'</span> int2str(psz(2)) <span class="string">'px)'</span>])
+0308 
+0309 <span class="comment">% get output flag for print</span>
+0310 <span class="keyword">switch</span> pars.fmt
+0311     <span class="keyword">case</span> <span class="string">'jpg'</span>
+0312         dev = <span class="string">'-djpeg'</span>;
+0313     <span class="keyword">case</span> <span class="string">'png'</span>
+0314         dev = <span class="string">'-dpng'</span>;
+0315     <span class="keyword">case</span> <span class="string">'eps'</span>
+0316         dev = <span class="string">'-depsc2'</span>;
+0317 <span class="keyword">end</span>
+0318 
+0319 <span class="comment">% turn off autorender</span>
+0320 ar = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'autorender'</span>);
+0321 <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p, <span class="string">'autorender'</span>, false);
+0322 
+0323 <span class="comment">% pre-exporting render</span>
+0324 drawnow
+0325 <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p, <span class="string">'print'</span>, true); <span class="comment">% renderer will know to do anything print-specific</span>
+0326 w = warning(<span class="string">'off'</span>);
+0327 <a href="render.html" class="code" title="function render(p)">render</a>(p)
+0328 drawnow
+0329 
+0330 <span class="comment">% export</span>
+0331 print(p.fig, dev, [<span class="string">'-r'</span> int2str(pars.dpi)], pars.file)
+0332 warning(w);
+0333 <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p, <span class="string">'print'</span>, false);
+0334 drawnow
+0335 
+0336 <span class="comment">% re-render on screen, so it looks ok again on screen</span>
+0337 <a href="render.html" class="code" title="function render(p)">render</a>(p)
+0338 drawnow
+0339 
+0340 <span class="comment">% restore autorender setting</span>
+0341 <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p, <span class="string">'autorender'</span>, ar);
+0342 
+0343 <span class="comment">% info</span>
+0344 <span class="keyword">if</span> nargout
+0345     info = [];
+0346     info.sizemm = round(sz);
+0347     info.sizepx = round(psz);
+0348 <span class="keyword">end</span>
+0349 
+0350 
+0351</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

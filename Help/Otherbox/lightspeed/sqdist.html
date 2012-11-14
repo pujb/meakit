@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sqdist</title>
+  <meta name="keywords" content="sqdist">
+  <meta name="description" content="SQDIST      Squared Euclidean or Mahalanobis distance.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>sqdist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SQDIST      Squared Euclidean or Mahalanobis distance.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function m = sqdist(p, q, A) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> SQDIST      Squared Euclidean or Mahalanobis distance.
+ SQDIST(p,q)   returns m(i,j) = (p(:,i) - q(:,j))'*(p(:,i) - q(:,j)).
+ SQDIST(p,q,A) returns m(i,j) = (p(:,i) - q(:,j))'*A*(p(:,i) - q(:,j)).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>	COL_SUM   Sum for each column.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_sqdist.html" class="code" title="">test_sqdist</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function m = sqdist(p, q, A)</a>
+0002 <span class="comment">% SQDIST      Squared Euclidean or Mahalanobis distance.</span>
+0003 <span class="comment">% SQDIST(p,q)   returns m(i,j) = (p(:,i) - q(:,j))'*(p(:,i) - q(:,j)).</span>
+0004 <span class="comment">% SQDIST(p,q,A) returns m(i,j) = (p(:,i) - q(:,j))'*A*(p(:,i) - q(:,j)).</span>
+0005 
+0006 <span class="comment">% Written by Tom Minka</span>
+0007 
+0008 [d, pn] = size(p);
+0009 [d, qn] = size(q);
+0010 
+0011 <span class="keyword">if</span> pn == 0 || qn == 0
+0012   m = zeros(pn,qn);
+0013   <span class="keyword">return</span>
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="keyword">if</span> nargin == 2
+0017   
+0018   pmag = <a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(p .* p);
+0019   qmag = <a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(q .* q);
+0020   m = repmat(qmag, pn, 1) + repmat(pmag', 1, qn) - 2*p'*q;
+0021   <span class="comment">%m = ones(pn,1)*qmag + pmag'*ones(1,qn) - 2*p'*q;</span>
+0022   
+0023 <span class="keyword">else</span>
+0024 
+0025   Ap = A*p;
+0026   Aq = A*q;
+0027   pmag = <a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(p .* Ap);
+0028   qmag = <a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(q .* Aq);
+0029   m = repmat(qmag, pn, 1) + repmat(pmag', 1, qn) - 2*p'*Aq;
+0030   
+0031 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_avalanche_hist</title>
+  <meta name="keywords" content="util_plot_avalanche_hist">
+  <meta name="description" content="UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_avalanche_hist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like
+Profs Begg / Plenz's paper.
+   Input:
+           x:          xDATA, e.g. The size array of avalanches
+           xname:      x's name, used for generate labels
+           mcolor:     Marker's color, [default]: [1 1 1]
+           lcolor:     Line's color, [default]: [0 0 0]
+           lineoff:    If true, only plot dots. [default]: false
+           nogap:      If true, the values = 0 will be ignores to avoid
+                       Inf at log scale. [default: false]
+           doplot:     If true, plot the graph. [default: true]
+           draw_slope: If true, draw the slope. [default: true]
+           overlay:    If true, the plotter will not create a new figure
+                       but using the old palette. [default: false]
+           method:     'fit' [default] / 'plfit' / 'polyfit'
+                       Curvefit method. When the number of samples is
+                       large enough, try plfit, else, fit is more
+                       robust, and polyfit is better when running batch
+                       jobs (it will not quit by bad fitting, but less robust)
+                   
+   Output:
+           prob:   The P(x)
+           edges:  The x axis
+           slope:  The slope of this curve (fit to ax^b, = a)
+           fitresult:  The fitting result.
+           gof:    The godness of fit.
+
+   Examples:
+           util_plot_avalanche_hist( sizes, 'S' );
+
+           [ prob edges slope fitresult gof] = util_plot_avalanche_hist(
+           sizes, 'S' );
+
+   Created on Jul/31/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-09-15  Fix the line gap bug, Add 'lineoff' option.
+       PJB#2010-09-17  Add 'nogap' option: Sometimes, we need those Inf
+                       gaps to be displayed.
+                       Add 'doplot' option.
+                       Add curvefit function, 'slope' / 'fitresult' /
+                       'gof'. Please ref to NEUROSCIENCE (commented)
+       PJB#2011-03-08  Adding new 'plfit' method</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>	PROB calculates probability distribution of y among nBins number of bins</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../Otherbox/plfit/plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">plfit</a>	PLFIT fits a power-law distributional model to data.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/avalanche.html" class="code" title="">avalanche</a>	</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter.html" class="code" title="function [ sizes alpha bp bp_1 mean_isi mean_rate ] = util_loop_calc_avalanche_parameter( filename, gnd, result_dir )">util_loop_calc_avalanche_parameter</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETER Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li><li><a href="../Scripts/util_loop_find_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( filename, gnd, result_dir )">util_loop_find_avalanche</a>	UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )</a>
+0002 <span class="comment">%UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</span>
+0003 <span class="comment">%Profs Begg / Plenz's paper.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           x:          xDATA, e.g. The size array of avalanches</span>
+0006 <span class="comment">%           xname:      x's name, used for generate labels</span>
+0007 <span class="comment">%           mcolor:     Marker's color, [default]: [1 1 1]</span>
+0008 <span class="comment">%           lcolor:     Line's color, [default]: [0 0 0]</span>
+0009 <span class="comment">%           lineoff:    If true, only plot dots. [default]: false</span>
+0010 <span class="comment">%           nogap:      If true, the values = 0 will be ignores to avoid</span>
+0011 <span class="comment">%                       Inf at log scale. [default: false]</span>
+0012 <span class="comment">%           doplot:     If true, plot the graph. [default: true]</span>
+0013 <span class="comment">%           draw_slope: If true, draw the slope. [default: true]</span>
+0014 <span class="comment">%           overlay:    If true, the plotter will not create a new figure</span>
+0015 <span class="comment">%                       but using the old palette. [default: false]</span>
+0016 <span class="comment">%           method:     'fit' [default] / 'plfit' / 'polyfit'</span>
+0017 <span class="comment">%                       Curvefit method. When the number of samples is</span>
+0018 <span class="comment">%                       large enough, try plfit, else, fit is more</span>
+0019 <span class="comment">%                       robust, and polyfit is better when running batch</span>
+0020 <span class="comment">%                       jobs (it will not quit by bad fitting, but less robust)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Output:</span>
+0023 <span class="comment">%           prob:   The P(x)</span>
+0024 <span class="comment">%           edges:  The x axis</span>
+0025 <span class="comment">%           slope:  The slope of this curve (fit to ax^b, = a)</span>
+0026 <span class="comment">%           fitresult:  The fitting result.</span>
+0027 <span class="comment">%           gof:    The godness of fit.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   Examples:</span>
+0030 <span class="comment">%           util_plot_avalanche_hist( sizes, 'S' );</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%           [ prob edges slope fitresult gof] = util_plot_avalanche_hist(</span>
+0033 <span class="comment">%           sizes, 'S' );</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%   Created on Jul/31/2010 By Pu Jiangbo</span>
+0036 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%   $Revision:</span>
+0039 <span class="comment">%       PJB#2010-09-15  Fix the line gap bug, Add 'lineoff' option.</span>
+0040 <span class="comment">%       PJB#2010-09-17  Add 'nogap' option: Sometimes, we need those Inf</span>
+0041 <span class="comment">%                       gaps to be displayed.</span>
+0042 <span class="comment">%                       Add 'doplot' option.</span>
+0043 <span class="comment">%                       Add curvefit function, 'slope' / 'fitresult' /</span>
+0044 <span class="comment">%                       'gof'. Please ref to NEUROSCIENCE (commented)</span>
+0045 <span class="comment">%       PJB#2011-03-08  Adding new 'plfit' method</span>
+0046 
+0047 
+0048 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0049 
+0050 <span class="keyword">if</span> ~exist(<span class="string">'mcolor'</span>, <span class="string">'var'</span>)
+0051     mcolor = [0 0 0];
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="keyword">if</span> ~exist(<span class="string">'lcolor'</span>, <span class="string">'var'</span>)
+0055     lcolor = [0 0 0];
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> ~exist(<span class="string">'lineoff'</span>, <span class="string">'var'</span>)
+0059     lineoff = false;
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="keyword">if</span> ~exist(<span class="string">'nogap'</span>, <span class="string">'var'</span>)
+0063     nogap = false;
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="keyword">if</span> ~exist(<span class="string">'doplot'</span>, <span class="string">'var'</span>)
+0067     doplot = true;
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="keyword">if</span> ~exist(<span class="string">'draw_slope'</span>, <span class="string">'var'</span>)
+0071     draw_slope = true;
+0072 <span class="keyword">end</span>
+0073 
+0074 <span class="keyword">if</span> ~exist(<span class="string">'overlay'</span>, <span class="string">'var'</span>)
+0075     overlay = false;
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0079     method = <span class="string">'fit'</span>;
+0080 <span class="keyword">end</span>
+0081 
+0082 
+0083 edges = 1:1:max(x);
+0084 <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> = histc(x, edges);
+0085 <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> = <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> / sum(<a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>);
+0086 
+0087 <span class="comment">% locate the index of zero-prob</span>
+0088 <span class="keyword">if</span> nogap
+0089     edges = find(<a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> ~= 0);
+0090     <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> = <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>(<a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> ~= 0);
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="comment">% Plot</span>
+0094 <span class="keyword">if</span> doplot
+0095     <span class="keyword">if</span> lineoff
+0096         <span class="keyword">if</span> ~overlay
+0097             figure
+0098         <span class="keyword">else</span>
+0099             hold on
+0100         <span class="keyword">end</span>
+0101         plot(edges, <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>, <span class="string">'o'</span>, <span class="string">'MarkerFaceColor'</span>, lcolor, <span class="string">'MarkerSize'</span>, 2);
+0102     <span class="keyword">else</span>
+0103         <span class="keyword">if</span> ~overlay
+0104             figure
+0105         <span class="keyword">else</span>
+0106             hold on
+0107         <span class="keyword">end</span>
+0108         plot(edges, <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>, <span class="string">'-o'</span>, <span class="string">'MarkerFaceColor'</span>, mcolor, <span class="string">'Color'</span>, lcolor, <span class="string">'MarkerSize'</span>, 2);
+0109     <span class="keyword">end</span>
+0110     <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'XScale'</span>, <span class="string">'log'</span>); <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'YScale'</span>, <span class="string">'log'</span>);
+0111     xlabel(xname); ylabel([<span class="string">'P('</span> xname <span class="string">')'</span>]);
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">% Curve fit (Ref to V. Pasquale et al. / Neuroscience 153 (2008) 1354–1369)</span>
+0115 
+0116 <span class="comment">% levels: (we only focus on points bigger than 1% of the maxiumum value of</span>
+0117 <span class="comment">% the distribution, but you can modify this parameter to get some other</span>
+0118 <span class="comment">% results)</span>
+0119 levels = 0.01;
+0120 loc_index = find(<a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a> &lt; levels, 1);
+0121 edges_fit = edges(1:loc_index)';
+0122 prob_fit = <a href="../Otherbox/ami/prob.html" class="code" title="function [py nBins]= prob(varargin)">prob</a>(1:loc_index)';
+0123 
+0124 <span class="keyword">if</span> strcmpi(method, <span class="string">'fit'</span>)
+0125     <span class="comment">% Using built-in fit function to get 'a' &amp; 'n'</span>
+0126     fit_op = fitoptions(<span class="string">'Method'</span>, <span class="string">'NonlinearLeastSquares'</span>);
+0127     fit_func = fittype(<span class="string">'a * ( x ^ n )'</span>, <span class="string">'options'</span>, fit_op );
+0128     
+0129     warning_state = warning(<span class="string">'query'</span>, <span class="string">'backtrace'</span>);
+0130     warning(<span class="string">'off'</span>, <span class="string">'backtrace'</span>);
+0131     [fitresult, gof] = fit(edges_fit(2:end), prob_fit(2:end), fit_func); <span class="comment">% The first bin is ignored (ref NEUROSCIENCE)</span>
+0132     warning(warning_state.state, <span class="string">'backtrace'</span>);
+0133     
+0134     slope = fitresult.n;
+0135     
+0136     <span class="comment">% Plot fit results</span>
+0137     <span class="keyword">if</span> doplot &amp;&amp; draw_slope
+0138         hold on;
+0139         plot(edges_fit(2:end), fitresult.a * edges_fit(2:end) .^ slope, <span class="string">'r'</span>, <span class="string">'linewidth'</span>, 2);
+0140         hold off;
+0141     <span class="keyword">end</span>
+0142 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'plfit'</span>)
+0143     <span class="keyword">if</span> strcmp(method, <span class="string">'plfit'</span>)
+0144         <span class="comment">% Using plfit to correct the result</span>
+0145         slope = -1 * <a href="../Otherbox/plfit/plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">plfit</a>(prob_fit(2:end), <span class="string">'finite'</span>);
+0146     <span class="keyword">end</span>
+0147     
+0148     <span class="comment">% Don't support these output</span>
+0149     fitresult = [];
+0150     gof = [];
+0151     
+0152     <span class="comment">% Plot fit results</span>
+0153     <span class="keyword">if</span> doplot &amp;&amp; draw_slope
+0154         hold on;
+0155         plot(edges_fit(2:end), 1 * edges_fit(2:end) .^ slope, <span class="string">'r'</span>, <span class="string">'linewidth'</span>, 2);
+0156         hold off;
+0157     <span class="keyword">end</span>
+0158 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'polyfit'</span>)
+0159     p = polyfit(log10(edges_fit(2:end)), log10(prob_fit(2:end)), 1);
+0160     slope = p(1);
+0161     fitresult = [];
+0162     gof = [];
+0163     
+0164     <span class="comment">% Plot fit results</span>
+0165     <span class="keyword">if</span> doplot &amp;&amp; draw_slope
+0166         hold on;
+0167         plot(edges_fit(2:end), 1 * edges_fit(2:end) .^ slope, <span class="string">'r'</span>, <span class="string">'linewidth'</span>, 2);
+0168         hold off;
+0169     <span class="keyword">end</span>
+0170 <span class="keyword">end</span>
+0171 
+0172 
+0173 disp([<span class="string">'Fitted Slope: '</span> num2str(slope)])
+0174 
+0175 <span class="keyword">end</span>
+0176</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

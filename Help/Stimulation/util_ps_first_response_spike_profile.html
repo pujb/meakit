@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_ps_first_response_spike_profile</title>
+  <meta name="keywords" content="util_ps_first_response_spike_profile">
+  <meta name="description" content="UTIL_PS_FIRST_RESPONSE_SPIKE_PROFILE 工具函数：处理刺激后第一个响应Spike的位置和幅度">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_ps_first_response_spike_profile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PS_FIRST_RESPONSE_SPIKE_PROFILE 工具函数：处理刺激后第一个响应Spike的位置和幅度</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ timing timing_std timing_all amp amp_std amp_all ] = util_ps_first_response_spike_profile( triggerif,spif,D,chid,trigger_range,isManualTrigger,peakType) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PS_FIRST_RESPONSE_SPIKE_PROFILE 工具函数：处理刺激后第一个响应Spike的位置和幅度
+   在给定trigger_range中，获取响应后第一个Spike的Timing/Amplitude，返回均值和STD
+   triggerif = trigger information from mcd file
+   spif = spike information from mcd file
+   D = datastrm获得的对象
+   chid = 11-88通道号
+   trigger_range = [start end] Trigger顺序的范围
+   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike（+/- 0.5 ms）
+   peakType = 幅度是记录最小值(0)、最大值(1)、峰-峰值(2)。</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../IO/mcd/mcintfac/@datastrm/ad2muvolt.html" class="code" title="function [vdata, tvals] = ad2muvolt(a, addata, streamname);">ad2muvolt</a>	ad2muvolt - converts MCRack ADC values into microvolt values (datastrm method)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ timing timing_std timing_all amp amp_std amp_all ] = util_ps_first_response_spike_profile( triggerif, </a><span class="keyword">...</span>
+0002     spif, <span class="keyword">...</span>
+0003     D, <span class="keyword">...</span>
+0004     chid, <span class="keyword">...</span>
+0005     trigger_range, <span class="keyword">...</span>
+0006     isManualTrigger, <span class="keyword">...</span>
+0007     peakType)
+0008 <span class="comment">%UTIL_PS_FIRST_RESPONSE_SPIKE_PROFILE 工具函数：处理刺激后第一个响应Spike的位置和幅度</span>
+0009 <span class="comment">%   在给定trigger_range中，获取响应后第一个Spike的Timing/Amplitude，返回均值和STD</span>
+0010 <span class="comment">%   triggerif = trigger information from mcd file</span>
+0011 <span class="comment">%   spif = spike information from mcd file</span>
+0012 <span class="comment">%   D = datastrm获得的对象</span>
+0013 <span class="comment">%   chid = 11-88通道号</span>
+0014 <span class="comment">%   trigger_range = [start end] Trigger顺序的范围</span>
+0015 <span class="comment">%   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike（+/- 0.5 ms）</span>
+0016 <span class="comment">%   peakType = 幅度是记录最小值(0)、最大值(1)、峰-峰值(2)。</span>
+0017 
+0018 <span class="comment">%   timing = 按Trigger发生为0，给出第一个Spike的发生时间的均值，时间单位为ms</span>
+0019 <span class="comment">%   timing_std = STDEV of timing</span>
+0020 <span class="comment">%   timing_all = 全部的第一个Spike的发生时间的队列</span>
+0021 <span class="comment">%   amp = Trigger后第一个Spike的幅度的均值</span>
+0022 <span class="comment">%   amp_std = STDEV of amplitude</span>
+0023 <span class="comment">%   amp_all = 全部的第一个Spike的幅度值的队列</span>
+0024 
+0025 <span class="comment">%   示例：</span>
+0026 <span class="comment">%   [timing timstd timall amp ampstd ampall] = util_ps_first_response_spike_profile(triggerif,spif,D,34,[1 200],1,2);</span>
+0027 <span class="comment">%   计算第1-200个Trigger的Trigger后第一个Spike的统计信息（通道34），只计算Trigger后0.5ms发生的Spike，峰峰值计算</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   蒲江波 2009年6月1日</span>
+0030 
+0031 
+0032 <span class="comment">% 通道序号转换</span>
+0033 hwid = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(chid);
+0034 
+0035 <span class="comment">% 基本思路</span>
+0036 <span class="comment">% 在指定的Trigger范围内循环，找到每个Trigger后的第一个Spike</span>
+0037 <span class="comment">% 返回这些Spike的Timging和Amplitude的均值和标准差</span>
+0038 
+0039 <span class="comment">% 为提高运行速度，预先创建FOR循环中反复用的变量</span>
+0040 this_spif_spiketime = spif.spiketimes{hwid}; <span class="comment">% 运行PSTH通道的SPIF信息复制本</span>
+0041 this_spif_spikevalue = <a href="../IO/mcd/mcintfac/@datastrm/ad2muvolt.html" class="code" title="function [vdata, tvals] = ad2muvolt(a, addata, streamname);">ad2muvolt</a>( D, spif.spikevalues{hwid} ); <span class="comment">% SPIKETIME信息副本</span>
+0042 
+0043 timing_all = [];
+0044 amp_all = [];
+0045 
+0046 <span class="comment">% 在Trigger中遍历</span>
+0047 <span class="keyword">for</span> i = trigger_range(1):trigger_range(2)
+0048     <span class="comment">% 获得每次Trigger的具体时间</span>
+0049     this_trigger_time = triggerif.times(i);
+0050     
+0051     <span class="comment">% 若为手动提的Trigger（或者需要一个延迟的情况）</span>
+0052     <span class="comment">% 则将开始扫描的时间延迟0.5 ms</span>
+0053     <span class="keyword">if</span> isManualTrigger
+0054         start_point = this_trigger_time + 0.5;
+0055     <span class="keyword">else</span>
+0056         start_point = this_trigger_time;
+0057     <span class="keyword">end</span>
+0058     
+0059     <span class="comment">% 比start_point还大的第一个spiketime就是第一个spike发生的时间</span>
+0060     <span class="comment">% 首先找到一串在start_point后发生的spike的timing</span>
+0061     first_spike_timing = this_spif_spiketime( this_spif_spiketime &gt; start_point );
+0062     <span class="comment">% 只取第一个</span>
+0063     first_spike_timing = first_spike_timing(1);
+0064     <span class="comment">% find返回第一个符合条件的下标，用来计算幅度用</span>
+0065     indexer = find( this_spif_spiketime &gt; start_point, 1 );
+0066     
+0067     <span class="comment">% 计算Spike幅度值</span>
+0068     <span class="keyword">switch</span>(peakType)
+0069         <span class="keyword">case</span> 0
+0070             <span class="comment">% MIN</span>
+0071             first_spike_amplitude = min( this_spif_spikevalue( :,indexer ) );
+0072         <span class="keyword">case</span> 1
+0073             <span class="comment">% MAX</span>
+0074             first_spike_amplitude = max( this_spif_spikevalue( :,indexer ) );
+0075         <span class="keyword">case</span> 2
+0076             <span class="comment">% Peak to Peak</span>
+0077             first_spike_amplitude = max( this_spif_spikevalue( :,indexer ) ) -<span class="keyword">...</span>
+0078                 min( this_spif_spikevalue(indexer) );
+0079     <span class="keyword">end</span>
+0080     
+0081     <span class="comment">% 将本次Trigger的信息加入信息表(其中Timing的信息需要减去Trigger发生的时间)</span>
+0082     timing_all = [timing_all (first_spike_timing - this_trigger_time)];
+0083     amp_all = [amp_all first_spike_amplitude];
+0084 <span class="keyword">end</span>
+0085 
+0086 timing = mean( timing_all );
+0087 timing_std = std( timing_all );
+0088 amp = mean( amp_all );
+0089 amp_std = std( amp_all );
+0090 
+0091 <span class="keyword">end</span>
+0092</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

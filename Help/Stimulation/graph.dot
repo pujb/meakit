@@ -1,0 +1,33 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  process_sti_result_by_stiID_by_amplitudes -> util_parse_para_fromstimulation;
+  process_sti_result_by_stiID_by_amplitudes_for_some_electrodes -> util_parse_para_fromstimulation;
+  process_sti_result_by_stiID_by_amplitudes_response_per -> util_parse_para_fromstimulation;
+  script_trigger_psth_amplitude_distribution -> util_psth_by_trigger;
+  util_sti_all_responses -> util_parse_para_fromstimulation;
+  util_sti_calc_test_score_arraywide -> util_sti_calc_test_score;
+  util_sti_responses_elictedby_one_elec -> util_check_trigger_belongs_elec;
+  util_sti_responses_elictedby_one_elec -> util_parse_para_fromstimulation;
+
+  animation_response_score [URL="animation_response_score.html"];
+  generate_gif_for_animation [URL="generate_gif_for_animation.html"];
+  process_sti_result_by_stiID_by_amplitudes [URL="process_sti_result_by_stiID_by_amplitudes.html"];
+  process_sti_result_by_stiID_by_amplitudes_for_some_electrodes [URL="process_sti_result_by_stiID_by_amplitudes_for_some_electrodes.html"];
+  process_sti_result_by_stiID_by_amplitudes_response_per [URL="process_sti_result_by_stiID_by_amplitudes_response_per.html"];
+  process_sti_result_by_stiID_by_delays_response_per [URL="process_sti_result_by_stiID_by_delays_response_per.html"];
+  script_trigger_psth_amplitude_distribution [URL="script_trigger_psth_amplitude_distribution.html"];
+  util_check_trigger_belongs_amp [URL="util_check_trigger_belongs_amp.html"];
+  util_check_trigger_belongs_elec [URL="util_check_trigger_belongs_elec.html"];
+  util_loadstimulation_fromxml [URL="util_loadstimulation_fromxml.html"];
+  util_parse_para_fromstimulation [URL="util_parse_para_fromstimulation.html"];
+  util_ps_amplitude_by_time_by_trigger [URL="util_ps_amplitude_by_time_by_trigger.html"];
+  util_ps_first_response_spike_profile [URL="util_ps_first_response_spike_profile.html"];
+  util_psth_amplitude_by_trigger [URL="util_psth_amplitude_by_trigger.html"];
+  util_psth_by_trigger [URL="util_psth_by_trigger.html"];
+  util_sti_all_responses [URL="util_sti_all_responses.html"];
+  util_sti_calc_test_response_count_multiple_arraywide [URL="util_sti_calc_test_response_count_multiple_arraywide.html"];
+  util_sti_calc_test_score [URL="util_sti_calc_test_score.html"];
+  util_sti_calc_test_score_arraywide [URL="util_sti_calc_test_score_arraywide.html"];
+  util_sti_calc_test_score_multiple_arraywide [URL="util_sti_calc_test_score_multiple_arraywide.html"];
+  util_sti_responses_elictedby_one_elec [URL="util_sti_responses_elictedby_one_elec.html"];
+}

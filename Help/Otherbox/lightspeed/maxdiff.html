@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of maxdiff</title>
+  <meta name="keywords" content="maxdiff">
+  <meta name="description" content="MAXDIFF(A,B) returns the maximum difference in any field or element.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>maxdiff
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MAXDIFF(A,B) returns the maximum difference in any field or element.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function e = maxdiff(a,b,rel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> MAXDIFF(A,B) returns the maximum difference in any field or element.
+ Matching infinities or NaNs do not count.
+
+ MAXDIFF(A,B,REL) measures the per-element relative difference (A-B)/(REL + A)
+
+ Examples:
+   maxdiff([1 2 3 nan inf -inf],[1 2 4 nan inf -inf]) % = 1</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="maxdiff.html" class="code" title="function e = maxdiff(a,b,rel)">maxdiff</a>	MAXDIFF(A,B) returns the maximum difference in any field or element.</li><li><a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="maxdiff.html" class="code" title="function e = maxdiff(a,b,rel)">maxdiff</a>	MAXDIFF(A,B) returns the maximum difference in any field or element.</li><li><a href="../../Otherbox/lightspeed/tests/test_ndsum.html" class="code" title="">test_ndsum</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function e = maxdiff(a,b,rel)</a>
+0002 <span class="comment">% MAXDIFF(A,B) returns the maximum difference in any field or element.</span>
+0003 <span class="comment">% Matching infinities or NaNs do not count.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% MAXDIFF(A,B,REL) measures the per-element relative difference (A-B)/(REL + A)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Examples:</span>
+0008 <span class="comment">%   maxdiff([1 2 3 nan inf -inf],[1 2 4 nan inf -inf]) % = 1</span>
+0009 
+0010 <span class="comment">% Written by Tom Minka</span>
+0011 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0012 
+0013 <span class="keyword">if</span> nargin &lt; 3
+0014   rel = [];
+0015 <span class="keyword">end</span>
+0016 
+0017 e = 0;
+0018 <span class="keyword">if</span> ~isequal(class(a), class(b))
+0019   fprintf(<span class="string">'maxdiff: incompatible types\n'</span>);
+0020   e = Inf;
+0021   <span class="keyword">return</span>
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> isa(a,<span class="string">'struct'</span>)
+0024   <span class="keyword">for</span> f = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(a)'
+0025     field = <a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f);
+0026     <span class="keyword">if</span> ~<a href="../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(b,field)
+0027       fprintf(<span class="string">'maxdiff: second argument lacks field %s\n'</span>, field);
+0028       e = Inf;
+0029       <span class="keyword">return</span>
+0030     <span class="keyword">end</span>
+0031     e = max(e,<a href="maxdiff.html" class="code" title="function e = maxdiff(a,b,rel)">maxdiff</a>(a.(field), b.(field), rel));
+0032   <span class="keyword">end</span>
+0033   <span class="keyword">return</span>
+0034 <span class="keyword">end</span>
+0035 <span class="keyword">if</span> ~isequal(size(a),size(b))
+0036   fprintf(<span class="string">'maxdiff: size mismatch\n'</span>);
+0037   e = Inf;
+0038   <span class="keyword">return</span>
+0039 <span class="keyword">end</span>
+0040 a = a(:);
+0041 b = b(:);
+0042 <span class="keyword">if</span> iscell(a)
+0043   <span class="keyword">for</span> i = 1:numel(a)
+0044     e = max(e,<a href="maxdiff.html" class="code" title="function e = maxdiff(a,b,rel)">maxdiff</a>(a{i},b{i}));
+0045   <span class="keyword">end</span>
+0046   <span class="keyword">return</span>
+0047 <span class="keyword">end</span>
+0048 i = isnan(a);
+0049 <span class="keyword">if</span> any(i ~= isnan(b))
+0050   <span class="comment">% mismatched NaNs</span>
+0051   e = Inf;
+0052   <span class="keyword">return</span>
+0053 <span class="keyword">elseif</span> sum(i) &gt; 0
+0054   a = a(~i);
+0055   b = b(~i);
+0056 <span class="keyword">end</span>
+0057 i = ~isfinite(a);
+0058 <span class="keyword">if</span> any(i ~= ~isfinite(b))
+0059   <span class="comment">% mismatched infs</span>
+0060   e = Inf;
+0061   <span class="keyword">return</span>
+0062 <span class="keyword">elseif</span> ~isequal(a(i),b(i))
+0063   e = Inf;
+0064   <span class="keyword">return</span>
+0065 <span class="keyword">else</span>
+0066   a = a(~i);
+0067   b = b(~i);
+0068 <span class="keyword">end</span>
+0069 <span class="keyword">if</span> isempty(a)
+0070   e = 0;
+0071   <span class="keyword">return</span>
+0072 <span class="keyword">end</span>
+0073 e = abs(a(:) - b(:));
+0074 <span class="keyword">if</span> ~isempty(rel)
+0075   e = e ./ (rel + abs(a(:)));
+0076 <span class="keyword">end</span>
+0077 e = max(e);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

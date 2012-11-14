@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of makeringlatticeCIJ</title>
+  <meta name="keywords" content="makeringlatticeCIJ">
+  <meta name="description" content="MAKERINGLATTICECIJ     Synthetic lattice network">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>makeringlatticeCIJ
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MAKERINGLATTICECIJ     Synthetic lattice network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [CIJ] = makeringlatticeCIJ(N,K) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MAKERINGLATTICECIJ     Synthetic lattice network
+
+   CIJ = makeringlatticeCIJ(N,K);
+
+   This function generates a directed lattice network with toroidal 
+   boundary counditions (i.e. with ring-like &quot;wrapping around&quot;).
+
+   Inputs:     N,      number of vertices
+               K,      number of edges
+
+   Outputs:    CIJ,    connection matrix
+
+   Note: The lattice is made by placing connections as close as possible 
+   to the main diagonal, with wrapping around. No connections are made 
+   on the main diagonal. In/Outdegree is kept approx. constant at K/N.
+
+
+   Olaf Sporns, Indiana University, 2005/2007</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [CIJ] = makeringlatticeCIJ(N,K)</a>
+0002 <span class="comment">%MAKERINGLATTICECIJ     Synthetic lattice network</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   CIJ = makeringlatticeCIJ(N,K);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function generates a directed lattice network with toroidal</span>
+0007 <span class="comment">%   boundary counditions (i.e. with ring-like &quot;wrapping around&quot;).</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Inputs:     N,      number of vertices</span>
+0010 <span class="comment">%               K,      number of edges</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Outputs:    CIJ,    connection matrix</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Note: The lattice is made by placing connections as close as possible</span>
+0015 <span class="comment">%   to the main diagonal, with wrapping around. No connections are made</span>
+0016 <span class="comment">%   on the main diagonal. In/Outdegree is kept approx. constant at K/N.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Olaf Sporns, Indiana University, 2005/2007</span>
+0020 
+0021 <span class="comment">% initialize</span>
+0022 CIJ = zeros(N);
+0023 CIJ1 = ones(N);
+0024 KK = 0;
+0025 cnt = 0;
+0026 seq = 1:N-1;
+0027 seq2 = N-1:-1:1;
+0028 
+0029 <span class="comment">% fill in</span>
+0030 <span class="keyword">while</span> (KK&lt;K)
+0031     cnt = cnt + 1;
+0032     dCIJ = triu(CIJ1,seq(cnt))-triu(CIJ1,seq(cnt)+1);
+0033     dCIJ2 = triu(CIJ1,seq2(cnt))-triu(CIJ1,seq2(cnt)+1);
+0034     dCIJ = dCIJ+dCIJ'+dCIJ2+dCIJ2';
+0035     CIJ = CIJ + dCIJ;
+0036     KK = sum(sum(CIJ));
+0037 <span class="keyword">end</span>;
+0038 
+0039 <span class="comment">% remove excess connections</span>
+0040 overby = KK-K;
+0041 <span class="keyword">if</span>(overby&gt;0)
+0042     [i j] = find(dCIJ);
+0043     rp = randperm(length(i));
+0044     <span class="keyword">for</span> ii=1:overby
+0045         CIJ(i(rp(ii)),j(rp(ii))) = 0;
+0046     <span class="keyword">end</span>;
+0047 <span class="keyword">end</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

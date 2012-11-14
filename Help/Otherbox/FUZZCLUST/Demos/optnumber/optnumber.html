@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of optnumber</title>
+  <meta name="keywords" content="optnumber">
+  <meta name="description" content="calling function to search the optimal number of clusters">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html FUZZCLUST --><!-- # Demos --><!-- menu.html optnumber -->
+<h1>optnumber
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>calling function to search the optimal number of clusters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">calling function to search the optimal number of clusters</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>	modified validation function for clustering, it calculates all the</li><li><a href="modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>	modified validation function for clustering, it calculates all the</li><li><a href="../../../../Otherbox/FUZZCLUST/GKclust.html" class="code" title="function result = GKclust(data,param)">GKclust</a>	checking the parameters given</li><li><a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../../../../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>	</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">%calling function to search the optimal number of clusters</span>
+0002 close all
+0003 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0004 path(path,<span class="string">'..\..\FUZZCLUST'</span>)
+0005 
+0006 
+0007 <span class="comment">%the data</span>
+0008 load motorcycle.txt
+0009 data.X=motorcycle(:,[1 2]);
+0010 [N,n]=size(data.X);
+0011 <span class="comment">%data normalizaiton</span>
+0012 data = <a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>);
+0013 
+0014 <span class="comment">%parameters</span>
+0015 ncmax=14; <span class="comment">%maximal number of cluster</span>
+0016 param.m=2;
+0017 param.e=1e-3;
+0018 <span class="comment">%</span>
+0019 ment=[];
+0020 figure(1)
+0021 <span class="keyword">for</span> cln=2:ncmax
+0022 param.c=cln;
+0023     param.ro = ones(1,param.c);
+0024     result=<a href="../../../../Otherbox/FUZZCLUST/GKclust.html" class="code" title="function result = GKclust(data,param)">GKclust</a>(data,param);
+0025     clf
+0026     plot(data.X(:,1),data.X(:,2),<span class="string">'b.'</span>,result.cluster.v(:,1),result.cluster.v(:,2),<span class="string">'r*'</span>);
+0027     hold on
+0028     new.X=data.X;
+0029     <a href="../../../../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new,result,param)
+0030     <span class="comment">%validation</span>
+0031     result=<a href="modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result,data,param);
+0032     ment{cln}=result.validity;
+0033 
+0034 <span class="keyword">end</span>
+0035 
+0036 
+0037 PC=[];CE=[];SC=[];S=[];XB=[];DI=[];ADI=[];
+0038 
+0039     <span class="keyword">for</span> i=2:ncmax
+0040        PC=[PC ment{i}.PC];
+0041        CE=[CE ment{i}.CE];
+0042        SC=[SC ment{i}.SC];
+0043        S=[S ment{i}.S];
+0044        XB=[XB ment{i}.XB];
+0045        DI=[DI ment{i}.DI];
+0046        ADI=[ADI ment{i}.ADI];
+0047    <span class="keyword">end</span>
+0048     figure(2)
+0049     clf
+0050     subplot(2,1,1), plot([2:ncmax],PC)
+0051     title(<span class="string">'Partition Coefficient (PC)'</span>)
+0052     subplot(2,1,2), plot([2:ncmax],CE,<span class="string">'r'</span>)  
+0053     title(<span class="string">'Classification Entropy (CE)'</span>)
+0054     figure(3)
+0055     subplot(3,1,1), plot([2:ncmax],SC,<span class="string">'g'</span>)
+0056     title(<span class="string">'Partition Index (SC)'</span>)
+0057     subplot(3,1,2), plot([2:ncmax],S,<span class="string">'m'</span>)
+0058     title(<span class="string">'Separation Index (S)'</span>)
+0059     subplot(3,1,3), plot([2:ncmax],XB)
+0060     title(<span class="string">'Xie and Beni Index (XB)'</span>)
+0061     figure(4)
+0062     subplot(2,1,1), plot([2:ncmax],DI)
+0063     title(<span class="string">'Dunn Index (DI)'</span>)
+0064     subplot(2,1,2), plot([2:ncmax],ADI)
+0065     title(<span class="string">'Alternative Dunn Index (ADI)'</span>)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

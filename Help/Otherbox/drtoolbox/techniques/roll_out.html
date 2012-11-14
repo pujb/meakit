@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of roll_out</title>
+  <meta name="keywords" content="roll_out">
+  <meta name="description" content="ROLL_OUT Rolls out an autoencoder">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>roll_out
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>ROLL_OUT Rolls out an autoencoder</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function autoenc = roll_out(network) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">ROLL_OUT Rolls out an autoencoder
+ 
+   network = roll_out(network)
+
+ Rolls out a stack of RBMs as an autoencoder that can be finetuned using,
+ e.g., backpropagation.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="train_autoencoder.html" class="code" title="function [mappedX, network] = train_autoencoder(X, layers)">train_autoencoder</a>	TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function autoenc = roll_out(network)</a>
+0002 <span class="comment">%ROLL_OUT Rolls out an autoencoder</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   network = roll_out(network)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Rolls out a stack of RBMs as an autoencoder that can be finetuned using,</span>
+0007 <span class="comment">% e.g., backpropagation.</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0011 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0012 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0013 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0014 <span class="comment">% maintain the name of the original author.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0017 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0018 
+0019 
+0020     <span class="comment">% Initialize some variables</span>
+0021     no_layers = length(network);
+0022     autoenc = cell(1, 2 * no_layers);
+0023     
+0024     <span class="comment">% Roll out network</span>
+0025     <span class="keyword">for</span> i=1:no_layers
+0026         autoenc{i} = network{i};
+0027         autoenc{2 * no_layers - i + 1}.W          = network{i}.W';
+0028         autoenc{2 * no_layers - i + 1}.bias_upW   = network{i}.bias_downW;
+0029         autoenc{2 * no_layers - i + 1}.bias_downW = network{i}.bias_upW;
+0030     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

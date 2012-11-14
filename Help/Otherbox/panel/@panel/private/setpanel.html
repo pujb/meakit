@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of setpanel</title>
+  <meta name="keywords" content="setpanel">
+  <meta name="description" content="set a panel object from the panel reference">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html panel --><!-- ../menu.html @panel --><!-- menu.html private -->
+<h1>setpanel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>set a panel object from the panel reference</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function out = setpanel(p, P, panelroot, special) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> set a panel object from the panel reference</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li><li><a href="../../../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li><li><a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="../../../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="../../../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li><li><a href="../../../../Otherbox/panel/@panel/subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = setpanel(p, P, panelroot, special)</a>
+0002 
+0003 <span class="comment">% set a panel object from the panel reference</span>
+0004 u = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0005 
+0006 <span class="comment">% if nothing there, create empty data object</span>
+0007 <span class="keyword">if</span> ~<a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(u, <span class="string">'panel'</span>)
+0008     u.panel.panels = {};
+0009     u.panel.panelroot = [];
+0010 <span class="keyword">end</span>
+0011 
+0012 <span class="comment">% if id unspecified, generate new unique id</span>
+0013 <span class="keyword">if</span> isempty(p.id)
+0014     p.id = length(u.panel.panels) + 1;
+0015     P.panel.id = p.id;
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="comment">% lay it in to the UserData</span>
+0019 u.panel.panels{p.id} = P;
+0020 
+0021 <span class="comment">% lay in root data</span>
+0022 <span class="keyword">if</span> nargin &gt;= 3
+0023     u.panel.panelroot = panelroot;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% handle special</span>
+0027 <span class="keyword">if</span> nargin &gt;= 4
+0028     <span class="keyword">switch</span> special
+0029         <span class="keyword">case</span> <span class="string">'createroot'</span>
+0030             u.panel.panelroot.rootpanelid = p.id;
+0031     <span class="keyword">end</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% lay in to figure</span>
+0035 <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig, <span class="string">'UserData'</span>, u);
+0036 
+0037 <span class="comment">% return it</span>
+0038 <span class="keyword">if</span> nargout
+0039     out = p;
+0040 <span class="keyword">end</span>
+0041 
+0042 
+0043</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

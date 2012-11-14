@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plvar</title>
+  <meta name="keywords" content="plvar">
+  <meta name="description" content="PLVAR estimates the uncertainty in the estimated power-law parameters.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html plfit -->
+<h1>plvar
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PLVAR estimates the uncertainty in the estimated power-law parameters.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [alpha, xmin, n]=plvar(x, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> PLVAR estimates the uncertainty in the estimated power-law parameters.
+    Source: http://www.santafe.edu/~aaronc/powerlaws/
+ 
+    PLVAR(x) takes a vector of observations x and returns estimated
+    uncertainties in the estimated power-law parameters, based on the
+    nonparametric approach described in Clauset, Shalizi, Newman (2007). 
+    PLVAR automatically detects whether x is composed of real or integer
+    values, and applies the appropriate method. For discrete data, if
+    min(x) &gt; 1000, PLVAR uses the continuous approximation, which is 
+    a reliable in this regime.
+   
+    The fitting procedure works as follows:
+    1) For each possible choice of x_min, we estimate alpha via the 
+       method of maximum likelihood, and calculate the Kolmogorov-Smirnov
+       goodness-of-fit statistic D.
+    2) We then select as our estimate of x_min, the value that gives the
+       minimum value D over all values of x_min.
+
+    Note that this procedure gives no estimate of the uncertainty of the 
+    fitted parameters, nor of the validity of the fit.
+
+    Example:
+       x = (1-rand(10000,1)).^(-1/(2.5-1));
+       [alpha, xmin, ntail] = plvar(x);
+
+    For more information, try 'type plvar'
+
+    See also <a href="plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">PLFIT</a>, <a href="plpva.html" class="code" title="function [p,gof]=plpva(x, xmin, varargin)">PLPVA</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>	SAMPLE    Sample from categorical distribution.</li><li><a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li><li><a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [alpha, xmin, n]=plvar(x, varargin)</a>
+0002 <span class="comment">% PLVAR estimates the uncertainty in the estimated power-law parameters.</span>
+0003 <span class="comment">%    Source: http://www.santafe.edu/~aaronc/powerlaws/</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    PLVAR(x) takes a vector of observations x and returns estimated</span>
+0006 <span class="comment">%    uncertainties in the estimated power-law parameters, based on the</span>
+0007 <span class="comment">%    nonparametric approach described in Clauset, Shalizi, Newman (2007).</span>
+0008 <span class="comment">%    PLVAR automatically detects whether x is composed of real or integer</span>
+0009 <span class="comment">%    values, and applies the appropriate method. For discrete data, if</span>
+0010 <span class="comment">%    min(x) &gt; 1000, PLVAR uses the continuous approximation, which is</span>
+0011 <span class="comment">%    a reliable in this regime.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%    The fitting procedure works as follows:</span>
+0014 <span class="comment">%    1) For each possible choice of x_min, we estimate alpha via the</span>
+0015 <span class="comment">%       method of maximum likelihood, and calculate the Kolmogorov-Smirnov</span>
+0016 <span class="comment">%       goodness-of-fit statistic D.</span>
+0017 <span class="comment">%    2) We then select as our estimate of x_min, the value that gives the</span>
+0018 <span class="comment">%       minimum value D over all values of x_min.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    Note that this procedure gives no estimate of the uncertainty of the</span>
+0021 <span class="comment">%    fitted parameters, nor of the validity of the fit.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    Example:</span>
+0024 <span class="comment">%       x = (1-rand(10000,1)).^(-1/(2.5-1));</span>
+0025 <span class="comment">%       [alpha, xmin, ntail] = plvar(x);</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    For more information, try 'type plvar'</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    See also PLFIT, PLPVA</span>
+0030 
+0031 <span class="comment">% Version 1.0   (2007 May)</span>
+0032 <span class="comment">% Version 1.0.2 (2007 September)</span>
+0033 <span class="comment">% Version 1.0.3 (2007 September)</span>
+0034 <span class="comment">% Version 1.0.4 (2008 January)</span>
+0035 <span class="comment">% Version 1.0.5 (2008 March)</span>
+0036 <span class="comment">% Version 1.0.6 (2008 April)</span>
+0037 <span class="comment">% Version 1.0.7 (2009 October)</span>
+0038 <span class="comment">% Copyright (C) 2008-2009 Aaron Clauset (Santa Fe Institute)</span>
+0039 <span class="comment">% Distributed under GPL 2.0</span>
+0040 <span class="comment">% http://www.gnu.org/copyleft/gpl.html</span>
+0041 <span class="comment">% PLVAR comes with ABSOLUTELY NO WARRANTY</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% Notes:</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% 1. In order to implement the integer-based methods in Matlab, the numeric</span>
+0046 <span class="comment">%    maximization of the log-likelihood function was used. This requires</span>
+0047 <span class="comment">%    that we specify the range of scaling parameters considered. We set</span>
+0048 <span class="comment">%    this range to be [1.50 : 0.01 : 3.50] by default. This vector can be</span>
+0049 <span class="comment">%    set by the user like so,</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%       a = plvar(x,'range',[1.001:0.001:5.001]);</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">% 2. PLVAR can be told to limit the range of values considered as estimates</span>
+0054 <span class="comment">%    for xmin in three ways. First, it can be instructed to sample these</span>
+0055 <span class="comment">%    possible values like so,</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%       a = plfit(x,'sample',100);</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">%    which uses 100 uniformly distributed values on the sorted list of</span>
+0060 <span class="comment">%    unique values in the data set. Second, it can simply omit all</span>
+0061 <span class="comment">%    candidates above a hard limit, like so</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">%       a = plfit(x,'limit',3.4);</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">%    Finally, it can be forced to use a fixed value, like so</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">%       a = plfit(x,'xmin',3.4);</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">%    In the case of discrete data, it rounds the limit to the nearest</span>
+0070 <span class="comment">%    integer.</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% 3. The default number of nonparametric repetitions of the fitting</span>
+0073 <span class="comment">% procedure is 1000. This number can be changed like so</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">%       a = plvar(x,'reps',10000);</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% 4. To silence the textual output to the screen, do this</span>
+0078 <span class="comment">%</span>
+0079 <span class="comment">%       p = plvar(x,'silent');</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">%</span>
+0082 
+0083 <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>    = [];
+0084 <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a> = [];
+0085 limit  = [];
+0086 xminx  = [];
+0087 Bt     = [];
+0088 quiet  = false;
+0089 <span class="keyword">persistent</span> rand_state;
+0090 
+0091 <span class="comment">% parse command-line parameters; trap for bad input</span>
+0092 i=1; 
+0093 <span class="keyword">while</span> i&lt;=length(varargin), 
+0094   argok = 1; 
+0095   <span class="keyword">if</span> ischar(varargin{i}), 
+0096     <span class="keyword">switch</span> varargin{i},
+0097         <span class="keyword">case</span> <span class="string">'range'</span>,        <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>    = varargin{i+1}; i = i + 1;
+0098         <span class="keyword">case</span> <span class="string">'sample'</span>,       <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a> = varargin{i+1}; i = i + 1;
+0099         <span class="keyword">case</span> <span class="string">'limit'</span>,        limit  = varargin{i+1}; i = i + 1;
+0100         <span class="keyword">case</span> <span class="string">'xmin'</span>,         xminx   = varargin{i+1}; i = i + 1;
+0101         <span class="keyword">case</span> <span class="string">'reps'</span>,         Bt     = varargin{i+1}; i = i + 1;
+0102         <span class="keyword">case</span> <span class="string">'silent'</span>,       quiet  = true;    i = i + 1;
+0103         <span class="keyword">otherwise</span>, argok=0; 
+0104     <span class="keyword">end</span>
+0105   <span class="keyword">end</span>
+0106   <span class="keyword">if</span> ~argok, 
+0107     disp([<span class="string">'(PLVAR) Ignoring invalid argument #'</span> num2str(i+1)]); 
+0108   <span class="keyword">end</span>
+0109   i = i+1; 
+0110 <span class="keyword">end</span>
+0111 <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>) &amp;&amp; (~isvector(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>) || min(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)&lt;=1),
+0112     fprintf(<span class="string">'(PLVAR) Error: ''range'' argument must contain a vector; using default.\n'</span>);
+0113     <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = [];
+0114 <span class="keyword">end</span>;
+0115 <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>) &amp;&amp; (~isscalar(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>) || <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>&lt;2),
+0116     fprintf(<span class="string">'(PLVAR) Error: ''sample'' argument must be a positive integer &gt; 1; using default.\n'</span>);
+0117     <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a> = [];
+0118 <span class="keyword">end</span>;
+0119 <span class="keyword">if</span> ~isempty(limit) &amp;&amp; (~isscalar(limit) || limit&lt;1),
+0120     fprintf(<span class="string">'(PLVAR) Error: ''limit'' argument must be a positive value &gt;= 1; using default.\n'</span>);
+0121     limit = [];
+0122 <span class="keyword">end</span>;
+0123 <span class="keyword">if</span> ~isempty(Bt) &amp;&amp; (~isscalar(Bt) || Bt&lt;2),
+0124     fprintf(<span class="string">'(PLVAR) Error: ''reps'' argument must be a positive value &gt; 1; using default.\n'</span>);
+0125     Bt = [];
+0126 <span class="keyword">end</span>;
+0127 <span class="keyword">if</span> ~isempty(xminx) &amp;&amp; (~isscalar(xminx) || xminx&gt;=max(x)),
+0128     fprintf(<span class="string">'(PLVAR) Error: ''xmin'' argument must be a positive value &lt; max(x); using default behavior.\n'</span>);
+0129     xminx = [];
+0130 <span class="keyword">end</span>;
+0131 
+0132 <span class="comment">% reshape input vector</span>
+0133 x = reshape(x,numel(x),1);
+0134 
+0135 <span class="comment">% select method (discrete or continuous) for fitting</span>
+0136 <span class="keyword">if</span>     isempty(setdiff(x,floor(x))), f_dattype = <span class="string">'INTS'</span>;
+0137 <span class="keyword">elseif</span> isreal(x),    f_dattype = <span class="string">'REAL'</span>;
+0138 <span class="keyword">else</span>                 f_dattype = <span class="string">'UNKN'</span>;
+0139 <span class="keyword">end</span>;
+0140 <span class="keyword">if</span> strcmp(f_dattype,<span class="string">'INTS'</span>) &amp;&amp; min(x) &gt; 1000 &amp;&amp; length(x)&gt;100,
+0141     f_dattype = <span class="string">'REAL'</span>;
+0142 <span class="keyword">end</span>;
+0143 <span class="keyword">if</span> isempty(rand_state)
+0144     rand_state = cputime;
+0145     rand(<span class="string">'twister'</span>,sum(100*clock));
+0146 <span class="keyword">end</span>;
+0147 <span class="keyword">if</span> isempty(Bt), Bt = 1000; <span class="keyword">end</span>;
+0148 N   = length(x);
+0149 bof = zeros(Bt,3);
+0150 
+0151 <span class="keyword">if</span> ~quiet,
+0152     fprintf(<span class="string">'Power-law Distribution, parameter error calculation\n'</span>);
+0153     fprintf(<span class="string">'   Copyright 2007-2009 Aaron Clauset\n'</span>);
+0154     fprintf(<span class="string">'   Warning: This can be a slow calculation; please be patient.\n'</span>);
+0155     fprintf(<span class="string">'   n    = %i\n   reps = %i\n'</span>,N,length(bof));
+0156 <span class="keyword">end</span>;
+0157 tic;
+0158 
+0159 <span class="comment">% estimate xmin and alpha, accordingly</span>
+0160 <span class="keyword">switch</span> f_dattype,
+0161     
+0162     <span class="keyword">case</span> <span class="string">'REAL'</span>,
+0163         
+0164         <span class="keyword">for</span> B=1:size(bof,1)
+0165             y = x(ceil(N*rand(N,1)));   <span class="comment">% bootstrap resample</span>
+0166 
+0167             ymins = unique(y);
+0168             ymins = ymins(1:end-1);
+0169             <span class="keyword">if</span> ~isempty(xminx),
+0170                 ymins = ymins(find(ymins&gt;=xminx,1,<span class="string">'first'</span>));
+0171             <span class="keyword">end</span>;
+0172             <span class="keyword">if</span> ~isempty(limit),
+0173                 ymins(ymins&gt;limit) = [];
+0174             <span class="keyword">end</span>;
+0175             <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>),
+0176                 ymins = ymins(unique(round(linspace(1,length(ymins),<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>))));
+0177             <span class="keyword">end</span>;
+0178             dat   = zeros(size(ymins));
+0179             z     = sort(y);
+0180             <span class="keyword">for</span> xm=1:length(ymins)
+0181                 xmin = ymins(xm);
+0182                 z    = z(z&gt;=xmin); 
+0183                 n    = length(z);
+0184                 <span class="comment">% estimate alpha using direct MLE</span>
+0185                 a    = n ./ sum( log(z./xmin) );
+0186                 <span class="comment">% compute KS statistic</span>
+0187                 cx   = (0:n-1)'./n;
+0188                 cf   = 1-(xmin./z).^a;
+0189                 dat(xm) = max( abs(cf-cx) );
+0190             <span class="keyword">end</span>;
+0191             ymin  = ymins(find(dat&lt;=min(dat),1,<span class="string">'first'</span>));
+0192             z     = y(y&gt;=ymin);
+0193             n     = length(z); 
+0194             alpha = 1 + n ./ sum( log(z./ymin) );
+0195             <span class="comment">% store distribution of estimated parameter values</span>
+0196             bof(B,:) = [n ymin alpha];
+0197             <span class="keyword">if</span> ~quiet &amp;&amp; B&gt;1,
+0198                 fprintf(<span class="string">'[%i]\tntail = %3.1f (%3.1f)\txmin = %3.1f (%3.1f)\talpha = %6.4f (%6.4f)\t[%4.2fm]\n'</span>,B,mean(bof(1:B,1)),std(bof(1:B,1)),mean(bof(1:B,2)),std(bof(1:B,2)),mean(bof(1:B,3)),std(bof(1:B,3)),toc/60);
+0199             <span class="keyword">end</span>;
+0200         <span class="keyword">end</span>;
+0201         n     = std(bof(:,1));
+0202         xmin  = std(bof(:,2));
+0203         alpha = std(bof(:,3));
+0204         
+0205     <span class="keyword">case</span> <span class="string">'INTS'</span>,
+0206         
+0207         <span class="keyword">if</span> isempty(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>),
+0208             <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>  = (1.50:0.01:3.50);    <span class="comment">% covers range of most practical</span>
+0209         <span class="keyword">end</span>;                            <span class="comment">% scaling parameters</span>
+0210         zvec = <a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>);
+0211 
+0212         <span class="keyword">for</span> B=1:size(bof,1)
+0213             y = x(ceil(N*rand(N,1)));   <span class="comment">% bootstrap resample</span>
+0214 
+0215             ymins = unique(y);
+0216             ymins = ymins(1:end-1);
+0217             <span class="keyword">if</span> ~isempty(xminx),
+0218                 ymins = ymins(find(ymins&gt;=xminx,1,<span class="string">'first'</span>));
+0219             <span class="keyword">end</span>;
+0220             <span class="keyword">if</span> ~isempty(limit),
+0221                 limit = round(limit);
+0222                 ymins(ymins&gt;limit) = [];
+0223             <span class="keyword">end</span>;
+0224             <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>),
+0225                 ymins = ymins(unique(round(linspace(1,length(ymins),<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>))));
+0226             <span class="keyword">end</span>;
+0227             ymax  = max(y);
+0228             dat   = zeros(length(ymins),2);
+0229             z     = y;
+0230             <span class="keyword">for</span> xm=1:length(ymins)
+0231                 xmin = ymins(xm);
+0232                 z    = z(z&gt;=xmin);
+0233                 n    = length(z);
+0234                 <span class="comment">% estimate alpha via direct maximization of likelihood function</span>
+0235                 <span class="keyword">try</span>
+0236                     <span class="comment">% vectorized version of numerical calculation</span>
+0237                     zdiff = sum( repmat((1:xmin-1)',1,length(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)).^-repmat(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>,xmin-1,1) ,1);
+0238                     L = -vec.*sum(log(z)) - n.*log(zvec - zdiff);
+0239                 <span class="keyword">catch</span>
+0240                     <span class="comment">% iterative version (more memory efficient, but slower)</span>
+0241                     L       = -Inf*ones(size(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>));
+0242                     slogz   = sum(log(z));
+0243                     xminvec = (1:xmin-1);
+0244                     <span class="keyword">for</span> k=1:length(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)
+0245                         L(k) = -<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(k)*slogz - n*log(zvec(k) - sum(xminvec.^-<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(k)));
+0246                     <span class="keyword">end</span>;
+0247                 <span class="keyword">end</span>;
+0248                 [Y,I] = max(L);
+0249                 <span class="comment">% compute KS statistic</span>
+0250                 fit = cumsum((((xmin:ymax).^-<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(I)))./ (zvec(I) - sum((1:xmin-1).^-<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(I))));
+0251                 cdi = cumsum(hist(z,xmin:ymax)./n);
+0252                 dat(xm,:) = [max(abs( fit - cdi )) <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(I)];
+0253             <span class="keyword">end</span>
+0254             [D,I] = min(dat(:,1));
+0255             ymin  = ymins(I);
+0256             n     = sum(y&gt;=ymin);
+0257             alpha = dat(I,2);
+0258             <span class="comment">% store distribution of estimated parameter values</span>
+0259             bof(B,:) = [n ymin alpha];
+0260             <span class="keyword">if</span> ~quiet &amp;&amp; B&gt;1,
+0261                 fprintf(<span class="string">'[%i]\tntail = %3.1f (%3.1f)\txmin = %3.1f (%3.1f)\talpha = %6.4f (%6.4f)\t[%4.2fm]\n'</span>,B,mean(bof(1:B,1)),std(bof(1:B,1)),mean(bof(1:B,2)),std(bof(1:B,2)),mean(bof(1:B,3)),std(bof(1:B,3)),toc/60);
+0262             <span class="keyword">end</span>;
+0263         <span class="keyword">end</span>;
+0264         n     = std(bof(:,1));
+0265         xmin  = std(bof(:,2));
+0266         alpha = std(bof(:,3));
+0267         
+0268     <span class="keyword">otherwise</span>,
+0269         fprintf(<span class="string">'(PLVAR) Error: x must contain only reals or only integers.\n'</span>);
+0270         alpha = [];
+0271         xmin  = [];
+0272         n     = [];
+0273         <span class="keyword">return</span>;
+0274 <span class="keyword">end</span>;
+0275</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

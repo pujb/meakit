@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of im2dat</title>
+  <meta name="keywords" content="im2dat">
+  <meta name="description" content="Function to determine data points from a image file of a plot.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html im2dat -->
+<h1>im2dat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Function to determine data points from a image file of a plot.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Xmean,Ymean1]=im2dat(Inputfile,xscale,yscale,option1,option2); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">Function to determine data points from a image file of a plot.
+
+SYNTAX:
+[X,Y]=IM2DAT(Inputfile,[xaxis_min xaxis_max],[yaxis_min ...                 
+                yaxis_max],optional1,optional2)
+
+PREPARING THE PLOT IMAGE:
+It is advisable to convert the image file into a bitmap.(For other supported formats 'help imread')
+NOTE: This fuction will accept Truecolor(24-bit), which the fuction convert to grayscale.            
+
+OPTIONAL ARGUMENTS:
+The optional arguments maybe given in any order.
+PLOT_SHADE==[minshading,maxshading]--Min shading and Max shading are optional. These
+arguments restrict the output data to particular range. This is useful if image contains more than
+one plot and is effective only when the plots have different colors, or shades of gray. Use 
+IMDATSEP.M function to seperate the common data for two sets of output vectors, from this 
+function.
+
+TYPE==&lt;scalar&gt;--The way the image is processed
+1=This version uses 3D Contour plot(DEFAULT)
+2=This version uses 2D Contour plot
+3=This versions uses edge determination(sobel technique) &amp; 3D Contour plot
+4=Filter out Red and use 3D Contour plot (24bit truecolor no conversion)
+5=Filter out Green and use 3D Contour plot (24bit truecolor no conversion)
+6=Filter out Blue and use 3D Contour plot (24bit truecolor no conversion)
+7=Accepts an image matrix, in place of a file. Matrix should not be given as string. Process
+        followed is as with 'type 1'.NOTE: Matrix should be 2D.
+
+OUTPUT:
+The Output Data is assigned to X,Y(Vectors). They can be used to make point plots and for
+curve fitting. To make line plots, sort the output vectors using IMDATSORT.M.However, This 
+only works for simple plots.
+
+(Function tested on MATLAB 5.1)
+                    Written by: Sumeet Yamdagni
+                    Email: syamdagni@hotmail.com
+---------------------------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Xmean,Ymean1]=im2dat(Inputfile,xscale,yscale,option1,option2);</a>
+0002 <span class="comment">%Function to determine data points from a image file of a plot.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%SYNTAX:</span>
+0005 <span class="comment">%[X,Y]=IM2DAT(Inputfile,[xaxis_min xaxis_max],[yaxis_min ...</span>
+0006 <span class="comment">%                yaxis_max],optional1,optional2)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%PREPARING THE PLOT IMAGE:</span>
+0009 <span class="comment">%It is advisable to convert the image file into a bitmap.(For other supported formats 'help imread')</span>
+0010 <span class="comment">%NOTE: This fuction will accept Truecolor(24-bit), which the fuction convert to grayscale.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%OPTIONAL ARGUMENTS:</span>
+0013 <span class="comment">%The optional arguments maybe given in any order.</span>
+0014 <span class="comment">%PLOT_SHADE==[minshading,maxshading]--Min shading and Max shading are optional. These</span>
+0015 <span class="comment">%arguments restrict the output data to particular range. This is useful if image contains more than</span>
+0016 <span class="comment">%one plot and is effective only when the plots have different colors, or shades of gray. Use</span>
+0017 <span class="comment">%IMDATSEP.M function to seperate the common data for two sets of output vectors, from this</span>
+0018 <span class="comment">%function.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%TYPE==&lt;scalar&gt;--The way the image is processed</span>
+0021 <span class="comment">%1=This version uses 3D Contour plot(DEFAULT)</span>
+0022 <span class="comment">%2=This version uses 2D Contour plot</span>
+0023 <span class="comment">%3=This versions uses edge determination(sobel technique) &amp; 3D Contour plot</span>
+0024 <span class="comment">%4=Filter out Red and use 3D Contour plot (24bit truecolor no conversion)</span>
+0025 <span class="comment">%5=Filter out Green and use 3D Contour plot (24bit truecolor no conversion)</span>
+0026 <span class="comment">%6=Filter out Blue and use 3D Contour plot (24bit truecolor no conversion)</span>
+0027 <span class="comment">%7=Accepts an image matrix, in place of a file. Matrix should not be given as string. Process</span>
+0028 <span class="comment">%        followed is as with 'type 1'.NOTE: Matrix should be 2D.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%OUTPUT:</span>
+0031 <span class="comment">%The Output Data is assigned to X,Y(Vectors). They can be used to make point plots and for</span>
+0032 <span class="comment">%curve fitting. To make line plots, sort the output vectors using IMDATSORT.M.However, This</span>
+0033 <span class="comment">%only works for simple plots.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%(Function tested on MATLAB 5.1)</span>
+0036 <span class="comment">%                    Written by: Sumeet Yamdagni</span>
+0037 <span class="comment">%                    Email: syamdagni@hotmail.com</span>
+0038 <span class="comment">%---------------------------------------------------------------------------------</span>
+0039 
+0040 <span class="comment">%Defaults</span>
+0041 flag_Clim=1;  <span class="comment">%The minimum shading limit will be assigned, which will be determined later.</span>
+0042 types=1;           <span class="comment">%Assigning default process.</span>
+0043 
+0044 <span class="comment">%Validating arguments</span>
+0045 <span class="comment">%---------------------------------------------------------------------------------</span>
+0046 <span class="keyword">if</span> nargin==4
+0047     <span class="comment">%===================</span>
+0048     <span class="keyword">if</span> length(option1)==1
+0049         <span class="comment">%______________________</span>
+0050         <span class="keyword">if</span> option1&lt;1|option1&gt;7
+0051             error(<span class="string">'Type out of range'</span>)
+0052         <span class="keyword">end</span>
+0053         <span class="comment">%______________________</span>
+0054         types=option1;
+0055     <span class="comment">%==================</span>
+0056     <span class="keyword">elseif</span> length(option1)==2
+0057         <span class="comment">%______________________</span>
+0058         <span class="keyword">if</span> max(option1)&gt;1
+0059             error(<span class="string">'Shading limits out of range. Choose values between 0&amp;1'</span>)
+0060         <span class="keyword">end</span>
+0061         <span class="comment">%______________________</span>
+0062         plot_shade=option1;        
+0063         flag_Clim=0; <span class="comment">%User defined shading range will be used.</span>
+0064     <span class="comment">%==================</span>
+0065     <span class="keyword">else</span>
+0066         error(<span class="string">'Option1 vector of invaild length'</span>)
+0067     
+0068     <span class="keyword">end</span>
+0069     <span class="comment">%==================</span>
+0070 <span class="comment">%------------------------------------</span>
+0071 <span class="keyword">elseif</span> nargin==5
+0072     <span class="comment">%===================</span>
+0073     <span class="keyword">if</span> length(option2)==1
+0074     
+0075         <span class="keyword">if</span> option2&lt;1|option2&gt;7
+0076             error(<span class="string">'Type out of range'</span>)
+0077         <span class="keyword">end</span>
+0078     
+0079         types=option2;
+0080     <span class="comment">%===================</span>
+0081     <span class="keyword">elseif</span> length(option2)==2
+0082     
+0083         <span class="keyword">if</span> max(option2)&gt;1
+0084             error(<span class="string">'Shading limits out of range. Choose values between 0&amp;1'</span>)
+0085         <span class="keyword">end</span>
+0086     
+0087         plot_shade=option2;        
+0088         flag_Clim=0; <span class="comment">%User defined shading range will be used.</span>
+0089     <span class="comment">%====================</span>
+0090     <span class="keyword">else</span>
+0091         error(<span class="string">'Option2 vector of invaild length'</span>)
+0092     <span class="keyword">end</span>
+0093     <span class="comment">%====================</span>
+0094 
+0095 <span class="comment">%-------------------------------------</span>
+0096 <span class="keyword">elseif</span> nargin &gt; 5
+0097    error(<span class="string">'Too many input arguments'</span>)
+0098 <span class="comment">%-------------------------------------</span>
+0099 <span class="keyword">elseif</span> nargin &lt; 3
+0100    error(<span class="string">'Not enough input arguments'</span>)
+0101 <span class="keyword">end</span>
+0102 <span class="comment">%---------------------------------------------------------------------------------</span>
+0103 
+0104 <span class="comment">%Inputfile is an image matrix. Then it should be 2D.</span>
+0105 <span class="keyword">if</span> types==7&amp;length(size(Inputfile))~=2
+0106     error(<span class="string">'Image matrix must be 2D'</span>)
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="comment">%Validating input scale vectors</span>
+0110 <span class="keyword">if</span> length(xscale)~=2|length(yscale)~=2;
+0111     error(<span class="string">'Input scale vector of invaild length'</span>)
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">%---------------------------------------------------------------------------------</span>
+0115 ModImg=<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(<span class="string">'P=double(Img);'</span>,<span class="string">'P=double(Img);'</span>,<span class="string">'P=edge(Img,''sobel'');'</span>,<span class="keyword">...</span>
+0116 <span class="string">'P=double(Img(:,:,1));'</span>,<span class="string">'P=double(Img(:,:,2));'</span>,<span class="string">'P=double(Img(:,:,3));'</span>,<span class="string">'P=double(Img);'</span>);
+0117 
+0118 ImgPlot=<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(<span class="string">'[dummy,h1]=contour3(x,y,P);'</span>,<span class="string">'[dummy,h1]=contour(x,y,P);'</span>,<span class="keyword">...</span>
+0119 <span class="string">'[dummy,h1]=contour3(x,y,P);'</span>,<span class="string">'[dummy,h1]=contour3(x,y,P);'</span>,<span class="keyword">...</span>
+0120 <span class="string">'[dummy,h1]=contour3(x,y,P);'</span>,<span class="string">'[dummy,h1]=contour3(x,y,P);'</span>,<span class="string">'[dummy,h1]=contour3(x,y,P);'</span>);
+0121 <span class="comment">%---------------------------------------------------------------------------------</span>
+0122 
+0123 <span class="keyword">if</span> types~=7
+0124     Img = imread(Inputfile);    <span class="comment">%Reading image data into a file</span>
+0125 <span class="keyword">else</span>
+0126     
+0127     Img=Inputfile;                        <span class="comment">%Accepting user image matrix</span>
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">%Validating whether the file is grayscale</span>
+0131 <span class="keyword">if</span> (types==1|types==2|types==3|types==7)&amp;isrgb(Img);
+0132     disp(<span class="string">'Using the inbuilt RGB2GRAY.m coverter'</span>);
+0133     Img=rgb2gray(Img);
+0134 <span class="keyword">end</span>
+0135 
+0136 <span class="comment">%----------------Modify Img----------------</span>
+0137 P=[];
+0138 eval(ModImg(types,:));
+0139 <span class="comment">%-----------------------------------------</span>
+0140 
+0141 <span class="comment">%Preparing mesh for contour</span>
+0142 [mI,nI]=size(P);
+0143 x1=linspace(xscale(1),xscale(2),nI);
+0144 y1=linspace(yscale(1),-yscale(2),mI);    <span class="comment">%The negative sign is to prevent image inversion, due to</span>
+0145 <span class="comment">%standard screen representation</span>
+0146 [x,y]=meshgrid(x1,y1);
+0147 
+0148 figure;
+0149 <span class="comment">%--------------ImgPlot---------------</span>
+0150 eval(ImgPlot(types,:));
+0151 <span class="comment">%-----------------------------------</span>
+0152 
+0153 <span class="comment">%h1 handler represents the handler for all children of axes.</span>
+0154 <span class="comment">%set(get(get(h1(1),'parent'),'parent'),'Visible','off');</span>
+0155 
+0156 <span class="comment">%Color Map</span>
+0157 <span class="comment">%cmap=&lt;color_map&gt;;</span>
+0158 cmap=gray;
+0159 colormap(cmap);
+0160 
+0161 <span class="comment">%Finding handle data points</span>
+0162 [size_h1,dummy]=size(h1);
+0163 
+0164 <span class="comment">%Control variables</span>
+0165 t=0;
+0166 k=0;
+0167 l=0;
+0168 
+0169 <span class="comment">%Output vectors</span>
+0170 Xmean=[];
+0171 Ymean=[];
+0172 
+0173 Clim=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h1(1),<span class="string">'Parent'</span>),<span class="string">'Clim'</span>); <span class="comment">%Gets the shading limits</span>
+0174 
+0175 <span class="comment">%Determining Data points--------------------------------------------------------------</span>
+0176 <span class="keyword">for</span> k=1:size_h1;
+0177     <span class="comment">%-----------------------------------</span>
+0178     <span class="keyword">if</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h1(k),<span class="string">'Type'</span>)==<span class="string">'patch'</span>;
+0179 <span class="comment">%[m,n]=size(get(h1(k),'Faces'));    %To restrict the number of data points</span>
+0180     
+0181         <span class="comment">%Shading To be considered as per user input only if optional arguments given.</span>
+0182         <span class="keyword">if</span> flag_Clim==0
+0183         HighShade=plot_shade(2);
+0184         LowShade=plot_shade(1);
+0185         <span class="keyword">else</span>
+0186         <span class="comment">%Arguments not given, using shading limit</span>
+0187         HighShade=Clim(1);
+0188         LowShade=Clim(1);
+0189         <span class="keyword">end</span>
+0190         
+0191 <span class="comment">%    if m&lt;16---------------------Polygons with more than 16 sides will be excluded, n can vary</span>
+0192 <span class="comment">%depending on user. Note line 88</span>
+0193         
+0194         <span class="comment">%Checking the intensity of shading</span>
+0195         Cdat=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h1(k),<span class="string">'CData'</span>); <span class="comment">%Gets shading data</span>
+0196         <span class="comment">%===================================</span>
+0197         <span class="keyword">if</span> Cdat(1)&lt;=HighShade&amp;Cdat(1)&gt;=LowShade;
+0198             <span class="comment">%True--This is a data point we can use</span>
+0199             Xdat=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h1(k),<span class="string">'XData'</span>);
+0200             Ydat=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h1(k),<span class="string">'YData'</span>);
+0201         
+0202             <span class="comment">%Calculating the average of the data point</span>
+0203             [size_dat,n]=size(Xdat); <span class="comment">%The size of the two vectors will be the same</span>
+0204         
+0205             <span class="comment">%To eliminate NaN</span>
+0206             Xdat(size_dat)=0;
+0207             Ydat(size_dat)=0;
+0208         
+0209             <span class="comment">%Calculating the data point</span>
+0210             t=t+1;
+0211             Xmean(t)=sum(Xdat)/(size_dat-1);
+0212             Ymean(t)=sum(Ydat)/(size_dat-1);
+0213             <span class="keyword">end</span>
+0214             <span class="comment">%===============================</span>
+0215 <span class="comment">%end</span>
+0216     <span class="keyword">end</span>
+0217 <span class="comment">%--------------------------------------</span>
+0218 <span class="keyword">end</span>
+0219 <span class="comment">%---------------------------------------------------------------------------------</span>
+0220 ymax=yscale(2);                        
+0221 Ymean1=Ymean+ymax;            <span class="comment">%This rectifies the provision taken for preventing inversion</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

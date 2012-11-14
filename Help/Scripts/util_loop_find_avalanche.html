@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_loop_find_avalanche</title>
+  <meta name="keywords" content="util_loop_find_avalanche">
+  <meta name="description" content="UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Scripts -->
+<h1>util_loop_find_avalanche
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( filename, gnd, result_dir ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a
+mcdfile.
+   Note: filename should be in full path format.
+   Example:
+       util_perform_op_in_directory('G:\MC_Rack Data\Fe','[ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( %file, [28], 'G:\Result' );', 'G:\Result', '*.mcd', 'locations sizes lengths vectors network_vectors seq spks amps', 'is_recursive', true, 'verbose', true);
+
+   Created on Aug/18/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-09-19  Bug fix.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_detect_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin )">util_detect_avalanche</a>	UTIL_DETECT_AVALANCHE Detecting the neural avalanches</li><li><a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>	UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( filename, gnd, result_dir )</a>
+0002 <span class="comment">%UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a</span>
+0003 <span class="comment">%mcdfile.</span>
+0004 <span class="comment">%   Note: filename should be in full path format.</span>
+0005 <span class="comment">%   Example:</span>
+0006 <span class="comment">%       util_perform_op_in_directory('G:\MC_Rack Data\Fe','[ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( %file, [28], 'G:\Result' );', 'G:\Result', '*.mcd', 'locations sizes lengths vectors network_vectors seq spks amps', 'is_recursive', true, 'verbose', true);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Created on Aug/18/2010 By Pu Jiangbo</span>
+0009 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   $Revision:</span>
+0012 <span class="comment">%       PJB#2010-09-19  Bug fix.</span>
+0013 
+0014 [ d, spif ] = <a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>(<span class="string">'isCompact'</span>, 1, <span class="string">'filename'</span>, filename);
+0015 [ locations sizes lengths vectors network_vectors seq spks amps ] = <a href="../Calculation/util_detect_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin )">util_detect_avalanche</a>( spif, gnd, <span class="string">'method_size'</span>, <span class="string">'unique'</span>, <span class="string">'calc_amp'</span>, <span class="string">'mean-p2p'</span>);
+0016 [ s_p s_x s_a s_fitresult s_gof ] = <a href="../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>( sizes, <span class="string">'S(#Electrode)'</span> );
+0017 [ l_p l_x l_a l_fitresult l_gof ] = <a href="../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>( lengths, <span class="string">'L'</span> );
+0018 [ spk_p spk_x spk_a spk_fitresult spk_gof ] = <a href="../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>( spks, <span class="string">'S(nLFPs)'</span> );
+0019 [ amp_p amp_x amp_a amp_fitresult amp_gof ] = <a href="../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>( amps, <span class="string">'Mean(LFPs)'</span> );
+0020 
+0021 <span class="keyword">end</span>
+0022</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

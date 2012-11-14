@@ -1,0 +1,3 @@
+download xpdf and ghostscript(64bit)
+extract and copy them into program files (not x86)
+change ghostscript's xxxx64(c).exe into xxxxx32(c).exe

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sample</title>
+  <meta name="keywords" content="sample">
+  <meta name="description" content="SAMPLE    Sample from categorical distribution.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>sample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SAMPLE    Sample from categorical distribution.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = sample(p, n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">SAMPLE    Sample from categorical distribution.
+ X = SAMPLE(P,N) returns a row vector of N integers, sampled according to the 
+ probability distribution P (an array of numbers &gt;= 0, whose sum is &gt; 0).
+ sum(P) does not have to be 1, but it must be &gt; 0.
+ X(i) ranges 1 to length(P).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="sample_hist.html" class="code" title="function h = sample_hist(p, n)">sample_hist</a>	SAMPLE_HIST     Sample from a multinomial distribution.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../Otherbox/lightspeed/graphics/test_hhist.html" class="code" title="">test_hhist</a>	demonstrate use of hhist</li><li><a href="../../Otherbox/lightspeed/tests/test_sample.html" class="code" title="">test_sample</a>	</li><li><a href="../../Otherbox/plfit/plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">plfit</a>	PLFIT fits a power-law distributional model to data.</li><li><a href="../../Otherbox/plfit/plpva.html" class="code" title="function [p,gof]=plpva(x, xmin, varargin)">plpva</a>	PLPVA calculates the p-value for the given power-law fit to some data.</li><li><a href="../../Otherbox/plfit/plvar.html" class="code" title="function [alpha, xmin, n]=plvar(x, varargin)">plvar</a>	PLVAR estimates the uncertainty in the estimated power-law parameters.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function x = sample(p, n)</a>
+0002 <span class="comment">%SAMPLE    Sample from categorical distribution.</span>
+0003 <span class="comment">% X = SAMPLE(P,N) returns a row vector of N integers, sampled according to the</span>
+0004 <span class="comment">% probability distribution P (an array of numbers &gt;= 0, whose sum is &gt; 0).</span>
+0005 <span class="comment">% sum(P) does not have to be 1, but it must be &gt; 0.</span>
+0006 <span class="comment">% X(i) ranges 1 to length(P).</span>
+0007 
+0008 <span class="comment">% Written by Tom Minka</span>
+0009 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0010 
+0011 <span class="keyword">if</span> nargin &lt; 2
+0012   n = 1;
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> n &lt; 10
+0016   cdf = cumsum(p(:));
+0017   <span class="keyword">if</span> cdf(end) &lt;= 0
+0018     error(<span class="string">'distribution is all zeros'</span>);
+0019   <span class="keyword">end</span>
+0020   x = zeros(1,n);
+0021   <span class="keyword">for</span> i = 1:n
+0022     x(i) = sum(cdf &lt; rand*cdf(end)) + 1;
+0023   <span class="keyword">end</span>
+0024 <span class="keyword">else</span>
+0025   <span class="comment">% large n method</span>
+0026   p = p(:);
+0027   p = p/sum(p);
+0028   h = <a href="sample_hist.html" class="code" title="function h = sample_hist(p, n)">sample_hist</a>(p,n);
+0029   x = zeros(1,n);
+0030   i = [0 cumsum(h)'];
+0031   <span class="comment">% set x = [1 1 1 1 2 2 3 3 3 ... ]</span>
+0032   <span class="keyword">for</span> k = 1:length(h)
+0033     x((i(k)+1):i(k+1)) = k;
+0034   <span class="keyword">end</span>
+0035   x = x(randperm(n));
+0036 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

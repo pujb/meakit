@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ad2muvolt</title>
+  <meta name="keywords" content="ad2muvolt">
+  <meta name="description" content="ad2muvolt - converts MCRack ADC values into microvolt values (datastrm method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>ad2muvolt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ad2muvolt - converts MCRack ADC values into microvolt values (datastrm method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [vdata, tvals] = ad2muvolt(a, addata, streamname); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> ad2muvolt - converts MCRack ADC values into microvolt values (datastrm method)
+
+ [vdata, tvals] = ad2muvolt(a, addata, streamname) returns an array &lt;vdata&gt; 
+ of size(addata) with values converted from &lt;addata&gt; with the conversion 
+ factors given in the structure &lt;a&gt; which must contain the fields 
+ &lt;a.ZeroADValue&gt; and &lt;a.MicrovoltsPerAD&gt; such as in datastream objects 
+ or the RACKSETUP variable used with other MCRacks datasets. &lt;tvals&gt; is a 
+ time vector of the length of a row of &lt;addata&gt; based on &lt;a.MicrosecondsPerTick&gt;.
+
+ If &lt;streamname&gt; is given conversion will be based on the parameters for
+ that datastream. 
+
+ NOTE: addata MUST NOT be a cell array!
+
+ U. Egert 3/98</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="getstreamnumber.html" class="code" title="function streamnumber=getstreamnumber(d,streamname);">getstreamnumber</a>	getstreamnumber - returns streamnumber of streamname (datastream method)</li><li><a href="../../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Convertion/util_convert_spif_with_amplitude.html" class="code" title="function [ spif ] = util_convert_spif_with_amplitude( d, spif )">util_convert_spif_with_amplitude</a>	UTIL_CONVERT_SPIF_WITH_AMPLITUDE Process the spike amplitude values in the</li><li><a href="../../../../Stimulation/util_ps_amplitude_by_time_by_trigger.html" class="code" title="function [ ax_x spike_number_in_each_bin spike_amplitude_mean spike_amplitude_std] = util_ps_amplitude_by_time_by_trigger( triggerif,spif,D,chid,binsize,timescope,trigger_range,isManualTrigger,peakType)">util_ps_amplitude_by_time_by_trigger</a>	UTIL_PS_AMPLITUDE_BY_TIME_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的幅度随时间轴的分布</li><li><a href="../../../../Stimulation/util_ps_first_response_spike_profile.html" class="code" title="function [ timing timing_std timing_all amp amp_std amp_all ] = util_ps_first_response_spike_profile( triggerif,spif,D,chid,trigger_range,isManualTrigger,peakType)">util_ps_first_response_spike_profile</a>	UTIL_PS_FIRST_RESPONSE_SPIKE_PROFILE 工具函数：处理刺激后第一个响应Spike的位置和幅度</li><li><a href="../../../../Stimulation/util_psth_amplitude_by_trigger.html" class="code" title="function [ ax_x result ] = util_psth_amplitude_by_trigger( triggerif,spif,D,chid,binsize,timescope,trigger_range,isManualTrigger,isNormalized,peakType)">util_psth_amplitude_by_trigger</a>	UTIL_PSTH_AMPLITUDE_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的Spike幅度分布</li><li><a href="../../../../Stimulation/util_sti_all_responses.html" class="code" title="function [ elecs responses_timing responses_amplitude ] = util_sti_all_responses( varargin )">util_sti_all_responses</a>	UTIL_STI_ALL_RESPONSES 工具函数：提取刺激后指定时间窗内所有电极的响应</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [vdata, tvals] = ad2muvolt(a, addata, streamname);</a>
+0002 <span class="comment">% ad2muvolt - converts MCRack ADC values into microvolt values (datastrm method)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% [vdata, tvals] = ad2muvolt(a, addata, streamname) returns an array &lt;vdata&gt;</span>
+0005 <span class="comment">% of size(addata) with values converted from &lt;addata&gt; with the conversion</span>
+0006 <span class="comment">% factors given in the structure &lt;a&gt; which must contain the fields</span>
+0007 <span class="comment">% &lt;a.ZeroADValue&gt; and &lt;a.MicrovoltsPerAD&gt; such as in datastream objects</span>
+0008 <span class="comment">% or the RACKSETUP variable used with other MCRacks datasets. &lt;tvals&gt; is a</span>
+0009 <span class="comment">% time vector of the length of a row of &lt;addata&gt; based on &lt;a.MicrosecondsPerTick&gt;.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% If &lt;streamname&gt; is given conversion will be based on the parameters for</span>
+0012 <span class="comment">% that datastream.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% NOTE: addata MUST NOT be a cell array!</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% U. Egert 3/98</span>
+0017 
+0018 
+0019 <span class="keyword">if</span> iscell(addata)
+0020    error(<span class="string">'addata MUST NOT be a cell array!'</span>);
+0021 <span class="keyword">end</span>;
+0022 
+0023 <span class="keyword">if</span> strmatch(<span class="string">'ole'</span>, <a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(a,<span class="string">'fileaccess'</span>)),
+0024    <span class="keyword">if</span> nargin==2
+0025       sn = <a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(a, <span class="string">'StreamNames'</span>);
+0026       s = [strmatch(<span class="string">'Spikes'</span>, sn) strmatch(<span class="string">'Electrode Raw Data'</span>, sn)];
+0027       
+0028       s=s(find(s&gt;0));
+0029       <span class="keyword">if</span> length(s)&gt;1
+0030          warning(<span class="string">'found more than one datastream, please indicate the one to use for conversion'</span>)
+0031          <span class="keyword">return</span>
+0032       <span class="keyword">end</span>
+0033    <span class="keyword">else</span>
+0034       s=<a href="getstreamnumber.html" class="code" title="function streamnumber=getstreamnumber(d,streamname);">getstreamnumber</a>(a,streamname);
+0035    <span class="keyword">end</span>;
+0036    
+0037    ZAD = a.ZeroADValue2(s);
+0038    MpAD = a.MicrovoltsPerAD2(s);
+0039    
+0040    vdata = (addata - ZAD) * MpAD;
+0041    tvals = a.MicrosecondsPerTick * [1:size(addata,2)];
+0042 <span class="keyword">else</span>
+0043    
+0044    ZAD = a.ZeroADValue;
+0045    MpAD = a.MicrovoltsPerAD;
+0046    
+0047    vdata = (addata - ZAD) * MpAD;
+0048    tvals = a.MicrosecondsPerTick * [1:size(addata,2)];
+0049 <span class="keyword">end</span>;
+0050 
+0051</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_set_colorbar</title>
+  <meta name="keywords" content="util_set_colorbar">
+  <meta name="description" content="UTIL_SET_COLORBAR Get a styled colorbar">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_set_colorbar
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_SET_COLORBAR Get a styled colorbar</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ handle ] = util_set_colorbar( map ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_SET_COLORBAR Get a styled colorbar
+   Map:    Colormap, e.g. jet.
+   handle: Colorbar handle
+
+   Created on Jul/29/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Plot/util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li><li><a href="../Scripts/network_states.html" class="code" title="">network_states</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ handle ] = util_set_colorbar( map )</a>
+0002 <span class="comment">%UTIL_SET_COLORBAR Get a styled colorbar</span>
+0003 <span class="comment">%   Map:    Colormap, e.g. jet.</span>
+0004 <span class="comment">%   handle: Colorbar handle</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Created on Jul/29/2010 By Pu Jiangbo</span>
+0007 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0008 
+0009 handle = colorbar();
+0010 colormap(map);
+0011 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handle, <span class="string">'box'</span>, <span class="string">'off'</span>);
+0012 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handle, <span class="string">'TickDir'</span>, <span class="string">'out'</span>);
+0013 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handle, <span class="string">'YTickMode'</span>,<span class="string">'manual'</span>);
+0014 
+0015 <span class="keyword">end</span>
+0016</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

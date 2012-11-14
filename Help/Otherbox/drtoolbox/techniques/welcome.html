@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of welcome</title>
+  <meta name="keywords" content="welcome">
+  <meta name="description" content="WELCOME Displays DR Toolbox version information">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>welcome
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>WELCOME Displays DR Toolbox version information</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function welcome </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">WELCOME Displays DR Toolbox version information
+
+   welcome
+
+ Displays DR Toolbox version information.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li><li><a href="../../../Otherbox/drtoolbox/generate_data.html" class="code" title="function [X, labels, t] = generate_data(dataname, n, noise)">generate_data</a>	GENERATE_DATA Generates an artificial dataset</li><li><a href="../../../Otherbox/drtoolbox/intrinsic_dim.html" class="code" title="function no_dims = intrinsic_dim(X, method)">intrinsic_dim</a>	INTRINSIC_DIM Eestimate the intrinsic dimensionality of dataset X</li><li><a href="../../../Otherbox/drtoolbox/out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li><li><a href="../../../Otherbox/drtoolbox/out_of_sample_est.html" class="code" title="function t_points = out_of_sample_est(points, X, mappedX)">out_of_sample_est</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension using estimation technique</li><li><a href="../../../Otherbox/drtoolbox/prewhiten.html" class="code" title="function [X, W, mu_X] = prewhiten(X)">prewhiten</a>	PREWHITEN Performs prewhitening of a dataset X</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function welcome</a>
+0002 <span class="comment">%WELCOME Displays DR Toolbox version information</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   welcome</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Displays DR Toolbox version information.</span>
+0007 
+0008 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0009 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0010 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0011 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0012 <span class="comment">% maintain the name of the original author.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0015 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0016 
+0017     <span class="keyword">global</span> DR_WELCOME;
+0018     <span class="keyword">if</span> isempty(DR_WELCOME)
+0019         disp(<span class="string">' '</span>);
+0020         disp(<span class="string">'   Welcome to the Matlab Toolbox for Dimensionality Reduction, version 0.7.2b (2-November-2010).'</span>);
+0021         disp(<span class="string">'      You are free to modify or redistribute this code (for non-commercial purposes), as long as a reference'</span>);
+0022         disp(<span class="string">'      to the original author (Laurens van der Maaten, UC San Diego / Delft Univ. of Techn.) is retained.'</span>);
+0023         disp(<span class="string">'      For more information, please visit http://homepage.tudelft.nl/19j49'</span>);
+0024         disp(<span class="string">' '</span>);
+0025         DR_WELCOME = 1;
+0026     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

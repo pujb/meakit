@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_find_not_continued_point</title>
+  <meta name="keywords" content="util_find_not_continued_point">
+  <meta name="description" content="UTIL_FIND_NOT_CONTINUED_POINT Search the input vector to find out the">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_find_not_continued_point
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_FIND_NOT_CONTINUED_POINT Search the input vector to find out the</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ endp ] = util_find_not_continued_point( in_vector, startp, step, method ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_FIND_NOT_CONTINUED_POINT Search the input vector to find out the
+first not-continued point in the list
+   Input:
+           in_vector:  Input vector
+           startp:     The start location of the input vector
+           step:       if in_vector(i+1) - in_vector(i) == step, we will
+                       say that the continuity is kept. otherwise, i+1
+                       will be the breakpoint.
+           method:     The comparing method, '&gt;', '&gt;=', '&lt;', '&lt;='
+   Output:
+           endp:       Returns the breakpoint.
+
+   Created on Jul/31/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-03-07  Speed up! (not use 'diff' and 'find')</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ endp ] = util_find_not_continued_point( in_vector, startp, step, method )</a>
+0002 <span class="comment">%UTIL_FIND_NOT_CONTINUED_POINT Search the input vector to find out the</span>
+0003 <span class="comment">%first not-continued point in the list</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           in_vector:  Input vector</span>
+0006 <span class="comment">%           startp:     The start location of the input vector</span>
+0007 <span class="comment">%           step:       if in_vector(i+1) - in_vector(i) == step, we will</span>
+0008 <span class="comment">%                       say that the continuity is kept. otherwise, i+1</span>
+0009 <span class="comment">%                       will be the breakpoint.</span>
+0010 <span class="comment">%           method:     The comparing method, '&gt;', '&gt;=', '&lt;', '&lt;='</span>
+0011 <span class="comment">%   Output:</span>
+0012 <span class="comment">%           endp:       Returns the breakpoint.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Created on Jul/31/2010 By Pu Jiangbo</span>
+0015 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   $Revision:</span>
+0018 <span class="comment">%       PJB#2011-03-07  Speed up! (not use 'diff' and 'find')</span>
+0019 
+0020 <span class="comment">% For speed, we will not check any parameters, BE CAREFUL!</span>
+0021 
+0022 <span class="comment">% Old version</span>
+0023 <span class="comment">% First diff, then find(,1)</span>
+0024 
+0025 <span class="keyword">if</span> strcmp(method, <span class="string">'&gt;'</span>)
+0026     <span class="keyword">for</span> i = startp:(length(in_vector) - 1)
+0027         <span class="keyword">if</span> (in_vector(i + 1) - in_vector(i)) &gt; step
+0028             endp = i + startp;
+0029             <span class="keyword">return</span>;
+0030         <span class="keyword">end</span>
+0031     <span class="keyword">end</span>
+0032     endp = [];
+0033 <span class="keyword">elseif</span> strcmp(method, <span class="string">'&gt;='</span>)
+0034     <span class="keyword">for</span> i = startp:(length(in_vector) - 1)
+0035         <span class="keyword">if</span> (in_vector(i + 1) - in_vector(i)) &gt;= step
+0036             endp = i + startp;
+0037             <span class="keyword">return</span>;
+0038         <span class="keyword">end</span>
+0039     <span class="keyword">end</span>
+0040     endp = [];
+0041 <span class="keyword">elseif</span> strcmp(method, <span class="string">'&lt;'</span>)
+0042     <span class="keyword">for</span> i = startp:(length(in_vector) - 1)
+0043         <span class="keyword">if</span> (in_vector(i + 1) - in_vector(i)) &lt; step
+0044             endp = i + startp;
+0045             <span class="keyword">return</span>;
+0046         <span class="keyword">end</span>
+0047     <span class="keyword">end</span>
+0048     endp = [];
+0049 <span class="keyword">elseif</span> strcmp(method, <span class="string">'&lt;='</span>)
+0050     <span class="keyword">for</span> i = startp:(length(in_vector) - 1)
+0051         <span class="keyword">if</span> (in_vector(i + 1) - in_vector(i)) &lt;= step
+0052             endp = i + startp;
+0053             <span class="keyword">return</span>;
+0054         <span class="keyword">end</span>
+0055     <span class="keyword">end</span>
+0056     endp = [];
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

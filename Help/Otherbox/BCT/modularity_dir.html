@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modularity_dir</title>
+  <meta name="keywords" content="modularity_dir">
+  <meta name="description" content="MODULARITY_DIR     Optimal community structure and modularity">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>modularity_dir
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MODULARITY_DIR     Optimal community structure and modularity</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Ci Q]=modularity_dir(A) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MODULARITY_DIR     Optimal community structure and modularity
+
+   Ci = modularity_dir(W);
+   [Ci Q] = modularity_dir(W);
+
+   The optimal community structure is a subdivision of the network into
+   nonoverlapping groups of nodes in a way that maximizes the number of
+   within-group edges, and minimizes the number of between-group edges. 
+   The modularity is a statistic that quantifies the degree to which the
+   network may be subdivided into such clearly delineated groups. 
+
+   Input:      W,      directed (weighted or binary) connection matrix.
+
+   Outputs:    Ci,     optimal community structure
+               Q,      maximized modularity
+
+   Note: Ci and Q may vary from run to run, due to heuristics in the 
+   algorithm. Consequently, it may be worth to compare multiple runs.
+   Also see Good et al. (2010) Phys. Rev. E 81:046106.
+
+   Reference: Leicht and Newman (2008) Phys Rev Lett 100:118703.
+
+
+   2008-2010
+   Mika Rubinov, UNSW
+   Jonathan Power, WUSTL
+   Dani Bassett, UCSB</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Ci Q]=modularity_dir(A)</a>
+0002 <span class="comment">%MODULARITY_DIR     Optimal community structure and modularity</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   Ci = modularity_dir(W);</span>
+0005 <span class="comment">%   [Ci Q] = modularity_dir(W);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   The optimal community structure is a subdivision of the network into</span>
+0008 <span class="comment">%   nonoverlapping groups of nodes in a way that maximizes the number of</span>
+0009 <span class="comment">%   within-group edges, and minimizes the number of between-group edges.</span>
+0010 <span class="comment">%   The modularity is a statistic that quantifies the degree to which the</span>
+0011 <span class="comment">%   network may be subdivided into such clearly delineated groups.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Input:      W,      directed (weighted or binary) connection matrix.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Outputs:    Ci,     optimal community structure</span>
+0016 <span class="comment">%               Q,      maximized modularity</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   Note: Ci and Q may vary from run to run, due to heuristics in the</span>
+0019 <span class="comment">%   algorithm. Consequently, it may be worth to compare multiple runs.</span>
+0020 <span class="comment">%   Also see Good et al. (2010) Phys. Rev. E 81:046106.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Reference: Leicht and Newman (2008) Phys Rev Lett 100:118703.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   2008-2010</span>
+0026 <span class="comment">%   Mika Rubinov, UNSW</span>
+0027 <span class="comment">%   Jonathan Power, WUSTL</span>
+0028 <span class="comment">%   Dani Bassett, UCSB</span>
+0029 
+0030 
+0031 <span class="comment">%   Modification History:</span>
+0032 <span class="comment">%   Jul 2008: Original (Mika Rubinov)</span>
+0033 <span class="comment">%   Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power)</span>
+0034 <span class="comment">%   Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)</span>
+0035 <span class="comment">%   Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)</span>
+0036 <span class="comment">%   Sep 2010: Node identities are now permuted (Dani Bassett)</span>
+0037 
+0038 N=length(A);                            <span class="comment">%number of vertices</span>
+0039 n_perm = randperm(N);                   <span class="comment">%DB: randomly permute order of nodes</span>
+0040 A = A(n_perm,n_perm);                   <span class="comment">%DB: use permuted matrix for subsequent analysis</span>
+0041 Ki=sum(A,1);                            <span class="comment">%in-degree</span>
+0042 Ko=sum(A,2);                            <span class="comment">%out-degree</span>
+0043 m=sum(Ki);                               <span class="comment">%number of edges</span>
+0044 b=A-(Ko*Ki).'/m;
+0045 B=b+b.';                                <span class="comment">%directed modularity matrix</span>
+0046 Ci=ones(N,1);                           <span class="comment">%community indices</span>
+0047 cn=1;                                   <span class="comment">%number of communities</span>
+0048 U=[1 0];                                <span class="comment">%array of unexamined communites</span>
+0049 
+0050 ind=1:N;
+0051 Bg=B;
+0052 Ng=N;
+0053 
+0054 <span class="keyword">while</span> U(1)                              <span class="comment">%examine community U(1)</span>
+0055     [V D]=eig(Bg);
+0056     [d1 i1]=max(diag(D));               <span class="comment">%most positive eigenvalue of Bg</span>
+0057     v1=V(:,i1);                         <span class="comment">%corresponding eigenvector</span>
+0058 
+0059     S=ones(Ng,1);
+0060     S(v1&lt;0)=-1;
+0061     q=S.'*Bg*S;                         <span class="comment">%contribution to modularity</span>
+0062 
+0063     <span class="keyword">if</span> q&gt;1e-10                           <span class="comment">%contribution positive: U(1) is divisible</span>
+0064         qmax=q;                         <span class="comment">%maximal contribution to modularity</span>
+0065         Bg(logical(eye(Ng)))=0;          <span class="comment">%Bg is modified, to enable fine-tuning</span>
+0066         indg=ones(Ng,1);                <span class="comment">%array of unmoved indices</span>
+0067         Sit=S;
+0068         <span class="keyword">while</span> any(indg);                <span class="comment">%iterative fine-tuning</span>
+0069             Qit=qmax-4*Sit.*(Bg*Sit);     <span class="comment">%this line is equivalent to:</span>
+0070             qmax=max(Qit.*indg);        <span class="comment">%for i=1:Ng</span>
+0071             imax=(Qit==qmax);           <span class="comment">%    Sit(i)=-Sit(i);</span>
+0072             Sit(imax)=-Sit(imax);       <span class="comment">%    Qit(i)=Sit.'*Bg*Sit;</span>
+0073             indg(imax)=nan;             <span class="comment">%    Sit(i)=-Sit(i);</span>
+0074             <span class="keyword">if</span> qmax&gt;q;                  <span class="comment">%end</span>
+0075                 q=qmax;
+0076                 S=Sit;
+0077             <span class="keyword">end</span>
+0078         <span class="keyword">end</span>
+0079 
+0080         <span class="keyword">if</span> abs(sum(S))==Ng              <span class="comment">%unsuccessful splitting of U(1)</span>
+0081             U(1)=[];
+0082         <span class="keyword">else</span>
+0083             cn=cn+1;
+0084             Ci(ind(S==1))=U(1);         <span class="comment">%split old U(1) into new U(1) and into cn</span>
+0085             Ci(ind(S==-1))=cn;
+0086             U=[cn U];
+0087         <span class="keyword">end</span>
+0088     <span class="keyword">else</span>                                <span class="comment">%contribution nonpositive: U(1) is indivisible</span>
+0089         U(1)=[];
+0090     <span class="keyword">end</span>
+0091 
+0092     ind=find(Ci==U(1));                 <span class="comment">%indices of unexamined community U(1)</span>
+0093     bg=B(ind,ind);
+0094     Bg=bg-diag(sum(bg));                <span class="comment">%modularity matrix for U(1)</span>
+0095     Ng=length(ind);                     <span class="comment">%number of vertices in U(1)</span>
+0096 <span class="keyword">end</span>
+0097 
+0098 s=Ci(:,ones(1,N));                      <span class="comment">%compute modularity</span>
+0099 Q=~(s-s.').*B/(2*m);
+0100 Q=sum(Q(:));
+0101 Ci_corrected = zeros(N,1);              <span class="comment">% DB: initialize Ci_corrected</span>
+0102 Ci_corrected(n_perm) = Ci;              <span class="comment">% DB: return order of nodes to the order used at the input stage.</span>
+0103 Ci = Ci_corrected;                      <span class="comment">% DB: output corrected community assignments</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

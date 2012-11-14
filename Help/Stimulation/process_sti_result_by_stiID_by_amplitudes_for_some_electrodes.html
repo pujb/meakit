@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of process_sti_result_by_stiID_by_amplitudes_for_some_electrodes</title>
+  <meta name="keywords" content="process_sti_result_by_stiID_by_amplitudes_for_some_electrodes">
+  <meta name="description" content="PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES_FOR_SOME_ELECTRODES 工具函数：提取部分通道的响应参数">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>process_sti_result_by_stiID_by_amplitudes_for_some_electrodes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES_FOR_SOME_ELECTRODES 工具函数：提取部分通道的响应参数</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ analysis ] = process_sti_result_by_stiID_by_amplitudes_for_some_electrodes( paraname, result, sti_id, stipro, list, isSort, sort_by_n ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES_FOR_SOME_ELECTRODES 工具函数：提取部分通道的响应参数
+ 提取刺激参数中，某个电极各个不同电压刺激下，指定通道的统计结果
+（可按照第sort_by_n个电压时，各个响应的从小到大输出，顺序在analysis的电极列表序）
+   输入参数：
+       paraname，要统计的参数名，和result结构体中对应
+       result，预先处理好的刺激结果矩阵
+       sti_id，刺激电极
+       stipro，刺激方案
+       list，要统计的电极列表，如[34 68]
+       isSort，是否要根据第n个电压进行排序
+       sort_by_n，第n个电压
+   输出参数：
+       analysis，结果
+
+ 蒲江波 2010年5月6日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_parse_para_fromstimulation.html" class="code" title="function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation )">util_parse_para_fromstimulation</a>	UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ analysis ] = process_sti_result_by_stiID_by_amplitudes_for_some_electrodes( paraname, result, sti_id, stipro, list, isSort, sort_by_n )</a>
+0002 <span class="comment">%PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES_FOR_SOME_ELECTRODES 工具函数：提取部分通道的响应参数</span>
+0003 <span class="comment">% 提取刺激参数中，某个电极各个不同电压刺激下，指定通道的统计结果</span>
+0004 <span class="comment">%（可按照第sort_by_n个电压时，各个响应的从小到大输出，顺序在analysis的电极列表序）</span>
+0005 <span class="comment">%   输入参数：</span>
+0006 <span class="comment">%       paraname，要统计的参数名，和result结构体中对应</span>
+0007 <span class="comment">%       result，预先处理好的刺激结果矩阵</span>
+0008 <span class="comment">%       sti_id，刺激电极</span>
+0009 <span class="comment">%       stipro，刺激方案</span>
+0010 <span class="comment">%       list，要统计的电极列表，如[34 68]</span>
+0011 <span class="comment">%       isSort，是否要根据第n个电压进行排序</span>
+0012 <span class="comment">%       sort_by_n，第n个电压</span>
+0013 <span class="comment">%   输出参数：</span>
+0014 <span class="comment">%       analysis，结果</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% 蒲江波 2010年5月6日</span>
+0017 
+0018 <span class="comment">% 计算在指定电极刺激时，总共有多少种变化</span>
+0019 [ ~, ~, ~, variation_amplitude,~ , ~, ~ ] = <a href="util_parse_para_fromstimulation.html" class="code" title="function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation )">util_parse_para_fromstimulation</a>(stipro);
+0020 
+0021 <span class="comment">% Remove STI</span>
+0022 list(list==sti_id) = [];
+0023 
+0024 <span class="keyword">if</span> isSort
+0025     <span class="comment">% Get sort value (by n)</span>
+0026     firstval = [];
+0027     <span class="keyword">for</span> i=1:length(list);
+0028         firstval = [firstval; result.([<span class="string">'amp'</span> num2str(variation_amplitude(sort_by_n))]).num_response.([<span class="string">'ch'</span> num2str(list(i))]).stat.mean list(i)];
+0029     <span class="keyword">end</span>
+0030     <span class="comment">% Show for checking</span>
+0031     firstval
+0032     <span class="comment">% Sort</span>
+0033     [~, index]=sort(firstval,1);
+0034     list = firstval(index(:,1),2);
+0035 <span class="keyword">end</span>
+0036 
+0037 
+0038 
+0039 <span class="keyword">for</span> i=1:length(list);
+0040     analysis.([<span class="string">'ch'</span> num2str(list(i))]).mean = [];
+0041     analysis.([<span class="string">'ch'</span> num2str(list(i))]).sem = [];
+0042     <span class="keyword">for</span> j=1:length(variation_amplitude)
+0043         analysis.([<span class="string">'ch'</span> num2str(list(i))]).mean = [analysis.([<span class="string">'ch'</span> num2str(list(i))]).mean result.([<span class="string">'amp'</span> num2str(variation_amplitude(j))]).(paraname).([<span class="string">'ch'</span> num2str(list(i))]).stat.mean];
+0044         analysis.([<span class="string">'ch'</span> num2str(list(i))]).sem = [analysis.([<span class="string">'ch'</span> num2str(list(i))]).sem result.([<span class="string">'amp'</span> num2str(variation_amplitude(j))]).(paraname).([<span class="string">'ch'</span> num2str(list(i))]).stat.sem];
+0045     <span class="keyword">end</span>
+0046 <span class="keyword">end</span>
+0047 
+0048 
+0049 <span class="keyword">end</span>
+0050</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

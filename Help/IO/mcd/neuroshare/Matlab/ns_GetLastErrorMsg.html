@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_GetLastErrorMsg</title>
+  <meta name="keywords" content="ns_GetLastErrorMsg">
+  <meta name="description" content="ns_GetLastErrorMsg   Retrieves the extended error message for the last">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_GetLastErrorMsg
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_GetLastErrorMsg   Retrieves the extended error message for the last</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, LastError] = ns_GetLastErrorMsg(); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_GetLastErrorMsg   Retrieves the extended error message for the last
+error
+
+   Usage:
+      [ns_RESULT, LastError] = ns_GetLastErrorMsg
+
+   Description:
+       Returns the last error message in text form to LastError. This
+       function should be called immediately following a function whose
+       return value indicates that an error occurred. The maximum size of
+       the error message text is 256 characters.
+
+   Return Values:
+       LastError    Variable to receive the extended last error message.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_LIBERROR    Library error
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 2/21/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, LastError] = ns_GetLastErrorMsg();</a>
+0002 
+0003 <span class="comment">%ns_GetLastErrorMsg   Retrieves the extended error message for the last</span>
+0004 <span class="comment">%error</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Usage:</span>
+0007 <span class="comment">%      [ns_RESULT, LastError] = ns_GetLastErrorMsg</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Description:</span>
+0010 <span class="comment">%       Returns the last error message in text form to LastError. This</span>
+0011 <span class="comment">%       function should be called immediately following a function whose</span>
+0012 <span class="comment">%       return value indicates that an error occurred. The maximum size of</span>
+0013 <span class="comment">%       the error message text is 256 characters.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Return Values:</span>
+0016 <span class="comment">%       LastError    Variable to receive the extended last error message.</span>
+0017 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0018 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0019 <span class="comment">%                   generated:</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%                       ns_LIBERROR    Library error</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0024 <span class="comment">%   Author: Almut Branner</span>
+0025 <span class="comment">%   Last modification: 2/21/2003</span>
+0026 
+0027 [ns_RESULT, LastError] = mexprog(17);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

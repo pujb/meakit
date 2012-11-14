@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xrepmat</title>
+  <meta name="keywords" content="xrepmat">
+  <meta name="description" content="REPMAT Replicate and tile an array.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>xrepmat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>REPMAT Replicate and tile an array.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function B = repmat(A,M,N) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">REPMAT Replicate and tile an array.
+   B = repmat(A,M,N) creates a large matrix B consisting of an M-by-N
+   tiling of copies of A. The size of B is [size(A,1)*M, size(A,2)*N].
+   The statement repmat(A,N) creates an N-by-N tiling.
+   
+   B = REPMAT(A,[M N]) accomplishes the same result as repmat(A,M,N).
+
+   B = REPMAT(A,[M N P ...]) tiles the array A to produce a 
+   multidimensional array B composed of copies of A. The size of B is 
+   [size(A,1)*M, size(A,2)*N, size(A,3)*P, ...].
+
+   REPMAT(A,M,N) when A is a scalar is commonly used to produce an M-by-N
+   matrix filled with A's value and having A's CLASS. For certain values,
+   you may achieve the same results using other functions. Namely,
+      REPMAT(NAN,M,N)           is the same as   NAN(M,N)
+      REPMAT(SINGLE(INF),M,N)   is the same as   INF(M,N,'single')
+      REPMAT(INT8(0),M,N)       is the same as   ZEROS(M,N,'int8')
+      REPMAT(UINT32(1),M,N)     is the same as   ONES(M,N,'uint32')
+      REPMAT(EPS,M,N)           is the same as   EPS(ONES(M,N))
+
+   Example:
+       repmat(magic(2), 2, 3)
+       repmat(uint8(5), 2, 3)
+
+   Class support for input A:
+      float: double, single
+
+   See also BSXFUN, MESHGRID, ONES, ZEROS, NAN, INF.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_repmat.html" class="code" title="">test_repmat</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function B = repmat(A,M,N)</a>
+0002 <span class="comment">%REPMAT Replicate and tile an array.</span>
+0003 <span class="comment">%   B = repmat(A,M,N) creates a large matrix B consisting of an M-by-N</span>
+0004 <span class="comment">%   tiling of copies of A. The size of B is [size(A,1)*M, size(A,2)*N].</span>
+0005 <span class="comment">%   The statement repmat(A,N) creates an N-by-N tiling.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   B = REPMAT(A,[M N]) accomplishes the same result as repmat(A,M,N).</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   B = REPMAT(A,[M N P ...]) tiles the array A to produce a</span>
+0010 <span class="comment">%   multidimensional array B composed of copies of A. The size of B is</span>
+0011 <span class="comment">%   [size(A,1)*M, size(A,2)*N, size(A,3)*P, ...].</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   REPMAT(A,M,N) when A is a scalar is commonly used to produce an M-by-N</span>
+0014 <span class="comment">%   matrix filled with A's value and having A's CLASS. For certain values,</span>
+0015 <span class="comment">%   you may achieve the same results using other functions. Namely,</span>
+0016 <span class="comment">%      REPMAT(NAN,M,N)           is the same as   NAN(M,N)</span>
+0017 <span class="comment">%      REPMAT(SINGLE(INF),M,N)   is the same as   INF(M,N,'single')</span>
+0018 <span class="comment">%      REPMAT(INT8(0),M,N)       is the same as   ZEROS(M,N,'int8')</span>
+0019 <span class="comment">%      REPMAT(UINT32(1),M,N)     is the same as   ONES(M,N,'uint32')</span>
+0020 <span class="comment">%      REPMAT(EPS,M,N)           is the same as   EPS(ONES(M,N))</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Example:</span>
+0023 <span class="comment">%       repmat(magic(2), 2, 3)</span>
+0024 <span class="comment">%       repmat(uint8(5), 2, 3)</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Class support for input A:</span>
+0027 <span class="comment">%      float: double, single</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   See also BSXFUN, MESHGRID, ONES, ZEROS, NAN, INF.</span>
+0030 
+0031 <span class="comment">%   Copyright 1984-2008 The MathWorks, Inc.</span>
+0032 <span class="comment">%   $Revision: 1.17.4.15 $  $Date: 2009/05/18 20:48:02 $</span>
+0033 
+0034 <span class="keyword">if</span> nargin &lt; 2
+0035     error(<span class="string">'MATLAB:repmat:NotEnoughInputs'</span>, <span class="string">'Requires at least 2 inputs.'</span>)
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> nargin == 2
+0039     <span class="keyword">if</span> isscalar(M)
+0040         siz = [M M];
+0041     <span class="keyword">else</span>
+0042         siz = M;
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">else</span>
+0045     siz = [M N];
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">if</span> isscalar(A)
+0049     nelems = prod(double(siz));
+0050     <span class="keyword">if</span> nelems&gt;0 &amp;&amp; nelems &lt; (2^31)-1 <span class="comment">% use linear indexing for speed.</span>
+0051         <span class="comment">% Since B doesn't exist, the first statement creates a B with</span>
+0052         <span class="comment">% the right size and type.  Then use scalar expansion to</span>
+0053         <span class="comment">% fill the array. Finally reshape to the specified size.</span>
+0054         B(nelems) = A;
+0055         <span class="keyword">if</span> ~isequal(B(1), B(nelems)) || ~(isnumeric(A) || islogical(A))
+0056             <span class="comment">% if B(1) is the same as B(nelems), then the default value filled in for</span>
+0057             <span class="comment">% B(1:end-1) is already A, so we don't need to waste time redoing</span>
+0058             <span class="comment">% this operation. (This optimizes the case that A is a scalar zero of</span>
+0059             <span class="comment">% some class.)</span>
+0060             B(:) = A;
+0061         <span class="keyword">end</span>
+0062         B = reshape(B,siz);
+0063     <span class="keyword">elseif</span> all(siz &gt; 0) <span class="comment">% use general indexing, cost of memory allocation dominates.</span>
+0064         ind = num2cell(siz);
+0065         B(ind{:}) = A;
+0066         <span class="keyword">if</span> ~isequal(B(1), B(ind{:})) || ~(isnumeric(A) || islogical(A))
+0067             B(:) = A;
+0068         <span class="keyword">end</span>
+0069     <span class="keyword">else</span>
+0070         B = A(ones(siz));
+0071     <span class="keyword">end</span>
+0072 <span class="keyword">elseif</span> ndims(A) == 2 &amp;&amp; numel(siz) == 2
+0073     [m,n] = size(A);
+0074     <span class="keyword">if</span> (issparse(A))
+0075         [I, J, S] = find(A);
+0076         I = bsxfun(@plus, I(:), m*(0:siz(1)-1));
+0077         I = I(:); I = I(:,ones(1,siz(2)));
+0078         J = J(:); J = J(:,ones(1,siz(1)));
+0079         J = bsxfun(@plus, J(:), n*(0:siz(2)-1));
+0080         S = S(:); S = S(:,ones(1,prod(siz)));
+0081         B = sparse(I(:), J(:), S(:), siz(1)*m, siz(2)*n, prod(siz)*nnz(A));
+0082     <span class="keyword">else</span>
+0083         <span class="keyword">if</span> (m == 1 &amp;&amp; siz(2) == 1)
+0084             B = A(ones(siz(1), 1), :);
+0085         <span class="keyword">elseif</span> (n == 1 &amp;&amp; siz(1) == 1)
+0086             B = A(:, ones(siz(2), 1));
+0087         <span class="keyword">else</span>
+0088             mind = (1:m)';
+0089             nind = (1:n)';
+0090             mind = mind(:,ones(1,siz(1)));
+0091             nind = nind(:,ones(1,siz(2)));
+0092             B = A(mind,nind);
+0093         <span class="keyword">end</span>
+0094     <span class="keyword">end</span>
+0095 <span class="keyword">else</span>
+0096     Asiz = size(A);
+0097     Asiz = [Asiz ones(1,length(siz)-length(Asiz))];
+0098     siz = [siz ones(1,length(Asiz)-length(siz))];
+0099     subs = cell(1,length(Asiz));
+0100     <span class="keyword">for</span> i=length(Asiz):-1:1
+0101         ind = (1:Asiz(i))';
+0102         subs{i} = ind(:,ones(1,siz(i)));
+0103     <span class="keyword">end</span>
+0104     B = A(subs{:});
+0105 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

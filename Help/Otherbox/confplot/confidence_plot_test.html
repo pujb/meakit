@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of confidence_plot_test</title>
+  <meta name="keywords" content="confidence_plot_test">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html confplot -->
+<h1>confidence_plot_test
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="confplot.html" class="code" title="function varargout = confplot(varargin)">confplot</a>	CONFPLOT Linear plot with continuous confidence/error boundaries.</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%</span>
+0004 randn(<span class="string">'state'</span>,0);
+0005 tmp = randn(size(x));
+0006 x = 1:0.1:100;
+0007 y = slidingavg(tmp,1000);
+0008 z1 = 0.05* exp(-x/50);
+0009 z2 = 0.08* exp(-x/50);
+0010 
+0011 <a href="confplot.html" class="code" title="function varargout = confplot(varargin)">confplot</a>(x,y,z1,z2,<span class="string">'Color'</span>,[1 0 0],<span class="string">'LineWidth'</span>,2);
+0012 grid on; box off;
+0013 xlabel(<span class="string">'time [s]'</span>,<span class="string">'FontName'</span>,<span class="string">'Helvetica'</span>,<span class="string">'FontSize'</span>,30);
+0014 ylabel(<span class="string">'[a.u.]'</span>,<span class="string">'FontName'</span>,<span class="string">'Helvetica'</span>,<span class="string">'FontSize'</span>,30);
+0015 legend(<span class="string">'Estimated value'</span>,<span class="string">'95% confidence boundaries'</span>);
+0016 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'FontName'</span>,<span class="string">'Helvetica'</span>,<span class="string">'FontSize'</span>,20,<span class="string">'YLim'</span>,[-0.2 0.15]);
+0017 
+0018 title(title(<span class="string">'CONFPLOT - {\copyright} 2002 Michele Giugliano, PhD'</span>);
+0019 <span class="comment">%print('testpic.jpg','-djpeg90','-r300')</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randomizer_bin_und</title>
+  <meta name="keywords" content="randomizer_bin_und">
+  <meta name="description" content="RANDOMIZER_BIN_UND     Random graph with preserved in/out degree distribution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>randomizer_bin_und
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RANDOMIZER_BIN_UND     Random graph with preserved in/out degree distribution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [R] = randomizer_bin_und(R,alpha) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RANDOMIZER_BIN_UND     Random graph with preserved in/out degree distribution
+
+   R = randomizer_bin_und(A,alpha);
+
+   This function randomizes a binary undirected network, while preserving 
+   the degree distribution. The function directly searches for rewirable 
+   edge pairs (rather than trying to rewire edge pairs at random), and 
+   hence avoids long loops and works especially well in dense matrices.
+
+   Inputs:     A,          binary undirected connection matrix
+               alpha,      fraction of edges to rewire
+
+   Outputs:    R,          randomized network
+
+   References: Maslov and Sneppen (2002) Science 296:910
+
+
+   Jonathan Power, WUSTL. 3/1/10.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [R] = randomizer_bin_und(R,alpha)</a>
+0002 <span class="comment">%RANDOMIZER_BIN_UND     Random graph with preserved in/out degree distribution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   R = randomizer_bin_und(A,alpha);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function randomizes a binary undirected network, while preserving</span>
+0007 <span class="comment">%   the degree distribution. The function directly searches for rewirable</span>
+0008 <span class="comment">%   edge pairs (rather than trying to rewire edge pairs at random), and</span>
+0009 <span class="comment">%   hence avoids long loops and works especially well in dense matrices.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Inputs:     A,          binary undirected connection matrix</span>
+0012 <span class="comment">%               alpha,      fraction of edges to rewire</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Outputs:    R,          randomized network</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   References: Maslov and Sneppen (2002) Science 296:910</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Jonathan Power, WUSTL. 3/1/10.</span>
+0020 
+0021 <span class="comment">% make binary</span>
+0022 R=ceil(R);
+0023 
+0024 <span class="comment">% ensure that matrix is binary</span>
+0025 <span class="keyword">if</span> (max(R(:))~=1) || (min(R(:))~=0)
+0026     error(<span class="string">'Matrix should be binary'</span>);
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% ensure that matrix is undirected</span>
+0030 <span class="keyword">if</span> ~isequal(R,R.')
+0031     error(<span class="string">'Matrix should be undirected'</span>);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% find how many edges are possible in the network</span>
+0035 [a b]=size(R);
+0036 numpossibleedges=((a*a)-a)/2;
+0037 
+0038 <span class="comment">% excise the diagonal and replace it with 9999</span>
+0039 savediag=R.*(eye(size(R,1)));
+0040 R=R.*(~eye(size(R,1)));
+0041 R=R+(eye(size(R,1)).*9999);
+0042 
+0043 <span class="comment">% if there are more edges than non-edges we invert the matrix to reduce</span>
+0044 <span class="comment">% computation time, then revert at the end of the script</span>
+0045 inverted=0;
+0046 [i j]=find(triu(R,1));
+0047 K=size(i,1);
+0048 <span class="keyword">if</span> K&gt;(numpossibleedges/2)
+0049     inverted=1;
+0050     R=double(~R);
+0051     R=R.*(~eye(size(R,1)));
+0052     R=R+(eye(size(R,1)).*9999);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% find edges</span>
+0056 [i j]=find(triu(R,1));
+0057 K=size(i,1);
+0058 
+0059 <span class="comment">% exclude fully connected nodes. will replace later</span>
+0060 fullnode=find((sum(triu(R,1),1)+(sum(triu(R,1),2))')==(a-1));
+0061 <span class="keyword">if</span> ~isempty(fullnode)
+0062     R(fullnode,:)=0; R(:,fullnode)=0;
+0063     R=R.*(~eye(size(R,1)));
+0064     R=R+(eye(size(R,1)).*9999);
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">% find the edges</span>
+0068 [i j]=find(triu(R,1));
+0069 K=size(i,1);
+0070 
+0071 <span class="keyword">if</span> (isempty(K) || K==(numpossibleedges) || (K==numpossibleedges-1))
+0072     fprintf(<span class="string">'No possible randomization.\n'</span>)
+0073 <span class="keyword">else</span>
+0074     <span class="keyword">for</span> iter=1:K <span class="comment">% for every edge</span>
+0075         <span class="keyword">if</span> rand&lt;=alpha <span class="comment">% rewire ~alpha% of edges</span>
+0076 
+0077             <span class="comment">% this is the chosen edge</span>
+0078             a=i(iter);
+0079             b=j(iter);
+0080             
+0081             <span class="comment">% for selected edge, see where each end can connect to</span>
+0082             alliholes=find(R(:,i(iter))==0);
+0083             alljholes=find(R(:,j(iter))==0);
+0084             
+0085             <span class="comment">% we can only use edges with connection to neither node</span>
+0086             iintersect=intersect(alliholes,alljholes);            
+0087             
+0088             <span class="comment">% find which of these nodes are connected</span>
+0089             [ii jj]=find(R(iintersect,iintersect)==1);         
+0090 
+0091             <span class="comment">% if there an edge to switch</span>
+0092             <span class="keyword">if</span> ~isempty(ii)
+0093 
+0094                 <span class="comment">% choose one randomly</span>
+0095                 nummates=size(ii,1);
+0096                 mate=ceil(rand*nummates);
+0097                 
+0098                 <span class="comment">% randomly orient the second edge</span>
+0099                 <span class="keyword">if</span> rand&lt;0.5
+0100                     c=iintersect(ii(mate));
+0101                     d=iintersect(jj(mate));
+0102                 <span class="keyword">else</span>
+0103                     d=iintersect(ii(mate));
+0104                     c=iintersect(jj(mate));
+0105                 <span class="keyword">end</span>
+0106 
+0107                 <span class="comment">% make the changes in the matrix</span>
+0108                 R(a,b)=0; R(c,d)=0;
+0109                 R(b,a)=0; R(d,c)=0;
+0110                 R(a,c)=1; R(b,d)=1;
+0111                 R(c,a)=1; R(d,b)=1;
+0112                 
+0113                 <span class="comment">% update the edge index</span>
+0114                 <span class="keyword">for</span> m=1:K
+0115                     <span class="keyword">if</span> ((i(m)==d) &amp;&amp; (j(m)==c))
+0116                         j(iter)=c; j(m)=b;
+0117                     <span class="keyword">elseif</span> ((i(m)==c) &amp;&amp; (j(m)==d))
+0118                         j(iter)=c; i(m)=b;
+0119                     <span class="keyword">end</span>
+0120                 <span class="keyword">end</span>
+0121             <span class="keyword">end</span> <span class="comment">% rewiring</span>
+0122         <span class="keyword">end</span> <span class="comment">% if rand&lt;alpha</span>
+0123     <span class="keyword">end</span> <span class="comment">% for every edge</span>
+0124 <span class="keyword">end</span> <span class="comment">% if enough edges to flip</span>
+0125 
+0126 <span class="comment">% restore full columns</span>
+0127 <span class="keyword">if</span> ~isempty(fullnode)
+0128     R(fullnode,:)=1; R(:,fullnode)=1;
+0129 <span class="keyword">end</span>
+0130 
+0131 <span class="comment">% if we did non-edges switch it back to edges</span>
+0132 <span class="keyword">if</span> inverted==1
+0133     R=double(~R);
+0134 <span class="keyword">end</span>
+0135 
+0136 <span class="comment">% clear and restore the diagonal</span>
+0137 R=R.*(~eye(size(R,1)));
+0138 R=R+savediag;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

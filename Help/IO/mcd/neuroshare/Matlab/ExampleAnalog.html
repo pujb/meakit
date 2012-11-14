@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ExampleAnalog</title>
+  <meta name="keywords" content="ExampleAnalog">
+  <meta name="description" content="function OutputAnalogVector = ExampleAnalog()">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ExampleAnalog
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function OutputAnalogVector = ExampleAnalog()</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function ExampleAnalog() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> function OutputAnalogVector = ExampleAnalog()</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>	ns_GetAnalogData   Retrieves analog data by index</li><li><a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>	ns_GetEntityInfo   Retrieves general entity information and type</li><li><a href="ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>	ns_GetFileInfo   Retrieves file information and entity counts</li><li><a href="ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>	ns_OpenFile   Opens a neural data file</li><li><a href="ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>	ns_SetDLL   Opens a Neuroshare Shared Library (.DLL or .so) in prepearation for other work</li><li><a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>	RMFIELD Remove fields from a mutable structure.</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ExampleAnalog()</a>
+0002 <span class="comment">% function OutputAnalogVector = ExampleAnalog()</span>
+0003 
+0004 <span class="comment">% Prompt for the correct DLL</span>
+0005 disp(<span class="string">' '</span>);  <span class="comment">% Blank line</span>
+0006 DLLName = input(<span class="string">'DLL Name: '</span>, <span class="string">'s'</span>);
+0007 
+0008 <span class="comment">% Load the appropriate DLL</span>
+0009 [nsresult] = <a href="ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>(DLLName);
+0010 <span class="keyword">if</span> (nsresult ~= 0)
+0011     disp(<span class="string">'DLL was not found!'</span>);
+0012     <span class="keyword">return</span>
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="comment">% Find out the data file from user</span>
+0016 disp(<span class="string">' '</span>);  <span class="comment">% Blank line</span>
+0017 filename = input(<span class="string">'Data file: '</span>, <span class="string">'s'</span>);
+0018 
+0019 
+0020 <span class="comment">% Load data file and display some info about the file</span>
+0021 <span class="comment">% Open data file</span>
+0022 [nsresult, hfile] = <a href="ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>(filename);
+0023 <span class="keyword">if</span> (nsresult ~= 0)
+0024     disp(<span class="string">'Data file did not open!'</span>);
+0025     <span class="keyword">return</span>
+0026 <span class="keyword">end</span>
+0027 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> filename;
+0028 
+0029 <span class="comment">% Get file information</span>
+0030 [nsresult, FileInfo] = <a href="ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>(hfile);
+0031 <span class="comment">% Gives you EntityCount, TimeStampResolution and TimeSpan</span>
+0032 <span class="keyword">if</span> (nsresult ~= 0)
+0033     disp(<span class="string">'Data file information did not load!'</span>);
+0034     <span class="keyword">return</span>
+0035 <span class="keyword">end</span>
+0036    
+0037 <span class="comment">% Define some variables needed for firing rates</span>
+0038 stepsize = 0.02; <span class="comment">% seconds</span>
+0039 stepsize1 = 0.1; <span class="comment">% seconds</span>
+0040 <span class="keyword">if</span> FileInfo.TimeSpan &gt; 150  <span class="comment">% Limit the timespan shown in the graphs to 150 seconds</span>
+0041     totaltime = 150;
+0042 <span class="keyword">else</span>
+0043     totaltime = FileInfo.TimeSpan; <span class="comment">% seconds</span>
+0044 <span class="keyword">end</span>
+0045 time = 0 : stepsize : totaltime;   <span class="comment">% Initialize time axis for gaussian plot</span>
+0046 
+0047 <span class="comment">% Build catalogue of entities</span>
+0048 [nsresult, EntityInfo] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile, [1 : 1 : FileInfo.EntityCount]);
+0049 
+0050 NeuralList = find([EntityInfo.EntityType] == 4);    <span class="comment">% List of EntityIDs needed to retrieve the information and data</span>
+0051 SegmentList = find([EntityInfo.EntityType] == 3);
+0052 AnalogList = find([EntityInfo.EntityType] == 2);
+0053 EventList = find([EntityInfo.EntityType] == 1);
+0054 
+0055 <span class="comment">% How many of a particular entity do we have</span>
+0056 cNeural = length(NeuralList);       
+0057 cSegment = length(SegmentList);
+0058 cAnalog = length(AnalogList);
+0059 cEvent = length(EventList);
+0060 
+0061 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> FileInfo;
+0062 
+0063 <span class="keyword">if</span> (cNeural == 0)
+0064     disp(<span class="string">'No neural events available!'</span>);
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="keyword">if</span> (cSegment == 0)
+0068     disp(<span class="string">'No segment entities available!'</span>);
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="keyword">if</span> (cAnalog == 0)
+0072     disp(<span class="string">'No analog entities available!'</span>);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">if</span> (cEvent == 0)
+0076     disp(<span class="string">'No event entities available!'</span>);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="comment">% prompt to get the number of points</span>
+0080 max_count = input(<span class="string">'How many data points (x-axis) do you want max? '</span>);
+0081 
+0082 <span class="comment">% Have user pick a channels or channels for further analysis</span>
+0083 <span class="comment">% Show the user how many channels are available</span>
+0084 disp(<span class="string">' '</span>);
+0085 disp([<span class="string">'There are '</span> num2str(cAnalog) <span class="string">' analog channels.'</span>]);
+0086 disp(<span class="string">' '</span>);
+0087 
+0088 yes = input(<span class="string">'Show first all analog channels? y/n '</span>, <span class="string">'s'</span>);
+0089 <span class="keyword">if</span> (yes == <span class="string">'y'</span>)
+0090     <span class="keyword">for</span> i = 1 : 1 : length(AnalogList)
+0091         chan = AnalogList(i);
+0092         count = min(max_count, EntityInfo(chan).ItemCount);
+0093         <span class="comment">% Get the fist data points of the waveform and show it</span>
+0094         [nsresult, ContinuousCount, wave] = <a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>(hfile, AnalogList(i), 1, count);
+0095         figure;
+0096         plot(wave);
+0097     <span class="keyword">end</span>
+0098     <span class="keyword">return</span>;
+0099 <span class="keyword">end</span>
+0100 
+0101 disp([<span class="string">'First analog entity: '</span> num2str(AnalogList(1)) ]);
+0102 channel = input(<span class="string">'Which data channels would you like to display? (e.g. 1 or [1 2 3])'</span>);
+0103 <span class="keyword">if</span> (EntityInfo(channel).EntityType == 2)  <span class="comment">% Have to check that the selected channel actually exists</span>
+0104 <span class="keyword">else</span>
+0105     disp(<span class="string">'Channel is not of type analog'</span>);
+0106     <span class="keyword">return</span>
+0107 <span class="keyword">end</span>
+0108 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> cNeural cSegment;
+0109 
+0110 <span class="comment">% Throw away entity infos we don't need to save memory</span>
+0111 EntityInfo = <a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>(EntityInfo, <span class="string">'EntityType'</span>);
+0112 
+0113 <span class="comment">%</span>
+0114 <span class="comment">% Load the waveform data and do the analysis</span>
+0115 <span class="comment">%</span>
+0116 
+0117 
+0118 count = min(max_count, EntityInfo(channel).ItemCount);
+0119 
+0120 <span class="comment">% Get the fist data points of the waveform and show it</span>
+0121 [nsresult, ContinuousCount, wave] = <a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>(hfile, channel, 1, count);
+0122 plot(wave);
+0123 <span class="keyword">return</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

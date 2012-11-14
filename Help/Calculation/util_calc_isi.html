@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_isi</title>
+  <meta name="keywords" content="util_calc_isi">
+  <meta name="description" content="UTIL_CALC_ISI Get inter-spike intervals between selected channels and time">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_isi
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_ISI Get inter-spike intervals between selected channels and time</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ isi, seq, ts, mean_isi, std_isi ] = util_calc_isi( spif, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_ISI Get inter-spike intervals between selected channels and time
+range.
+   Input:
+           spif:       The spike information structure
+           ch:         If not given, it means all channels except gnds, or
+                       you can provide a list like [28, 87];
+           gnds:       Grounding electrodes.
+           startend:   If not given, it means the whole recording length.
+           network_mode:   If true, all channels in ch(if not given = all
+                           channels) except gnds will be rearranged into
+                           one, and calc the isi. [default:false]
+           isi_mode:   'histo' [default] / 'vsTime'
+                       @ 'vsTime', this program will also return a
+                       timestamp [isi,seq,timestamp] = util...
+           binedge:    @ 'histo', 'binedge' must be given to generate the
+                       histogram. for example: def: [0:0.1:5]
+                       @ 25 kHz Sampling rate, the minium interval is 0.04
+   Please note: all time unit are 'ms'.
+   Output:
+           isi:        ROWS: Time, COLS: Electrodes
+           seq:        Channel sequence.
+           ts:         @ 'vsTime', the timestamp of each isi dot.
+           mean_isi:   Average of isi
+
+   Created on Aug/24/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-03-05  Now it can provide both ISIunit &amp; ISIarray info
+                       &amp; returns mean_isi.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_calc_sem.html" class="code" title="function [ sem ] = util_calc_sem( vector )">util_calc_sem</a>	UTIL_CALC_SEM Get the standard error of the mean (SEM)</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/util_loop_calc_avalanche_parameter.html" class="code" title="function [ sizes alpha bp bp_1 mean_isi mean_rate ] = util_loop_calc_avalanche_parameter( filename, gnd, result_dir )">util_loop_calc_avalanche_parameter</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETER Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ isi, seq, ts, mean_isi, std_isi ] = util_calc_isi( spif, varargin )</a>
+0002 <span class="comment">%UTIL_CALC_ISI Get inter-spike intervals between selected channels and time</span>
+0003 <span class="comment">%range.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           spif:       The spike information structure</span>
+0006 <span class="comment">%           ch:         If not given, it means all channels except gnds, or</span>
+0007 <span class="comment">%                       you can provide a list like [28, 87];</span>
+0008 <span class="comment">%           gnds:       Grounding electrodes.</span>
+0009 <span class="comment">%           startend:   If not given, it means the whole recording length.</span>
+0010 <span class="comment">%           network_mode:   If true, all channels in ch(if not given = all</span>
+0011 <span class="comment">%                           channels) except gnds will be rearranged into</span>
+0012 <span class="comment">%                           one, and calc the isi. [default:false]</span>
+0013 <span class="comment">%           isi_mode:   'histo' [default] / 'vsTime'</span>
+0014 <span class="comment">%                       @ 'vsTime', this program will also return a</span>
+0015 <span class="comment">%                       timestamp [isi,seq,timestamp] = util...</span>
+0016 <span class="comment">%           binedge:    @ 'histo', 'binedge' must be given to generate the</span>
+0017 <span class="comment">%                       histogram. for example: def: [0:0.1:5]</span>
+0018 <span class="comment">%                       @ 25 kHz Sampling rate, the minium interval is 0.04</span>
+0019 <span class="comment">%   Please note: all time unit are 'ms'.</span>
+0020 <span class="comment">%   Output:</span>
+0021 <span class="comment">%           isi:        ROWS: Time, COLS: Electrodes</span>
+0022 <span class="comment">%           seq:        Channel sequence.</span>
+0023 <span class="comment">%           ts:         @ 'vsTime', the timestamp of each isi dot.</span>
+0024 <span class="comment">%           mean_isi:   Average of isi</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Created on Aug/24/2010 By Pu Jiangbo</span>
+0027 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   $Revision:</span>
+0030 <span class="comment">%       PJB#2011-03-05  Now it can provide both ISIunit &amp; ISIarray info</span>
+0031 <span class="comment">%                       &amp; returns mean_isi.</span>
+0032 
+0033 
+0034 <span class="comment">% Analyze parameter</span>
+0035 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0036 
+0037 <span class="keyword">if</span> ~exist(<span class="string">'ch'</span>, <span class="string">'var'</span>)
+0038     ch = [];
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> ~exist(<span class="string">'gnds'</span>, <span class="string">'var'</span>)
+0042     gnds = [];
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> ~exist(<span class="string">'startend'</span>, <span class="string">'var'</span>)
+0046     startend = spif.startend;
+0047 <span class="keyword">else</span>
+0048     <span class="keyword">if</span> startend(1) &lt; spif.startend(1) || startend(2) &gt; spif.startend(2) || startend(1) &gt; spif.startend(2) || startend(2) &lt; spif.startend(1)
+0049         error(<span class="string">'Incorrect startend.'</span>);
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> ~exist(<span class="string">'network_mode'</span>, <span class="string">'var'</span>)
+0054     network_mode = false;
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">if</span> ~exist(<span class="string">'isi_mode'</span>, <span class="string">'var'</span>)
+0058     isi_mode = <span class="string">'histo'</span>;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">if</span> strcmp(isi_mode, <span class="string">'histo'</span>)
+0062     <span class="keyword">if</span> ~exist(<span class="string">'binedge'</span>, <span class="string">'var'</span>)
+0063         binedge = [0:0.1:5];
+0064     <span class="keyword">end</span>
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">% CALCULATION</span>
+0068 <span class="keyword">if</span> network_mode
+0069     <span class="comment">% Calc network isi</span>
+0070     spiketimes = [];
+0071     isi = [];
+0072     seq = [];
+0073     ts = [];
+0074     <span class="keyword">for</span> i = 1:64
+0075         chid = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(i);
+0076         <span class="keyword">if</span> ~isempty(ch)
+0077             <span class="comment">% If the user provided a list of selected channels</span>
+0078             <span class="comment">% Only selected channels</span>
+0079             <span class="keyword">if</span> ~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(chid, ch)
+0080                 <span class="keyword">continue</span>;
+0081             <span class="keyword">end</span>
+0082         <span class="keyword">end</span>
+0083         <span class="keyword">if</span> ~isempty(gnds)
+0084             <span class="comment">% If the user provided a list of not-selected channels</span>
+0085             <span class="comment">% Except grouding channels</span>
+0086             <span class="keyword">if</span> <a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(chid, gnds)
+0087                 <span class="keyword">continue</span>;
+0088             <span class="keyword">end</span>
+0089         <span class="keyword">end</span>
+0090         
+0091         <span class="comment">% Link into one</span>
+0092         s = spif.spiketimes{i};
+0093         spiketimes = [spiketimes(:); s(:)];
+0094     <span class="keyword">end</span>
+0095     <span class="comment">% Sort</span>
+0096     spiketimes = unique(spiketimes);
+0097     <span class="comment">% Calc isi</span>
+0098     <span class="keyword">if</span> strcmpi(isi_mode, <span class="string">'vsTime'</span>)
+0099         <span class="comment">% ISI vs Time</span>
+0100         isi = diff(spiketimes);
+0101         ts = spiketimes(2:end);   <span class="comment">% ts</span>
+0102     <span class="keyword">elseif</span> strcmpi(isi_mode, <span class="string">'histo'</span>)
+0103         <span class="comment">% ISI Histogram</span>
+0104         <span class="keyword">if</span> ~exist(<span class="string">'binedge'</span>, <span class="string">'var'</span>)
+0105             error(<span class="string">'binedge must be provided.'</span>);
+0106         <span class="keyword">end</span>
+0107         isi = histc(diff(spiketimes), binedge);
+0108         isi = isi(1:end-1); <span class="comment">% The last bin is not correct</span>
+0109     <span class="keyword">end</span>
+0110     mean_isi = mean(diff(spiketimes));  <span class="comment">% mean_isi</span>
+0111     std_isi = std(diff(spiketimes));
+0112     sem_isi = <a href="../Common/util_calc_sem.html" class="code" title="function [ sem ] = util_calc_sem( vector )">util_calc_sem</a>(diff(spiketimes));
+0113 <span class="keyword">else</span>
+0114     <span class="comment">% Calc individual isi</span>
+0115     isi = {};
+0116     mean_isi = [];
+0117     std_isi = [];
+0118     sem_isi = [];
+0119     ts = {};
+0120     seq = [];
+0121     <span class="comment">% Get the channel list</span>
+0122     <span class="keyword">for</span> i = 1:64
+0123         chid = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(i);
+0124         <span class="keyword">if</span> ~isempty(ch)
+0125             <span class="comment">% Only selected channels</span>
+0126             <span class="keyword">if</span> ~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(chid, ch)
+0127                 <span class="keyword">continue</span>;
+0128             <span class="keyword">end</span>
+0129         <span class="keyword">end</span>
+0130         <span class="keyword">if</span> ~isempty(gnds)
+0131             <span class="comment">% Except grounding channels</span>
+0132             <span class="keyword">if</span> <a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(chid, gnds)
+0133                 <span class="keyword">continue</span>;
+0134             <span class="keyword">end</span>
+0135         <span class="keyword">end</span>
+0136         
+0137         <span class="comment">% Add channel sequence</span>
+0138         seq = [seq chid];
+0139         
+0140         <span class="comment">% Calc isi</span>
+0141         spiketimes = spif.spiketimes{i};
+0142         spiketimes = spiketimes(spiketimes &gt;= startend(1) &amp; spiketimes &lt;= startend(2));
+0143         <span class="keyword">if</span> strcmpi(isi_mode, <span class="string">'vsTime'</span>)
+0144             <span class="comment">% ISI vs Time</span>
+0145             isi = [isi; {diff(spiketimes)}];
+0146             ts = [ts; {spiketimes(2:end)}];
+0147         <span class="keyword">elseif</span> strcmpi(isi_mode, <span class="string">'histo'</span>)
+0148             <span class="comment">% ISI Histogram</span>
+0149             <span class="keyword">if</span> ~exist(<span class="string">'binedge'</span>, <span class="string">'var'</span>)
+0150                 error(<span class="string">'binedge must be provided.'</span>);
+0151             <span class="keyword">end</span>
+0152             this_isi = histc(diff(spiketimes), binedge);
+0153             this_isi = this_isi(1:end-1);   <span class="comment">% The last bin is not correct</span>
+0154             isi = [isi; {this_isi}];
+0155         <span class="keyword">end</span>
+0156         mean_isi = [mean_isi mean(diff(spiketimes))];
+0157         std_isi  = [std_isi std(diff(spiketimes))];
+0158         sem_isi  = [sem_isi <a href="../Common/util_calc_sem.html" class="code" title="function [ sem ] = util_calc_sem( vector )">util_calc_sem</a>(diff(spiketimes))];
+0159     <span class="keyword">end</span>
+0160 <span class="keyword">end</span>
+0161 
+0162 <span class="keyword">end</span>
+0163</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

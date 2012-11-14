@@ -1,0 +1,615 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_detect_avalanche</title>
+  <meta name="keywords" content="util_detect_avalanche">
+  <meta name="description" content="UTIL_DETECT_AVALANCHE Detecting the neural avalanches">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_detect_avalanche
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_DETECT_AVALANCHE Detecting the neural avalanches</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_DETECT_AVALANCHE Detecting the neural avalanches
+   For the detailed algorithm, please refer to Begg's paper (2003, JNS)
+   Input:
+           spif:        Spike information structure
+           gnds:        Grounding electrodes
+           binwidth:    [default]: 4 ms, as defined in Begg's papers
+           active_ch_threshold:  [default]: 0, to determine the active
+                        channels when generating the initial bin sequence.
+                        Channels whose mean rate &gt; this (&gt;= this, when it = 0).
+                        will be selected into the sequence, otherwise, they
+                        will be excluded. (like gnds)
+           method_size: 'unique' [default] / 'repetitive' 
+                        'unique': the size of avalanche is the the number of 
+                                electrodes being active at least once
+                                inside an avalanche.
+                        'repetitive': the total number of active electrodes within
+                                an avalanche, taking into account multiple
+                                activations of the same electrodes.
+                        Defined by Neuroscience 153 (2008) 1354–1369
+           calc_amp:    'none' [default]: Don't do the sizes of amplitude
+                               because it is very slow. sizes_amp will be
+                               [].
+                        'sum-p2p':  Sum all peak-to-peak values in each
+                                    avalanche.
+                        'mean-p2p': Average all peak-to-peak values in
+                                    each avalanche.
+                        'sum-peak': Sum all abs(lowest peaks) in each
+                                    avalanche.
+                        'mean-peak':Average all abs(lowest peaks) in each
+                                    avalanche.
+                        Note: The lowest peaks are the second row in the
+                        spike values table, which means the spif must be a
+                        compacted spif (first row: the largest value,
+                        second row: the lowest value.)
+   Output:
+           locations:   In bins, the locations of detected avalanches,
+                        acturally, we locate them at the blank frame
+                        before the first frame of an avalanche.
+           sizes:       The sizes of detected avalanches (electrodes - 'unique' or 'repetitive')
+           sizes_spk:   The sizes of detected avalanches (summed number of spikes)
+ NOT READY - sizes_amp:   The sizes of detected avalanches (summed amplitude of spikes)  
+           lengths:     The lengths of detected avalanches
+           vectors:     N(number of avalanches) * (64 - 4 - num_gnd), the detailed frames.
+           network_vectors: The time sequence of spike firings used in
+                        detection. (useful for following calculation).
+           seq:         Electrode sequence (hwid), e.g.
+                        seq(network_vectors(:,bin)) = electrodes in 'bin'
+
+   Examples:
+           [ locations sizes lengths vectors ] = util_detect_avalanche(
+           spif, [15] );
+               
+           [ locations sizes lengths vectors network_vectors seq spks
+           amps] = util_detect_avalanche( spif, [28], 'method_size',
+           'repetitive', 'calc_amp', 'none');
+
+   Created on Jul/31/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-09-15  Double check the algorithm and do bug fixes.
+                       Add 'method_size' option.
+       PJB#2010-09-17  Add 'sizes_spk' output.
+       PJB#2010-09-18  Add 'sizes_amp' output.
+                       Add 'calc_amp' option to calc different modes of
+                       spike amplitudes into the avalanche statistic.
+       PJB#2011-03-07  Fix the performance issue, now is 880% faster, by
+                       using a different pattern to store &quot;vectors&quot;
+       PJB#2011-03-08  Change the default method to 'unique'
+       PJB#2011-05-16  Fix the hardcoding of electrode numbers (64), now
+                       using num_units (derived from spif).
+       PJB#2011-05-17  Try to speed up by MEX function. But it turns out
+                       that the original M code is the fastest
+                       (MEX/builtin/M).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_calc_network_vector.html" class="code" title="function [ network_vectors seq ] = util_calc_network_vector( spif, excluded_ch, varargin )">util_calc_network_vector</a>	UTIL_CALC_NETWORK_VECTOR Get the network activity vectors</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>	UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-</li><li><a href="../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/avalanche.html" class="code" title="">avalanche</a>	</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter.html" class="code" title="function [ sizes alpha bp bp_1 mean_isi mean_rate ] = util_loop_calc_avalanche_parameter( filename, gnd, result_dir )">util_loop_calc_avalanche_parameter</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETER Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li><li><a href="../Scripts/util_loop_find_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( filename, gnd, result_dir )">util_loop_find_avalanche</a>	UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function endp = sub_find_not_continued_point( in_vector, startp )</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin )</a>
+0002 <span class="comment">%UTIL_DETECT_AVALANCHE Detecting the neural avalanches</span>
+0003 <span class="comment">%   For the detailed algorithm, please refer to Begg's paper (2003, JNS)</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           spif:        Spike information structure</span>
+0006 <span class="comment">%           gnds:        Grounding electrodes</span>
+0007 <span class="comment">%           binwidth:    [default]: 4 ms, as defined in Begg's papers</span>
+0008 <span class="comment">%           active_ch_threshold:  [default]: 0, to determine the active</span>
+0009 <span class="comment">%                        channels when generating the initial bin sequence.</span>
+0010 <span class="comment">%                        Channels whose mean rate &gt; this (&gt;= this, when it = 0).</span>
+0011 <span class="comment">%                        will be selected into the sequence, otherwise, they</span>
+0012 <span class="comment">%                        will be excluded. (like gnds)</span>
+0013 <span class="comment">%           method_size: 'unique' [default] / 'repetitive'</span>
+0014 <span class="comment">%                        'unique': the size of avalanche is the the number of</span>
+0015 <span class="comment">%                                electrodes being active at least once</span>
+0016 <span class="comment">%                                inside an avalanche.</span>
+0017 <span class="comment">%                        'repetitive': the total number of active electrodes within</span>
+0018 <span class="comment">%                                an avalanche, taking into account multiple</span>
+0019 <span class="comment">%                                activations of the same electrodes.</span>
+0020 <span class="comment">%                        Defined by Neuroscience 153 (2008) 1354–1369</span>
+0021 <span class="comment">%           calc_amp:    'none' [default]: Don't do the sizes of amplitude</span>
+0022 <span class="comment">%                               because it is very slow. sizes_amp will be</span>
+0023 <span class="comment">%                               [].</span>
+0024 <span class="comment">%                        'sum-p2p':  Sum all peak-to-peak values in each</span>
+0025 <span class="comment">%                                    avalanche.</span>
+0026 <span class="comment">%                        'mean-p2p': Average all peak-to-peak values in</span>
+0027 <span class="comment">%                                    each avalanche.</span>
+0028 <span class="comment">%                        'sum-peak': Sum all abs(lowest peaks) in each</span>
+0029 <span class="comment">%                                    avalanche.</span>
+0030 <span class="comment">%                        'mean-peak':Average all abs(lowest peaks) in each</span>
+0031 <span class="comment">%                                    avalanche.</span>
+0032 <span class="comment">%                        Note: The lowest peaks are the second row in the</span>
+0033 <span class="comment">%                        spike values table, which means the spif must be a</span>
+0034 <span class="comment">%                        compacted spif (first row: the largest value,</span>
+0035 <span class="comment">%                        second row: the lowest value.)</span>
+0036 <span class="comment">%   Output:</span>
+0037 <span class="comment">%           locations:   In bins, the locations of detected avalanches,</span>
+0038 <span class="comment">%                        acturally, we locate them at the blank frame</span>
+0039 <span class="comment">%                        before the first frame of an avalanche.</span>
+0040 <span class="comment">%           sizes:       The sizes of detected avalanches (electrodes - 'unique' or 'repetitive')</span>
+0041 <span class="comment">%           sizes_spk:   The sizes of detected avalanches (summed number of spikes)</span>
+0042 <span class="comment">% NOT READY - sizes_amp:   The sizes of detected avalanches (summed amplitude of spikes)</span>
+0043 <span class="comment">%           lengths:     The lengths of detected avalanches</span>
+0044 <span class="comment">%           vectors:     N(number of avalanches) * (64 - 4 - num_gnd), the detailed frames.</span>
+0045 <span class="comment">%           network_vectors: The time sequence of spike firings used in</span>
+0046 <span class="comment">%                        detection. (useful for following calculation).</span>
+0047 <span class="comment">%           seq:         Electrode sequence (hwid), e.g.</span>
+0048 <span class="comment">%                        seq(network_vectors(:,bin)) = electrodes in 'bin'</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">%   Examples:</span>
+0051 <span class="comment">%           [ locations sizes lengths vectors ] = util_detect_avalanche(</span>
+0052 <span class="comment">%           spif, [15] );</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">%           [ locations sizes lengths vectors network_vectors seq spks</span>
+0055 <span class="comment">%           amps] = util_detect_avalanche( spif, [28], 'method_size',</span>
+0056 <span class="comment">%           'repetitive', 'calc_amp', 'none');</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%   Created on Jul/31/2010 By Pu Jiangbo</span>
+0059 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%   $Revision:</span>
+0062 <span class="comment">%       PJB#2010-09-15  Double check the algorithm and do bug fixes.</span>
+0063 <span class="comment">%                       Add 'method_size' option.</span>
+0064 <span class="comment">%       PJB#2010-09-17  Add 'sizes_spk' output.</span>
+0065 <span class="comment">%       PJB#2010-09-18  Add 'sizes_amp' output.</span>
+0066 <span class="comment">%                       Add 'calc_amp' option to calc different modes of</span>
+0067 <span class="comment">%                       spike amplitudes into the avalanche statistic.</span>
+0068 <span class="comment">%       PJB#2011-03-07  Fix the performance issue, now is 880% faster, by</span>
+0069 <span class="comment">%                       using a different pattern to store &quot;vectors&quot;</span>
+0070 <span class="comment">%       PJB#2011-03-08  Change the default method to 'unique'</span>
+0071 <span class="comment">%       PJB#2011-05-16  Fix the hardcoding of electrode numbers (64), now</span>
+0072 <span class="comment">%                       using num_units (derived from spif).</span>
+0073 <span class="comment">%       PJB#2011-05-17  Try to speed up by MEX function. But it turns out</span>
+0074 <span class="comment">%                       that the original M code is the fastest</span>
+0075 <span class="comment">%                       (MEX/builtin/M).</span>
+0076 
+0077 
+0078 <span class="comment">% Analysis parameters</span>
+0079 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0080 
+0081 <span class="keyword">if</span> ~exist(<span class="string">'binwidth'</span>, <span class="string">'var'</span>)
+0082     binwidth = 4;
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="keyword">if</span> ~exist(<span class="string">'active_ch_threshold'</span>, <span class="string">'var'</span>)
+0086     active_ch_threshold = 0;
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> ~exist(<span class="string">'method_size'</span>, <span class="string">'var'</span>)
+0090     method_size = <span class="string">'unique'</span>;
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">if</span> ~exist(<span class="string">'calc_amp'</span>, <span class="string">'var'</span>)
+0094     calc_amp = <span class="string">'none'</span>;
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="comment">% Check spif</span>
+0098 <span class="keyword">if</span> (~<a href="../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(spif, <span class="string">'amp_converted'</span>) || ~spif.amp_converted) &amp;&amp; ~strcmp(calc_amp, <span class="string">'none'</span>)
+0099     error(<span class="string">'Note: The amplitudes in the spif have not been correctly converted to the actual values.'</span>);
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="comment">% Calculate the network vector</span>
+0103 fprintf(<span class="string">'Parsing bins... '</span>); tic;
+0104 [ network_vectors seq ] = <a href="util_calc_network_vector.html" class="code" title="function [ network_vectors seq ] = util_calc_network_vector( spif, excluded_ch, varargin )">util_calc_network_vector</a>( spif, gnds, <span class="string">'only_activ_ch'</span>, true, <span class="string">'threshold'</span>, active_ch_threshold, <span class="string">'bin'</span>, binwidth); t = fix(toc);
+0105 fprintf(<span class="string">' Done ~ %d seconds\n'</span>, t);
+0106 
+0107 <span class="comment">% Find active frames</span>
+0108 num_units = length(spif.spiketimes);
+0109 num_bins = size(network_vectors, 2);
+0110 summed_activity = sum(network_vectors, 1);
+0111 <span class="comment">% For speed concern, active bins is much fewer than blanked bins</span>
+0112 active_framebins = find(summed_activity &gt; 0);
+0113 
+0114 <span class="comment">% Check if there is no active frames</span>
+0115 <span class="keyword">if</span> isempty(active_framebins)
+0116     error(<span class="string">'No active frames.'</span>);
+0117 <span class="keyword">end</span>
+0118 
+0119 locations = [];
+0120 sizes = [0];    <span class="comment">% size(1) is reserved for the following calculation of sizes</span>
+0121 sizes_spk = [0];
+0122 sizes_amp = [0];
+0123 lengths = [];
+0124 vectors = {};
+0125 
+0126 <span class="comment">% Check if there is only 1 avalanche</span>
+0127 <span class="comment">% We check here to simplify the logic of the following codes</span>
+0128 <span class="keyword">if</span> isempty(<a href="#_sub1" class="code" title="subfunction endp = sub_find_not_continued_point( in_vector, startp )">sub_find_not_continued_point</a>(active_framebins, 1))
+0129     <span class="comment">% All active_framebins are continous</span>
+0130     <span class="comment">% Check if there are blank frames befroe and after this sequence</span>
+0131     <span class="keyword">if</span> active_framebins(1) == 1 || active_framebins(end) == num_bins
+0132         error(<span class="string">'There is 1 candidate, but it is not surrounded by blank frames.'</span>);
+0133     <span class="keyword">else</span>
+0134         disp(<span class="string">'Only 1 avalanche'</span>);
+0135         locations = active_framebins(1);
+0136         lengths = active_framebins(end) - active_framebins(1) + 1;
+0137         
+0138         electrodes_list = [];   <span class="comment">% Store all active electrodes in the current avalanche</span>
+0139         amplitude_list = [];    <span class="comment">% Store all amplitudes in the current avalanche</span>
+0140         current_vector = cell(1, length(active_framebins));    <span class="comment">% Prealloc the vector for performance issue</span>
+0141         <span class="keyword">for</span> i = 1:length(active_framebins)
+0142             <span class="comment">% Recording the participation of electrodes in the current bin</span>
+0143             <span class="comment">% The following line is the old slow version, but they work the same</span>
+0144             <span class="comment">% vectors{1, i} = util_convert_hw2ch((seq(network_vectors(:, active_framebins(i)) &gt; 0)));</span>
+0145             current_vector{i} = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>((seq(network_vectors(:, active_framebins(i)) &gt; 0)));
+0146             <span class="comment">% Calculating electrodes involved in the current bin</span>
+0147             electrodes_list = [electrodes_list vectors{1, i}];
+0148             <span class="comment">% Calculating summed spike counts in the current bin</span>
+0149             sizes_spk(1) = sizes_spk(1) + sum(network_vectors(:, active_framebins(i)));
+0150             
+0151             <span class="comment">% Amplitudes</span>
+0152             <span class="keyword">if</span> strcmpi(calc_amp, <span class="string">'none'</span>)
+0153                 <span class="comment">% Do nothing</span>
+0154             <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-p2p'</span>) || strcmpi(calc_amp, <span class="string">'mean-p2p'</span>)
+0155                 <span class="comment">% Calculating peak-to-peak spike amplitudes in the current bin</span>
+0156                 <span class="keyword">for</span> hwid = 1:num_units
+0157                     <span class="comment">% Get the max peaks and min peaks in the current bin and</span>
+0158                     <span class="comment">% current electrode, calc Peak to peak amplitudes</span>
+0159                     channel_amp = spif.spikevalues{hwid};
+0160                     channel_spk = spif.spiketimes{hwid} / binwidth;
+0161                     channel_amp = channel_amp(:, channel_spk &gt;= active_framebins(i) &amp; channel_spk &lt; (active_framebins(i) + 1));
+0162                     <span class="keyword">if</span> ~isempty(channel_amp)
+0163                         amplitude_list = [amplitude_list abs(channel_amp(1,:) - channel_amp(2,:))];
+0164                     <span class="keyword">else</span>
+0165                         amplitude_list = [amplitude_list 0];
+0166                     <span class="keyword">end</span>
+0167                 <span class="keyword">end</span>
+0168             <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-peak'</span>) || strcmpi(calc_amp, <span class="string">'mean-peak'</span>)
+0169                 <span class="comment">% Calculating absolute spike peak amplitudes in the current bin</span>
+0170                 <span class="keyword">for</span> hwid = 1:num_units
+0171                     <span class="comment">% Get the max peaks and min peaks in the current bin and</span>
+0172                     <span class="comment">% current electrode, calc Peak to peak amplitudes</span>
+0173                     channel_amp = spif.spikevalues{hwid};
+0174                     channel_spk = spif.spiketimes{hwid} / binwidth;
+0175                     channel_amp = channel_amp(:, channel_spk &gt;= active_framebins(i) &amp; channel_spk &lt; (active_framebins(i) + 1));
+0176                     <span class="keyword">if</span> ~isempty(channel_amp)
+0177                         amplitude_list = [amplitude_list abs(channel_amp(2,:))];
+0178                     <span class="keyword">else</span>
+0179                         amplitude_list = [amplitude_list 0];
+0180                     <span class="keyword">end</span>
+0181                 <span class="keyword">end</span>
+0182             <span class="keyword">end</span>
+0183         <span class="keyword">end</span>
+0184         <span class="comment">% Setup vector</span>
+0185         vectors{1} = current_vector; 
+0186         <span class="comment">% Calculating sizes (of electrodes)</span>
+0187         <span class="keyword">if</span> strcmpi(method_size, <span class="string">'repetitive'</span>)
+0188             sizes(1) = length(electrode_list);
+0189         <span class="keyword">elseif</span> strcmpi(method_size, <span class="string">'unique'</span>)
+0190             sizes(1) = length(unique(electrode_list));
+0191         <span class="keyword">end</span>
+0192         <span class="comment">% Calculating amplitudes</span>
+0193         <span class="keyword">if</span> strcmpi(calc_amp, <span class="string">'none'</span>)
+0194             sizes_amp = [];
+0195         <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-p2p'</span>) || strcmpi(calc_amp, <span class="string">'sum-peak'</span>)
+0196             sizes_amp(1) = sizes_amp(1) + sum(amplitude_list);
+0197         <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'mean-p2p'</span>) || strcmpi(calc_amp, <span class="string">'mean-peak'</span>)
+0198             sizes_amp(1) = sizes_amp(1) + mean(amplitude_list);
+0199         <span class="keyword">end</span>
+0200     <span class="keyword">end</span>
+0201     
+0202     <span class="comment">% Quit</span>
+0203     <span class="keyword">return</span>;
+0204 <span class="keyword">end</span>
+0205 
+0206 <span class="comment">% If arrive here, we should have more than 1 avalanche</span>
+0207 
+0208 <span class="comment">% Check if the first active_framebin has 1 blank frame before start</span>
+0209 <span class="keyword">if</span> active_framebins(1) == 1
+0210     <span class="comment">% The first active_framebin doesnt have 1 blank frame before start</span>
+0211     <span class="comment">% Find the next start point by</span>
+0212     <span class="comment">% Finding the first active_framebin after the nearest breakpoint</span>
+0213     breakpoint = <a href="#_sub1" class="code" title="subfunction endp = sub_find_not_continued_point( in_vector, startp )">sub_find_not_continued_point</a>(active_framebins(1:end), 1);
+0214     
+0215     <span class="keyword">if</span> isempty(breakpoint)
+0216         <span class="comment">% The next avalanche is the only 1 candidate left</span>
+0217         <span class="keyword">if</span> active_framebins(end) == num_bins
+0218             <span class="comment">% The next avalanche doesnt have blank frame after end</span>
+0219             error(<span class="string">'There is 1 candidate, but it is not surrounded by blank frames.'</span>);
+0220         <span class="keyword">else</span>
+0221             <span class="comment">% The next avalanche is qualified</span>
+0222             <span class="comment">% Give the job to the usual routine.</span>
+0223             indexer = breakpoint;
+0224         <span class="keyword">end</span>
+0225     <span class="keyword">else</span>
+0226         <span class="comment">% The next avalanche is not the only 1 candidate left</span>
+0227         <span class="comment">% Give the job to the usual routine.</span>
+0228         indexer = breakpoint;
+0229     <span class="keyword">end</span>
+0230 <span class="keyword">else</span>
+0231     <span class="comment">% The first active_framebin has 1 blank frame before start</span>
+0232     <span class="comment">% We will calculate the first avalanche from the first active_framebin</span>
+0233     indexer = 1;
+0234 <span class="keyword">end</span>
+0235 
+0236 <span class="comment">% Init</span>
+0237 num_ava = 0;    <span class="comment">%   We know there must have at least 1 avalanche</span>
+0238 sizes = [];
+0239 sizes_spk = [];
+0240 sizes_amp = [];
+0241 fprintf(<span class="string">'Locating avalanches... '</span>); tic;
+0242 qualified = 0;  <span class="comment">%   This flag is used to indicate if the current candidate in the loop is qualified</span>
+0243 
+0244 <span class="keyword">while</span> indexer &lt;= length(active_framebins)
+0245     <span class="comment">% Check if this candidate has blank frames before start</span>
+0246     <span class="keyword">if</span> (indexer ~= 1 &amp;&amp; (active_framebins(indexer) - 1) == active_framebins(indexer - 1)) || (indexer == 1 &amp;&amp; active_framebins(indexer) ~= 1)
+0247         <span class="comment">% There is no blank frames before this candidate</span>
+0248         qualified = 0;
+0249     <span class="keyword">else</span>
+0250         <span class="comment">% Check if this candidate has blank frames after end</span>
+0251         <span class="comment">% Find the start of next avalanche</span>
+0252         breakpoint = <a href="#_sub1" class="code" title="subfunction endp = sub_find_not_continued_point( in_vector, startp )">sub_find_not_continued_point</a>(active_framebins(indexer:end), 1) + indexer - 1;
+0253         
+0254         <span class="keyword">if</span> isempty(breakpoint)
+0255             <span class="comment">% This candidate is the last candidate</span>
+0256             <span class="comment">% Check if it has the blank frame after</span>
+0257             <span class="keyword">if</span> active_framebins(end) == num_bins
+0258                 <span class="comment">% No, the last active_framebin is actually the last bin</span>
+0259                 qualified = 0;
+0260             <span class="keyword">else</span>
+0261                 qualified = 1;
+0262             <span class="keyword">end</span>
+0263         <span class="keyword">else</span>
+0264             <span class="comment">% Because we can find the breakpoint (the start of next avalanche)</span>
+0265             <span class="comment">% It means this candidate will end by a blank framebin</span>
+0266             qualified = 1;
+0267         <span class="keyword">end</span>
+0268     <span class="keyword">end</span>
+0269     
+0270     <span class="comment">% Check if this candidate is qualified</span>
+0271     <span class="keyword">if</span> qualified
+0272         <span class="comment">% Increase count</span>
+0273         num_ava = num_ava + 1;
+0274         sizes = [sizes 0];
+0275         sizes_spk = [sizes_spk 0];
+0276         sizes_amp = [sizes_amp 0];
+0277     <span class="keyword">else</span>
+0278         <span class="comment">% Prepare the next loop</span>
+0279         <span class="comment">% Check if this candidate is the last candidate</span>
+0280         breakpoint = <a href="#_sub1" class="code" title="subfunction endp = sub_find_not_continued_point( in_vector, startp )">sub_find_not_continued_point</a>(active_framebins(indexer:end), 1) + indexer - 1;
+0281         
+0282         <span class="keyword">if</span> isempty(breakpoint)
+0283             <span class="comment">% This candidate is the last candidate</span>
+0284             <span class="comment">% Quit loop</span>
+0285             <span class="keyword">break</span>;
+0286         <span class="keyword">else</span>
+0287             <span class="comment">% This candidate is not the last candidate, locate indexer to</span>
+0288             <span class="comment">% the next candidate</span>
+0289             indexer = breakpoint;
+0290             <span class="comment">% Go to the next round of loop directly</span>
+0291             <span class="keyword">continue</span>;
+0292         <span class="keyword">end</span>
+0293     <span class="keyword">end</span>
+0294     
+0295     <span class="comment">% If arrive here, we have to add this candidate to the avalanche list</span>
+0296     
+0297     <span class="comment">% Mark the start of this avalanche</span>
+0298     locations(num_ava) = active_framebins(indexer);
+0299     
+0300     <span class="comment">% FIXED: We dont need to find, because the previous lines have done the</span>
+0301     <span class="comment">%        job</span>
+0302     <span class="comment">% Find the start of next avalanche</span>
+0303     <span class="comment">% breakpoint = util_find_not_continued_point(active_framebins(indexer:end), 1, 1, '&gt;') + indexer - 1;</span>
+0304     <span class="comment">% FIXED END--&gt;</span>
+0305     
+0306     <span class="comment">% Check the breakpoint (if this is the last avalanche)</span>
+0307     <span class="keyword">if</span> isempty(breakpoint)
+0308         <span class="comment">% The current avalanche is the last avalanche, because it last to</span>
+0309         <span class="comment">% the end of rest active framebins</span>
+0310         lengths(num_ava) = active_framebins(end) - active_framebins(indexer) + 1;
+0311     <span class="keyword">else</span>
+0312         <span class="comment">% The length of current one =</span>
+0313         <span class="comment">% the last active_frame before next candidate - the first active frame + 1;</span>
+0314         lengths(num_ava) = active_framebins(breakpoint - 1) - active_framebins(indexer) + 1;
+0315     <span class="keyword">end</span>
+0316     
+0317     <span class="comment">% Calculating the size, the vector (electrodes in each active framebin)</span>
+0318     
+0319     <span class="comment">% Locating the start/end bins</span>
+0320     start_bin = active_framebins(indexer);
+0321     end_bin = active_framebins(indexer) + lengths(num_ava) - 1;
+0322 
+0323     <span class="comment">% Loop to count the size (of electrodes / of spikes / of amplitudes)</span>
+0324     <span class="keyword">if</span> strcmpi(method_size, <span class="string">'repetitive'</span>)
+0325         <span class="comment">% One electrode may be counted multiple times</span>
+0326         amplitude_list = [];    <span class="comment">% Store all amplitudes in the current avalanche</span>
+0327         current_vector = cell(1, lengths(num_ava));    <span class="comment">% Prealloc the vector for performance issue</span>
+0328         <span class="keyword">for</span> i = 1:lengths(num_ava)
+0329             current_bin = start_bin + i - 1;
+0330             current_network_vector = network_vectors(:, current_bin);  <span class="comment">% Temp use for speeding up</span>
+0331             <span class="comment">% Recording the participation of electrodes in the current bin</span>
+0332             <span class="comment">% The following line is the old slow version, but they work the same</span>
+0333             <span class="comment">% vectors{num_ava, i} = util_convert_hw2ch((seq(network_vectors(:, current_bin) &gt; 0)));</span>
+0334             <span class="comment">% vectors{num_ava, i} = util_convert_hw2ch(seq(current_network_vector &gt; 0));</span>
+0335             current_vector{i} = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(seq(current_network_vector &gt; 0));
+0336             
+0337             <span class="comment">% Calculating number of electrodes involved in the current bin</span>
+0338             sizes(num_ava) = sizes(num_ava) + length(current_vector{i});
+0339             <span class="comment">% Calculating summed spike counts in the current bin</span>
+0340             <span class="comment">% The following line is the old slow version, but they work the same</span>
+0341             <span class="comment">% sizes_spk(num_ava) = sizes_spk(num_ava) + sum(network_vectors(:, current_bin));</span>
+0342             sizes_spk(num_ava) = sizes_spk(num_ava) + sum(current_network_vector);
+0343             <span class="comment">% Amplitudes</span>
+0344             <span class="keyword">if</span> strcmpi(calc_amp, <span class="string">'none'</span>)
+0345                 <span class="comment">% Do nothing</span>
+0346             <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-p2p'</span>) || strcmpi(calc_amp, <span class="string">'mean-p2p'</span>)
+0347                 <span class="comment">% Calculating peak-to-peak spike amplitudes in the current bin</span>
+0348                 <span class="keyword">for</span> hwid = 1:num_units
+0349                     <span class="comment">% Get the max peaks and min peaks in the current bin and</span>
+0350                     <span class="comment">% current electrode, calc Peak to peak amplitudes</span>
+0351                     channel_amp = spif.spikevalues{hwid};
+0352                     channel_spk = spif.spiketimes{hwid} / binwidth;
+0353                     channel_amp = channel_amp(:, channel_spk &gt;= current_bin &amp; channel_spk &lt; (current_bin + 1));
+0354                     <span class="keyword">if</span> ~isempty(channel_amp)
+0355                         amplitude_list = [amplitude_list abs(channel_amp(1,:) - channel_amp(2,:))];
+0356                     <span class="keyword">else</span>
+0357                         amplitude_list = [amplitude_list 0];
+0358                     <span class="keyword">end</span>
+0359                 <span class="keyword">end</span>
+0360             <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-peak'</span>) || strcmpi(calc_amp, <span class="string">'mean-peak'</span>)
+0361                 <span class="comment">% Calculating absolute spike peak amplitudes in the current bin</span>
+0362                 <span class="keyword">for</span> hwid = 1:num_units
+0363                     <span class="comment">% Get the max peaks and min peaks in the current bin and</span>
+0364                     <span class="comment">% current electrode, calc Peak to peak amplitudes</span>
+0365                     channel_amp = spif.spikevalues{hwid};
+0366                     channel_spk = spif.spiketimes{hwid} / binwidth;
+0367                     channel_amp = channel_amp(:, channel_spk &gt;= current_bin &amp; channel_spk &lt; (current_bin + 1));
+0368                     <span class="keyword">if</span> ~isempty(channel_amp)
+0369                         amplitude_list = [amplitude_list abs(channel_amp(2,:))];
+0370                     <span class="keyword">else</span>
+0371                         amplitude_list = [amplitude_list 0];
+0372                     <span class="keyword">end</span>
+0373                 <span class="keyword">end</span>
+0374             <span class="keyword">end</span>
+0375         <span class="keyword">end</span>
+0376         <span class="comment">% Setup vector</span>
+0377         vectors{num_ava} = current_vector;
+0378         <span class="comment">% Calculating amplitudes</span>
+0379         <span class="keyword">if</span> strcmpi(calc_amp, <span class="string">'none'</span>)
+0380             sizes_amp = [];
+0381         <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-p2p'</span>) || strcmpi(calc_amp, <span class="string">'sum-peak'</span>)
+0382             sizes_amp(num_ava) = sizes_amp(num_ava) + sum(amplitude_list);
+0383         <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'mean-p2p'</span>) || strcmpi(calc_amp, <span class="string">'mean-peak'</span>)
+0384             sizes_amp(num_ava) = sizes_amp(num_ava) + mean(amplitude_list);
+0385         <span class="keyword">end</span>
+0386     <span class="keyword">elseif</span> strcmpi(method_size, <span class="string">'unique'</span>)
+0387         <span class="comment">% One electrode will be counted only once (this only affects the sizes (electrodes))</span>
+0388         electrodes_list = [];   <span class="comment">% Store all active electrodes in the current avalanche</span>
+0389         amplitude_list = [];    <span class="comment">% Store all amplitudes in the current avalanche</span>
+0390         current_vector = cell(1, lengths(num_ava));    <span class="comment">% Prealloc the vector for performance issue</span>
+0391         <span class="keyword">for</span> i = 1:lengths(num_ava)
+0392             current_bin = start_bin + i - 1;
+0393             current_network_vector = network_vectors(:, current_bin);  <span class="comment">% Temp use for speeding up</span>
+0394             <span class="comment">% Recording the participation of electrodes in the current bin</span>
+0395             <span class="comment">% The following line is the old slow version, but they work the same</span>
+0396             <span class="comment">% vectors{num_ava, i} = util_convert_hw2ch((seq(network_vectors(:, current_bin) &gt; 0)));</span>
+0397             <span class="comment">% vectors{num_ava, i} = util_convert_hw2ch((seq(current_network_vector)));</span>
+0398             current_vector{i} = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(seq(current_network_vector &gt; 0));
+0399             <span class="comment">% Temporarily store the list of all the electrodes appear in</span>
+0400             <span class="comment">% the this avalanche</span>
+0401             electrodes_list = [electrodes_list current_vector{i}];
+0402             <span class="comment">% Calculating summed spike counts in the current bin</span>
+0403             <span class="comment">% The following line is the old slow version, but they work the same</span>
+0404             <span class="comment">% sizes_spk(num_ava) = sizes_spk(num_ava) + sum(network_vectors(:, current_bin));</span>
+0405             sizes_spk(num_ava) = sizes_spk(num_ava) + sum(current_network_vector);
+0406             <span class="comment">% Amplitudes</span>
+0407             <span class="keyword">if</span> strcmpi(calc_amp, <span class="string">'none'</span>)
+0408                 <span class="comment">% Do nothing</span>
+0409             <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-p2p'</span>) || strcmpi(calc_amp, <span class="string">'mean-p2p'</span>)
+0410                 <span class="comment">% Calculating peak-to-peak spike amplitudes in the current bin</span>
+0411                 <span class="keyword">for</span> hwid = 1:num_units
+0412                     <span class="comment">% Get the max peaks and min peaks in the current bin and</span>
+0413                     <span class="comment">% current electrode, calc Peak to peak amplitudes</span>
+0414                     channel_amp = spif.spikevalues{hwid};
+0415                     channel_spk = spif.spiketimes{hwid} / binwidth;
+0416                     channel_amp = channel_amp(:, channel_spk &gt;= current_bin &amp; channel_spk &lt; (current_bin + 1));
+0417                     <span class="keyword">if</span> ~isempty(channel_amp)
+0418                         amplitude_list = [amplitude_list abs(channel_amp(1,:) - channel_amp(2,:))];
+0419                     <span class="keyword">else</span>
+0420                         amplitude_list = [amplitude_list 0];
+0421                     <span class="keyword">end</span>
+0422                 <span class="keyword">end</span>
+0423             <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-peak'</span>) || strcmpi(calc_amp, <span class="string">'mean-peak'</span>)
+0424                 <span class="comment">% Calculating absolute spike peak amplitudes in the current bin</span>
+0425                 <span class="keyword">for</span> hwid = 1:num_units
+0426                     <span class="comment">% Get the max peaks and min peaks in the current bin and</span>
+0427                     <span class="comment">% current electrode, calc Peak to peak amplitudes</span>
+0428                     channel_amp = spif.spikevalues{hwid};
+0429                     channel_spk = spif.spiketimes{hwid} / binwidth;
+0430                     channel_amp = channel_amp(:, channel_spk &gt;= current_bin &amp; channel_spk &lt; (current_bin + 1));
+0431                     <span class="keyword">if</span> ~isempty(channel_amp)
+0432                         amplitude_list = [amplitude_list abs(channel_amp(2,:))];
+0433                     <span class="keyword">else</span>
+0434                         amplitude_list = [amplitude_list 0];
+0435                     <span class="keyword">end</span>
+0436                 <span class="keyword">end</span>
+0437             <span class="keyword">end</span>
+0438         <span class="keyword">end</span>
+0439         <span class="comment">% Setup vector</span>
+0440         vectors{num_ava} = current_vector;
+0441         <span class="comment">% Calculating number of electrodes involved in the current bin</span>
+0442         <span class="comment">% Each electrode can only counted once (by using unique)</span>
+0443         sizes(num_ava) = sizes(num_ava) + length(unique(electrodes_list));
+0444         <span class="comment">% Calculating amplitudes</span>
+0445         <span class="keyword">if</span> strcmpi(calc_amp, <span class="string">'none'</span>)
+0446             sizes_amp = [];
+0447         <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'sum-p2p'</span>) || strcmpi(calc_amp, <span class="string">'sum-peak'</span>)
+0448             sizes_amp(num_ava) = sizes_amp(num_ava) + sum(amplitude_list);
+0449         <span class="keyword">elseif</span> strcmpi(calc_amp, <span class="string">'mean-p2p'</span>) || strcmpi(calc_amp, <span class="string">'mean-peak'</span>)
+0450             sizes_amp(num_ava) = sizes_amp(num_ava) + mean(amplitude_list);
+0451         <span class="keyword">end</span>
+0452     <span class="keyword">else</span>
+0453         error([<span class="string">'Not supported method for counting avalanche sizes - '</span> method_size]);
+0454     <span class="keyword">end</span>
+0455    
+0456     <span class="comment">% Deciding next step</span>
+0457     <span class="comment">% Check if this is the last avalanche</span>
+0458     <span class="keyword">if</span> isempty(breakpoint)
+0459         <span class="comment">% Quit loop</span>
+0460         <span class="keyword">break</span>;
+0461     <span class="keyword">else</span>
+0462         <span class="comment">% Change indexer to the new position</span>
+0463         indexer = breakpoint;
+0464     <span class="keyword">end</span>
+0465     
+0466     <span class="comment">% Progress</span>
+0467     <span class="keyword">if</span> ~mod(num_ava, 100)
+0468         <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(100 * indexer / length(active_framebins));
+0469     <span class="keyword">end</span>
+0470 <span class="keyword">end</span>
+0471 
+0472 <span class="comment">% disp 'done'</span>
+0473 t = fix(toc);
+0474 <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(100);
+0475 fprintf(<span class="string">'Detecting used ~ %d seconds.\n'</span>, t);
+0476 
+0477 <span class="keyword">end</span>
+0478 
+0479 
+0480 <a name="_sub1" href="#_subfunctions" class="code">function endp = sub_find_not_continued_point( in_vector, startp )</a>
+0481 <span class="comment">%SUB_FIND_NOT_CONTINUED_POINT Short version of util_find_not_continued_point</span>
+0482 <span class="comment">%   Please refer to the full version.</span>
+0483 <span class="keyword">for</span> i = startp:(length(in_vector) - 1)
+0484     <span class="keyword">if</span> (in_vector(i + 1) - in_vector(i)) &gt; 1
+0485         endp = i + startp;
+0486         <span class="keyword">return</span>;
+0487     <span class="keyword">end</span>
+0488 <span class="keyword">end</span>
+0489 endp = [];
+0490 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of writetoPAJ</title>
+  <meta name="keywords" content="writetoPAJ">
+  <meta name="description" content="WRITETOPAJ         Write to Pajek">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>writetoPAJ
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>WRITETOPAJ         Write to Pajek</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function writetoPAJ(CIJ, fname, arcs) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">WRITETOPAJ         Write to Pajek
+
+   writetoPAJ(CIJ, fname, arcs);
+
+   This function writes a Pajek .net file from a MATLAB matrix
+
+   Inputs:     CIJ,        adjacency matrix
+               fname,      filename minus .net extension
+               arcs,       1 for directed network
+                           0 for an undirected network
+
+   Chris Honey, Indiana University, 2007</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function writetoPAJ(CIJ, fname, arcs)</a>
+0002 <span class="comment">%WRITETOPAJ         Write to Pajek</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   writetoPAJ(CIJ, fname, arcs);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function writes a Pajek .net file from a MATLAB matrix</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Inputs:     CIJ,        adjacency matrix</span>
+0009 <span class="comment">%               fname,      filename minus .net extension</span>
+0010 <span class="comment">%               arcs,       1 for directed network</span>
+0011 <span class="comment">%                           0 for an undirected network</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Chris Honey, Indiana University, 2007</span>
+0014 
+0015 
+0016 N = size(CIJ,1);
+0017 fid = fopen(cat(2,fname,<span class="string">'.net'</span>), <span class="string">'w'</span>);
+0018 
+0019 <span class="comment">%%%VERTICES</span>
+0020 fprintf(fid, <span class="string">'*vertices %6i \r'</span>, N);
+0021 <span class="keyword">for</span> i = 1:N
+0022     fprintf(fid, <span class="string">'%6i &quot;%6i&quot; \r'</span>, [i i]);
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">%%%ARCS/EDGES</span>
+0026 <span class="keyword">if</span> arcs
+0027     fprintf(fid, <span class="string">'*arcs \r'</span>);
+0028 <span class="keyword">else</span>
+0029     fprintf(fid, <span class="string">'*edges \r'</span>);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">for</span> i = 1:N
+0033     <span class="keyword">for</span> j = 1:N
+0034         <span class="keyword">if</span> CIJ(i,j) ~= 0
+0035             fprintf(fid, <span class="string">'%6i %6i %6f \r'</span>, [i j CIJ(i,j)]);
+0036         <span class="keyword">end</span>
+0037     <span class="keyword">end</span>
+0038 <span class="keyword">end</span>
+0039 
+0040 fclose(fid)
+0041</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

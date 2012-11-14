@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of klsymdivergence</title>
+  <meta name="keywords" content="klsymdivergence">
+  <meta name="description" content="KLSYMDIVERGENCE symmetric Jensen-Shannon redundancy measure for">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html itt -->
+<h1>klsymdivergence
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>KLSYMDIVERGENCE symmetric Jensen-Shannon redundancy measure for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function klsym = klsymdivergence (x,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">KLSYMDIVERGENCE symmetric Jensen-Shannon redundancy measure for 
+categorical-discrete data based on Kullback-Leibler divergence.
+   KL = KLSYMDIVERGENCE(X,Y) returns the Jensen-Shannon divergence between 
+   the two column vectors X and Y containing categorical measures.
+
+   The Jensen-Shannon divergence [1] also known as symmetric 
+   Kullback-Leibler divergence, is a measure that averages
+   Kullback-Leibler divergence [2][3] of both (X,Y) and (Y,X);
+
+   It is important to remark that the implementation introduced in this 
+   script allows to compute the Jensen-Shannon divergence directly on two 
+   column vectors containing categorical data instead of requiring their 
+   probability distributions as inputs. The number of categories (distinct
+   values) per vector must be the same.
+
+   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp; 
+   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;
+   Centre for Applied Medical Research. Pamplona (Spain).
+
+   December 13th, 2007. Information Theory Toolbox v1.0
+
+   Example:
+   
+    x = [1;2;2;2;0;0;1;0;1;2];
+    y = [1;2;2;2;2;1;0;2;1;0];
+    klsym = klsymdivergence(x,y);
+
+   Citation:
+
+   If you use them for your academic research work,please kindly cite this 
+   toolbox as: 
+   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.  
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp; 
+   Centre for Applied Medical Research. Pamplona (Spain).
+
+   References
+   [1] Jensen-Shannon Divergence and Hilbert space embedding, Bent Fuglede 
+   and Flemming Topsøe University of Copenhagen, Department of Mathematics
+   [2] Kullback, S., and Leibler, R. A., 1951, On information and 
+   sufficiency, Annals of Mathematical Statistics 22: 79-86.
+   [3] http://en.wikipedia.org/wiki/Kullback-Leibler_divergence</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="kldivergence.html" class="code" title="function kl = kldivergence (x,y)">kldivergence</a>	KLDIVERGENCE redundancy measure for categorical-discrete data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%KLSYMDIVERGENCE symmetric Jensen-Shannon redundancy measure for</span>
+0002 <span class="comment">%categorical-discrete data based on Kullback-Leibler divergence.</span>
+0003 <span class="comment">%   KL = KLSYMDIVERGENCE(X,Y) returns the Jensen-Shannon divergence between</span>
+0004 <span class="comment">%   the two column vectors X and Y containing categorical measures.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   The Jensen-Shannon divergence [1] also known as symmetric</span>
+0007 <span class="comment">%   Kullback-Leibler divergence, is a measure that averages</span>
+0008 <span class="comment">%   Kullback-Leibler divergence [2][3] of both (X,Y) and (Y,X);</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   It is important to remark that the implementation introduced in this</span>
+0011 <span class="comment">%   script allows to compute the Jensen-Shannon divergence directly on two</span>
+0012 <span class="comment">%   column vectors containing categorical data instead of requiring their</span>
+0013 <span class="comment">%   probability distributions as inputs. The number of categories (distinct</span>
+0014 <span class="comment">%   values) per vector must be the same.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp;</span>
+0017 <span class="comment">%   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;</span>
+0018 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0019 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   December 13th, 2007. Information Theory Toolbox v1.0</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Example:</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    x = [1;2;2;2;0;0;1;0;1;2];</span>
+0026 <span class="comment">%    y = [1;2;2;2;2;1;0;2;1;0];</span>
+0027 <span class="comment">%    klsym = klsymdivergence(x,y);</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   Citation:</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   If you use them for your academic research work,please kindly cite this</span>
+0032 <span class="comment">%   toolbox as:</span>
+0033 <span class="comment">%   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.</span>
+0034 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0035 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%   References</span>
+0038 <span class="comment">%   [1] Jensen-Shannon Divergence and Hilbert space embedding, Bent Fuglede</span>
+0039 <span class="comment">%   and Flemming Topsøe University of Copenhagen, Department of Mathematics</span>
+0040 <span class="comment">%   [2] Kullback, S., and Leibler, R. A., 1951, On information and</span>
+0041 <span class="comment">%   sufficiency, Annals of Mathematical Statistics 22: 79-86.</span>
+0042 <span class="comment">%   [3] http://en.wikipedia.org/wiki/Kullback-Leibler_divergence</span>
+0043 
+0044 <a name="_sub0" href="#_subfunctions" class="code">function klsym = klsymdivergence (x,y)</a>
+0045 
+0046 lambda = 0.5;
+0047 klsym = lambda*<a href="kldivergence.html" class="code" title="function kl = kldivergence (x,y)">kldivergence</a>(x,y) + (1-lambda)*<a href="kldivergence.html" class="code" title="function kl = kldivergence (x,y)">kldivergence</a>(y,x);    <span class="comment">%average of the two possible KL divergences for vectors x and y</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

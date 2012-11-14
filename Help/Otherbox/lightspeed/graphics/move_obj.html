@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of move_obj</title>
+  <meta name="keywords" content="move_obj">
+  <meta name="description" content="callback function for draggable objects">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>move_obj
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>callback function for draggable objects</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function move_obj(arg) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> callback function for draggable objects
+ Any object can be made draggable via
+   set(obj, 'ButtonDownFcn', 'move_obj(1)');</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function move_obj(arg)</a>
+0002 <span class="comment">% callback function for draggable objects</span>
+0003 <span class="comment">% Any object can be made draggable via</span>
+0004 <span class="comment">%   set(obj, 'ButtonDownFcn', 'move_obj(1)');</span>
+0005 
+0006 <span class="comment">% using deltas allows us to drag big objects</span>
+0007 <span class="keyword">persistent</span> last_pos;
+0008 <span class="keyword">persistent</span> windowbuttonmotionfcn;
+0009 <span class="keyword">persistent</span> windowbuttonupfcn;
+0010 
+0011 <span class="comment">% handle events</span>
+0012 <span class="keyword">switch</span> arg
+0013   <span class="keyword">case</span> 2    <span class="comment">% button motion</span>
+0014     pos = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca, <span class="string">'CurrentPoint'</span>);
+0015     pos = pos(1,:);
+0016 
+0017     <span class="keyword">switch</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gco, <span class="string">'type'</span>)
+0018       <span class="keyword">case</span> <span class="string">'text'</span>, obj_pos = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gco, <span class="string">'Pos'</span>)';
+0019       <span class="keyword">case</span> <span class="string">'line'</span>, 
+0020     obj_pos(1,:) = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gco,<span class="string">'xdata'</span>);
+0021     obj_pos(2,:) = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gco,<span class="string">'ydata'</span>);
+0022       <span class="keyword">otherwise</span> error([<span class="string">'cannot handle type '</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gco,<span class="string">'type'</span>)])
+0023     <span class="keyword">end</span>
+0024     <span class="comment">% if the scale is logarithmic then the delta is a ratio</span>
+0025     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'xscale'</span>), <span class="string">'log'</span>)
+0026       new_pos(1,:) = obj_pos(1,:) * (pos(1)/last_pos(1));
+0027     <span class="keyword">else</span>
+0028       new_pos(1,:) = obj_pos(1,:) + (pos(1)-last_pos(1));
+0029     <span class="keyword">end</span>
+0030     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'yscale'</span>), <span class="string">'log'</span>)
+0031       new_pos(2,:) = obj_pos(2,:) * (pos(2)/last_pos(2));
+0032     <span class="keyword">else</span>
+0033       new_pos(2,:) = obj_pos(2,:) + (pos(2)-last_pos(2));
+0034     <span class="keyword">end</span>
+0035     <span class="keyword">switch</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gco, <span class="string">'type'</span>)
+0036       <span class="keyword">case</span> <span class="string">'text'</span>, <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gco, <span class="string">'Pos'</span>, new_pos);
+0037       <span class="keyword">case</span> <span class="string">'line'</span>,
+0038     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gco, <span class="string">'xdata'</span>, new_pos(1,:), <span class="keyword">...</span>
+0039              <span class="string">'ydata'</span>, new_pos(2,:));
+0040     <span class="keyword">end</span>
+0041     last_pos = pos;
+0042   <span class="keyword">case</span> 1    <span class="comment">% buttondown</span>
+0043     <span class="comment">% start moving</span>
+0044     <span class="comment">% dragging looks better with double buffering on</span>
+0045     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf, <span class="string">'DoubleBuffer'</span>, <span class="string">'on'</span>);
+0046     last_pos = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'CurrentPoint'</span>);
+0047     last_pos = last_pos(1,:);
+0048     <span class="comment">% set callbacks</span>
+0049     fig = gcf;
+0050     <span class="comment">%set(fig, 'pointer', 'fleur');</span>
+0051     windowbuttonmotionfcn = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig,<span class="string">'windowbuttonmotionfcn'</span>);
+0052     windowbuttonupfcn = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig,<span class="string">'windowbuttonupfcn'</span>);
+0053     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'windowbuttonmotionfcn'</span>, [<span class="string">'move_obj(2);'</span> windowbuttonmotionfcn]);
+0054     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'windowbuttonupfcn'</span>, [<span class="string">'move_obj(3);'</span> windowbuttonupfcn]);
+0055   <span class="keyword">case</span> 3    <span class="comment">% button up</span>
+0056     <span class="comment">% finished moving</span>
+0057     <span class="comment">% clear callbacks</span>
+0058     fig = gcf;
+0059     <span class="comment">%set(fig, 'pointer', 'arrow');</span>
+0060     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'windowbuttonmotionfcn'</span>, windowbuttonmotionfcn);
+0061     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'windowbuttonupfcn'</span>, windowbuttonupfcn);
+0062   <span class="keyword">otherwise</span>
+0063     error(<span class="string">'invalid argument'</span>)
+0064 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

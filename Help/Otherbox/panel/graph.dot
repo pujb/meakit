@@ -1,0 +1,17 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  panel_demo_1 [URL="panel_demo_1.html"];
+  panel_demo_2 [URL="panel_demo_2.html"];
+  panel_demo_3 [URL="panel_demo_3.html"];
+  panel_demo_4 [URL="panel_demo_4.html"];
+  panel_demo_5 [URL="panel_demo_5.html"];
+  panel_demo_6 [URL="panel_demo_6.html"];
+  panel_demo_7 [URL="panel_demo_7.html"];
+  panel_demo_8 [URL="panel_demo_8.html"];
+  panel_demo_9 [URL="panel_demo_9.html"];
+  panel_demo_A [URL="panel_demo_A.html"];
+  panel_demo_B [URL="panel_demo_B.html"];
+  panel_render_all [URL="panel_render_all.html"];
+  panel_resizefcn [URL="panel_resizefcn.html"];
+}

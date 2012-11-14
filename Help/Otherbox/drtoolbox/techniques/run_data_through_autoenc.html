@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of run_data_through_autoenc</title>
+  <meta name="keywords" content="run_data_through_autoenc">
+  <meta name="description" content="RUN_DATA_THROUGH_AUTOENC Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>run_data_through_autoenc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>RUN_DATA_THROUGH_AUTOENC Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [reconX, mappedX] = run_data_through_autoenc(network, X) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">RUN_DATA_THROUGH_AUTOENC Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li><li><a href="backprop.html" class="code" title="function network = backprop(network, X, T, max_iter)">backprop</a>	BACKPROP Trains a network on a dataset using backpropagation</li><li><a href="train_autoencoder.html" class="code" title="function [mappedX, network] = train_autoencoder(X, layers)">train_autoencoder</a>	TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [reconX, mappedX] = run_data_through_autoenc(network, X)</a>
+0002 <span class="comment">%RUN_DATA_THROUGH_AUTOENC Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 
+0005 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0006 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0007 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0008 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0009 <span class="comment">% maintain the name of the original author.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0012 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0013 
+0014     <span class="comment">% Initialize some variables</span>
+0015     n = size(X, 1);
+0016     no_layers = length(network);
+0017     middle_layer = ceil(no_layers / 2);
+0018 
+0019     <span class="comment">% Run data through autoencoder</span>
+0020     activations = [X ones(n, 1)];
+0021     <span class="keyword">for</span> i=1:no_layers
+0022         <span class="keyword">if</span> i ~= middle_layer
+0023             activations = [1 ./ (1 + exp(-(activations * [network{i}.W; network{i}.bias_upW]))) ones(n, 1)];
+0024         <span class="keyword">else</span>
+0025             activations = [activations * [network{i}.W; network{i}.bias_upW] ones(n, 1)];
+0026             mappedX = activations(:,1:end-1);
+0027         <span class="keyword">end</span>
+0028     <span class="keyword">end</span>
+0029     reconX = activations(:,1:end-1);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

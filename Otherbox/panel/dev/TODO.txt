@@ -1,0 +1,48 @@
+
+------------------------------------------------------------------------------------------------
+		TODO
+------------------------------------------------------------------------------------------------
+
+(from me)
+
+* fully-automatic margins based on what was actually rendered, with respect to "off this edge" alignment
+
+MY ANSWER: erm... yeah, would need a bit of thought, though. half the point is that the nice fixed margins give us a nice regular layout; if we allowed automatic margins it would step outside that model. might provide it as an option, but what would need to be automatically accounted for? titles? x/ylabels? tick labels? needs some thought.
+
+* offer intuitive interface to margins on individual panels (e.g. offer 'p.marginbottom' etc.)
+
+MY ANSWER: this sounds straightforward, let's do that.
+
+* turn on rendering of box-model, so it's easy to see where the margins come from.
+
+MY ANSWER: thought about this; not as easy as it sounds. had a look at the way Matlab adds lines to figures, and it looks like it does an axis-in-the-background trick. i may look into this at some point, but i'll not lose any sleep about it.
+
+(from LP Pakula)
+
+* Implement using a HANDLE class inheritance
+
+MY ANSWER: implement using a HANDLE class: yeah, well this was written back in the dark days when such things weren't possible. i do fancy reimplementing at some point, would be slicker. if i ever get the time :)
+
+IMPORTANT: if we do this, take the opportunity to change a couple of things...
+	1) "parentmargin" and "axismargin" should be (inherited) defaults, but the individual margin of each panel should just be in "margin" - setting this to [] would return it to use the local default (usually, inherited from the default panel above the root panel)
+	2) give easy access to children, through p.getChildren() or p.getChild(). also have it so if you display "p", you see the tree of its children.
+
+* Allow margins to be set individually so that defaults remain 
+e.g. axismargin(10,[],[].10);
+
+MY ANSWER: re the defaults idea, yeah i see what you mean. i'll stick it on the todo list.
+
+(from Niko at Matlab Central)
+
+01 Mar 2011
+Niko
+Very useful tool.
+
+It would be nice to be able to easily add a panel-wide xlabel/ylabel spanning multiple children.
+
+02 Mar 2011
+Ben Mitch
+Hi Niko - thanks. You mean, I think, so that the xlabel/ylabel were positioned as if the four (say) sub-panels were all one axis. That's a good idea, yeah. I guess another possibility is that you might want to set all the xlabels/ylabels of all the sub-panels through a single command. Both things are possible, but the first sounds particularly useful. I'll look into it.
+
+Thanks for the feedback.
+

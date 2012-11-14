@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_normpdf</title>
+  <meta name="keywords" content="test_normpdf">
+  <meta name="description" content="timing test for normpdf">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_normpdf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>timing test for normpdf</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> timing test for normpdf</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/mvnormpdf.html" class="code" title="function p = mvnormpdf(varargin)">mvnormpdf</a>	MVNORMPDF    Multivariate normal probability density function.</li><li><a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>	MVNORMPDFLN    log of multivariate normal density.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% timing test for normpdf</span>
+0002 
+0003 niter = 1000;
+0004 d = 100;
+0005 A = rand(d);
+0006 A = A*A';
+0007 S = chol(A);
+0008 iA = inv(A);
+0009 iS = chol(iA);
+0010 x = rand(d,1);
+0011 
+0012 fprintf(<span class="string">'time for standard normal:'</span>)
+0013 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x); <span class="keyword">end</span>;toc
+0014 fprintf(<span class="string">'time for single mean:'</span>)
+0015 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x,x(:,1)); <span class="keyword">end</span>;toc
+0016 fprintf(<span class="string">'time for zero mean, Cholesky argument:'</span>)
+0017 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x,[],S); <span class="keyword">end</span>;toc
+0018 fprintf(<span class="string">'time for Cholesky argument:'</span>)
+0019 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x,x,S); <span class="keyword">end</span>;toc
+0020 fprintf(<span class="string">'time for variance argument:'</span>)
+0021 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x,x,[],A); <span class="keyword">end</span>;toc
+0022 fprintf(<span class="string">'time for inverse Cholesky argument:'</span>)
+0023 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x,x,iS,<span class="string">'inv'</span>); <span class="keyword">end</span>;toc
+0024 fprintf(<span class="string">'time for inverse variance argument:'</span>)
+0025 tic;<span class="keyword">for</span> i = 1:niter <a href="../../../Otherbox/lightspeed/mvnormpdfln.html" class="code" title="function p = mvnormpdfln(x, m, S, V)">mvnormpdfln</a>(x,x,<span class="string">'inv'</span>,iA); <span class="keyword">end</span>;toc
+0026 
+0027 x=[0;1];
+0028 m=[0.1;1.1];
+0029 v=[0.1 0.1;0.1 0.5];
+0030 <a href="../../../Otherbox/lightspeed/mvnormpdf.html" class="code" title="function p = mvnormpdf(varargin)">mvnormpdf</a>(x,m,[],v)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

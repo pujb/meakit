@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of kernel_pca</title>
+  <meta name="keywords" content="kernel_pca">
+  <meta name="description" content="KERNEL_PCA Perform the kernel PCA algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>kernel_pca
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>KERNEL_PCA Perform the kernel PCA algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = kernel_pca(X, no_dims, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">KERNEL_PCA Perform the kernel PCA algorithm
+
+   [mappedX, mapping] = kernel_pca(X, no_dims)
+   [mappedX, mapping] = kernel_pca(X, no_dims, kernel)
+   [mappedX, mapping] = kernel_pca(X, no_dims, kernel, param1)
+   [mappedX, mapping] = kernel_pca(X, no_dims, kernel, param1, param2)
+
+ The function runs kernel PCA on a set of datapoints X. The variable
+ no_dims sets the number of dimensions of the feature points in the 
+ embedded feature space (no_dims &gt;= 1, default = 2). 
+ For no_dims, you can also specify a number between 0 and 1, determining 
+ the amount of variance you want to retain in the PCA step.
+ The value of kernel determines the used kernel. Possible values are 'linear',
+ 'gauss', 'poly', 'subsets', or 'princ_angles' (default = 'gauss'). For
+ more info on setting the parameters of the kernel function, type HELP
+ GRAM.
+ The function returns the locations of the embedded trainingdata in 
+ mappedX. Furthermore, it returns information on the mapping in mapping.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>	GRAM Computes the Gram-matrix of data points X using a kernel function</li><li><a href="kernel_function.html" class="code" title="function y = kernel_function(v, X, center, kernel, param1, param2, type)">kernel_function</a>	KERNEL_FUNCTION Computes sum of (K * X) where X is a possible eigenvector</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = kernel_pca(X, no_dims, varargin)</a>
+0002 <span class="comment">%KERNEL_PCA Perform the kernel PCA algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = kernel_pca(X, no_dims)</span>
+0005 <span class="comment">%   [mappedX, mapping] = kernel_pca(X, no_dims, kernel)</span>
+0006 <span class="comment">%   [mappedX, mapping] = kernel_pca(X, no_dims, kernel, param1)</span>
+0007 <span class="comment">%   [mappedX, mapping] = kernel_pca(X, no_dims, kernel, param1, param2)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% The function runs kernel PCA on a set of datapoints X. The variable</span>
+0010 <span class="comment">% no_dims sets the number of dimensions of the feature points in the</span>
+0011 <span class="comment">% embedded feature space (no_dims &gt;= 1, default = 2).</span>
+0012 <span class="comment">% For no_dims, you can also specify a number between 0 and 1, determining</span>
+0013 <span class="comment">% the amount of variance you want to retain in the PCA step.</span>
+0014 <span class="comment">% The value of kernel determines the used kernel. Possible values are 'linear',</span>
+0015 <span class="comment">% 'gauss', 'poly', 'subsets', or 'princ_angles' (default = 'gauss'). For</span>
+0016 <span class="comment">% more info on setting the parameters of the kernel function, type HELP</span>
+0017 <span class="comment">% GRAM.</span>
+0018 <span class="comment">% The function returns the locations of the embedded trainingdata in</span>
+0019 <span class="comment">% mappedX. Furthermore, it returns information on the mapping in mapping.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 
+0023 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0024 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0025 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0026 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0027 <span class="comment">% maintain the name of the original author.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0030 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0031 
+0032     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0033         no_dims = 2;
+0034     <span class="keyword">end</span>
+0035     kernel = <span class="string">'gauss'</span>;
+0036     param1 = 1;
+0037     param2 = 3;
+0038     <span class="keyword">if</span> nargin &gt; 2
+0039         kernel = varargin{1};
+0040         <span class="keyword">if</span> length(varargin) &gt; 1 &amp; strcmp(class(varargin{2}), <span class="string">'double'</span>), param1 = varargin{2}; <span class="keyword">end</span>
+0041         <span class="keyword">if</span> length(varargin) &gt; 2 &amp; strcmp(class(varargin{3}), <span class="string">'double'</span>), param2 = varargin{3}; <span class="keyword">end</span>
+0042     <span class="keyword">end</span>
+0043     
+0044     <span class="comment">% Store the number of training and test points</span>
+0045     ell = size(X, 1);
+0046 
+0047     <span class="keyword">if</span> size(X, 1) &lt; 2000
+0048 
+0049         <span class="comment">% Compute Gram matrix for training points</span>
+0050         disp(<span class="string">'Computing kernel matrix...'</span>); 
+0051         K = <a href="gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>(X, X, kernel, param1, param2);
+0052 
+0053         <span class="comment">% Normalize kernel matrix K</span>
+0054         mapping.column_sums = sum(K) / ell;                       <span class="comment">% column sums</span>
+0055         mapping.total_sum   = sum(mapping.column_sums) / ell;     <span class="comment">% total sum</span>
+0056         J = ones(ell, 1) * mapping.column_sums;                   <span class="comment">% column sums (in matrix)</span>
+0057         K = K - J - J';
+0058         K = K + mapping.total_sum;
+0059  
+0060         <span class="comment">% Compute first no_dims eigenvectors and store these in V, store corresponding eigenvalues in L</span>
+0061         disp(<span class="string">'Eigenanalysis of kernel matrix...'</span>);
+0062         K(isnan(K)) = 0;
+0063         K(isinf(K)) = 0;
+0064         [V, L] = eig(K);
+0065     <span class="keyword">else</span>
+0066         <span class="comment">% Compute column sums (for out-of-sample extension)</span>
+0067         mapping.column_sums = <a href="kernel_function.html" class="code" title="function y = kernel_function(v, X, center, kernel, param1, param2, type)">kernel_function</a>([], X', 1, kernel, param1, param2, <span class="string">'ColumnSums'</span>) / ell;
+0068         mapping.total_sum   = sum(mapping.column_sums) / ell;
+0069         
+0070         <span class="comment">% Perform eigenanalysis of kernel matrix without explicitly</span>
+0071         <span class="comment">% computing it</span>
+0072         disp(<span class="string">'Eigenanalysis of kernel matrix (using slower but memory-conservative implementation)...'</span>);
+0073         options.disp = 0;
+0074         options.isreal = 1;
+0075         options.issym = 1;
+0076         [V, L] = eigs(@(v)<a href="kernel_function.html" class="code" title="function y = kernel_function(v, X, center, kernel, param1, param2, type)">kernel_function</a>(v, X', 1, kernel, param1, param2, <span class="string">'Normal'</span>), size(X, 1), no_dims, <span class="string">'LM'</span>, options);
+0077         disp(<span class="string">' '</span>);
+0078     <span class="keyword">end</span>
+0079     
+0080     <span class="comment">% Sort eigenvalues and eigenvectors in descending order</span>
+0081     [L, ind] = sort(diag(L), <span class="string">'descend'</span>);
+0082     L = L(1:no_dims);
+0083     V = V(:,ind(1:no_dims));
+0084     
+0085     <span class="comment">% Compute inverse of eigenvalues matrix L</span>
+0086     disp(<span class="string">'Computing final embedding...'</span>);
+0087     invL = diag(1 ./ L);
+0088     
+0089     <span class="comment">% Compute square root of eigenvalues matrix L</span>
+0090     sqrtL = diag(sqrt(L));
+0091     
+0092     <span class="comment">% Compute inverse of square root of eigenvalues matrix L</span>
+0093     invsqrtL = diag(1 ./ diag(sqrtL));
+0094     
+0095     <span class="comment">% Compute the new embedded points for both K and Ktest-data</span>
+0096     mappedX = sqrtL * V';                     <span class="comment">% = invsqrtL * V'* K</span>
+0097     
+0098     <span class="comment">% Set feature vectors in original format</span>
+0099     mappedX = mappedX';
+0100     
+0101     <span class="comment">% Store information for out-of-sample extension</span>
+0102     mapping.X = X;
+0103     mapping.V = V;
+0104     mapping.invsqrtL = invsqrtL;
+0105     mapping.kernel = kernel;
+0106     mapping.param1 = param1;
+0107     mapping.param2 = param2;
+0108</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FCMclust</title>
+  <meta name="keywords" content="FCMclust">
+  <meta name="description" content="data normalization">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>FCMclust
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>data normalization</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result = FCMclust(data,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">data normalization</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li><li><a href="../../Otherbox/FUZZCLUST/Demos/PCAexample/PCAexample.html" class="code" title="">PCAexample</a>	generate PCA example</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/motorcycle/FCMcall.html" class="code" title="">FCMcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/motorcycle/GGcall.html" class="code" title="">GGcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/FCMcall.html" class="code" title="">FCMcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/GGcall.html" class="code" title="">GGcall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/comparing/FCMcall.html" class="code" title="">FCMcall</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = FCMclust(data,param)</a>
+0002 
+0003 
+0004 <span class="comment">%data normalization</span>
+0005 X=data.X;
+0006 
+0007 f0=param.c;
+0008 <span class="comment">%checking the parameters given</span>
+0009 <span class="comment">%default parameters</span>
+0010 <span class="keyword">if</span> exist(<span class="string">'param.m'</span>)==1, m = param.m;<span class="keyword">else</span> m = 2;<span class="keyword">end</span>;
+0011 <span class="keyword">if</span> exist(<span class="string">'param.e'</span>)==1, e = param.m;<span class="keyword">else</span> e = 1e-4;<span class="keyword">end</span>;
+0012 
+0013 [N,n] = size(X);
+0014 [Nf0,nf0] = size(f0); 
+0015 X1 = ones(N,1);
+0016 
+0017 <span class="comment">% Initialize fuzzy partition matrix</span>
+0018 rand(<span class="string">'state'</span>,0)
+0019 <span class="keyword">if</span> max(Nf0,nf0) == 1,         <span class="comment">% only number of cluster given</span>
+0020   c = f0;
+0021   mm = mean(X);             <span class="comment">%mean of the data (1,n)</span>
+0022   aa = max(abs(X - ones(N,1)*mm)); <span class="comment">%</span>
+0023   v = 2*(ones(c,1)*aa).*(rand(c,n)-0.5) + ones(c,1)*mm;
+0024   <span class="keyword">for</span> j = 1 : c,
+0025     xv = X - X1*v(j,:);
+0026     d(:,j) = sum((xv*eye(n).*xv),2);
+0027   <span class="keyword">end</span>;
+0028   d = (d+1e-10).^(-1/(m-1));
+0029   f0 = (d ./ (sum(d,2)*ones(1,c)));
+0030   
+0031 <span class="keyword">else</span>
+0032   c = size(f0,2);
+0033   fm = f0.^m; sumf = sum(fm);
+0034   v = (fm'*X)./(sumf'*ones(1,n)); <span class="comment">%</span>
+0035 <span class="keyword">end</span>;
+0036 
+0037 f = zeros(N,c);                <span class="comment">% partition matrix</span>
+0038 iter = 0;                       <span class="comment">% iteration counter</span>
+0039 
+0040 <span class="comment">% Iterate</span>
+0041 <span class="keyword">while</span>  max(max(f0-f)) &gt; e
+0042   iter = iter + 1;
+0043   f = f0;
+0044   <span class="comment">% Calculate centers</span>
+0045   fm = f.^m;
+0046   sumf = sum(fm);
+0047   v = (fm'*X)./(sumf'*ones(1,n));
+0048   <span class="keyword">for</span> j = 1 : c,
+0049     xv = X - X1*v(j,:);
+0050     d(:,j) = sum((xv*eye(n).*xv),2);
+0051   <span class="keyword">end</span>;
+0052   distout=sqrt(d);
+0053   J(iter) = sum(sum(f0.*d));
+0054   <span class="comment">% Update f0</span>
+0055   d = (d+1e-10).^(-1/(m-1));
+0056   f0 = (d ./ (sum(d,2)*ones(1,c)));
+0057 <span class="keyword">end</span>
+0058 
+0059 fm = f.^m; 
+0060 sumf = sum(fm);
+0061 
+0062 <span class="comment">%results</span>
+0063 result.data.f=f0;
+0064 result.data.d=distout;
+0065 result.cluster.v=v;
+0066 result.iter = iter;
+0067 result.cost = J;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

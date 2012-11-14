@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mds</title>
+  <meta name="keywords" content="mds">
+  <meta name="description" content="MDS Run MDS on the data to get a low-dimensional visualization">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>mds
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MDS Run MDS on the data to get a low-dimensional visualization</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = mds(X, no_dims) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">MDS Run MDS on the data to get a low-dimensional visualization
+ 
+   mappedX = mds(X, no_dims)
+
+ Run multidimensional scaling on the dataset X to get a two-dimensional 
+ visualization. The low-dimensional representation is returned in mappedX.
+ It has dimensionality no_dims (default = 2).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = mds(X, no_dims)</a>
+0002 <span class="comment">%MDS Run MDS on the data to get a low-dimensional visualization</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = mds(X, no_dims)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Run multidimensional scaling on the dataset X to get a two-dimensional</span>
+0007 <span class="comment">% visualization. The low-dimensional representation is returned in mappedX.</span>
+0008 <span class="comment">% It has dimensionality no_dims (default = 2).</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0013 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0014 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0015 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0016 <span class="comment">% maintain the name of the original author.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0019 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0020 
+0021 
+0022     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0023         no_dims = 2;
+0024     <span class="keyword">end</span>
+0025 
+0026     <span class="comment">% NOTE: Classical scaling is identical to performing PCA, except the</span>
+0027     <span class="comment">% input data is different. Specifying pairwise similarity data is not</span>
+0028     <span class="comment">% yet supported by the toolbox.</span>
+0029     mappedX = <a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>(X, <span class="string">'PCA'</span>, no_dims);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

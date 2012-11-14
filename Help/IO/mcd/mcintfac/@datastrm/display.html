@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of display</title>
+  <meta name="keywords" content="display">
+  <meta name="description" content="Command window display">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>display
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Command window display</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function display(d) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> Command window display</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../../Otherbox/drtoolbox/techniques/sammon.html" class="code" title="function [y, E] = sammon(x, n, opts)">sammon</a>	SAMMON Performs Sammon's MDS mapping on dataset X</li><li><a href="../../../../Otherbox/lightspeed/@mutable/display.html" class="code" title="function display(mut)">display</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function display(d)</a>
+0002 <span class="comment">% Command window display</span>
+0003 
+0004 
+0005 disp(<span class="string">' '</span>);
+0006 
+0007 <span class="keyword">if</span> d.fid&gt;0 &amp; ~strcmp(d.fileaccess,<span class="string">'ole'</span>)
+0008    tmp={<span class="string">'filename'</span>
+0009       <span class="string">'fileaccess'</span>  
+0010       <span class="string">'fid'</span>   
+0011       <span class="string">'version'</span>
+0012       <span class="string">'filesize'</span>
+0013       <span class="string">'DataType'</span>
+0014       <span class="string">'MicrovoltsPerAD'</span>
+0015       <span class="string">'ZeroADValue'</span>
+0016       <span class="string">'MicrosecondsPerTick'</span>
+0017       <span class="string">'NChannels'</span>
+0018       <span class="string">'ChannelID'</span>
+0019       <span class="string">'HardwareChannelID'</span>
+0020       <span class="string">'ChannelNames'</span>
+0021       <span class="string">'HardwareChannelNames'</span>
+0022       <span class="string">'total_window_ticks'</span>
+0023       <span class="string">'offset_to_data'</span>
+0024       <span class="string">'recordingdate'</span>
+0025       <span class="string">'sweepStartTime'</span>
+0026       <span class="string">'sweepStartPointer'</span>
+0027       <span class="string">'windowTicksPos'</span>
+0028       <span class="string">'triggerChannel'</span>
+0029       <span class="string">'spikeSize'</span>
+0030       <span class="string">'ticks_pre_event'</span>
+0031       <span class="string">'BitFlipRemoveFactor'</span>
+0032            };
+0033    
+0034    <span class="keyword">for</span> i=1:size(tmp,1);
+0035        entry = eval([<span class="string">'d.'</span> tmp{i}]);
+0036       <span class="keyword">if</span> (isa(entry, <span class="string">'double'</span>) &amp; (length(entry) == 1)) | isa(entry, <span class="string">'char'</span>)
+0037          disp([tmp{i} blanks(24-length(tmp{i})) num2str(entry)]);
+0038       <span class="keyword">else</span>
+0039          disp([tmp{i} blanks(24-length(tmp{i})) class(entry) <span class="keyword">...</span>
+0040                <span class="string">'  ('</span> num2str(size(entry)) <span class="string">')'</span>]);
+0041       <span class="keyword">end</span>
+0042    <span class="keyword">end</span>   
+0043       
+0044     disp(<span class="string">' '</span>);   
+0045    <span class="keyword">try</span>
+0046        disp([d.filename <span class="string">'  '</span> datestr(d.recordingdate, 1) <span class="keyword">...</span>
+0047             <span class="string">'  ('</span> num2str(ftell(d.fid)) <span class="string">' / '</span> num2str(d.filesize) <span class="string">')'</span>]);
+0048    <span class="keyword">catch</span>
+0049         warning([d.filename <span class="string">'  '</span> datestr(d.recordingdate, 1) <span class="string">' must be opened for reading'</span>]);
+0050    <span class="keyword">end</span>
+0051 <span class="keyword">else</span>
+0052    tmp={<span class="string">'filename'</span>
+0053        <span class="string">'fileaccess'</span>
+0054         <span class="string">'version'</span>
+0055       <span class="string">'softwareversion'</span>
+0056       <span class="string">'meatype'</span>
+0057         <span class="string">'filesize'</span>
+0058         <span class="string">'MicrovoltsPerAD2'</span>
+0059         <span class="string">'MicrosecondsPerTick'</span>
+0060         <span class="string">'MillisamplesPerSecond2'</span>
+0061         <span class="string">'ZeroADValue'</span>
+0062         <span class="string">'ZeroADValue2'</span>
+0063       <span class="string">'TotalChannels'</span>
+0064       <span class="string">'NChannels2'</span>
+0065         <span class="string">'ChannelNames2'</span>
+0066         <span class="string">'HardwareChannelNames2'</span>
+0067         <span class="string">'ChannelID2'</span>
+0068         <span class="string">'HardwareChannelID2'</span>
+0069         <span class="string">'recordingdate'</span>
+0070         <span class="string">'recordingStopDate'</span>
+0071         <span class="string">'sweepStartTime'</span>
+0072       <span class="string">'sweepStopTime'</span>
+0073         <span class="string">'StreamCount'</span>
+0074         <span class="string">'StreamNames'</span>
+0075         <span class="string">'StreamInfo'</span>
+0076         <span class="string">'TriggerStreamID'</span>
+0077       <span class="string">'TimeWindow'</span>
+0078       };
+0079    <span class="keyword">for</span> i=1:size(tmp,1);
+0080        entry = eval([<span class="string">'d.'</span> tmp{i}]);
+0081       <span class="keyword">if</span> (isa(entry, <span class="string">'double'</span>) &amp; (length(entry) == 1)) | isa(entry, <span class="string">'char'</span>)
+0082          disp([tmp{i} blanks(24-length(tmp{i})) num2str(entry)]);
+0083       <span class="keyword">else</span>
+0084          disp([tmp{i} blanks(24-length(tmp{i})) class(entry) <span class="keyword">...</span>
+0085                <span class="string">'  ('</span> num2str(size(entry)) <span class="string">')'</span>]);
+0086       <span class="keyword">end</span>
+0087    <span class="keyword">end</span>   
+0088       
+0089 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

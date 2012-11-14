@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_find_number_of_used_electrodes</title>
+  <meta name="keywords" content="util_find_number_of_used_electrodes">
+  <meta name="description" content="UTIL_FIND_USED_ELECTRODES Get the number and list of used electrodes.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_find_number_of_used_electrodes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_FIND_USED_ELECTRODES Get the number and list of used electrodes.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ total_number_of_electrodes total_number_of_used electrode_list] = util_find_number_of_used_electrodes( spif ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_FIND_USED_ELECTRODES Get the number and list of used electrodes.
+Electrodes at the four corners are not used, for example.
+   Input:
+           spif:   Spike information structure.
+   Output:
+           total_number_of_electrodes:     As title.
+           total_number_of_used:           As title.
+                                           If there is no spike in one
+                                           channel, then the channel will
+                                           be marked as not-used(0).
+           electrode_list (HWID):          The list of all elelctrodes in
+                                           HWID. If used, the
+                                           corresponding position will be
+                                           marked as 1, else : 0.
+
+   Created on Oct/21/2009 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ total_number_of_electrodes total_number_of_used electrode_list] = util_find_number_of_used_electrodes( spif )</a>
+0002 <span class="comment">%UTIL_FIND_USED_ELECTRODES Get the number and list of used electrodes.</span>
+0003 <span class="comment">%Electrodes at the four corners are not used, for example.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           spif:   Spike information structure.</span>
+0006 <span class="comment">%   Output:</span>
+0007 <span class="comment">%           total_number_of_electrodes:     As title.</span>
+0008 <span class="comment">%           total_number_of_used:           As title.</span>
+0009 <span class="comment">%                                           If there is no spike in one</span>
+0010 <span class="comment">%                                           channel, then the channel will</span>
+0011 <span class="comment">%                                           be marked as not-used(0).</span>
+0012 <span class="comment">%           electrode_list (HWID):          The list of all elelctrodes in</span>
+0013 <span class="comment">%                                           HWID. If used, the</span>
+0014 <span class="comment">%                                           corresponding position will be</span>
+0015 <span class="comment">%                                           marked as 1, else : 0.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Created on Oct/21/2009 By Pu Jiangbo</span>
+0018 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0019 
+0020 <span class="comment">% Get the total number of all electrodes</span>
+0021 spif_size = size( spif.spiketimes );
+0022 total_number_of_electrodes = spif_size(1);
+0023 
+0024 <span class="comment">% Init</span>
+0025 total_number_of_used = 0;
+0026 electrode_list = zeros(total_number_of_electrodes, 1);
+0027 
+0028 <span class="comment">% Loop</span>
+0029 <span class="keyword">for</span> i = 1:total_number_of_electrodes
+0030     <span class="keyword">if</span> isempty(spif.spiketimes{i})
+0031         <span class="comment">% There is no spike in this channel.</span>
+0032         electrode_list(i) = 0;
+0033     <span class="keyword">else</span>
+0034         electrode_list(i) = 1;
+0035         total_number_of_used = total_number_of_used + 1;
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

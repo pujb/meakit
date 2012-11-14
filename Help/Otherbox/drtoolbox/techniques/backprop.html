@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of backprop</title>
+  <meta name="keywords" content="backprop">
+  <meta name="description" content="BACKPROP Trains a network on a dataset using backpropagation">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>backprop
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BACKPROP Trains a network on a dataset using backpropagation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function network = backprop(network, X, T, max_iter) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">BACKPROP Trains a network on a dataset using backpropagation
+
+   network = backprop(network, X, T, max_iter)
+
+ The function trains the specified network using backpropagation on
+ dataset X with targets T for max_iter iterations. The dataset X is an NxD
+ matrix, whereas the targets matrix T has size NxM. The variable network
+ is a cell array that may be obtained from the TRAIN_DEEP_NETWORK
+ function. The function returns the trained network in network.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>	Minimize a continuous differentialble multivariate function. Starting point</li><li><a href="run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>	RUN_DATA_THROUGH_AUTOENC Summary of this function goes here</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="train_autoencoder.html" class="code" title="function [mappedX, network] = train_autoencoder(X, layers)">train_autoencoder</a>	TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = backprop(network, X, T, max_iter)</a>
+0002 <span class="comment">%BACKPROP Trains a network on a dataset using backpropagation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   network = backprop(network, X, T, max_iter)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The function trains the specified network using backpropagation on</span>
+0007 <span class="comment">% dataset X with targets T for max_iter iterations. The dataset X is an NxD</span>
+0008 <span class="comment">% matrix, whereas the targets matrix T has size NxM. The variable network</span>
+0009 <span class="comment">% is a cell array that may be obtained from the TRAIN_DEEP_NETWORK</span>
+0010 <span class="comment">% function. The function returns the trained network in network.</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023     <span class="keyword">if</span> ~exist(<span class="string">'max_iter'</span>, <span class="string">'var'</span>) || isempty(max_iter)
+0024         max_iter = 10;
+0025     <span class="keyword">end</span>
+0026 
+0027     <span class="comment">% Initialize some variables</span>
+0028     n = size(X, 1);
+0029     no_layers = length(network);
+0030     batch_size = round(n / 600);
+0031     
+0032     <span class="comment">% Estimate the initial error</span>
+0033     estN = min([n 5000]);
+0034     reconX = <a href="run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>(network, X(1:estN,:));
+0035     C = sum(sum((T(1:estN,:) - reconX) .^ 2)) ./ estN;
+0036     disp([<span class="string">'Initial MSE: '</span> num2str(C)]);
+0037     
+0038     <span class="comment">% Perform the backpropagation</span>
+0039     <span class="keyword">for</span> iter=1:max_iter
+0040         disp([<span class="string">'Iteration '</span> num2str(iter) <span class="string">'...'</span>]);
+0041         
+0042         <span class="comment">% Loop over all batches</span>
+0043         index = randperm(n);
+0044         <span class="keyword">for</span> batch=1:batch_size:n
+0045 
+0046             <span class="comment">% Select current batch</span>
+0047             tmpX = X(index(batch:min([batch + batch_size - 1 n])),:);
+0048             tmpT = T(index(batch:min([batch + batch_size - 1 n])),:);
+0049 
+0050             <span class="comment">% Convert the weights and store them in the network</span>
+0051             v = [];
+0052             <span class="keyword">for</span> i=1:length(network)
+0053                 v = [v; network{i}.W(:); network{i}.bias_upW(:)];
+0054             <span class="keyword">end</span>
+0055             
+0056             <span class="comment">% Conjugate gradient minimization using 3 linesearches</span>
+0057 <span class="comment">%             checkgrad('backprop_gradient', v, 1e-5, network, tmpX, tmpT)</span>
+0058             v = <a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>(v, <span class="string">'backprop_gradient'</span>, 3, network, tmpX, tmpT);
+0059             
+0060             <span class="comment">% Deconvert the weights and store them in the network</span>
+0061             ind = 1;
+0062             <span class="keyword">for</span> i=1:no_layers
+0063                 network{i}.W        = reshape(v(ind:ind - 1 + numel(network{i}.W)),        size(network{i}.W));         ind = ind + numel(network{i}.W);
+0064                 network{i}.bias_upW = reshape(v(ind:ind - 1 + numel(network{i}.bias_upW)), size(network{i}.bias_upW));  ind = ind + numel(network{i}.bias_upW);
+0065             <span class="keyword">end</span>
+0066         <span class="keyword">end</span>
+0067         
+0068         <span class="comment">% Estimate the current error</span>
+0069         reconX = <a href="run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>(network, X(1:estN,:));
+0070         C = sum(sum((T(1:estN,:) - reconX) .^ 2)) ./ estN;
+0071         disp([<span class="string">'MSE: '</span> num2str(C)]);
+0072     <span class="keyword">end</span>
+0073</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

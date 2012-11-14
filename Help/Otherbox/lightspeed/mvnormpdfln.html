@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mvnormpdfln</title>
+  <meta name="keywords" content="mvnormpdfln">
+  <meta name="description" content="MVNORMPDFLN    log of multivariate normal density.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>mvnormpdfln
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MVNORMPDFLN    log of multivariate normal density.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function p = mvnormpdfln(x, m, S, V) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> MVNORMPDFLN    log of multivariate normal density.
+   See MVNORMPDF for argument description.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>	COL_SUM   Sum for each column.</li><li><a href="solve_tril.html" class="code" title="function x = solve_tril(T,b)">solve_tril</a>	SOLVE_TRIL      Left division by lower triangular matrix.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mvnormpdf.html" class="code" title="function p = mvnormpdf(varargin)">mvnormpdf</a>	MVNORMPDF    Multivariate normal probability density function.</li><li><a href="../../Otherbox/lightspeed/tests/test_normpdf.html" class="code" title="">test_normpdf</a>	timing test for normpdf</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function p = mvnormpdfln(x, m, S, V)</a>
+0002 <span class="comment">% MVNORMPDFLN    log of multivariate normal density.</span>
+0003 <span class="comment">%   See MVNORMPDF for argument description.</span>
+0004 
+0005 log2pi = 1.83787706640935;
+0006 [d, n] = size(x);
+0007 <span class="keyword">if</span> nargin == 1
+0008   dx = x;
+0009 <span class="keyword">elseif</span> isempty(m)
+0010   dx = x;
+0011 <span class="keyword">else</span>
+0012   <span class="comment">% m specified</span>
+0013   sz = size(m);
+0014   <span class="keyword">if</span> sz(1) ~= d
+0015     error(<span class="string">'rows(m) ~= rows(x)'</span>)
+0016   <span class="keyword">end</span>
+0017   nm = sz(2);
+0018   <span class="keyword">if</span> nm == 1
+0019     dx = x - repmat(m,1,n);
+0020   <span class="keyword">elseif</span> n == 1
+0021     dx = repmat(x,1,nm) - m;
+0022   <span class="keyword">elseif</span> nm == n
+0023     dx = x - m;
+0024   <span class="keyword">else</span>
+0025     error(<span class="string">'incompatible number of columns in x and m'</span>)
+0026   <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> nargin &lt; 3
+0029   <span class="comment">% unit variance</span>
+0030   p = -0.5*(d*log2pi + <a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(dx.*dx));
+0031   <span class="keyword">return</span>
+0032 <span class="keyword">end</span>
+0033 have_inv = 0;
+0034 <span class="keyword">if</span> nargin == 3
+0035   <span class="comment">% standard deviation given</span>
+0036   <span class="keyword">if</span> d == 1
+0037     dx = dx./S;
+0038     p = (-log(S) -0.5*log2pi) - 0.5*(dx.*dx);
+0039     <span class="keyword">return</span>;
+0040   <span class="keyword">end</span>
+0041   <span class="keyword">if</span> S(2,1) ~= 0
+0042     error(<span class="string">'S is not upper triangular'</span>)
+0043   <span class="keyword">end</span>
+0044   <span class="keyword">if</span> any(size(S) ~= [d d])
+0045     error(<span class="string">'S is not the right size'</span>)
+0046   <span class="keyword">end</span>
+0047 <span class="keyword">else</span>
+0048   <span class="keyword">if</span> ischar(V)
+0049     <span class="keyword">if</span> strcmp(V,<span class="string">'inv'</span>)
+0050       <span class="comment">% inverse stddev given</span>
+0051       iS = S;
+0052       have_inv = 1;
+0053     <span class="keyword">else</span>
+0054       error(<span class="string">'unknown directive'</span>)
+0055     <span class="keyword">end</span>
+0056   <span class="keyword">elseif</span> ischar(S) 
+0057     <span class="keyword">if</span> strcmp(S,<span class="string">'inv'</span>)
+0058       <span class="comment">% inverse variance given</span>
+0059       <span class="keyword">if</span> d == 1
+0060     iS = sqrt(V);
+0061       <span class="keyword">else</span>
+0062     iS = chol(V);
+0063       <span class="keyword">end</span>
+0064       have_inv = 1;
+0065     <span class="keyword">else</span>
+0066       error(<span class="string">'unknown directive'</span>)
+0067     <span class="keyword">end</span>
+0068   <span class="keyword">else</span>
+0069     <span class="comment">% variance given</span>
+0070     <span class="keyword">if</span> d == 1
+0071       S = sqrt(V);
+0072     <span class="keyword">else</span>
+0073       S = chol(V);
+0074     <span class="keyword">end</span>
+0075   <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 <span class="keyword">if</span> have_inv
+0078   <span class="keyword">if</span> d == 1
+0079     dx = iS .* dx;
+0080     logdetiS = log(iS);
+0081   <span class="keyword">else</span>
+0082     dx = iS*dx;
+0083     logdetiS = sum(log(diag(iS)));
+0084   <span class="keyword">end</span>
+0085 <span class="keyword">else</span>
+0086   <span class="keyword">if</span> d == 1
+0087     dx = dx./S;
+0088     logdetiS = -log(S);
+0089   <span class="keyword">else</span>
+0090     dx = <a href="solve_tril.html" class="code" title="function x = solve_tril(T,b)">solve_tril</a>(S',dx);
+0091     <span class="comment">%dx = S'\dx;</span>
+0092     logdetiS = -sum(log(diag(S)));
+0093   <span class="keyword">end</span>
+0094 <span class="keyword">end</span>
+0095 p = (logdetiS -0.5*d*log2pi) -0.5*<a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(dx.*dx);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

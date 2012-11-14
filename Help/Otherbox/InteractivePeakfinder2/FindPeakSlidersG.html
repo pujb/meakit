@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FindPeakSlidersG</title>
+  <meta name="keywords" content="FindPeakSlidersG">
+  <meta name="description" content="Interactive findpeaks script with peak-zoom feature,">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>FindPeakSlidersG
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Interactive findpeaks script with peak-zoom feature,</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Interactive findpeaks script with peak-zoom feature, 
+ for pre-defined data in x,y. 
+ Load a typical data set into the vectors x,y, then run this 
+ m-file and adjust the 5 sliders to determine what values of the 
+ parameters give the most reliable peak detection. Peak number and 
+ position, height, and width of each peak is returned in the matrix P. 
+ The 5 parameters are:
+ SlopeThreshold (SlopeT) - Slope of the smoothed third-derivative that is  
+   taken to indicate a peak. Larger values will neglect small features.
+ AmpThreshold (AmpT) - Any peaks with height less than this value are ignored.
+ SmoothWidth - Width of smooth functions applied to data before slope is
+   measured. Larger values will neglect small features. The best value is 
+   about equal to the half-width of the peaks.
+ FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)
+   peak that are taken to determine the peak height, positions, and width.
+   The best value is about equal to the half-width of the peaks.
+ Peak - This slider zooms in on any one of the detected peaks, and shows
+   the fitted top of the peak (FitWidth) as a blue curve. To see all the
+   peaks, set the Peaks slider to zero (all the way down).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="AmpTSlider.html" class="code" title="function AmpTSlider(n,h)">AmpTSlider</a>	Changes AmpThreshold when the AmpThreshold slider is moved.</li><li><a href="BGSlider.html" class="code" title="function BGSlider(n,h)">BGSlider</a>	Called when the BG slider is clicked.</li><li><a href="FitSlider.html" class="code" title="function FitSlider(n,h)">FitSlider</a>	Changes FitWidth when the FitWidth slider is moved.</li><li><a href="PeakSlider.html" class="code" title="function PeakSlider(n,h)">PeakSlider</a>	Changes PeakNumber when the Peak slider is moved.</li><li><a href="SlopeTSlider.html" class="code" title="function SlopeTSlider(n,h)">SlopeTSlider</a>	Changes SlopeThreshold when the SlopeThreshold slider is moved.</li><li><a href="SmoothSlider.html" class="code" title="function SmoothSlider(n,h)">SmoothSlider</a>	Changes SmoothWidth when the SmoothWidth slider is moved.</li><li><a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>	function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)</li><li><a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>	RTSLID Slider widget that responds to dragging realtime</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="DemoFindPeakSlidersG.html" class="code" title="">DemoFindPeakSlidersG</a>	Interactive demo of findpeaks function with peak-zoom feature.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% Interactive findpeaks script with peak-zoom feature,</span>
+0002 <span class="comment">% for pre-defined data in x,y.</span>
+0003 <span class="comment">% Load a typical data set into the vectors x,y, then run this</span>
+0004 <span class="comment">% m-file and adjust the 5 sliders to determine what values of the</span>
+0005 <span class="comment">% parameters give the most reliable peak detection. Peak number and</span>
+0006 <span class="comment">% position, height, and width of each peak is returned in the matrix P.</span>
+0007 <span class="comment">% The 5 parameters are:</span>
+0008 <span class="comment">% SlopeThreshold (SlopeT) - Slope of the smoothed third-derivative that is</span>
+0009 <span class="comment">%   taken to indicate a peak. Larger values will neglect small features.</span>
+0010 <span class="comment">% AmpThreshold (AmpT) - Any peaks with height less than this value are ignored.</span>
+0011 <span class="comment">% SmoothWidth - Width of smooth functions applied to data before slope is</span>
+0012 <span class="comment">%   measured. Larger values will neglect small features. The best value is</span>
+0013 <span class="comment">%   about equal to the half-width of the peaks.</span>
+0014 <span class="comment">% FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)</span>
+0015 <span class="comment">%   peak that are taken to determine the peak height, positions, and width.</span>
+0016 <span class="comment">%   The best value is about equal to the half-width of the peaks.</span>
+0017 <span class="comment">% Peak - This slider zooms in on any one of the detected peaks, and shows</span>
+0018 <span class="comment">%   the fitted top of the peak (FitWidth) as a blue curve. To see all the</span>
+0019 <span class="comment">%   peaks, set the Peaks slider to zero (all the way down).</span>
+0020 
+0021 <span class="comment">% Note: If the slider ranges are not appropriate for your data, change</span>
+0022 <span class="comment">%       them in lines 61-66.</span>
+0023 
+0024 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 1.5 October 18, 2006</span>
+0025 
+0026 warning off MATLAB:polyfit:RepeatedPointsOrRescale
+0027 format compact
+0028 
+0029 <span class="keyword">global</span> x
+0030 <span class="keyword">global</span> y
+0031 <span class="keyword">global</span> SlopeThreshold 
+0032 <span class="keyword">global</span> AmpThreshold  
+0033 <span class="keyword">global</span> SmoothWidth
+0034 <span class="keyword">global</span> FitWidth
+0035 <span class="keyword">global</span> PeakNumber
+0036 <span class="keyword">global</span> P
+0037 close
+0038 figure(1)
+0039 
+0040 
+0041 <span class="comment">% Graph the signal in red</span>
+0042 h=figure(1);
+0043 plot(x,y,<span class="string">'m'</span>) 
+0044 h2=gca;axis([x(1) x(length(x)) min(y) max(y)]);
+0045 title(<span class="string">'Vary the sliders to see how the parameters effect peak finding performance'</span>)
+0046 
+0047 <span class="comment">% Initial values of variable parameters</span>
+0048 WidthPoints=10;  <span class="comment">% Average number of points in half-width of peaks (CHANGE TO FIT YOUR SIGNAL)</span>
+0049 SlopeThreshold=WidthPoints^-2;
+0050 AmpThreshold=0.1*max(y);
+0051 SmoothWidth=WidthPoints/2;  <span class="comment">% SmoothWidth should be roughly equal to 1/2 the peak width (in points)</span>
+0052 FitWidth=WidthPoints/2; <span class="comment">% FitWidth should be roughly equal to 1/2 the peak widths(in points)</span>
+0053 <span class="keyword">if</span> FitWidth&lt;3,FitWidth=3;<span class="keyword">end</span>
+0054 PeakNumber=0;
+0055 
+0056 <span class="comment">% Find and number the peaks on the graph</span>
+0057 <span class="comment">% type warning off MATLAB:polyfit:RepeatedPointsOrRescale</span>
+0058 P=<a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth);
+0059 xlabel([<span class="string">'SlopeT = '</span> num2str(SlopeThreshold) <span class="string">'    AmpT = '</span> num2str(AmpThreshold) <span class="string">'    SmoothWidth = '</span> num2str(SmoothWidth) <span class="string">'    FitWidth = '</span> num2str(FitWidth) ])
+0060 text(P(:, 2),P(:, 3),num2str(P(:,1)))  <span class="comment">% Number the peaks found on the graph</span>
+0061 
+0062 <span class="comment">% Maximum ranges of the sliders (change as needed)</span>
+0063 SlopeMax=100;
+0064 SlopeMin=10^-6;
+0065 AmpMax=max(y);
+0066 AmpMin=min(y);
+0067 SmoothWidthMax=100;
+0068 FitWidthMax=100;
+0069 MaxPeaks=40;
+0070 
+0071 <span class="comment">% Draw the sliders</span>
+0072 
+0073 <a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>(h,@<a href="SlopeTSlider.html" class="code" title="function SlopeTSlider(n,h)">SlopeTSlider</a>,h2,1,<span class="string">'Scale'</span>,[log10(SlopeMin) log10(SlopeMax)],<span class="string">'Def'</span>,log10(SlopeThreshold),<span class="string">'Back'</span>,[0.9 0.9 0.9],<span class="string">'Label'</span>,<span class="string">'SlopeT'</span>,<span class="string">'Position'</span>,[0.03 0.5 0.03 0.35]);
+0074 <a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>(h,@<a href="AmpTSlider.html" class="code" title="function AmpTSlider(n,h)">AmpTSlider</a>,h2,0,<span class="string">'Scale'</span>,[AmpMin AmpMax],<span class="string">'Def'</span>,AmpThreshold,<span class="string">'Back'</span>,[0.9 0.9 0.9],<span class="string">'Label'</span>,<span class="string">'AmpT'</span>,<span class="string">'Position'</span>,[0.03 0.04 0.03 0.35]);
+0075 <a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>(h,@<a href="BGSlider.html" class="code" title="function BGSlider(n,h)">BGSlider</a>,h2,0,<span class="string">'Scale'</span>,[0 1],<span class="string">'Def'</span>,0,<span class="string">'Back'</span>,[0.9 0.9 0.9],<span class="string">'Label'</span>,<span class="string">'BG'</span>,<span class="string">'Position'</span>,[0.94 0.9 0.03 0.04]);
+0076 <a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>(h,@<a href="SmoothSlider.html" class="code" title="function SmoothSlider(n,h)">SmoothSlider</a>,h2,0,<span class="string">'Scale'</span>,[0 2],<span class="string">'Def'</span>,log10(SmoothWidth),<span class="string">'Back'</span>,[0.9 0.9 0.9],<span class="string">'Label'</span>,<span class="string">'Smooth'</span>,<span class="string">'Position'</span>,[0.94 0.32 0.03 0.2]);
+0077 <a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>(h,@<a href="FitSlider.html" class="code" title="function FitSlider(n,h)">FitSlider</a>,h2,0,<span class="string">'Scale'</span>,[log10(3) log10(FitWidthMax)],<span class="string">'Def'</span>,log10(FitWidth),<span class="string">'Back'</span>,[0.9 0.9 0.9],<span class="string">'Label'</span>,<span class="string">'Fit'</span>,<span class="string">'Position'</span>,[0.94 0.04 0.03 0.2]);
+0078 <a href="rtslid.html" class="code" title="function h = rtslid(fig,f,hh,varargin)">rtslid</a>(h,@<a href="PeakSlider.html" class="code" title="function PeakSlider(n,h)">PeakSlider</a>,h2,0,<span class="string">'Scale'</span>,[0 MaxPeaks],<span class="string">'Def'</span>,0,<span class="string">'Back'</span>,[0.9 0.9 0.9],<span class="string">'Label'</span>,<span class="string">'Peak'</span>,<span class="string">'Position'</span>,[0.94 0.6 0.03 0.22]);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

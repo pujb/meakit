@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_connect_spif_spiketimes</title>
+  <meta name="keywords" content="util_connect_spif_spiketimes">
+  <meta name="description" content="UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_connect_spif_spiketimes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个
+   将两个Spiketimes连接成一个Spiketimes。这个函数的实质是将两个一样大小的Cell
+   矩阵连接成一个Cell矩阵(按行)。
+
+   'auto_extend'：用于连接几个矩阵时用，将spt2中的spiketime值统一的加上一个auto_extend指定的数（ms）
+
+   蒲江波 - 2009年6月17日
+   蒲江波 - 2009年7月3日
+       加上auto_extend这个参数，能够将两个spiketimes按照时间连接起来(后面的spiketimes统一的加上一个基准值：前面的文件的长度)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_load_spike_from_mcdraw.html" class="code" title="function [ D spif raw] = util_load_spike_from_mcdraw ( varargin )">util_load_spike_from_mcdraw</a>	UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike</li><li><a href="util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="util_load_spike_trigger_mcdstream_from_multiple_files.html" class="code" title="function [ spif triggerif ] = util_load_spike_trigger_mcdstream_from_multiple_files( varargin )">util_load_spike_trigger_mcdstream_from_multiple_files</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM_WHOLE_LENGTH_FROM_MULTIPLE_FILES 工具函数：从多个MCD文件中获取SPIF/TRIGGERIF信息</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin )</a>
+0002 <span class="comment">%UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个</span>
+0003 <span class="comment">%   将两个Spiketimes连接成一个Spiketimes。这个函数的实质是将两个一样大小的Cell</span>
+0004 <span class="comment">%   矩阵连接成一个Cell矩阵(按行)。</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   'auto_extend'：用于连接几个矩阵时用，将spt2中的spiketime值统一的加上一个auto_extend指定的数（ms）</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   蒲江波 - 2009年6月17日</span>
+0009 <span class="comment">%   蒲江波 - 2009年7月3日</span>
+0010 <span class="comment">%       加上auto_extend这个参数，能够将两个spiketimes按照时间连接起来(后面的spiketimes统一的加上一个基准值：前面的文件的长度)</span>
+0011 
+0012 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0013 
+0014 <span class="keyword">if</span> size(spt1) ~= size(spt2)
+0015     error(<span class="string">'Two arguments must have the same size.'</span>);
+0016 <span class="keyword">end</span>
+0017 
+0018 [<a href="../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a> columns] = size(spt1);
+0019 connected = cell(<a href="../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>,columns);
+0020 
+0021 <span class="comment">% 在行中迭代，将Cell矩阵中每个元素的值按row连接</span>
+0022 <span class="keyword">if</span> exist(<span class="string">'auto_extend'</span>, <span class="string">'var'</span>)
+0023     <span class="keyword">for</span> i = 1:<a href="../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>
+0024         connected{i} = [spt1{i}; spt2{i} + auto_extend];
+0025     <span class="keyword">end</span>
+0026 <span class="keyword">else</span>
+0027     <span class="keyword">for</span> i = 1:<a href="../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>
+0028         connected{i} = [spt1{i}; spt2{i}];
+0029     <span class="keyword">end</span>
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">end</span>
+0033</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

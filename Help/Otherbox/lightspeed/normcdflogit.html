@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of normcdflogit</title>
+  <meta name="keywords" content="normcdflogit">
+  <meta name="description" content="NORMCDFLOGIT   log(normcdf/(1-normcdf))">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>normcdflogit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>NORMCDFLOGIT   log(normcdf/(1-normcdf))</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function e = normcdflogit(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> NORMCDFLOGIT   log(normcdf/(1-normcdf))
+ More accurate than explicitly evaluating log(normcdf/(1-normcdf)), and
+ retains more precision than normcdfln when x is large.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="normcdf.html" class="code" title="function p = normcdf(x,m,s)">normcdf</a>	NORMCDF   Normal Cumulative Density Function.</li><li><a href="normcdfln.html" class="code" title="function e = normcdfln(x)">normcdfln</a>	NORMCDFLN   log of normal cumulative density function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function e = normcdflogit(x)</a>
+0002 <span class="comment">% NORMCDFLOGIT   log(normcdf/(1-normcdf))</span>
+0003 <span class="comment">% More accurate than explicitly evaluating log(normcdf/(1-normcdf)), and</span>
+0004 <span class="comment">% retains more precision than normcdfln when x is large.</span>
+0005 
+0006 <span class="comment">% Written by Tom Minka</span>
+0007 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0008 
+0009 e = x;
+0010 small = -7;
+0011 large = 7;
+0012 i = find(x &gt;= small &amp; x &lt;= large);
+0013 <span class="keyword">if</span> ~isempty(i)
+0014   e(i) = <a href="normcdf.html" class="code" title="function p = normcdf(x,m,s)">normcdf</a>(x(i));
+0015   e(i) = log(e(i)./(1-e(i)));
+0016 <span class="keyword">end</span>
+0017 i = find(x &lt; small);
+0018 <span class="keyword">if</span> ~isempty(i)
+0019   e(i) = <a href="normcdfln.html" class="code" title="function e = normcdfln(x)">normcdfln</a>(x(i));
+0020   <span class="comment">%e(i) = e(i) - log(1-exp(e(i)));</span>
+0021 <span class="keyword">end</span>
+0022 i = find(x &gt; large);
+0023 <span class="keyword">if</span> ~isempty(i)
+0024   e(i) = -<a href="normcdfln.html" class="code" title="function e = normcdfln(x)">normcdfln</a>(-x(i));
+0025   <span class="comment">%e(i) = log(1-exp(-e(i))) + e(i);</span>
+0026 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

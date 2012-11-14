@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of axis_pct</title>
+  <meta name="keywords" content="axis_pct">
+  <meta name="description" content="AXIS_PCT       Set reasonable axis limits.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>axis_pct
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>AXIS_PCT       Set reasonable axis limits.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function ax = axis_pct(pct) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> AXIS_PCT       Set reasonable axis limits.
+
+ AXIS_PCT(pct) sets axis limits to extend pct% beyond limits of plotted 
+ objects.  Default is 5%.
+ Works for linear or log scale.
+ Unfortunately, the axes won't change when new points are plotted.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="hhist.html" class="code" title="function [density,test] = hhist(data, resolution)">hhist</a>	HHIST       Locally-adaptive unbiased density estimate.</li><li><a href="labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li><li><a href="linechart.html" class="code" title="function linechart(y,color,varargin)">linechart</a>	LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.</li><li><a href="plot_errorbars.html" class="code" title="function plot_errorbars(means,stderrs,rownames)">plot_errorbars</a>	plot_errorbars(means,stderrs,rownames)</li><li><a href="test_hhist.html" class="code" title="">test_hhist</a>	demonstrate use of hhist</li><li><a href="../../../Otherbox/lightspeed/tests/test_ndsum.html" class="code" title="">test_ndsum</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ax = axis_pct(pct)</a>
+0002 <span class="comment">% AXIS_PCT       Set reasonable axis limits.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% AXIS_PCT(pct) sets axis limits to extend pct% beyond limits of plotted</span>
+0005 <span class="comment">% objects.  Default is 5%.</span>
+0006 <span class="comment">% Works for linear or log scale.</span>
+0007 <span class="comment">% Unfortunately, the axes won't change when new points are plotted.</span>
+0008 
+0009 <span class="comment">% Written by Tom Minka</span>
+0010 
+0011 <span class="keyword">if</span> nargin &lt; 1
+0012   pct = 0.05;
+0013 <span class="keyword">end</span>
+0014 ax = [Inf -Inf Inf -Inf Inf -Inf];
+0015 
+0016 <span class="comment">% find bounding box of plotted objects</span>
+0017 children = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'children'</span>);
+0018 <span class="keyword">for</span> child = children'
+0019     c = [Inf -Inf Inf -Inf Inf -Inf];
+0020   <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(child,<span class="string">'type'</span>),<span class="string">'text'</span>)
+0021     xyz = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(child,<span class="string">'position'</span>);
+0022     <span class="comment">% need to determine bounding box of the text</span>
+0023     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'xscale'</span>), <span class="string">'log'</span>)
+0024       xyz(1) = log10(xyz(1));
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'yscale'</span>), <span class="string">'log'</span>)
+0027       xyz(2) = log10(xyz(2));
+0028     <span class="keyword">end</span>
+0029     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'zscale'</span>), <span class="string">'log'</span>)
+0030       xyz(3) = log10(xyz(3));
+0031     <span class="keyword">end</span>
+0032     c([1 2]) = xyz(1);
+0033     c([3 4]) = xyz(2);
+0034     c([5 6]) = xyz(3);
+0035   <span class="keyword">else</span>
+0036     x = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(child,<span class="string">'xdata'</span>);
+0037     x = x(isfinite(x));
+0038     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'xscale'</span>), <span class="string">'log'</span>)
+0039       x = x(x &gt; 0);
+0040       x = log10(x);
+0041     <span class="keyword">end</span>
+0042     <span class="keyword">if</span> ~isempty(x)
+0043       c([1 2]) = [min(x(:)) max(x(:))];
+0044     <span class="keyword">end</span>
+0045     y = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(child,<span class="string">'ydata'</span>);
+0046     y = y(isfinite(y));
+0047     <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'yscale'</span>), <span class="string">'log'</span>)
+0048       y = y(y &gt; 0);
+0049       y = log10(y);
+0050     <span class="keyword">end</span>
+0051     <span class="keyword">if</span> ~isempty(y)
+0052       c([3 4]) = [min(y(:)) max(y(:))];
+0053     <span class="keyword">end</span>
+0054     <span class="keyword">try</span>
+0055       z = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(child,<span class="string">'zdata'</span>);
+0056       z = z(isfinite(z));
+0057       <span class="keyword">if</span> ~isempty(z)
+0058                 <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'zscale'</span>), <span class="string">'log'</span>)
+0059                     z = z(z &gt; 0);
+0060                     z = log10(z);
+0061                 <span class="keyword">end</span>
+0062                 c([5 6]) = [min(z(:)) max(z(:))];
+0063       <span class="keyword">end</span>
+0064     <span class="keyword">end</span>
+0065   <span class="keyword">end</span>
+0066   ax([1 3 5]) = min(ax([1 3 5]), c([1 3 5]));
+0067   ax([2 4 6]) = max(ax([2 4 6]), c([2 4 6]));
+0068 <span class="keyword">end</span>
+0069 dx = ax(2)-ax(1);
+0070 <span class="keyword">if</span> dx == 0
+0071   dx = 1;
+0072 <span class="keyword">end</span>
+0073 dy = ax(4)-ax(3);
+0074 <span class="keyword">if</span> dy == 0
+0075   dy = 1;
+0076 <span class="keyword">end</span>
+0077 dz = ax(6)-ax(5);
+0078 <span class="keyword">if</span> dz == 0
+0079   dz = 1;
+0080 <span class="keyword">end</span>
+0081 ax = ax + [-dx dx -dy dy -dz dz]*pct;
+0082 <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'xscale'</span>), <span class="string">'log'</span>)
+0083   ax([1 2]) = 10.^(ax([1 2]));
+0084 <span class="keyword">end</span>
+0085 <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'yscale'</span>), <span class="string">'log'</span>)
+0086   ax([3 4]) = 10.^(ax([3 4]));
+0087 <span class="keyword">end</span>
+0088 <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'zscale'</span>), <span class="string">'log'</span>)
+0089   ax([5 6]) = 10.^(ax([5 6]));
+0090 <span class="keyword">end</span>
+0091 <span class="comment">% clip for 2D</span>
+0092 ax = ax(1:length(axis));
+0093 <span class="keyword">if</span> ~isempty(children)
+0094   axis(ax);
+0095 <span class="keyword">end</span>
+0096 <span class="keyword">if</span> nargout &lt; 1
+0097   <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> ax
+0098 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

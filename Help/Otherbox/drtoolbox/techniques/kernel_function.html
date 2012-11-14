@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of kernel_function</title>
+  <meta name="keywords" content="kernel_function">
+  <meta name="description" content="KERNEL_FUNCTION Computes sum of (K * X) where X is a possible eigenvector">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>kernel_function
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>KERNEL_FUNCTION Computes sum of (K * X) where X is a possible eigenvector</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function y = kernel_function(v, X, center, kernel, param1, param2, type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">KERNEL_FUNCTION Computes sum of (K * X) where X is a possible eigenvector
+
+   y = kernel_function(v, X, center, kernel, param1, param2)
+
+ The function computes the sum of the elements of (K * v), where v is a
+ possible eigenvector of K. This function is used to enable the use of
+ EIGS in Kernel PCA. The other parameters of the function are the dataset 
+ X, the name of the kernel function (default = 'gauss'), and its 
+ corresponding parameters in param1 and param2.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="kernel_pca.html" class="code" title="function [mappedX, mapping] = kernel_pca(X, no_dims, varargin)">kernel_pca</a>	KERNEL_PCA Perform the kernel PCA algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y = kernel_function(v, X, center, kernel, param1, param2, type)</a>
+0002 <span class="comment">%KERNEL_FUNCTION Computes sum of (K * X) where X is a possible eigenvector</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   y = kernel_function(v, X, center, kernel, param1, param2)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The function computes the sum of the elements of (K * v), where v is a</span>
+0007 <span class="comment">% possible eigenvector of K. This function is used to enable the use of</span>
+0008 <span class="comment">% EIGS in Kernel PCA. The other parameters of the function are the dataset</span>
+0009 <span class="comment">% X, the name of the kernel function (default = 'gauss'), and its</span>
+0010 <span class="comment">% corresponding parameters in param1 and param2.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0015 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0016 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0017 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0018 <span class="comment">% maintain the name of the original author.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0021 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0022 
+0023     <span class="keyword">if</span> ~exist(<span class="string">'center'</span>, <span class="string">'var'</span>)
+0024         center = 0;
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> ~exist(<span class="string">'type'</span>, <span class="string">'var'</span>)
+0027         type = <span class="string">'Normal'</span>;
+0028     <span class="keyword">end</span>
+0029     <span class="keyword">if</span> ~strcmp(type, <span class="string">'ColumnSums'</span>), fprintf(<span class="string">'.'</span>); <span class="keyword">end</span>    
+0030         
+0031     <span class="comment">% If no kernel function is specified</span>
+0032     <span class="keyword">if</span> nargin == 2 || strcmp(kernel, <span class="string">'none'</span>)
+0033         kernel = <span class="string">'linear'</span>;
+0034     <span class="keyword">end</span>
+0035     
+0036     <span class="comment">% Construct result vector</span>
+0037     y = zeros(1, size(X, 1));
+0038     n = size(X, 2);
+0039     
+0040     <span class="keyword">switch</span> kernel
+0041         
+0042         <span class="keyword">case</span> <span class="string">'linear'</span>
+0043             <span class="comment">% Retrieve information for centering of K</span>
+0044             <span class="keyword">if</span> center || strcmp(type, <span class="string">'ColumnSums'</span>)
+0045                 column_sum = zeros(1, n);
+0046                 <span class="keyword">for</span> i=1:n
+0047                     <span class="comment">% Compute single row of the kernel matrix</span>
+0048                     K = X(:,i)' * X;
+0049                     column_sum = column_sum + K;
+0050                 <span class="keyword">end</span>
+0051                 <span class="comment">% Compute centering constant over entire kernel</span>
+0052                 total_sum = ((1 / n^2) * sum(column_sum));
+0053             <span class="keyword">end</span>
+0054             
+0055             <span class="keyword">if</span> ~strcmp(type, <span class="string">'ColumnSums'</span>)
+0056                 <span class="comment">% Compute product K*v</span>
+0057                 <span class="keyword">for</span> i=1:n
+0058                     <span class="comment">% Compute single row of the kernel matrix</span>
+0059                     K = X(:,i)' * X;
+0060 
+0061                     <span class="comment">% Center row of the kernel matrix</span>
+0062                     <span class="keyword">if</span> center
+0063                         K = K - ((1 / n) .* column_sum) - ((1 / n) .* column_sum(i)) + total_sum;
+0064                     <span class="keyword">end</span>
+0065 
+0066                     <span class="comment">% Compute sum of products</span>
+0067                     y(i) = K * v;
+0068                 <span class="keyword">end</span>
+0069             <span class="keyword">else</span>
+0070                 <span class="comment">% Return column sums</span>
+0071                 y = column_sum;
+0072             <span class="keyword">end</span>
+0073             
+0074         <span class="keyword">case</span> <span class="string">'poly'</span>
+0075             
+0076             <span class="comment">% Initialize some variables</span>
+0077             <span class="keyword">if</span> ~exist(<span class="string">'param1'</span>, <span class="string">'var'</span>), param1 = 1; param2 = 3; <span class="keyword">end</span>            
+0078                         
+0079             <span class="comment">% Retrieve information for centering of K</span>
+0080             <span class="keyword">if</span> center || strcmp(type, <span class="string">'ColumnSums'</span>)
+0081                 column_sum = zeros(1, n);
+0082                 <span class="keyword">for</span> i=1:n
+0083                     <span class="comment">% Compute column sums of the kernel matrix</span>
+0084                     K = X(:,i)' * X;
+0085                     K = (K + param1) .^ param2;
+0086                     column_sum = column_sum + K;
+0087                 <span class="keyword">end</span>
+0088                 <span class="comment">% Compute centering constant over entire kernel</span>
+0089                 total_sum = ((1 / n^2) * sum(column_sum));
+0090             <span class="keyword">end</span>       
+0091 
+0092             <span class="keyword">if</span> ~strcmp(type, <span class="string">'ColumnSums'</span>)
+0093                 <span class="comment">% Compute product K*v</span>
+0094                 <span class="keyword">for</span> i=1:n
+0095                     <span class="comment">% Compute row of the kernel matrix</span>
+0096                     K = X(:,i)' * X;
+0097                     K = (K + param1) .^ param2;
+0098 
+0099                     <span class="comment">% Center row of the kernel matrix</span>
+0100                     <span class="keyword">if</span> center
+0101                         K = K - ((1 / n) .* column_sum) - ((1 / n) .* column_sum(i)) + total_sum;
+0102                     <span class="keyword">end</span>
+0103 
+0104                     <span class="comment">% Compute sum of products</span>
+0105                     y(i) = K * v;
+0106                 <span class="keyword">end</span>
+0107             <span class="keyword">else</span>
+0108                 <span class="comment">% Return column sums</span>
+0109                 y = column_sum;
+0110             <span class="keyword">end</span>
+0111             
+0112         <span class="keyword">case</span> <span class="string">'gauss'</span>
+0113             
+0114             <span class="comment">% Initialize some variables</span>
+0115             <span class="keyword">if</span> ~exist(<span class="string">'param1'</span>, <span class="string">'var'</span>), param1 = 1; <span class="keyword">end</span>
+0116             
+0117             <span class="comment">% Retrieve information for centering of K</span>
+0118             <span class="keyword">if</span> center || strcmp(type, <span class="string">'ColumnSums'</span>)
+0119                 column_sum = zeros(1, n);
+0120                 <span class="keyword">for</span> i=1:n
+0121                     <span class="comment">% Compute row sums of the kernel matrix</span>
+0122                     K = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X(:,i), X);
+0123                     K = exp(-(K.^2 / (2 * param1.^2)));
+0124                     column_sum = column_sum + K;
+0125                 <span class="keyword">end</span>
+0126                 <span class="comment">% Compute centering constant over entire kernel</span>
+0127                 total_sum = ((1 / n^2) * sum(column_sum));
+0128             <span class="keyword">end</span>
+0129 
+0130             <span class="keyword">if</span> ~strcmp(type, <span class="string">'ColumnSums'</span>)
+0131                 <span class="comment">% Compute product K*v</span>
+0132                 <span class="keyword">for</span> i=1:n
+0133                     <span class="comment">% Compute single row of the kernel matrix</span>
+0134                     K = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X(:,i), X);
+0135                     K = exp(-(K.^2 / (2 * param1.^2)));
+0136 
+0137                     <span class="comment">% Center row of the kernel matrix</span>
+0138                     <span class="keyword">if</span> center
+0139                         K = K - ((1 / n) .* column_sum) - ((1 / n) .* column_sum(i)) + total_sum;
+0140                     <span class="keyword">end</span>
+0141                     
+0142                     <span class="comment">% Compute sum of products</span>
+0143                     y(i) = K * v;
+0144                 <span class="keyword">end</span>
+0145             <span class="keyword">else</span>
+0146                 <span class="comment">% Return column sums</span>
+0147                 y = column_sum;
+0148             <span class="keyword">end</span>
+0149             
+0150         <span class="keyword">otherwise</span>
+0151             error(<span class="string">'Unknown kernel function.'</span>);
+0152     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

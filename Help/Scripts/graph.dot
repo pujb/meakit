@@ -1,0 +1,16 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  avalanche [URL="avalanche.html"];
+  betweenness [URL="betweenness.html"];
+  network_states [URL="network_states.html"];
+  util_loop_calc_avalanche_parameter [URL="util_loop_calc_avalanche_parameter.html"];
+  util_loop_calc_avalanche_parameter2 [URL="util_loop_calc_avalanche_parameter2.html"];
+  util_loop_calc_topo [URL="util_loop_calc_topo.html"];
+  util_loop_check_file [URL="util_loop_check_file.html"];
+  util_loop_find_avalanche [URL="util_loop_find_avalanche.html"];
+  util_loop_get_fractal_parameters [URL="util_loop_get_fractal_parameters.html"];
+  util_loop_plot_spsa [URL="util_loop_plot_spsa.html"];
+  util_script_print_channel_firing_rate_sd [URL="util_script_print_channel_firing_rate_sd.html"];
+  util_test_function_for_looping [URL="util_test_function_for_looping.html"];
+}

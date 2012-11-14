@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_sqrt</title>
+  <meta name="keywords" content="flops_sqrt">
+  <meta name="description" content="FLOPS_SQRT    Flops for square root">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_sqrt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_SQRT    Flops for square root</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_sqrt </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_SQRT    Flops for square root
+ FLOPS_SQRT returns the number of flops needed to compute the square root
+ of a scalar.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>	FLOPS_CHOL    Flops for Cholesky decomposition.</li><li><a href="flops_pow.html" class="code" title="function f = flops_pow(a)">flops_pow</a>	FLOPS_POW    Flops for raising to real power.</li><li><a href="flops_randnorm.html" class="code" title="function f = flops_randnorm(n, m, S, V)">flops_randnorm</a>	FLOPS_RANDNORM     Flops for randnorm.</li><li><a href="../../Otherbox/lightspeed/tests/test_flops.html" class="code" title="">test_flops</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_sqrt</a>
+0002 <span class="comment">% FLOPS_SQRT    Flops for square root</span>
+0003 <span class="comment">% FLOPS_SQRT returns the number of flops needed to compute the square root</span>
+0004 <span class="comment">% of a scalar.</span>
+0005 
+0006 <span class="comment">% This flop count is based on timing the Pentium 4.</span>
+0007 <span class="comment">% The neutral flop count is based on source code for C sqrt() function at</span>
+0008 <span class="comment">% http://www.opencores.org/cvsweb.shtml/or1k/newlib/newlib/libm/mathfp/s_sqrt.c</span>
+0009 
+0010 <span class="comment">% if you change this, you should also change flops_pow.</span>
+0011 f = 8; <span class="comment">% P4</span>
+0012 <span class="comment">%f = 15; % neutral</span>
+0013</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

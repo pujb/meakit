@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of makerandCIJ_und</title>
+  <meta name="keywords" content="makerandCIJ_und">
+  <meta name="description" content="MAKERANDCIJ_UND        Synthetic directed random network">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>makerandCIJ_und
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MAKERANDCIJ_UND        Synthetic directed random network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [CIJ] = makerandCIJ_und(N,K) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MAKERANDCIJ_UND        Synthetic directed random network
+
+   CIJ = makerandCIJ_und(N,K);
+
+   This function generates an undirected random network
+
+   Inputs:     N,      number of vertices
+               K,      number of edges
+
+   Output:     CIJ,    undirected random connection matrix
+
+   Note: no connections are placed on the main diagonal.
+
+
+ Olaf Sporns, Indiana University, 2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [CIJ] = makerandCIJ_und(N,K)</a>
+0002 <span class="comment">%MAKERANDCIJ_UND        Synthetic directed random network</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   CIJ = makerandCIJ_und(N,K);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function generates an undirected random network</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Inputs:     N,      number of vertices</span>
+0009 <span class="comment">%               K,      number of edges</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Output:     CIJ,    undirected random connection matrix</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Note: no connections are placed on the main diagonal.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Olaf Sporns, Indiana University, 2007/2008</span>
+0017 
+0018 ind = triu(~eye(N));
+0019 i = find(ind);
+0020 rp = randperm(length(i));
+0021 irp = i(rp);
+0022 
+0023 CIJ = zeros(N);
+0024 CIJ(irp(1:K)) = 1;
+0025 CIJ = CIJ+CIJ';         <span class="comment">% symmetrize</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

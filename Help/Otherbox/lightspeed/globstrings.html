@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of globstrings</title>
+  <meta name="keywords" content="globstrings">
+  <meta name="description" content="GLOBSTRINGS  String matching via wildcards.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>globstrings
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GLOBSTRINGS  String matching via wildcards.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function results = globstrings(patterns, strs); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">GLOBSTRINGS  String matching via wildcards.
+ GLOBSTRINGS(PATTERNS,STRINGS) returns a cell array of the strings from 
+ STRINGS that match some wildcard pattern in PATTERNS.
+ STRINGS is a cell array of strings.
+ PATTERNS is a string or cell array of strings.
+
+ Two types of wildcards are supported:
+ * matches zero or more characters.
+ ? matches exactly one character.
+
+ Examples:
+   globstrings('f?*r',{'fr','fur','four'})   % returns {'fur','four'}
+   globstrings({'a*','*c'},{'ace','bar','rac'}) % returns {'ace','rac'}
+
+ See also <a href="glob.html" class="code" title="function [names,isdirs] = glob(pattern,prefix)">glob</a>, <a href="glob2regexp.html" class="code" title="function pattern = glob2regexp(pattern)">glob2regexp</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="glob2regexp.html" class="code" title="function pattern = glob2regexp(pattern)">glob2regexp</a>	GLOB2REGEXP   Convert a glob pattern into a regexp pattern.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function results = globstrings(patterns, strs);</a>
+0002 <span class="comment">%GLOBSTRINGS  String matching via wildcards.</span>
+0003 <span class="comment">% GLOBSTRINGS(PATTERNS,STRINGS) returns a cell array of the strings from</span>
+0004 <span class="comment">% STRINGS that match some wildcard pattern in PATTERNS.</span>
+0005 <span class="comment">% STRINGS is a cell array of strings.</span>
+0006 <span class="comment">% PATTERNS is a string or cell array of strings.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Two types of wildcards are supported:</span>
+0009 <span class="comment">% * matches zero or more characters.</span>
+0010 <span class="comment">% ? matches exactly one character.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Examples:</span>
+0013 <span class="comment">%   globstrings('f?*r',{'fr','fur','four'})   % returns {'fur','four'}</span>
+0014 <span class="comment">%   globstrings({'a*','*c'},{'ace','bar','rac'}) % returns {'ace','rac'}</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also glob, glob2regexp.</span>
+0017 
+0018 <span class="comment">% Written by Tom Minka</span>
+0019 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0020 
+0021 <span class="keyword">if</span> ischar(patterns)
+0022   patterns = cellstr(patterns)';
+0023 <span class="keyword">end</span>
+0024 patterns = patterns;
+0025 results = {};
+0026 <span class="keyword">for</span> i = 1:length(patterns)
+0027   s = regexp(strs,<a href="glob2regexp.html" class="code" title="function pattern = glob2regexp(pattern)">glob2regexp</a>(patterns{i}),<span class="string">'match'</span>);
+0028   s = cat(2,s{:});
+0029   <span class="keyword">if</span> isempty(s)
+0030     warning([patterns{i} <span class="string">' did not match anything'</span>]);
+0031   <span class="keyword">else</span>
+0032     results = {results{:} s{:}};
+0033   <span class="keyword">end</span>
+0034 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

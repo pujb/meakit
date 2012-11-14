@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of int_hist</title>
+  <meta name="keywords" content="int_hist">
+  <meta name="description" content="INT_HIST(x, n) is a histogram of all integer values 1..n in x.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>int_hist
+&nbsp;&nbsp;<img src="../../c.png" alt="Windows 32" border="0" title="Windows 32"></h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>INT_HIST(x, n) is a histogram of all integer values 1..n in x.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h = int_hist(x, n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> INT_HIST(x, n) is a histogram of all integer values 1..n in x.
+ If n is not given, max(x) is used.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_int_hist.html" class="code" title="">test_int_hist</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = int_hist(x, n)</a>
+0002 <span class="comment">% INT_HIST(x, n) is a histogram of all integer values 1..n in x.</span>
+0003 <span class="comment">% If n is not given, max(x) is used.</span>
+0004 
+0005 <span class="comment">% Hans Olsson's one-liner from matlab faq</span>
+0006 h = full(sum(sparse(1:length(x(:)),x(:),1)));
+0007 <span class="keyword">if</span> nargin == 2
+0008   <span class="keyword">if</span> n &gt; length(h)
+0009     <span class="comment">% pad with zeros</span>
+0010     h = [h zeros(1,n-length(h))];
+0011   <span class="keyword">end</span>
+0012 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

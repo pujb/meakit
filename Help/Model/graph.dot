@@ -1,0 +1,6 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  util_generate_neurons [URL="util_generate_neurons.html"];
+  util_setup_model [URL="util_setup_model.html"];
+}

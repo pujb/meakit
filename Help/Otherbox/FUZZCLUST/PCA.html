@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PCA</title>
+  <meta name="keywords" content="PCA">
+  <meta name="description" content="%beletehetõ hogy veszi e bementnek az eigenvektoroat, if existes téma">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>PCA
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>%beletehetõ hogy veszi e bementnek az eigenvektoroat, if existes téma</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result = PCA(data,param,result) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">                   %beletehetõ hogy veszi e bementnek az eigenvektoroat, if existes téma
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/FUZZCLUST/Demos/PCAexample/PCAexample.html" class="code" title="">PCAexample</a>	generate PCA example</li><li><a href="../../Otherbox/FUZZCLUST/Demos/projection/visual_call.html" class="code" title="">visual_call</a>	Calling function of the visualization functions</li><li><a href="../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = PCA(data,param,result)</a>
+0002 <span class="comment">%                   %beletehetõ hogy veszi e bementnek az eigenvektoroat, if existes téma</span>
+0003 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0004 
+0005 <span class="comment">% the data</span>
+0006 [N,n]=size(data.X);
+0007 odim = param.q; <span class="comment">%projection to q-dimension</span>
+0008 <span class="comment">% calculating autocorrelation matrix</span>
+0009   A = zeros(n);
+0010   me = zeros(1,n);
+0011   <span class="keyword">for</span> i=1:n, 
+0012     me(i) = mean(data.X(isfinite(data.X(:,i)),i)); 
+0013     data.X(:,i) = data.X(:,i) - me(i); 
+0014   <span class="keyword">end</span>  
+0015   <span class="keyword">for</span> i=1:n, 
+0016     <span class="keyword">for</span> j=i:n, 
+0017       c = data.X(:,i).*data.X(:,j); c = c(isfinite(c));
+0018       A(i,j) = sum(c)/length(c); A(j,i) = A(i,j); 
+0019     <span class="keyword">end</span>
+0020   <span class="keyword">end</span>
+0021   
+0022   <span class="comment">% eigenvectors, sort them according to eigenvalues, and normalize</span>
+0023   [V,S]   = eig(A);
+0024   eigval  = diag(S);
+0025   [y,ind] = sort(abs(eigval)); 
+0026   eigval  = eigval(flipud(ind));<span class="comment">%??????</span>
+0027   V       = V(:,flipud(ind)); 
+0028   <span class="keyword">for</span> i=1:odim
+0029      V(:,i) = (V(:,i) / norm(V(:,i)));
+0030   <span class="keyword">end</span>
+0031   
+0032   <span class="comment">% take only odim first eigenvectors</span>
+0033   V = V(:,1:odim);
+0034   D = abs(eigval)/sum(abs(eigval));
+0035   D = D(1:odim); 
+0036 
+0037 <span class="comment">% project the data using odim first eigenvectors</span>
+0038 P = data.X*V;
+0039 <span class="comment">%cluster centers by PCA</span>
+0040 vp = (result.cluster.v-me(ones(param.c,1),:))*V; 
+0041 
+0042 <span class="comment">%results</span>
+0043 result.proj.P = P;<span class="comment">%projected data</span>
+0044 result.proj.vp = vp;<span class="comment">%cluster centers</span>
+0045 result.proj.V = V;<span class="comment">%eigenvectors</span>
+0046 result.proj.D = D;<span class="comment">%eigenvalues</span>
+0047 
+0048 
+0049 
+0050 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

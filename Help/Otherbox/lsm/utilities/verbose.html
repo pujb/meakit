@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of verbose</title>
+  <meta name="keywords" content="verbose">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>verbose
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function verbose(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Calculation/util_calc_raw_spont_cch.html" class="code" title="function [ lags cch peak] = util_calc_raw_spont_cch( varargin )">util_calc_raw_spont_cch</a>	UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</li><li><a href="../../../Calculation/util_calc_synchrony.html" class="code" title="function [ Q q Qn qn ] = util_calc_synchrony( spif, chlist, varargin )">util_calc_synchrony</a>	UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels</li><li><a href="../../../Common/util_perform_op_in_directory.html" class="code" title="function [ varargout ] = util_perform_op_in_directory( given_dir, op, result_dir, filematch, var_to_save, varargin )">util_perform_op_in_directory</a>	UTIL_PERFORM_OP_IN_DIRECTORY Perform the same operation on each file in</li><li><a href="../../../Otherbox/corrgram/corrgram.html" class="code" title="function [c_out, l_out, t_out] = corrgram(varargin)">corrgram</a>	CORRGRAM Calculate windowed cross correlation between two signals.</li><li><a href="collect_sr_data.html" class="code" title="function [Rout,Sout] = collect_sr_data(nmc,Sin,nS,Tsim,R2X,pm,si,rs,GUI,optTI,isSlave)">collect_sr_data</a>	</li><li><a href="../../../Otherbox/migram/corrgram.html" class="code" title="function [c_out, l_out, t_out] = corrgram(varargin)">corrgram</a>	CORRGRAM Calculate windowed cross correlation between two signals.</li><li><a href="../../../Otherbox/migram/migram.html" class="code" title="function [c_out, l_out, t_out] = migram(varargin)">migram</a>	MIGRAM Calculate windowed mutual information between two signals.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function verbose(varargin)</a>
+0002 
+0003 <span class="keyword">global</span> VERBOSE_LEVEL
+0004 
+0005 s=dbstack;
+0006 
+0007 <span class="keyword">while</span> isnumeric(varargin{1})
+0008   varargin = varargin(2:end);
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="keyword">if</span> VERBOSE_LEVEL &gt;= length(s)-2
+0012   fprintf(varargin{:});
+0013 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

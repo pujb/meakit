@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of duplicated</title>
+  <meta name="keywords" content="duplicated">
+  <meta name="description" content="DUPLICATED   Find duplicated rows.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>duplicated
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DUPLICATED   Find duplicated rows.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function d = duplicated(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">DUPLICATED   Find duplicated rows.
+ DUPLICATED(x) returns a vector d such that d(i) = 1 if x(i,:) is a 
+ duplicate of an earlier row.
+
+ Examples:
+ duplicated([2 7 8 7 1 2 8]') = [0 0 0 1 0 1 1]'
+ duplicated([0 0 1 1 0; 0 1 0 1 1]') = [0 0 0 0 1]'
+ duplicated(eye(100))
+ duplicated(kron((1:3)',ones(3)))
+
+ You can simulate unique(x) or unique(x,'rows') by x(~duplicated(x)).
+ The difference is that the latter form will not sort the contents of x, 
+ as unique will.
+
+ See also UNIQUE.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="argmin.html" class="code" title="function index = argmin(x)">argmin</a>	ARGMIN   Index of minimum element.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_duplicated.html" class="code" title="">test_duplicated</a>	demonstrates the difference in speed between duplicated and unique.</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function d = duplicated1(x)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function d = duplicated(x)</a>
+0002 <span class="comment">%DUPLICATED   Find duplicated rows.</span>
+0003 <span class="comment">% DUPLICATED(x) returns a vector d such that d(i) = 1 if x(i,:) is a</span>
+0004 <span class="comment">% duplicate of an earlier row.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Examples:</span>
+0007 <span class="comment">% duplicated([2 7 8 7 1 2 8]') = [0 0 0 1 0 1 1]'</span>
+0008 <span class="comment">% duplicated([0 0 1 1 0; 0 1 0 1 1]') = [0 0 0 0 1]'</span>
+0009 <span class="comment">% duplicated(eye(100))</span>
+0010 <span class="comment">% duplicated(kron((1:3)',ones(3)))</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% You can simulate unique(x) or unique(x,'rows') by x(~duplicated(x)).</span>
+0013 <span class="comment">% The difference is that the latter form will not sort the contents of x,</span>
+0014 <span class="comment">% as unique will.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also UNIQUE.</span>
+0017 
+0018 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0019 
+0020 <span class="comment">% This function is not well optimized.</span>
+0021 <span class="comment">% In particular, it is slower than unique.</span>
+0022 
+0023 [nr,nc] = size(x);
+0024 <span class="keyword">if</span> nc == 1
+0025   d = <a href="#_sub1" class="code" title="subfunction d = duplicated1(x)">duplicated1</a>(x);
+0026   <span class="keyword">return</span>;
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> nr == 1
+0029   d = 0;
+0030   <span class="keyword">return</span>;
+0031 <span class="keyword">end</span>
+0032 hash = x*rand(nc,1);
+0033 [dummy,ord] = sort(hash);
+0034 xo = x(ord,:);
+0035 <span class="comment">%d = [0 all(diff(xo)==0,2)'];</span>
+0036 d = [0 all(xo(1:end-1,:)==xo(2:<span class="keyword">end</span>,:),2)'];
+0037 dd = diff([d 0]);
+0038 dstart = find(dd &gt; 0);
+0039 dend = find(dd &lt; 0);
+0040 <span class="comment">% loop each run of duplicated columns</span>
+0041 <span class="keyword">for</span> i = 1:length(dstart)
+0042   <span class="comment">% place the zero at the first element in the original order</span>
+0043   d(dstart(i)) = 1;
+0044   d(dstart(i)-1 + <a href="argmin.html" class="code" title="function index = argmin(x)">argmin</a>(ord(dstart(i):dend(i)))) = 0;
+0045 <span class="keyword">end</span>
+0046 d(ord) = d;
+0047 d = d';
+0048 <span class="comment">%d = duplicated1(hash);</span>
+0049 
+0050 <a name="_sub1" href="#_subfunctions" class="code">function d = duplicated1(x)</a>
+0051 <span class="comment">% special case where x is a column vector.</span>
+0052 
+0053 [s,ord] = sort(x);
+0054 d = zeros(size(x));
+0055 d(ord) = [0; s(1:end-1)==s(2:end)];
+0056 <span class="comment">%d(ord) = [0; diff(s)==0];</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

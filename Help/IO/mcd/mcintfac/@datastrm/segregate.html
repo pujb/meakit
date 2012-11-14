@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of segregate</title>
+  <meta name="keywords" content="segregate">
+  <meta name="description" content="segregate - extracts synchronous start and end points of fields/spike events">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>segregate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>segregate - extracts synchronous start and end points of fields/spike events</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function c=segregate(d,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> segregate - extracts synchronous start and end points of fields/spike events
+ c=segregate(d,varargin) Reads through spike data and extracts 
+ start and end points of fields/spike events coherent on all 
+ channels.
+
+ Following 'segTime', the maximal allowed intervall in ms 
+     between to coherent fields can be given (default 20 ms).
+ Following 'startend', the region of interest as array of 
+     two values in ms can be given (default whole file)
+ Following 'minLength', the minimum length of coherent fields 
+     not to be discarded can be given (default is length of cutout).
+
+ return value:
+ format des return wertes: 
+ ((number of segregates*68),3) Matrix with begin time, end time 
+ and active channel of coherent fields sorted by channelnumber 
+ (not active channels times are set to zero).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c=segregate(d,varargin)</a>
+0002 <span class="comment">% segregate - extracts synchronous start and end points of fields/spike events</span>
+0003 <span class="comment">% c=segregate(d,varargin) Reads through spike data and extracts</span>
+0004 <span class="comment">% start and end points of fields/spike events coherent on all</span>
+0005 <span class="comment">% channels.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Following 'segTime', the maximal allowed intervall in ms</span>
+0008 <span class="comment">%     between to coherent fields can be given (default 20 ms).</span>
+0009 <span class="comment">% Following 'startend', the region of interest as array of</span>
+0010 <span class="comment">%     two values in ms can be given (default whole file)</span>
+0011 <span class="comment">% Following 'minLength', the minimum length of coherent fields</span>
+0012 <span class="comment">%     not to be discarded can be given (default is length of cutout).</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% return value:</span>
+0015 <span class="comment">% format des return wertes:</span>
+0016 <span class="comment">% ((number of segregates*68),3) Matrix with begin time, end time</span>
+0017 <span class="comment">% and active channel of coherent fields sorted by channelnumber</span>
+0018 <span class="comment">% (not active channels times are set to zero).</span>
+0019 
+0020 <span class="comment">%defaults start</span>
+0021 segTime=1; <span class="comment">%in ms</span>
+0022 startTime=0;
+0023 minLength=0;
+0024 endTime=d.sweepStartTime(length(d.sweepStartTime));
+0025 eventsPerSec=1;
+0026 minChannelNum=1;
+0027 <span class="comment">%defaults end</span>
+0028 
+0029 <span class="keyword">if</span> (d.DataType ~= <span class="string">'spike continous'</span>)
+0030     error([<span class="string">'segregate up to now works only on spike continous not on '</span> d.DataType]);
+0031 <span class="keyword">end</span>;
+0032 
+0033 <span class="keyword">if</span> d.sweepStartPointer==0,
+0034     evalin(<span class="string">'base'</span>,<span class="string">'a=setpos(a,''segment'',1)'</span>,<span class="string">'error(''set position first with a=setpos(a...'')'</span>);
+0035     c=0;
+0036     warning(<span class="string">'call last function again now (setpos war automatically called)'</span>);
+0037     <span class="keyword">return</span>;
+0038 <span class="keyword">end</span>;
+0039 
+0040 <span class="keyword">for</span> iarg=1:2:size(varargin,2)
+0041     <span class="keyword">switch</span> lower(varargin{iarg})
+0042         <span class="keyword">case</span> {<span class="string">'segtime'</span>},
+0043             segTime=varargin{iarg+1};
+0044         <span class="keyword">case</span> {<span class="string">'startend'</span>},
+0045             startTime=varargin{iarg+1}(1);
+0046             endTime=varargin{iarg+1}(2);
+0047         <span class="keyword">case</span> {<span class="string">'minlength'</span>},
+0048             minLength=varargin{iarg+1};
+0049         <span class="keyword">case</span> {<span class="string">'eventsPerSec'</span>},
+0050             eventsPerSec=varargin{iarg+1};
+0051         <span class="keyword">case</span> {<span class="string">'minChannelNum'</span>},
+0052             minChannelNum=varargin{iarg+1};
+0053     <span class="keyword">end</span>
+0054 <span class="keyword">end</span>;
+0055 
+0056 startSegm=max(find(d.sweepStartTime&lt;=startTime));
+0057 endSegm    =min([find(d.sweepStartTime&gt;endTime);length(d.sweepStartTime)]); <span class="comment">%not to be read!</span>
+0058 
+0059 nSegments=endSegm-startSegm;
+0060 startPointer=d.sweepStartPointer(startSegm);
+0061 
+0062 tmp=d.sorterleft(d.HardwareChannelID);
+0063 sortedChannelID=[tmp setdiff([1:68],tmp)]';    <span class="comment">%not recorded channel are appended!</span>
+0064 
+0065 nChannels=68;
+0066 c=cell(nChannels,2);       
+0067 spikeCount=zeros(nChannels,1);
+0068 memMax=round((endTime-startTime)/1000*eventsPerSec); <span class="comment">%max eventsPerSec</span>
+0069 c=zeros(memMax*68,3);
+0070 
+0071 fseek(d.fid,startPointer,<span class="string">'bof'</span>);
+0072 segCount=0;
+0073 msPerT=d.MicrosecondsPerTick/1000;
+0074 ci=1;
+0075 lastSegEnd=-5000;    <span class="comment">%should not overlap with begin of first segment</span>
+0076 <span class="keyword">while</span> segCount&lt;nSegments
+0077     segCount=segCount+1;
+0078     tci=0;
+0079     tmpc=zeros(round(128*64/20),3);
+0080     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);                <span class="comment">% Startzeit des Segments</span>
+0081     sweepStartTime = (timebin(2)*2^32+timebin(1))*msPerT;
+0082 <span class="keyword">if</span> sweepStartTime &gt;383145
+0083 test=<span class="string">'go'</span>;
+0084 <span class="keyword">end</span>
+0085     segmentsamples = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of samples in segment. 3200 (always)</span>
+0086                                                                         <span class="comment">%2 mal? warum?</span>
+0087     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);                <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0088     sweepStartTime = (timebin(2)*2^32+timebin(1))*msPerT;
+0089     segmentsamples = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of samples in segment. 3200 (always)</span>
+0090     <span class="keyword">if</span> segmentsamples ~= 3200
+0091         error(<span class="string">'unexpected data-file structure, value segmentsamples2 is not valid (~=3200)'</span>)
+0092     <span class="keyword">end</span>;
+0093     lokNChannel = fread(d.fid,1,<span class="string">'ulong'</span>);                    <span class="comment">% number of spike lists in segment (immer 64, je Kanal 1)</span>
+0094     <span class="keyword">if</span> lokNChannel ~= 64
+0095         error(<span class="string">'unexpected data-file structure, value nChannels is not valid (~=64)'</span>)
+0096     <span class="keyword">end</span>;
+0097     lokSpkCnt=0;
+0098     <span class="keyword">for</span> i1=1:lokNChannel                                                    <span class="comment">% Kanal nummer (0-63) in der ausgew鋒lten Reihenfolge,</span>
+0099         <span class="comment">%read in spike list                                          also gew鋒lte Kan鋖e zuerst, dann alle nicht gew鋒lten mit Eintr鋑en von 0 Spikes!!!</span>
+0100         nSpikes = fread(d.fid,1,<span class="string">'ulong'</span>);            <span class="comment">% number of spikes in list (i.e. spikes auf diesem Kanal in diesem Segment)</span>
+0101         <span class="keyword">for</span> i2=1:nSpikes,                                            <span class="comment">% spike number</span>
+0102             <span class="comment">%read in spike:</span>
+0103             timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);        <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0104             spiketime = (timebin(2)*2^32+timebin(1))*msPerT;        <span class="comment">% reformat to ms</span>
+0105             ticks_pre_event  = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">%ticks pre event</span>
+0106             spikeSize  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% window size in ticks, i.e. # of samples in this trace</span>
+0107             tmp= fread(d.fid,[1,spikeSize],<span class="string">'short'</span>);    <span class="comment">% spikevalues</span>
+0108             <span class="keyword">if</span> (spikeSize/2==floor(spikeSize/2))
+0109                 pFac=0;
+0110             <span class="keyword">else</span>
+0111                 pFac=+1;
+0112             <span class="keyword">end</span>;  
+0113             peak = tmp(ticks_pre_event-1+pFac:ticks_pre_event+1+pFac)-d.ZeroADValue;
+0114             <span class="keyword">if</span> ~d.BitFlipRemoveFactor | <span class="keyword">...</span>
+0115                             ( abs(peak(2))*d.BitFlipRemoveFactor &lt; abs(peak(1)) <span class="keyword">...</span>
+0116                                   &amp; abs(peak(2))*d.BitFlipRemoveFactor &lt; abs(peak(3)) )    <span class="comment">%remove peak if very sharp</span>
+0117                 lokSpkCnt=lokSpkCnt+1;
+0118                 tci=tci+1;
+0119                 tmpc(tci,1)= spiketime-ticks_pre_event*msPerT; <span class="comment">% spike begin</span>
+0120                 tmpc(tci,2)= tmpc(tci,1)+spikeSize*msPerT; <span class="comment">% spike end</span>
+0121                 tmpc(tci,3)= sortedChannelID(i1); <span class="comment">% channel number</span>
+0122             <span class="keyword">end</span>;
+0123         <span class="keyword">end</span>;
+0124     <span class="keyword">end</span>;
+0125     <span class="keyword">if</span> lokSpkCnt
+0126         tmpc=tmpc(1:tci,:);
+0127         tmpc=sortrows(tmpc,1);
+0128         tmpSegIdx=find((tmpc(2:tci,1)-tmpc(1:tci-1,1)) &gt; (segTime+spikeSize*msPerT));
+0129 <span class="comment">%tmpSegIdx</span>
+0130         tmpSegStartIdx=[1;tmpSegIdx+1]; <span class="comment">%all beginnings of segregats</span>
+0131         tmpSegEndIdx=[tmpSegIdx;tci]; <span class="comment">%all ends of segregats</span>
+0132         minSegTimes=tmpc(tmpSegStartIdx,1);
+0133         beginSeg=1;
+0134         <span class="keyword">if</span> lastSegEnd &gt; minSegTimes(1)-segTime;
+0135             <span class="comment">%endzeit des letzten segregat f黵 alle Kan鋖e hochsetzen, neue Kan鋖e hinzunehmen</span>
+0136             <span class="keyword">for</span> i1=1:lokNChannel
+0137                 chan1Exist=(c((ci-1)*68+i1,3)==i1);
+0138                 chan2Idx=find(tmpc(tmpSegStartIdx(1):tmpSegEndIdx(1)-1,3)==i1);
+0139                 <span class="keyword">if</span> chan2Idx &amp; chan1Exist
+0140                     c((ci-1)*68+i1,2)=max(tmpc(chan2Idx,2));
+0141                 <span class="keyword">elseif</span> chan2Idx
+0142                     c((ci-1)*68+i1,1)=min(tmpc(chan2Idx,1));
+0143                     c((ci-1)*68+i1,2)=max(tmpc(chan2Idx,2));
+0144                     c((ci-1)*68+i1,3)=i1;
+0145                 <span class="keyword">end</span>;
+0146             <span class="keyword">end</span>;
+0147             beginSeg=2;
+0148         <span class="keyword">end</span>;
+0149 
+0150         <span class="keyword">for</span> is=beginSeg:length(tmpSegStartIdx)
+0151             <span class="keyword">if</span> sum(c((ci-1)*68+1:ci*68,3)./[1:68]') &lt; minChannelNum
+0152                 ci=ci-1;
+0153             <span class="keyword">end</span>;
+0154             tmpc2=zeros(68,3);
+0155             <span class="keyword">for</span> i1=1:lokNChannel
+0156                 chanIdx=find(tmpc(tmpSegStartIdx(is):tmpSegEndIdx(is),3)==i1);
+0157                 <span class="keyword">if</span> chanIdx
+0158                     tmpc2(i1,1)=min(tmpc(tmpSegStartIdx(is)+chanIdx-1,1));
+0159                     tmpc2(i1,2)=max(tmpc(tmpSegStartIdx(is)+chanIdx-1,2));
+0160                     tmpc2(i1,3)=i1;
+0161                 <span class="keyword">end</span>;
+0162             <span class="keyword">end</span>;
+0163             c(ci*68+1:(ci+1)*68,:)=tmpc2;
+0164             ci=ci+1;
+0165         <span class="keyword">end</span>;
+0166         lastSegEnd=max(c((ci-1)*68+1:ci*68,2));
+0167 
+0168     <span class="keyword">end</span>;
+0169 <span class="keyword">end</span>;
+0170 
+0171 c=c(1:ci*68,:);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

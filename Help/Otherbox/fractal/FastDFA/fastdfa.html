@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fastdfa</title>
+  <meta name="keywords" content="fastdfa">
+  <meta name="description" content="Performs fast detrended fluctuation analysis on a nonstationary input signal to">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html fractal --><!-- menu.html FastDFA -->
+<h1>fastdfa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Performs fast detrended fluctuation analysis on a nonstationary input signal to</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [alpha, intervals, flucts] = fastdfa(x, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> Performs fast detrended fluctuation analysis on a nonstationary input signal to
+ obtain an estimate for the scaling exponent.
+
+ Useage:
+ [alpha, intervals, flucts] = fastdfa(x)
+ [alpha, intervals, flucts] = fastdfa(x, intervals)
+ Inputs
+    x          - input signal: must be a row vector
+ Optional inputs
+    intervals  - List of sample interval widths at each scale
+                 (If not specified, then a binary subdivision is constructed)
+
+ Outputs:
+    alpha      - Estimated scaling exponent
+    intervals  - List of sample interval widths at each scale
+    flucts     - List of fluctuation amplitudes at each scale
+
+ (c) 2006 Max Little. If you use this code, please cite:
+ M. Little, P. McSharry, I. Moroz, S. Roberts (2006),
+ Nonlinear, biophysically-informed speech pathology detection
+ in Proceedings of ICASSP 2006, IEEE Publishers: Toulouse, France.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Calculation/util_get_fractal_DFA.html" class="code" title="function [DFA_mean DFA_std DFA_sem DFA_list] = util_get_fractal_DFA( spif, gnds, varargin )">util_get_fractal_DFA</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% Performs fast detrended fluctuation analysis on a nonstationary input signal to</span>
+0002 <span class="comment">% obtain an estimate for the scaling exponent.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Useage:</span>
+0005 <span class="comment">% [alpha, intervals, flucts] = fastdfa(x)</span>
+0006 <span class="comment">% [alpha, intervals, flucts] = fastdfa(x, intervals)</span>
+0007 <span class="comment">% Inputs</span>
+0008 <span class="comment">%    x          - input signal: must be a row vector</span>
+0009 <span class="comment">% Optional inputs</span>
+0010 <span class="comment">%    intervals  - List of sample interval widths at each scale</span>
+0011 <span class="comment">%                 (If not specified, then a binary subdivision is constructed)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Outputs:</span>
+0014 <span class="comment">%    alpha      - Estimated scaling exponent</span>
+0015 <span class="comment">%    intervals  - List of sample interval widths at each scale</span>
+0016 <span class="comment">%    flucts     - List of fluctuation amplitudes at each scale</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (c) 2006 Max Little. If you use this code, please cite:</span>
+0019 <span class="comment">% M. Little, P. McSharry, I. Moroz, S. Roberts (2006),</span>
+0020 <span class="comment">% Nonlinear, biophysically-informed speech pathology detection</span>
+0021 <span class="comment">% in Proceedings of ICASSP 2006, IEEE Publishers: Toulouse, France.</span>
+0022 
+0023 <a name="_sub0" href="#_subfunctions" class="code">function [alpha, intervals, flucts] = fastdfa(x, varargin)</a>
+0024 
+0025 [xpts, ypts] = fastdfa_core(x, varargin{:});
+0026 
+0027 <span class="comment">% Sort the intervals, and produce a log-log straight line fit</span>
+0028 datapts   = sortrows([xpts ypts],1);
+0029 intervals = datapts(:,1);
+0030 flucts    = datapts(:,2);
+0031 
+0032 coeffs    = polyfit(log10(xpts), log10(ypts), 1);
+0033 alpha     = coeffs(1);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

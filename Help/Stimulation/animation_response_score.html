@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of animation_response_score</title>
+  <meta name="keywords" content="animation_response_score">
+  <meta name="description" content="ANIMATION_RESPONSE_SCORE 将成绩Cell矩阵的内容绘制成动画">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>animation_response_score
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>ANIMATION_RESPONSE_SCORE 将成绩Cell矩阵的内容绘制成动画</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ movie_frm ] = animation_response_score( result_cell_array ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">ANIMATION_RESPONSE_SCORE 将成绩Cell矩阵的内容绘制成动画
+   读入UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE产生的结果矩阵（非均值阵，而是保存有每次刺激响应数据
+   的后面几对计算结果），并将结果矩阵中的数据分拆成若干帧（有多少次刺激，就有多少帧）。将每一帧的结果利用plot_mea_dotsgraph绘制
+   成图，并将图形存入frame阵列，作为结果返回。这个阵列可以运用movie函数绘制成电影，用movie2gif函数绘制成gif动画。
+
+   输入参数：util_sti_calc_test_score_multiple_arraywide产生的结果
+   输出参数：movie文件
+
+   See also PLOT_MEA_DOTSGRAPH,
+   <a href="util_sti_calc_test_score_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_score_multiple_arraywide( varargin )">UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE</a>,
+   UTIL_PLOT_8S_INTO_DOTSGRAPH
+
+   蒲江波 2009年11月24日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_64to8s.html" class="code" title="function [results] = util_convert_64to8s(inp)">util_convert_64to8s</a>	UTIL_CONVERT_64TO8S 将1:64的向量变成8*8方阵</li><li><a href="../Plot/util_plot_8s_into_dotsgraph.html" class="code" title="function [ the_frame ] = util_plot_8s_into_dotsgraph( varargin )">util_plot_8s_into_dotsgraph</a>	UTIL_PLOT_8S_INTO_DOTSGRAPH 工具函数：将一个8*8的矩阵绘制成圆点图</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ movie_frm ] = animation_response_score( result_cell_array )</a>
+0002 <span class="comment">%ANIMATION_RESPONSE_SCORE 将成绩Cell矩阵的内容绘制成动画</span>
+0003 <span class="comment">%   读入UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE产生的结果矩阵（非均值阵，而是保存有每次刺激响应数据</span>
+0004 <span class="comment">%   的后面几对计算结果），并将结果矩阵中的数据分拆成若干帧（有多少次刺激，就有多少帧）。将每一帧的结果利用plot_mea_dotsgraph绘制</span>
+0005 <span class="comment">%   成图，并将图形存入frame阵列，作为结果返回。这个阵列可以运用movie函数绘制成电影，用movie2gif函数绘制成gif动画。</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   输入参数：util_sti_calc_test_score_multiple_arraywide产生的结果</span>
+0008 <span class="comment">%   输出参数：movie文件</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   See also PLOT_MEA_DOTSGRAPH,</span>
+0011 <span class="comment">%   UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE,</span>
+0012 <span class="comment">%   UTIL_PLOT_8S_INTO_DOTSGRAPH</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   蒲江波 2009年11月24日</span>
+0015 
+0016 
+0017 <span class="comment">% 计算动画的帧数</span>
+0018 <span class="comment">% 方法是计算result_cell_array里面各个子cell的维数，取最大的</span>
+0019 
+0020 max_dimension = 0;
+0021 
+0022 <span class="keyword">for</span> i = 1:64
+0023     this_dimension = size( result_cell_array{i}, 2 );
+0024     <span class="keyword">if</span> this_dimension &gt; max_dimension
+0025         max_dimension = this_dimension;
+0026     <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 
+0029 number_of_frames = max_dimension;
+0030 
+0031 <span class="comment">% 将每帧绘制成动画</span>
+0032 <span class="comment">% 方法是将传入数据中每次刺激的响应取出，并依旧按照电极序列绘制成图，利用getframe保存。</span>
+0033 <span class="comment">% 绘图利用了早先编写的plot_mea_dotsgraph代码基础</span>
+0034 
+0035 <span class="keyword">for</span> i = 1:number_of_frames
+0036     tmp_vector = zeros(1,64);
+0037     <span class="keyword">for</span> hwID = 1:64
+0038         <span class="keyword">if</span> size( result_cell_array{hwID},2 ) &lt; number_of_frames
+0039             tmp_vector(hwID) = 0;
+0040         <span class="keyword">else</span>
+0041             tmp_vector(hwID) = result_cell_array{hwID}(i);
+0042         <span class="keyword">end</span>
+0043     <span class="keyword">end</span>
+0044     
+0045     tmp_vector_s = <a href="../Common/util_convert_64to8s.html" class="code" title="function [results] = util_convert_64to8s(inp)">util_convert_64to8s</a>(tmp_vector);
+0046     
+0047     movie_frm(i) = <a href="../Plot/util_plot_8s_into_dotsgraph.html" class="code" title="function [ the_frame ] = util_plot_8s_into_dotsgraph( varargin )">util_plot_8s_into_dotsgraph</a>(<span class="string">'the_matrix'</span>, tmp_vector_s, <span class="string">'haveAxes'</span>, 0, <span class="string">'isFigureWindowStayedOpen'</span>, 1, <span class="string">'haveIndicator'</span>, 1);
+0048 <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of edge_betweenness_wei</title>
+  <meta name="keywords" content="edge_betweenness_wei">
+  <meta name="description" content="EDGE_BETWEENNESS_WEI    Edge betweenness centrality">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>edge_betweenness_wei
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EDGE_BETWEENNESS_WEI    Edge betweenness centrality</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [EBC BC]=edge_betweenness_wei(G) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">EDGE_BETWEENNESS_WEI    Edge betweenness centrality
+
+   EBC = edge_betweenness_wei(W);
+   [EBC BC] = edge_betweenness_wei(W);
+
+   Edge betweenness centrality is the fraction of all shortest paths in 
+   the network that contain a given edge. Edges with high values of 
+   betweenness centrality participate in a large number of shortest paths.
+
+   Input:      A,      binary (directed/undirected) connection matrix.
+
+   Output:     EBC,    edge betweenness centrality matrix.
+               BC,     nodal betweenness centrality vector.
+
+   Notes:
+       The input matrix must be a mapping from weight to distance. For 
+   instance, in a weighted correlation network, higher correlations are 
+   more naturally interpreted as shorter distances, and the input matrix 
+   should consequently be some inverse of the connectivity matrix.
+       Betweenness centrality may be normalised to [0,1] via BC/[(N-1)(N-2)]
+
+   Reference: Brandes (2001) J Math Sociol 25:163-177.
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [EBC BC]=edge_betweenness_wei(G)</a>
+0002 <span class="comment">%EDGE_BETWEENNESS_WEI    Edge betweenness centrality</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   EBC = edge_betweenness_wei(W);</span>
+0005 <span class="comment">%   [EBC BC] = edge_betweenness_wei(W);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Edge betweenness centrality is the fraction of all shortest paths in</span>
+0008 <span class="comment">%   the network that contain a given edge. Edges with high values of</span>
+0009 <span class="comment">%   betweenness centrality participate in a large number of shortest paths.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Input:      A,      binary (directed/undirected) connection matrix.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Output:     EBC,    edge betweenness centrality matrix.</span>
+0014 <span class="comment">%               BC,     nodal betweenness centrality vector.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Notes:</span>
+0017 <span class="comment">%       The input matrix must be a mapping from weight to distance. For</span>
+0018 <span class="comment">%   instance, in a weighted correlation network, higher correlations are</span>
+0019 <span class="comment">%   more naturally interpreted as shorter distances, and the input matrix</span>
+0020 <span class="comment">%   should consequently be some inverse of the connectivity matrix.</span>
+0021 <span class="comment">%       Betweenness centrality may be normalised to [0,1] via BC/[(N-1)(N-2)]</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Reference: Brandes (2001) J Math Sociol 25:163-177.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0027 
+0028 
+0029 n=length(G);
+0030 <span class="comment">% E=find(G); G(E)=1./G(E);        %invert weights</span>
+0031 BC=zeros(n,1);                  <span class="comment">%vertex betweenness</span>
+0032 EBC=zeros(n);                   <span class="comment">%edge betweenness</span>
+0033 
+0034 <span class="keyword">for</span> u=1:n
+0035     D=inf(1,n); D(u)=0;         <span class="comment">%distance from u</span>
+0036     NP=zeros(1,n); NP(u)=1;     <span class="comment">%number of paths from u</span>
+0037     S=true(1,n);                <span class="comment">%distance permanence (true is temporary)</span>
+0038     P=false(n);                 <span class="comment">%predecessors</span>
+0039     Q=zeros(1,n); q=n;          <span class="comment">%order of non-increasing distance</span>
+0040 
+0041     G1=G;
+0042     V=u;
+0043     <span class="keyword">while</span> 1
+0044         S(V)=0;                 <span class="comment">%distance u-&gt;V is now permanent</span>
+0045         G1(:,V)=0;              <span class="comment">%no in-edges as already shortest</span>
+0046         <span class="keyword">for</span> v=V
+0047             Q(q)=v; q=q-1;
+0048             W=find(G1(v,:));                <span class="comment">%neighbours of v</span>
+0049             <span class="keyword">for</span> w=W
+0050                 Duw=D(v)+G1(v,w);           <span class="comment">%path length to be tested</span>
+0051                 <span class="keyword">if</span> Duw&lt;D(w)                 <span class="comment">%if new u-&gt;w shorter than old</span>
+0052                     D(w)=Duw;
+0053                     NP(w)=NP(v);            <span class="comment">%NP(u-&gt;w) = NP of new path</span>
+0054                     P(w,:)=0;
+0055                     P(w,v)=1;               <span class="comment">%v is the only predecessor</span>
+0056                 <span class="keyword">elseif</span> Duw==D(w)            <span class="comment">%if new u-&gt;w equal to old</span>
+0057                     NP(w)=NP(w)+NP(v);      <span class="comment">%NP(u-&gt;w) sum of old and new</span>
+0058                     P(w,v)=1;               <span class="comment">%v is also a predecessor</span>
+0059                 <span class="keyword">end</span>
+0060             <span class="keyword">end</span>
+0061         <span class="keyword">end</span>
+0062 
+0063         minD=min(D(S));
+0064         <span class="keyword">if</span> isempty(minD), <span class="keyword">break</span>             <span class="comment">%all nodes reached, or</span>
+0065         <span class="keyword">elseif</span> isinf(minD),                 <span class="comment">%...some cannot be reached:</span>
+0066             Q(1:q)=find(isinf(D)); <span class="keyword">break</span>    <span class="comment">%...these are first-in-line</span>
+0067         <span class="keyword">end</span>
+0068         V=find(D==minD);
+0069     <span class="keyword">end</span>
+0070 
+0071     DP=zeros(n,1);                          <span class="comment">%dependency</span>
+0072     <span class="keyword">for</span> w=Q(1:n-1)
+0073         BC(w)=BC(w)+DP(w);
+0074         <span class="keyword">for</span> v=find(P(w,:))
+0075             DPvw=(1+DP(w)).*NP(v)./NP(w);
+0076             DP(v)=DP(v)+DPvw;
+0077             EBC(v,w)=EBC(v,w)+DPvw;
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

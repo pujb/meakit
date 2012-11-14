@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_randnorm</title>
+  <meta name="keywords" content="flops_randnorm">
+  <meta name="description" content="FLOPS_RANDNORM     Flops for randnorm.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_randnorm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_RANDNORM     Flops for randnorm.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_randnorm(n, m, S, V) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_RANDNORM     Flops for randnorm.
+ Arguments same as randnorm.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>	FLOPS_CHOL    Flops for Cholesky decomposition.</li><li><a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>	FLOPS_MUL    Flops for real matrix multiplication.</li><li><a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>	FLOPS_SQRT    Flops for square root</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_randnorm(n, m, S, V)</a>
+0002 <span class="comment">% FLOPS_RANDNORM     Flops for randnorm.</span>
+0003 <span class="comment">% Arguments same as randnorm.</span>
+0004 
+0005 flops_randn = 18;
+0006 <span class="keyword">if</span> nargin == 1
+0007   f = n*flops_randn;
+0008   <span class="keyword">return</span>;
+0009 <span class="keyword">end</span>
+0010 d = <a href="rows.html" class="code" title="function r = rows(x)">rows</a>(m);
+0011 f = d*n*flops_randn;
+0012 <span class="keyword">if</span> nargin &gt; 2
+0013   <span class="keyword">if</span> nargin == 4
+0014     <span class="keyword">if</span> d == 1
+0015       f = f + <a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>*<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(S);
+0016     <span class="keyword">else</span>
+0017       f = f + <a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>(d);
+0018     <span class="keyword">end</span>
+0019   <span class="keyword">end</span>
+0020   f = f + <a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(d,d,n);
+0021 <span class="keyword">end</span>
+0022 f = f + d*n;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

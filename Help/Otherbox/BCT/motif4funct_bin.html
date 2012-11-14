@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of motif4funct_bin</title>
+  <meta name="keywords" content="motif4funct_bin">
+  <meta name="description" content="MOTIF4FUNCT_BIN       Frequency of functional class-4 motifs">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>motif4funct_bin
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MOTIF4FUNCT_BIN       Frequency of functional class-4 motifs</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [f F]=motif4funct_bin(W) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MOTIF4FUNCT_BIN       Frequency of functional class-4 motifs
+
+   [f F] = motif4funct_bin(W);
+
+   Functional motifs are subsets of connection patterns embedded within 
+   anatomical motifs. Motif frequency is the frequency of occurrence of 
+   motifs around a node.
+
+   Input:      W,      weighted directed connection matrix
+                       (all weights must be between 0 and 1)
+
+   Output:     F,      motif frequency matrix
+               f,      motif frequency vector (averaged over all nodes)
+
+
+   Reference: Onnela et al. (2005) Phys Rev E 71:065103
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f F]=motif4funct_bin(W)</a>
+0002 <span class="comment">%MOTIF4FUNCT_BIN       Frequency of functional class-4 motifs</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [f F] = motif4funct_bin(W);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Functional motifs are subsets of connection patterns embedded within</span>
+0007 <span class="comment">%   anatomical motifs. Motif frequency is the frequency of occurrence of</span>
+0008 <span class="comment">%   motifs around a node.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      W,      weighted directed connection matrix</span>
+0011 <span class="comment">%                       (all weights must be between 0 and 1)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Output:     F,      motif frequency matrix</span>
+0014 <span class="comment">%               f,      motif frequency vector (averaged over all nodes)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Reference: Onnela et al. (2005) Phys Rev E 71:065103</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0021 
+0022 <span class="keyword">persistent</span> M4 ID4 N4
+0023 <span class="keyword">if</span> isempty(N4)
+0024     load motif34lib M4 ID4 N4                     <span class="comment">%load motif data</span>
+0025 <span class="keyword">end</span>
+0026 
+0027 n=length(W);                                    <span class="comment">%number of vertices in W</span>
+0028 f=zeros(199,1);
+0029 F=zeros(199,n);                                 <span class="comment">%frequency</span>
+0030 
+0031 A=1*(W~=0);                                     <span class="comment">%adjacency matrix</span>
+0032 As=A|A.';                                       <span class="comment">%symmetrized adjacency</span>
+0033 
+0034 <span class="keyword">for</span> u=1:n-3                                     <span class="comment">%loop u 1:n-2</span>
+0035     V1=[false(1,u) As(u,u+1:n)];                <span class="comment">%v1: neibs of u (&gt;u)</span>
+0036     <span class="keyword">for</span> v1=find(V1)
+0037         V2=[false(1,u) As(v1,u+1:n)];           <span class="comment">%v2: all neibs of v1 (&gt;u)</span>
+0038         V2(V1)=0;                               <span class="comment">%not already in V1</span>
+0039         V2=V2|([false(1,v1) As(u,v1+1:n)]);     <span class="comment">%and all neibs of u (&gt;v1)</span>
+0040         <span class="keyword">for</span> v2=find(V2)
+0041             vz=max(v1,v2);                      <span class="comment">%vz: largest rank node</span>
+0042             V3=([false(1,u) As(v2,u+1:n)]);     <span class="comment">%v3: all neibs of v2 (&gt;u)</span>
+0043             V3(V2)=0;                           <span class="comment">%not already in V1&amp;V2</span>
+0044             V3=V3|([false(1,v2) As(v1,v2+1:n)]);<span class="comment">%and all neibs of v1 (&gt;v2)</span>
+0045             V3(V1)=0;                           <span class="comment">%not already in V1</span>
+0046             V3=V3|([false(1,vz) As(u,vz+1:n)]); <span class="comment">%and all neibs of u (&gt;vz)</span>
+0047             <span class="keyword">for</span> v3=find(V3)
+0048 
+0049                 a=[A(v1,u);A(v2,u);A(v3,u);A(u,v1);A(v2,v1);A(v3,v1);<span class="keyword">...</span>
+0050                     A(u,v2);A(v1,v2);A(v3,v2);A(u,v3);A(v1,v3);A(v2,v3)];
+0051                 ind=(M4*a)==N4;                 <span class="comment">%find all contained isomorphs</span>
+0052                 id=ID4(ind);
+0053 
+0054                 [idu j]=unique(id);             <span class="comment">%unique motif occurences</span>
+0055                 j=[0;j];
+0056                 mu=length(idu);                 <span class="comment">%number of unique motifs</span>
+0057                 f2=zeros(mu,1);
+0058 
+0059                 <span class="keyword">for</span> h=1:mu                      <span class="comment">%for each unique motif</span>
+0060                     f2(h)=j(h+1)-j(h);              <span class="comment">%and frequencies</span>
+0061                 <span class="keyword">end</span>
+0062 
+0063                 <span class="comment">%then add to cumulative count</span>
+0064                 f(idu)=f(idu)+f2;
+0065                 <span class="keyword">if</span> nargout==2
+0066                     F(idu,[u v1 v2 v3])=F(idu,[u v1 v2 v3])+[f2 f2 f2 f2];
+0067                 <span class="keyword">end</span>
+0068             <span class="keyword">end</span>
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

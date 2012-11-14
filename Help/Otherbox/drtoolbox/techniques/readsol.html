@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of readsol</title>
+  <meta name="keywords" content="readsol">
+  <meta name="description" content="READSOL Read solution from CSDP">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>readsol
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>READSOL Read solution from CSDP</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [x,y,z]=readsol(fname,K,m) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">READSOL Read solution from CSDP
+
+ [x,y,z]=readsol(fname,K,m)
+
+   fname     File name to read solution from.
+   K         structure of the matrices.
+   m         size of y vector.
+ 
+ Modified 7/15/04, for greater MATLAB acceleration.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="csdp.html" class="code" title="function [x,y,z,info]=csdp(At,b,c,K,pars)">csdp</a>	CSDP Uses CSDP to solve a problem in SeDuMi format</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x,y,z]=readsol(fname,K,m)</a>
+0002 <span class="comment">%READSOL Read solution from CSDP</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% [x,y,z]=readsol(fname,K,m)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   fname     File name to read solution from.</span>
+0007 <span class="comment">%   K         structure of the matrices.</span>
+0008 <span class="comment">%   m         size of y vector.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Modified 7/15/04, for greater MATLAB acceleration.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%</span>
+0014 
+0015 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0016 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0017 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0018 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0019 <span class="comment">% maintain the name of the original author.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0022 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0023 
+0024 
+0025 <span class="comment">%</span>
+0026 <span class="comment">%  First, eliminate special cases that we don't handle.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%  Check for any quadratic cone constraints.</span>
+0030 <span class="comment">%</span>
+0031 <span class="keyword">if</span> <a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(K,<span class="string">'q'</span>) 
+0032   <span class="keyword">if</span> ((~isempty(K.q)) &amp; (K.q ~= 0))
+0033     fprintf(<span class="string">'quadratic cone constraints are not supported.\n'</span>);
+0034     <span class="keyword">return</span>
+0035   <span class="keyword">end</span>
+0036 <span class="keyword">end</span> 
+0037 <span class="comment">%</span>
+0038 <span class="comment">%  Check for any rotated cone constraints.</span>
+0039 <span class="comment">%</span>
+0040 <span class="keyword">if</span> <a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(K,<span class="string">'r'</span>)
+0041   <span class="keyword">if</span> ((~isempty(K.r)) &amp; (K.r ~= 0))
+0042     fprintf(<span class="string">'rotated cone constraints are not supported.\n'</span>);
+0043     <span class="keyword">return</span>
+0044   <span class="keyword">end</span>
+0045 <span class="keyword">end</span> 
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Check for any free variables.</span>
+0048 <span class="comment">%</span>
+0049 <span class="keyword">if</span> <a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(K,<span class="string">'f'</span>)
+0050   <span class="keyword">if</span> ((~isempty(K.f)) &amp; (K.f ~= 0))
+0051     fprintf(<span class="string">'Free variables are not supported.\n'</span>);
+0052     <span class="keyword">return</span>
+0053   <span class="keyword">end</span>
+0054 <span class="keyword">end</span> 
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Figure out the structure of the LP and SDP blocks.</span>
+0057 <span class="comment">%</span>
+0058 <span class="keyword">if</span> (<a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(K,<span class="string">'l'</span>))
+0059   <span class="keyword">if</span> (K.l &gt; 0)
+0060     nlin=K.l;
+0061   <span class="keyword">else</span>
+0062     K.l=0;
+0063     nlin=0;
+0064   <span class="keyword">end</span>
+0065 <span class="keyword">else</span>
+0066   K.l=0;
+0067   nlin=0;
+0068 <span class="keyword">end</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% Patched on 10/23/03 to handle all kinds of stupid ways of indicating</span>
+0071 <span class="comment">% no SDP block.</span>
+0072 <span class="comment">%</span>
+0073 <span class="keyword">if</span> (<a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(K,<span class="string">'s'</span>))
+0074   <span class="keyword">if</span> (length(K.s) &gt; 1)
+0075     nsdpblocks=length(K.s);
+0076   <span class="keyword">else</span>
+0077     <span class="keyword">if</span> (length(K.s)==1)
+0078       <span class="keyword">if</span> (K.s==0)
+0079         nsdpblocks=0;
+0080         K.s=[];
+0081       <span class="keyword">else</span>
+0082         nsdpblocks=1;
+0083       <span class="keyword">end</span>
+0084     <span class="keyword">else</span>
+0085       nsdpblocks=0;
+0086       K.s=[]; 
+0087     <span class="keyword">end</span>
+0088   <span class="keyword">end</span>
+0089 <span class="keyword">else</span>
+0090   K.s=[];
+0091   nsdpblocks=0;
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="comment">%</span>
+0095 <span class="comment">% First, where everything is in the vector.</span>
+0096 <span class="comment">%</span>
+0097 <span class="comment">% vecsdpbase(i)=point in vector at which SDP block i starts.</span>
+0098 <span class="comment">% v(1..nlin)         LP variables.</span>
+0099 <span class="comment">%</span>
+0100 base=nlin+1;
+0101 <span class="keyword">for</span> i=1:length(K.s)
+0102   vecsdpbase(i)=base;
+0103   base=base+(K.s(i))^2;
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="comment">%</span>
+0107 <span class="comment">% Second, where everything is in the matrix.</span>
+0108 <span class="comment">%</span>
+0109 <span class="comment">% matsdpbase(i)=   index of upper left corner of SDP block i.</span>
+0110 <span class="comment">% matlpbase        index of start of LP block.</span>
+0111 <span class="comment">%</span>
+0112 base=1;
+0113 <span class="keyword">for</span> i=1:length(K.s)
+0114   matsdpbase(i)=base;
+0115   base=base+K.s(i);
+0116 <span class="keyword">end</span> 
+0117 matlpbase=base;
+0118 <span class="comment">%</span>
+0119 <span class="comment">% Setup an array containing blocksizes. blocksize(i) is used as a faster</span>
+0120 <span class="comment">% synonym for K.s(i) in what follows.  This is because MATLAB doesn't</span>
+0121 <span class="comment">% accelerate statements involving fields.</span>
+0122 <span class="comment">%</span>
+0123 <span class="keyword">if</span> (nsdpblocks &gt;= 1)
+0124   blocksizes=zeros(nsdpblocks,1);
+0125   <span class="keyword">for</span> i=1:nsdpblocks
+0126     blocksizes(i)=K.s(i);
+0127   <span class="keyword">end</span>
+0128 <span class="keyword">end</span>
+0129 <span class="comment">%</span>
+0130 <span class="comment">%  Open up the file.</span>
+0131 <span class="comment">%</span>
+0132 fid=fopen(fname,<span class="string">'r'</span>);
+0133 <span class="keyword">if</span> (fid == -1)
+0134   fprintf(<span class="string">'file does not exist!\n'</span>);
+0135   <span class="keyword">return</span>
+0136 <span class="keyword">end</span>
+0137 <span class="comment">%</span>
+0138 <span class="comment">% Read y.</span>
+0139 <span class="comment">%</span>
+0140 y=fscanf(fid,<span class="string">'%le'</span>,m);
+0141 <span class="comment">%</span>
+0142 <span class="comment">% Read the remaining entries.</span>
+0143 <span class="comment">%</span>
+0144 [A,count]=fscanf(fid,<span class="string">'%d %d %d %d %le'</span>,[5,inf]);
+0145 count=count/5;
+0146 <span class="comment">%</span>
+0147 <span class="comment">% Allocate storage for x and z.</span>
+0148 <span class="comment">%</span>
+0149 <span class="keyword">if</span> ((length(K.s) &gt; 1) | (length(K.s==1) &amp; (K.s&gt;0)))
+0150   veclength=vecsdpbase(length(K.s))+K.s(nsdpblocks)^2-1;
+0151 <span class="keyword">else</span>
+0152   veclength=nlin;
+0153 <span class="keyword">end</span>
+0154 <span class="comment">%</span>
+0155 <span class="comment">% Allocate space for x and z.  We could use sparse vectors here, but</span>
+0156 <span class="comment">% the dense vector is vastly faster.</span>
+0157 <span class="comment">%</span>
+0158 x=zeros(veclength,1);
+0159 z=zeros(veclength,1);
+0160 <span class="comment">%</span>
+0161 <span class="comment">% now, loop through the entries and put them into x and z.</span>
+0162 <span class="comment">%</span>
+0163 <span class="keyword">for</span> i=1:count
+0164   <span class="keyword">if</span> (A(1,i)==1)
+0165 <span class="comment">%</span>
+0166 <span class="comment">% A z entry.</span>
+0167 <span class="comment">%</span>
+0168     blk=A(2,i);
+0169     indexi=A(3,i);
+0170     indexj=A(4,i);
+0171     ent=A(5,i);
+0172 
+0173     <span class="keyword">if</span> (blk==nsdpblocks+1)
+0174       z(indexi)=ent;
+0175     <span class="keyword">else</span>
+0176 <span class="comment">%</span>
+0177 <span class="comment">% In one of the SDP blocks.</span>
+0178 <span class="comment">%</span>
+0179 <span class="comment">%      [blk, indexi, indexj, K.s(blk)]</span>
+0180 
+0181       z(vecsdpbase(blk)+indexi+(indexj-1)*blocksizes(blk)-1)=ent;
+0182       z(vecsdpbase(blk)+indexj+(indexi-1)*blocksizes(blk)-1)=ent;
+0183     <span class="keyword">end</span>
+0184   <span class="keyword">else</span>
+0185 <span class="comment">%</span>
+0186 <span class="comment">% An x entry.</span>
+0187 <span class="comment">%</span>
+0188     blk=A(2,i);
+0189     indexi=A(3,i);
+0190     indexj=A(4,i);
+0191     ent=A(5,i);
+0192 
+0193     <span class="keyword">if</span> (blk==nsdpblocks+1)
+0194       x(indexi)=ent;
+0195     <span class="keyword">else</span>
+0196 <span class="comment">%</span>
+0197 <span class="comment">% In one of the SDP blocks.</span>
+0198 <span class="comment">%</span>
+0199       x(vecsdpbase(blk)+indexi+(indexj-1)*blocksizes(blk)-1)=ent;
+0200       x(vecsdpbase(blk)+indexj+(indexi-1)*blocksizes(blk)-1)=ent;
+0201     <span class="keyword">end</span>
+0202   <span class="keyword">end</span>
+0203 <span class="keyword">end</span>
+0204 <span class="comment">%</span>
+0205 <span class="comment">% Correction for the difference between CSDP and SeDuMi primal/dual pair.</span>
+0206 <span class="comment">%</span>
+0207 y=-y;
+0208 <span class="comment">%</span>
+0209 <span class="comment">% close the file.</span>
+0210 <span class="comment">%</span>
+0211 fclose(fid);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

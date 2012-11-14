@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of subsasgn</title>
+  <meta name="keywords" content="subsasgn">
+  <meta name="description" content="Written by Tom Minka">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html @mutable -->
+<h1>subsasgn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Written by Tom Minka</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mut = subsasgn(mut,index,v) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> Written by Tom Minka
+ (c) Microsoft Corporation. All rights reserved.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>	IND2SUBV   Subscript vector from linear index.</li><li><a href="../../../Otherbox/lightspeed/sizeJava.html" class="code" title="function sz = sizeJava(jv)">sizeJava</a>	sizeJava(jv) returns the size of a java array, in a manner corresponding</li><li><a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li><li><a href="../../../Otherbox/panel/@panel/subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li><li><a href="../../../Otherbox/panel/@panel/export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="../../../Otherbox/panel/@panel/subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function subsasgnJava(jv,index,v,cl)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mut = subsasgn(mut,index,v)</a>
+0002 
+0003 <span class="comment">% Written by Tom Minka</span>
+0004 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0005 
+0006 <a href="#_sub1" class="code" title="subfunction subsasgnJava(jv,index,v,cl)">subsasgnJava</a>(mut.obj,index,v,mut.cl);
+0007 
+0008 <a name="_sub1" href="#_subfunctions" class="code">function subsasgnJava(jv,index,v,cl)</a>
+0009 
+0010 <span class="keyword">if</span> nargin &lt; 4
+0011   <span class="comment">% class(jv) is expensive, so we do it only once</span>
+0012   cl = class(jv);
+0013 <span class="keyword">end</span>
+0014 <span class="keyword">if</span> strcmp(cl,<span class="string">'java.util.Hashtable'</span>)
+0015   <span class="comment">% don't bother checking the type</span>
+0016   <span class="comment">%if strcmp(index(1).type,'.')</span>
+0017   f = index(1).subs;
+0018   <span class="keyword">if</span> length(index) &gt; 1
+0019     jv = jv.get(f);
+0020     <span class="keyword">if</span> isempty(jv)
+0021       error(sprintf(<span class="string">'Reference to non-existent field ''%s''.'</span>,f));
+0022     <span class="keyword">end</span>
+0023     <span class="comment">% recurse on remaining subscripts</span>
+0024     <a href="#_sub1" class="code" title="subfunction subsasgnJava(jv,index,v,cl)">subsasgnJava</a>(jv,index(2:end),v);
+0025   <span class="keyword">else</span>
+0026     <span class="keyword">if</span> ~jv.containsKey(f)
+0027       <span class="comment">% add a new field</span>
+0028       jv.get(<span class="string">'_fields'</span>).addElement(f);
+0029     <span class="keyword">end</span>
+0030     jv.put(f,<a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>(v));
+0031   <span class="keyword">end</span>
+0032   <span class="keyword">return</span>
+0033 <span class="keyword">elseif</span> strcmp(cl,<span class="string">'java.lang.Double[][]'</span>) | strcmp(cl,<span class="string">'java.lang.Object[][]'</span>)
+0034   <span class="keyword">if</span> length(index(1).subs) == 1
+0035     <span class="comment">% convert single index to a full index</span>
+0036     i = index(1).subs{1};
+0037     <span class="keyword">if</span> length(i) &gt; 1
+0038       error(<span class="string">'a single array of indices is not supported'</span>);
+0039     <span class="keyword">end</span>
+0040     s = <a href="../../../Otherbox/lightspeed/sizeJava.html" class="code" title="function sz = sizeJava(jv)">sizeJava</a>(jv);
+0041     index(1).subs = num2cell(<a href="../../../Otherbox/lightspeed/ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>(s,i),1);
+0042   <span class="keyword">end</span>
+0043   <span class="keyword">if</span> strcmp(cl,<span class="string">'java.lang.Object[][]'</span>)
+0044     <span class="comment">% cell array</span>
+0045     <span class="keyword">if</span> strcmp(index(1).type,<span class="string">'{}'</span>)
+0046       index(1).type = <span class="string">'()'</span>;
+0047     <span class="keyword">end</span>
+0048   <span class="keyword">end</span>
+0049   <span class="comment">% fall through</span>
+0050 <span class="keyword">elseif</span> strcmp(cl,<span class="string">'java.util.Vector'</span>) | strcmp(cl,<span class="string">'java.util.BitSet'</span>)
+0051   <span class="comment">% empty array</span>
+0052   error(<span class="string">'Index exceeds matrix dimensions.'</span>);
+0053 <span class="keyword">end</span>
+0054 <span class="comment">% use built-in subsasgn</span>
+0055 <a href="subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>(jv,index,<a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>(v));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

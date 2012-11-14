@@ -1,0 +1,494 @@
+
+<style>
+
+body
+{
+	color:#335;
+	font-family:segoe ui, verdana;
+	font-size:medium;
+	max-width:1000px;
+	margin:auto;
+	background-color:gray;
+}
+
+#main
+{
+	background-color:white;
+	padding:32px;
+}
+
+h1, h2, h3, h4, h5
+{
+	font-family:Segoe UI, Times;
+	color:black;
+}
+
+a:link, a:visited
+{
+	color:blue;
+	text-decoration:none;
+}
+
+a:hover
+{
+	text-decoration:underline;
+}
+
+tt, pre, dh.ref
+{
+	font-family:"andale mono", "courier new";
+	color:#390;
+	font-size:medium;
+	color:black;
+}
+
+dd
+{
+	margin-bottom:8px;
+}
+
+</style>
+
+
+
+<div id="main">
+
+
+
+
+<img src='examples.png' style='float:right; margin:16px'>
+
+
+
+<h1>Panel</h1>
+
+<h2>Overview</h2>
+
+<p>Panel is a Matlab Utility that simplifies laying out multi-panel figures. It has the following advantages over <tt>subplot</tt>:
+
+<ul>
+
+<li>Precise control over layout, leading to optimal use of space (subplot often generates figures that are too spaced out to be usable in print work).</li>
+<li>Easy rearrangement of panels in figure, as opposed to tricksy <tt>subplot</tt> renumbering operation.</li>
+<li>Figure-wide control of rendering (font size, face, etc.).</li>
+<li>Work in physical units (millimetres, inches, etc.) as well as fractional units.</li>
+<li>WYSIWYG rendering to image files sized for your publication target - camera-ready artwork direct from Matlab.</li>
+<li>Labelling/Titling of subplot groups, rather than individual subplots</li>
+<li>(Bonus) Convenient interface to tick/ticklabel/label.</li>
+<li>(Bonus) SI/Engineering scale labelling built in.</li>
+
+</ul>
+
+<p>Below is the Quick Reference guide (if you know what you're doing) and the User Guide (if you don't). In addition, some demos are included: try <tt>panel_demo_1</tt> to get started. Panel can be found at <a href="http://www.mathworks.com/matlabcentral/fileexchange/20003-panel">Mathworks Matlab Central File Exchange</a>.
+
+
+
+<h2>FAQ</h2>
+
+<dl>
+<dh>Why are my ticklabels sometimes wrong?</dh>
+<dd>Panel usually leaves Matlab to set the ticks and tick labels itself. However, if you leave the ticks in automatic mode (let Matlab choose them) and put the tick labels in manual mode (e.g. by using <tt>xscale</tt>/<tt>yscale</tt>), the tick labels are explicitly set during rendering, but the ticks remain subject to change. If you then cause the ticks to change (e.g. by calling <tt>axis</tt>), the explicitly-stored tick labels will be wrong until the panel is re-rendered. Resizing the window, or making any substantive change to the panel itself, will force this if autorender is on. Alternatively, you can call <tt>render()</tt> on the figure's root panel explicitly. If you are at the prompt, you can call <tt>panel_render_all</tt> to force immediate rendering of all existing root panels. Generally, if you are using explicit tick labelling but automatic ticking, you should probably turn <tt>autorender</tt> off and call <tt>render()</tt> explicitly at the end of your plotting code. Note that an equivalent problem can be generated using Handle Graphics, if you explicitly set an axis's <tt>ticklabel</tt> property whilst leaving the axis's ticks in auto mode, then resize or rescale the axis; the only difference with Panel is that it is not immediately obvious that setting <tt>xscale</tt> or <tt>yscale</tt> implicitly puts the ticklabel mode to manual, causing the same problem.
+</dl>
+
+
+
+<h2>Quick Reference</h2>
+
+<h3>Methods</h3>
+
+<dl>
+<dh class="ref">p = panel(...)</dh>
+<dd>Create new root panel.</dd>
+<dh class="ref">P = panel([m n], ...)</dh>
+<dd>Create new panel grid.</dd>
+<dh class="ref">q = p.pack(...)</dh>
+<dd>Commit <tt>p</tt> as a parent panel, and return new child panel.</dd>
+<dh class="ref">Q = p.pack([m n], ...)</dh>
+<dd>Pack new panel grid into <tt>p</tt>.</dd>
+<dh class="ref">a = p.select()</dh>
+<dd>Commit <tt>p</tt> as an axis panel, and make axis current.</dd>
+<dh class="ref">p.render()</dh>
+<dd>Manually re-render <tt>p</tt>, which must be a root panel.</dd>
+<dh class="ref">p.export(...)</dh>
+<dd>Render <tt>p</tt> to image file.</dd>
+</dl>
+
+<h3>Properties (read only)</h3>
+
+<dl>
+<dh class="ref">p.figure</dh>
+<dd>Handle of associated figure.</dd>
+<dh class="ref">p.axis</dh>
+<dd>Handle of associated axis, if there is one.</dd>
+<dh class="ref">p.children</dh>
+<dd>List of panel's children.</dd>
+</dl>
+
+<h3>Properties (read/write)</h3>
+
+<dl>
+<dh class="ref">p.axismargin, p.parentmargin</dh>
+<dd>Axis/parent margin; either a [scalar] or a [1x4], to set [all-sides] or [left bottom right top].</dd>
+<dh class="ref">p.edge</dh>
+<dd>Packing edge; one of 'l', 't', 'r', or 'b'.</dd>
+<dh class="ref">p.fontname, p.fontsize, p.fontweight</dh>
+<dd>Font properties in Handle Graphics format.</dd>
+<dh class="ref">p.xscale, p.yscale</dh>
+<dd>Engineering scale mode; Yotta ('Y') through yocto ('y') - or set to <tt>false</tt> to revert to no engineering scale mode. May also have a second character, <tt>$</tt>, to cause automatic tick label suffixing.</dd>
+</dl>
+
+<h3>Root Panel Properties (read/write)</h3>
+
+<p>These properties can be read through any panel, but can only be written through the root panel.</p>
+
+<dl>
+<dh class="ref">p.rootmargin</dh>
+<dd>Extra margin only used by the root panel; either a [scalar] or a [1x4], to set [all-sides] or [left bottom right top].</dd>
+<dh class="ref">p.autorender</dh>
+<dd>True/false; if true <tt>render()</tt> is called automatically after any change to the panel tree.</dd>
+<dh class="ref">p.units</dh>
+<dd>Units for length interface; 'mm', 'in' or 'cm', default is 'mm'.</dd>
+</dl>
+
+<h3>Native Axis Property Interface</h3>
+
+<dl>
+<dh class="ref">p.xtick, p.ytick</dh>
+<dd>Tick positions; set to <tt>false</tt> to revert tickmode to automatic.</dd>
+<dh class="ref">p.xticklabel, p.yticklabel</dh>
+<dd>Tick labels; set to <tt>false</tt> to revert ticklabelmode to automatic.</dd>
+<dh class="ref">p.xlabel, p.ylabel</dh>
+<dd>Axis labels; the character <tt>$</tt> will be replaced by engineering suffix, if in engineering scale mode.</dd>
+<dh class="ref">p.title</dh>
+<dd>Axis title.</dd>
+</dl>
+
+<b>NB: <tt>xlabel</tt>, <tt>ylabel</tt> and <tt>title</tt> can also be set on a parent panel - this provides labelling/titling for a group of axes, rather than for an individual axis.</b>
+
+<h3>Native Axis Recursive Property Interface (recursive, write only)</h3>
+
+<dl>
+<dh class="ref">p.xticks, p.yticks</dh>
+<dd>Set xtick/ytick of this panel and any descendants in one call (<tt>false</tt> is a valid value).</dd>
+<dh class="ref">p.xticklabels, p.yticklabels</dh>
+<dd>Set xticklabel/yticklabel of this panel and any descendants in one call (<tt>false</tt> is a valid value).</dd>
+<dh class="ref">p.xlabels, p.ylabels</dh>
+<dd>Set xlabel/ylabel of this panel and any descendants in one call.</dd>
+</dl>
+
+
+
+<h2>User Guide</h2>
+
+<h3>A single panel</h3>
+
+<p>First, the "root panel" is attached to a Figure:</p>
+
+<pre>
+p = panel(gcf);
+</pre>
+
+<p>Every panel, including the root panel, is created as an "uncommitted panel" - it can then be committed as either a "parent panel" (a panel with "child panels" packed into it) or an "axis panel" (a panel that corresponds one-to-one to a Matlab axis object. To commit a panel as an axis panel, just select it:</p>
+
+<pre>
+p.select();
+</pre>
+
+<p>The axis appears, and you can plot into it in the usual way. To set the most common axis properties, you can use the shortcuts below, though setting them the old-fashioned way works exactly the same.</p>
+
+<pre>
+p.title = '...';
+p.xlabel = '...';
+p.ylabel = '...';
+p.xtick = [...];
+p.ytick = [...];
+p.xticklabel = '...';
+p.yticklabel = '...';
+</pre>
+
+<h3>Packing multiple panels into one parent panel</h3>
+
+<p>Instead of selecting the root panel as an axis panel, we can pack a couple of child panels into it:</p>
+
+<pre>
+q = panel(gcf);
+qA = q.pack();
+qB = q.pack();
+qA.select();
+qB.select();
+</pre>
+
+<p>See <tt>panel_demo_1</tt> for more.</p>
+
+<p><b style='color:black'>EXTRA CREDIT</b> Above, we created <tt>p</tt> and then committed it as an axis panel. We could not then <tt>pack()</tt> children into it (axis panels and parent panels are mutually exclusive). So, we created a new root panel in the same Figure Window, <tt>q</tt>, which became the root panel of the Figure Window. The panel referenced by <tt>p</tt> was deleted, along with the axis that was created when we called <tt>p.select()</tt>. If we tried to access the old panel through the variable <tt>p</tt>, we would get an error indicating that the referenced panel is no more.</p>
+
+<h3>Packing grandchildren, etc.</h3>
+
+<p>This packing process can be continued indefinitely (until the renderer starts giving warnings, anyway). For instance, we can pack down a bit, then right a bit, then down a bit:</p>
+
+<pre>
+p = panel(gcf);
+pA = p.pack(30);
+pB = p.pack();
+pB.edge = 'l'; % pack on the left edge (default is to pack on the top edge)
+pBA = pB.pack(25); % use leftmost 25% of the space for BA
+pBB = pB.pack(25); % use next 25% of the space for BB
+pBC = pB.pack(); % use remaining for BC
+pBBA = pBC.pack(1/3); % values less than 1 are assumed to be fractions rather than percentages
+pBBB = pBC.pack(1/3); % you don't have to use the 'remainder' space
+pBBC = pBC.pack(1/3); % here, we've used all the space explicitly anyway
+</pre>
+
+<p>Note the use of percentages and fractions, unambiguously, since 1% or less is not a plausible packing size (see <tt>panel_demo_2</tt>).</p>
+
+<h3>Forming a packed grid at-once</h3>
+
+<p>Often, though, you'll just want to pack a grid of panels into the figure. Rather than create a root panel, then pack in rows, then pack columns into those rows, you can use the following syntax:</p>
+
+<pre>
+pp = panel(gcf, [3 4]);
+select(pp{2, 3});
+</pre>
+
+<p>This will create a figure with 3 rows and 4 columns, much like using a subplot(3, 4, ...) command, and then commit the panel in the 2nd row and 3rd column as an axis panel and make it active. See <tt>help panel/panel</tt> to find out how to control the size of the rows and columns. To set root properties, you can obtain the root panel using:</p>
+
+<pre>
+p = pp{1}.root;
+
+% for example...
+p.autorender = false;
+</pre>
+
+<p>See <tt>panel_demo_8</tt> for a full example. NOTE that you can also pack a grid of panels into any child; see <tt>help panel/pack</tt> for details.</p>
+
+
+
+<h3>Using panel to manage an existing axis</h3>
+
+<p>You may create a special-purpose axis such as a colorbar, and wish to manage it as a panel in a layout. Usually, when you select() a panel (commit it as an axis panel) an axis is created automatically. An alternative syntax for select:</p>
+
+<pre>
+p.select(h_axis);
+</pre>
+
+<p>will associate the panel with the specified axis, instead of creating a new one. See <tt>panel_demo_9</tt>.</p>
+
+
+
+<h3>The Panel Box Model</h3>
+
+<div style='font-size:90%; color:black; margin-bottom:8px'>
+<img src='boxmodel.png'><br>
+The figure shows a Figure Window, with examples of all three types of margin.
+</div>
+
+<p>The figure above illustrates the Box model. The root panel (solid red box) "uses" the entire client area of the Figure Window. Each panel uses some sub-region of the region used by its parent. This "used" region is called the panel's "outside box". Three panels are shown in the figure; the three solid boxes (red, blue and green) are their outside boxes.</p>
+
+<p>The root panel uses the <tt>rootmargin</tt> - no other panel uses this margin; the inside of this is marked by the dotted red box. The root panel, in this example, is a parent panel, and thus also uses the <tt>parentmargin</tt>; the inside of this is marked by the dashed red box. This forms the "inside box" of a parent panel. The outside boxes of child panels fit exactly into the inside box of the parent; in this case, the blue and green child panel outside boxes (solid boxes) fit exactly into the dashed red box.</p>
+
+<p>Each of these child panels is an axis panel. An axis panel uses the <tt>axismargin</tt>; this inside of this is marked for the two panels by the blue and green dashed boxes. The axis, when created, fits exactly inside this, the axis panel's inside box.</p>
+
+<p><b>NOTE</b> The default <tt>parentmargin</tt> is zero, and this will do just fine in most cases - the figure shows a non-zero parent margin, just for illustration.</p>
+
+<h4>Inheritance</h4>
+
+<p><tt>axismargin</tt> and <tt>parentmargin</tt> are two of a panel's inherited properties (if you don't set them, they are inherited from the panel's parent). The root panel inherits from the "default panel", i.e. if unset it uses default parameters (defined in <tt>subsref.m</tt>). <tt>rootmargin</tt> is a property of the root panel only, but can be read through any panel; its value is only used by the root panel.</p>
+
+<p>For example:</p>
+
+<pre>
+p = panel(gcf);
+pA = p.pack();
+pB = p.pack();
+p.parentmargin = [30 0 0 0]; % affects p, pA and pB
+pB.axismargin = [30 30 20 20]; % affects pB only
+</pre>
+
+<h4>Format</h4>
+
+<p>Margins are all specified in the form [left bottom right top] (widths), in the units that are current for the root panel. If all four margins are the same, the margin can be set by passing just a scalar, which is then used for all four elements. Negative margins are not allowed. Percentages are not supported - these would rather take the wind out of Panel's sails, which lives to generate well-packed results at any window/export size. Perhaps they should be, since this would allow a figure to have the same layout at any size; contact me if you want this.</p>
+
+<h4>Root Margin</h4>
+
+<p>The root margin is a special margin used only by the root panel to account for the fact that in the default, fairly dense, layout, axis panels overflow their outside box slightly to the right and to the top. This is unaccceptable at the root, since this overflow would render off-figure. By default, then, a small additional root margin (5mm top and right) is set. If it is not suitable, you can change it (or remove it). For example:</p>
+
+<pre>
+p.rootmargin = [0 0 5 5]; % this is the default
+p.rootmargin = 0; % remove it completely (and you will probably see the overflow)
+</pre>
+
+<p>See <tt>panel_demo_5</tt> for a full example.</p>
+
+
+
+
+
+
+
+<h3>Units</h3>
+
+All distance metrics (currently, margins) are read/written in the current units of the root panel. To view/change these units, use:
+
+<pre>
+disp(p.units);
+p.units = 'mm';
+pB.axismargin = [30 30 20 20];
+p.units = 'in';
+disp(pB.axismargin)
+</pre>
+
+Note that the displayed margin is in inches, though it was set in millimetres, and the numbers have changed to reflect that change of units. That is, the <tt>units</tt> property controls the get/set interface only; once the numbers are stored in the panel object, they are stored in a unit-independent form. See <tt>panel_demo_3</tt> for more.
+
+
+
+<h3>Engineering Scales</h3>
+
+<p>As a bonus, unrelated to the main function of panel, engineering scaling is offered. By setting:</p>
+
+<pre>
+p.xscale = 'k';
+</pre>
+
+<p>for example, the scale of the x axis is changed to be in <i>kilo</i> units, rather than units. As a result, the numbers against the ticks will get a thousand times smaller (and nothing else will change). To have this setting reflected in the associated axis label, see the section below. Alternatively, you can set:</p>
+
+<pre>
+p.xscale = '?';
+</pre>
+
+<p>to let Panel automatically choose the correct engineering scale for your data. For an example, see <tt>panel_demo_6</tt>.</p>
+
+<p>If you suffix the <tt>$</tt> character to xscale (or yscale), for example as below, the tick labels will automatically be suffixed with the engineering scale prefix. Thus, a value of 15,000 might read "15k".</p>
+
+<pre>
+p.xscale = 'k$';
+</pre>
+
+<p>This is not usual labelling practice, however. If you would prefer (more usual) to include the engineering scale information in the axis label rather than the tick labels, include the character <tt>$</tt> in the appropriate axis label.</p>
+
+
+
+
+<h3>Titles and Labels</h3>
+
+You can set axis titles and labels and tick labels through Handle Graphics in the usual way. However, Panel offers a convenient interface to these properties of an axis, as shown below.
+
+<pre>
+p = panel(...);
+select(p);
+p.title = 'my panel title';
+p.xlabel = 'my x axis label';
+p.ylabel = 'my y axis label';
+p.xtick = [1 2 3];
+p.xticklabel = {1 2 3};
+</pre>
+
+If you use the symbol <tt>$</tt> in an axis label (<tt>xlabel</tt> or <tt>ylabel</tt>), it will be replaced by the engineering scale mode suffix for that axis (if engineering scale mode is not in use, it is replaced with an empty string). For example:
+
+<pre>
+p.xlabel = 'time ($s)';
+</pre>
+
+Individual panel titles are usually frowned upon in print journals, and Panel assumes there will be none, by default. However, you have full control using Panel, and can make room for panel titles if you want to. For example:
+
+<pre>
+p = panel(gcf);
+pA = p.pack(30);
+pB = p.pack();
+pB.title = ['my panel title'];
+pB.axismargin = [15 15 0 5]; % add a little extra top margin to accomodate the title
+</pre>
+
+<p>See <tt>panel_demo_7</tt> for a full example. See <tt>panel_demo_A</tt> for a variety of ways of using tick labelling.</p>
+
+Sometimes, you may have a number of child panels that share some features (e.g. they all need the same xlabel/ylabel). You can quickly achieve this using the recursive properties interface, which amounts to adding an "s" to the end of the property name, exemplified below (see Recursive Property Interface above for a complete list, or <tt>panel_demo_B</tt> for examples).
+
+<pre>
+p = panel([2 1]);
+select(p{1});
+select(p{2});
+r = p{1}.root;
+r.xlabels = 'money';
+r.ylabels = 'power';
+</pre>
+
+Alternatively, you may wish to label/title an axis <i>group</i>, rather than individual axes. You can achieve this by setting <tt>xlabel</tt>, <tt>ylabel</tt> or <tt>title</tt> on a parent panel. For example, see below or see <tt>panel_demo_B</tt>.
+
+<pre>
+p = panel([2 2]);
+for i = 1:4
+	select(p{i});
+	plot([1 2 3])
+end
+r = p{1}.root;
+r.xlabel = 'money';
+r.ylabel = 'power';
+
+% for a fuller example of appropriate margins, see panel_demo_B
+r.rootmargin = [10 10 5 5];
+</pre>
+
+
+
+<h3>Fonts</h3>
+
+You can control the font size, face and weight for individual panels, if you choose. However, you would more normally want to control these figure-wide, in which case you can set them on the root panel. In general, the properties are inherited, so the value from the most immediate parent with an explicit value is used.
+
+<pre>
+p.fontname = 'times';
+p.fontsize = 14;
+p.fontweight = 'bold';
+</pre>
+
+
+
+<h3>Autorender</h3>
+
+<p>By default, the root panel is re-rendered (re-drawn) whenever you change anything of any of its descendants. For rapid prototyping of your layout, this is ideal (you see your changes as soon as you make them). However, for complex layouts, rendering can take a little time, and may get done many times if you make many changes whilst building your panel. In this case, you may improve script performance substantially by turning off <tt>autorender</tt>, and rendering the root panel manually once you're finished:
+
+<pre>
+p = panel(...);
+p.autorender = false;
+...
+render(p);
+</pre>
+
+Though, the following slightly different approach is recommended, since it leaves the panel in <tt>autorender</tt> mode once you've finished making changes (setting <tt>autorender</tt> to true invokes <tt>render()</tt> as well).
+
+<pre>
+p = panel(...);
+p.autorender = false;
+...
+p.autorender = true;
+</pre>
+
+
+
+<h3>Export</h3>
+
+Finally, to export to a camera-ready image, see <tt>help panel/export</tt>. In short:
+
+<pre>
+% prepare your whole figure
+p = panel();
+...
+
+% do the export
+export(p, 'my_rendered_figure.png');
+</pre>
+
+Your main steps would be:
+
+<ol>
+<li>Identify your target area (e.g. "one third of the height of one column of a two-column A4 page").
+<li>Decide on orientation, output resolution (DPI), or leave these at defaults.
+<li>Marvel at the way it actually looks like you thought it would (well, your mileage may vary... let me know :).
+</ol>
+
+See <tt>panel_demo_4</tt> for a full example.
+
+
+
+
+
+</div>
+

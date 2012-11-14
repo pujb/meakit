@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of matching_ind</title>
+  <meta name="keywords" content="matching_ind">
+  <meta name="description" content="MATCHING_IND       Matching index">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>matching_ind
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MATCHING_IND       Matching index</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Min,Mout,Mall] = matching_ind(CIJ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MATCHING_IND       Matching index
+
+   [Min,Mout,Mall] = matching_ind(CIJ);
+
+   For any two nodes u and v, the matching index computes the amount of
+   overlap in the connection patterns of u and v. Self-connections and
+   u-v connections are ignored. The matching index is a symmetric 
+   quantity, similar to a correlation or a dot product.
+
+   Input:      CIJ,    connection/adjacency matrix
+
+   Output:     Min,    matching index for incoming connections
+               Mout,   matching index for outgoing connections
+               Mall,   matching index for all connections
+
+   Notes:
+       Does not use self- or cross connections for comparison.
+       Does not use connections that are not present in BOTH u and v.
+       All output matrices are calculated for upper triangular only.
+
+
+ Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Min,Mout,Mall] = matching_ind(CIJ)</a>
+0002 <span class="comment">%MATCHING_IND       Matching index</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [Min,Mout,Mall] = matching_ind(CIJ);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   For any two nodes u and v, the matching index computes the amount of</span>
+0007 <span class="comment">%   overlap in the connection patterns of u and v. Self-connections and</span>
+0008 <span class="comment">%   u-v connections are ignored. The matching index is a symmetric</span>
+0009 <span class="comment">%   quantity, similar to a correlation or a dot product.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Input:      CIJ,    connection/adjacency matrix</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Output:     Min,    matching index for incoming connections</span>
+0014 <span class="comment">%               Mout,   matching index for outgoing connections</span>
+0015 <span class="comment">%               Mall,   matching index for all connections</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Notes:</span>
+0018 <span class="comment">%       Does not use self- or cross connections for comparison.</span>
+0019 <span class="comment">%       Does not use connections that are not present in BOTH u and v.</span>
+0020 <span class="comment">%       All output matrices are calculated for upper triangular only.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0024 
+0025 N = size(CIJ,1);
+0026 
+0027 <span class="comment">% compare incoming connections only</span>
+0028 Min = zeros(N,N);
+0029 <span class="keyword">for</span> i=1:N-1
+0030     <span class="keyword">for</span> j=i+1:N
+0031         c1 = CIJ(:,i);
+0032         c2 = CIJ(:,j);
+0033         use = ~(~c1&amp;~c2);
+0034         use(i) = 0;
+0035         use(j) = 0;
+0036         ncon = sum(c1(use))+sum(c2(use));
+0037         <span class="keyword">if</span> (ncon==0)
+0038             Min(i,j) = 0;
+0039         <span class="keyword">else</span>
+0040             Min(i,j) = 2*(sum(c1(use)&amp;c2(use))/ncon);
+0041         <span class="keyword">end</span>;
+0042     <span class="keyword">end</span>;
+0043 <span class="keyword">end</span>;
+0044 
+0045 <span class="comment">% compare outgoing connections only</span>
+0046 Mout = zeros(N,N);
+0047 <span class="keyword">for</span> i=1:N-1
+0048     <span class="keyword">for</span> j=i+1:N
+0049         c1 = CIJ(i,:);
+0050         c2 = CIJ(j,:);
+0051         use = ~(~c1&amp;~c2);
+0052         use(i) = 0;
+0053         use(j) = 0;
+0054         ncon = sum(c1(use))+sum(c2(use));
+0055         <span class="keyword">if</span> (ncon==0)
+0056             Mout(i,j) = 0;
+0057         <span class="keyword">else</span>
+0058             Mout(i,j) = 2*(sum(c1(use)&amp;c2(use))/ncon);
+0059         <span class="keyword">end</span>;
+0060     <span class="keyword">end</span>;
+0061 <span class="keyword">end</span>;
+0062 
+0063 <span class="comment">% compare all (incoming+outgoing) connections</span>
+0064 Mall = zeros(N,N);
+0065 <span class="keyword">for</span> i=1:N-1
+0066     <span class="keyword">for</span> j=i+1:N
+0067         c1 = [CIJ(:,i)' CIJ(i,:)];
+0068         c2 = [CIJ(:,j)' CIJ(j,:)];
+0069         use = ~(~c1&amp;~c2);
+0070         use(i) = 0;  use(i+N) = 0;
+0071         use(j) = 0;  use(j+N) = 0;
+0072         ncon = sum(c1(use))+sum(c2(use));
+0073         <span class="keyword">if</span> (ncon==0)
+0074             Mall(i,j) = 0;
+0075         <span class="keyword">else</span>
+0076             Mall(i,j) = 2*(sum(c1(use)&amp;c2(use))/ncon);
+0077         <span class="keyword">end</span>;
+0078     <span class="keyword">end</span>;
+0079 <span class="keyword">end</span>;
+0080</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

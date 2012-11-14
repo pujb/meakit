@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mppca</title>
+  <meta name="keywords" content="mppca">
+  <meta name="description" content="MPPCA Runs EM algorithm and computes local factor analyzers">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>mppca
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MPPCA Runs EM algorithm and computes local factor analyzers</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [LX, MX, PX] = mppca(X, no_dims, no_analyzers, tol, maxiter, minstd) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">MPPCA Runs EM algorithm and computes local factor analyzers
+
+   [LX, MX, PX] = mppca(X, no_dims, no_analyzers, tol, maxiter, minstd)
+
+ Runs EM algorithm to determine coordinates of factor analyzers. The data
+ is given in the DxN matrix X. no_dims indicates the number of dimensions that
+ the local factor analyzers compute their embedding in. The number of 
+ factor analyzers that is used is given by no_analyzers. The variable tol indicates 
+ the tolreance in considering the EM as converged, whereas maxiter
+ indicates the maximum number of iterations for the EM algorithm. The
+ variable minstd sets the minimum standard deviation of the Gaussians that
+ the EM algorithm fits.
+ The function returns in LX the lowdimensional representations of X of all
+ factor analyzers, in MX the means of the factors analyzers, and in PX the
+ noise covariances.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="charting.html" class="code" title="function [mappedX, mapping] = charting(X, no_dims, no_analyzers, max_iterations, eig_impl)">charting</a>	CHARTING Performs manifold charting on dataset X</li><li><a href="run_llc.html" class="code" title="function mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations, eig_impl)">run_llc</a>	RUN_LLC Performs the LLC algorithm for dimensionality reduction</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [LX, MX, PX] = mppca(X, no_dims, no_analyzers, tol, maxiter, minstd)</a>
+0002 <span class="comment">%MPPCA Runs EM algorithm and computes local factor analyzers</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [LX, MX, PX] = mppca(X, no_dims, no_analyzers, tol, maxiter, minstd)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Runs EM algorithm to determine coordinates of factor analyzers. The data</span>
+0007 <span class="comment">% is given in the DxN matrix X. no_dims indicates the number of dimensions that</span>
+0008 <span class="comment">% the local factor analyzers compute their embedding in. The number of</span>
+0009 <span class="comment">% factor analyzers that is used is given by no_analyzers. The variable tol indicates</span>
+0010 <span class="comment">% the tolreance in considering the EM as converged, whereas maxiter</span>
+0011 <span class="comment">% indicates the maximum number of iterations for the EM algorithm. The</span>
+0012 <span class="comment">% variable minstd sets the minimum standard deviation of the Gaussians that</span>
+0013 <span class="comment">% the EM algorithm fits.</span>
+0014 <span class="comment">% The function returns in LX the lowdimensional representations of X of all</span>
+0015 <span class="comment">% factor analyzers, in MX the means of the factors analyzers, and in PX the</span>
+0016 <span class="comment">% noise covariances.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0021 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0022 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0023 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0024 <span class="comment">% maintain the name of the original author.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0027 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0028 
+0029 
+0030     <span class="comment">% Initialize some variables</span>
+0031     [D N] = size(X);                <span class="comment">% size of data</span>
+0032     epsilon = 1e-9;                 <span class="comment">% regularization parameter</span>
+0033     
+0034     <span class="comment">% Estimate minimum variance allowed</span>
+0035     minvar = minstd ^ 2;
+0036 
+0037     <span class="comment">% Randomly initialize factor analyzers</span>
+0038     mm = mean(X, 2);
+0039     ss = cov(X');
+0040     <span class="keyword">try</span>                                                 <span class="comment">% for small problems</span>
+0041         cc = chol(ss);
+0042         MX = bsxfun(@plus, cc' * randn(D, no_analyzers), mm);
+0043         LX = minstd * randn(D, no_dims, no_analyzers);
+0044         PX = 2 * mean(diag(cc)) * ones(D, 1);
+0045     <span class="keyword">catch</span>                                               <span class="comment">% for large problems (or nearly singular covariance matrices)</span>
+0046         cc = std(X, [], 2);
+0047         MX = bsxfun(@plus, bsxfun(@times, cc, randn(D, no_analyzers)), mm);
+0048         LX = minstd * randn(D, no_dims, no_analyzers);
+0049         PX = 2 * mean(cc) * ones(D, 1);
+0050     <span class="keyword">end</span>
+0051     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> mm ss cc
+0052 
+0053     <span class="comment">% Compute squared data</span>
+0054     X2 = X .^ 2;
+0055     
+0056     <span class="comment">% Initialize some variables</span>
+0057     const = -D / 2 * log(2 * pi);
+0058     lik = -Inf;
+0059     R  = zeros(no_analyzers, N);
+0060     czz = zeros(no_dims, no_dims, no_analyzers);
+0061     zz  = zeros(no_dims, N, no_analyzers);
+0062 
+0063     <span class="comment">% Run for maxiter iterations at max</span>
+0064     <span class="keyword">for</span> i=1:maxiter
+0065 
+0066         <span class="comment">% Progress bar</span>
+0067         <span class="keyword">if</span> rem(i, 10) == 0
+0068             fprintf(<span class="string">'.'</span>);
+0069         <span class="keyword">end</span>
+0070 
+0071         <span class="comment">% E step</span>
+0072         pii = 1 ./ PX;
+0073         <span class="keyword">for</span> k=1:no_analyzers
+0074             l        = LX(:,:,k);                                                                       <span class="comment">% select k-th local representation</span>
+0075             ltpi     = bsxfun(@times, pii, l)';
+0076             ltpil    = ltpi * l;
+0077             iltpil   = eye(no_dims) + ltpil;
+0078             cc       = chol(iltpil);
+0079             cci      = inv(cc);
+0080             covz     = cci * cci';                                                                      <span class="comment">% compute covariance</span>
+0081             delta    = X - MX(:,k * ones(1, N));
+0082             meanz    = ((eye(no_dims) - ltpil * covz) * ltpi) * delta;
+0083             czz(:,:,k) = covz;
+0084             zz(:,:,k)  = meanz;                                                                         <span class="comment">% update local representation</span>
+0085             R(k,:)    = -.5 * (pii' * (delta .* delta) - sum(meanz .* (iltpil * meanz), 1)) - <span class="keyword">...</span><span class="comment">       % update reponsibilie</span>
+0086                           sum(log(diag(cc)));
+0087         <span class="keyword">end</span>
+0088 
+0089         <span class="comment">% Compute responsibilities of datapoints to the clusters</span>
+0090         R = R + const + .5 * sum(log(pi));
+0091         R = exp(bsxfun(@minus, R, max(R, [], 1)));
+0092         R = bsxfun(@rdivide, R, sum(R, 1));
+0093 
+0094         <span class="comment">% Update likelihood of estimation</span>
+0095         oldlik = lik;
+0096         lik = sum(max(R, [], 1) + log(sum(R, 1)));
+0097         
+0098         <span class="comment">% Stop EM after convergence</span>
+0099         <span class="keyword">if</span> abs(oldlik - lik) &lt; tol
+0100             <span class="keyword">break</span>;
+0101         <span class="keyword">end</span>
+0102 
+0103         <span class="comment">% M step</span>
+0104         PX = 0;
+0105         <span class="keyword">for</span> k=1:no_analyzers                         <span class="comment">% Update all factor analyzers</span>
+0106             r    = R(k,:);
+0107             z    = zz(:,:,k);
+0108             rz   = bsxfun(@times, z, r);
+0109             sr   = sum(r);
+0110             srz  = sum(rz, 2);
+0111             srxz = X * rz';
+0112             srx  = X * r';
+0113             m1   = [srxz srx];
+0114             m2   = [sr * czz(:,:,k) + z * rz' srz; srz' sr];
+0115             m1   = m1 / (m2 + (rand(size(m2)) * epsilon));     <span class="comment">% random regularization to make sure that INV(m2) does not contain Infs</span>
+0116             LX(:,:,k) = m1(:,1:no_dims);
+0117             MX(:,k) = m1(:,no_dims + 1);
+0118             PX = PX + X2 * r' - sum(LX(:,:,k) .* srxz, 2) - MX(:,k) .* srx;
+0119         <span class="keyword">end</span>
+0120         PX = max(minvar, PX / N);
+0121         PX(:) = mean(PX);
+0122     <span class="keyword">end</span>
+0123 
+0124     <span class="comment">% Done</span>
+0125     disp(<span class="string">' '</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

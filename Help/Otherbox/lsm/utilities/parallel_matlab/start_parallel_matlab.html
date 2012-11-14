@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of start_parallel_matlab</title>
+  <meta name="keywords" content="start_parallel_matlab">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html lsm --><!-- ../menu.html utilities --><!-- menu.html parallel_matlab -->
+<h1>start_parallel_matlab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function start_parallel_matlab(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="available_hosts.html" class="code" title="function hosts=available_hosts(varargin)">available_hosts</a>	AVAILABLE_HOSTS returns hosts available for running parallel matlab processes.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function start_parallel_matlab(varargin)</a>
+0002 
+0003 
+0004 <span class="keyword">if</span> isempty(getenv(<span class="string">'PM_PATH'</span>))
+0005   fprintf(<span class="string">'It seems that there is NO parallel Matlab installed!\n'</span>);
+0006   <span class="keyword">return</span>;
+0007 <span class="keyword">end</span>
+0008 
+0009 <span class="keyword">if</span> pmis
+0010   fprintf(<span class="string">'Parallel Matlab already started!\n'</span>);
+0011   <span class="keyword">return</span>;
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="keyword">if</span> length(varargin) &gt; 0
+0015   args = varargin;
+0016 <span class="keyword">else</span>
+0017   args = <a href="available_hosts.html" class="code" title="function hosts=available_hosts(varargin)">available_hosts</a>;
+0018 <span class="keyword">end</span>
+0019 
+0020 h     = 0;
+0021 DEBUG = 0;
+0022 GUI   = 0;
+0023 nice  = <span class="string">'same'</span>;
+0024 hosts = [];
+0025 num   = [];
+0026 <span class="keyword">while</span> length(args) &gt; 0
+0027   <span class="keyword">if</span> strcmp(upper(args{1}),<span class="string">'DEBUG'</span>)
+0028     DEBUG = 1;
+0029     args = args(2:end);
+0030   <span class="keyword">elseif</span> strcmp(upper(args{1}),<span class="string">'NICE'</span>)
+0031     nice = args{2};
+0032     args = args(3:end);
+0033   <span class="keyword">elseif</span> strcmp(upper(args{1}),<span class="string">'GUI'</span>)
+0034     GUI = 1;
+0035     args = args(2:end);
+0036   <span class="keyword">elseif</span> ~isempty(str2num(args{1}))
+0037     h=h+1;
+0038     hosts{h} = sprintf(<span class="string">'figipc%s.tu-graz.ac.at'</span>,args{1});
+0039     num(h)   = 1;
+0040     args = args(2:end);
+0041     <span class="keyword">if</span> length(args) &gt; 0
+0042       <span class="keyword">if</span> isnumeric(args{1})
+0043     num(h) = args{1};
+0044     args = args(2:end);
+0045       <span class="keyword">end</span>
+0046     <span class="keyword">end</span>
+0047   <span class="keyword">elseif</span> ischar(args{1})
+0048     h=h+1;
+0049     hosts{h} = args{1};
+0050     num(h)   = 1;
+0051     args = args(2:end);
+0052     <span class="keyword">if</span> length(args) &gt; 0
+0053       <span class="keyword">if</span> isnumeric(args{1})
+0054     num(h) = args{1};
+0055     args = args(2:end);
+0056       <span class="keyword">end</span>
+0057     <span class="keyword">end</span>
+0058   <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 hosts = hosts(find(num&gt;0));
+0062 num   = num(find(num&gt;0));
+0063 
+0064 <span class="keyword">for</span> i=1:length(num)
+0065   <span class="keyword">if</span> isempty(find(hosts{i}==<span class="string">'.'</span>))
+0066     hosts{i}=sprintf(<span class="string">'%s.tu-graz.ac.at'</span>,hosts{i});
+0067   <span class="keyword">end</span>
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="keyword">if</span> isempty(hosts)
+0071   hosts = { <span class="string">'figipc70.tu-graz.ac.at'</span> <span class="keyword">...</span>
+0072             <span class="string">'figipc71.tu-graz.ac.at'</span> <span class="keyword">...</span>
+0073             <span class="string">'figipc72.tu-graz.ac.at'</span> <span class="keyword">...</span>
+0074             <span class="string">'figipc73.tu-graz.ac.at'</span> }
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">if</span> isempty(num), num = ones(1,length(hosts)); <span class="keyword">end</span>
+0078 <span class="keyword">if</span> isempty(DEBUG), DEBUG = 0; <span class="keyword">end</span>
+0079 
+0080 wd = pwd;
+0081 cd(getenv(<span class="string">'HOME'</span>));
+0082 home=pwd;
+0083 cd(wd);
+0084 wd=[ <span class="string">'./'</span> wd(length(home)+2:end)];
+0085 
+0086 <span class="keyword">if</span> DEBUG
+0087   hosts = hosts(1:min(<span class="keyword">end</span>,2));
+0088   num   = ones(1,length(hosts));
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="keyword">for</span> m=1:length(hosts)
+0092   <span class="keyword">for</span> n=1:num(min(length(num),m))
+0093     log_files{n,m} = sprintf(<span class="string">'%s/log.%s.%i'</span>,wd,hosts{m},n);
+0094   <span class="keyword">end</span>
+0095 <span class="keyword">end</span>
+0096 
+0097 vm.wd      = wd;
+0098 vm.prio    = nice; 
+0099 
+0100 vm.try     = <span class="string">''</span>;
+0101 vm.catch   = <span class="string">''</span>;
+0102 <span class="keyword">if</span> DEBUG
+0103   vm.runmode = <span class="string">'fg'</span>;
+0104 <span class="keyword">else</span>
+0105   vm.runmode = <span class="string">'bg'</span>;
+0106 <span class="keyword">end</span>
+0107 
+0108 fprintf(<span class="string">'\n'</span>);
+0109 tids=pmopen(hosts,vm,{hosts,num,0,log_files});
+0110 
+0111 fprintf(<span class="string">'\n\nWaiting for all matlab instances to join '</span>);
+0112 tic; nCPUs=length(pmmembvm(0));
+0113 <span class="keyword">while</span> toc &lt; 60 &amp; nCPUs &lt; sum(num)
+0114   fprintf(<span class="string">'-'</span>);
+0115   pause(1);
+0116   nCPUs=length(pmmembvm(0));
+0117 <span class="keyword">end</span>
+0118 <span class="keyword">if</span> nCPUs == sum(num)
+0119   fprintf(<span class="string">'&gt; %i CPUs in VM 0\n\n'</span>,length(pmmembvm(0)));
+0120 <span class="keyword">else</span>
+0121   fprintf(<span class="string">' some CPUs did not join VM 0. Check for errors.'</span>);
+0122 <span class="keyword">end</span>
+0123 
+0124 <span class="comment">%</span>
+0125 <span class="comment">% initialize the random generators at each node differently</span>
+0126 <span class="comment">%</span>
+0127 tids=pmmembvm(0);
+0128 <span class="keyword">for</span> i=1:length(tids)
+0129   pmeval(tids(i),sprintf(<span class="string">'rand(''state'',%i); randn(''state'',%i);'</span>,ceil(rand*1e6),ceil(rand*1e6)));
+0130 <span class="keyword">end</span>
+0131 
+0132 <span class="comment">%</span>
+0133 <span class="comment">% initialize lsm toolbox</span>
+0134 <span class="comment">%</span>
+0135 <span class="keyword">global</span> LSMROOT
+0136 <span class="keyword">if</span> isempty(LSMROOT)
+0137   rel_lsmroot = <span class="string">'~/lsm'</span>;
+0138   fprintf(<span class="string">'LSMROOT not set =&gt; using ~/lsm'</span>);
+0139 <span class="keyword">else</span>
+0140   rel_lsmroot=[<span class="string">'~/'</span> LSMROOT(length(home)+2:end)];
+0141 <span class="keyword">end</span>
+0142 tids=pmmembvm(0);
+0143 pmeval(tids,sprintf(<span class="string">'cur=pwd; cd %s; addpath(pwd); cd(cur); lsm_startup;'</span>,rel_lsmroot));
+0144 
+0145 
+0146</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

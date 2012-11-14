@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of update_type_uipanel</title>
+  <meta name="keywords" content="update_type_uipanel">
+  <meta name="description" content="This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html gui -->
+<h1>update_type_uipanel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.
+ The toolbox can be obtained from http://homepage.tudelft.nl/19j49
+ You are free to use, change, or redistribute this code in any way you
+ want for non-commercial purposes. However, it is appreciated if you 
+ maintain the name of the original author.
+
+ (C) Laurens van der Maaten, 2010
+ University California, San Diego / Delft University of Technology</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="case1.html" class="code" title="">case1</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="mapping_parameters.html" class="code" title="function varargout = mapping_parameters(varargin)">mapping_parameters</a>	MAPPING_PARAMETERS M-file for mapping_parameters.fig</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0002 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0003 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0004 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0005 <span class="comment">% maintain the name of the original author.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0008 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0009 
+0010 <span class="keyword">if</span> strcmpi(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.uipanel_tp,<span class="string">'Visible'</span>),<span class="string">'on'</span>)
+0011     <span class="keyword">if</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.tl,<span class="string">'value'</span>)
+0012         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0013         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0014         <span class="comment">%set(handles.ka,'Visible','on');</span>
+0015     <span class="keyword">else</span>
+0016         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0017         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0018         <span class="comment">%set(handles.ka,'Visible','off');</span>
+0019     <span class="keyword">end</span>
+0020 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

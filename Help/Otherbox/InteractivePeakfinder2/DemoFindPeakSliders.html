@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DemoFindPeakSliders</title>
+  <meta name="keywords" content="DemoFindPeakSliders">
+  <meta name="description" content="A self-contained interactive demonstration of FindPeakSliders">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>DemoFindPeakSliders
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>A self-contained interactive demonstration of FindPeakSliders</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> A self-contained interactive demonstration of FindPeakSliders 
+ applied to noisy synthetic data set consisting of a random number 
+ of narrow peaks. Use the sliders to explore the effect of the 
+ variables SlopeThreshold (SlopeT), AmplitudeThreshold (AmpT), 
+ SmoothWidth (Smooth), and FitWidth (Fit). Peak number and the 
+ estimated position, height, and width of each peak is returned in 
+ the matrix P.  The 4 parameters are:
+ SlopeThreshold - Slope of the smoothed third-derivative that is taken 
+  to indicate a peak. Larger values will neglect small features.
+ AmpThreshold - Any peaks with height less than AmpThreshold are ignored.
+ SmoothWidth - Width of smooth functions applied to data before slope is
+   measured. Larger values will neglect small features. A reasonable value is 
+   about equal to 1/2 the width of the peaks.
+ FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)
+   peak that are taken to determine the peak height, positions, and width.
+   A reasonable value is about equal to 1/2 the width of the peaks.
+ Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>	Interactive findpeaks script for pre-defined data in x,y.</li><li><a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>	gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</li><li><a href="lorentzian.html" class="code" title="function g = lorentzian(x,position,width)">lorentzian</a>	lorentzian(x,position,width) Lorentzian function.</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% A self-contained interactive demonstration of FindPeakSliders</span>
+0002 <span class="comment">% applied to noisy synthetic data set consisting of a random number</span>
+0003 <span class="comment">% of narrow peaks. Use the sliders to explore the effect of the</span>
+0004 <span class="comment">% variables SlopeThreshold (SlopeT), AmplitudeThreshold (AmpT),</span>
+0005 <span class="comment">% SmoothWidth (Smooth), and FitWidth (Fit). Peak number and the</span>
+0006 <span class="comment">% estimated position, height, and width of each peak is returned in</span>
+0007 <span class="comment">% the matrix P.  The 4 parameters are:</span>
+0008 <span class="comment">% SlopeThreshold - Slope of the smoothed third-derivative that is taken</span>
+0009 <span class="comment">%  to indicate a peak. Larger values will neglect small features.</span>
+0010 <span class="comment">% AmpThreshold - Any peaks with height less than AmpThreshold are ignored.</span>
+0011 <span class="comment">% SmoothWidth - Width of smooth functions applied to data before slope is</span>
+0012 <span class="comment">%   measured. Larger values will neglect small features. A reasonable value is</span>
+0013 <span class="comment">%   about equal to 1/2 the width of the peaks.</span>
+0014 <span class="comment">% FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)</span>
+0015 <span class="comment">%   peak that are taken to determine the peak height, positions, and width.</span>
+0016 <span class="comment">%   A reasonable value is about equal to 1/2 the width of the peaks.</span>
+0017 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</span>
+0018 warning off MATLAB:polyfit:RepeatedPointsOrRescale
+0019 format compact
+0020 close
+0021 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>
+0022 <span class="keyword">global</span> x
+0023 <span class="keyword">global</span> y
+0024 <span class="keyword">global</span> SlopeThreshold 
+0025 <span class="keyword">global</span> AmpThreshold  
+0026 <span class="keyword">global</span> SmoothWidth
+0027 <span class="keyword">global</span> FitWidth
+0028 <span class="keyword">global</span> PeakNumber 
+0029 <span class="keyword">global</span> P
+0030 figure(1);clf
+0031 
+0032 <span class="comment">% Simulate data set</span>
+0033 increment=5;
+0034 x=[1:increment:4000];
+0035 <span class="comment">% For each simulated peak, enter the amplitude, position, and width below</span>
+0036 amp=randn(1,39);  <span class="comment">% Amplitudes of the peaks</span>
+0037 pos=[200:100:4000];   <span class="comment">% Positions of the peaks</span>
+0038 wid=60.*ones(size(pos));   <span class="comment">% Widths of the peaks</span>
+0039 Noise=.01;
+0040 <span class="comment">% A = matrix containing one of the unit-amplidude peak in each of its srow</span>
+0041 A = zeros(length(pos),length(x));
+0042 <span class="keyword">for</span> k=1:length(pos)
+0043   <span class="keyword">if</span> amp(k)&gt;0, A(k,:)=<a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>(x,pos(k),wid(k)); <span class="keyword">end</span>; <span class="comment">% Or you can use any other peak function</span>
+0044 <span class="keyword">end</span>
+0045 z=amp*A;  <span class="comment">% Multiplies each row by the corresponding amplitude and adds them up</span>
+0046 y=z+Noise.*randn(size(z));
+0047 y=y+<a href="lorentzian.html" class="code" title="function g = lorentzian(x,position,width)">lorentzian</a>(x,0,4000); <span class="comment">% Adds background signal</span>
+0048 
+0049 <span class="comment">% Call the interactive findpeaks script</span>
+0050 <a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>;
+0051 
+0052 <span class="comment">%Print out peak table in Matlab Command window</span>
+0053 P</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

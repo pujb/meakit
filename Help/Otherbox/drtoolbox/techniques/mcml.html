@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mcml</title>
+  <meta name="keywords" content="mcml">
+  <meta name="description" content="MCML Performs MCML on the specified dataset">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>mcml
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MCML Performs MCML on the specified dataset</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mapping = mcml(X, labels, no_dims) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">MCML Performs MCML on the specified dataset
+
+   mapping = mcml(X, labels, no_dims)
+
+ Performs linear Maximally Collapsing Metric Learning (MCML) on the 
+ dataset specified through X and labels. The function returns a 
+ Mahalanobis metrix in M. Distances through the metric are thus given by
+ D(x, y) = (x - y) * A * (x - y)'.
+ It the does an SVD on A gives you a (low-rank) projection of the data
+ into a space where the squared Euclidean distance corresponds to the
+ learned Mahalanobis metric in the original space.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>	Minimize a continuous differentialble multivariate function. Starting point</li><li><a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mapping = mcml(X, labels, no_dims)</a>
+0002 <span class="comment">%MCML Performs MCML on the specified dataset</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mapping = mcml(X, labels, no_dims)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Performs linear Maximally Collapsing Metric Learning (MCML) on the</span>
+0007 <span class="comment">% dataset specified through X and labels. The function returns a</span>
+0008 <span class="comment">% Mahalanobis metrix in M. Distances through the metric are thus given by</span>
+0009 <span class="comment">% D(x, y) = (x - y) * A * (x - y)'.</span>
+0010 <span class="comment">% It the does an SVD on A gives you a (low-rank) projection of the data</span>
+0011 <span class="comment">% into a space where the squared Euclidean distance corresponds to the</span>
+0012 <span class="comment">% learned Mahalanobis metric in the original space.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0017 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0018 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0019 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0020 <span class="comment">% maintain the name of the original author.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0023 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0024 
+0025 
+0026     <span class="comment">% Make sure data is zero mean</span>
+0027     mapping.mean = mean(X, 1);
+0028     X = bsxfun(@minus, X, mapping.mean);
+0029 
+0030     <span class="comment">% Initialize some variables</span>
+0031     [n, d] = size(X);
+0032     max_iter = 100;
+0033     
+0034     <span class="comment">% Construct matrix with label information</span>
+0035     P = zeros(n, n);
+0036     [foo, bar, labels] = unique(labels);
+0037     <span class="keyword">for</span> i=1:max(labels)
+0038         ind = find(labels == i);
+0039         P(ind, ind) = 1;
+0040     <span class="keyword">end</span>
+0041     P(1:n+1:end) = 0;
+0042     P = bsxfun(@rdivide, P, sum(P, 2));
+0043     P = max(P, realmin);
+0044     
+0045     <span class="comment">% Initialize solution</span>
+0046     A = randn(d, d) * .0001;
+0047     A = (A + A') + eye(d);
+0048     iter = 0;
+0049     converged = false;
+0050     
+0051     <span class="comment">% Run iterations</span>
+0052     <span class="keyword">while</span> iter &lt; max_iter &amp;&amp; ~converged
+0053         
+0054         <span class="comment">% Perform gradient step</span>
+0055         iter = iter + 1;
+0056         disp([<span class="string">'Iteration '</span> num2str(iter) <span class="string">'...'</span>]);
+0057         [A, f] = <a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>(A(:), <span class="string">'mcml_grad'</span>, 5, X, P);
+0058         A = reshape(A, [d d]);
+0059         <span class="keyword">if</span> isempty(f) || f(end) - f(1) &gt; -1e-4
+0060             disp(<span class="string">'Converged!'</span>);
+0061             converged = true;
+0062         <span class="keyword">end</span>
+0063         
+0064         <span class="comment">% Project A back onto the cone of PSD matrices</span>
+0065         [<a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>, val] = eig(A);
+0066         val = diag(val);
+0067         ind = find(val &gt; 0);
+0068         A = real(bsxfun(@times, val(ind)', <a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(:,ind)) * <a href="../../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(:,ind)');
+0069     <span class="keyword">end</span> 
+0070     
+0071     <span class="comment">% Obtain low-dimensional representation</span>
+0072     [mapping.M, foo, bar] = svd(A);
+0073     mapping.M = mapping.M(:,1:no_dims);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

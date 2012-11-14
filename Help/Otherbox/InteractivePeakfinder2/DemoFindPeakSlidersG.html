@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DemoFindPeakSlidersG</title>
+  <meta name="keywords" content="DemoFindPeakSlidersG">
+  <meta name="description" content="Interactive demo of findpeaks function with peak-zoom feature.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>DemoFindPeakSlidersG
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Interactive demo of findpeaks function with peak-zoom feature.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Interactive demo of findpeaks function with peak-zoom feature. 
+ You can adjust the 5 sliders to determine what
+ values of the parameters give the most reliable peak detection. 
+ The 5 parameters are:
+ SlopeThreshold - Slope of the smoothed third-derivative that is taken 
+  to indicate a peak. Larger values will neglect small features.
+ AmpThreshold - Any peaks with height less than AmpThreshold are ignored.
+ SmoothWidth - Width of smooth functions applied to data before slope is
+   measured. Larger values will neglect small features. A reasonable value is 
+   about equal to 1/2 of the width of the peaks.
+ FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)
+   peak that are taken to determine the peak height, positions, and width.
+   A reasonable value is about equal to 1/2 of the width of the peaks.
+ Peak - This slider zooms in on any one of the detected peaks, and shows
+   the fitted top of the peak (FitWidth) as a blue curve. To see all the
+   peaks, set the Peaks slider to zero (all the way down).
+ Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="FindPeakSlidersG.html" class="code" title="">FindPeakSlidersG</a>	Interactive findpeaks script with peak-zoom feature,</li><li><a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>	gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</li><li><a href="lorentzian.html" class="code" title="function g = lorentzian(x,position,width)">lorentzian</a>	lorentzian(x,position,width) Lorentzian function.</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% Interactive demo of findpeaks function with peak-zoom feature.</span>
+0002 <span class="comment">% You can adjust the 5 sliders to determine what</span>
+0003 <span class="comment">% values of the parameters give the most reliable peak detection.</span>
+0004 <span class="comment">% The 5 parameters are:</span>
+0005 <span class="comment">% SlopeThreshold - Slope of the smoothed third-derivative that is taken</span>
+0006 <span class="comment">%  to indicate a peak. Larger values will neglect small features.</span>
+0007 <span class="comment">% AmpThreshold - Any peaks with height less than AmpThreshold are ignored.</span>
+0008 <span class="comment">% SmoothWidth - Width of smooth functions applied to data before slope is</span>
+0009 <span class="comment">%   measured. Larger values will neglect small features. A reasonable value is</span>
+0010 <span class="comment">%   about equal to 1/2 of the width of the peaks.</span>
+0011 <span class="comment">% FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)</span>
+0012 <span class="comment">%   peak that are taken to determine the peak height, positions, and width.</span>
+0013 <span class="comment">%   A reasonable value is about equal to 1/2 of the width of the peaks.</span>
+0014 <span class="comment">% Peak - This slider zooms in on any one of the detected peaks, and shows</span>
+0015 <span class="comment">%   the fitted top of the peak (FitWidth) as a blue curve. To see all the</span>
+0016 <span class="comment">%   peaks, set the Peaks slider to zero (all the way down).</span>
+0017 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</span>
+0018 
+0019 warning off MATLAB:polyfit:RepeatedPointsOrRescale
+0020 format compact
+0021 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>
+0022 close
+0023 <span class="keyword">global</span> x
+0024 <span class="keyword">global</span> y
+0025 <span class="keyword">global</span> SlopeThreshold 
+0026 <span class="keyword">global</span> AmpThreshold  
+0027 <span class="keyword">global</span> SmoothWidth
+0028 <span class="keyword">global</span> FitWidth
+0029 <span class="keyword">global</span> PeakNumber
+0030 <span class="keyword">global</span> P
+0031 figure(1)
+0032 
+0033 <span class="comment">% Simulate data set</span>
+0034 increment=5;
+0035 x=[200:increment:4000];
+0036 <span class="comment">% For each simulated peak, enter the amplitude, position, and width below</span>
+0037 amp=randn(1,39);  <span class="comment">% Amplitudes of the peaks</span>
+0038 pos=[200:100:4000];   <span class="comment">% Positions of the peaks</span>
+0039 wid=60.*ones(size(pos));   <span class="comment">% Widths of the peaks</span>
+0040 Noise=.02;
+0041 <span class="comment">% A = matrix containing one of the unit-amplidude peak in each of its srow</span>
+0042 A = zeros(length(pos),length(x));
+0043 <span class="keyword">for</span> k=1:length(pos)
+0044   <span class="keyword">if</span> amp(k)&gt;0, A(k,:)=<a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>(x,pos(k),wid(k)); <span class="keyword">end</span>; <span class="comment">% Or you can use any other peak function</span>
+0045 <span class="keyword">end</span>
+0046 z=amp*A;  <span class="comment">% Multiplies each row by the corresponding amplitude and adds them up</span>
+0047 y=z+Noise.*randn(size(z));
+0048 y=y+<a href="lorentzian.html" class="code" title="function g = lorentzian(x,position,width)">lorentzian</a>(x,0,4000); <span class="comment">% Adds background signal</span>
+0049 
+0050 <span class="comment">% Call the interactive findpeaks script</span>
+0051 <a href="FindPeakSlidersG.html" class="code" title="">FindPeakSlidersG</a>;
+0052 
+0053 <span class="comment">%Print out peak table in Matlab Command window</span>
+0054 P</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_ps_amplitude_by_time_by_trigger</title>
+  <meta name="keywords" content="util_ps_amplitude_by_time_by_trigger">
+  <meta name="description" content="UTIL_PS_AMPLITUDE_BY_TIME_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的幅度随时间轴的分布">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_ps_amplitude_by_time_by_trigger
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PS_AMPLITUDE_BY_TIME_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的幅度随时间轴的分布</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ ax_x spike_number_in_each_bin spike_amplitude_mean spike_amplitude_std] = util_ps_amplitude_by_time_by_trigger( triggerif,spif,D,chid,binsize,timescope,trigger_range,isManualTrigger,peakType) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PS_AMPLITUDE_BY_TIME_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的幅度随时间轴的分布
+   本函数计算的幅度分布信息是依据时间分布，而不是概率分布，概率分布的函数是util_psth_amplitude_by_trigger
+   triggerif = trigger information from mcd file
+   spif = spike information from mcd file
+   D = datastrm获得的对象
+   binsize = bin width of each histogram in millisecond
+   timescope = [start end], of the time scope of counting spikes
+   trigger_range = [start end], triggers counts into the psth
+   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike
+   peakType = 幅度是记录最小值(0)、最大值(1)、峰-峰值(2)。
+
+   ax_x = X坐标轴
+   spike_number_in_each_bin = 每个bin内的Spike的总数目（累加）
+   spike_amplitude_mean = 每个bin内的Spike幅度的均值
+   spike_amplitude_std = 每个bin内Spike幅度的STDEV
+   
+   示例：
+   [ ax_x spike_number_in_each_bin spike_amplitude_mean spike_amplitude_std] = util_ps_amplitude_by_time_by_trigger(triggerif,spif,D,34,5,[-50 450],[81 100],1,2);
+   是计算通道34上，Trigger前后-50,450ms间的Spike的幅度随时间的分布。计算Trigger的范围
+   是第81-100个Trigger，忽略Trigger前后0.5 ms（手动提Trigger的伪信息）
+   的信息，并归一化。输出时是每5 ms一个bin
+
+   蒲江波 - 2009年5月30日
+   蒲江波 - 2009年5月31日
+       Bug fix:统计Spike个数值永远为75.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../IO/mcd/mcintfac/@datastrm/ad2muvolt.html" class="code" title="function [vdata, tvals] = ad2muvolt(a, addata, streamname);">ad2muvolt</a>	ad2muvolt - converts MCRack ADC values into microvolt values (datastrm method)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ ax_x spike_number_in_each_bin spike_amplitude_mean spike_amplitude_std] = util_ps_amplitude_by_time_by_trigger( triggerif, </a><span class="keyword">...</span>
+0002     spif, <span class="keyword">...</span>
+0003     D, <span class="keyword">...</span>
+0004     chid, <span class="keyword">...</span>
+0005     binsize, <span class="keyword">...</span>
+0006     timescope, <span class="keyword">...</span>
+0007     trigger_range, <span class="keyword">...</span>
+0008     isManualTrigger, <span class="keyword">...</span>
+0009     peakType)
+0010 <span class="comment">%UTIL_PS_AMPLITUDE_BY_TIME_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的幅度随时间轴的分布</span>
+0011 <span class="comment">%   本函数计算的幅度分布信息是依据时间分布，而不是概率分布，概率分布的函数是util_psth_amplitude_by_trigger</span>
+0012 <span class="comment">%   triggerif = trigger information from mcd file</span>
+0013 <span class="comment">%   spif = spike information from mcd file</span>
+0014 <span class="comment">%   D = datastrm获得的对象</span>
+0015 <span class="comment">%   binsize = bin width of each histogram in millisecond</span>
+0016 <span class="comment">%   timescope = [start end], of the time scope of counting spikes</span>
+0017 <span class="comment">%   trigger_range = [start end], triggers counts into the psth</span>
+0018 <span class="comment">%   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike</span>
+0019 <span class="comment">%   peakType = 幅度是记录最小值(0)、最大值(1)、峰-峰值(2)。</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   ax_x = X坐标轴</span>
+0022 <span class="comment">%   spike_number_in_each_bin = 每个bin内的Spike的总数目（累加）</span>
+0023 <span class="comment">%   spike_amplitude_mean = 每个bin内的Spike幅度的均值</span>
+0024 <span class="comment">%   spike_amplitude_std = 每个bin内Spike幅度的STDEV</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   示例：</span>
+0027 <span class="comment">%   [ ax_x spike_number_in_each_bin spike_amplitude_mean spike_amplitude_std] = util_ps_amplitude_by_time_by_trigger(triggerif,spif,D,34,5,[-50 450],[81 100],1,2);</span>
+0028 <span class="comment">%   是计算通道34上，Trigger前后-50,450ms间的Spike的幅度随时间的分布。计算Trigger的范围</span>
+0029 <span class="comment">%   是第81-100个Trigger，忽略Trigger前后0.5 ms（手动提Trigger的伪信息）</span>
+0030 <span class="comment">%   的信息，并归一化。输出时是每5 ms一个bin</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%   蒲江波 - 2009年5月30日</span>
+0033 <span class="comment">%   蒲江波 - 2009年5月31日</span>
+0034 <span class="comment">%       Bug fix:统计Spike个数值永远为75.</span>
+0035 
+0036 <span class="comment">% 通道序号转换</span>
+0037 hwid = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(chid);
+0038 
+0039 <span class="comment">% 基本思路</span>
+0040 <span class="comment">% 在指定的Trigger范围内循环，检索所有的Spike，以Binsize作为一个时间段，遍历整个timescope[].</span>
+0041 <span class="comment">% 每个Binsize内的Spike Amplitude做平均，用来代表那个时间段内的Response的幅度。</span>
+0042 
+0043 <span class="comment">% 为提高运行速度，预先创建FOR循环中反复用的变量</span>
+0044 this_spif_spiketime = spif.spiketimes{hwid}; <span class="comment">% 运行PSTH通道的SPIF信息复制本</span>
+0045 this_spif_spikevalue = <a href="../IO/mcd/mcintfac/@datastrm/ad2muvolt.html" class="code" title="function [vdata, tvals] = ad2muvolt(a, addata, streamname);">ad2muvolt</a>( D, spif.spikevalues{hwid} ); <span class="comment">% SPIKETIME信息副本</span>
+0046 
+0047 <span class="comment">% 计算出有多少个Bin，用来预存每次运算的结果</span>
+0048 <span class="keyword">if</span> mod(timescope(2) - timescope(1), binsize)
+0049     error(<span class="string">'binsize必须要可以被timescope的范围所整除.'</span>);
+0050 <span class="keyword">end</span>
+0051 bin_number = (timescope(2) - timescope(1)) / binsize + 1;
+0052 
+0053 <span class="comment">% 每个Bin内的Spike的数目</span>
+0054 spike_number_in_each_bin = zeros(1, bin_number);
+0055 
+0056 <span class="comment">% 每个Bin内的Spike的幅度的队列</span>
+0057 spike_amplitude_in_each_bin = cell(1, bin_number);
+0058 
+0059 <span class="comment">% 每个Bin内的Spike的幅度的平均值</span>
+0060 spike_amplitude_mean = zeros(1, bin_number);
+0061 
+0062 <span class="comment">% 每个Bin内的Spike的幅度的STD</span>
+0063 spike_amplitude_std = zeros(1, bin_number);
+0064 
+0065 <span class="comment">% 生成X轴</span>
+0066 ax_x = timescope(1):binsize:timescope(2);
+0067 
+0068 <span class="comment">% 在Trigger中遍历</span>
+0069 <span class="keyword">for</span> i = trigger_range(1):trigger_range(2)
+0070     <span class="comment">% 记录每次Trigger的具体时间</span>
+0071     this_trigger_time = triggerif.times(i);
+0072     <span class="comment">% 确定第一个Bin的开始和最后一个Bin的结束</span>
+0073     first_bin_start = timescope(1) + this_trigger_time;
+0074     last_bin_start = timescope(2) - binsize + this_trigger_time;
+0075     
+0076     <span class="comment">% 在SPIF中寻找给定的Trigger时间Timescope[]范围内的Spike</span>
+0077     <span class="comment">% 基本方法</span>
+0078     <span class="comment">% 利用Trigger的时间在SPIF.spiketime中查询每个Bin范围内的Spike的索引号码</span>
+0079     <span class="comment">% 然后用这个索引号码去找到spikevalue内的spikevalue,平均之，放在结果中</span>
+0080     <span class="comment">% 然后递增bin范围，遍历timescope内所有的时间段</span>
+0081     
+0082     <span class="comment">% 确定是否过零点，和手动提Trigger的误差容忍范围(0.5ms)</span>
+0083     <span class="comment">% 这个范围是通用的，后面的分析过程中将不突出isManualTrigger的作用</span>
+0084     <span class="keyword">if</span> isManualTrigger
+0085         <span class="keyword">if</span> first_bin_start &lt; this_trigger_time
+0086             before_trigger = this_trigger_time - 0.5 - binsize;
+0087         <span class="keyword">else</span>
+0088             before_trigger = NaN;
+0089         <span class="keyword">end</span>
+0090         after_trigger = this_trigger_time + 0.5;
+0091     <span class="keyword">else</span>
+0092         <span class="keyword">if</span> first_bin_start &lt; this_trigger_time
+0093             before_trigger = this_trigger_time;
+0094         <span class="keyword">else</span>
+0095             before_trigger = NaN;
+0096             after_trigger = this_trigger_time;
+0097         <span class="keyword">end</span>
+0098     <span class="keyword">end</span>
+0099     
+0100     <span class="comment">% 按照刺激时刻点将时间范围分成两段</span>
+0101     <span class="comment">% 在每段的循环中，将[last next)内的spike幅度序列放入Cell矩阵进行保存</span>
+0102     
+0103     <span class="comment">% 计算前半段（如果有的话，刺激时间前的部分）</span>
+0104     <span class="comment">% 如果不存在前半段，则before_trigger是NaN，则这段循环不会进行</span>
+0105     
+0106     bin_counter = 1; <span class="comment">% 循环下标</span>
+0107     <span class="keyword">if</span> ~isnan(before_trigger)
+0108         <span class="keyword">for</span> j = first_bin_start:binsize:before_trigger
+0109             <span class="comment">% 把每个Bin内的Spike的幅度的值保存在列表中，等循环完所有的Trigger后再行处理</span>
+0110             
+0111             <span class="comment">% 根据peakType确定要幅度的计算方法(0:min, 1:max, 2:max-min)</span>
+0112             <span class="comment">% spike_amplitude是一个临时的变量，用于存放某个Bin范围内的Spike的幅度值</span>
+0113             <span class="keyword">switch</span>(peakType)
+0114                 <span class="keyword">case</span> 0
+0115                     spike_amplitude = min( this_spif_spikevalue( :, <span class="keyword">...</span>
+0116                         this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) );
+0117                 <span class="keyword">case</span> 1
+0118                     spike_amplitude = max( this_spif_spikevalue( :, <span class="keyword">...</span>
+0119                         this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) );
+0120                 <span class="keyword">case</span> 2
+0121                     spike_amplitude = max( this_spif_spikevalue( :, <span class="keyword">...</span>
+0122                         this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) ) - <span class="keyword">...</span>
+0123                         min( this_spif_spikevalue( :, <span class="keyword">...</span>
+0124                         this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) );
+0125             <span class="keyword">end</span>
+0126             spike_amplitude_in_each_bin{1,bin_counter} = <span class="keyword">...</span>
+0127                 [ spike_amplitude_in_each_bin{1,bin_counter} spike_amplitude ];
+0128            
+0129             bin_counter = bin_counter + 1;
+0130         <span class="keyword">end</span>
+0131     <span class="keyword">end</span>
+0132    
+0133     <span class="comment">% 计算后半段</span>
+0134     <span class="comment">% bin_counter是目前即将要计算的Bin的Index，不能改变</span>
+0135     <span class="keyword">for</span> j = after_trigger:binsize:last_bin_start
+0136         <span class="keyword">switch</span>(peakType)
+0137             <span class="keyword">case</span> 0
+0138                 spike_amplitude = min( this_spif_spikevalue( :, <span class="keyword">...</span>
+0139                     this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) );
+0140             <span class="keyword">case</span> 1
+0141                 spike_amplitude = max( this_spif_spikevalue( :, <span class="keyword">...</span>
+0142                     this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) );
+0143             <span class="keyword">case</span> 2
+0144                 spike_amplitude = max( this_spif_spikevalue( :, <span class="keyword">...</span>
+0145                     this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) ) - <span class="keyword">...</span>
+0146                     min( this_spif_spikevalue( :, <span class="keyword">...</span>
+0147                     this_spif_spiketime &gt;= j &amp; this_spif_spiketime &lt; j+binsize ) );
+0148         <span class="keyword">end</span>
+0149         spike_amplitude_in_each_bin{1,bin_counter} = <span class="keyword">...</span>
+0150             [ spike_amplitude_in_each_bin{1,bin_counter} spike_amplitude ];
+0151 
+0152         bin_counter = bin_counter + 1;
+0153     <span class="keyword">end</span>
+0154 <span class="keyword">end</span>
+0155 
+0156 <span class="comment">% 计算结果</span>
+0157 <span class="comment">% spike_amplitude_in_each_bin里面包含了各个Bin内Spike幅度的值（min/max/p2p）。</span>
+0158 <span class="keyword">for</span> i=1:bin_number
+0159     spike_number_in_each_bin(1,i) = length( spike_amplitude_in_each_bin{1,i} );
+0160     spike_amplitude_mean(1,i) = mean( spike_amplitude_in_each_bin{1,i} );
+0161     spike_amplitude_std(1,i) = std( spike_amplitude_in_each_bin{1,i} );
+0162 <span class="keyword">end</span>
+0163 
+0164 <span class="keyword">end</span>
+0165</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eps2pdf</title>
+  <meta name="keywords" content="eps2pdf">
+  <meta name="description" content="EPS2PDF  Convert an eps file to pdf format using ghostscript">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html export_fig -->
+<h1>eps2pdf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EPS2PDF  Convert an eps file to pdf format using ghostscript</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function eps2pdf(source, dest, crop, append, gray, quality) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">EPS2PDF  Convert an eps file to pdf format using ghostscript
+
+ Examples:
+   eps2pdf source dest
+   eps2pdf(source, dest, crop)
+   eps2pdf(source, dest, crop, append)
+   eps2pdf(source, dest, crop, append, gray)
+   eps2pdf(source, dest, crop, append, gray, quality)
+
+ This function converts an eps file to pdf format. The output can be
+ optionally cropped and also converted to grayscale. If the output pdf
+ file already exists then the eps file can optionally be appended as a new
+ page on the end of the eps file. The level of bitmap compression can also
+ optionally be set.
+
+ This function requires that you have ghostscript installed on your
+ system. Ghostscript can be downloaded from: http://www.ghostscript.com
+
+IN:
+   source - filename of the source eps file to convert. The filename is
+            assumed to already have the extension &quot;.eps&quot;.
+   dest - filename of the destination pdf file. The filename is assumed to
+          already have the extension &quot;.pdf&quot;.
+   crop - boolean indicating whether to crop the borders off the pdf.
+          Default: true.
+   append - boolean indicating whether the eps should be appended to the
+            end of the pdf as a new page (if the pdf exists already).
+            Default: false.
+   gray - boolean indicating whether the output pdf should be grayscale or
+          not. Default: false.
+   quality - scalar indicating the level of image bitmap quality to
+             output. A larger value gives a higher quality. quality &gt; 100
+             gives lossless output. Default: ghostscript prepress default.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [im alpha] = export_fig(varargin)">export_fig</a>	EXPORT_FIG  Exports figures suitable for publication</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%EPS2PDF  Convert an eps file to pdf format using ghostscript</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   eps2pdf source dest</span>
+0005 <span class="comment">%   eps2pdf(source, dest, crop)</span>
+0006 <span class="comment">%   eps2pdf(source, dest, crop, append)</span>
+0007 <span class="comment">%   eps2pdf(source, dest, crop, append, gray)</span>
+0008 <span class="comment">%   eps2pdf(source, dest, crop, append, gray, quality)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% This function converts an eps file to pdf format. The output can be</span>
+0011 <span class="comment">% optionally cropped and also converted to grayscale. If the output pdf</span>
+0012 <span class="comment">% file already exists then the eps file can optionally be appended as a new</span>
+0013 <span class="comment">% page on the end of the eps file. The level of bitmap compression can also</span>
+0014 <span class="comment">% optionally be set.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% This function requires that you have ghostscript installed on your</span>
+0017 <span class="comment">% system. Ghostscript can be downloaded from: http://www.ghostscript.com</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%IN:</span>
+0020 <span class="comment">%   source - filename of the source eps file to convert. The filename is</span>
+0021 <span class="comment">%            assumed to already have the extension &quot;.eps&quot;.</span>
+0022 <span class="comment">%   dest - filename of the destination pdf file. The filename is assumed to</span>
+0023 <span class="comment">%          already have the extension &quot;.pdf&quot;.</span>
+0024 <span class="comment">%   crop - boolean indicating whether to crop the borders off the pdf.</span>
+0025 <span class="comment">%          Default: true.</span>
+0026 <span class="comment">%   append - boolean indicating whether the eps should be appended to the</span>
+0027 <span class="comment">%            end of the pdf as a new page (if the pdf exists already).</span>
+0028 <span class="comment">%            Default: false.</span>
+0029 <span class="comment">%   gray - boolean indicating whether the output pdf should be grayscale or</span>
+0030 <span class="comment">%          not. Default: false.</span>
+0031 <span class="comment">%   quality - scalar indicating the level of image bitmap quality to</span>
+0032 <span class="comment">%             output. A larger value gives a higher quality. quality &gt; 100</span>
+0033 <span class="comment">%             gives lossless output. Default: ghostscript prepress default.</span>
+0034 
+0035 <span class="comment">% Copyright (C) Oliver Woodford 2009-2010</span>
+0036 
+0037 <span class="comment">% Suggestion of appending pdf files provided by Matt C at:</span>
+0038 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/23629</span>
+0039 
+0040 <span class="comment">% Thank you to Fabio Viola for pointing out compression artifacts, leading</span>
+0041 <span class="comment">% to the quality setting.</span>
+0042 <span class="comment">% Thank you to Scott for pointing out the subsampling of very small images,</span>
+0043 <span class="comment">% which was fixed for lossless compression settings.</span>
+0044 
+0045 <a name="_sub0" href="#_subfunctions" class="code">function eps2pdf(source, dest, crop, append, gray, quality)</a>
+0046 <span class="comment">% Intialise the options string for ghostscript</span>
+0047 options = [<span class="string">'-q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -sOutputFile=&quot;'</span> dest <span class="string">'&quot;'</span>];
+0048 <span class="comment">% Set crop option</span>
+0049 <span class="keyword">if</span> nargin &lt; 3 || crop
+0050     options = [options <span class="string">' -dEPSCrop'</span>];
+0051 <span class="keyword">end</span>
+0052 <span class="comment">% Set the grayscale option</span>
+0053 <span class="keyword">if</span> nargin &gt; 4 &amp;&amp; gray
+0054     options = [options <span class="string">' -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray'</span>];
+0055 <span class="keyword">end</span>
+0056 <span class="comment">% Set the bitmap quality</span>
+0057 <span class="keyword">if</span> nargin &gt; 5 &amp;&amp; ~isempty(quality)
+0058     options = [options <span class="string">' -dAutoFilterColorImages=false -dAutoFilterGrayImages=false'</span>];
+0059     <span class="keyword">if</span> quality &gt; 100
+0060         options = [options <span class="string">' -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FlateEncode -c &quot;.setpdfwrite &lt;&lt; /ColorImageDownsampleThreshold 10 /GrayImageDownsampleThreshold 10 &gt;&gt; setdistillerparams&quot;'</span>];
+0061     <span class="keyword">else</span>
+0062         options = [options <span class="string">' -dColorImageFilter=/DCTEncode -dGrayImageFilter=/DCTEncode'</span>];
+0063         v = 1 + (quality &lt; 80);
+0064         quality = 1 - quality / 100;
+0065         s = sprintf(<span class="string">'&lt;&lt; /QFactor %.2f /Blend 1 /HSample [%d 1 1 %d] /VSample [%d 1 1 %d] &gt;&gt;'</span>, quality, v, v, v, v);
+0066         options = sprintf(<span class="string">'%s -c &quot;.setpdfwrite &lt;&lt; /ColorImageDict %s /GrayImageDict %s &gt;&gt; setdistillerparams&quot;'</span>, options, s, s);
+0067     <span class="keyword">end</span>
+0068 <span class="keyword">end</span>
+0069 <span class="comment">% Check if the output file exists</span>
+0070 <span class="keyword">if</span> nargin &gt; 3 &amp;&amp; append &amp;&amp; exist(dest, <span class="string">'file'</span>) == 2
+0071     <span class="comment">% File exists - append current figure to the end</span>
+0072     tmp_nam = tempname;
+0073     <span class="comment">% Copy the file</span>
+0074     copyfile(dest, tmp_nam);
+0075     <span class="comment">% Add the output file names</span>
+0076     options = [options <span class="string">' -f &quot;'</span> tmp_nam <span class="string">'&quot; &quot;'</span> source <span class="string">'&quot;'</span>];
+0077     <span class="keyword">try</span>
+0078         <span class="comment">% Convert to pdf using ghostscript</span>
+0079         [status message] = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>(options);
+0080     <span class="keyword">catch</span>
+0081         <span class="comment">% Delete the intermediate file</span>
+0082         <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0083         rethrow(lasterror);
+0084     <span class="keyword">end</span>
+0085     <span class="comment">% Delete the intermediate file</span>
+0086     <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0087 <span class="keyword">else</span>
+0088     <span class="comment">% File doesn't exist or should be over-written</span>
+0089     <span class="comment">% Add the output file names</span>
+0090     options = [options <span class="string">' -f &quot;'</span> source <span class="string">'&quot;'</span>];
+0091     <span class="comment">% Convert to pdf using ghostscript</span>
+0092     [status message] = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>(options);
+0093 <span class="keyword">end</span>
+0094 <span class="comment">% Check for error</span>
+0095 <span class="keyword">if</span> status
+0096     <span class="comment">% Report error</span>
+0097     <span class="keyword">if</span> isempty(message)
+0098         error(<span class="string">'Unable to generate pdf. Check destination directory is writable.'</span>);
+0099     <span class="keyword">else</span>
+0100         error(message);
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 <span class="keyword">return</span>
+0104</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

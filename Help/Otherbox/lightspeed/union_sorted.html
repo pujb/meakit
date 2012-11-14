@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of union_sorted</title>
+  <meta name="keywords" content="union_sorted">
+  <meta name="description" content="UNION_SORTED  Set union of sorted sets.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>union_sorted
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>UNION_SORTED  Set union of sorted sets.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [c,a_match,b_match] = union_sorted(a,b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">UNION_SORTED  Set union of sorted sets.
+ UNION_SORTED(A,B) where A and B are vectors returns the combined values
+ from A and B with no repetitions.  A (and B) must be sorted and unique, and 
+ the result will be sorted and unique.
+
+ [C,A_MATCH,B_MATCH] = UNION_SORTED(A,B) also returns
+   A_MATCH = MATCH_SORTED(A,C)
+   B_MATCH = MATCH_SORTED(B,C)
+
+ Examples:
+   union_sorted([20 30 40], [10 20 30])
+   [c,a_match,b_match] = union_sorted([20 30 40], [10 20 30])</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ismember_sorted.html" class="code" title="function [tf,loc] = ismember_sorted(a,s)">ismember_sorted</a>	ISMEMBER_SORTED   True for member of sorted set.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,a_match,b_match] = union_sorted(a,b)</a>
+0002 <span class="comment">%UNION_SORTED  Set union of sorted sets.</span>
+0003 <span class="comment">% UNION_SORTED(A,B) where A and B are vectors returns the combined values</span>
+0004 <span class="comment">% from A and B with no repetitions.  A (and B) must be sorted and unique, and</span>
+0005 <span class="comment">% the result will be sorted and unique.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% [C,A_MATCH,B_MATCH] = UNION_SORTED(A,B) also returns</span>
+0008 <span class="comment">%   A_MATCH = MATCH_SORTED(A,C)</span>
+0009 <span class="comment">%   B_MATCH = MATCH_SORTED(B,C)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Examples:</span>
+0012 <span class="comment">%   union_sorted([20 30 40], [10 20 30])</span>
+0013 <span class="comment">%   [c,a_match,b_match] = union_sorted([20 30 40], [10 20 30])</span>
+0014 
+0015 <span class="comment">% Written by Tom Minka</span>
+0016 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0017 
+0018 <span class="comment">% instead of a full sort, you could do a merge of the two sorted lists.</span>
+0019 <span class="keyword">if</span> nargout &lt;= 1
+0020   c = sort([a(~<a href="ismember_sorted.html" class="code" title="function [tf,loc] = ismember_sorted(a,s)">ismember_sorted</a>(a,b)) b]);
+0021 <span class="keyword">else</span>
+0022   [tf,loc] = <a href="ismember_sorted.html" class="code" title="function [tf,loc] = ismember_sorted(a,s)">ismember_sorted</a>(a,b);
+0023   [c,i] = sort([a(~tf) b]);
+0024   <span class="comment">% c = [a(~tf) b](i)</span>
+0025   nc = length(c);
+0026   nb = length(b);
+0027   na = length(a);
+0028   index = zeros(1,nc);
+0029   index(i) = 1:nc;
+0030   <span class="comment">% c(index) = [a(~tf) b]</span>
+0031   b_match = index((nc-nb+1):nc);
+0032   a_match = zeros(1,na);
+0033   a_match(~tf) = index(1:(nc-nb));
+0034   a_match(tf) = b_match(loc(tf));
+0035 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

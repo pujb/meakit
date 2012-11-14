@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plot_errorbars</title>
+  <meta name="keywords" content="plot_errorbars">
+  <meta name="description" content="plot_errorbars(means,stderrs,rownames)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>plot_errorbars
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>plot_errorbars(means,stderrs,rownames)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function plot_errorbars(means,stderrs,rownames) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> plot_errorbars(means,stderrs,rownames)
+ makes a plot where each mean is displayed on a row labelled with its
+ rowname and a horizontal line connecting (mean-stderr,mean+stderr)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>	AXIS_PCT       Set reasonable axis limits.</li><li><a href="set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>	SET_LINESPEC    Set the color and line style of a graphics object.</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function plot_errorbars(means,stderrs,rownames)</a>
+0002 <span class="comment">% plot_errorbars(means,stderrs,rownames)</span>
+0003 <span class="comment">% makes a plot where each mean is displayed on a row labelled with its</span>
+0004 <span class="comment">% rowname and a horizontal line connecting (mean-stderr,mean+stderr)</span>
+0005 
+0006 n = size(means,1);
+0007 h=plot(means,1:n,<span class="string">'o'</span>);
+0008 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'linewidth'</span>,2)
+0009 x = zeros(2,n);
+0010 x(1,:) = means-stderrs;
+0011 x(2,:) = means+stderrs;
+0012 y = repmat(1:n,2,1);
+0013 h = line(x,y);
+0014 <a href="set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>(h,<span class="string">'b-'</span>);
+0015 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'linewidth'</span>,2)
+0016 <a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>
+0017 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'ytick'</span>,1:n,<span class="string">'yticklabel'</span>,rownames,<span class="string">'ydir'</span>,<span class="string">'reverse'</span>)
+0018 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'tickdir'</span>,<span class="string">'out'</span>)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

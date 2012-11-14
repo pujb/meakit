@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cholproj</title>
+  <meta name="keywords" content="cholproj">
+  <meta name="description" content="CHOLPROJ  Projected Cholesky factorization.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>cholproj
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CHOLPROJ  Projected Cholesky factorization.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [U,isPosDef] = cholproj(A) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">CHOLPROJ  Projected Cholesky factorization.
+ cholproj(A) returns an upper triangular matrix U so that U'*U = A,
+ provided A is symmetric positive semidefinite (sps).
+
+ If A is not sps, then U will approximately satisfy U'*U = A.   
+ This is useful when dealing with matrices that are affected
+ by roundoff errors.  By multiplying U'*U you effectively round A to the 
+ nearest sps matrix.
+
+ [U,isPosDef] = cholproj(A) also returns whether A is positive definite.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="inv_posdef.html" class="code" title="function x = inv_posdef(A)">inv_posdef</a>	INV_POSDEF        Invert positive definite matrix.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [U,isPosDef] = cholproj(A)</a>
+0002 <span class="comment">%CHOLPROJ  Projected Cholesky factorization.</span>
+0003 <span class="comment">% cholproj(A) returns an upper triangular matrix U so that U'*U = A,</span>
+0004 <span class="comment">% provided A is symmetric positive semidefinite (sps).</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% If A is not sps, then U will approximately satisfy U'*U = A.</span>
+0007 <span class="comment">% This is useful when dealing with matrices that are affected</span>
+0008 <span class="comment">% by roundoff errors.  By multiplying U'*U you effectively round A to the</span>
+0009 <span class="comment">% nearest sps matrix.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% [U,isPosDef] = cholproj(A) also returns whether A is positive definite.</span>
+0012 
+0013 U = zeros(size(A));
+0014 isPosDef = 1;
+0015 <span class="keyword">for</span> i = 1:<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(A)
+0016   <span class="keyword">for</span> j = i:<a href="rows.html" class="code" title="function r = rows(x)">rows</a>(A)
+0017     k = 1:(i-1);
+0018     s = A(i,j) - U(k,i)'*U(k,j);
+0019     <span class="keyword">if</span> i == j
+0020       <span class="keyword">if</span> s &lt;= 0
+0021     isPosDef = 0;
+0022     U(i,i) = 0;
+0023       <span class="keyword">else</span>
+0024     U(i,i) = sqrt(s);
+0025       <span class="keyword">end</span>
+0026     <span class="keyword">else</span>
+0027       <span class="keyword">if</span> U(i,i) &gt; 0
+0028     U(i,j) = s / U(i,i);
+0029       <span class="keyword">else</span>
+0030     U(i,j) = 0;
+0031       <span class="keyword">end</span>
+0032     <span class="keyword">end</span>
+0033   <span class="keyword">end</span>
+0034 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

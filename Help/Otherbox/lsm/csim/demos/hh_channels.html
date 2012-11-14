@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of hh_channels</title>
+  <meta name="keywords" content="hh_channels">
+  <meta name="description" content="this is *super tolles* demo">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html lsm --><!-- ../menu.html csim --><!-- menu.html demos -->
+<h1>hh_channels
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>this is *super tolles* demo</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">
+ this is *super tolles* demo</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">%</span>
+0002 <span class="comment">% this is *super tolles* demo</span>
+0003 <span class="comment">%</span>
+0004 
+0005 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0006 rand(<span class="string">'state'</span>,8931180);
+0007 randn(<span class="string">'state'</span>,8931180);
+0008 
+0009 addpath(<span class="string">'..'</span>);
+0010 
+0011 <span class="comment">%</span>
+0012 <span class="comment">% make sure that we start from scratch</span>
+0013 <span class="comment">%</span>
+0014 csim(<span class="string">'destroy'</span>);
+0015 
+0016 <span class="comment">%</span>
+0017 <span class="comment">% the passive parameters</span>
+0018 <span class="comment">%</span>
+0019 Em = 10.61299992*1e-3;    <span class="comment">% Volt</span>
+0020 Rm = 424.4135437*1e3;     <span class="comment">% Ohm</span>
+0021 Cm = 0.007853974588*1e-6; <span class="comment">% Farad</span>
+0022 Vresting = -0.04;         <span class="comment">% Volt</span>
+0023 
+0024 <span class="comment">%</span>
+0025 <span class="comment">% create a CbNeuron</span>
+0026 <span class="comment">%</span>
+0027 n = csim(<span class="string">'create'</span>,<span class="string">'CbNeuron'</span>);
+0028 
+0029 <span class="comment">%</span>
+0030 <span class="comment">% set the parameters of this neuron (in the future should be able with one command line)</span>
+0031 <span class="comment">%</span>
+0032 csim(<span class="string">'set'</span>,n,<span class="string">'Cm'</span>,Cm);
+0033 csim(<span class="string">'set'</span>,n,<span class="string">'Rm'</span>,Rm);
+0034 csim(<span class="string">'set'</span>,n,<span class="string">'Vresting'</span>,Vresting);
+0035 csim(<span class="string">'set'</span>,n,<span class="string">'Vreset'</span>,Vresting);
+0036 csim(<span class="string">'set'</span>,n,<span class="string">'Vinit'</span>,Vresting);
+0037 csim(<span class="string">'set'</span>,n,<span class="string">'Trefract'</span>,0.005);
+0038 csim(<span class="string">'set'</span>,n,<span class="string">'Inoise'</span>,0.00*1e-6);
+0039 csim(<span class="string">'set'</span>,n,<span class="string">'Iinject'</span>,0.00*1e-6);
+0040 csim(<span class="string">'set'</span>,n,<span class="string">'Vthresh'</span>,0.02);
+0041 csim(<span class="string">'set'</span>,n,<span class="string">'doReset'</span>,0);
+0042 
+0043 <span class="comment">%</span>
+0044 <span class="comment">% create a H&amp;H K+ channel</span>
+0045 <span class="comment">%</span>
+0046 k=csim(<span class="string">'create'</span>,<span class="string">'HH_K_Channel'</span>);
+0047 csim(<span class="string">'set'</span>,k,<span class="string">'Gbar'</span>,0.2827430964*1e-3);
+0048 csim(<span class="string">'set'</span>,k,<span class="string">'Erev'</span>,-11.99979305*1e-3+Vresting);
+0049 
+0050 <span class="comment">%</span>
+0051 <span class="comment">% create a H&amp;H Na++ channel</span>
+0052 <span class="comment">%</span>
+0053 na=csim(<span class="string">'create'</span>,<span class="string">'HH_Na_Channel'</span>);
+0054 csim(<span class="string">'set'</span>,na,<span class="string">'Gbar'</span>,0.9424769878*1e-3);
+0055 csim(<span class="string">'set'</span>,na,<span class="string">'Erev'</span>,0.1150009537+Vresting);
+0056 
+0057 <span class="comment">%</span>
+0058 <span class="comment">% now we have to cennect the objects</span>
+0059 <span class="comment">%</span>
+0060 csim(<span class="string">'connect'</span>,n,k);   <span class="comment">% make the K channel a part of the neuron (in the future we will have a 'insert')</span>
+0061 csim(<span class="string">'connect'</span>,k,n);   <span class="comment">% let the K channel now that it is a part of the neuron</span>
+0062 
+0063 csim(<span class="string">'connect'</span>,n,na);  <span class="comment">% make the Na channel a part of the neuron</span>
+0064 csim(<span class="string">'connect'</span>,na,n);
+0065 
+0066 <span class="comment">%</span>
+0067 <span class="comment">% create an analog input neuron an a synapse</span>
+0068 <span class="comment">%</span>
+0069 ain=csim(<span class="string">'create'</span>,<span class="string">'AnalogInputNeuron'</span>);
+0070 s=csim(<span class="string">'create'</span>,<span class="string">'StaticAnalogSynapse'</span>);
+0071 
+0072 <span class="comment">%</span>
+0073 <span class="comment">% connect them: NOTE: csim('connect',destination,source</span>
+0074 <span class="comment">%</span>
+0075 csim(<span class="string">'connect'</span>,s,ain); <span class="comment">% the output of the input device goes to the syn</span>
+0076 csim(<span class="string">'connect'</span>,n,s);   <span class="comment">% the syn feeds into our neuron</span>
+0077 
+0078 <span class="comment">%</span>
+0079 <span class="comment">% now we want to record some values during the simulation:</span>
+0080 <span class="comment">%</span>
+0081 r=csim(<span class="string">'create'</span>,<span class="string">'MexRecorder'</span>);
+0082 
+0083 <span class="comment">%</span>
+0084 <span class="comment">% tell the recorder which fields to record</span>
+0085 <span class="comment">%</span>
+0086 csim(<span class="string">'connect'</span>,r,n,<span class="string">'Vm'</span>);
+0087 csim(<span class="string">'connect'</span>,r,na,<span class="string">'g'</span>);
+0088 csim(<span class="string">'connect'</span>,r,k,<span class="string">'g'</span>);
+0089 csim(<span class="string">'connect'</span>,r,s,<span class="string">'psr'</span>);
+0090 csim(<span class="string">'connect'</span>,r,n,<span class="string">'spikes'</span>);
+0091 
+0092 <span class="comment">%</span>
+0093 <span class="comment">% set parameters regarding the simulation control</span>
+0094 <span class="comment">%</span>
+0095 dt=2e-5;
+0096 dtr=max(1e-4,dt);
+0097 Tsim=1;
+0098 csim(<span class="string">'set'</span>,r,<span class="string">'dt'</span>,dtr);           <span class="comment">% how offten the recorde sould store the values</span>
+0099 csim(<span class="string">'set'</span>,<span class="string">'dt'</span>,dt);              <span class="comment">% the integration time constant</span>
+0100 csim(<span class="string">'set'</span>,<span class="string">'randSeed'</span>,randseed);  <span class="comment">% the randSeed</span>
+0101 
+0102 <span class="comment">%</span>
+0103 <span class="comment">% define an input which will be fedd to out input object</span>
+0104 <span class="comment">%</span>
+0105 input(1).spiking = 0;                                 <span class="comment">% its analog</span>
+0106 input(1).dt      = 1e-3;                              <span class="comment">% time base</span>
+0107 input(1).idx     = ain;                               <span class="comment">% where to send the input to</span>
+0108 t=0:input(1).dt:Tsim;
+0109 input(1).data    = 0.04e-6*(2*rand(size(t))-1);  <span class="comment">% a sine modulted current</span>
+0110 
+0111 <span class="comment">%</span>
+0112 <span class="comment">% now do the simulation</span>
+0113 <span class="comment">%</span>
+0114 csim(<span class="string">'reset'</span>);
+0115 
+0116 
+0117 tic
+0118 output=csim(<span class="string">'simulate'</span>,Tsim,input);
+0119 fprintf(<span class="string">'%g times faster then real time\n'</span>,Tsim/toc);
+0120 
+0121 
+0122 <span class="comment">%</span>
+0123 <span class="comment">% plot the results</span>
+0124 <span class="comment">%</span>
+0125 figure(1); clf reset;
+0126 subplot(2,1,1);
+0127 
+0128 t=[dtr:dtr:Tsim];
+0129 
+0130 plot(t,output{1}.channel(1).data); hold on;
+0131 line([0 Tsim],csim(<span class="string">'get'</span>,n,<span class="string">'Vresting'</span>)*[1 1],<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0132 xlabel(<span class="string">'time [sec]'</span>);
+0133 ylabel(<span class="string">'Vm (Volts)'</span>);
+0134 axis tight
+0135 
+0136 subplot(2,1,2);
+0137 plot(t,output{1}.channel(2).data,<span class="string">'r'</span>); hold on;
+0138 plot(t,output{1}.channel(3).data,<span class="string">'b'</span>); hold on;
+0139 legend(<span class="string">'g_{Na}(t) (Siemens)'</span>,<span class="string">'g_K(t) (Siemens)'</span>);
+0140 xlabel(<span class="string">'time [sec]'</span>);
+0141 
+0142 
+0143 fprintf(<span class="string">'nSpikes=%i\n'</span>,length(output{end}.times));
+0144 
+0145 <span class="comment">%net = csim('export');</span>
+0146 <span class="comment">%</span>
+0147 <span class="comment">%save test</span>
+0148 <span class="comment">%</span>
+0149 <span class="comment">%clear all</span>
+0150 <span class="comment">%</span>
+0151 <span class="comment">%load test</span>
+0152 <span class="comment">%delete test.mat</span>
+0153 <span class="comment">%</span>
+0154 <span class="comment">%csim('import',net);</span>
+0155 
+0156 csim(<span class="string">'set'</span>,<span class="string">'dt'</span>,dt/10);
+0157 
+0158 csim(<span class="string">'reset'</span>);
+0159 
+0160 tic
+0161 csim(<span class="string">'simulate'</span>,Tsim,input);
+0162 out1=csim(<span class="string">'get'</span>,r,<span class="string">'traces'</span>);
+0163 
+0164 fprintf(<span class="string">'%g times faster then real time\n'</span>,Tsim/toc);
+0165 
+0166 figure(2); clf reset;
+0167 subplot(2,1,1);
+0168 
+0169 t=[dtr:dtr:Tsim];
+0170 
+0171 plot(t,out1.channel(1).data); hold on;
+0172 line([0 Tsim],csim(<span class="string">'get'</span>,n,<span class="string">'Vresting'</span>)*[1 1],<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0173 xlabel(<span class="string">'time [sec]'</span>);
+0174 ylabel(<span class="string">'Vm (Volts)'</span>);
+0175 axis tight
+0176 
+0177 subplot(2,1,2);
+0178 plot(t,out1.channel(2).data,<span class="string">'r'</span>); hold on;
+0179 plot(t,out1.channel(3).data,<span class="string">'b'</span>); hold on;
+0180 legend(<span class="string">'g_{Na}(t) (Siemens)'</span>,<span class="string">'g_K(t) (Siemens)'</span>);
+0181 xlabel(<span class="string">'time [sec]'</span>);
+0182 
+0183 fprintf(<span class="string">'nSpikes=%i\n'</span>,length(out1.channel(5).data));
+0184 
+0185</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

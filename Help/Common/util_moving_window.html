@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_moving_window</title>
+  <meta name="keywords" content="util_moving_window">
+  <meta name="description" content="UTIL_MOVING_WINDOW Applying a @func handle to window-ed data">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_moving_window
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_MOVING_WINDOW Applying a @func handle to window-ed data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ result ] = util_moving_window( x, window_length, mode, func, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_MOVING_WINDOW Applying a @func handle to window-ed data
+   Input:
+           x:              1-D data (Matrix data also partly supported, see the codes)
+           window_length:  Window width
+           mode:           'Cont' or 'Jump'
+           func:           Function handle:  Y=F(X)
+           funcargs:       Function args: Y=F(X, ...), if needed.
+
+   Output:
+           result:         In most cases, as a 1-D vector (cell array as if x is a Matrix).
+
+   Created on Jun/09/2012 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2012-06-11  Adding codes to determine if x is a vector/matrix.
+       PJB#2012-06-12  Adding codes to support the Matrix version of
+                       sliding window algorithm.
+       PJB@2012-06-12  Bug Fix: varargout -&gt; varargout {:}, otherwise the
+                       @func could not receive correct arguments.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_pcc_from_rate.html" class="code" title="function [ pcc ] = util_calc_pcc_from_rate( spif, varargin )">util_calc_pcc_from_rate</a>	UTIL_CALC_PCC_FROM_RATE Get Pearson Corr. between electrodes v.s. Time</li><li><a href="../Calculation/util_calc_sd_from_rate.html" class="code" title="function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin )">util_calc_sd_from_rate</a>	UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ result ] = util_moving_window( x, window_length, mode, func, varargin )</a>
+0002 <span class="comment">%UTIL_MOVING_WINDOW Applying a @func handle to window-ed data</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           x:              1-D data (Matrix data also partly supported, see the codes)</span>
+0005 <span class="comment">%           window_length:  Window width</span>
+0006 <span class="comment">%           mode:           'Cont' or 'Jump'</span>
+0007 <span class="comment">%           func:           Function handle:  Y=F(X)</span>
+0008 <span class="comment">%           funcargs:       Function args: Y=F(X, ...), if needed.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Output:</span>
+0011 <span class="comment">%           result:         In most cases, as a 1-D vector (cell array as if x is a Matrix).</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Created on Jun/09/2012 By Pu Jiangbo</span>
+0014 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   $Revision:</span>
+0017 <span class="comment">%       PJB#2012-06-11  Adding codes to determine if x is a vector/matrix.</span>
+0018 <span class="comment">%       PJB#2012-06-12  Adding codes to support the Matrix version of</span>
+0019 <span class="comment">%                       sliding window algorithm.</span>
+0020 <span class="comment">%       PJB@2012-06-12  Bug Fix: varargout -&gt; varargout {:}, otherwise the</span>
+0021 <span class="comment">%                       @func could not receive correct arguments.</span>
+0022 
+0023 
+0024 <span class="comment">% Init variables</span>
+0025 n_len = length(x);
+0026 <span class="keyword">if</span> window_length &lt; 1 || window_length &gt; n_len
+0027     error(<span class="string">'Wrong input: window_length &gt; 1, &lt; length of x.'</span>)
+0028 <span class="keyword">end</span>
+0029 w_len = window_length;
+0030 
+0031 <span class="keyword">if</span> strcmpi(mode, <span class="string">'cont'</span>)
+0032     mode = 0;
+0033 <span class="keyword">elseif</span> strcmpi(mode, <span class="string">'jump'</span>)
+0034     mode = 1;
+0035 <span class="keyword">else</span>
+0036     error(<span class="string">'Wrong input: mode should be CONT or JUMP.'</span>);
+0037 <span class="keyword">end</span>
+0038     
+0039 <span class="comment">% Determine if X is a vector</span>
+0040 <span class="keyword">if</span> isvector(x)
+0041     <span class="comment">% x is a vector</span>
+0042     <span class="keyword">if</span> mode == 0
+0043         <span class="comment">% Smoothly sliding window</span>
+0044         <span class="comment">% start_pos -&gt; start_pos + w_len - 1</span>
+0045         <span class="comment">% start_pos ++</span>
+0046         <span class="comment">% START: 1</span>
+0047         <span class="comment">% END: if start_pos + w_len - 1&gt;= n_len =&gt; start_pos -&gt; n_len</span>
+0048         result = zeros(n_len-w_len+1, 1);
+0049         <span class="keyword">for</span> i = 1:n_len
+0050             result(i) = func(x(i:i+w_len-1), varargin{:});
+0051             <span class="comment">%disp(x(i:i+w_len-1));disp(', ')</span>
+0052             <span class="keyword">if</span> i+w_len-1 &gt;= n_len
+0053                 result(i+1) = func(x(i+1:end), varargin{:});
+0054                 <span class="comment">%disp(x(i+1:end));disp(', end')</span>
+0055                 <span class="keyword">break</span>;
+0056             <span class="keyword">end</span>
+0057         <span class="keyword">end</span>
+0058     <span class="keyword">elseif</span> mode == 1
+0059         <span class="comment">% Jumping window</span>
+0060         <span class="comment">% start_pos -&gt; start_pos + w_len - 1</span>
+0061         <span class="comment">% start_pos = start_pos + w_len</span>
+0062         <span class="comment">% START: 1</span>
+0063         <span class="comment">% END: if start_pos + w_len + w_len &gt;= n_len =&gt; start_pos + w_len -&gt; n_len</span>
+0064         <span class="comment">%      It means: if the next round of next round cannot complete a window, then</span>
+0065         <span class="comment">%      extend the next round.</span>
+0066         result = zeros(fix(n_len/w_len), 1);
+0067         result_i = 1;
+0068         <span class="keyword">for</span> i = 1:w_len:n_len
+0069             result(result_i) = func(x(i:i+w_len-1), varargin{:});
+0070             <span class="comment">%disp(x(i:i+w_len-1));disp(', ')</span>
+0071             result_i = result_i + 1;
+0072             <span class="keyword">if</span> i+w_len+w_len &gt;= n_len
+0073                 result(result_i) = func(x(i+w_len:end), varargin{:});
+0074                 <span class="comment">%disp(x(i+w_len:end));disp(', end')</span>
+0075                 <span class="keyword">break</span>;
+0076             <span class="keyword">end</span>
+0077         <span class="keyword">end</span>
+0078     <span class="keyword">end</span>
+0079 <span class="keyword">else</span>
+0080     <span class="comment">% x is a matrix</span>
+0081     disp(<span class="string">'Matrix input is detected, please check the code, make sure you are using the right way.'</span>)
+0082     <span class="comment">% We should apply the @func to a windowed-data of the matrix</span>
+0083     <span class="comment">% Window-data size:</span>
+0084     <span class="comment">%   Number of rows = window_length</span>
+0085     <span class="comment">%   Number of cols = cols of x</span>
+0086     <span class="comment">% The user should check the format of input matrix, Note, the layout of</span>
+0087     <span class="comment">% result is in a 1-D cell array.</span>
+0088     <span class="comment">% One window-ed dataset -&gt; One numberic result.</span>
+0089     <span class="keyword">if</span> mode == 0
+0090         <span class="comment">% Smoothly sliding window</span>
+0091         <span class="comment">% start_pos -&gt; start_pos + w_len - 1</span>
+0092         <span class="comment">% start_pos ++</span>
+0093         <span class="comment">% START: 1</span>
+0094         <span class="comment">% END: if start_pos + w_len - 1&gt;= n_len =&gt; start_pos -&gt; n_len</span>
+0095         result = cell(n_len-w_len+1, 1);
+0096         <span class="comment">% Generate a movie</span>
+0097         <span class="comment">% Used only in the case that x is a matrix. I.E.</span>
+0098         <span class="comment">% We can show you a movie of changing patterns in</span>
+0099         <span class="comment">% result-cell array.</span>
+0100         <span class="comment">% DECLARE: globale movie_frames, in the console</span>
+0101         <span class="comment">% UNCOMMENT THIS: ==&gt;</span>
+0102         <span class="comment">% global movie_frames</span>
+0103         <span class="comment">% figure,movie_frames = moviein(n_len-w_len+1, 1);</span>
+0104         <span class="comment">% ==END</span>
+0105         <span class="keyword">for</span> i = 1:n_len
+0106             result{i} = func(x(i:i+w_len-1,:), varargin{:});
+0107             <span class="comment">% UNCOMMENT THIS: ==&gt;</span>
+0108             <span class="comment">% imagesc(func(x(i:i+w_len-1,:)));title([num2str(i) ' of ' num2str(n_len-w_len+1)]);drawnow;movie_frames(:,i)=getframe;</span>
+0109             <span class="comment">% ==END</span>
+0110             <span class="comment">%disp(x(i:i+w_len-1));disp(', ')</span>
+0111             <span class="keyword">if</span> i+w_len-1 &gt;= n_len
+0112                 result{i+1} = func(x(i+1:<span class="keyword">end</span>,:), varargin{:});
+0113                 <span class="comment">% UNCOMMENT THIS: ==&gt;</span>
+0114                 <span class="comment">% imagesc(func(x(i+1:end,:)));title([num2str(i+1) ' of ' num2str(n_len-w_len+1)]);drawnow;movie_frames(:,i+1)=getframe;</span>
+0115                 <span class="comment">% ==END</span>
+0116                 <span class="comment">%disp(x(i+1:end));disp(', end')</span>
+0117                 <span class="keyword">break</span>;
+0118             <span class="keyword">end</span>
+0119         <span class="keyword">end</span>
+0120     <span class="keyword">elseif</span> mode == 1
+0121         <span class="comment">% Jumping window</span>
+0122         <span class="comment">% start_pos -&gt; start_pos + w_len - 1</span>
+0123         <span class="comment">% start_pos = start_pos + w_len</span>
+0124         <span class="comment">% START: 1</span>
+0125         <span class="comment">% END: if start_pos + w_len + w_len &gt;= n_len =&gt; start_pos + w_len -&gt; n_len</span>
+0126         <span class="comment">%      It means: if the next round of next round cannot complete a window, then</span>
+0127         <span class="comment">%      extend the next round.</span>
+0128         result = cell(fix(n_len/w_len), 1);
+0129         result_i = 1;
+0130         <span class="keyword">for</span> i = 1:w_len:n_len
+0131             result{result_i} = func(x(i:i+w_len-1,:), varargin{:});
+0132             <span class="comment">%disp(x(i:i+w_len-1));disp(', ')</span>
+0133             result_i = result_i + 1;
+0134             <span class="keyword">if</span> i+w_len+w_len &gt;= n_len
+0135                 result{result_i} = func(x(i+w_len:<span class="keyword">end</span>,:), varargin{:});
+0136                 <span class="comment">%disp(x(i+w_len:end));disp(', end')</span>
+0137                 <span class="keyword">break</span>;
+0138             <span class="keyword">end</span>
+0139         <span class="keyword">end</span>
+0140     <span class="keyword">end</span>
+0141 <span class="keyword">end</span>
+0142 
+0143 <span class="keyword">end</span>
+0144</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

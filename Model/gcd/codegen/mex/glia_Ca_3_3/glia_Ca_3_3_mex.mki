@@ -1,0 +1,14 @@
+# Make settings for glia_Ca_3_3 
+COMPILER=cl
+COMPFLAGS=/c /Zp8 /GR /W3 /EHs /D_CRT_SECURE_NO_DEPRECATE /D_SCL_SECURE_NO_DEPRECATE /D_SECURE_SCL=0 /DMATLAB_MEX_FILE /nologo /MD
+OPTIMFLAGS=/O2 /Oy- /DNDEBUG
+DEBUGFLAGS=/Z7
+LINKER=link
+LINKFLAGS=/dll /export:mexFunction /LIBPATH:"D:\MATLAB\R2011a\extern\lib\win32\microsoft" libmx.lib libmex.lib libmat.lib /MACHINE:X86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /manifest /incremental:NO /implib:"glia_Ca_3_3_mex.x" /MAP:"E:\Software Profiles\matlab\util\Model\gcd\codegen\mex\glia_Ca_3_3\glia_Ca_3_3_mex.mexw32.map"
+LINKOPTIMFLAGS=
+LINKDEBUGFLAGS=/debug /PDB:"E:\Software Profiles\matlab\util\Model\gcd\codegen\mex\glia_Ca_3_3\glia_Ca_3_3_mex.mexw32.pdb"
+MATLAB_ARCH=win32
+BORLAND=
+OMPFLAGS= 
+EMC_COMPILER=msvc100
+EMC_CONFIG=debug

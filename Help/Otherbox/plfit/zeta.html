@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of zeta</title>
+  <meta name="keywords" content="zeta">
+  <meta name="description" content="ZETA  Riemann Zeta function">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html plfit -->
+<h1>zeta
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ZETA  Riemann Zeta function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [f] = zeta(z) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">ZETA  Riemann Zeta function
+
+usage: f = zeta(z)
+
+tested on version 5.3.1
+
+      This program calculates the Riemann Zeta function
+      for the elements of Z using the Dirichlet deta function.
+      Z may be complex and any size. Best accuracy for abs(z)&lt;80.
+
+      Has a pole at z=1, zeros for z=(-even integers),
+      infinite number of zeros for z=1/2+i*y
+
+
+see also: Eta, <a href="deta.html" class="code" title="function [f] = deta(z,k)">Deta</a>, Lambda, Betad, Bern, Euler
+see also: mhelp <a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="deta.html" class="code" title="function [f] = deta(z,k)">deta</a>	DETA   Calculates Dirichlet functions of the form</li><li><a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../Otherbox/drtoolbox/techniques/jdqr.html" class="code" title="function varargout=jdqr(varargin)">jdqr</a>	JDQR computes a partial Schur decomposition of a square matrix or operator.</li><li><a href="../../Otherbox/drtoolbox/techniques/jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li><li><a href="plfit.html" class="code" title="function [alpha, xmin, L]=plfit(x, varargin)">plfit</a>	PLFIT fits a power-law distributional model to data.</li><li><a href="plplot.html" class="code" title="function h=plplot(x, xmin, alpha)">plplot</a>	PLPLOT visualizes a power-law distributional model with empirical data.</li><li><a href="plpva.html" class="code" title="function [p,gof]=plpva(x, xmin, varargin)">plpva</a>	PLPVA calculates the p-value for the given power-law fit to some data.</li><li><a href="plvar.html" class="code" title="function [alpha, xmin, n]=plvar(x, varargin)">plvar</a>	PLVAR estimates the uncertainty in the estimated power-law parameters.</li><li><a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f] = zeta(z)</a>
+0002 <span class="comment">%ZETA  Riemann Zeta function</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%usage: f = zeta(z)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%tested on version 5.3.1</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%      This program calculates the Riemann Zeta function</span>
+0009 <span class="comment">%      for the elements of Z using the Dirichlet deta function.</span>
+0010 <span class="comment">%      Z may be complex and any size. Best accuracy for abs(z)&lt;80.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      Has a pole at z=1, zeros for z=(-even integers),</span>
+0013 <span class="comment">%      infinite number of zeros for z=1/2+i*y</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%see also: Eta, Deta, Lambda, Betad, Bern, Euler</span>
+0017 <span class="comment">%see also: mhelp zeta</span>
+0018 
+0019 <span class="comment">%Paul Godfrey</span>
+0020 <span class="comment">%pgodfrey@conexant.com</span>
+0021 <span class="comment">%3-24-01</span>
+0022 
+0023 zz=2.^z;
+0024 k = zz./(zz-2);
+0025 
+0026 f=k.*<a href="deta.html" class="code" title="function [f] = deta(z,k)">deta</a>(z,1);
+0027 
+0028 p=find(z==1);
+0029 <span class="keyword">if</span> ~isempty(p)
+0030    f(p)=Inf;
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="keyword">return</span>
+0034 
+0035 <span class="comment">%a demo of this function is</span>
+0036 
+0037 ezplot <a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>
+0038 grid on
+0039 
+0040 figure(2)
+0041 ezmesh(<span class="string">'abs(zeta(x+i*y))'</span>,[0 1 .5 30])
+0042 view(75, 4)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

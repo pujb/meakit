@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_GetLibraryInfo</title>
+  <meta name="keywords" content="ns_GetLibraryInfo">
+  <meta name="description" content="ns_GetLibraryInfo   Get library version information">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_GetLibraryInfo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_GetLibraryInfo   Get library version information</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo(); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_GetLibraryInfo   Get library version information
+
+   Usage:
+       [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo()
+
+   Description:
+       Obtains information about the API library.
+
+   Return Values:
+       nsLibraryInfo   Structure to receive library version information.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_LIBERROR    Library Error
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 8/11/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Neuroshare.html" class="code" title="">Neuroshare</a>	</li><li><a href="../../../../IO/util_load_nsdll.html" class="code" title="function [ dllpath dllname ] = util_load_nsdll( filetype, dodisp )">util_load_nsdll</a>	UTIL_LOAD_NSDLL Load the corresponding Neuroshare dll according to the filetype</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo();</a>
+0002 
+0003 <span class="comment">%ns_GetLibraryInfo   Get library version information</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%       [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo()</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Description:</span>
+0009 <span class="comment">%       Obtains information about the API library.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Return Values:</span>
+0012 <span class="comment">%       nsLibraryInfo   Structure to receive library version information.</span>
+0013 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0014 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0015 <span class="comment">%                   generated:</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%                       ns_LIBERROR    Library Error</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0020 <span class="comment">%   Author: Almut Branner</span>
+0021 <span class="comment">%   Last modification: 8/11/2003</span>
+0022 
+0023 [ns_RESULT, nsLibraryInfo] = mexprog(2);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

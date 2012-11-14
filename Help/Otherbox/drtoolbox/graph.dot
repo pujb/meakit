@@ -1,0 +1,41 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  Contents -> compute_mapping;
+  Contents -> drgui;
+  Contents -> generate_data;
+  Contents -> intrinsic_dim;
+  Contents -> mexall;
+  Contents -> out_of_sample;
+  Contents -> out_of_sample_est;
+  Contents -> prewhiten;
+  Contents -> reconstruction_error;
+  Contents -> test_toolbox;
+  out_of_sample -> out_of_sample;
+  test_toolbox -> compute_mapping;
+  test_toolbox -> generate_data;
+  test_toolbox -> intrinsic_dim;
+  test_toolbox -> prewhiten;
+
+  ._Contents [URL="._Contents.html"];
+  ._compute_mapping [URL="._compute_mapping.html"];
+  ._drgui [URL="._drgui.html"];
+  ._generate_data [URL="._generate_data.html"];
+  ._intrinsic_dim [URL="._intrinsic_dim.html"];
+  ._mexall [URL="._mexall.html"];
+  ._out_of_sample [URL="._out_of_sample.html"];
+  ._out_of_sample_est [URL="._out_of_sample_est.html"];
+  ._prewhiten [URL="._prewhiten.html"];
+  ._reconstruction_error [URL="._reconstruction_error.html"];
+  ._test_toolbox [URL="._test_toolbox.html"];
+  Contents [URL="Contents.html"];
+  compute_mapping [URL="compute_mapping.html"];
+  drgui [URL="drgui.html"];
+  generate_data [URL="generate_data.html"];
+  intrinsic_dim [URL="intrinsic_dim.html"];
+  mexall [URL="mexall.html"];
+  out_of_sample [URL="out_of_sample.html"];
+  out_of_sample_est [URL="out_of_sample_est.html"];
+  prewhiten [URL="prewhiten.html"];
+  reconstruction_error [URL="reconstruction_error.html"];
+  test_toolbox [URL="test_toolbox.html"];
+}

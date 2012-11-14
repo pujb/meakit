@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DemoFindPeak</title>
+  <meta name="keywords" content="DemoFindPeak">
+  <meta name="description" content="A simple self-contained demonstration of the findpeak function (line 48)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>DemoFindPeak
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>A simple self-contained demonstration of the findpeak function (line 48)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> A simple self-contained demonstration of the findpeak function (line 48)
+ applied to noisy synthetic data set consisting of a random number of narrow 
+ peaks.  Each time you run this, a different set of peaks is generated.
+ The 4 adjustable parameters (in lines 40 - 43) are:
+ SlopeThreshold - Slope of the smoothed third-derivative that is taken 
+    to indicate a peak. Larger values will neglect small features.
+ AmpThreshold - Any peaks with height less than AmpThreshold are ignored.
+ SmoothWidth - Width of smooth functions applied to data before slope is
+    measured. Larger values will neglect small features. A reasonable value is 
+    about equal to 1/2 the width of the peaks.
+ FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)
+    peak that are taken to determine the peak height, positions, and width.
+    A reasonable value is about equal to 1/2 the width of the peaks.
+ Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>	function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)</li><li><a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>	gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% A simple self-contained demonstration of the findpeak function (line 48)</span>
+0002 <span class="comment">% applied to noisy synthetic data set consisting of a random number of narrow</span>
+0003 <span class="comment">% peaks.  Each time you run this, a different set of peaks is generated.</span>
+0004 <span class="comment">% The 4 adjustable parameters (in lines 40 - 43) are:</span>
+0005 <span class="comment">% SlopeThreshold - Slope of the smoothed third-derivative that is taken</span>
+0006 <span class="comment">%    to indicate a peak. Larger values will neglect small features.</span>
+0007 <span class="comment">% AmpThreshold - Any peaks with height less than AmpThreshold are ignored.</span>
+0008 <span class="comment">% SmoothWidth - Width of smooth functions applied to data before slope is</span>
+0009 <span class="comment">%    measured. Larger values will neglect small features. A reasonable value is</span>
+0010 <span class="comment">%    about equal to 1/2 the width of the peaks.</span>
+0011 <span class="comment">% FitWidth - The number of points around the &quot;top part&quot; of the (unsmoothed)</span>
+0012 <span class="comment">%    peak that are taken to determine the peak height, positions, and width.</span>
+0013 <span class="comment">%    A reasonable value is about equal to 1/2 the width of the peaks.</span>
+0014 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</span>
+0015 
+0016 format compact
+0017 figure(1);clf
+0018 
+0019 <span class="comment">% Generate synthetic signal</span>
+0020 increment=.2; <span class="comment">% Increment between adjacent values of x.</span>
+0021 x=[1:increment:400];
+0022 <span class="comment">% For each simulated peak, enter the amplitude, position, and width below</span>
+0023 amp=randn(1,38);  <span class="comment">% Amplitudes of the peaks</span>
+0024 pos=[10:10:380];   <span class="comment">% Positions of the peaks</span>
+0025 wid=5.*ones(size(pos));   <span class="comment">% Widths of the peaks</span>
+0026 Noise=.1;
+0027 <span class="comment">% A = matrix containing one of the unit-amplidude peak in each of its srow</span>
+0028 A = zeros(length(pos),length(x));
+0029 <span class="keyword">for</span> k=1:length(pos)
+0030   <span class="keyword">if</span> amp(k)&gt;0, A(k,:)=<a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>(x,pos(k),wid(k)); <span class="keyword">end</span>; <span class="comment">% Or you can use any other peak function</span>
+0031 <span class="keyword">end</span>
+0032 z=amp*A;  <span class="comment">% Multiplies each row by the corresponding amplitude and adds them up</span>
+0033 y=z+Noise.*randn(size(z)); <span class="comment">% Add random noise</span>
+0034 
+0035 figure(1);plot(x,y,<span class="string">'r'</span>)  <span class="comment">% Graph the signal in red</span>
+0036 title(<span class="string">'Detected peaks are numbered. Peak table is printed in Command Window'</span>)
+0037 
+0038 <span class="comment">% Initial values of variable parameters</span>
+0039 WidthPoints=mean(wid)/increment; <span class="comment">% Average number of points in half-width of peaks</span>
+0040 SlopeThreshold=0.5*WidthPoints^-2; <span class="comment">% Formula for estimating value of SlopeThreshold</span>
+0041 AmpThreshold=0.05*max(y);
+0042 SmoothWidth=round(WidthPoints/2);  <span class="comment">% SmoothWidth should be roughly equal to 1/2 the peak width (in points)</span>
+0043 FitWidth=round(WidthPoints/2); <span class="comment">% FitWidth should be roughly equal to 1/2 the peak widths(in points)</span>
+0044 
+0045 <span class="comment">% Lavel the x-axis with the parameter values</span>
+0046 xlabel([<span class="string">'SlopeThresh. = '</span> num2str(SlopeThreshold) <span class="string">'    AmpThresh. = '</span> num2str(AmpThreshold) <span class="string">'    SmoothWidth = '</span> num2str(SmoothWidth) <span class="string">'    FitWidth = '</span> num2str(FitWidth) ])
+0047 
+0048 <span class="comment">% Find the peaks</span>
+0049 start=cputime;
+0050 P=<a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth);
+0051 ElapsedTime=cputime-start
+0052 
+0053 <span class="comment">% Display results</span>
+0054 <span class="string">'    Peak #   Position    Height    Width'</span>
+0055 P  <span class="comment">% Display table of peaks</span>
+0056 figure(1);text(P(:, 2),P(:, 3),num2str(P(:,1)))  <span class="comment">% Number the peaks found on the graph</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

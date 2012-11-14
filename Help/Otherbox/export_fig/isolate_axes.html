@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of isolate_axes</title>
+  <meta name="keywords" content="isolate_axes">
+  <meta name="description" content="ISOLATE_AXES Isolate the specified axes in a figure on their own">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html export_fig -->
+<h1>isolate_axes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ISOLATE_AXES Isolate the specified axes in a figure on their own</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function fh = isolate_axes(ah, vis) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">ISOLATE_AXES Isolate the specified axes in a figure on their own
+
+ Examples:
+   fh = isolate_axes(ah)
+   fh = isolate_axes(ah, vis)
+
+ This function will create a new figure containing the axes specified, and
+ also their associated legends and colorbars. The axes specified must all
+ be in the same figure, but they will generally only be a subset of the
+ axes in the figure.
+
+ IN:
+    ah - An array of axes handles, which must come from the same figure.
+    vis - A boolean indicating whether the new figure should be visible.
+          Default: false.
+
+ OUT:
+    fh - The handle of the created figure.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [im alpha] = export_fig(varargin)">export_fig</a>	EXPORT_FIG  Exports figures suitable for publication</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fh = copyfig(fh)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%ISOLATE_AXES Isolate the specified axes in a figure on their own</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   fh = isolate_axes(ah)</span>
+0005 <span class="comment">%   fh = isolate_axes(ah, vis)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This function will create a new figure containing the axes specified, and</span>
+0008 <span class="comment">% also their associated legends and colorbars. The axes specified must all</span>
+0009 <span class="comment">% be in the same figure, but they will generally only be a subset of the</span>
+0010 <span class="comment">% axes in the figure.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% IN:</span>
+0013 <span class="comment">%    ah - An array of axes handles, which must come from the same figure.</span>
+0014 <span class="comment">%    vis - A boolean indicating whether the new figure should be visible.</span>
+0015 <span class="comment">%          Default: false.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% OUT:</span>
+0018 <span class="comment">%    fh - The handle of the created figure.</span>
+0019 
+0020 <span class="comment">% Copyright (C) Oliver Woodford 2011</span>
+0021 
+0022 <a name="_sub0" href="#_subfunctions" class="code">function fh = isolate_axes(ah, vis)</a>
+0023 <span class="comment">% Make sure we have an array of handles</span>
+0024 <span class="keyword">if</span> ~all(ishandle(ah))
+0025     error(<span class="string">'ah must be an array of handles'</span>);
+0026 <span class="keyword">end</span>
+0027 <span class="comment">% Check that the handles are all for axes, and are all in the same figure</span>
+0028 fh = ancestor(ah(1), <span class="string">'figure'</span>);
+0029 nAx = numel(ah);
+0030 <span class="keyword">for</span> a = 1:nAx
+0031     <span class="keyword">if</span> ~strcmp(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(ah(a), <span class="string">'Type'</span>), <span class="string">'axes'</span>)
+0032         error(<span class="string">'All handles must be axes handles.'</span>);
+0033     <span class="keyword">end</span>
+0034     <span class="keyword">if</span> ~isequal(ancestor(ah(a), <span class="string">'figure'</span>), fh)
+0035         error(<span class="string">'Axes must all come from the same figure.'</span>);
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 <span class="comment">% Tag the axes so we can find them in the copy</span>
+0039 old_tag = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(ah, <span class="string">'Tag'</span>);
+0040 <span class="keyword">if</span> nAx == 1
+0041     old_tag = {old_tag};
+0042 <span class="keyword">end</span>
+0043 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah, <span class="string">'Tag'</span>, <span class="string">'ObjectToCopy'</span>);
+0044 <span class="comment">% Create a new figure exactly the same as the old one</span>
+0045 fh = <a href="#_sub1" class="code" title="subfunction fh = copyfig(fh)">copyfig</a>(fh); <span class="comment">%copyobj(fh, 0);</span>
+0046 <span class="keyword">if</span> nargin &lt; 2 || ~vis
+0047     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fh, <span class="string">'Visible'</span>, <span class="string">'off'</span>);
+0048 <span class="keyword">end</span>
+0049 <span class="comment">% Reset the axes tags</span>
+0050 <span class="keyword">for</span> a = 1:nAx
+0051     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah(a), <span class="string">'Tag'</span>, old_tag{a});
+0052 <span class="keyword">end</span>
+0053 <span class="comment">% Get all the axes and gui objects</span>
+0054 axs = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fh, <span class="string">'Children'</span>);
+0055 <span class="comment">% Find the objects to save</span>
+0056 ah = findobj(axs, <span class="string">'Tag'</span>, <span class="string">'ObjectToCopy'</span>);
+0057 <span class="keyword">if</span> numel(ah) ~= nAx
+0058     error(<span class="string">'Incorrect number of axes found.'</span>);
+0059 <span class="keyword">end</span>
+0060 I = ~ismember(axs, ah);
+0061 <span class="comment">% Set the axes tags to what they should be</span>
+0062 <span class="keyword">for</span> a = 1:nAx
+0063     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ah(a), <span class="string">'Tag'</span>, old_tag{a});
+0064 <span class="keyword">end</span>
+0065 <span class="comment">% Keep any legends and colorbars which overlap the subplots</span>
+0066 lh = findobj(axs, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-and'</span>, {<span class="string">'Tag'</span>, <span class="string">'legend'</span>, <span class="string">'-or'</span>, <span class="string">'Tag'</span>, <span class="string">'Colorbar'</span>})';
+0067 nLeg = numel(lh);
+0068 <span class="keyword">if</span> nLeg &gt; 0
+0069     [leg_ind leg_ind] = ismember(lh, axs); 
+0070     ax_pos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(ah, <span class="string">'OuterPosition'</span>);
+0071     <span class="keyword">if</span> nAx &gt; 1
+0072         ax_pos = cell2mat(ax_pos(:));
+0073     <span class="keyword">end</span>
+0074     ax_pos(:,3:4) = ax_pos(:,3:4) + ax_pos(:,1:2);
+0075     leg_pos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(lh, <span class="string">'OuterPosition'</span>);
+0076     <span class="keyword">if</span> nLeg &gt; 1;
+0077         leg_pos = cell2mat(leg_pos(:));
+0078     <span class="keyword">end</span>
+0079     leg_pos(:,3:4) = leg_pos(:,3:4) + leg_pos(:,1:2);
+0080     <span class="keyword">for</span> a = 1:nAx
+0081             <span class="comment">% Overlap test</span>
+0082             I(leg_ind(leg_pos(:,1) &lt; ax_pos(a,3) &amp; leg_pos(:,2) &lt; ax_pos(a,4) &amp;<span class="keyword">...</span>
+0083                       leg_pos(:,3) &gt; ax_pos(a,1) &amp; leg_pos(:,4) &gt; ax_pos(a,2))) = false;
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 <span class="comment">% Delete all axes except for the input axes and associated items</span>
+0087 <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(axs(I));
+0088 <span class="keyword">return</span>
+0089 
+0090 <a name="_sub1" href="#_subfunctions" class="code">function fh = copyfig(fh)</a>
+0091 <span class="comment">% Is there a legend?</span>
+0092 <span class="keyword">if</span> isempty(findobj(fh, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'Tag'</span>, <span class="string">'legend'</span>))
+0093     <span class="comment">% Safe to copy using copyobj</span>
+0094     fh = copyobj(fh, 0);
+0095 <span class="keyword">else</span>
+0096     <span class="comment">% copyobj will change the figure, so save and then load it instead</span>
+0097     tmp_nam = [tempname <span class="string">'.fig'</span>];
+0098     hgsave(fh, tmp_nam);
+0099     fh = hgload(tmp_nam);
+0100     <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0101 <span class="keyword">end</span>
+0102 <span class="keyword">return</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

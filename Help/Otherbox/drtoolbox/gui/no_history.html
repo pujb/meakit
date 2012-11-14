@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of no_history</title>
+  <meta name="keywords" content="no_history">
+  <meta name="description" content="NO_HISTORY M-file for no_history.fig">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html gui -->
+<h1>no_history
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NO_HISTORY M-file for no_history.fig</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = no_history(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> NO_HISTORY M-file for no_history.fig
+      NO_HISTORY by itself, creates a new NO_HISTORY or raises the
+      existing singleton*.
+
+      H = NO_HISTORY returns the handle to a new NO_HISTORY or the handle to
+      the existing singleton*.
+
+      NO_HISTORY('CALLBACK',hObject,eventData,handles,...) calls the local
+      function named CALLBACK in NO_HISTORY.M with the given input arguments.
+
+      NO_HISTORY('Property','Value',...) creates a new NO_HISTORY or raises the
+      existing singleton*.  Starting from the left, property value pairs are
+      applied to the GUI before no_history_OpeningFcn gets called.  An
+      unrecognized property name or invalid value makes property application
+      stop.  All inputs are passed to no_history_OpeningFcn via varargin.
+
+      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one
+      instance to run (singleton)&quot;.
+
+ See also: GUIDE, GUIDATA, GUIHANDLES</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function no_history_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = no_history_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function pushbutton1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function pushbutton2_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function figure1_KeyPressFcn(hObject, eventdata, handles)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = no_history(varargin)</a>
+0002 <span class="comment">% NO_HISTORY M-file for no_history.fig</span>
+0003 <span class="comment">%      NO_HISTORY by itself, creates a new NO_HISTORY or raises the</span>
+0004 <span class="comment">%      existing singleton*.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%      H = NO_HISTORY returns the handle to a new NO_HISTORY or the handle to</span>
+0007 <span class="comment">%      the existing singleton*.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%      NO_HISTORY('CALLBACK',hObject,eventData,handles,...) calls the local</span>
+0010 <span class="comment">%      function named CALLBACK in NO_HISTORY.M with the given input arguments.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      NO_HISTORY('Property','Value',...) creates a new NO_HISTORY or raises the</span>
+0013 <span class="comment">%      existing singleton*.  Starting from the left, property value pairs are</span>
+0014 <span class="comment">%      applied to the GUI before no_history_OpeningFcn gets called.  An</span>
+0015 <span class="comment">%      unrecognized property name or invalid value makes property application</span>
+0016 <span class="comment">%      stop.  All inputs are passed to no_history_OpeningFcn via varargin.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one</span>
+0019 <span class="comment">%      instance to run (singleton)&quot;.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also: GUIDE, GUIDATA, GUIHANDLES</span>
+0022 
+0023 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0024 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0025 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0026 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0027 <span class="comment">% maintain the name of the original author.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0030 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0031 
+0032 <span class="comment">% Edit the above text to modify the response to help no_history</span>
+0033 
+0034 <span class="comment">% Last Modified by GUIDE v2.5 16-Sep-2008 15:57:20</span>
+0035 
+0036 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0037 gui_Singleton = 1;
+0038 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0039                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0040                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction no_history_OpeningFcn(hObject, eventdata, handles, varargin)">no_history_OpeningFcn</a>, <span class="keyword">...</span>
+0041                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = no_history_OutputFcn(hObject, eventdata, handles)">no_history_OutputFcn</a>, <span class="keyword">...</span>
+0042                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0043                    <span class="string">'gui_Callback'</span>,   []);
+0044 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0045     gui_State.gui_Callback = str2func(varargin{1});
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">if</span> nargout
+0049     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0050 <span class="keyword">else</span>
+0051     gui_mainfcn(gui_State, varargin{:});
+0052 <span class="keyword">end</span>
+0053 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0054 
+0055 <span class="comment">% --- Executes just before no_history is made visible.</span>
+0056 <a name="_sub1" href="#_subfunctions" class="code">function no_history_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0057 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0058 <span class="comment">% hObject    handle to figure</span>
+0059 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0060 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0061 <span class="comment">% varargin   command line arguments to no_history (see VARARGIN)</span>
+0062 
+0063 <span class="comment">% Choose default command line output for no_history</span>
+0064 handles.output = <span class="string">'Yes'</span>;
+0065 
+0066 <span class="comment">% Update handles structure</span>
+0067 guidata(hObject, handles);
+0068 
+0069 <span class="comment">% Insert custom Title and Text if specified by the user</span>
+0070 <span class="comment">% Hint: when choosing keywords, be sure they are not easily confused</span>
+0071 <span class="comment">% with existing figure properties.  See the output of set(figure) for</span>
+0072 <span class="comment">% a list of figure properties.</span>
+0073 <span class="keyword">if</span>(nargin &gt; 3)
+0074     <span class="keyword">for</span> index = 1:2:(nargin-3),
+0075         <span class="keyword">if</span> nargin-3==index, <span class="keyword">break</span>, <span class="keyword">end</span>
+0076         <span class="keyword">switch</span> lower(varargin{index})
+0077          <span class="keyword">case</span> <span class="string">'title'</span>
+0078           <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject, <span class="string">'Name'</span>, varargin{index+1});
+0079          <span class="keyword">case</span> <span class="string">'string'</span>
+0080           <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.text1, <span class="string">'String'</span>, varargin{index+1});
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span>
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% Determine the position of the dialog - centered on the callback figure</span>
+0086 <span class="comment">% if available, else, centered on the screen</span>
+0087 FigPos=<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'DefaultFigurePosition'</span>);
+0088 OldUnits = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject, <span class="string">'Units'</span>);
+0089 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject, <span class="string">'Units'</span>, <span class="string">'pixels'</span>);
+0090 OldPos = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'Position'</span>);
+0091 FigWidth = OldPos(3);
+0092 FigHeight = OldPos(4);
+0093 <span class="keyword">if</span> isempty(gcbf)
+0094     ScreenUnits=<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'Units'</span>);
+0095     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0096     ScreenSize=<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'ScreenSize'</span>);
+0097     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0,<span class="string">'Units'</span>,ScreenUnits);
+0098 
+0099     FigPos(1)=1/2*(ScreenSize(3)-FigWidth);
+0100     FigPos(2)=2/3*(ScreenSize(4)-FigHeight);
+0101 <span class="keyword">else</span>
+0102     GCBFOldUnits = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcbf,<span class="string">'Units'</span>);
+0103     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcbf,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0104     GCBFPos = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcbf,<span class="string">'Position'</span>);
+0105     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcbf,<span class="string">'Units'</span>,GCBFOldUnits);
+0106     FigPos(1:2) = [(GCBFPos(1) + GCBFPos(3) / 2) - FigWidth / 2, <span class="keyword">...</span>
+0107                    (GCBFPos(2) + GCBFPos(4) / 2) - FigHeight / 2];
+0108 <span class="keyword">end</span>
+0109 FigPos(3:4)=[FigWidth FigHeight];
+0110 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject, <span class="string">'Position'</span>, FigPos);
+0111 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject, <span class="string">'Units'</span>, OldUnits);
+0112 
+0113 <span class="comment">% Show a question icon from dialogicons.mat - variables questIconData</span>
+0114 <span class="comment">% and questIconMap</span>
+0115 load dialogicons.mat
+0116 
+0117 IconData=questIconData;
+0118 questIconMap(256,:) = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.figure1, <span class="string">'Color'</span>);
+0119 IconCMap=questIconMap;
+0120 
+0121 Img=image(IconData, <span class="string">'Parent'</span>, handles.axes1);
+0122 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.figure1, <span class="string">'Colormap'</span>, IconCMap);
+0123 
+0124 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.axes1, <span class="keyword">...</span>
+0125     <span class="string">'Visible'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+0126     <span class="string">'YDir'</span>   , <span class="string">'reverse'</span>       , <span class="keyword">...</span>
+0127     <span class="string">'XLim'</span>   , <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(Img,<span class="string">'XData'</span>), <span class="keyword">...</span>
+0128     <span class="string">'YLim'</span>   , <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(Img,<span class="string">'YData'</span>)  <span class="keyword">...</span>
+0129     );
+0130 
+0131 <span class="comment">% Make the GUI modal</span>
+0132 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.figure1,<span class="string">'WindowStyle'</span>,<span class="string">'modal'</span>)
+0133 
+0134 <span class="comment">% UIWAIT makes no_history wait for user response (see UIRESUME)</span>
+0135 uiwait(handles.figure1);
+0136 
+0137 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0138 <a name="_sub2" href="#_subfunctions" class="code">function varargout = no_history_OutputFcn(hObject, eventdata, handles)</a>
+0139 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0140 <span class="comment">% hObject    handle to figure</span>
+0141 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0142 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0143 
+0144 <span class="comment">% Get default command line output from handles structure</span>
+0145 varargout{1} = handles.output;
+0146 
+0147 <span class="comment">% The figure can be deleted now</span>
+0148 <a href="../../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(handles.figure1);
+0149 
+0150 <span class="comment">% --- Executes on button press in pushbutton1.</span>
+0151 <a name="_sub3" href="#_subfunctions" class="code">function pushbutton1_Callback(hObject, eventdata, handles)</a>
+0152 <span class="comment">% hObject    handle to pushbutton1 (see GCBO)</span>
+0153 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0154 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0155 
+0156 handles.output = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'String'</span>);
+0157 
+0158 <span class="comment">% Update handles structure</span>
+0159 guidata(hObject, handles);
+0160 
+0161 <span class="comment">% Use UIRESUME instead of delete because the OutputFcn needs</span>
+0162 <span class="comment">% to get the updated handles structure.</span>
+0163 uiresume(handles.figure1);
+0164 
+0165 <span class="comment">% --- Executes on button press in pushbutton2.</span>
+0166 <a name="_sub4" href="#_subfunctions" class="code">function pushbutton2_Callback(hObject, eventdata, handles)</a>
+0167 <span class="comment">% hObject    handle to pushbutton2 (see GCBO)</span>
+0168 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0169 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0170 
+0171 handles.output = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'String'</span>);
+0172 
+0173 <span class="comment">% Update handles structure</span>
+0174 guidata(hObject, handles);
+0175 
+0176 <span class="comment">% Use UIRESUME instead of delete because the OutputFcn needs</span>
+0177 <span class="comment">% to get the updated handles structure.</span>
+0178 uiresume(handles.figure1);
+0179 
+0180 
+0181 <span class="comment">% --- Executes when user attempts to close figure1.</span>
+0182 <a name="_sub5" href="#_subfunctions" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a>
+0183 <span class="comment">% hObject    handle to figure1 (see GCBO)</span>
+0184 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0185 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0186 
+0187 <span class="keyword">if</span> isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.figure1, <span class="string">'waitstatus'</span>), <span class="string">'waiting'</span>)
+0188     <span class="comment">% The GUI is still in UIWAIT, us UIRESUME</span>
+0189     uiresume(handles.figure1);
+0190 <span class="keyword">else</span>
+0191     <span class="comment">% The GUI is no longer waiting, just close it</span>
+0192     <a href="../../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(handles.figure1);
+0193 <span class="keyword">end</span>
+0194 
+0195 
+0196 <span class="comment">% --- Executes on key press over figure1 with no controls selected.</span>
+0197 <a name="_sub6" href="#_subfunctions" class="code">function figure1_KeyPressFcn(hObject, eventdata, handles)</a>
+0198 <span class="comment">% hObject    handle to figure1 (see GCBO)</span>
+0199 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0200 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0201 
+0202 <span class="comment">% Check for &quot;enter&quot; or &quot;escape&quot;</span>
+0203 <span class="keyword">if</span> isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'CurrentKey'</span>),<span class="string">'escape'</span>)
+0204     <span class="comment">% User said no by hitting escape</span>
+0205     handles.output = <span class="string">'No'</span>;
+0206     
+0207     <span class="comment">% Update handles structure</span>
+0208     guidata(hObject, handles);
+0209     
+0210     uiresume(handles.figure1);
+0211 <span class="keyword">end</span>    
+0212     
+0213 <span class="keyword">if</span> isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'CurrentKey'</span>),<span class="string">'return'</span>)
+0214     uiresume(handles.figure1);
+0215 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

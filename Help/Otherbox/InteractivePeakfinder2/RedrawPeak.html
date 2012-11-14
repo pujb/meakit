@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RedrawPeak</title>
+  <meta name="keywords" content="RedrawPeak">
+  <meta name="description" content="Redraws graph for FindPeakSliders when Peak slider is moved.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>RedrawPeak
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Redraws graph for FindPeakSliders when Peak slider is moved.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Redraws graph for FindPeakSliders when Peak slider is moved.
+ Tom O'Haver (toh@umd.edu). Version 2 April, 2009</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>	function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)</li><li><a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>	gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</li><li><a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>	Returns the index and the value of the element of vector x that is closest to val</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="AmpTSlider.html" class="code" title="function AmpTSlider(n,h)">AmpTSlider</a>	Changes AmpThreshold when the AmpThreshold slider is moved.</li><li><a href="BGSlider.html" class="code" title="function BGSlider(n,h)">BGSlider</a>	Called when the BG slider is clicked.</li><li><a href="FitSlider.html" class="code" title="function FitSlider(n,h)">FitSlider</a>	Changes FitWidth when the FitWidth slider is moved.</li><li><a href="PeakSlider.html" class="code" title="function PeakSlider(n,h)">PeakSlider</a>	Changes PeakNumber when the Peak slider is moved.</li><li><a href="SlopeTSlider.html" class="code" title="function SlopeTSlider(n,h)">SlopeTSlider</a>	Changes SlopeThreshold when the SlopeThreshold slider is moved.</li><li><a href="SmoothSlider.html" class="code" title="function SmoothSlider(n,h)">SmoothSlider</a>	Changes SmoothWidth when the SmoothWidth slider is moved.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% Redraws graph for FindPeakSliders when Peak slider is moved.</span>
+0002 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 2 April, 2009</span>
+0003 warning off MATLAB:divideByZero
+0004 warning off MATLAB:polyfit:PolyNotUnique
+0005 <span class="keyword">global</span> x
+0006 <span class="keyword">global</span> y
+0007 <span class="keyword">global</span> SlopeThreshold 
+0008 <span class="keyword">global</span> AmpThreshold  
+0009 <span class="keyword">global</span> SmoothWidth
+0010 <span class="keyword">global</span> FitWidth
+0011 <span class="keyword">global</span> PeakNumber
+0012 <span class="keyword">global</span> P
+0013 axes(h);
+0014 <span class="keyword">if</span> PeakNumber&gt;max(P(:,1)),
+0015     PeakNumber=max(P(:,1));
+0016 <span class="keyword">end</span>
+0017 P=<a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth);
+0018 FitWidth=round(real(FitWidth));
+0019 n1=<a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>(x,P(PeakNumber,2))-FitWidth;
+0020 <span class="keyword">if</span> n1&lt;1, n1=1;,<span class="keyword">end</span>
+0021 n2=<a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>(x,P(PeakNumber,2))+FitWidth;
+0022 <span class="keyword">if</span> n2&gt;length(y), n2=length(y);,<span class="keyword">end</span>
+0023 PeakRange=[n1:n2];
+0024 plot(x(PeakRange),y(PeakRange),<span class="string">'m.'</span>);hold on
+0025 n1=<a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>(x,P(PeakNumber,2))-round(FitWidth/2);
+0026 n2=<a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>(x,P(PeakNumber,2))+round(FitWidth/2);
+0027 <span class="keyword">if</span> n1&lt;1, n1=1;,<span class="keyword">end</span>
+0028 <span class="keyword">if</span> n2&gt;length(y), n2=length(y);,<span class="keyword">end</span>
+0029 PlotRange=[n1:n2];
+0030 xx=x(PlotRange);
+0031 yy=y(PlotRange);
+0032 [coef,S,MU]=polyfit(xx,log(abs(yy)),2);  <span class="comment">% Fit parabola to log10 of sub-group</span>
+0033 c1=coef(3);c2=coef(2);c3=coef(1);
+0034 PeakX=-((MU(2).*c2/(2*c3))-MU(1));   <span class="comment">% Compute peak position and height or fitted parabola</span>
+0035 PeakY=exp(c1-c3*(c2/(2*c3))^2);
+0036 MeasuredWidth=norm(MU(2).*2.35703/(sqrt(2)*sqrt(-1*c3)));
+0037 plot(xx,PeakY.*<a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>(xx,PeakX,MeasuredWidth));
+0038 hold off
+0039 title([<span class="string">'Peak number '</span> num2str(PeakNumber) <span class="string">'    Height = '</span> num2str(PeakY) <span class="string">'    Position ='</span> num2str(round(100*PeakX)/100) <span class="string">'    Width ='</span> num2str(round(10*MeasuredWidth)/10)])
+0040 text(P(PeakNumber,2),0.9.*P(PeakNumber,3),num2str(PeakNumber))
+0041 xlabel([<span class="string">'SlopeT = '</span> num2str(SlopeThreshold) <span class="string">'   AmpT = '</span> num2str(AmpThreshold) <span class="string">'   SmoothWidth = '</span> num2str(SmoothWidth) <span class="string">'   FitWidth = '</span> num2str(FitWidth) ])
+0042 <span class="comment">%axis([x(PeakRange(1)) x(length(PeakRange)) min(y) max(y)]); % Update plot</span>
+0043 currentaxis=axis;
+0044 text(currentaxis(1),0.99.*currentaxis(4),[<span class="string">'Set peak slider to zero to see all peaks'</span>])</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

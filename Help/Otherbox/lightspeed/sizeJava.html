@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sizeJava</title>
+  <meta name="keywords" content="sizeJava">
+  <meta name="description" content="sizeJava(jv) returns the size of a java array, in a manner corresponding">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>sizeJava
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>sizeJava(jv) returns the size of a java array, in a manner corresponding</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function sz = sizeJava(jv) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> sizeJava(jv) returns the size of a java array, in a manner corresponding
+ to 'size' on matlab arrays.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>	fromJava    Convert from Java to Matlab.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function sz = sizeJava(jv)</a>
+0002 <span class="comment">% sizeJava(jv) returns the size of a java array, in a manner corresponding</span>
+0003 <span class="comment">% to 'size' on matlab arrays.</span>
+0004 
+0005 <span class="comment">% Written by Tom Minka</span>
+0006 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0007 
+0008 sz(1) = size(jv,1);
+0009 sz(2) = size(jv(1,:),1);
+0010 <span class="keyword">if</span> sz(2) == 0
+0011   <span class="comment">% workaround matlab's bug</span>
+0012   sz(2) = 1;
+0013 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randgamma</title>
+  <meta name="keywords" content="randgamma">
+  <meta name="description" content="RANDGAMMA   Sample from Gamma distribution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>randgamma
+&nbsp;&nbsp;<img src="../../c.png" alt="Windows 32" border="0" title="Windows 32"></h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RANDGAMMA   Sample from Gamma distribution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = randgamma(a) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> RANDGAMMA   Sample from Gamma distribution
+ 
+ X = RANDGAMMA(A) returns a matrix, the same size as A, where X(i,j)
+ is a sample from a Gamma(A(i,j)) distribution.
+
+ Gamma(a) has density function p(x) = x^(a-1)*exp(-x)/gamma(a).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="install_lightspeed.html" class="code" title="">install_lightspeed</a>	Install_lightspeed</li><li><a href="randbeta.html" class="code" title="function x = randbeta(a,b)">randbeta</a>	RANDBETA   Sample from Beta distribution</li><li><a href="randwishart.html" class="code" title="function cholX = randwishart(a,d)">randwishart</a>	RANDWISHART    Sample from Wishart distribution.</li><li><a href="../../Otherbox/lightspeed/tests/test_randgamma.html" class="code" title="">test_randgamma</a>	</li><li><a href="../../Otherbox/lightspeed/tests/test_randomseed.html" class="code" title="">test_randomseed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function x = randgamma(a)</a>
+0002 <span class="comment">% RANDGAMMA   Sample from Gamma distribution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% X = RANDGAMMA(A) returns a matrix, the same size as A, where X(i,j)</span>
+0005 <span class="comment">% is a sample from a Gamma(A(i,j)) distribution.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Gamma(a) has density function p(x) = x^(a-1)*exp(-x)/gamma(a).</span>
+0008 
+0009 <span class="comment">% This function is implemented in MEX (randgamma.c)</span>
+0010 error(<span class="string">'You must run install_lightspeed first'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

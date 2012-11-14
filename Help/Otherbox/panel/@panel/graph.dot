@@ -1,0 +1,37 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  clear -> delete;
+  delete -> delete;
+  display -> subsref;
+  export -> render;
+  export -> subsasgn;
+  export -> subsref;
+  pack -> pack;
+  pack -> subsasgn;
+  pack -> subsref;
+  panel -> delete;
+  panel -> pack;
+  panel -> panel;
+  render -> subsref;
+  select -> render;
+  select -> subsref;
+  subsasgn -> render;
+  subsasgn -> subsasgn;
+  subsasgn -> subsref;
+  subsref -> export;
+  subsref -> pack;
+  subsref -> render;
+  subsref -> select;
+  subsref -> subsref;
+
+  clear [URL="clear.html"];
+  delete [URL="delete.html"];
+  display [URL="display.html"];
+  export [URL="export.html"];
+  pack [URL="pack.html"];
+  panel [URL="panel.html"];
+  render [URL="render.html"];
+  select [URL="select.html"];
+  subsasgn [URL="subsasgn.html"];
+  subsref [URL="subsref.html"];
+}

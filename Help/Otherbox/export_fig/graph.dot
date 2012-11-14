@@ -1,0 +1,26 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  eps2pdf -> ghostscript;
+  export_fig -> eps2pdf;
+  export_fig -> isolate_axes;
+  export_fig -> pdf2eps;
+  export_fig -> print2array;
+  export_fig -> print2eps;
+  ghostscript -> user_string;
+  pdf2eps -> pdftops;
+  pdftops -> user_string;
+  print2array -> ghostscript;
+  print2array -> print2eps;
+  print2eps -> fix_lines;
+
+  eps2pdf [URL="eps2pdf.html"];
+  export_fig [URL="export_fig.html"];
+  fix_lines [URL="fix_lines.html"];
+  ghostscript [URL="ghostscript.html"];
+  isolate_axes [URL="isolate_axes.html"];
+  pdf2eps [URL="pdf2eps.html"];
+  pdftops [URL="pdftops.html"];
+  print2array [URL="print2array.html"];
+  print2eps [URL="print2eps.html"];
+  user_string [URL="user_string.html"];
+}

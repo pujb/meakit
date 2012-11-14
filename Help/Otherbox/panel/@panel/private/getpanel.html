@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getpanel</title>
+  <meta name="keywords" content="getpanel">
+  <meta name="description" content="get a panel object from the panel reference">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html panel --><!-- ../menu.html @panel --><!-- menu.html private -->
+<h1>getpanel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>get a panel object from the panel reference</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [P, panelroot] = getpanel(p) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> get a panel object from the panel reference</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li><li><a href="../../../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li><li><a href="../../../../Otherbox/panel/@panel/display.html" class="code" title="function display(p)">display</a>	disp([10 'panel: (' num2str(p.fig) ', ' int2str(p.id) ')' 10])</li><li><a href="../../../../Otherbox/panel/@panel/export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="../../../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="../../../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li><li><a href="../../../../Otherbox/panel/@panel/subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [P, panelroot] = getpanel(p)</a>
+0002 
+0003 <span class="comment">% get a panel object from the panel reference</span>
+0004 u = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0005 <span class="keyword">if</span> ~<a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(u, <span class="string">'panel'</span>)
+0006     error([<span class="string">'panel reference no longer valid -  &quot;'</span> int2str(p.id) <span class="string">'&quot; not found in figure &quot;'</span> num2str(p.fig) <span class="string">'&quot; (was associated figure closed/reopened?)'</span>])
+0007 <span class="keyword">end</span>
+0008 
+0009 <span class="comment">% extract</span>
+0010 <span class="keyword">if</span> length(u.panel.panels) &gt;= p.id
+0011     P = u.panel.panels{p.id};
+0012     <span class="keyword">if</span> isempty(P)
+0013         error(<span class="string">'panel no longer exists - this is a hanging reference'</span>)
+0014     <span class="keyword">end</span>
+0015     panelroot = u.panel.panelroot;
+0016     <span class="keyword">return</span>
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="comment">% else error</span>
+0020 error([<span class="string">'panel &quot;'</span> int2str(p.id) <span class="string">'&quot; not found in figure &quot;'</span> num2str(p.fig) <span class="string">'&quot;'</span>])</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_convert_dp2ms</title>
+  <meta name="keywords" content="util_convert_dp2ms">
+  <meta name="description" content="UTIL_CONVERT_DP2MS 工具函数：计算给定数据点所涵盖的时间长度">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_convert_dp2ms
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CONVERT_DP2MS 工具函数：计算给定数据点所涵盖的时间长度</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ timems ] = util_convert_dp2ms( number_of_datapoints, MicrosecondsPerTick ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CONVERT_DP2MS 工具函数：计算给定数据点所涵盖的时间长度
+   输入参数：
+       number_of_datapoints，数据点的个数
+       MicrosecondsPerTick，每个Index位涵盖的时间。例如，25000 Hz采样，则每个Index是40 us
+   输出：
+       timems，时间长度
+
+   蒲江波 2010年5月21日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ timems ] = util_convert_dp2ms( number_of_datapoints, MicrosecondsPerTick )</a>
+0002 <span class="comment">%UTIL_CONVERT_DP2MS 工具函数：计算给定数据点所涵盖的时间长度</span>
+0003 <span class="comment">%   输入参数：</span>
+0004 <span class="comment">%       number_of_datapoints，数据点的个数</span>
+0005 <span class="comment">%       MicrosecondsPerTick，每个Index位涵盖的时间。例如，25000 Hz采样，则每个Index是40 us</span>
+0006 <span class="comment">%   输出：</span>
+0007 <span class="comment">%       timems，时间长度</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   蒲江波 2010年5月21日</span>
+0010 
+0011 timems = MicrosecondsPerTick * number_of_datapoints / 1000;
+0012 
+0013 <span class="keyword">end</span>
+0014</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

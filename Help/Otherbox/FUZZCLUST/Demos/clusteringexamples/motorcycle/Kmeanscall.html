@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Kmeanscall</title>
+  <meta name="keywords" content="Kmeanscall">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../../menu.html FUZZCLUST --><!-- # Demos --><!-- # clusteringexamples --><!-- menu.html motorcycle -->
+<h1>Kmeanscall
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>	validation of the clustering</li><li><a href="../../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../../brain.png)"><pre>0001 close all
+0002 <a href="../../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0003 path(path,<span class="string">'..\..\..\FUZZCLUST'</span>)
+0004 <span class="comment">%the data</span>
+0005 load motorcycle.txt
+0006 data.X = motorcycle(:,[1 2]);
+0007 
+0008 [N,n]=size(data.X);
+0009 
+0010 <span class="comment">%data normalization</span>
+0011 data = <a href="../../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>);
+0012 plot(data.X(:,1),data.X(:,2),<span class="string">'.'</span>)
+0013 hold on
+0014 <span class="comment">%parameters</span>
+0015 param.c=4;
+0016 param.vis=1;
+0017 param.val=1;
+0018 <span class="comment">%clustering</span>
+0019 result=kmeans(data,param);
+0020 <span class="comment">%validation</span>
+0021 result = <a href="../../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>(result,data,param);
+0022 result.validity</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

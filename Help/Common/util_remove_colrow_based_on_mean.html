@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_remove_colrow_based_on_mean</title>
+  <meta name="keywords" content="util_remove_colrow_based_on_mean">
+  <meta name="description" content="UTIL_REMOVE_COLROW_BASED_ON_MEAN Remove the column / row of the matrix by">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_remove_colrow_based_on_mean
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_REMOVE_COLROW_BASED_ON_MEAN Remove the column / row of the matrix by</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [result] = util_remove_colrow_based_on_mean(matrix, threshold, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_REMOVE_COLROW_BASED_ON_MEAN Remove the column / row of the matrix by
+a threshold.
+   Averaging along each column / row, removing the one which mean &lt; threshold
+   Input:
+           matrix, threshold.
+           method: 'col'[default] / 'row'
+
+   Created on Dec/12/2008 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2009-06-18  Change name and add comments
+       PJB#2010-08-18  Add 'method'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [result] = util_remove_colrow_based_on_mean(matrix, threshold, varargin)</a>
+0002 <span class="comment">%UTIL_REMOVE_COLROW_BASED_ON_MEAN Remove the column / row of the matrix by</span>
+0003 <span class="comment">%a threshold.</span>
+0004 <span class="comment">%   Averaging along each column / row, removing the one which mean &lt; threshold</span>
+0005 <span class="comment">%   Input:</span>
+0006 <span class="comment">%           matrix, threshold.</span>
+0007 <span class="comment">%           method: 'col'[default] / 'row'</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Created on Dec/12/2008 By Pu Jiangbo</span>
+0010 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   $Revision:</span>
+0013 <span class="comment">%       PJB#2009-06-18  Change name and add comments</span>
+0014 <span class="comment">%       PJB#2010-08-18  Add 'method'</span>
+0015 
+0016 <span class="comment">% Analyze parameter</span>
+0017 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0018 
+0019 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0020     method = <span class="string">'col'</span>;
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">if</span> strcmpi(method, <span class="string">'col'</span>)
+0024     <span class="comment">% MEAN OF EACH COLUMN</span>
+0025     mean_val = mean(matrix, 1);
+0026     matrix(:, mean_val &lt; threshold | isnan(mean_val) | isempty(mean_val)) = [];
+0027 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'row'</span>)
+0028     <span class="comment">% MEAN OF EACH ROW</span>
+0029     mean_val = mean(matrix, 2);
+0030     matrix(mean_val &lt; threshold | isnan(mean_val) | isempty(mean_val), :) = [];
+0031 <span class="keyword">else</span>
+0032     error(<span class="string">'Not supported yet.'</span>);
+0033 <span class="keyword">end</span>
+0034     
+0035 result = matrix;
+0036 
+0037 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

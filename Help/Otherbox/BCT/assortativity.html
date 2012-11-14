@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of assortativity</title>
+  <meta name="keywords" content="assortativity">
+  <meta name="description" content="ASSORTATIVITY      Assortativity coefficient">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>assortativity
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ASSORTATIVITY      Assortativity coefficient</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function   r = assortativity(CIJ,flag) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">ASSORTATIVITY      Assortativity coefficient
+
+   r = assortativity(CIJ,flag);
+
+   The assortativity coefficient is a correlation coefficient between the 
+   degrees of all nodes on two opposite ends of a link. A positive 
+   assortativity coefficient indicates that nodes tend to link to other 
+   nodes with the same or similar degree.
+
+   Inputs:     CIJ,        binary directed/undirected connection matrix
+               flag,       1 = directed graph; 0 = non-directed graph
+
+   Outputs:    r,          assortativity
+
+   Notes: The function accepts weighted networks, but all connection
+   weights are ignored. The main diagonal should be empty.
+
+   Reference:  Newman (2002) Phys Rev Lett 89:208701.
+
+
+   Olaf Sporns, Indiana University, 2007/2008
+   Vassilis Tsiaras, University of Crete, 2009</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="degrees_dir.html" class="code" title="function [id,od,deg] = degrees_dir(CIJ)">degrees_dir</a>	DEGREES_DIR        Indegree and outdegree</li><li><a href="degrees_und.html" class="code" title="function [deg] = degrees_und(CIJ)">degrees_und</a>	DEGREES_UND        Degree</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_get_assortativity.html" class="code" title="function A = util_get_assortativity( network_connection_matrix, varargin )">util_get_assortativity</a>	UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function   r = assortativity(CIJ,flag)</a>
+0002 <span class="comment">%ASSORTATIVITY      Assortativity coefficient</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   r = assortativity(CIJ,flag);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   The assortativity coefficient is a correlation coefficient between the</span>
+0007 <span class="comment">%   degrees of all nodes on two opposite ends of a link. A positive</span>
+0008 <span class="comment">%   assortativity coefficient indicates that nodes tend to link to other</span>
+0009 <span class="comment">%   nodes with the same or similar degree.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Inputs:     CIJ,        binary directed/undirected connection matrix</span>
+0012 <span class="comment">%               flag,       1 = directed graph; 0 = non-directed graph</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Outputs:    r,          assortativity</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Notes: The function accepts weighted networks, but all connection</span>
+0017 <span class="comment">%   weights are ignored. The main diagonal should be empty.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Reference:  Newman (2002) Phys Rev Lett 89:208701.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Olaf Sporns, Indiana University, 2007/2008</span>
+0023 <span class="comment">%   Vassilis Tsiaras, University of Crete, 2009</span>
+0024 
+0025 <span class="keyword">if</span> (flag==0)
+0026     [deg] = <a href="degrees_und.html" class="code" title="function [deg] = degrees_und(CIJ)">degrees_und</a>(CIJ);
+0027     [i,j] = find(triu(CIJ,1)&gt;0);
+0028     K = length(i);
+0029     <span class="keyword">for</span> k=1:K
+0030         degi(k) = deg(i(k));
+0031         degj(k) = deg(j(k));
+0032     <span class="keyword">end</span>;
+0033 <span class="keyword">end</span>;
+0034 <span class="keyword">if</span> (flag==1)
+0035     [id,od,deg] = <a href="degrees_dir.html" class="code" title="function [id,od,deg] = degrees_dir(CIJ)">degrees_dir</a>(CIJ);
+0036     [i,j] = find(CIJ&gt;0);
+0037     K = length(i);
+0038     <span class="keyword">for</span> k=1:K
+0039         degi(k) = deg(i(k));
+0040         degj(k) = deg(j(k));
+0041     <span class="keyword">end</span>;
+0042 <span class="keyword">end</span>;
+0043 
+0044 <span class="comment">% compute assortativity</span>
+0045 r = (sum(degi.*degj)/K - (sum(0.5*(degi+degj))/K)^2)/(sum(0.5*(degi.^2+degj.^2))/K - (sum(0.5*(degi+degj))/K)^2);
+0046</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of out_of_sample</title>
+  <meta name="keywords" content="out_of_sample">
+  <meta name="description" content="TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html drtoolbox -->
+<h1>out_of_sample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function t_point = out_of_sample(point, mapping) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints
+
+   t_points = out_of_sample(points, mapping)
+
+ Performs out-of-sample extension of the new datapoints in points. The 
+ information necessary for the out-of-sample extension is contained in 
+ mapping (this struct can be obtained from COMPUTE_MAPPING).
+ The function returns the coordinates of the transformed points in t_points.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li><li><a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li><li><a href="../../Otherbox/drtoolbox/techniques/dijkstra.html" class="code" title="function D = dijkstra( G , S )">dijkstra</a>	--------------------------------------------------------------------</li><li><a href="../../Otherbox/drtoolbox/techniques/gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>	GRAM Computes the Gram-matrix of data points X using a kernel function</li><li><a href="../../Otherbox/drtoolbox/techniques/infermfa.html" class="code" title="function [R, Z] = infermfa(X, LX, MX, PX)">infermfa</a>	INFERMFA Infer MoFA using information from EM algorithm in MPPCA</li><li><a href="../../Otherbox/drtoolbox/techniques/run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>	RUN_DATA_THROUGH_AUTOENC Summary of this function goes here</li><li><a href="../../Otherbox/drtoolbox/techniques/welcome.html" class="code" title="function welcome">welcome</a>	WELCOME Displays DR Toolbox version information</li><li><a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Contents.html" class="code" title="">Contents</a>	</li><li><a href="out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function t_point = out_of_sample(point, mapping)</a>
+0002 <span class="comment">%TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   t_points = out_of_sample(points, mapping)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Performs out-of-sample extension of the new datapoints in points. The</span>
+0007 <span class="comment">% information necessary for the out-of-sample extension is contained in</span>
+0008 <span class="comment">% mapping (this struct can be obtained from COMPUTE_MAPPING).</span>
+0009 <span class="comment">% The function returns the coordinates of the transformed points in t_points.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023     <a href="../../Otherbox/drtoolbox/techniques/welcome.html" class="code" title="function welcome">welcome</a>;
+0024 
+0025     <span class="comment">% Handle PRTools dataset</span>
+0026     <span class="keyword">if</span> strcmp(class(point), <span class="string">'dataset'</span>)
+0027         prtools = 1;
+0028         ppoint = point;
+0029         point = point.data;
+0030     <span class="keyword">else</span> 
+0031         prtools = 0;
+0032     <span class="keyword">end</span>
+0033 
+0034     <span class="keyword">switch</span> mapping.name
+0035         
+0036         <span class="comment">% Linear mappings</span>
+0037         <span class="keyword">case</span> {<span class="string">'PCA'</span>, <span class="string">'LDA'</span>, <span class="string">'LPP'</span>, <span class="string">'NPE'</span>, <span class="string">'LLTSA'</span>, <span class="string">'SPCA'</span>, <span class="string">'PPCA'</span>, <span class="string">'FA'</span>, <span class="string">'NCA'</span>, <span class="string">'MCML'</span>, <span class="string">'LMNN'</span>}
+0038             t_point = bsxfun(@minus, point, mapping.mean) * mapping.M;
+0039             
+0040         <span class="comment">% Kernel PCA mapping</span>
+0041         <span class="keyword">case</span> <span class="string">'KernelPCA'</span>
+0042             <span class="comment">% Compute and center kernel matrix</span>
+0043             K = <a href="../../Otherbox/drtoolbox/techniques/gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>(mapping.X, point, mapping.kernel, mapping.param1, mapping.param2);
+0044             J = repmat(mapping.column_sums', [1 size(K, 2)]);
+0045             K = K - repmat(sum(K, 1), [size(K, 1) 1]) - J + repmat(mapping.total_sum, [size(K, 1) size(K, 2)]);
+0046             
+0047             <span class="comment">% Compute transformed points</span>
+0048             t_point = mapping.invsqrtL * mapping.V' * K;
+0049             t_point = t_point';            
+0050                   
+0051         <span class="comment">% Neural network mapping (with biases)</span>
+0052         <span class="keyword">case</span> <span class="string">'AutoEncoderEA'</span>
+0053             <span class="comment">% Make zero-mean, unit variance</span>
+0054             point = bsxfun(@minus,   point, mapping.mean);
+0055             point = bsxfun(@rdivide, point, mapping.var);
+0056             
+0057             <span class="comment">% Run through autoencoder</span>
+0058             point   = [point                                      ones(size(point, 1), 1)]; 
+0059             w1probs = [1 ./ (1 + exp(-point   * mapping.w1))      ones(size(point, 1), 1)];
+0060             w2probs = [1 ./ (1 + exp(-w1probs * mapping.w2))      ones(size(point, 1), 1)];
+0061             w3probs = [1 ./ (1 + exp(-w2probs * mapping.w3))      ones(size(point, 1), 1)];
+0062             t_point = w3probs * mapping.w4;
+0063             
+0064         <span class="keyword">case</span> <span class="string">'Autoencoder'</span>
+0065             point = point -  mapping.min;
+0066             point = point ./ mapping.max;
+0067             t_point = <a href="../../Otherbox/drtoolbox/techniques/run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>(mapping.network, point);
+0068             
+0069         <span class="keyword">case</span> {<span class="string">'Isomap'</span>, <span class="string">'LandmarkIsomap'</span>}
+0070             
+0071             <span class="comment">% Precomputations for speed</span>
+0072             <span class="keyword">if</span> strcmp(mapping.name, <span class="string">'Isomap'</span>)
+0073                 invVal = inv(diag(mapping.val));
+0074                 [val, index] = sort(mapping.val, <span class="string">'descend'</span>);
+0075                 mapping.landmarks = 1:size(mapping.X, 1);
+0076             <span class="keyword">else</span>
+0077                 val = mapping.beta .^ (1 / 2);
+0078                 [val, index] = sort(real(diag(val)), <span class="string">'descend'</span>);
+0079             <span class="keyword">end</span>
+0080             val = val(1:mapping.no_dims);
+0081             meanD1 = mean(mapping.DD .^ 2, 1);
+0082             meanD2 = mean(mean(mapping.DD .^ 2));
+0083             
+0084             <span class="comment">% Process all points (notice that in this implementation</span>
+0085             <span class="comment">% out-of-sample points are not used as landmark points)</span>
+0086             points = point;
+0087             t_point = repmat(0, [size(point, 1) mapping.no_dims]);
+0088             <span class="keyword">for</span> i=1:size(points, 1)
+0089                 
+0090                 <span class="comment">% Compute distance of new sample to training points</span>
+0091                 point = points(i,:);
+0092                 tD = <a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(point', mapping.X');
+0093                 [tmp, ind] = sort(tD); 
+0094                 tD(ind(mapping.k + 2:end)) = 0;
+0095                 tD = sparse(tD);
+0096                 tD = <a href="../../Otherbox/drtoolbox/techniques/dijkstra.html" class="code" title="function D = dijkstra( G , S )">dijkstra</a>([0 tD; tD' mapping.D], 1);
+0097                 tD = tD(mapping.landmarks + 1) .^ 2;
+0098 
+0099                 <span class="comment">% Compute point embedding</span>
+0100                 subB = -.5 * (bsxfun(@minus, tD, mean(tD, 2)) - meanD1 - meanD2);
+0101                 <span class="keyword">if</span> strcmp(mapping.name, <span class="string">'LandmarkIsomap'</span>)
+0102                     <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = subB * mapping.alpha * mapping.invVal;
+0103                     <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(:,index(1:mapping.no_dims));
+0104                 <span class="keyword">else</span>
+0105                     <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = subB * mapping.vec * invVal;
+0106                     <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(:,index(1:mapping.no_dims));
+0107                 <span class="keyword">end</span>
+0108                 t_point(i,:) = real(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> .* sqrt(val)');
+0109             <span class="keyword">end</span>
+0110             
+0111         <span class="keyword">case</span> <span class="string">'LLE'</span>
+0112             <span class="comment">% Initialize some variables</span>
+0113             n = size(mapping.X, 1);
+0114             t_point = repmat(0, [size(point, 1) numel(mapping.val)]);
+0115             
+0116             <span class="comment">% Compute local Gram matrix</span>
+0117             D = (<a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(point', mapping.X') .^ 2);
+0118             [foo, ind] = sort(D, 2, <span class="string">'ascend'</span>);
+0119             <span class="keyword">for</span> i=1:size(point, 1)
+0120 
+0121                 <span class="comment">% Compute local Gram matrix</span>
+0122                 C = (repmat(point(i,:), [mapping.k 1]) - mapping.X(ind(i, 2:mapping.k + 1),:)) * <span class="keyword">...</span>
+0123                     (repmat(point(i,:), [mapping.k 1]) - mapping.X(ind(i, 2:mapping.k + 1),:))';
+0124 
+0125                 <span class="comment">% Compute reconstruction weights</span>
+0126                 invC = inv(C);
+0127                 W = sum(invC, 2) ./ sum(sum(invC));
+0128 
+0129                 <span class="comment">% Compute kernel matrix</span>
+0130                 K = repmat(0, [n 1]);
+0131                 K(ind(i, 2:mapping.k + 1)) = W;
+0132 
+0133                 <span class="comment">% Compute embedded point</span>
+0134                 t_point(i,:) = sum(mapping.vec .* repmat(K, [1 size(mapping.vec, 2)]), 1);
+0135             <span class="keyword">end</span>
+0136         
+0137         <span class="keyword">case</span> <span class="string">'Laplacian'</span>         
+0138             <span class="comment">% Initialize some other variables</span>
+0139             n = size(mapping.X, 1);
+0140             
+0141             <span class="comment">% Compute embeddings</span>
+0142             t_point = repmat(0, [size(point, 1) numel(mapping.val)]);
+0143             <span class="keyword">for</span> i=1:size(point, 1)
+0144                 
+0145                 <span class="comment">% Compute Gaussian kernel between test point and training points</span>
+0146                 K = (<a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(point(i,:)', mapping.X') .^ 2)';
+0147                 [foo, ind] = sort(K, <span class="string">'ascend'</span>);            
+0148                 K(ind(mapping.k+1:end)) = 0;
+0149                 K(K ~= 0) = exp(-K(K ~= 0) / (2 * mapping.sigma ^ 2));
+0150 
+0151                 <span class="comment">% Normalize kernel</span>
+0152                 K = (1 ./ n) .* (K ./ sqrt(mean(K) .* mean(mapping.K, 2)));
+0153 
+0154                 <span class="comment">% Compute embedded point</span>
+0155                 t_point(i,:) = sum(mapping.vec .* repmat(K, [1 size(mapping.vec, 2)]), 1);
+0156             <span class="keyword">end</span>
+0157             
+0158         <span class="keyword">case</span> <span class="string">'LandmarkMVU'</span>
+0159             <span class="comment">% Initialize some variables</span>
+0160             n = size(point, 1);
+0161             
+0162             <span class="comment">% Compute pairwise distances</span>
+0163             X = <a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(point', mapping.X); 
+0164             neighbors = zeros(mapping.k2, n);
+0165             
+0166             <span class="comment">% Compute reconstruction weights</span>
+0167             tol = 1e-7;
+0168             Pia = sparse([], [], [], mapping.no_landmarks, n);
+0169             <span class="keyword">for</span> i=1:n
+0170                 
+0171                 <span class="comment">% Identify nearest neighbors in distance matrix</span>
+0172                 dist = <a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X(:,i), mapping.D);
+0173                 [dist, ind] = sort(dist, <span class="string">'ascend'</span>);
+0174                 neighbors(:,i) = ind(2:mapping.k2 + 1);
+0175                 
+0176                 <span class="comment">% Compute reconstruction weights</span>
+0177                 z = mapping.D(:,neighbors(:,i)) - repmat(X(:,i), 1, mapping.k2);
+0178                 C = z' * z;
+0179                 C = C + tol * trace(C) * eye(mapping.k2) / mapping.k2;
+0180                 invC = inv(C);
+0181                 Pia(neighbors(:,i), i) = sum(invC)' / sum(sum(invC));
+0182             <span class="keyword">end</span>
+0183 
+0184             <span class="comment">% Fill sparse LLE weight matrix</span>
+0185             M = speye(n) + sparse([], [], [], n, n, n * mapping.k2 .^ 2);
+0186             <span class="keyword">for</span> i=1:n
+0187                 j = neighbors(:,i);
+0188                 w = Pia(j, i);
+0189                 M(i, j) = M(i, j) - w';
+0190                 M(j, i) = M(j, i) - w;
+0191                 M(j, j) = M(j, j) + w * w';
+0192             <span class="keyword">end</span>
+0193 
+0194             <span class="comment">% Invert LLE weight matrix</span>
+0195             Pia = -M(mapping.no_landmarks + 1:<span class="keyword">end</span>, mapping.no_landmarks + 1:end) \ <span class="keyword">...</span>
+0196                    M(mapping.no_landmarks + 1:<span class="keyword">end</span>, 1:mapping.no_landmarks);
+0197             Pia = [eye(mapping.no_landmarks); Pia];
+0198             
+0199             <span class="comment">% Apply mapping on the data</span>
+0200             t_point = mapping.Y * Pia';
+0201             t_point = t_point(1:mapping.no_dims,:)';
+0202             
+0203         <span class="keyword">case</span> <span class="string">'FastMVU'</span>
+0204             
+0205             <span class="keyword">if</span> ~mapping.finetune
+0206                 <span class="comment">% Initialize some other variables</span>
+0207                 n = size(mapping.X, 1);   
+0208 
+0209                 <span class="comment">% Start with out-of-sample extension for Laplacian Eigenmaps</span>
+0210                 Y = repmat(0, [size(point, 1) size(mapping.vec, 2)]);
+0211                 <span class="keyword">for</span> i=1:size(point, 1)
+0212 
+0213                     <span class="comment">% Compute adjecency matrix between test point and training points</span>
+0214                     K = <a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(point(i,:)', mapping.X(mapping.conn_comp,:)')' .^ 2;
+0215                     [foo, ind] = sort(K, <span class="string">'ascend'</span>);
+0216                     K(ind(mapping.k + 1:end)) = 0;
+0217                     K(ind(1:mapping.k)) = 1;
+0218 
+0219                     <span class="comment">% Normalize kernel</span>
+0220                     K = (1 ./ n) .* (K ./ sqrt(mean(K) .* mean(mapping.D, 2)));
+0221 
+0222                     <span class="comment">% Compute estimated eigenvectors of graph Laplacian</span>
+0223                     Y(i,:) = sum(mapping.vec .* repmat(K, [1 size(mapping.vec, 2)]), 1);
+0224                 <span class="keyword">end</span>
+0225 
+0226                 <span class="comment">% Out-of sample extension to obtain initial solutions</span>
+0227                 newY = mapping.L * Y';
+0228                 newY = mapping.newV' * newY;
+0229                 newY = newY(mapping.idx(end:-1:1),:)';
+0230 
+0231                 <span class="comment">% Apply the PCA mapping</span>
+0232                 t_point = <a href="out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>(newY, mapping.pca_map);
+0233             <span class="keyword">else</span>
+0234                 error(<span class="string">'Out-of-sample extension for FastMVU is only available when finetuning was disabled.'</span>);
+0235             <span class="keyword">end</span>
+0236             
+0237         <span class="keyword">case</span> <span class="string">'ManifoldChart'</span>
+0238             
+0239             <span class="comment">% Set some variables</span>
+0240             no_dims = size(mapping.V, 2);
+0241             no_analyzers = size(mapping.LX, 3);
+0242             kf = no_analyzers * (no_dims + 1);
+0243             
+0244             <span class="comment">% Infer locations and mixing proportions under MoPPCA model</span>
+0245             [R, Z] = <a href="../../Otherbox/drtoolbox/techniques/infermfa.html" class="code" title="function [R, Z] = infermfa(X, LX, MX, PX)">infermfa</a>(point', mapping.LX, mapping.MX, mapping.PX);
+0246             
+0247             <span class="comment">% Construct matrix U</span>
+0248             Z(no_dims + 1,:,:) = 1; 
+0249             Z = permute(Z, [1 3 2]);
+0250             R = reshape(R, [1 no_analyzers size(point, 1)]);
+0251             U = reshape(bsxfun(@times, R, Z), [kf size(point, 1)])';
+0252             
+0253             <span class="comment">% Apply charting linear mapping</span>
+0254             t_point = U * mapping.V;
+0255                         
+0256         <span class="keyword">otherwise</span>
+0257             error([<span class="string">'An out-of-sample extension for '</span> mapping.name <span class="string">' is not available in the toolbox. You might consider using OUT_OF_SAMPLE_EST instead.'</span>]);
+0258     <span class="keyword">end</span>
+0259     
+0260     <span class="comment">% Handle PRTools dataset</span>
+0261     <span class="keyword">if</span> prtools == 1
+0262         ppoint.data = t_point;
+0263         t_point = ppoint;
+0264     <span class="keyword">end</span>
+0265</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

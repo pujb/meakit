@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  Contents [URL="Contents.html"];
+  mi_fano [URL="mi_fano.html"];
+  mi_from_count [URL="mi_from_count.html"];
+  mi_infty [URL="mi_infty.html"];
+  mibayes [URL="mibayes.html"];
+}

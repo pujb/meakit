@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_B</title>
+  <meta name="keywords" content="panel_demo_B">
+  <meta name="description" content="% PANEL DEMO B">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_B
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO B</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO B
+%
+% (a) Create a four-by-four panel array
+% (b) Illustrate parent panel xlabels/ylabels
+% (c) Illustrate parent panel xlabel/ylabel</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO B</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create a four-by-four panel array</span>
+0005 <span class="comment">%% (b) Illustrate parent panel xlabels/ylabels</span>
+0006 <span class="comment">%% (c) Illustrate parent panel xlabel/ylabel</span>
+0007 
+0008 
+0009 
+0010 <span class="comment">%% (a)</span>
+0011 
+0012 <span class="comment">% create a grid-at-once</span>
+0013 clf
+0014 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>([2 2]);
+0015 
+0016 <span class="comment">% get root panel</span>
+0017 root = p{1}.root;
+0018 
+0019 <span class="comment">% disable autorender</span>
+0020 root.autorender = false;
+0021 
+0022 <span class="comment">% commit the children</span>
+0023 <span class="keyword">for</span> n = 1:4
+0024     <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(p{n});
+0025     plot(randn(1000,1));
+0026     axis([0 1000 -3 3])
+0027 <span class="keyword">end</span>
+0028 
+0029 
+0030 
+0031 <span class="comment">%% (b)</span>
+0032 
+0033 <span class="comment">% ok</span>
+0034 disp(<span class="string">'Recursive axis properties'</span>);
+0035 
+0036 <span class="comment">% use titles</span>
+0037 root.titles = <span class="string">'badness and goodness'</span>;
+0038 
+0039 <span class="comment">% use xlabels/ylabels</span>
+0040 root.xlabels = <span class="string">'sample number'</span>;
+0041 root.ylabels = <span class="string">'value'</span>;
+0042 
+0043 <span class="comment">% use xticks/yticks</span>
+0044 root.xticks = [0 300 700 1000];
+0045 root.yticks = [-2 0 2];
+0046 
+0047 <span class="comment">% use xticklabels/yticklabels</span>
+0048 root.xticklabels = {<span class="string">'oh'</span> <span class="string">'three'</span> <span class="string">'seven'</span> <span class="string">'max'</span>};
+0049 root.yticklabels = {<span class="string">'-'</span> <span class="string">'0'</span> <span class="string">'+'</span>};
+0050 
+0051 <span class="comment">% need a bit of extra space because the titles and xlabels</span>
+0052 <span class="comment">% are both present...</span>
+0053 root.axismargin = [15 15 0 5];
+0054 
+0055 <span class="comment">% render</span>
+0056 <a href="../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>(root);
+0057 
+0058 <span class="comment">% wait</span>
+0059 disp(<span class="string">'press any key...'</span>)
+0060 pause
+0061 
+0062 
+0063 
+0064 <span class="comment">%% (c)</span>
+0065 
+0066 <span class="comment">% ok</span>
+0067 disp(<span class="string">'Parent axis properties'</span>);
+0068 
+0069 <span class="comment">% remove stuff</span>
+0070 root.xlabels = <span class="string">''</span>;
+0071 root.ylabels = <span class="string">''</span>;
+0072 root.titles = <span class="string">''</span>;
+0073 
+0074 <span class="comment">% use xlabel/ylabel on a parent panel</span>
+0075 root.xlabel = <span class="string">'sample number'</span>;
+0076 root.ylabel = <span class="string">'value'</span>;
+0077 root.title = <span class="string">'badness and goodness'</span>;
+0078 
+0079 <span class="comment">% this requires some extra parent margin to make space for</span>
+0080 <span class="comment">% the extra text</span>
+0081 root.parentmargin = [10 10 0 5];
+0082 
+0083 <span class="comment">% but not for this panel's children...</span>
+0084 c = root.children;
+0085 c{1}.parentmargin = 0;
+0086 c{2}.parentmargin = 0;
+0087 
+0088 <span class="comment">% and we can reduce the axismargin since we're not using it</span>
+0089 <span class="comment">% for labels</span>
+0090 root.axismargin = 6;
+0091 
+0092 <span class="comment">% render</span>
+0093 <a href="../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>(root);
+0094 
+0095 
+0096</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  util_animate_dots -> util_plot_scatter_with_lines;
+  util_make_raster_colormap -> util_make_raster_colormap;
+  util_plot_raster_image -> util_plot_spsa;
+  util_plot_raster_image -> util_set_xtick;
+  util_plot_raster_simple -> util_plot_spsa;
+  util_plot_raster_simple -> util_set_xtick;
+  util_plot_spsa -> util_set_xtick;
+  util_plot_topo -> util_make_raster_colormap;
+  util_plot_topo -> util_plot_curve;
+
+  util_animate_dots [URL="util_animate_dots.html"];
+  util_make_raster_colormap [URL="util_make_raster_colormap.html"];
+  util_plot_8s_into_arraymap [URL="util_plot_8s_into_arraymap.html"];
+  util_plot_8s_into_arraymap_bar [URL="util_plot_8s_into_arraymap_bar.html"];
+  util_plot_8s_into_dotsgraph [URL="util_plot_8s_into_dotsgraph.html"];
+  util_plot_avalanche_hist [URL="util_plot_avalanche_hist.html"];
+  util_plot_channel_of_state [URL="util_plot_channel_of_state.html"];
+  util_plot_curve [URL="util_plot_curve.html"];
+  util_plot_curve_with_stdsem [URL="util_plot_curve_with_stdsem.html"];
+  util_plot_raster_image [URL="util_plot_raster_image.html"];
+  util_plot_raster_simple [URL="util_plot_raster_simple.html"];
+  util_plot_scatter_with_lines [URL="util_plot_scatter_with_lines.html"];
+  util_plot_spsa [URL="util_plot_spsa.html"];
+  util_plot_state_trans [URL="util_plot_state_trans.html"];
+  util_plot_topo [URL="util_plot_topo.html"];
+  util_set_xtick [URL="util_set_xtick.html"];
+}

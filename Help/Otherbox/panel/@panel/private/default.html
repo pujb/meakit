@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of default</title>
+  <meta name="keywords" content="default">
+  <meta name="description" content="default panel object">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html panel --><!-- ../menu.html @panel --><!-- menu.html private -->
+<h1>default
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>default panel object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [P, panelroot] = default </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> default panel object</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../../Otherbox/drtoolbox/techniques/jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li><li><a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="../../../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../../../Otherbox/panel/@panel/subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [P, panelroot] = default</a>
+0002 
+0003 <span class="comment">% default panel object</span>
+0004 P = [];
+0005 
+0006 <span class="comment">% default root object</span>
+0007 
+0008 
+0009 
+0010 <span class="comment">%% ROOT PROPERTIES</span>
+0011 
+0012 panelroot.autorender = [];
+0013 panelroot.units = [];            <span class="comment">% interface units ('cm'entimetres, 'mm'illimetres, 'in'ches)</span>
+0014 panelroot.rootmargin = [];       <span class="comment">% extra margins around root panel [l b r t]</span>
+0015 
+0016 <span class="comment">% internal states</span>
+0017 panelroot.print = false;                <span class="comment">% if true, render appropriately (might not do anything currently, but is set in export.m)</span>
+0018 panelroot.rootpanelid = 1;            <span class="comment">% initially is 1, but if root panel gets recreated it will be different</span>
+0019 
+0020 
+0021 
+0022 <span class="comment">%% PANEL PROPERTIES</span>
+0023 
+0024 P.panel.id = <span class="string">''</span>;
+0025 
+0026 <span class="comment">% all panels except the root have a parent panel and</span>
+0027 <span class="comment">% packing instructions into their parent</span>
+0028 P.panel.parent = 0;        <span class="comment">% index of parent in panels array of this figure (zero for root panel)</span>
+0029 P.panel.pack = 0;          <span class="comment">% packing parameters for this panel within its parent (zero means auto-pack)</span>
+0030 
+0031 <span class="comment">% a panel either has an associated axis, children, or</span>
+0032 <span class="comment">% neither (but not both!)</span>
+0033 P.panel.axis = 0;          <span class="comment">% handle to associated axis or zero if no axis</span>
+0034 P.panel.children = [];     <span class="comment">% list of children or empty if no children</span>
+0035 P.panel.hiddenaxis = 0;        <span class="comment">% used to display parent panel xlabel/ylabel, if present</span>
+0036 
+0037 <span class="comment">% temp data store during export</span>
+0038 P.panel.export = [];
+0039 
+0040 
+0041 
+0042 <span class="comment">%% RENDER PROPERTIES (INHERITED)</span>
+0043 
+0044 <span class="comment">% inherited properties that are distance metrics</span>
+0045 P.render_inh.axismargin = [];
+0046 P.render_inh.parentmargin = [];
+0047 
+0048 <span class="comment">% inherited properties</span>
+0049 P.render_inh.edge = <span class="string">'t'</span>;        <span class="comment">% edge to pack on (l, b, r or t)</span>
+0050 P.render_inh.fontname = [];
+0051 P.render_inh.fontsize = [];
+0052 P.render_inh.fontweight = [];
+0053 
+0054 
+0055 
+0056 <span class="comment">%% RENDER PROPERTIES (NOT INHERITED)</span>
+0057 
+0058 <span class="comment">% axis properties</span>
+0059 P.render_notinh.xscale = <span class="string">''</span>;
+0060 P.render_notinh.yscale = <span class="string">''</span>;
+0061 
+0062 
+0063</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

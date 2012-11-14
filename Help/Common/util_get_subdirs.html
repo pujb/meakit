@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_subdirs</title>
+  <meta name="keywords" content="util_get_subdirs">
+  <meta name="description" content="UTIL_GET_SUBDIRS Get sub directories of the given dir.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_get_subdirs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_SUBDIRS Get sub directories of the given dir.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ subdirs ] = util_get_subdirs( given_dir, is_sort_by_date, is_recursive, excluded_dir ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_SUBDIRS Get sub directories of the given dir.
+   Please note, the method dir (whose name starts with a '@') and private
+   directory (whose name is 'private') will be ignored.
+   This function is called during setup, therefore, many other toolbox
+   functions cannot be used in this file. (e.g. pvpmod.m)
+
+   Input:
+           given_dir: The dir you want to explore its sub directories.
+           is_sort_by_date: If true, the returned list is sorted by date
+                            (ascending, old to new).
+           is_recursive:    If true, we will find all sub directories
+                            recursively.
+           excluded_dir:    A cell array, providing the dir(s) which will
+                            be ignored.
+   Output:
+           subdirs:   The names of sub directories, if none, return []
+
+   Example:
+           util_get_subdirs('.', 1, 1, {'Otherbox\FIND'})'
+
+   Created on Aug/14/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-08-15  Adding the ability to exclude dir/sub-dirs.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_get_subdirs.html" class="code" title="function [ subdirs ] = util_get_subdirs( given_dir, is_sort_by_date, is_recursive, excluded_dir )">util_get_subdirs</a>	UTIL_GET_SUBDIRS Get sub directories of the given dir.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_get_subdirs.html" class="code" title="function [ subdirs ] = util_get_subdirs( given_dir, is_sort_by_date, is_recursive, excluded_dir )">util_get_subdirs</a>	UTIL_GET_SUBDIRS Get sub directories of the given dir.</li><li><a href="util_perform_op_in_directory.html" class="code" title="function [ varargout ] = util_perform_op_in_directory( given_dir, op, result_dir, filematch, var_to_save, varargin )">util_perform_op_in_directory</a>	UTIL_PERFORM_OP_IN_DIRECTORY Perform the same operation on each file in</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ subdirs ] = util_get_subdirs( given_dir, is_sort_by_date, is_recursive, excluded_dir )</a>
+0002 <span class="comment">%UTIL_GET_SUBDIRS Get sub directories of the given dir.</span>
+0003 <span class="comment">%   Please note, the method dir (whose name starts with a '@') and private</span>
+0004 <span class="comment">%   directory (whose name is 'private') will be ignored.</span>
+0005 <span class="comment">%   This function is called during setup, therefore, many other toolbox</span>
+0006 <span class="comment">%   functions cannot be used in this file. (e.g. pvpmod.m)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Input:</span>
+0009 <span class="comment">%           given_dir: The dir you want to explore its sub directories.</span>
+0010 <span class="comment">%           is_sort_by_date: If true, the returned list is sorted by date</span>
+0011 <span class="comment">%                            (ascending, old to new).</span>
+0012 <span class="comment">%           is_recursive:    If true, we will find all sub directories</span>
+0013 <span class="comment">%                            recursively.</span>
+0014 <span class="comment">%           excluded_dir:    A cell array, providing the dir(s) which will</span>
+0015 <span class="comment">%                            be ignored.</span>
+0016 <span class="comment">%   Output:</span>
+0017 <span class="comment">%           subdirs:   The names of sub directories, if none, return []</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Example:</span>
+0020 <span class="comment">%           util_get_subdirs('.', 1, 1, {'Otherbox\FIND'})'</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Created on Aug/14/2010 By Pu Jiangbo</span>
+0023 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   $Revision:</span>
+0026 <span class="comment">%       PJB#2010-08-15  Adding the ability to exclude dir/sub-dirs.</span>
+0027 
+0028 <span class="comment">% Check if it is ignored</span>
+0029 <span class="keyword">for</span> i = 1:length(excluded_dir)
+0030     <span class="keyword">if</span> strcmpi(excluded_dir{i}, given_dir)
+0031         subdirs = [];
+0032         <span class="keyword">return</span>;
+0033     <span class="keyword">end</span>
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="comment">% Save current path</span>
+0037 pwd_push = pwd;
+0038 
+0039 <span class="comment">% CD to the given_dir</span>
+0040 <span class="keyword">if</span> ~exist(given_dir, <span class="string">'dir'</span>)
+0041     error(<span class="string">'The given dir not exists.'</span>);
+0042     <span class="comment">% Change back to the current path.</span>
+0043     cd(pwd_push);
+0044 <span class="keyword">end</span>
+0045 cd(given_dir);
+0046 
+0047 <span class="comment">% List all subdirs</span>
+0048 listings = dir; 
+0049 listings = listings(~cellfun(@isempty,{listings(:).date})); 
+0050 
+0051 <span class="comment">% Get all sub directories</span>
+0052 subdirs = [];
+0053 <span class="keyword">for</span> i = 1:length(listings)
+0054     <span class="keyword">if</span> ~(strcmp(listings(i).name, <span class="string">'.'</span>) || strcmp(listings(i).name, <span class="string">'..'</span>) || strcmp(listings(i).name(1), <span class="string">'@'</span>) || strcmp(listings(i).name, <span class="string">'private'</span>)) &amp;&amp; listings(i).isdir
+0055         <span class="comment">% Setup Flag (indicating this sub will be ignored)</span>
+0056         ignored = false;
+0057         <span class="comment">% Check if this sub directory should be ignored</span>
+0058         <span class="keyword">for</span> j = 1:length(excluded_dir)
+0059             <span class="keyword">if</span> strcmpi(excluded_dir{j}, [given_dir filesep listings(i).name])
+0060                 ignored = true;
+0061             <span class="keyword">end</span>
+0062         <span class="keyword">end</span>
+0063         <span class="comment">% Add to list</span>
+0064         <span class="keyword">if</span> ~ignored
+0065             temp.name = listings(i).name;
+0066             temp.datenum = listings(i).datenum;
+0067             subdirs = [subdirs; temp];
+0068         <span class="keyword">end</span>
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% Sort</span>
+0073 <span class="keyword">if</span> is_sort_by_date &amp;&amp; length(subdirs) &gt; 1
+0074     [~, order] = sort([subdirs(:).datenum]);
+0075     subdirs = subdirs(order);
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="comment">% Change back to the current path.</span>
+0079 cd(pwd_push);
+0080 
+0081 <span class="comment">% Return</span>
+0082 
+0083 <span class="comment">% Generate the relative path (to given_dir)</span>
+0084 <span class="keyword">if</span> isempty(subdirs)
+0085     subdirs = [];
+0086 <span class="keyword">else</span>
+0087     subdirs = {subdirs(:).name};
+0088     <span class="keyword">for</span> i = 1:length(subdirs)
+0089         subdirs{i} = [given_dir filesep subdirs{i}];
+0090     <span class="keyword">end</span>
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="comment">% Process all sub directories if necessary</span>
+0094 <span class="keyword">if</span> is_recursive
+0095     <span class="keyword">if</span> ~isempty(subdirs)
+0096         <span class="comment">% Go to each sub directory</span>
+0097         <span class="keyword">for</span> i = 1:length(subdirs)
+0098             recursive_result = <a href="util_get_subdirs.html" class="code" title="function [ subdirs ] = util_get_subdirs( given_dir, is_sort_by_date, is_recursive, excluded_dir )">util_get_subdirs</a>(subdirs{i}, is_sort_by_date, true, excluded_dir);
+0099             <span class="keyword">if</span> ~isempty(recursive_result)
+0100                 subdirs = [subdirs {recursive_result{:}}];
+0101             <span class="keyword">end</span>
+0102         <span class="keyword">end</span>
+0103     <span class="keyword">end</span>
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="keyword">end</span>
+0107</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

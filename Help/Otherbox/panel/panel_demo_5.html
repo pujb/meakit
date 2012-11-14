@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_5</title>
+  <meta name="keywords" content="panel_demo_5">
+  <meta name="description" content="% PANEL DEMO 5">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_5
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 5</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 5
+%
+% (a) Create an empty panel object
+% (b) Packing some panels
+% (c) Plotting into those panels, setting axis labels
+% (d) Adjusting the root margin</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 5</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an empty panel object</span>
+0005 <span class="comment">%% (b) Packing some panels</span>
+0006 <span class="comment">%% (c) Plotting into those panels, setting axis labels</span>
+0007 <span class="comment">%% (d) Adjusting the root margin</span>
+0008 
+0009 
+0010 
+0011 <span class="comment">%% (a)</span>
+0012 
+0013 <span class="comment">% clear or create figure and create root panel covering</span>
+0014 <span class="comment">% whole figure</span>
+0015 clf
+0016 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0017 
+0018 
+0019 
+0020 <span class="comment">%% (b)</span>
+0021 
+0022 <span class="comment">% form an upper panel A and a lower panel B where A takes 30% of the</span>
+0023 <span class="comment">% available space, leaving 70% for B</span>
+0024 pA = p.pack(30);
+0025 pB = p.pack();
+0026 
+0027 
+0028 
+0029 <span class="comment">%% (c)</span>
+0030 
+0031 <span class="comment">% plot into panel A</span>
+0032 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pA)
+0033 x = -100:100;
+0034 plot(x,x.^2/1000,<span class="string">'r'</span>)
+0035 
+0036 <span class="comment">% set axis labels through panel, for control over metrics</span>
+0037 pA.xlabel = <span class="string">'x is great'</span>;
+0038 pA.ylabel = <span class="string">'y is better'</span>;
+0039 
+0040 <span class="comment">% plot into panel B</span>
+0041 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pB)
+0042 plot(randn(1000,3))
+0043 axis([0 1000 -5 5])
+0044 
+0045 <span class="comment">% set axis labels through panel, for control over metrics</span>
+0046 pB.xlabel = <span class="string">'foo'</span>;
+0047 pB.ylabel = <span class="string">'bar'</span>;
+0048 
+0049 
+0050 
+0051 <span class="comment">%% (d)</span>
+0052 
+0053 <span class="comment">% panels generally overflow slightly into their parent to</span>
+0054 <span class="comment">% the top and to the right, since axis number labels stick</span>
+0055 <span class="comment">% out, just a little bit. we ignore this throughout, since</span>
+0056 <span class="comment">% it makes layout much easier, but at the root, we don't</span>
+0057 <span class="comment">% want these labels to go off-figure (also we want a little</span>
+0058 <span class="comment">% space top and right between the axes and the edges of the</span>
+0059 <span class="comment">% figure). to see this in action, let's turn *off*</span>
+0060 <span class="comment">% &quot;rootmargin&quot;:</span>
+0061 disp(<span class="string">'current rootmargin:'</span>)
+0062 disp(p.rootmargin)
+0063 disp(<span class="string">'removing rootmargin completely:'</span>)
+0064 p.rootmargin = [0 0 0 0];
+0065 disp(p.rootmargin)
+0066 disp(<span class="string">'press a key to continue...'</span>)
+0067 pause
+0068 
+0069 <span class="comment">% see, we've lost a bit of those labels and the axes are</span>
+0070 <span class="comment">% hard up against the top and right edges? so &quot;rootmargin&quot;</span>
+0071 <span class="comment">% is an extra margin used only by the root panel, and is</span>
+0072 <span class="comment">% usually used to account for this overflow, thus:</span>
+0073 disp(<span class="string">'putting back the 5mm top &amp; right rootmargin:'</span>);
+0074 p.rootmargin = [0 0 5 5]; <span class="comment">% 5mm top and right</span>
+0075 disp(p.rootmargin)
+0076 disp(<span class="string">'press a key to continue...'</span>)
+0077 pause
+0078 
+0079 <span class="comment">% however, you can use it as you see fit...</span>
+0080 disp(<span class="string">'putting in some other rootmargin:'</span>);
+0081 p.rootmargin = [10 20 30 40];
+0082 disp(p.rootmargin)
+0083 
+0084</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

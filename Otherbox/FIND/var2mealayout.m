@@ -1,0 +1,66 @@
+function var2mealayout()
+% FIND_GUI function. MEA layouts saved as variables in the base workspace 
+% can be selected and loaded via a GUI. not working as standalone.
+%
+% Markus Nenniger
+% find.bccn.uni-freiburg.de
+
+% get names of all variable in base workspace
+myvars=struct2cell(evalin('base','whos'));
+myvars=myvars(1,:);
+
+% get current MEAmap from FIND user data
+FIND_GUIdata=get(findobj('Tag','FIND_GUI'),'UserData');
+MEAmap=FIND_GUIdata.MEAmap;
+
+% store variable names in a 20 row cell array
+tmp=cell(ceil(length(myvars)/20),20)';
+tmp(1:length(myvars))=myvars;
+myvars=tmp';
+
+% main window
+h=figure('Units','Normalized',...
+    'Tag','var2mealayout', ...
+    'Name','read MEAlayout from variable',...
+    'NumberTitle','off',...
+    'MenuBar','none');
+
+% table for variable names, clicking calls calls slxn2txt
+MEAtable=uitable('Parent',h,...
+    'Data',myvars',...
+    'Tag','MEAmaptable',...
+    'Units','normalized',...
+    'Cellselectioncallback',@slxn2txt',...
+    'Position',[0.05 0.15 0.9 0.8]);
+
+% sets selected variable as MEAmap.
+setvaluespushbutton=uicontrol('Parent',h,...
+    'Style','Pushbutton',...
+    'String','Apply',...
+    'Units','normalized',...
+    'Callback','MEAchannelassignfrombase(get(findobj(''Tag'',''setvalueseditbox''),''String''))',...
+    'Position',[0.6 0.05 0.2 0.08]);
+
+%sets typed variable names as MEAmap.
+setvalueseditbox=uicontrol('Parent',h,...
+    'Style','edit',...
+    'String','',...
+    'Tag','setvalueseditbox',...
+    'Units','normalized',...
+    'Callback','',...
+    'Position',[0.2 0.05 0.2 0.08]);
+
+
+function slxn2txt(src, eventdata)
+% converts selection from 'MEAtable' to char and stores it in
+% 'setvalueseditbox'
+
+mydata=get(src,'Data');
+if size(eventdata.Indices,1)>1
+    eventdata.Indices=eventdata.Indices(1,:);
+end
+
+mydata=mydata(eventdata.Indices(1),eventdata.Indices(2));
+
+h=findobj(gcf,'Tag','setvalueseditbox');
+set(h,'String',mydata);

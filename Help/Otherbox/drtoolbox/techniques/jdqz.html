@@ -1,0 +1,2708 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jdqz</title>
+  <meta name="keywords" content="jdqz">
+  <meta name="description" content="JDQZ computes a partial generalized Schur decomposition (or QZ">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>jdqz
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>JDQZ computes a partial generalized Schur decomposition (or QZ</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=jdqz(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">JDQZ computes a partial generalized Schur decomposition (or QZ
+  decomposition) of a pair of square matrices or operators.
+  
+  LAMBDA=JDQZ(A,B) and JDQZ(A,B) return K eigenvalues of the matrix pair
+  (A,B), where K=min(5,N) and N=size(A,1) if K has not been specified.
+  
+  [X,JORDAN]=JDQZ(A,B) returns the eigenvectors X and the Jordan
+  structure JORDAN:  A*X=B*X*JORDAN. The diagonal of JORDAN contains the
+  eigenvalues: LAMBDA=DIAG(JORDAN). JORDAN is an K by K matrix with the
+  eigenvalues on the diagonal and zero or one on the first upper diagonal
+  elements. The other entries are zero.
+  
+  [X,JORDAN,HISTORY]=JDQZ(A,B) returns also the convergence history.
+  
+  [X,JORDAN,Q,Z,S,T,HISTORY]=JDQZ(A,B) 
+  If between four and seven output arguments are required, then Q and Z
+  are N by K orthonormal, S and T are K by K upper triangular such that
+  they form a partial generalized Schur decomposition: A*Q=Z*S and
+  B*Q=Z*T. Then LAMBDA=DIAG(S)./DIAG(T) and X=Q*Y with Y the eigenvectors
+  of the pair (S,T): S*Y=T*Y*JORDAN (see also OPTIONS.Schur).
+
+  JDQZ(A,B)
+  JDQZ('Afun','Bfun')
+  The first input argument is either a square matrix (which can be full
+  or sparse, symmetric or nonsymmetric, real or complex), or a string
+  containing the name of an M-file which applies a linear operator to the
+  columns of a given matrix. In the latter case, the M-file, say Afun.m,
+  must return the dimension N of the problem with N = Afun([],'dimension').
+  For example, JDQZ('fft',...) is much faster than JDQZ(F,...), where F is
+  the explicit FFT matrix.
+  If another input argument is a square N by N matrix or the name of an
+  M-file, then B is this argument (regardless whether A is an M-file or a
+  matrix). If B has not been specified, then B is assumed to be the
+  identity unless A is an M-file with two output vectors of dimension N
+  with [AV,BV]=Afun(V), or with AV=Afun(V,'A') and BV=Afun(V,'B').
+
+  The remaining input arguments are optional and can be given in
+  practically any order:
+
+  [X,JORDAN,Q,Z,S,T,HISTORY] = JDQZ(A,B,K,SIGMA,OPTIONS)
+  [X,JORDAN,Q,Z,S,T,HISTORY] = JDQZ('Afun','Bfun',K,SIGMA,OPTIONS)
+
+  where
+
+      K         an integer, the number of desired eigenvalues.
+      SIGMA     a scalar shift or a two letter string.
+      OPTIONS   a structure containing additional parameters.
+
+  If K is not specified, then K = MIN(N,5) eigenvalues are computed.
+
+  If SIGMA is not specified, then the Kth eigenvalues largest in
+  magnitude are computed. If SIGMA is a real or complex scalar, then the
+  Kth eigenvalues nearest SIGMA are computed. If SIGMA is column vector
+  of size (L,1), then the Jth eigenvalue nearest to SIGMA(MIN(J,L))
+  is computed for J=1:K. SIGMA is the &quot;target&quot; for the desired eigenvalues.
+  If SIGMA is one of the following strings, then it specifies the desired
+  eigenvalues.
+
+    SIGMA            Specified eigenvalues
+
+    'LM'             Largest Magnitude
+    'SM'             Smallest Magnitude (same as SIGMA = 0)
+    'LR'             Largest Real part
+    'SR'             Smallest Real part
+    'BE'             Both Ends. Computes K/2 eigenvalues
+                     from each end of the spectrum (one more
+                     from the high end if K is odd.)
+
+  If 'TestSpace' is 'Harmonic' (see OPTIONS), then SIGMA = 0 is the
+  default, otherwise SIGMA = 'LM' is the default.
+
+
+  The OPTIONS structure specifies certain parameters in the algorithm.
+
+   Field name            Parameter                             Default
+
+   OPTIONS.Tol           Convergence tolerance:                1e-8
+                           norm(r) &lt;= Tol/SQRT(K)
+   OPTIONS.jmin          Minimum dimension search subspace V   K+5
+   OPTIONS.jmax          Maximum dimension search subspace V   jmin+5
+   OPTIONS.MaxIt         Maximum number of iterations.         100
+   OPTIONS.v0            Starting space                        ones+0.1*rand
+   OPTIONS.Schur         Gives schur decomposition             'no'
+                           If 'yes', then X and JORDAN are
+                           not computed and [Q,Z,S,T,HISTORY]
+                           is the list of output arguments.
+   OPTIONS.TestSpace     Defines the test subspace W           'Harmonic'
+                           'Standard':    W=sigma*A*V+B*V
+                           'Harmonic':    W=A*V-sigma*B*V
+                           'SearchSpace': W=V
+                            W=V is justified if B is positive
+                            definite.
+   OPTIONS.Disp          Shows size of intermediate residuals  'no'
+                           and the convergence history
+   OPTIONS.NSigma        Take as target for the second and     'no'
+                           following eigenvalues, the best
+                           approximate eigenvalues from the
+                           test subspace.
+   OPTIONS.Pairs         Search for conjugated eigenpairs      'no'
+   OPTIONS.LSolver       Linear solver                         'GMRES'
+   OPTIONS.LS_Tol        Residual reduction linear solver      1,0.7,0.7^2,..
+   OPTIONS.LS_MaxIt      Maximum number it.  linear solver     5
+   OPTIONS.LS_ell        ell for BiCGstab(ell)                 4
+   OPTIONS.Precond       Preconditioner  (see below)           identity.
+   OPTIONS.Type_Precond  Way of using preconditioner           'left'
+
+  For instance
+
+    options=struct('Tol',1.0e-8,'LSolver','BiCGstab','LS_ell',4,'Precond',M);
+
+  changes the convergence tolerance to 1.0e-8, takes BiCGstab as linear
+  solver, and takes M as preconditioner (for ways of defining M, see below).
+
+
+  PRECONDITIONING. The action M-inverse of the preconditioner M (an
+  approximation of A-lamda*B) on an N-vector V can be defined in the
+  OPTIONS
+
+     OPTIONS.Precond
+     OPTIONS.L_Precond     same as OPTIONS.Precond
+     OPTIONS.U_Precond
+     OPTIONS.P_Precond
+
+  If no preconditioner has been specified (or is []), then M\V=V (M is
+  the identity).
+  If Precond is an N by N matrix, say, K, then
+        M\V = K\V.
+  If Precond is an N by 2*N matrix, say, K, then
+        M\V = U\L\V, where K=[L,U], and L and U are N by N matrices.
+  If Precond is a string, say, 'Mi', then
+        if Mi(V,'L') and Mi(V,'U') return N-vectors
+               M\V = Mi(Mi(V,'L'),'U')
+        otherwise
+               M\V = Mi(V) or M\V=Mi(V,'preconditioner').
+  Note that Precond and A can be the same string.
+  If L_Precond and U_Precond are strings, say, 'Li' and 'Ui',
+  respectively, then
+        M\V=Ui(Li(V)).
+  If (P_precond,) L_Precond, and U_precond are N by N matrices, say,
+  (P,) L, and U, respectively, then
+        M\V=U\L\(P*V)      (P*M=L*U)
+
+     OPTIONS.Type_Precond
+  The preconditioner can be used as explicit left preconditioner
+  ('left', default), as explicit right preconditioner ('right') or
+  implicitly ('impl').
+
+
+  <a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">JDQZ</a> without input arguments returns the options and its defaults.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>	default panel object</li><li><a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="charting.html" class="code" title="function [mappedX, mapping] = charting(X, no_dims, no_analyzers, max_iterations, eig_impl)">charting</a>	CHARTING Performs manifold charting on dataset X</li><li><a href="laplacian_eigen.html" class="code" title="function [mappedX, mapping] = laplacian_eigen(X, no_dims, k, sigma, eig_impl)">laplacian_eigen</a>	LAPLACIAN_EIGEN Performs non-linear dimensionality reduction using Laplacian Eigenmaps</li><li><a href="llc.html" class="code" title="function mappedX = llc(X, neighbor, no_dims, R, Z, eig_impl)">llc</a>	LLC Runs the LLC algorithm (given information on the formed factor analyzers)</li><li><a href="lltsa.html" class="code" title="function [mappedX, mapping] = lltsa(X, no_dims, k, eig_impl)">lltsa</a>	LLTSA Runs the linear local tangent space alignment algorithm</li><li><a href="lpp.html" class="code" title="function [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl)">lpp</a>	LPP Perform linearity preserving projection</li><li><a href="npe.html" class="code" title="function [mappedX, mapping] = npe(X, no_dims, k, eig_impl)">npe</a>	NPE Perform the Neighborhood Preserving Embedding algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [V,AV,BV]=Arnoldi(v,Av,Bv,sigma,jmin,nselect,tol)</a></li><li><a href="#_sub2" class="code">function I=CheckSortSchur(Sigma,kappa)</a></li><li><a href="#_sub3" class="code">function [T,D]=ScaleT(T)</a></li><li><a href="#_sub4" class="code">function [X,D,Jor]=FindJordan(S,T,SCHUR)</a></li><li><a href="#_sub5" class="code">function [X,Jor,J]=PseudoJordan(S,T,delta)</a></li><li><a href="#_sub6" class="code">function [X,Jor,U]=JordanBlock(A,tol)</a></li><li><a href="#_sub7" class="code">function varargout=output(history,SCHUR,X,Lambda)</a></li><li><a href="#_sub8" class="code">function   UpdateMinvZ</a></li><li><a href="#_sub9" class="code">function [t,xtol]=SolvePCE(theta,q,z,r,lsolver,par,nit)</a></li><li><a href="#_sub10" class="code">function [MZ,QMZ]=FormPM(q,z)</a></li><li><a href="#_sub11" class="code">function [x,xtol] = exact(theta,Q,Z,r)</a></li><li><a href="#_sub12" class="code">function [r,xtol] = olsen(theta,Q,Z,MZ,M,r,par)</a></li><li><a href="#_sub13" class="code">function [x,rnrm] = cgstab(theta,Q,Z,MZ,M,r,par)</a></li><li><a href="#_sub14" class="code">function [v,rnrm] = gmres0(theta,Q,Z,MZ,M,v,par)</a></li><li><a href="#_sub15" class="code">function [v,rnrm] = gmres(theta,Q,Z,MZ,M,v,par)</a></li><li><a href="#_sub16" class="code">function [Av,Bv]=MV(v)</a></li><li><a href="#_sub17" class="code">function y=SolvePrecond(y);</a></li><li><a href="#_sub18" class="code">function [v,u]=PreMV(theta,Q,Z,M,v)</a></li><li><a href="#_sub19" class="code">function  r=SkewProj(Q,Z,M,r);</a></li><li><a href="#_sub20" class="code">function ppar=spar(par,nit)</a></li><li><a href="#_sub21" class="code">function u=ImagVector(u)</a></li><li><a href="#_sub22" class="code">function Sigma=ScaleEig(Sigma)</a></li><li><a href="#_sub23" class="code">function [r,z,nrm,theta]=Comp_rz(E,kappa)</a></li><li><a href="#_sub24" class="code">function [V,R]=RepGS(Z,V,gamma)</a></li><li><a href="#_sub25" class="code">function [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)</a></li><li><a href="#_sub26" class="code">function I=SortEig(s,t,sigma,kappa);</a></li><li><a href="#_sub27" class="code">function t=twistdim(t,k)</a></li><li><a href="#_sub28" class="code">function [Q,Z,S,T]=SwapQZ(Q,Z,S,T,I)</a></li><li><a href="#_sub29" class="code">function [Q,Z,S,T]=SwapQZ0(Q,Z,S,T,I)</a></li><li><a href="#_sub30" class="code">function MyClear</a></li><li><a href="#_sub31" class="code">function [n,nselect,Sigma,kappa,SCHUR,</a></li><li><a href="#_sub32" class="code">function msg=StrOp(Op)</a></li><li><a href="#_sub33" class="code">function DisplayPreconditioner(n)</a></li><li><a href="#_sub34" class="code">function possibilities</a></li><li><a href="#_sub35" class="code">function x = boolean(x,gamma,string)</a></li><li><a href="#_sub36" class="code">function [a,ok]=findfield(options,fopts,str,default,gamma,stri)</a></li><li><a href="#_sub37" class="code">function n=CheckMatrix(A,gamma)</a></li><li><a href="#_sub38" class="code">function [Av,Bv,n]=CheckDimMV(v)</a></li><li><a href="#_sub39" class="code">function n=SetPrecond(n,TP)</a></li><li><a href="#_sub40" class="code">function Result(Sigm,Target,S,T,tol)</a></li><li><a href="#_sub41" class="code">function s=mydisp(lambda,d)</a></li><li><a href="#_sub42" class="code">function ShowEig(theta,target,k)</a></li><li><a href="#_sub43" class="code">function texttest(s,nr,gamma)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=jdqz(varargin)</a>
+0002 <span class="comment">%JDQZ computes a partial generalized Schur decomposition (or QZ</span>
+0003 <span class="comment">%  decomposition) of a pair of square matrices or operators.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%  LAMBDA=JDQZ(A,B) and JDQZ(A,B) return K eigenvalues of the matrix pair</span>
+0006 <span class="comment">%  (A,B), where K=min(5,N) and N=size(A,1) if K has not been specified.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  [X,JORDAN]=JDQZ(A,B) returns the eigenvectors X and the Jordan</span>
+0009 <span class="comment">%  structure JORDAN:  A*X=B*X*JORDAN. The diagonal of JORDAN contains the</span>
+0010 <span class="comment">%  eigenvalues: LAMBDA=DIAG(JORDAN). JORDAN is an K by K matrix with the</span>
+0011 <span class="comment">%  eigenvalues on the diagonal and zero or one on the first upper diagonal</span>
+0012 <span class="comment">%  elements. The other entries are zero.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%  [X,JORDAN,HISTORY]=JDQZ(A,B) returns also the convergence history.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  [X,JORDAN,Q,Z,S,T,HISTORY]=JDQZ(A,B)</span>
+0017 <span class="comment">%  If between four and seven output arguments are required, then Q and Z</span>
+0018 <span class="comment">%  are N by K orthonormal, S and T are K by K upper triangular such that</span>
+0019 <span class="comment">%  they form a partial generalized Schur decomposition: A*Q=Z*S and</span>
+0020 <span class="comment">%  B*Q=Z*T. Then LAMBDA=DIAG(S)./DIAG(T) and X=Q*Y with Y the eigenvectors</span>
+0021 <span class="comment">%  of the pair (S,T): S*Y=T*Y*JORDAN (see also OPTIONS.Schur).</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%  JDQZ(A,B)</span>
+0024 <span class="comment">%  JDQZ('Afun','Bfun')</span>
+0025 <span class="comment">%  The first input argument is either a square matrix (which can be full</span>
+0026 <span class="comment">%  or sparse, symmetric or nonsymmetric, real or complex), or a string</span>
+0027 <span class="comment">%  containing the name of an M-file which applies a linear operator to the</span>
+0028 <span class="comment">%  columns of a given matrix. In the latter case, the M-file, say Afun.m,</span>
+0029 <span class="comment">%  must return the dimension N of the problem with N = Afun([],'dimension').</span>
+0030 <span class="comment">%  For example, JDQZ('fft',...) is much faster than JDQZ(F,...), where F is</span>
+0031 <span class="comment">%  the explicit FFT matrix.</span>
+0032 <span class="comment">%  If another input argument is a square N by N matrix or the name of an</span>
+0033 <span class="comment">%  M-file, then B is this argument (regardless whether A is an M-file or a</span>
+0034 <span class="comment">%  matrix). If B has not been specified, then B is assumed to be the</span>
+0035 <span class="comment">%  identity unless A is an M-file with two output vectors of dimension N</span>
+0036 <span class="comment">%  with [AV,BV]=Afun(V), or with AV=Afun(V,'A') and BV=Afun(V,'B').</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%  The remaining input arguments are optional and can be given in</span>
+0039 <span class="comment">%  practically any order:</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%  [X,JORDAN,Q,Z,S,T,HISTORY] = JDQZ(A,B,K,SIGMA,OPTIONS)</span>
+0042 <span class="comment">%  [X,JORDAN,Q,Z,S,T,HISTORY] = JDQZ('Afun','Bfun',K,SIGMA,OPTIONS)</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">%  where</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%      K         an integer, the number of desired eigenvalues.</span>
+0047 <span class="comment">%      SIGMA     a scalar shift or a two letter string.</span>
+0048 <span class="comment">%      OPTIONS   a structure containing additional parameters.</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">%  If K is not specified, then K = MIN(N,5) eigenvalues are computed.</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">%  If SIGMA is not specified, then the Kth eigenvalues largest in</span>
+0053 <span class="comment">%  magnitude are computed. If SIGMA is a real or complex scalar, then the</span>
+0054 <span class="comment">%  Kth eigenvalues nearest SIGMA are computed. If SIGMA is column vector</span>
+0055 <span class="comment">%  of size (L,1), then the Jth eigenvalue nearest to SIGMA(MIN(J,L))</span>
+0056 <span class="comment">%  is computed for J=1:K. SIGMA is the &quot;target&quot; for the desired eigenvalues.</span>
+0057 <span class="comment">%  If SIGMA is one of the following strings, then it specifies the desired</span>
+0058 <span class="comment">%  eigenvalues.</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">%    SIGMA            Specified eigenvalues</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">%    'LM'             Largest Magnitude</span>
+0063 <span class="comment">%    'SM'             Smallest Magnitude (same as SIGMA = 0)</span>
+0064 <span class="comment">%    'LR'             Largest Real part</span>
+0065 <span class="comment">%    'SR'             Smallest Real part</span>
+0066 <span class="comment">%    'BE'             Both Ends. Computes K/2 eigenvalues</span>
+0067 <span class="comment">%                     from each end of the spectrum (one more</span>
+0068 <span class="comment">%                     from the high end if K is odd.)</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">%  If 'TestSpace' is 'Harmonic' (see OPTIONS), then SIGMA = 0 is the</span>
+0071 <span class="comment">%  default, otherwise SIGMA = 'LM' is the default.</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">%</span>
+0074 <span class="comment">%  The OPTIONS structure specifies certain parameters in the algorithm.</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%   Field name            Parameter                             Default</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">%   OPTIONS.Tol           Convergence tolerance:                1e-8</span>
+0079 <span class="comment">%                           norm(r) &lt;= Tol/SQRT(K)</span>
+0080 <span class="comment">%   OPTIONS.jmin          Minimum dimension search subspace V   K+5</span>
+0081 <span class="comment">%   OPTIONS.jmax          Maximum dimension search subspace V   jmin+5</span>
+0082 <span class="comment">%   OPTIONS.MaxIt         Maximum number of iterations.         100</span>
+0083 <span class="comment">%   OPTIONS.v0            Starting space                        ones+0.1*rand</span>
+0084 <span class="comment">%   OPTIONS.Schur         Gives schur decomposition             'no'</span>
+0085 <span class="comment">%                           If 'yes', then X and JORDAN are</span>
+0086 <span class="comment">%                           not computed and [Q,Z,S,T,HISTORY]</span>
+0087 <span class="comment">%                           is the list of output arguments.</span>
+0088 <span class="comment">%   OPTIONS.TestSpace     Defines the test subspace W           'Harmonic'</span>
+0089 <span class="comment">%                           'Standard':    W=sigma*A*V+B*V</span>
+0090 <span class="comment">%                           'Harmonic':    W=A*V-sigma*B*V</span>
+0091 <span class="comment">%                           'SearchSpace': W=V</span>
+0092 <span class="comment">%                            W=V is justified if B is positive</span>
+0093 <span class="comment">%                            definite.</span>
+0094 <span class="comment">%   OPTIONS.Disp          Shows size of intermediate residuals  'no'</span>
+0095 <span class="comment">%                           and the convergence history</span>
+0096 <span class="comment">%   OPTIONS.NSigma        Take as target for the second and     'no'</span>
+0097 <span class="comment">%                           following eigenvalues, the best</span>
+0098 <span class="comment">%                           approximate eigenvalues from the</span>
+0099 <span class="comment">%                           test subspace.</span>
+0100 <span class="comment">%   OPTIONS.Pairs         Search for conjugated eigenpairs      'no'</span>
+0101 <span class="comment">%   OPTIONS.LSolver       Linear solver                         'GMRES'</span>
+0102 <span class="comment">%   OPTIONS.LS_Tol        Residual reduction linear solver      1,0.7,0.7^2,..</span>
+0103 <span class="comment">%   OPTIONS.LS_MaxIt      Maximum number it.  linear solver     5</span>
+0104 <span class="comment">%   OPTIONS.LS_ell        ell for BiCGstab(ell)                 4</span>
+0105 <span class="comment">%   OPTIONS.Precond       Preconditioner  (see below)           identity.</span>
+0106 <span class="comment">%   OPTIONS.Type_Precond  Way of using preconditioner           'left'</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">%  For instance</span>
+0109 <span class="comment">%</span>
+0110 <span class="comment">%    options=struct('Tol',1.0e-8,'LSolver','BiCGstab','LS_ell',4,'Precond',M);</span>
+0111 <span class="comment">%</span>
+0112 <span class="comment">%  changes the convergence tolerance to 1.0e-8, takes BiCGstab as linear</span>
+0113 <span class="comment">%  solver, and takes M as preconditioner (for ways of defining M, see below).</span>
+0114 <span class="comment">%</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">%  PRECONDITIONING. The action M-inverse of the preconditioner M (an</span>
+0117 <span class="comment">%  approximation of A-lamda*B) on an N-vector V can be defined in the</span>
+0118 <span class="comment">%  OPTIONS</span>
+0119 <span class="comment">%</span>
+0120 <span class="comment">%     OPTIONS.Precond</span>
+0121 <span class="comment">%     OPTIONS.L_Precond     same as OPTIONS.Precond</span>
+0122 <span class="comment">%     OPTIONS.U_Precond</span>
+0123 <span class="comment">%     OPTIONS.P_Precond</span>
+0124 <span class="comment">%</span>
+0125 <span class="comment">%  If no preconditioner has been specified (or is []), then M\V=V (M is</span>
+0126 <span class="comment">%  the identity).</span>
+0127 <span class="comment">%  If Precond is an N by N matrix, say, K, then</span>
+0128 <span class="comment">%        M\V = K\V.</span>
+0129 <span class="comment">%  If Precond is an N by 2*N matrix, say, K, then</span>
+0130 <span class="comment">%        M\V = U\L\V, where K=[L,U], and L and U are N by N matrices.</span>
+0131 <span class="comment">%  If Precond is a string, say, 'Mi', then</span>
+0132 <span class="comment">%        if Mi(V,'L') and Mi(V,'U') return N-vectors</span>
+0133 <span class="comment">%               M\V = Mi(Mi(V,'L'),'U')</span>
+0134 <span class="comment">%        otherwise</span>
+0135 <span class="comment">%               M\V = Mi(V) or M\V=Mi(V,'preconditioner').</span>
+0136 <span class="comment">%  Note that Precond and A can be the same string.</span>
+0137 <span class="comment">%  If L_Precond and U_Precond are strings, say, 'Li' and 'Ui',</span>
+0138 <span class="comment">%  respectively, then</span>
+0139 <span class="comment">%        M\V=Ui(Li(V)).</span>
+0140 <span class="comment">%  If (P_precond,) L_Precond, and U_precond are N by N matrices, say,</span>
+0141 <span class="comment">%  (P,) L, and U, respectively, then</span>
+0142 <span class="comment">%        M\V=U\L\(P*V)      (P*M=L*U)</span>
+0143 <span class="comment">%</span>
+0144 <span class="comment">%     OPTIONS.Type_Precond</span>
+0145 <span class="comment">%  The preconditioner can be used as explicit left preconditioner</span>
+0146 <span class="comment">%  ('left', default), as explicit right preconditioner ('right') or</span>
+0147 <span class="comment">%  implicitly ('impl').</span>
+0148 <span class="comment">%</span>
+0149 <span class="comment">%</span>
+0150 <span class="comment">%  JDQZ without input arguments returns the options and its defaults.</span>
+0151 <span class="comment">%</span>
+0152 
+0153 <span class="comment">%   Gerard Sleijpen.</span>
+0154 <span class="comment">%   Copyright (c) 2002</span>
+0155 <span class="comment">%</span>
+0156 <span class="comment">%</span>
+0157 
+0158 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0159 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0160 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0161 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0162 <span class="comment">% maintain the name of the original author.</span>
+0163 <span class="comment">%</span>
+0164 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0165 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0166 
+0167 
+0168 <span class="keyword">global</span> Qschur Zschur Sschur Tschur <span class="keyword">...</span>
+0169        Operator_MVs Precond_Solves <span class="keyword">...</span>
+0170        MinvZ QastMinvZ
+0171 
+0172 <span class="keyword">if</span> nargin==0
+0173    <a href="#_sub34" class="code" title="subfunction possibilities">possibilities</a>, <span class="keyword">return</span>,
+0174 <span class="keyword">end</span>
+0175 
+0176 <span class="comment">%%% Read/set parameters</span>
+0177 [n,nselect,Sigma,kappa,SCHUR,<span class="keyword">...</span>
+0178    jmin,jmax,tol0,maxit,V,AV,BV,TS,DISP,PAIRS,JDV0,FIX_tol,track,NSIGMA,<span class="keyword">...</span>
+0179    lsolver,LSpar] = ReadOptions(varargin{1:nargin});
+0180 
+0181 Qschur = zeros(n,0);    Zschur=zeros(n,0);; 
+0182 MinvZ  = zeros(n,0);    QastMinvZ=zeros(0,0); 
+0183 Sschur = []; Tschur=[]; history = []; 
+0184 
+0185 <span class="comment">%%% Return if eigenvalueproblem is trivial</span>
+0186 <span class="keyword">if</span> n&lt;2
+0187   <span class="keyword">if</span> n==1, Qschur=1; Zschur=1; [Sschur,Tschur]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(1); <span class="keyword">end</span>
+0188   <span class="keyword">if</span> nargout == 0, Lambda=Sschur/Tschur, <span class="keyword">else</span>
+0189   [varargout{1:nargout}]=<a href="#_sub7" class="code" title="subfunction varargout=output(history,SCHUR,X,Lambda)">output</a>(history,SCHUR,1,Sschur/Tschur); <span class="keyword">end</span>, 
+0190 <span class="keyword">return</span>, <span class="keyword">end</span>
+0191 
+0192 <span class="comment">%---------- SET PARAMETERS &amp; STRINGS FOR OUTPUT -------------------------</span>
+0193 
+0194 <span class="keyword">if</span>     TS==0, testspace=<span class="string">'sigma(1)''*Av+sigma(2)''*Bv'</span>;
+0195 <span class="keyword">elseif</span> TS==1, testspace=<span class="string">'sigma(2)*Av-sigma(1)*Bv'</span>;
+0196 <span class="keyword">elseif</span> TS==2, testspace=<span class="string">'v'</span>; 
+0197 <span class="keyword">elseif</span> TS==3, testspace=<span class="string">'Bv'</span>;
+0198 <span class="keyword">elseif</span> TS==4, testspace=<span class="string">'Av'</span>;
+0199 <span class="keyword">end</span>
+0200 
+0201 String=[<span class="string">'\r#it=%i #MV=%3i, dim(V)=%2i, |r_%2i|=%6.1e  '</span>];
+0202 
+0203 <span class="comment">%------------------- JDQZ -----------------------------------------------</span>
+0204 
+0205 <span class="comment">% fprintf('Scaling with kappa=%6.4g.',kappa)</span>
+0206 
+0207 k=0; nt=0; j=size(V,2); nSigma=size(Sigma,1);
+0208 it=0; extra=0; Zero=[]; target=[]; tol=tol0/sqrt(nselect);
+0209 
+0210 INITIATE=1;  JDV=0; 
+0211 rKNOWN=0; EXPAND=0; USE_OLD=0; DETECTED=0;
+0212 
+0213 time=clock;
+0214 <span class="keyword">if</span> TS ~=2
+0215 <span class="keyword">while</span> (k&lt;nselect &amp; it&lt;maxit)
+0216 
+0217    <span class="comment">%%% Initialize target, test space and interaction matrices</span>
+0218    <span class="keyword">if</span> INITIATE, <span class="comment">% set new target</span>
+0219       nt=min(nt+1,nSigma); sigma = Sigma(nt,:); nlit=0; lit=0;  
+0220       <span class="keyword">if</span> j&lt;2
+0221         [V,AV,BV]=<a href="#_sub1" class="code" title="subfunction [V,AV,BV]=Arnoldi(v,Av,Bv,sigma,jmin,nselect,tol)">Arnoldi</a>(V,AV,BV,sigma,jmin,nselect,tol);
+0222         rKNOWN=0; EXPAND=0; USE_OLD=0; DETECTED=0; target=[];
+0223         j=min(jmin,n-k);
+0224       <span class="keyword">end</span>
+0225       <span class="keyword">if</span> DETECTED &amp; NSIGMA
+0226          [Ur,Ul,St,Tt] = <a href="#_sub25" class="code" title="subfunction [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)">SortQZ</a>(WAV,WBV,sigma,kappa);
+0227          y=Ur(:,1); q=V*y; Av=AV*y; Bv=BV*y; 
+0228          [r,z,nr,theta]=<a href="#_sub23" class="code" title="subfunction [r,z,nrm,theta]=Comp_rz(E,kappa)">Comp_rz</a>(<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Zschur,[Av,Bv],0),kappa);
+0229          sigma=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(theta);
+0230          USE_OLD=NSIGMA; rKNOWN=1; lit=10;
+0231       <span class="keyword">end</span>   
+0232       NEWSHIFT= 1; 
+0233       <span class="keyword">if</span> DETECTED &amp; TS&lt;2, NEWSHIFT= ~min(target==sigma); <span class="keyword">end</span>
+0234       target=sigma; ttarget=sigma;
+0235       <span class="keyword">if</span> ischar(ttarget), ttrack=0; <span class="keyword">else</span>, ttrack=track; <span class="keyword">end</span>
+0236       <span class="keyword">if</span> NEWSHIFT 
+0237          v=V; Av=AV; Bv=BV; W=eval(testspace);
+0238          <span class="comment">%%% V=RepGS(Qschur,V); [AV,BV]=MV(V); %%% more stability??</span>
+0239          <span class="comment">%%% W=RepGS(Zschur,eval(testspace));  %%% dangerous if sigma~lambda</span>
+0240          <span class="keyword">if</span> USE_OLD, W(:,1)=V(:,1); <span class="keyword">end</span>, 
+0241          W=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Zschur,W); WAV=W'*AV;  WBV=W'*BV;
+0242       <span class="keyword">end</span>
+0243       INITIATE=0; DETECTED=0; JDV=0;
+0244 
+0245    <span class="keyword">end</span> <span class="comment">% if INITIATE</span>
+0246 
+0247    <span class="comment">%%% Solve the preconditioned correction equation</span>
+0248    <span class="keyword">if</span> rKNOWN,
+0249       <span class="keyword">if</span> JDV, z=W; q=V; extra=extra+1; 
+0250          <span class="keyword">if</span> DISP,  fprintf(<span class="string">'  %2i-d proj.\n'</span>,k+j-1), <span class="keyword">end</span> 
+0251       <span class="keyword">end</span>
+0252       <span class="keyword">if</span> FIX_tol*nr&gt;1 &amp; ~ischar(target), theta=target; <span class="keyword">else</span>, FIX_tol=0; <span class="keyword">end</span>
+0253       t=<a href="#_sub9" class="code" title="subfunction [t,xtol]=SolvePCE(theta,q,z,r,lsolver,par,nit)">SolvePCE</a>(theta,q,z,r,lsolver,LSpar,lit); 
+0254       nlit=nlit+1; lit=lit+1; it=it+1;
+0255       EXPAND=1; rKNOWN=0; JDV=0;
+0256    <span class="keyword">end</span> <span class="comment">% if rKNOWN</span>
+0257     
+0258    <span class="comment">%%% Expand the subspaces and the interaction matrices</span>
+0259    <span class="keyword">if</span> EXPAND
+0260       [v,<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>]=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>([Qschur,V],t);
+0261       V=[V,v]; 
+0262       [Av,Bv]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(v); AV=[AV,Av]; BV=[BV,Bv]; 
+0263       w=eval(testspace); w=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>([Zschur,W],w);
+0264       WAV=[WAV,W'*Av;w'*AV]; WBV=[WBV,W'*Bv;w'*BV]; W=[W,w];
+0265       j=j+1; EXPAND=0;
+0266 
+0267       <span class="comment">%%% Check for stagnation</span>
+0268       <span class="keyword">if</span> abs(<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>(size(<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>,1),1))/norm(<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>)&lt;0.06, JDV=JDV0; <span class="keyword">end</span>
+0269 
+0270    <span class="keyword">end</span> <span class="comment">% if EXPAND</span>
+0271  
+0272    <span class="comment">%%% Solve projected eigenproblem</span>
+0273    <span class="keyword">if</span> USE_OLD
+0274       [Ur,Ul,St,Tt]=<a href="#_sub25" class="code" title="subfunction [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)">SortQZ</a>(WAV,WBV,ttarget,kappa,(j&gt;=jmax)*jmin,y); 
+0275    <span class="keyword">else</span>
+0276       [Ur,Ul,St,Tt]=<a href="#_sub25" class="code" title="subfunction [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)">SortQZ</a>(WAV,WBV,ttarget,kappa,(j&gt;=jmax)*jmin); 
+0277    <span class="keyword">end</span>
+0278 
+0279    <span class="comment">%%% Compute approximate eigenpair and residual</span>
+0280    y=Ur(:,1); q=V*y; Av=AV*y; Bv=BV*y; 
+0281    [r,z,nr,theta]=<a href="#_sub23" class="code" title="subfunction [r,z,nrm,theta]=Comp_rz(E,kappa)">Comp_rz</a>(<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Zschur,[Av,Bv],0),kappa); 
+0282    <span class="comment">%%%=== an alternative, but less stable way of computing z =====</span>
+0283    <span class="comment">% beta=Tt(1,1); alpha=St(1,1); theta=[alpha,beta];</span>
+0284    <span class="comment">% r=RepGS(Zschur,beta*Av-alpha*Bv,0); nr=norm(r); z=W*Ul(:,1);</span>
+0285    rKNOWN=1; <span class="keyword">if</span> nr&lt;ttrack, ttarget=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(theta); <span class="keyword">end</span>
+0286 
+0287          <span class="keyword">if</span> DISP,                                  <span class="comment">%%% display history</span>
+0288             fprintf(String,it,Operator_MVs,j,nlit,nr), 
+0289          <span class="keyword">end</span> 
+0290          history=[history;nr,it,Operator_MVs];    <span class="comment">%%% save history</span>
+0291 
+0292    <span class="comment">%%% check convergence</span>
+0293    <span class="keyword">if</span> (nr&lt;tol)
+0294       <span class="comment">%%% EXPAND Schur form</span>
+0295       Qschur=[Qschur,q]; Zschur=[Zschur,z];
+0296       Sschur=[[Sschur;zeros(1,k)],Zschur'*Av]; 
+0297       Tschur=[[Tschur;zeros(1,k)],Zschur'*Bv];  Zero=[Zero,0];
+0298       k=k+1; 
+0299       <span class="keyword">if</span> ischar(target), Target(k,:)=[nt,0,0];
+0300       <span class="keyword">else</span>, Target(k,:)=[0,target]; <span class="keyword">end</span>
+0301       <span class="keyword">if</span> DISP, <a href="#_sub42" class="code" title="subfunction ShowEig(theta,target,k)">ShowEig</a>(theta,target,k); <span class="keyword">end</span>
+0302       <span class="keyword">if</span> (k&gt;=nselect), <span class="keyword">break</span>; <span class="keyword">end</span>;
+0303       <span class="comment">%%% Expand preconditioned Schur matrix MinvZ=M\Zschur</span>
+0304       <a href="#_sub8" class="code" title="subfunction   UpdateMinvZ">UpdateMinvZ</a>;
+0305       J=[2:j]; j=j-1; Ur=Ur(:,J); Ul=Ul(:,J); 
+0306       V=V*Ur; AV=AV*Ur; BV=BV*Ur; W=W*Ul; 
+0307       WAV=St(J,J); WBV=Tt(J,J);
+0308   
+0309       rKNOWN=0; DETECTED=1;  USE_OLD=0;
+0310 
+0311       <span class="comment">%%% check for conjugate pair</span>
+0312       <span class="keyword">if</span> PAIRS &amp; (abs(imag(theta(1)/theta(2)))&gt;tol) 
+0313          t=<a href="#_sub21" class="code" title="subfunction u=ImagVector(u)">ImagVector</a>(q); <span class="comment">% t=conj(q); t=t-q*(q'*t);</span>
+0314          <span class="keyword">if</span> norm(t)&gt;tol, t=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>([Qschur,V],t,0); 
+0315             <span class="keyword">if</span> norm(t)&gt;200*tol
+0316                target=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(conj(theta));
+0317                EXPAND=1; DETECTED=0; 
+0318                <span class="keyword">if</span> DISP, fprintf(<span class="string">'--- Checking for conjugate pair ---\n'</span>), <span class="keyword">end</span>
+0319             <span class="keyword">end</span>
+0320          <span class="keyword">end</span>
+0321       <span class="keyword">end</span>
+0322     
+0323       INITIATE = ( j==0 &amp; DETECTED);
+0324 
+0325    <span class="keyword">elseif</span> DETECTED <span class="comment">%%% To detect whether another eigenpair is accurate enough</span>
+0326       INITIATE=1; 
+0327    <span class="keyword">end</span> <span class="comment">% if (nr&lt;tol)</span>
+0328    
+0329    <span class="comment">%%% restart if dim(V)&gt; jmax</span>
+0330    <span class="keyword">if</span> j==jmax
+0331       j=jmin; J=[1:j]; 
+0332       Ur=Ur(:,J); Ul=Ul(:,J); 
+0333       V=V*Ur; AV=AV*Ur; BV=BV*Ur; W=W*Ul; 
+0334       WAV=St(J,J); WBV=Tt(J,J); 
+0335    <span class="keyword">end</span> <span class="comment">% if j==jmax</span>
+0336 
+0337 <span class="keyword">end</span> <span class="comment">% while k</span>
+0338 <span class="keyword">end</span> <span class="comment">% if TS~=2</span>
+0339 
+0340 
+0341 <span class="keyword">if</span> TS==2
+0342 Q0=Qschur; ZastQ=[];
+0343 <span class="comment">% WAV=V'*AV; WBV=V'*BV;</span>
+0344 <span class="keyword">while</span> (k&lt;nselect &amp; it&lt;maxit)
+0345 
+0346    <span class="comment">%%% Initialize target, test space and interaction matrices</span>
+0347    <span class="keyword">if</span> INITIATE &amp; ( nSigma&gt;k | NSIGMA), <span class="comment">% set new target</span>
+0348       nt=min(nt+1,nSigma); sigma = Sigma(nt,:); nlit=0; lit=0;                
+0349       <span class="keyword">if</span> j&lt;2
+0350         [V,AV,BV]=<a href="#_sub1" class="code" title="subfunction [V,AV,BV]=Arnoldi(v,Av,Bv,sigma,jmin,nselect,tol)">Arnoldi</a>(V,AV,BV,sigma,jmin,nselect,tol);
+0351         rKNOWN=0; EXPAND=0; USE_OLD=0; DETECTED=0; target=[];
+0352         j=min(jmin,n-k);; 
+0353       <span class="keyword">end</span>
+0354       <span class="keyword">if</span> DETECTED &amp; NSIGMA
+0355          [Ur,Ul,St,Tt]=<a href="#_sub25" class="code" title="subfunction [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)">SortQZ</a>(WAV,WBV,sigma,kappa,1); 
+0356          q=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Zschur,V*Ur(:,1)); [Av,Bv]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(q); 
+0357          [r,z,nr,theta]=<a href="#_sub23" class="code" title="subfunction [r,z,nrm,theta]=Comp_rz(E,kappa)">Comp_rz</a>(<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Zschur,[Av,Bv],0),kappa); 
+0358          sigma=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(theta); 
+0359          USE_OLD=NSIGMA; rKNOWN=1; lit=10;
+0360       <span class="keyword">end</span>   
+0361       target=sigma; ttarget=sigma;
+0362       <span class="keyword">if</span> ischar(ttarget), ttrack=0; <span class="keyword">else</span>, ttrack=track; <span class="keyword">end</span>
+0363       <span class="keyword">if</span> ~DETECTED
+0364          <span class="comment">%%% additional stabilisation. May not be needed</span>
+0365          <span class="comment">%%% V=RepGS(Zschur,V); [AV,BV]=MV(V);</span>
+0366          <span class="comment">%%% end add. stab.</span>
+0367          WAV=V'*AV; WBV=V'*BV;
+0368       <span class="keyword">end</span>
+0369       DETECTED=0; INITIATE=0; JDV=0; 
+0370    <span class="keyword">end</span> <span class="comment">% if INITIATE</span>
+0371 
+0372    <span class="comment">%%% Solve the preconditioned correction equation</span>
+0373    <span class="keyword">if</span> rKNOWN,
+0374       <span class="keyword">if</span> JDV, z=V; q=V; extra=extra+1; 
+0375          <span class="keyword">if</span> DISP,  fprintf(<span class="string">'  %2i-d proj.\n'</span>,k+j-1), <span class="keyword">end</span> 
+0376       <span class="keyword">end</span>
+0377       <span class="keyword">if</span> FIX_tol*nr&gt;1 &amp; ~ischar(target), theta=target; <span class="keyword">else</span>, FIX_tol=0; <span class="keyword">end</span>
+0378       t=<a href="#_sub9" class="code" title="subfunction [t,xtol]=SolvePCE(theta,q,z,r,lsolver,par,nit)">SolvePCE</a>(theta,q,z,r,lsolver,LSpar,lit); 
+0379       nlit=nlit+1; lit=lit+1; it=it+1;
+0380       EXPAND=1; rKNOWN=0; JDV=0;
+0381    <span class="keyword">end</span> <span class="comment">% if rKNOWN</span>
+0382 
+0383    <span class="comment">%%% expand the subspaces and the interaction matrices</span>
+0384    <span class="keyword">if</span> EXPAND
+0385       [v,<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>]=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>([Zschur,V],t); [Av,Bv]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(v); 
+0386       WAV=[WAV,V'*Av;v'*AV,v'*Av]; WBV=[WBV,V'*Bv;v'*BV,v'*Bv];
+0387       V=[V,v]; AV=[AV,Av]; BV=[BV,Bv]; 
+0388       j=j+1; EXPAND=0;
+0389 
+0390       <span class="comment">%%% Check for stagnation</span>
+0391       <span class="keyword">if</span> abs(<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>(size(<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>,1),1))/norm(<a href="../../../Otherbox/plfit/zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>)&lt;0.06, JDV=JDV0; <span class="keyword">end</span> 
+0392 
+0393    <span class="keyword">end</span> <span class="comment">% if EXPAND</span>
+0394  
+0395    <span class="comment">%%% compute approximate eigenpair</span>
+0396    <span class="keyword">if</span> USE_OLD
+0397       [Ur,Ul]=<a href="#_sub25" class="code" title="subfunction [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)">SortQZ</a>(WAV,WBV,ttarget,kappa,(j&gt;=jmax)*jmin,Ur(:,1)); 
+0398    <span class="keyword">else</span>
+0399       [Ur,Ul]=<a href="#_sub25" class="code" title="subfunction [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)">SortQZ</a>(WAV,WBV,ttarget,kappa,(j&gt;=jmax)*jmin);
+0400    <span class="keyword">end</span>
+0401      
+0402    <span class="comment">%%% Compute approximate eigenpair and residual</span>
+0403    q=V*Ur(:,1); Av=AV*Ur(:,1); Bv=BV*Ur(:,1);  
+0404    [r,z,nr,theta]=<a href="#_sub23" class="code" title="subfunction [r,z,nrm,theta]=Comp_rz(E,kappa)">Comp_rz</a>(<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Zschur,[Av,Bv],0),kappa); 
+0405    rKNOWN=1; <span class="keyword">if</span> nr&lt;ttrack, ttarget=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(theta); <span class="keyword">end</span>
+0406 
+0407           <span class="keyword">if</span> DISP,                                 <span class="comment">%%% display history</span>
+0408              fprintf(String,it,Operator_MVs, j,nlit,nr), 
+0409           <span class="keyword">end</span>  
+0410           history=[history;nr,it,Operator_MVs];   <span class="comment">%%% save history</span>
+0411    
+0412    <span class="comment">%%% check convergence</span>
+0413    <span class="keyword">if</span> (nr&lt;tol)
+0414       <span class="comment">%%% expand Schur form</span>
+0415       [q,a]=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Q0,q); a1=a(k+1,1); a=a(1:k,1);
+0416       <span class="comment">%%% ZastQ=Z'*Q0</span>
+0417       Q0=[Q0,q]; <span class="comment">%%% the final Qschur</span>
+0418       ZastQ=[ZastQ,Zschur'*q;z'*Q0]; Zschur=[Zschur,z]; Qschur=[Qschur,z]; 
+0419       Sschur=[[Sschur;Zero],a1\(Zschur'*Av-[Sschur*a;0])];
+0420       Tschur=[[Tschur;Zero],a1\(Zschur'*Bv-[Tschur*a;0])]; Zero=[Zero,0];
+0421       k=k+1;
+0422       <span class="keyword">if</span> ischar(target), Target(k,:)=[nt,0,0];
+0423       <span class="keyword">else</span>, Target(k,:)=[0,target]; <span class="keyword">end</span>
+0424       <span class="keyword">if</span> DISP, <a href="#_sub42" class="code" title="subfunction ShowEig(theta,target,k)">ShowEig</a>(theta,target,k); <span class="keyword">end</span>
+0425       <span class="keyword">if</span> (k&gt;=nselect), <span class="keyword">break</span>; <span class="keyword">end</span>;  
+0426       <a href="#_sub8" class="code" title="subfunction   UpdateMinvZ">UpdateMinvZ</a>;
+0427       J=[2:j]; j=j-1; rKNOWN=0; DETECTED=1; 
+0428       Ul=Ul(:,J); 
+0429       V=V*Ul; AV=AV*Ul; BV=BV*Ul; 
+0430       WAV=Ul'*WAV*Ul; WBV=Ul'*WBV*Ul; 
+0431       Ul=eye(j); Ur=Ul;
+0432 
+0433       <span class="comment">%%% check for conjugate pair</span>
+0434       <span class="keyword">if</span> PAIRS &amp; (abs(imag(theta(2)/theta(1)))&gt;tol)
+0435          t=<a href="#_sub21" class="code" title="subfunction u=ImagVector(u)">ImagVector</a>(q); 
+0436          <span class="keyword">if</span> norm(t)&gt;tol,  
+0437             <span class="comment">%%% t perp Zschur, t in span(Q0,imag(q))</span>
+0438             t=t-Q0*(ZastQ\(Zschur'*t));
+0439             <span class="keyword">if</span> norm(t)&gt;100*tol
+0440                target=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(conj(theta));
+0441                EXPAND=1; DETECTED=0; USE_OLD=0; 
+0442                <span class="keyword">if</span> DISP, fprintf(<span class="string">'--- Checking for conjugate pair ---\n'</span>), <span class="keyword">end</span>
+0443             <span class="keyword">end</span>
+0444          <span class="keyword">end</span>
+0445       <span class="keyword">end</span>
+0446       INITIATE = ( j==0 &amp; DETECTED);
+0447 
+0448    <span class="keyword">elseif</span> DETECTED <span class="comment">%%% To detect whether another eigenpair is accurate enough</span>
+0449       INITIATE=1;
+0450    <span class="keyword">end</span> <span class="comment">% if (nr&lt;tol)</span>
+0451 
+0452    <span class="comment">%%% restart if dim(V)&gt; jmax</span>
+0453    <span class="keyword">if</span> j==jmax
+0454       j=jmin; J=[1:j];
+0455       Ur=Ur(:,J); 
+0456       V=V*Ur; AV=AV*Ur; BV=BV*Ur; 
+0457       WAV=Ur'*WAV*Ur; WBV=Ur'*WBV*Ur; 
+0458       Ur=eye(j); 
+0459    <span class="keyword">end</span> <span class="comment">% if jmax</span>
+0460 
+0461 <span class="keyword">end</span> <span class="comment">% while k</span>
+0462 Qschur=Q0;
+0463 <span class="keyword">end</span>
+0464 
+0465 time_needed=etime(clock,time);
+0466 
+0467 <span class="keyword">if</span> JDV0 &amp; extra&gt;0 &amp; DISP
+0468   fprintf(<span class="string">'\n\n# j-dim. proj.: %2i\n\n'</span>,extra)
+0469 <span class="keyword">end</span>
+0470 
+0471 I=<a href="#_sub2" class="code" title="subfunction I=CheckSortSchur(Sigma,kappa)">CheckSortSchur</a>(Sigma,kappa); Target(1:length(I),:)=Target(I,:);
+0472 
+0473 XKNOWN=0;
+0474 
+0475 <span class="keyword">if</span> nargout == 0 
+0476    <span class="keyword">if</span> ~DISP
+0477    eigenvalues=diag(Sschur)./diag(Tschur)
+0478    <span class="comment">% Result(eigenvalues)</span>
+0479    <span class="keyword">return</span>, <span class="keyword">end</span>
+0480 <span class="keyword">else</span>
+0481   Jordan=[]; X=zeros(n,0);
+0482   <span class="keyword">if</span> SCHUR ~= 1
+0483     <span class="keyword">if</span> k&gt;0
+0484       [Z,D,Jor]=<a href="#_sub4" class="code" title="subfunction [X,D,Jor]=FindJordan(S,T,SCHUR)">FindJordan</a>(Sschur,Tschur,SCHUR); 
+0485       DT=abs(diag(D)); DS=abs(diag(Jor));
+0486       JT=find(DT&lt;=tol &amp; DS&gt;tol); JS=find(DS&lt;=tol &amp; DT&lt;=tol);
+0487       msg=<span class="string">''</span>; DT=~isempty(JT); DS=~isempty(JS); 
+0488       <span class="keyword">if</span> DT
+0489           msg1=<span class="string">'The eigenvalues'</span>; msg2=sprintf(<span class="string">', %i'</span>,JT);
+0490           msg=[msg1,msg2,<span class="string">' are numerically ''Inf'''</span>];
+0491       <span class="keyword">end</span>, 
+0492       <span class="keyword">if</span> DS
+0493           msg1=<span class="string">'The pencil is numerically degenerated in the directions'</span>;
+0494           msg2=sprintf(<span class="string">', %i'</span>,JS); 
+0495           <span class="keyword">if</span> DT, msg=[msg,sprintf(<span class="string">'\n\n'</span>)]; <span class="keyword">end</span>, msg=[msg,msg1,msg2,<span class="string">'.'</span>];
+0496       <span class="keyword">end</span>, 
+0497       <span class="keyword">if</span> (DT | DS), warndlg(msg,<span class="string">'Unreliable directions'</span>), <span class="keyword">end</span>
+0498       Jordan=Jor/D; X=Qschur*Z; XKNOWN=1;
+0499     <span class="keyword">end</span> 
+0500   <span class="keyword">end</span>
+0501   [varargout{1:nargout}]=<a href="#_sub7" class="code" title="subfunction varargout=output(history,SCHUR,X,Lambda)">output</a>(history,SCHUR,X,Jordan);
+0502 
+0503 <span class="keyword">end</span>
+0504 
+0505 <span class="comment">%-------------- display results -----------------------------------------</span>
+0506 <span class="keyword">if</span> DISP &amp; size(history,1)&gt;0
+0507   rs=history(:,1); mrs=max(rs);
+0508   <span class="keyword">if</span> mrs&gt;0, rs=rs+0.1*eps*mrs;
+0509     subplot(2,1,1); t=history(:,2); 
+0510     plot(t,log10(rs),<span class="string">'*-'</span>,t,log10(tol)+0*t,<span class="string">':'</span>)
+0511     legend(<span class="string">'log_{10} || r_{#it} ||_2'</span>)
+0512     String=sprintf(<span class="string">'The test subspace is computed as %s.'</span>,testspace);
+0513     title(String)
+0514 
+0515     subplot(2,1,2); t=history(:,3);
+0516     plot(t,log10(rs),<span class="string">'-*'</span>,t,log10(tol)+0*t,<span class="string">':'</span>)
+0517     legend(<span class="string">'log_{10} || r_{#MV} ||_2'</span>)
+0518   
+0519 
+0520     String=sprintf(<span class="string">'JDQZ with jmin=%g, jmax=%g, residual tolerance %g.'</span>,<span class="keyword">...</span>
+0521             jmin,jmax,tol); 
+0522     title(String) 
+0523     String=sprintf(<span class="string">'Correction equation solved with %s.'</span>,lsolver);
+0524     xlabel(String), 
+0525 
+0526     date=fix(clock);
+0527     String=sprintf(<span class="string">'%2i-%2i-%2i, %2i:%2i:%2i'</span>,date(3:-1:1),date(4:6));
+0528     ax=axis; text(0.2*ax(1)+0.8*ax(2),1.2*ax(3)-0.2*ax(4),String)
+0529     drawnow
+0530   <span class="keyword">end</span>
+0531 
+0532   <a href="#_sub40" class="code" title="subfunction Result(Sigm,Target,S,T,tol)">Result</a>(Sigma,Target,diag(Sschur),diag(Tschur),tol)
+0533 
+0534 <span class="keyword">end</span>
+0535 
+0536 <span class="comment">%------------------------ TEST ACCURACY ---------------------------------</span>
+0537 <span class="keyword">if</span> k&gt;nselect &amp; DISP
+0538    fprintf(<span class="string">'\n%i additional eigenpairs have been detected.\n'</span>,k-nselect)
+0539 <span class="keyword">end</span>
+0540 <span class="keyword">if</span> k&lt;nselect &amp; DISP
+0541    fprintf(<span class="string">'\nFailed to detect %i eigenpairs.\n'</span>,nselect-k)
+0542 <span class="keyword">end</span>
+0543 
+0544 <span class="keyword">if</span> (k&gt;0) &amp; DISP
+0545    Str=<span class="string">'time_needed'</span>;                      <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str))
+0546    fprintf(<span class="string">'\n%39s: %9i'</span>,<span class="string">'Number of Operator actions'</span>,Operator_MVs)
+0547    <span class="keyword">if</span> Precond_Solves
+0548    fprintf(<span class="string">'\n%39s: %9i'</span>,<span class="string">'Number of preconditioner solves'</span>,Precond_Solves)
+0549    <span class="keyword">end</span>
+0550    <span class="keyword">if</span> 1
+0551    <span class="keyword">if</span> SCHUR ~= 1 &amp; XKNOWN
+0552      <span class="comment">% Str='norm(Sschur*Z-Tschur*Z*Jordan)'; texttest(Str,eval(Str),tol0)</span>
+0553      ok=1; eval(<span class="string">'[AX,BX]=MV(X);'</span>,<span class="string">'ok=0;'</span>)
+0554      <span class="keyword">if</span> ~ok, <span class="keyword">for</span> j=1:size(X,2), [AX(:,j),BX(:,j)]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(X(:,j)); <span class="keyword">end</span>, <span class="keyword">end</span>
+0555      Str=<span class="string">'norm(AX*D-BX*Jor)'</span>;              <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str),tol0)
+0556    <span class="keyword">end</span>
+0557    ok=1; eval(<span class="string">'[AQ,BQ]=MV(Qschur);'</span>,<span class="string">'ok=0;'</span>)
+0558    <span class="keyword">if</span> ~ok, <span class="keyword">for</span> j=1:size(Qschur,2), [AQ(:,j),BQ(:,j)]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(Qschur(:,j)); <span class="keyword">end</span>, <span class="keyword">end</span>
+0559    <span class="keyword">if</span> kappa == 1
+0560      Str=<span class="string">'norm(AQ-Zschur*Sschur)'</span>;         <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str),tol0)
+0561    <span class="keyword">else</span>
+0562      Str=<span class="string">'norm(AQ-Zschur*Sschur)/kappa'</span>;   <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str),tol0)
+0563    <span class="keyword">end</span>
+0564    Str=<span class="string">'norm(BQ-Zschur*Tschur)'</span>;           <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str),tol0)
+0565    I=eye(k);
+0566    Str=<span class="string">'norm(Qschur''*Qschur-I)'</span>;          <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str))  
+0567    Str=<span class="string">'norm(Zschur''*Zschur-I)'</span>;          <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str))
+0568    nrmSschur=max(norm(Sschur),1.e-8);
+0569    nrmTschur=max(norm(Tschur),1.e-8);
+0570    Str=<span class="string">'norm(tril(Sschur,-1))/nrmSschur'</span>;  <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str))
+0571    Str=<span class="string">'norm(tril(Tschur,-1))/nrmTschur'</span>;  <a href="#_sub43" class="code" title="subfunction texttest(s,nr,gamma)">texttest</a>(Str,eval(Str))
+0572    <span class="keyword">end</span>
+0573    fprintf(<span class="string">'\n==================================================\n'</span>)
+0574 <span class="keyword">end</span>
+0575 <span class="keyword">if</span> k==0
+0576   disp(<span class="string">'no eigenvalue could be detected with the required precision'</span>)
+0577 <span class="keyword">end</span>
+0578 
+0579 <span class="keyword">return</span>
+0580 <span class="comment">%%%======== END JDQZ ====================================================</span>
+0581 
+0582 <span class="comment">%%%======================================================================</span>
+0583 <span class="comment">%%%======== PREPROCESSING ===============================================</span>
+0584 <span class="comment">%%%======================================================================</span>
+0585 
+0586 <span class="comment">%%%======== ARNOLDI (for initial spaces) ================================</span>
+0587 <a name="_sub1" href="#_subfunctions" class="code">function [V,AV,BV]=Arnoldi(v,Av,Bv,sigma,jmin,nselect,tol)</a>
+0588 <span class="comment">% Apply Arnoldi with M\(A*sigma(1)'+B*sigma(2)'), to construct an</span>
+0589 <span class="comment">% initial search subspace</span>
+0590 <span class="comment">%</span>
+0591 
+0592 <span class="keyword">global</span> Qschur
+0593 
+0594 <span class="keyword">if</span> ischar(sigma), sigma=[0,1]; <span class="keyword">end</span>
+0595 
+0596 [n,j]=size(v); k=size(Qschur,2); jmin=min(jmin,n-k);
+0597 
+0598 <span class="keyword">if</span> j==0 &amp; k&gt;0
+0599   v=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Qschur,rand(n,1)); [Av,Bv]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(v); j=1; 
+0600 <span class="keyword">end</span>
+0601 
+0602 V=v; AV=Av; BV=Bv;
+0603 <span class="keyword">while</span> j&lt;jmin;
+0604    v=[Av,Bv]*sigma';
+0605    v0=<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(v);
+0606    <span class="keyword">if</span> sigma(1)==0 &amp; norm(v0-v)&lt;tol, 
+0607    <span class="comment">%%%% then precond=I and target = 0: apply Arnoldi with A</span>
+0608       sigma=[1,0]; v0=Av;
+0609    <span class="keyword">end</span>
+0610    v=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>([Qschur,V],v0); V=[V,v]; 
+0611    [Av,Bv]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(v); AV=[AV,Av]; BV=[BV,Bv]; j=j+1; 
+0612 <span class="keyword">end</span> <span class="comment">% while</span>
+0613 
+0614 <span class="keyword">return</span>
+0615 <span class="comment">%%%======== END ARNOLDI =================================================</span>
+0616 
+0617 <span class="comment">%%%======================================================================</span>
+0618 <span class="comment">%%%======== POSTPROCESSING ==============================================</span>
+0619 <span class="comment">%%%======================================================================</span>
+0620 
+0621 <span class="comment">%%%======== SORT QZ DECOMPOSITION INTERACTION MATRICES ==================</span>
+0622 <a name="_sub2" href="#_subfunctions" class="code">function I=CheckSortSchur(Sigma,kappa)</a>
+0623 <span class="comment">% I=CheckSortSchur(Sigma)</span>
+0624 <span class="comment">%   Scales Qschur, Sschur, and Tschur such that diag(Tschur) in [0,1]</span>
+0625 <span class="comment">%   Reorders the Partial Schur decomposition such that the `eigenvalues'</span>
+0626 <span class="comment">%   (diag(S),diag(T)) appear in increasing chordal distance w.r.t. to</span>
+0627 <span class="comment">%   Sigma.</span>
+0628 <span class="comment">%   If diag(T) is non-singular then Lambda=diag(S)./diag(T) are the</span>
+0629 <span class="comment">%   eigenvalues.</span>
+0630 
+0631 <span class="keyword">global</span> Qschur Zschur Sschur Tschur
+0632 
+0633 k=size(Sschur,1); <span class="keyword">if</span> k==0, I=[]; <span class="keyword">return</span>, <span class="keyword">end</span>
+0634 <span class="comment">% [AQ,BQ]=MV(Qschur);</span>
+0635 <span class="comment">%   Str='norm(AQ-Zschur*Sschur)';                texttest(Str,eval(Str))</span>
+0636 <span class="comment">%   Str='norm(BQ-Zschur*Tschur)';                texttest(Str,eval(Str))</span>
+0637 
+0638 <span class="comment">%--- scale such that diag(Tschur) in [0,1] ----</span>
+0639 [Tschur,D]=<a href="#_sub3" class="code" title="subfunction [T,D]=ScaleT(T)">ScaleT</a>(Tschur); Sschur=D\Sschur;
+0640 
+0641 <span class="comment">% kappa=max(norm(Sschur,inf)/norm(Tschur,inf),1);</span>
+0642 
+0643 s=diag(Sschur); t=diag(Tschur);
+0644 I=(1:k)'; l=size(Sigma,1);
+0645 <span class="keyword">for</span> j=1:k 
+0646   J0=(j:k)';
+0647   J=<a href="#_sub26" class="code" title="subfunction I=SortEig(s,t,sigma,kappa);">SortEig</a>(s(I(J0)),t(I(J0)),Sigma(min(j,l),:),kappa);
+0648   I(J0)=I(J0(J));
+0649 <span class="keyword">end</span>
+0650 
+0651 <span class="keyword">if</span> ~min((1:k)'==I)
+0652    [Q,Z,Sschur,Tschur]=<a href="#_sub28" class="code" title="subfunction [Q,Z,S,T]=SwapQZ(Q,Z,S,T,I)">SwapQZ</a>(eye(k),eye(k),Sschur,Tschur,I); 
+0653    [Tschur,D2]=<a href="#_sub3" class="code" title="subfunction [T,D]=ScaleT(T)">ScaleT</a>(Tschur); Sschur=D2\Sschur;
+0654    Qschur=Qschur*Q; Zschur=Zschur*(D*Z*D2);
+0655 <span class="keyword">else</span>
+0656    Zschur=Zschur*D;
+0657 <span class="keyword">end</span>
+0658 
+0659 <span class="keyword">return</span>
+0660 <span class="comment">%========================================================================</span>
+0661 <a name="_sub3" href="#_subfunctions" class="code">function [T,D]=ScaleT(T)</a>
+0662 <span class="comment">% scale such that diag(T) in [0,1] ----</span>
+0663    n=sign(diag(T)); n=n+(n==0); D=diag(n);
+0664    T=D\T; IT=imag(T); RT=real(T);
+0665    T=RT+IT.*(abs(IT)&gt;eps*abs(RT))*sqrt(-1);
+0666 <span class="keyword">return</span>
+0667 <span class="comment">%%%======== COMPUTE SORTED JORDAN FORM ==================================</span>
+0668 <a name="_sub4" href="#_subfunctions" class="code">function [X,D,Jor]=FindJordan(S,T,SCHUR)</a>
+0669 <span class="comment">% [X,D,J]=FINDJORDAN(S,T)</span>
+0670 <span class="comment">%   For S and T k by k upper triangular matrices</span>
+0671 <span class="comment">%   FINDJORDAN computes the Jordan decomposition.</span>
+0672 <span class="comment">%   X is a k by k matrix of eigenvectors and principal vectors</span>
+0673 <span class="comment">%   D and J are k by matrices, D is diagonal, J is Jordan</span>
+0674 <span class="comment">%   such that S*X*D=T*X*J. (diag(D),diag(J)) are the eigenvalues.</span>
+0675 <span class="comment">%   If D is non-singular then Lambda=diag(J)./diag(D)</span>
+0676 <span class="comment">%   are the eigenvalues.</span>
+0677 
+0678 <span class="comment">% coded by Gerard Sleijpen, May, 2002</span>
+0679 
+0680 k=size(S,1);
+0681 s=diag(S); t=diag(T); n=sign(t); n=n+(n==0); 
+0682 D=sqrt(conj(s).*s+conj(t).*t).*n;
+0683 S=diag(D)\S; T=diag(D)\T; D=diag(diag(T));
+0684 
+0685 <span class="keyword">if</span> k&lt;1, 
+0686   <span class="keyword">if</span> k==0, X=[]; D=[]; Jor=[]; <span class="keyword">end</span>
+0687   <span class="keyword">if</span> k==1, X=1; Jor=s; <span class="keyword">end</span>
+0688   <span class="keyword">return</span>
+0689 <span class="keyword">end</span>
+0690 
+0691 tol=k*(norm(S,1)+norm(T,1))*eps;
+0692 [X,Jor,I]=<a href="#_sub5" class="code" title="subfunction [X,Jor,J]=PseudoJordan(S,T,delta)">PseudoJordan</a>(S,T,tol);
+0693 
+0694 
+0695 <span class="keyword">if</span> SCHUR == 0
+0696 <span class="keyword">for</span> l=1:length(I)-1
+0697   <span class="keyword">if</span> I(l)&lt;I(l+1)-1, 
+0698     J=[I(l):I(l+1)-1];  
+0699     [U,JJor]=<a href="#_sub6" class="code" title="subfunction [X,Jor,U]=JordanBlock(A,tol)">JordanBlock</a>(Jor(J,J),tol);
+0700     X(:,J)=X(:,J)*U; Jor(J,J)=JJor;
+0701   <span class="keyword">end</span>
+0702 <span class="keyword">end</span>
+0703 <span class="keyword">end</span>
+0704 
+0705 Jor=Jor+diag(diag(S)); Jor=Jor.*(abs(Jor)&gt;tol);
+0706 
+0707 <span class="keyword">return</span>
+0708 <span class="comment">%==================================================</span>
+0709 <a name="_sub5" href="#_subfunctions" class="code">function [X,Jor,J]=PseudoJordan(S,T,delta)</a>
+0710 <span class="comment">% Computes a pseudo-Jordan decomposition for the upper triangular</span>
+0711 <span class="comment">% matrices S and T with ordered diagonal elements.</span>
+0712 <span class="comment">% S*X*(diag(diag(T)))=T*X*(diag(diag(S))+Jor)</span>
+0713 <span class="comment">% with X(:,i:j) orthonormal if its</span>
+0714 <span class="comment">% columns span an invariant subspace of (S,T).</span>
+0715 
+0716 k=size(S,1); s=diag(S); t=diag(T); 
+0717 
+0718 Jor=zeros(k); X=eye(k); J=1;
+0719 
+0720 <span class="keyword">for</span> i=2:k
+0721   I=[1:i]; 
+0722   C=t(i,1)*S(I,I)-s(i,1)*T(I,I); C(i,i)=norm(C,inf);
+0723   <span class="keyword">if</span> C(i,i)&gt;0
+0724     tol=delta*C(i,i);
+0725     <span class="keyword">for</span> j=i:-1:1 
+0726       <span class="keyword">if</span> j==1 | abs(C(j-1,j-1))&gt;tol, <span class="keyword">break</span>; <span class="keyword">end</span>
+0727     <span class="keyword">end</span>
+0728     e=zeros(i,1); e(i,1)=1;
+0729     <span class="keyword">if</span> j==i
+0730       J=[J,i]; q=C\e; X(I,i)=q/norm(q);
+0731     <span class="keyword">else</span>
+0732       q=X(I,j:i-1); 
+0733       q=[C,T(I,I)*q;q',zeros(i-j)]\[e;zeros(i-j,1)];
+0734       q=q/norm(q(I,1)); X(I,i)=q(I,1);
+0735       Jor(j:i-1,i)=-q(i+1:2*i-j,1);
+0736     <span class="keyword">end</span>
+0737   <span class="keyword">end</span>
+0738 <span class="keyword">end</span>
+0739 J=[J,k+1];
+0740 
+0741 <span class="keyword">return</span>
+0742 <span class="comment">%==================================================</span>
+0743 <a name="_sub6" href="#_subfunctions" class="code">function [X,Jor,U]=JordanBlock(A,tol)</a>
+0744 <span class="comment">%  If A is nilpotent, then A*X=X*Jor with</span>
+0745 <span class="comment">%  Jor a Jordan block</span>
+0746 <span class="comment">%</span>
+0747 
+0748 k=size(A,1); Id=eye(k); 
+0749 U=Id; aa=A; j=k; jj=[]; J=1:k;
+0750 
+0751 <span class="keyword">while</span> j&gt;0
+0752   [u,s,v]=svd(aa); U(:,J)=U(:,J)*v;
+0753   sigma=diag(s); delta=tol;
+0754   J=find(sigma&lt;delta); 
+0755   <span class="keyword">if</span> isempty(J),j=0; <span class="keyword">else</span>, j=min(J)-1; <span class="keyword">end</span>
+0756   jj=[jj,j]; <span class="keyword">if</span> j==0, <span class="keyword">break</span>, <span class="keyword">end</span>
+0757   aa=v'*u*s; J=1:j; aa=aa(J,J);
+0758 <span class="keyword">end</span> 
+0759 Jor=U'*A*U; Jor=Jor.*(abs(Jor)&gt;tol);
+0760 l=length(jj); jj=[jj(l:-1:1),k];
+0761 
+0762 l2=jj(2)-jj(1); J=jj(1)+(1:l2); 
+0763 JX=Id(:,J); X=Id;
+0764 <span class="keyword">for</span> j=2:l
+0765   l1=l2+1; l2=jj(j+1)-jj(j); 
+0766   J2=l1:l2; J=jj(j)+(1:l2);
+0767   JX=Jor*JX; D=diag(sqrt(diag(JX'*JX))); JX=JX/D;
+0768   [Q,S,V]=svd(JX(J,:));
+0769   JX=[JX,Id(:,J)*Q(:,J2)]; X(:,J)=JX;
+0770 <span class="keyword">end</span>
+0771 
+0772 J=[];
+0773 <span class="keyword">for</span> i=1:l2
+0774   <span class="keyword">for</span> k=l:-1:1
+0775     j=jj(k)+i; <span class="keyword">if</span> j&lt;=jj(k+1), J=[J,j]; <span class="keyword">end</span>
+0776   <span class="keyword">end</span>
+0777 <span class="keyword">end</span>
+0778 
+0779 X=X(:,J); Jor=X\(Jor*X); X=U*X;
+0780 Jor=Jor.*(abs(Jor)&gt;100*tol);
+0781 
+0782 <span class="keyword">return</span>
+0783 <span class="comment">%%%======== END JORDAN FORM =============================================</span>
+0784 
+0785 <span class="comment">%%%======== OUTPUT ======================================================</span>
+0786 <a name="_sub7" href="#_subfunctions" class="code">function varargout=output(history,SCHUR,X,Lambda)</a>
+0787 
+0788 <span class="keyword">global</span> Qschur Zschur Sschur Tschur
+0789 
+0790 <span class="keyword">if</span> nargout == 1, varargout{1}=diag(Sschur)./diag(Tschur); <span class="keyword">return</span>, <span class="keyword">end</span>
+0791 <span class="keyword">if</span> nargout &gt; 2,  varargout{nargout}=history;        <span class="keyword">end</span>
+0792 <span class="keyword">if</span> nargout &lt; 6 &amp; SCHUR == 1
+0793   <span class="keyword">if</span> nargout &gt;1, varargout{1}=Qschur; varargout{2}=Zschur; <span class="keyword">end</span>
+0794   <span class="keyword">if</span> nargout &gt;2, varargout{3}=Sschur; <span class="keyword">end</span>
+0795   <span class="keyword">if</span> nargout &gt;3, varargout{4}=Tschur; <span class="keyword">end</span>
+0796 <span class="keyword">end</span>
+0797 
+0798 <span class="comment">%-------------- compute eigenpairs --------------------------------------</span>
+0799 
+0800 <span class="keyword">if</span> SCHUR ~= 1
+0801    varargout{1}=X; varargout{2}=Lambda; 
+0802    <span class="keyword">if</span> nargout &gt;3, varargout{3}=Qschur; varargout{4}=Zschur; <span class="keyword">end</span>
+0803    <span class="keyword">if</span> nargout &gt;4, varargout{5}=Sschur; <span class="keyword">end</span>
+0804    <span class="keyword">if</span> nargout &gt;5, varargout{6}=Tschur; <span class="keyword">end</span>
+0805 <span class="keyword">end</span>
+0806 
+0807 <span class="keyword">return</span>
+0808 <span class="comment">%%%======================================================================</span>
+0809 <span class="comment">%%%======== UPDATE PRECONDITIONED SCHUR VECTORS =========================</span>
+0810 <span class="comment">%%%======================================================================</span>
+0811 <a name="_sub8" href="#_subfunctions" class="code">function   UpdateMinvZ</a>
+0812 
+0813 <span class="keyword">global</span> Qschur Zschur MinvZ QastMinvZ
+0814 
+0815   [n,k]=size(Qschur);
+0816   <span class="keyword">if</span> k==1, MinvZ=zeros(n,0); QastMinvZ = []; <span class="keyword">end</span>
+0817   Minv_z=<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(Zschur(:,k)); 
+0818   QastMinvZ=[[QastMinvZ;Qschur(:,k)'*MinvZ],Qschur'*Minv_z];
+0819   MinvZ=[MinvZ,Minv_z]; 
+0820 
+0821 <span class="keyword">return</span>
+0822 <span class="comment">%%%======================================================================</span>
+0823 <span class="comment">%%%======== SOLVE CORRECTION EQUATION ===================================</span>
+0824 <span class="comment">%%%======================================================================</span>
+0825 
+0826 <a name="_sub9" href="#_subfunctions" class="code">function [t,xtol]=SolvePCE(theta,q,z,r,lsolver,par,nit)</a>
+0827 
+0828 <span class="keyword">global</span> Qschur Zschur
+0829 
+0830   Q=[Qschur,q]; Z=[Zschur,z];
+0831 
+0832   <span class="keyword">switch</span> lsolver
+0833     <span class="keyword">case</span> <span class="string">'exact'</span>
+0834          [t,xtol] = <a href="#_sub11" class="code" title="subfunction [x,xtol] = exact(theta,Q,Z,r)">exact</a>(theta,Q,Z,r);
+0835 
+0836     <span class="keyword">case</span> {<span class="string">'gmres'</span>,<span class="string">'cgstab'</span>,<span class="string">'olsen'</span>} 
+0837 
+0838       [MZ,QMZ]=<a href="#_sub10" class="code" title="subfunction [MZ,QMZ]=FormPM(q,z)">FormPM</a>(q,z); 
+0839       <span class="comment">%%% solve preconditioned system</span>
+0840       [t,xtol] = feval(lsolver,theta,Q,Z,MZ,QMZ,r,<a href="#_sub20" class="code" title="subfunction ppar=spar(par,nit)">spar</a>(par,nit));
+0841 
+0842   <span class="keyword">end</span>
+0843     
+0844 <span class="keyword">return</span>
+0845 <span class="comment">%------------------------------------------------------------------------</span>
+0846 <a name="_sub10" href="#_subfunctions" class="code">function [MZ,QMZ]=FormPM(q,z)</a>
+0847 <span class="comment">% compute vectors and matrices for skew projection</span>
+0848 
+0849 <span class="keyword">global</span> Qschur MinvZ QastMinvZ
+0850 
+0851   Minv_z=<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(z);
+0852   QMZ=[QastMinvZ,Qschur'*Minv_z;q'*MinvZ,q'*Minv_z];
+0853   MZ=[MinvZ,Minv_z];
+0854     
+0855 <span class="keyword">return</span>
+0856 <span class="comment">%%%======================================================================</span>
+0857 <span class="comment">%%%======== LINEAR SOLVERS ==============================================</span>
+0858 <span class="comment">%%%======================================================================</span>
+0859 <a name="_sub11" href="#_subfunctions" class="code">function [x,xtol] = exact(theta,Q,Z,r)</a>
+0860 <span class="comment">% produces the exact solution if matrices are given</span>
+0861 <span class="comment">% Is only feasible for low dimensional matrices</span>
+0862 <span class="comment">% Only of interest for experimental purposes</span>
+0863 <span class="comment">%</span>
+0864 <span class="keyword">global</span> Operator_A Operator_B
+0865 
+0866 n=size(r,1); 
+0867 
+0868 <span class="keyword">if</span> ischar(Operator_A)
+0869    [MZ,QMZ]=<a href="#_sub10" class="code" title="subfunction [MZ,QMZ]=FormPM(q,z)">FormPM</a>(Q(:,end),Z(:,end)); 
+0870    <span class="keyword">if</span> n&gt;200
+0871      [x,xtol]=<a href="#_sub9" class="code" title="subfunction [t,xtol]=SolvePCE(theta,q,z,r,lsolver,par,nit)">SolvePCE</a>(theta,Q,Z,MZ,QMZ,r,<span class="string">'cgstab'</span>,[1.0e-10,500,4]); 
+0872    <span class="keyword">else</span>
+0873      [x,xtol]=<a href="#_sub9" class="code" title="subfunction [t,xtol]=SolvePCE(theta,q,z,r,lsolver,par,nit)">SolvePCE</a>(theta,Q,Z,MZ,QMZ,r,<span class="string">'gmres'</span>,[1.0e-10,100]); 
+0874    <span class="keyword">end</span>
+0875    <span class="keyword">return</span>
+0876 <span class="keyword">end</span>
+0877 
+0878 k=size(Q,2);
+0879 Aug=[theta(2)*Operator_A-theta(1)*Operator_B,Z;Q',zeros(k,k)];
+0880 x=Aug\[r;zeros(k,1)]; x([n+1:n+k],:)=[]; xtol=1;
+0881 
+0882 <span class="comment">% L=eig(full(Aug)); plot(real(L),imag(L),'*'), pause</span>
+0883 <span class="comment">%%% [At,Bt]=MV(x); At=theta(2)*At-theta(1)*Bt;</span>
+0884 <span class="comment">%%% xtol=norm(r-At+Z*(Z'*At))/norm(r);</span>
+0885 
+0886 <span class="keyword">return</span>
+0887 
+0888 <span class="comment">%%%===== Iterative methods ==============================================</span>
+0889 <a name="_sub12" href="#_subfunctions" class="code">function [r,xtol] = olsen(theta,Q,Z,MZ,M,r,par)</a>
+0890 <span class="comment">% returns the preconditioned residual as approximate solution</span>
+0891 <span class="comment">% May be sufficient in case of an excellent preconditioner</span>
+0892 
+0893   r=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(r)); xtol=0;
+0894 
+0895 <span class="keyword">return</span>
+0896 <span class="comment">%------------------------------------------------------------------------</span>
+0897 <a name="_sub13" href="#_subfunctions" class="code">function [x,rnrm] = cgstab(theta,Q,Z,MZ,M,r,par)</a>
+0898 <span class="comment">% BiCGstab(ell) with preconditioning</span>
+0899 <span class="comment">% [x,rnrm] = cgstab(theta,Q,Z,MZ,M,r,par)</span>
+0900 <span class="comment">% Computes iteratively an approximation to the solution</span>
+0901 <span class="comment">% of the linear system Q'*x = 0 and Atilde*x=r</span>
+0902 <span class="comment">% where Atilde=(I-Z*Z)*(A-theta*B)*(I-Q*Q').</span>
+0903 <span class="comment">% using (I-MZ*(M\Q'))*inv(K) as preconditioner</span>
+0904 <span class="comment">%</span>
+0905 <span class="comment">% This function is specialized for use in JDQZ.</span>
+0906 <span class="comment">% integer nmv: number of matrix multiplications</span>
+0907 <span class="comment">% rnrm: relative residual norm</span>
+0908 <span class="comment">%</span>
+0909 <span class="comment">%  par=[tol,mxmv,ell] where</span>
+0910 <span class="comment">%    integer m: max number of iteration steps</span>
+0911 <span class="comment">%    real tol: residual reduction</span>
+0912 <span class="comment">%</span>
+0913 <span class="comment">% rnrm: obtained residual reduction</span>
+0914 <span class="comment">%</span>
+0915 <span class="comment">% -- References: ETNA</span>
+0916 
+0917 <span class="comment">% Gerard Sleijpen (sleijpen@math.uu.nl)</span>
+0918 <span class="comment">% Copyright (c) 1998, Gerard Sleijpen</span>
+0919 
+0920 <span class="comment">% -- Initialization --</span>
+0921 <span class="comment">%</span>
+0922 
+0923 <span class="keyword">global</span> Precond_Type
+0924 
+0925 tol=par(1); max_it=par(2); l=par(3); n=size(r,1);
+0926 rnrm=1; nmv=0;
+0927  
+0928 <span class="keyword">if</span> max_it &lt; 2 | tol&gt;=1, x=r; <span class="keyword">return</span>, <span class="keyword">end</span>
+0929 <span class="comment">%%% 0 step of bicgstab eq. 1 step of bicgstab</span>
+0930 <span class="comment">%%% Then x is a multiple of b</span>
+0931 
+0932 TP=Precond_Type;
+0933 <span class="keyword">if</span> TP==0, r=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(r)); tr=r;
+0934 <span class="keyword">else</span>, tr=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Z,r); <span class="keyword">end</span>
+0935 rnrm=norm(r); snrm=rnrm; tol=tol*snrm;
+0936 
+0937 sigma=1; omega=1; 
+0938 x=zeros(n,1); u=zeros(n,1);
+0939 J1=2:l+1; 
+0940    
+0941 <span class="comment">%%% HIST=[0,1];</span>
+0942 
+0943 <span class="keyword">if</span> TP &lt;2 <span class="comment">%% explicit preconditioning</span>
+0944 <span class="comment">% -- Iteration loop</span>
+0945 <span class="keyword">while</span> (nmv &lt; max_it)
+0946 
+0947    sigma=-omega*sigma;
+0948    <span class="keyword">for</span> j = 1:l,
+0949       rho=tr'*r(:,j);  bet=rho/sigma;
+0950       u=r-bet*u;
+0951       u(:,j+1)=<a href="#_sub18" class="code" title="subfunction [v,u]=PreMV(theta,Q,Z,M,v)">PreMV</a>(theta,Q,MZ,M,u(:,j));
+0952       sigma=tr'*u(:,j+1);  alp=rho/sigma;
+0953       r=r-alp*u(:,2:j+1);
+0954       r(:,j+1)=<a href="#_sub18" class="code" title="subfunction [v,u]=PreMV(theta,Q,Z,M,v)">PreMV</a>(theta,Q,MZ,M,r(:,j));
+0955       x=x+alp*u(:,1);
+0956       G(1,1)=r(:,1)'*r(:,1); rnrm=sqrt(G(1,1));
+0957       <span class="keyword">if</span> rnrm&lt;tol, l=j; J1=2:l+1; r=r(:,1:l+1); <span class="keyword">break</span>, <span class="keyword">end</span>
+0958    <span class="keyword">end</span>
+0959    nmv = nmv+2*l;
+0960 
+0961    <span class="keyword">for</span> i=2:l+1 
+0962      G(i,1:i)=r(:,i)'*r(:,1:i); G(1:i,i)=G(i,1:i)'; 
+0963    <span class="keyword">end</span>
+0964    <span class="keyword">if</span> TP, g=Z'*r; G=G-g'*g; <span class="keyword">end</span>
+0965    d=G(J1,1); gamma=G(J1,J1)\d;  
+0966    rnrm=sqrt(real(G(1,1)-d'*gamma));   <span class="comment">%%% compute norm in l-space</span>
+0967    <span class="comment">%%% HIST=[HIST;[nmv,rnrm/snrm]];</span>
+0968 
+0969    x=x+r(:,1:l)*gamma;
+0970    <span class="keyword">if</span> rnrm &lt; tol, <span class="keyword">break</span>, <span class="keyword">end</span>     <span class="comment">%%% sufficient accuracy. No need to update r,u</span>
+0971    omega=gamma(l,1); gamma=[1;-gamma];
+0972    u=u*gamma; r=r*gamma; 
+0973    <span class="keyword">if</span> TP, g=g*gamma; r=r-Z*g; <span class="keyword">end</span>
+0974 
+0975    <span class="comment">% rnrm = norm(r);</span>
+0976 <span class="keyword">end</span>
+0977 
+0978 <span class="keyword">else</span> <span class="comment">%% implicit preconditioning</span>
+0979 
+0980 I=eye(2*l); v0=I(:,1:l); s0=I(:,l+1:2*l);
+0981 y0=zeros(2*l,1); V=zeros(n,2*l); 
+0982 
+0983 <span class="keyword">while</span> (nmv &lt; max_it)
+0984 
+0985    sigma=-omega*sigma;
+0986    y=y0; v=v0; s=s0;
+0987    <span class="keyword">for</span> j = 1:l,
+0988       rho=tr'*r(:,j);  bet=rho/sigma;
+0989       u=r-bet*u;
+0990       <span class="keyword">if</span> j&gt;1,                 <span class="comment">%%% collect the updates for x in l-space</span>
+0991          v(:,1:j-1)=s(:,1:j-1)-bet*v(:,1:j-1); 
+0992       <span class="keyword">end</span>
+0993       [u(:,j+1),V(:,j)]=<a href="#_sub18" class="code" title="subfunction [v,u]=PreMV(theta,Q,Z,M,v)">PreMV</a>(theta,Q,MZ,M,u(:,j));
+0994       sigma=tr'*u(:,j+1);  alp=rho/sigma;
+0995       r=r-alp*u(:,2:j+1);
+0996       <span class="keyword">if</span> j&gt;1, 
+0997          s(:,1:j-1)=s(:,1:j-1)-alp*v(:,2:j); 
+0998       <span class="keyword">end</span>
+0999       [r(:,j+1),V(:,l+j)]=<a href="#_sub18" class="code" title="subfunction [v,u]=PreMV(theta,Q,Z,M,v)">PreMV</a>(theta,Q,MZ,M,r(:,j));
+1000       y=y+alp*v(:,1);  
+1001       G(1,1)=r(:,1)'*r(:,1); rnrm=sqrt(G(1,1));
+1002       <span class="keyword">if</span> rnrm&lt;tol, l=j; J1=2:l+1; s=s(:,1:l); <span class="keyword">break</span>, <span class="keyword">end</span>
+1003    <span class="keyword">end</span>
+1004    nmv = nmv+2*l;
+1005 
+1006    <span class="keyword">for</span> i=2:l+1 
+1007      G(i,1:i)=r(:,i)'*r(:,1:i); G(1:i,i)=G(i,1:i)'; 
+1008    <span class="keyword">end</span>
+1009    g=Z'*r; G=G-g'*g;         <span class="comment">%%% but, do the orth to Z implicitly</span>
+1010    d=G(J1,1); gamma=G(J1,J1)\d;  
+1011    rnrm=sqrt(real(G(1,1)-d'*gamma)); <span class="comment">%%% compute norm in l-space</span>
+1012    x=x+V*(y+s*gamma);
+1013 
+1014    <span class="comment">%%% HIST=[HIST;[nmv,rnrm/snrm]];</span>
+1015 
+1016    <span class="keyword">if</span> rnrm &lt; tol, <span class="keyword">break</span>, <span class="keyword">end</span>  <span class="comment">%%% sufficient accuracy. No need to update r,u</span>
+1017    omega=gamma(l,1); gamma=[1;-gamma];
+1018    u=u*gamma; r=r*gamma; 
+1019    g=g*gamma; r=r-Z*g;        <span class="comment">%%% Do the orth to Z explicitly</span>
+1020                               <span class="comment">%%% In exact arithmetic not needed, but</span>
+1021                               <span class="comment">%%% appears to be more stable.</span>
+1022 
+1023 <span class="keyword">end</span>
+1024 <span class="keyword">end</span>
+1025 
+1026 <span class="keyword">if</span> TP==1, x=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(x)); <span class="keyword">end</span>
+1027 rnrm = rnrm/snrm;
+1028 <span class="comment">%%% plot(HIST(:,1),log10(HIST(:,2)+eps),'*'), drawnow</span>
+1029 <span class="keyword">return</span>
+1030 <span class="comment">%----------------------------------------------------------------------</span>
+1031 <a name="_sub14" href="#_subfunctions" class="code">function [v,rnrm] = gmres0(theta,Q,Z,MZ,M,v,par)</a>
+1032 <span class="comment">% GMRES</span>
+1033 <span class="comment">% [x,rnrm] = gmres(theta,Q,Z,MZ,M,v,par)</span>
+1034 <span class="comment">% Computes iteratively an approximation to the solution</span>
+1035 <span class="comment">% of the linear system Q'*x = 0 and Atilde*x=b</span>
+1036 <span class="comment">% where Atilde=(I-Z*Z)*(A-theta*B)*(I-Q*Q').</span>
+1037 <span class="comment">% using (I-MZ*(M\Q'))*inv(K) as preconditioner</span>
+1038 <span class="comment">%</span>
+1039 <span class="comment">% If used as implicit preconditioner then FGMRES.</span>
+1040 <span class="comment">%</span>
+1041 <span class="comment">% par=[tol,m] where</span>
+1042 <span class="comment">%  integer m: degree of the minimal residual polynomial</span>
+1043 <span class="comment">%  real tol: residual reduction</span>
+1044 <span class="comment">%</span>
+1045 <span class="comment">% rnrm: obtained residual reduction</span>
+1046 <span class="comment">%</span>
+1047 <span class="comment">% -- References: Saad &amp; Schultz SISC 1986</span>
+1048 
+1049 <span class="comment">% Gerard Sleijpen (sleijpen@math.uu.nl)</span>
+1050 <span class="comment">% Copyright (c) 1998, Gerard Sleijpen</span>
+1051 
+1052 <span class="comment">% -- Initialization</span>
+1053 
+1054 <span class="keyword">global</span> Precond_Type
+1055 
+1056 tol=par(1); max_it=par(2); n = size(v,1);
+1057 rnrm = 1; j=0;
+1058 
+1059 <span class="keyword">if</span> max_it &lt; 2 | tol&gt;=1, <span class="keyword">return</span>, <span class="keyword">end</span> 
+1060 <span class="comment">%%% 0 step of gmres eq. 1 step of gmres</span>
+1061 <span class="comment">%%% Then x is a multiple of b</span>
+1062  
+1063 H = zeros(max_it +1,max_it); Rot=[ones(1,max_it);zeros(1,max_it)];
+1064 
+1065 TP=Precond_Type;
+1066 
+1067 TP=Precond_Type; 
+1068 <span class="keyword">if</span> TP==0
+1069   v=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(v)); rho0 = norm(v); v = v/rho0;
+1070 <span class="keyword">else</span>
+1071   v=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Z,v); 
+1072 <span class="keyword">end</span>
+1073 
+1074 V = [v];
+1075 tol = tol * rnrm; 
+1076 y = [ rnrm ; zeros(max_it,1) ];
+1077 
+1078 <span class="keyword">while</span> (j &lt; max_it) &amp; (rnrm &gt; tol),
+1079   j=j+1;
+1080   [v,w]=<a href="#_sub18" class="code" title="subfunction [v,u]=PreMV(theta,Q,Z,M,v)">PreMV</a>(theta,Q,MZ,M,v); 
+1081   <span class="keyword">if</span> TP 
+1082     <span class="keyword">if</span> TP == 2, W=[W,w]; <span class="keyword">end</span> 
+1083     v=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Z,v,0); 
+1084   <span class="keyword">end</span>
+1085   [v,h] = <a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(V,v); H(1:size(h,1),j) = h;
+1086   V = [V, v]; 
+1087   <span class="keyword">for</span> i = 1:j-1,
+1088     a = Rot(:,i);
+1089     H(i:i+1,j) = [a'; -a(2) a(1)]*H(i:i+1,j);
+1090   <span class="keyword">end</span>
+1091   J=[j, j+1];
+1092   a=H(J,j);
+1093   <span class="keyword">if</span> a(2) ~= 0
+1094      cs = norm(a); 
+1095      a = a/cs; Rot(:,j) = a;
+1096      H(J,j) = [cs; 0];
+1097      y(J) = [a'; -a(2) a(1)]*y(J);
+1098   <span class="keyword">end</span> 
+1099   rnrm = abs(y(j+1));
+1100 <span class="keyword">end</span>
+1101 
+1102 J=[1:j];  
+1103 <span class="keyword">if</span> TP == 2
+1104   v = W(:,J)*(H(J,J)\y(J));
+1105 <span class="keyword">else</span>
+1106   v = V(:,J)*(H(J,J)\y(J));
+1107 <span class="keyword">end</span>
+1108 
+1109 <span class="keyword">if</span> TP==1, v=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(v)); <span class="keyword">end</span>
+1110 
+1111 <span class="keyword">return</span>
+1112 <span class="comment">%%%======================================================================</span>
+1113 <a name="_sub15" href="#_subfunctions" class="code">function [v,rnrm] = gmres(theta,Q,Z,MZ,M,v,par)</a>
+1114 <span class="comment">% GMRES</span>
+1115 <span class="comment">% [x,nmv,rnrm] = gmres(theta,Q,Z,MZ,M,v,par)</span>
+1116 <span class="comment">% Computes iteratively an approximation to the solution</span>
+1117 <span class="comment">% of the linear system Q'*x = 0 and Atilde*x=r</span>
+1118 <span class="comment">% where Atilde=(I-Z*Z)*(A-theta*B)*(I-Q*Q').</span>
+1119 <span class="comment">% using (I-MZ*(M\Q'))*inv(K) as preconditioner.</span>
+1120 <span class="comment">%</span>
+1121 <span class="comment">% If used as implicit preconditioner, then FGMRES.</span>
+1122 <span class="comment">%</span>
+1123 <span class="comment">% par=[tol,m] where</span>
+1124 <span class="comment">%  integer m: degree of the minimal residual polynomial</span>
+1125 <span class="comment">%  real tol: residual reduction</span>
+1126 <span class="comment">%</span>
+1127 <span class="comment">% nmv:  number of MV with Atilde</span>
+1128 <span class="comment">% rnrm: obtained residual reduction</span>
+1129 <span class="comment">%</span>
+1130 <span class="comment">% -- References: Saad</span>
+1131 <span class="comment">% Same as gmres0. However this variant uses MATLAB built-in functions</span>
+1132 <span class="comment">% slightly more efficient (see Sleijpen and van den Eshof).</span>
+1133 <span class="comment">%</span>
+1134 <span class="comment">%</span>
+1135 <span class="comment">% Gerard Sleijpen (sleijpen@math.uu.nl)</span>
+1136 <span class="comment">% Copyright (c) 2002, Gerard Sleijpen</span>
+1137 
+1138 <span class="keyword">global</span> Precond_Type
+1139 
+1140 <span class="comment">% -- Initialization</span>
+1141 tol=par(1); max_it=par(2); n = size(v,1);
+1142 j=0;
+1143 
+1144 <span class="keyword">if</span> max_it &lt; 2 | tol&gt;=1, rnrm=1; <span class="keyword">return</span>, <span class="keyword">end</span> 
+1145 <span class="comment">%%% 0 step of gmres eq. 1 step of gmres</span>
+1146 <span class="comment">%%% Then x is a multiple of b</span>
+1147  
+1148 H = zeros(max_it +1,max_it); Gamma=1; rho=1;
+1149 
+1150 TP=Precond_Type; 
+1151 <span class="keyword">if</span> TP==0
+1152   v=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(v)); rho0 = norm(v); v = v/rho0;
+1153 <span class="keyword">else</span>
+1154   v=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Z,v); rho0=1;
+1155 <span class="keyword">end</span>
+1156 
+1157 V = zeros(n,0); W=zeros(n,0);
+1158 tol0 = 1/(tol*tol); 
+1159 <span class="comment">%% HIST=1;</span>
+1160 <span class="keyword">while</span> (j &lt; max_it) &amp; (rho &lt; tol0) 
+1161 
+1162   V=[V,v]; j=j+1;
+1163   [v,w]=<a href="#_sub18" class="code" title="subfunction [v,u]=PreMV(theta,Q,Z,M,v)">PreMV</a>(theta,Q,MZ,M,v);
+1164   <span class="keyword">if</span> TP 
+1165     <span class="keyword">if</span> TP == 2, W=[W,w]; <span class="keyword">end</span> 
+1166     v=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(Z,v,0); 
+1167   <span class="keyword">end</span>
+1168   [v,h] = <a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>(V,v); 
+1169   H(1:size(h,1),j)=h; gamma=H(j+1,j);
+1170   
+1171   <span class="keyword">if</span> gamma==0, <span class="keyword">break</span> <span class="comment">%%% Lucky break-down</span>
+1172   <span class="keyword">else</span>
+1173     gamma= -Gamma*h(1:j)/gamma; 
+1174     Gamma=[Gamma,gamma];
+1175     rho=rho+gamma'*gamma;
+1176   <span class="keyword">end</span>     
+1177           
+1178   <span class="comment">%% HIST=[HIST;(gamma~=0)/sqrt(rho)];</span>
+1179     
+1180 <span class="keyword">end</span>
+1181 
+1182 <span class="keyword">if</span> gamma==0; <span class="comment">%%% Lucky break-down</span>
+1183    e1=zeros(j,1); e1(1)=rho0; rnrm=0; 
+1184    <span class="keyword">if</span> TP == 2
+1185      v=W*(H(1:j,1:j)\e1); 
+1186    <span class="keyword">else</span>
+1187      v=V*(H(1:j,1:j)\e1); 
+1188    <span class="keyword">end</span> 
+1189 <span class="keyword">else</span> <span class="comment">%%% solve in least square sense</span>
+1190    e1=zeros(j+1,1); e1(1)=rho0; rnrm=1/sqrt(rho);
+1191    <span class="keyword">if</span> TP == 2
+1192      v=W*(H(1:j+1,1:j)\e1); 
+1193    <span class="keyword">else</span>
+1194      v=V*(H(1:j+1,1:j)\e1); 
+1195    <span class="keyword">end</span> 
+1196 <span class="keyword">end</span>
+1197 
+1198 <span class="keyword">if</span> TP==1, v=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,MZ,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(v)); <span class="keyword">end</span>
+1199 <span class="comment">%% HIST=log10(HIST+eps); J=[0:size(HIST,1)-1]';</span>
+1200 <span class="comment">%% plot(J,HIST(:,1),'*'); drawnow</span>
+1201 <span class="keyword">return</span>
+1202 <span class="comment">%%%======== END SOLVE CORRECTION EQUATION ===============================</span>
+1203 
+1204 <span class="comment">%%%======================================================================</span>
+1205 <span class="comment">%%%======== BASIC OPERATIONS ============================================</span>
+1206 <span class="comment">%%%======================================================================</span>
+1207 <a name="_sub16" href="#_subfunctions" class="code">function [Av,Bv]=MV(v)</a>
+1208 <span class="comment">% [y,z]=MV(x)</span>
+1209 <span class="comment">%  y=A*x, z=B*x</span>
+1210 
+1211 <span class="comment">%  y=MV(x,theta)</span>
+1212 <span class="comment">%  y=(A-theta*B)*x</span>
+1213 <span class="comment">%</span>
+1214 
+1215 <span class="keyword">global</span> Operator_Form Operator_MVs Operator_A Operator_B Operator_Params
+1216 
+1217   Bv=v;
+1218   <span class="keyword">switch</span> Operator_Form
+1219      <span class="keyword">case</span> 1 <span class="comment">% both Operator_A and B are strings</span>
+1220         Operator_Params{1}=v;
+1221         Av=feval(Operator_A,Operator_Params{:}); 
+1222         Bv=feval(Operator_B,Operator_Params{:});
+1223      <span class="keyword">case</span> 2
+1224         Operator_Params{1}=v;
+1225         [Av,Bv]=feval(Operator_A,Operator_Params{:});
+1226      <span class="keyword">case</span> 3
+1227         Operator_Params{1}=v;
+1228         Operator_Params{2}=<span class="string">'A'</span>;
+1229         Av=feval(Operator_A,Operator_Params{:});
+1230         Operator_Params{2}=<span class="string">'B'</span>;
+1231         Bv=feval(Operator_A,Operator_Params{:});
+1232      <span class="keyword">case</span> 4
+1233         Operator_Params{1}=v;
+1234         Av=feval(Operator_A,Operator_Params{:}); 
+1235         Bv=Operator_B*v;
+1236      <span class="keyword">case</span> 5
+1237         Operator_Params{1}=v;
+1238         Av=feval(Operator_A,Operator_Params{:});
+1239      <span class="keyword">case</span> 6
+1240         Av=Operator_A*v; 
+1241         Operator_Params{1}=v;
+1242         Bv=feval(Operator_B,Operator_Params{:});
+1243      <span class="keyword">case</span> 7
+1244         Av=Operator_A*v; 
+1245         Bv=Operator_B*v;
+1246      <span class="keyword">case</span> 8
+1247         Av=Operator_A*v;
+1248   <span class="keyword">end</span>
+1249 
+1250   Operator_MVs = Operator_MVs +size(v,2);
+1251 
+1252 <span class="comment">% [Av(1:5,1),Bv(1:5,1)], pause</span>
+1253 <span class="keyword">return</span>
+1254 <span class="comment">%------------------------------------------------------------------------</span>
+1255 <a name="_sub17" href="#_subfunctions" class="code">function y=SolvePrecond(y);</a>
+1256 
+1257 <span class="keyword">global</span> Precond_Form Precond_L Precond_U Precond_P Precond_Params Precond_Solves
+1258 
+1259     <span class="keyword">switch</span> Precond_Form
+1260       <span class="keyword">case</span> 0,     
+1261       <span class="keyword">case</span> 1,     Precond_Params{1}=y; 
+1262                   y=feval(Precond_L,Precond_Params{:}); 
+1263       <span class="keyword">case</span> 2,     Precond_Params{1}=y; Precond_Params{2}=<span class="string">'preconditioner'</span>;
+1264                   y=feval(Precond_L,Precond_Params{:});
+1265       <span class="keyword">case</span> 3,     Precond_Params{1}=y; 
+1266                   Precond_Params{1}=feval(Precond_L,Precond_Params{:}); 
+1267                   y=feval(Precond_U,Precond_Params{:});
+1268       <span class="keyword">case</span> 4,     Precond_Params{1}=y; Precond_Params{2}=<span class="string">'L'</span>; 
+1269                   Precond_Params{1}=feval(Precond_L,Precond_Params{:}); 
+1270                   Precond_Params{2}=<span class="string">'U'</span>;
+1271                   y=feval(Precond_L,Precond_Params{:});
+1272       <span class="keyword">case</span> 5,     y=Precond_L\y;
+1273       <span class="keyword">case</span> 6,     y=Precond_U\(Precond_L\y);
+1274       <span class="keyword">case</span> 7,     y=Precond_U\(Precond_L\(Precond_P*y));
+1275     <span class="keyword">end</span>
+1276 
+1277     <span class="keyword">if</span> Precond_Form
+1278       Precond_Solves = Precond_Solves +size(y,2);
+1279     <span class="keyword">end</span>
+1280 <span class="comment">%% y(1:5,1), pause</span>
+1281 <span class="keyword">return</span>
+1282 <span class="comment">%------------------------------------------------------------------------</span>
+1283 <a name="_sub18" href="#_subfunctions" class="code">function [v,u]=PreMV(theta,Q,Z,M,v)</a>
+1284 <span class="comment">% v=Atilde*v</span>
+1285 
+1286 <span class="keyword">global</span> Precond_Type
+1287 
+1288   <span class="keyword">if</span> Precond_Type
+1289     u=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,Z,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(v)); 
+1290     [v,w]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(u); v=theta(2)*v-theta(1)*w;
+1291   <span class="keyword">else</span>
+1292     [v,u]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(v); u=theta(2)*v-theta(1)*u;
+1293     v=<a href="#_sub19" class="code" title="subfunction  r=SkewProj(Q,Z,M,r);">SkewProj</a>(Q,Z,M,<a href="#_sub17" class="code" title="subfunction y=SolvePrecond(y);">SolvePrecond</a>(u));
+1294   <span class="keyword">end</span>
+1295   
+1296 <span class="keyword">return</span>
+1297 <span class="comment">%------------------------------------------------------------------------</span>
+1298 <a name="_sub19" href="#_subfunctions" class="code">function  r=SkewProj(Q,Z,M,r);</a>
+1299 
+1300    <span class="keyword">if</span> ~isempty(Q), 
+1301       r=r-Z*(M\(Q'*r));
+1302    <span class="keyword">end</span> 
+1303 
+1304 <span class="keyword">return</span>
+1305 <span class="comment">%------------------------------------------------------------------------</span>
+1306 <a name="_sub20" href="#_subfunctions" class="code">function ppar=spar(par,nit)</a>
+1307 
+1308 k=size(par,2)-2;
+1309 ppar=par(1,k:k+2);
+1310 
+1311 <span class="keyword">if</span> k&gt;1
+1312    <span class="keyword">if</span> nit&gt;k
+1313       ppar(1,1)=par(1,k)*((par(1,k)/par(1,k-1))^(nit-k));
+1314    <span class="keyword">else</span>
+1315       ppar(1,1)=par(1,max(nit,1));
+1316    <span class="keyword">end</span>
+1317 <span class="keyword">end</span>
+1318 
+1319 ppar(1,1)=max(ppar(1,1),1.0e-8);
+1320 
+1321 <span class="keyword">return</span>
+1322 <span class="comment">%------------------------------------------------------------------------</span>
+1323 <a name="_sub21" href="#_subfunctions" class="code">function u=ImagVector(u)</a>
+1324 <span class="comment">% computes &quot;essential&quot; imaginary part of a vector</span>
+1325   maxu=max(u); maxu=maxu/abs(maxu); u=imag(u/maxu);
+1326 <span class="keyword">return</span>
+1327 <span class="comment">%------------------------------------------------------------------------</span>
+1328 <a name="_sub22" href="#_subfunctions" class="code">function Sigma=ScaleEig(Sigma)</a>
+1329 <span class="comment">%</span>
+1330 <span class="comment">%</span>
+1331   n=sign(Sigma(:,2)); n=n+(n==0);
+1332   d=sqrt((Sigma.*conj(Sigma))*[1;1]).*n;
+1333   Sigma=diag(d)\Sigma;
+1334 
+1335 <span class="keyword">return</span>
+1336 <span class="comment">%%%======== COMPUTE r AND z =============================================</span>
+1337 <a name="_sub23" href="#_subfunctions" class="code">function [r,z,nrm,theta]=Comp_rz(E,kappa)</a>
+1338 <span class="comment">%</span>
+1339 <span class="comment">% [r,z,nrm,theta]=Comp_rz(E)</span>
+1340 <span class="comment">%   computes the direction r of the minimal residual,</span>
+1341 <span class="comment">%   the left projection vector z,</span>
+1342 <span class="comment">%   the approximate eigenvalue theta</span>
+1343 <span class="comment">%</span>
+1344 <span class="comment">% [r,z,nrm,theta]=Comp_rz(E,kappa)</span>
+1345 <span class="comment">%   kappa is a scaling factor.</span>
+1346 <span class="comment">%</span>
+1347 
+1348 <span class="comment">% coded by Gerard Sleijpen, version Januari 7, 1998</span>
+1349 
+1350   <span class="keyword">if</span> nargin == 1
+1351     kappa=norm(E(:,1))/norm(E(:,2)); kappa=2^(round(log2(kappa)));
+1352   <span class="keyword">end</span>
+1353 
+1354   <span class="keyword">if</span> kappa ~=1, E(:,1)=E(:,1)/kappa; <span class="keyword">end</span>
+1355 
+1356   [Q,sigma,u]=svd(E,0);   <span class="comment">%%% E*u=Q*sigma, sigma(1,1)&gt;sigma(2,2)</span>
+1357   r=Q(:,2); z=Q(:,1); nrm=sigma(2,2); 
+1358   <span class="comment">% nrm=nrm/sigma(1,1); nrmz=sigma(1,1)</span>
+1359 
+1360   u(1,:)=u(1,:)/kappa; theta=[-u(2,2),u(1,2)];
+1361   
+1362 <span class="keyword">return</span>
+1363 <span class="comment">%%%======== END computation r and z =====================================</span>
+1364 <span class="comment">%%%======================================================================</span>
+1365 <span class="comment">%%%======== Orthogonalisation ===========================================</span>
+1366 <span class="comment">%%%======================================================================</span>
+1367 <a name="_sub24" href="#_subfunctions" class="code">function [V,R]=RepGS(Z,V,gamma)</a>
+1368 <span class="comment">%</span>
+1369 <span class="comment">% Orthonormalisation using repeated Gram-Schmidt</span>
+1370 <span class="comment">%   with the Daniel-Gragg-Kaufman-Stewart (DGKS) criterion</span>
+1371 <span class="comment">%</span>
+1372 <span class="comment">% Q=RepGS(V)</span>
+1373 <span class="comment">%   The n by k matrix V is orthonormalized, that is,</span>
+1374 <span class="comment">%   Q is an n by k orthonormal matrix and</span>
+1375 <span class="comment">%   the columns of Q span the same space as the columns of V</span>
+1376 <span class="comment">%   (in fact the first j columns of Q span the same space</span>
+1377 <span class="comment">%   as the first j columns of V for all j &lt;= k).</span>
+1378 <span class="comment">%</span>
+1379 <span class="comment">% Q=RepGS(Z,V)</span>
+1380 <span class="comment">%  Assuming Z is n by l orthonormal, V is orthonormalized against Z:</span>
+1381 <span class="comment">%  [Z,Q]=RepGS([Z,V])</span>
+1382 <span class="comment">%</span>
+1383 <span class="comment">% Q=RepGS(Z,V,gamma)</span>
+1384 <span class="comment">%  With gamma=0, V is only orthogonalized against Z</span>
+1385 <span class="comment">%  Default gamma=1 (the same as Q=RepGS(Z,V))</span>
+1386 <span class="comment">%</span>
+1387 <span class="comment">% [Q,R]=RepGS(Z,V,gamma)</span>
+1388 <span class="comment">%  if gamma == 1, V=[Z,Q]*R; else, V=Z*R+Q; end</span>
+1389  
+1390 <span class="comment">% coded by Gerard Sleijpen, March, 2002</span>
+1391 
+1392 <span class="comment">% if nargin == 1, V=Z; Z=zeros(size(V,1),0); end</span>
+1393 <span class="keyword">if</span> nargin &lt;3, gamma=1; <span class="keyword">end</span>
+1394 
+1395 [n,dv]=size(V); [m,dz]=size(Z);
+1396 
+1397 <span class="keyword">if</span> gamma, l0=min(dv+dz,n); <span class="keyword">else</span>, l0=dz; <span class="keyword">end</span>
+1398 R=zeros(l0,dv); 
+1399 
+1400 <span class="keyword">if</span> dv==0, <span class="keyword">return</span>, <span class="keyword">end</span>
+1401 <span class="keyword">if</span> dz==0 &amp; gamma==0, <span class="keyword">return</span>, <span class="keyword">end</span>
+1402 
+1403 <span class="comment">% if m~=n</span>
+1404 <span class="comment">%   if m&lt;n, Z=[Z;zeros(n-m,dz)]; end</span>
+1405 <span class="comment">%   if m&gt;n, V=[V;zeros(m-n,dv)]; n=m; end</span>
+1406 <span class="comment">% end</span>
+1407 
+1408 <span class="keyword">if</span> (dz==0 &amp; gamma)
+1409    j=1; l=1; J=1;
+1410    q=V(:,1); nr=norm(q); R(1,1)=nr;
+1411    <span class="keyword">while</span> nr==0, q=rand(n,1); nr=norm(q); <span class="keyword">end</span>, V(:,1)=q/nr;
+1412    <span class="keyword">if</span> dv==1, <span class="keyword">return</span>, <span class="keyword">end</span>    
+1413 <span class="keyword">else</span>
+1414    j=0; l=0; J=[];
+1415 <span class="keyword">end</span>
+1416 
+1417 <span class="keyword">while</span> j&lt;dv,
+1418    j=j+1; q=V(:,j); nr_o=norm(q); nr=eps*nr_o;
+1419    <span class="keyword">if</span> dz&gt;0, yz=Z'*q;     q=q-Z*yz;      <span class="keyword">end</span>
+1420    <span class="keyword">if</span> l&gt;0,  y=V(:,J)'*q; q=q-V(:,J)*y;  <span class="keyword">end</span>
+1421    nr_n=norm(q);
+1422   
+1423    <span class="keyword">while</span> (nr_n&lt;0.5*nr_o &amp; nr_n &gt; nr)
+1424       <span class="keyword">if</span> dz&gt;0, sz=Z'*q;     q=q-Z*sz;     yz=yz+sz; <span class="keyword">end</span>
+1425       <span class="keyword">if</span> l&gt;0,  s=V(:,J)'*q; q=q-V(:,J)*s; y=y+s;    <span class="keyword">end</span>
+1426       nr_o=nr_n; nr_n=norm(q);                
+1427    <span class="keyword">end</span>
+1428    <span class="keyword">if</span> dz&gt;0, R(1:dz,j)=yz; <span class="keyword">end</span>
+1429    <span class="keyword">if</span> l&gt;0,  R(dz+J,j)=y;  <span class="keyword">end</span>
+1430 
+1431    <span class="keyword">if</span> ~gamma
+1432      V(:,j)=q;
+1433    <span class="keyword">elseif</span> l+dz&lt;n, l=l+1; 
+1434      <span class="keyword">if</span> nr_n &lt;= nr <span class="comment">% expand with a random vector</span>
+1435        <span class="comment">% if nr_n==0</span>
+1436        V(:,l)=<a href="#_sub24" class="code" title="subfunction [V,R]=RepGS(Z,V,gamma)">RepGS</a>([Z,V(:,J)],rand(n,1));
+1437        <span class="comment">% else % which can be numerical noice</span>
+1438        <span class="comment">%   V(:,l)=q/nr_n;</span>
+1439        <span class="comment">% end</span>
+1440      <span class="keyword">else</span>
+1441        V(:,l)=q/nr_n; R(dz+l,j)=nr_n; 
+1442      <span class="keyword">end</span>
+1443      J=[1:l];
+1444    <span class="keyword">end</span> 
+1445 
+1446 <span class="keyword">end</span> <span class="comment">% while j</span>
+1447 
+1448 <span class="keyword">if</span> gamma &amp; l&lt;dv, V=V(:,J); <span class="keyword">end</span>
+1449 
+1450 <span class="keyword">return</span>
+1451 <span class="comment">%%%======== END  Orthogonalisation ======================================</span>
+1452 
+1453 <span class="comment">%%%======================================================================</span>
+1454 <span class="comment">%%%======== Sorts Schur form ============================================</span>
+1455 <span class="comment">%%%======================================================================</span>
+1456 <a name="_sub25" href="#_subfunctions" class="code">function [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)</a>
+1457 <span class="comment">%</span>
+1458 <span class="comment">% [Q,Z,S,T]=SortQZ(A,B,tau)</span>
+1459 <span class="comment">%   A and B are k by k matrices, tau is a complex pair [alpha,beta].</span>
+1460 <span class="comment">%   SortQZ computes the qz-decomposition of (A,B) with prescribed</span>
+1461 <span class="comment">%   ordering: A*Q=Z*S, B*Q=Z*T;</span>
+1462 <span class="comment">%             Q and Z are unitary k by k matrices,</span>
+1463 <span class="comment">%             S and T are upper triangular k by k matrices.</span>
+1464 <span class="comment">%   The ordering is as follows:</span>
+1465 <span class="comment">%   (diag(S),diag(T)) are the eigenpairs of (A,B) ordered</span>
+1466 <span class="comment">%   with increasing &quot;chordal distance&quot; w.r.t. tau.</span>
+1467 <span class="comment">%</span>
+1468 <span class="comment">%   If tau is a scalar then [tau,1] is used.</span>
+1469 <span class="comment">%   Default value for tau is tau=0, i.e., tau=[0,1].</span>
+1470 <span class="comment">%</span>
+1471 <span class="comment">% [Q,Z,S,T]=SortQZ(A,B,tau,kappa)</span>
+1472 <span class="comment">%   kappa scales A first: A/kappa. Default kappa=1.</span>
+1473 <span class="comment">%</span>
+1474 <span class="comment">% [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma)</span>
+1475 <span class="comment">%   Sorts the first MAX(gamma,1) elements. Default: gamma=k</span>
+1476 <span class="comment">%</span>
+1477 <span class="comment">% [Q,Z,S,T]=SortQZ(A,B,tau,kappa,gamma,u)</span>
+1478 <span class="comment">%   Now, with ordering such that angle u and Q(:,1) is less than 45o,</span>
+1479 <span class="comment">%   and, except for the first pair, (diag(S),diag(T)) are</span>
+1480 <span class="comment">%   with increasing &quot;chordal distance&quot; w.r.t. tau.</span>
+1481 <span class="comment">%   If such an ordering does not exist, ordering is as without u.</span>
+1482 <span class="comment">%</span>
+1483 
+1484 <span class="comment">% coded by Gerard Sleijpen, version April, 2002</span>
+1485 
+1486   k=size(A,1); 
+1487   <span class="keyword">if</span> k==1, Q=1; Z=1; S=A;T=B; <span class="keyword">return</span>, <span class="keyword">end</span>
+1488   kk=k-1;
+1489   <span class="keyword">if</span> nargin &lt; 3, tau=[0,1]; <span class="keyword">end</span> 
+1490   <span class="keyword">if</span> nargin &lt; 4, kappa=1;   <span class="keyword">end</span> 
+1491   <span class="keyword">if</span> nargin &gt; 4, kk=max(1,min(gamma,k-1)); <span class="keyword">end</span>
+1492 
+1493   <span class="comment">%%    kappa=max(norm(A,inf)/max(norm(B,inf),1.e-12),1);</span>
+1494   <span class="comment">%%    kappa=2^(round(log2(kappa)));</span>
+1495 
+1496 <span class="comment">%%%------ compute the qz factorization -------</span>
+1497   [S,T,Z,Q]=qz(A,B); Z=Z';
+1498                  <span class="comment">% kkappa=max(norm(A,inf),norm(B,inf));</span>
+1499                  <span class="comment">% Str='norm(A*Q-Z*S)';texttest(Str,eval(Str))</span>
+1500                  <span class="comment">% Str='norm(B*Q-Z*T)';texttest(Str,eval(Str))</span>
+1501 
+1502 <span class="comment">%%%------ scale the eigenvalues --------------</span>
+1503   t=diag(T); n=sign(t); n=n+(n==0); D=diag(n);  
+1504   Q=Q/D; S=S/D; T=T/D; 
+1505 
+1506 <span class="comment">%%%------ sort the eigenvalues ---------------</span>
+1507   I=<a href="#_sub26" class="code" title="subfunction I=SortEig(s,t,sigma,kappa);">SortEig</a>(diag(S),real(diag(T)),tau,kappa);
+1508                
+1509 <span class="comment">%%%------ swap the qz form -------------------</span>
+1510   [Q,Z,S,T]=<a href="#_sub28" class="code" title="subfunction [Q,Z,S,T]=SwapQZ(Q,Z,S,T,I)">SwapQZ</a>(Q,Z,S,T,I(1:kk)); 
+1511                 <span class="comment">% Str='norm(A*Q-Z*S)';texttest(Str,eval(Str))</span>
+1512                 <span class="comment">% Str='norm(B*Q-Z*T)';texttest(Str,eval(Str))</span>
+1513 
+1514 
+1515 
+1516   <span class="keyword">if</span> nargin &lt; 6 | size(u,2) ~= 1
+1517      <span class="keyword">return</span>
+1518   <span class="keyword">else</span>
+1519 <span class="comment">%%% repeat SwapQZ if angle is too small</span>
+1520      kk=min(size(u,1),k); J=1:kk; u=u(J,1)'*Q(J,:); 
+1521      <span class="keyword">if</span> abs(u(1,1))&gt;0.7, <span class="keyword">return</span>, <span class="keyword">end</span>
+1522      <span class="keyword">for</span> j=2:kk
+1523         J=1:j;
+1524         <span class="keyword">if</span> norm(u(1,J))&gt;0.7
+1525           J0=[j,1:j-1];  
+1526           [Qq,Zz,Ss,Tt]=<a href="#_sub28" class="code" title="subfunction [Q,Z,S,T]=SwapQZ(Q,Z,S,T,I)">SwapQZ</a>(eye(j),eye(j),S(J,J),T(J,J),J0);
+1527           <span class="keyword">if</span> abs(u(1,J)*Qq(:,1))&gt;0.71
+1528              Q(:,J)=Q(:,J)*Qq; Z(:,J)=Z(:,J)*Zz; 
+1529              S(J,J)=Ss; S(J,j+1:k)=Zz'*S(J,j+1:k);
+1530              T(J,J)=Tt; T(J,j+1:k)=Zz'*T(J,j+1:k);
+1531                  <span class="comment">% Str='norm(A*Q-Z*S)';texttest(Str,eval(Str))</span>
+1532                  <span class="comment">% Str='norm(B*Q-Z*T)';texttest(Str,eval(Str))</span>
+1533                  fprintf(<span class="string">'  Took %2i:%6.4g\n'</span>,j,S(1,1)./T(1,1))
+1534              <span class="keyword">return</span>
+1535           <span class="keyword">end</span>
+1536         <span class="keyword">end</span>
+1537      <span class="keyword">end</span>
+1538      disp([<span class="string">'  Selection problem:  took '</span>,num2str(1)])
+1539      <span class="keyword">return</span>
+1540   <span class="keyword">end</span>
+1541 
+1542 <span class="comment">%%%======================================================================</span>
+1543 <a name="_sub26" href="#_subfunctions" class="code">function I=SortEig(s,t,sigma,kappa);</a>
+1544 <span class="comment">%</span>
+1545 <span class="comment">% I=SortEig(S,T,SIGMA) sorts the indices of [S,T] as prescribed by SIGMA</span>
+1546 <span class="comment">%   S and T are K-vectors.</span>
+1547 <span class="comment">%</span>
+1548 <span class="comment">%   If SIGMA=[ALPHA,BETA] is a complex pair then</span>
+1549 <span class="comment">%     if CHORDALDISTANCE</span>
+1550 <span class="comment">%       sort [S,T] with increasing chordal distance w.r.t. SIGMA.</span>
+1551 <span class="comment">%     else</span>
+1552 <span class="comment">%       sort S./T with increasing distance w.r.t. SIGMA(1)/SIGMA(2)</span>
+1553 <span class="comment">%</span>
+1554 <span class="comment">%  The chordal distance D between a pair A and a pair B is</span>
+1555 <span class="comment">%  defined as follows.</span>
+1556 <span class="comment">%    Scale A by a scalar F such that NORM(F*A)=1.</span>
+1557 <span class="comment">%    Scale B by a scalar G such that NORM(G*B)=1.</span>
+1558 <span class="comment">%    Then D(A,B)=SQRT(1-ABS((F*A)*(G*B)')).</span>
+1559 <span class="comment">%</span>
+1560 <span class="comment">% I=SortEig(S,T,SIGMA,KAPPA). Kappa is a caling that effects the</span>
+1561 <span class="comment">% chordal distance: [S,KAPPA*T] w.r.t. [SIGMA(1),KAPPA*SIGMA(2)].</span>
+1562 
+1563 <span class="comment">% coded by Gerard Sleijpen, version April 2002</span>
+1564 
+1565 <span class="keyword">global</span> CHORDALDISTANCE
+1566 
+1567 <span class="keyword">if</span> ischar(sigma)
+1568   warning off, s=s./t; warning on
+1569   <span class="keyword">switch</span> sigma
+1570     <span class="keyword">case</span> <span class="string">'LM'</span>
+1571       [s,I]=sort(-abs(s));
+1572     <span class="keyword">case</span> <span class="string">'SM'</span>
+1573       [s,I]=sort(abs(s));
+1574     <span class="keyword">case</span> <span class="string">'LR'</span>;
+1575       [s,I]=sort(-real(s));
+1576     <span class="keyword">case</span> <span class="string">'SR'</span>;
+1577       [s,I]=sort(real(s));
+1578     <span class="keyword">case</span> <span class="string">'BE'</span>;
+1579       [s,I]=sort(real(s)); I=<a href="#_sub27" class="code" title="subfunction t=twistdim(t,k)">twistdim</a>(I,1);
+1580   <span class="keyword">end</span>
+1581 <span class="keyword">elseif</span> CHORDALDISTANCE
+1582   <span class="keyword">if</span> kappa~=1, t=kappa*t; sigma(2)=kappa*sigma(2); <span class="keyword">end</span>
+1583   n=sqrt(s.*conj(s)+t.*t);
+1584   [s,I]=sort(-abs([s,t]*sigma')./n);
+1585 <span class="keyword">else</span>
+1586   warning off, s=s./t; warning on
+1587   <span class="keyword">if</span> sigma(2)==0; [s,I]=sort(-abs(s));
+1588   <span class="keyword">else</span>, [s,I]=sort(abs(s-sigma(1)/sigma(2)));
+1589   <span class="keyword">end</span> 
+1590 <span class="keyword">end</span>
+1591 
+1592 <span class="keyword">return</span>
+1593 <span class="comment">%------------------------------------------------------------------------</span>
+1594 <a name="_sub27" href="#_subfunctions" class="code">function t=twistdim(t,k)</a>
+1595 
+1596   d=size(t,k); J=1:d; J0=zeros(1,2*d);
+1597   J0(1,2*J)=J; J0(1,2*J-1)=flipdim(J,2); I=J0(1,J);
+1598   <span class="keyword">if</span> k==1, t=t(I,:); <span class="keyword">else</span>, t=t(:,I); <span class="keyword">end</span>
+1599 
+1600 <span class="keyword">return</span>
+1601 <span class="comment">%%%======================================================================</span>
+1602 <a name="_sub28" href="#_subfunctions" class="code">function [Q,Z,S,T]=SwapQZ(Q,Z,S,T,I)</a>
+1603 <span class="comment">% [Q,Z,S,T]=SwapQZ(QQ,ZZ,SS,TT,P)</span>
+1604 <span class="comment">%    QQ and ZZ are K by K unitary,  SS and TT are K by K uper triangular.</span>
+1605 <span class="comment">%    P is the first part of a permutation of (1:K)'.</span>
+1606 <span class="comment">%</span>
+1607 <span class="comment">%    Then Q and Z are K by K unitary, S and T are K by K upper triangular,</span>
+1608 <span class="comment">%    such that, for A = ZZ*SS*QQ' and B = ZZ*T*QQ', we have</span>
+1609 <span class="comment">%    A*Q = Z*S, B*Q = Z*T  and LAMBDA(1:LENGTH(P))=LLAMBDA(P) where</span>
+1610 <span class="comment">%    LAMBDA=DIAG(S)./DIAGg(T) and LLAMBDA=DIAG(SS)./DIAG(TT).</span>
+1611 <span class="comment">%</span>
+1612 <span class="comment">%    Computation uses Givens rotations.</span>
+1613 <span class="comment">%</span>
+1614 
+1615 <span class="comment">% coded by Gerard Sleijpen, version October 12, 1998</span>
+1616   
+1617 
+1618   kk=min(length(I),size(S,1)-1);
+1619   j=1; <span class="keyword">while</span> (j&lt;=kk &amp; j==I(j)), j=j+1; <span class="keyword">end</span>
+1620   <span class="keyword">while</span> j&lt;=kk
+1621     i=I(j);
+1622     <span class="keyword">for</span> k = i-1:-1:j, 
+1623       <span class="comment">%%% i&gt;j, move ith eigenvalue to position j</span>
+1624       J = [k,k+1]; 
+1625       q = T(k+1,k+1)*S(k,J) - S(k+1,k+1)*T(k,J);
+1626       <span class="keyword">if</span> q(1) ~= 0 
+1627         q = q/norm(q);
+1628         G = [[q(2);-q(1)],q'];
+1629         Q(:,J) = Q(:,J)*G; 
+1630         S(:,J) = S(:,J)*G; T(:,J) = T(:,J)*G;
+1631       <span class="keyword">end</span> 
+1632       <span class="keyword">if</span> abs(S(k+1,k))&lt;abs(T(k+1,k)), q=T(J,k); <span class="keyword">else</span> q=S(J,k); <span class="keyword">end</span>
+1633       <span class="keyword">if</span> q(2) ~= 0
+1634         q=q/norm(q);
+1635         G = [q';q(2),-q(1)];
+1636         Z(:,J) = Z(:,J)*G'; 
+1637         S(J,:) = G*S(J,:); T(J,:) = G*T(J,:);
+1638       <span class="keyword">end</span> 
+1639       T(k+1,k) = 0;
+1640       S(k+1,k) = 0; 
+1641     <span class="keyword">end</span>
+1642     I=I+(I&lt;i); 
+1643     j=j+1; <span class="keyword">while</span> (j&lt;=kk &amp; j==I(j)), j=j+1; <span class="keyword">end</span>
+1644   <span class="keyword">end</span>
+1645 
+1646 <span class="keyword">return</span>
+1647 <span class="comment">%------------------------------------------------------------------------</span>
+1648 <a name="_sub29" href="#_subfunctions" class="code">function [Q,Z,S,T]=SwapQZ0(Q,Z,S,T,I)</a>
+1649 <span class="comment">%</span>
+1650 <span class="comment">% [Q,Z,S,T]=sortqz0(A,B,s,t,k)</span>
+1651 <span class="comment">%    A and B are k by k matrices, t and s are k vectors such that</span>
+1652 <span class="comment">%    (t(i),s(i)) eigenpair (A,B), i.e. t(i)*A-s(i)*B singular.</span>
+1653 <span class="comment">%    Computes the Schur form with a ordering prescribed by (t,s):</span>
+1654 <span class="comment">%       A*Q=Z*S, B*Q=Z*T such that diag(S)./diag(T)=s./t.</span>
+1655 <span class="comment">%    Computation uses Householder reflections.</span>
+1656 <span class="comment">%</span>
+1657 
+1658 <span class="comment">% coded by Gerard Sleijpen, version October 12, 1997</span>
+1659   
+1660   k=size(S,1); s=diag(S); t=diag(T); s=s(I,1); t=t(I,1);
+1661 
+1662   <span class="keyword">for</span> i=1:k-1
+1663     <span class="comment">%%% compute q s.t. C*q=(t(i,1)*S-s(i,1)*T)*q=0</span>
+1664     C=t(i,1)*S(i:k,i:k)-s(i,1)*T(i:k,i:k);
+1665     [q,r,p]=qr(C);          <span class="comment">%% C*P=Q*R</span>
+1666     <span class="comment">%% check whether last but one diag. elt r nonzero</span>
+1667     j=k-i; <span class="keyword">while</span> abs(r(j,j))&lt;eps*norm(r); j=j-1; <span class="keyword">end</span>; j=j+1;
+1668     r(j,j)=1; e=zeros(j,1); e(j,1)=1;
+1669     q=p*([r(1:j,1:j)\e;zeros(k-i+1-j,1)]); q=q/norm(q);<span class="comment">%% C*q</span>
+1670     <span class="comment">%%% end computation q</span>
+1671     z=conj(s(i,1))*S(i:k,i:k)*q+conj(t(i,1))*T(i:k,i:k)*q; z=z/norm(z);
+1672     a=q(1,1); <span class="keyword">if</span> a ~=0, a=abs(a)/a; q=a*q; <span class="keyword">end</span>
+1673     a=z(1,1); <span class="keyword">if</span> a ~=0, a=abs(a)/a; z=a*z; <span class="keyword">end</span>
+1674     q(1,1)=q(1,1)+1; q=q/norm(q); q=[zeros(i-1,1);q]; 
+1675     z(1,1)=z(1,1)+1; z=z/norm(z); z=[zeros(i-1,1);z];
+1676     S=S-(S*q)*(2*q)'; S=S-(2*z)*(z'*S);
+1677     T=T-(T*q)*(2*q)'; T=T-(2*z)*(z'*T);
+1678     Q=Q-(Q*q)*(2*q)'; Z=Z-(Z*z)*(2*z)';
+1679   <span class="keyword">end</span>
+1680 <span class="keyword">return</span>
+1681 
+1682 <span class="comment">%%%======== END sort QZ decomposition interaction matrices ==============</span>
+1683 
+1684 <span class="comment">%%%======================================================================</span>
+1685 <span class="comment">%%%======== INITIALIZATION ==============================================</span>
+1686 <span class="comment">%%%======================================================================</span>
+1687 <a name="_sub30" href="#_subfunctions" class="code">function MyClear</a>
+1688 
+1689 <span class="keyword">global</span> Operator_Form Operator_A Operator_B Operator_Params <span class="keyword">...</span>
+1690        Precond_L Precond_U Precond_P Precond_Params <span class="keyword">...</span>
+1691        Precond_Form Precond_Type <span class="keyword">...</span>
+1692        Operator_MVs Precond_Solves <span class="keyword">...</span>
+1693        CHORDALDISTANCE <span class="keyword">...</span>
+1694        Qschur Zschur Sschur Tschur <span class="keyword">...</span>
+1695        MinvZ QastMinvZ
+1696 
+1697 <span class="keyword">return</span>
+1698 <span class="comment">%%%======================================================================</span>
+1699 <a name="_sub31" href="#_subfunctions" class="code">function [n,nselect,Sigma,kappa,SCHUR,</a><span class="keyword">...</span>
+1700           jmin,jmax,tol,maxit,V,AV,BV,TS,DISP,PAIRS,JDV,FIX,track,NSIGMA,<span class="keyword">...</span>
+1701           lsolver,par] = ReadOptions(varargin)
+1702 <span class="comment">% Read options and set defaults</span>
+1703 
+1704 <span class="keyword">global</span> Operator_Form Operator_A Operator_B Operator_Params <span class="keyword">...</span>
+1705        Precond_Form Precond_L Precond_U Precond_P Precond_Params <span class="keyword">...</span>
+1706        CHORDALDISTANCE
+1707 
+1708 
+1709 Operator_A = varargin{1};
+1710 
+1711 n=<a href="#_sub37" class="code" title="subfunction n=CheckMatrix(A,gamma)">CheckMatrix</a>(Operator_A,1);
+1712 
+1713 <span class="comment">% defaults              %%%% search for 'xx' in fieldnames</span>
+1714 nselect0= 5; 
+1715 maxit   = 200;          <span class="comment">%%%% 'ma'</span>
+1716 SCHUR   = 0;            <span class="comment">%%%% 'sch'</span>
+1717 tol     = 1e-8;         <span class="comment">%%%% 'to'</span>
+1718 DISP    = 0;            <span class="comment">%%%% 'di'</span>
+1719 p0      = 5; <span class="comment">%%% jmin=nselect+p0 %%%% 'jmi'</span>
+1720 p1      = 5; <span class="comment">%%% jmax=jmin+p1    %%%% 'jma'</span>
+1721 TS      = 1;            <span class="comment">%%%% 'te'</span>
+1722 PAIRS   = 0;            <span class="comment">%%%% 'pai'</span>
+1723 JDV     = 0;            <span class="comment">%%%% 'av'</span>
+1724 track   = 1e-4;         <span class="comment">%%%% 'tr'</span>
+1725 FIX     = 1000;         <span class="comment">%%%% 'fix'</span>
+1726 NSIGMA  = 0;            <span class="comment">%%%% 'ns'</span>
+1727 CHORD   = 1;            <span class="comment">%%%% 'ch'</span>
+1728 lsolver = <span class="string">'gmres'</span>;      <span class="comment">%%%% 'lso'</span>
+1729 ls_maxit= 200;          <span class="comment">%%%% 'ls_m'</span>
+1730 ls_tol  = [0.7,0.49];   <span class="comment">%%%% 'ls_t'</span>
+1731 ell     = 4;            <span class="comment">%%%% 'ls_e'</span>
+1732 TP      = 0;            <span class="comment">%%%% 'ty'</span>
+1733 L       = [];           <span class="comment">%%%% 'l_'</span>
+1734 U       = [];           <span class="comment">%%%% 'u_'</span>
+1735 P       = [];           <span class="comment">%%%% 'p_'</span>
+1736 kappa   = 1;            <span class="comment">%%%% 'sca'</span>
+1737 V0      = <span class="string">'ones(n,1)+rand(n,1)'</span>;  <span class="comment">%%%% 'v0'</span>
+1738 
+1739 <span class="comment">%% initiation</span>
+1740 nselect=[]; Sigma=[]; options=[]; Operator_B=[];
+1741 jmin=-1; jmax=-1; V=[]; AV=[]; BV=[]; par=[];
+1742 
+1743 <span class="comment">%------------------------------------------------</span>
+1744 <span class="comment">%------- Find quantities ------------------------</span>
+1745 <span class="comment">%------------------------------------------------</span>
+1746 jj=[];
+1747 <span class="keyword">for</span> j = 2:nargin
+1748    <span class="keyword">if</span> isstruct(varargin{j})
+1749       options = varargin{j};
+1750    <span class="keyword">elseif</span> ischar(varargin{j})
+1751       s=varargin{j}; 
+1752       <span class="keyword">if</span> exist(s)==2 &amp; isempty(Operator_B)
+1753          Operator_B=s;
+1754       <span class="keyword">elseif</span>  length(s) == 2 &amp; isempty(Sigma)
+1755         s=upper(s);
+1756         <span class="keyword">switch</span> s
+1757           <span class="keyword">case</span> {<span class="string">'LM'</span>,<span class="string">'SM'</span>,<span class="string">'LR'</span>,<span class="string">'SR'</span>,<span class="string">'BE'</span>}, Sigma=s;
+1758           <span class="keyword">otherwise</span>
+1759             jj=[jj,j];
+1760         <span class="keyword">end</span>
+1761       <span class="keyword">else</span>
+1762         jj=[jj,j];
+1763       <span class="keyword">end</span>
+1764    <span class="keyword">elseif</span> min([n,n]==size(varargin{j})) &amp; isempty(Operator_B)
+1765       Operator_B=varargin{j}; 
+1766    <span class="keyword">elseif</span> length(varargin{j}) == 1
+1767       s = varargin{j};
+1768       <span class="keyword">if</span> isempty(nselect) &amp; isreal(s) &amp; (s == fix(s)) &amp; (s &gt; 0)
+1769          nselect = min(n,s);
+1770       <span class="keyword">elseif</span> isempty(Sigma)
+1771          Sigma = s; 
+1772       <span class="keyword">else</span>
+1773         jj=[jj,j];
+1774       <span class="keyword">end</span>
+1775    <span class="keyword">elseif</span> min(size(varargin{j}))==1  &amp; isempty(Sigma)
+1776       Sigma = varargin{j}; <span class="keyword">if</span> size(Sigma,1)==1, Sigma=Sigma'; <span class="keyword">end</span> 
+1777    <span class="keyword">elseif</span> min(size(varargin{j}))==2  &amp; isempty(Sigma)
+1778       Sigma = varargin{j}; <span class="keyword">if</span> size(Sigma,2)&gt;2 , Sigma=Sigma'; <span class="keyword">end</span> 
+1779    <span class="keyword">else</span>
+1780       jj=[jj,j];
+1781    <span class="keyword">end</span>
+1782 <span class="keyword">end</span>
+1783 
+1784 <span class="comment">%------- find parameters for operators -----------</span>
+1785 Operator_Params=[]; Operator_Params{2}=<span class="string">''</span>;
+1786 k=length(jj);
+1787 <span class="keyword">if</span> k&gt;0
+1788   Operator_Params(3:k+2)=varargin(jj);
+1789   <span class="keyword">if</span> ~ischar(Operator_A)
+1790     msg=sprintf(<span class="string">', %i'</span>,jj);
+1791     msg=sprintf(<span class="string">'Input argument, number%s, not recognized.'</span>,msg);
+1792     button=questdlg(msg,<span class="string">'Input arguments'</span>,<span class="string">'Ignore'</span>,<span class="string">'Stop'</span>,<span class="string">'Ignore'</span>);
+1793     <span class="keyword">if</span> strcmp(button,<span class="string">'Stop'</span>), n=-1; <span class="keyword">return</span>, <span class="keyword">end</span>
+1794   <span class="keyword">end</span>
+1795 <span class="keyword">end</span>
+1796 <span class="comment">%------- operator B -----------------------------</span>
+1797 <span class="keyword">if</span> isempty(Operator_B)
+1798    <span class="keyword">if</span> ischar(Operator_A)
+1799       Operator_Form=2; <span class="comment">% or Operator_Form=3, or Operator_Form=5;</span>
+1800    <span class="keyword">else</span>
+1801       Operator_Form=8;
+1802    <span class="keyword">end</span>
+1803 <span class="keyword">else</span>
+1804    <span class="keyword">if</span> ischar(Operator_B)
+1805       <span class="keyword">if</span> ischar(Operator_A), Operator_Form=1; <span class="keyword">else</span>, Operator_Form=6; <span class="keyword">end</span>
+1806    <span class="keyword">elseif</span> ischar(Operator_A)
+1807       Operator_Form=4;
+1808    <span class="keyword">else</span>
+1809       Operator_Form=7;
+1810    <span class="keyword">end</span>
+1811 <span class="keyword">end</span>
+1812 <span class="keyword">if</span> n&lt;2, <span class="keyword">return</span>, <span class="keyword">end</span>
+1813 
+1814 <span class="comment">%------- number of eigs to be computed ----------</span>
+1815 <span class="keyword">if</span> isempty(nselect), nselect=min(n,nselect0); <span class="keyword">end</span>
+1816 
+1817 <span class="comment">%------------------------------------------------</span>
+1818 <span class="comment">%------- Analyse Options ------------------------</span>
+1819 <span class="comment">%------------------------------------------------</span>
+1820 fopts = [];
+1821 <span class="keyword">if</span> ~isempty(options), fopts = <a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(options); <span class="keyword">end</span>
+1822 
+1823 <span class="comment">%------- preconditioner -------------------------</span>
+1824 Precond_L=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'pr'</span>,[]);
+1825 [L,ok]=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'l_'</span>,Precond_L);
+1826 <span class="keyword">if</span> ok &amp; ~isempty(Precond_L),
+1827    msg =sprintf(<span class="string">'A preconditioner is defined in'</span>);
+1828    msg =[msg,sprintf(<span class="string">'\n''Precond'', but also in ''L_precond''.'</span>)];
+1829    msg=[msg,sprintf(<span class="string">'\nWhat is the correct one?'</span>)];
+1830    button=questdlg(msg,<span class="string">'Preconditioner'</span>,<span class="string">'L_Precond'</span>,<span class="string">'Precond'</span>,<span class="string">'L_Precond'</span>);
+1831    <span class="keyword">if</span> strcmp(button,<span class="string">'L_Precond'</span>), 
+1832      Precond_L = L;
+1833    <span class="keyword">end</span>
+1834 <span class="keyword">else</span>
+1835    Precond_L = L;
+1836 <span class="keyword">end</span>
+1837 
+1838 <span class="keyword">if</span> ~isempty(Precond_L)
+1839   Precond_U=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'u_'</span>,[]);
+1840   Precond_P=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'p_'</span>,[]);
+1841 <span class="keyword">end</span>
+1842 
+1843 Precond_Params=[]; Precond_Params{2}=<span class="string">''</span>;
+1844 Params=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'par'</span>,[]);
+1845 [l,k]=size(Params);
+1846 <span class="keyword">if</span> k&gt;0, 
+1847   <span class="keyword">if</span> iscell(Params), Precond_Params(3:k+2)=Params; 
+1848   <span class="keyword">else</span>, Precond_Params{3}=Params; <span class="keyword">end</span>
+1849 <span class="keyword">end</span>
+1850 TP=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ty'</span>,TP);
+1851 n=<a href="#_sub39" class="code" title="subfunction n=SetPrecond(n,TP)">SetPrecond</a>(n,TP); <span class="keyword">if</span> n&lt;2, <span class="keyword">return</span>, <span class="keyword">end</span>
+1852 
+1853 <span class="comment">%------- max, min dimension search subspace ------</span>
+1854 jmin=min(n,<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'jmi'</span>,jmin));
+1855 jmax=min(n,<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'jma'</span>,jmax));
+1856 <span class="keyword">if</span> jmax &lt; 0
+1857    <span class="keyword">if</span> jmin&lt;0, jmin=min(n,nselect+p0); <span class="keyword">end</span>
+1858    jmax=min(n,jmin+p1); 
+1859 <span class="keyword">else</span>
+1860    <span class="keyword">if</span> jmin&lt;0, jmin=max(1,jmax-p1); <span class="keyword">end</span>
+1861 <span class="keyword">end</span> 
+1862 maxit=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ma'</span>,maxit);
+1863 
+1864 <span class="comment">%------- initial search subspace ----------------</span>
+1865 V=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'v'</span>,[]);
+1866 [m,d]=size(V); 
+1867 <span class="keyword">if</span> m~=n 
+1868   <span class="keyword">if</span> m&gt;n, V = V(1:n,:); <span class="keyword">end</span>
+1869   <span class="keyword">if</span> m&lt;n, V = [V;0.001*rand(n-m-1,d)]; <span class="keyword">end</span>
+1870 <span class="keyword">end</span>
+1871 V=orth(V); [m,d]=size(V);
+1872 <span class="keyword">if</span> d==0, nr=0; <span class="keyword">while</span> nr==0, V=eval(V0); nr=norm(V); V=V/nr; <span class="keyword">end</span>, <span class="keyword">end</span>
+1873 
+1874 
+1875 <span class="comment">%------- Check definition B, Compute AV, BV -----</span>
+1876 [AV,BV,n]=<a href="#_sub38" class="code" title="subfunction [Av,Bv,n]=CheckDimMV(v)">CheckDimMV</a>(V); <span class="keyword">if</span> n&lt;2, <span class="keyword">return</span>, <span class="keyword">end</span>
+1877 
+1878 <span class="comment">%------- Other options --------------------------</span>
+1879 tol=<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'to'</span>,tol);
+1880 kappa  = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'sca'</span>,kappa);
+1881 kappa  = abs(kappa(1,1)); <span class="keyword">if</span> kappa==0, kappa=1; <span class="keyword">end</span>
+1882 PAIRS  = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'pai'</span>,PAIRS,[0,1]);
+1883 SCHUR  = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'sch'</span>,SCHUR,[0,1,0.5]);
+1884 DISP   = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'di'</span>,DISP,[0,1]);
+1885 JDV    = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'av'</span>,JDV,[0,1]);
+1886 track  = max(abs(<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'tr'</span>,track,[0,track,inf])),0);
+1887 NSIGMA = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ns'</span>,NSIGMA,[0,1]);
+1888 FIX    = max(abs(<a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'fix'</span>,0,[0,FIX,inf])),0);
+1889 CHORDALDISTANCE = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ch'</span>,CHORD,[0,1]);
+1890 
+1891 [TS0,ok] = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'te'</span>,TS);
+1892 
+1893 <span class="keyword">if</span> ok &amp; ischar(TS0)
+1894    <span class="keyword">if</span>     strncmpi(TS0,<span class="string">'st'</span>,2),  TS=0; <span class="comment">%% 'standard'</span>
+1895    <span class="keyword">elseif</span> strncmpi(TS0,<span class="string">'ha'</span>,2),  TS=1; <span class="comment">%% 'harmonic'</span>
+1896    <span class="keyword">elseif</span> strncmpi(TS0,<span class="string">'se'</span>,2),  TS=2; <span class="comment">%% 'searchspace'</span>
+1897    <span class="keyword">elseif</span> strncmpi(TS0,<span class="string">'bv'</span>,2),  TS=3;
+1898    <span class="keyword">elseif</span> strncmpi(TS0,<span class="string">'av'</span>,2),  TS=4;
+1899    <span class="keyword">end</span>
+1900 <span class="keyword">else</span>
+1901    TS=max(0,min(4,round(TS0(1,1))));
+1902 <span class="keyword">end</span>
+1903 
+1904 <span class="comment">%------- set targets ----------------</span>
+1905 <span class="keyword">if</span> isempty(Sigma)
+1906    <span class="keyword">if</span> TS==1, Sigma=[0,1]; <span class="keyword">else</span>, Sigma = <span class="string">'LM'</span>; <span class="keyword">end</span>
+1907 <span class="keyword">elseif</span> ischar(Sigma)
+1908    <span class="keyword">switch</span> Sigma
+1909      <span class="keyword">case</span> {<span class="string">'LM'</span>,<span class="string">'LR'</span>,<span class="string">'SR'</span>,<span class="string">'BE'</span>,<span class="string">'SM'</span>}
+1910      <span class="keyword">if</span> ~ok, TS=3; <span class="keyword">end</span>
+1911    <span class="keyword">end</span>
+1912 <span class="keyword">else</span>
+1913   [k,l]=size(Sigma);
+1914   <span class="keyword">if</span> l==1, Sigma=[Sigma,ones(k,1)]; l=2; <span class="keyword">end</span>
+1915   Sigma=<a href="#_sub22" class="code" title="subfunction Sigma=ScaleEig(Sigma)">ScaleEig</a>(Sigma);
+1916 <span class="keyword">end</span>
+1917 
+1918 <span class="keyword">if</span> ischar(Sigma) &amp; TS&lt;2 
+1919    msg1=sprintf(<span class="string">'   The choice sigma = ''%s'' does not match the\n'</span>,Sigma);
+1920    msg2=sprintf(<span class="string">'   selected test subspace. Specify a numerical\n'</span>);
+1921    msg3=sprintf(<span class="string">'   value for sigma (e.g. sigma = '</span>); msg4=<span class="string">''</span>;
+1922    <span class="keyword">switch</span> Sigma
+1923       <span class="keyword">case</span> {<span class="string">'LM'</span>,<span class="string">'LR'</span>}
+1924          msg4=sprintf(<span class="string">'[1,0]'</span>);     
+1925       <span class="keyword">case</span> {<span class="string">'SM'</span>,<span class="string">'SR'</span>,<span class="string">'BE'</span>}
+1926          msg4=sprintf(<span class="string">' [0,1]'</span>);  
+1927    <span class="keyword">end</span>
+1928    msg5=sprintf(<span class="string">'),\n   or continue with ''TestSpace''=''B*V''.'</span>);
+1929    msg=[msg1,msg2,msg3,msg4,msg5];
+1930    button=questdlg(msg,<span class="string">'Targets and test subspaces'</span>,<span class="string">'Continue'</span>,<span class="string">'Stop'</span>,<span class="string">'Continue'</span>);
+1931    <span class="keyword">if</span> strcmp(button,<span class="string">'Continue'</span>), TS=3; <span class="keyword">else</span>, n=-1; <span class="keyword">return</span>, <span class="keyword">end</span>
+1932 <span class="keyword">end</span>
+1933 
+1934 <span class="comment">%------- linear solver --------------------------</span>
+1935 lsolver  = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'lso'</span>,lsolver);
+1936 
+1937 method=strvcat(<span class="string">'exact'</span>,<span class="string">'olsen'</span>,<span class="string">'iluexact'</span>,<span class="string">'gmres'</span>,<span class="string">'cgstab'</span>,<span class="string">'bicgstab'</span>);
+1938 j=strmatch(lower(lsolver),method);
+1939 <span class="keyword">if</span> isempty(j), 
+1940   msg=[<span class="string">'The linear solver '''</span>,lsolver,<span class="string">''' is not included.'</span>];
+1941   msg=[msg,sprintf(<span class="string">'\nIs GMRES ok?'</span>)];
+1942   button=questdlg(msg,<span class="string">'Linear solver'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+1943   <span class="keyword">if</span> strcmp(button,<span class="string">'Yes'</span>), j=4; ls_maxit=5; <span class="keyword">else</span>, n=-1; <span class="keyword">return</span>, <span class="keyword">end</span>
+1944 <span class="keyword">end</span>
+1945 <span class="keyword">if</span>     j==1, lsolver=<span class="string">'exact'</span>; Precond_Form = 0;
+1946 <span class="keyword">elseif</span> j==2 | j==3, lsolver=<span class="string">'olsen'</span>;
+1947 <span class="keyword">elseif</span> j==4, lsolver=<span class="string">'gmres'</span>;  ls_maxit=5;
+1948 <span class="keyword">else</span>,        lsolver=<span class="string">'cgstab'</span>; ls_tol=1.0e-10;
+1949 <span class="keyword">end</span>
+1950 
+1951 ls_maxit= <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ls_m'</span>,ls_maxit);
+1952 ls_tol  = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ls_t'</span>,ls_tol);
+1953 ell     = <a href="#_sub36" class="code" title="subfunction [a,ok]=findfield(options,fopts,str,default,gamma,stri)">findfield</a>(options,fopts,<span class="string">'ls_e'</span>,ell);
+1954 
+1955 par=[ls_tol,ls_maxit,ell];
+1956 
+1957 
+1958 <span class="comment">%----- Display the parameters that are used ----------------</span>
+1959 <span class="keyword">if</span> DISP 
+1960 
+1961   fprintf(<span class="string">'\n'</span>),fprintf(<span class="string">'PROBLEM\n'</span>)
+1962   <span class="keyword">switch</span> Operator_Form
+1963      <span class="keyword">case</span> {1,4,6,7} 
+1964   fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'A'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Operator_A));
+1965   fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'B'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Operator_B));
+1966      <span class="keyword">case</span> 2
+1967   fprintf(<span class="string">'%13s: ''%s''  ([Av,Bv] = %s(v))\n'</span>,<span class="string">'A,B'</span>,Operator_A,Operator_A);
+1968      <span class="keyword">case</span> 3
+1969   fprintf(<span class="string">'%13s: ''%s''\n'</span>,<span class="string">'A,B'</span>,Operator_A);
+1970   fprintf(<span class="string">'%15s(Av = %s(v,''A''), Bv = %s(v,''B''))\n'</span>,<span class="keyword">...</span>
+1971                                 <span class="string">''</span>,Operator_A,Operator_A);
+1972      <span class="keyword">case</span> {5,8}
+1973   fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'A'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Operator_A));
+1974   fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'B'</span>,<span class="string">'Identity   (B*v = v)'</span>);
+1975   <span class="keyword">end</span>
+1976 
+1977   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'dimension'</span>,n);
+1978   fprintf(<span class="string">'%13s: %i\n\n'</span>,<span class="string">'nselect'</span>,nselect);
+1979 
+1980   <span class="keyword">if</span> length(jj)&gt;0 &amp; (ischar(Operator_A) | ischar(Operator_B))
+1981     msgj=sprintf(<span class="string">', %i'</span>,jj); msgo=<span class="string">''</span>; 
+1982     <span class="keyword">if</span> ischar(Operator_A), msgo=sprintf(<span class="string">' ''%s'''</span>,Operator_A); <span class="keyword">end</span>
+1983     <span class="keyword">if</span> ischar(Operator_B), msgo=sprintf(<span class="string">'%s ''%s''.'</span>,msgo,Operator_B); <span class="keyword">end</span>
+1984     fprintf(<span class="string">' The JDQZ input arguments, number%s, are\n'</span>,msgj)
+1985     fprintf(<span class="string">' taken as input parameters 3:%i for%s.\n\n'</span>,length(jj)+2,msgo);
+1986   <span class="keyword">end</span>
+1987 
+1988   fprintf(<span class="string">'TARGET\n'</span>)
+1989   <span class="keyword">if</span> ischar(Sigma)
+1990      fprintf(<span class="string">'%13s: ''%s''\n'</span>,<span class="string">'sigma'</span>,Sigma)
+1991   <span class="keyword">else</span> 
+1992      fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'sigma'</span>,<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(Sigma(1,:)))
+1993      <span class="keyword">for</span> j=2:size(Sigma,1), 
+1994         fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">''</span>,<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(Sigma(j,:)))
+1995      <span class="keyword">end</span>
+1996   <span class="keyword">end</span>
+1997 
+1998   fprintf(<span class="string">'\nOPTIONS\n'</span>)
+1999   fprintf(<span class="string">'%13s: %g\n'</span>,<span class="string">'Schur'</span>,SCHUR)
+2000   fprintf(<span class="string">'%13s: %g\n'</span>,<span class="string">'Tol'</span>,tol)
+2001   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'Disp'</span>,DISP)
+2002   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'jmin'</span>,jmin)
+2003   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'jmax'</span>,jmax)
+2004   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'MaxIt'</span>,maxit)
+2005   fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'v0'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(V))
+2006   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'Pairs'</span>,PAIRS)
+2007   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'AvoidStag'</span>,JDV)
+2008   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'NSigma'</span>,NSIGMA)
+2009   fprintf(<span class="string">'%13s: %g\n'</span>,<span class="string">'Track'</span>,track)
+2010   fprintf(<span class="string">'%13s: %g\n'</span>,<span class="string">'FixShift'</span>,FIX)
+2011   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'Chord'</span>,CHORDALDISTANCE)
+2012   fprintf(<span class="string">'%13s: ''%s''\n'</span>,<span class="string">'LSolver'</span>,lsolver)
+2013   str=sprintf(<span class="string">'%g '</span>,ls_tol);
+2014   fprintf(<span class="string">'%13s: [ %s]\n'</span>,<span class="string">'LS_Tol'</span>,str)
+2015   fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'LS_MaxIt'</span>,ls_maxit)
+2016   <span class="keyword">if</span> strcmp(lsolver,<span class="string">'cgstab'</span>)
+2017     fprintf(<span class="string">'%13s: %i\n'</span>,<span class="string">'LS_ell'</span>,ell)
+2018   <span class="keyword">end</span>
+2019 
+2020   <a href="#_sub33" class="code" title="subfunction DisplayPreconditioner(n)">DisplayPreconditioner</a>(n); fprintf(<span class="string">'\n'</span>)
+2021    
+2022   <span class="keyword">switch</span> TS
+2023      <span class="keyword">case</span> 0, str=<span class="string">'Standard, W = alpha''*A*V + beta''*B*V'</span>;
+2024      <span class="keyword">case</span> 1, str=<span class="string">'Harmonic, W = beta*A*V - alpha*B*V'</span>;
+2025      <span class="keyword">case</span> 2, str=<span class="string">'SearchSpace, W = V'</span>;
+2026      <span class="keyword">case</span> 3, str=<span class="string">'Petrov, W = B*V'</span>;
+2027      <span class="keyword">case</span> 4, str=<span class="string">'Petrov, W = A*V'</span>;
+2028    <span class="keyword">end</span>
+2029    fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'TestSpace'</span>,str); fprintf(<span class="string">'\n\n'</span>);
+2030 
+2031 <span class="keyword">end</span>
+2032 
+2033 <span class="keyword">return</span>
+2034 <span class="comment">%------------------------------------------------------------------------</span>
+2035 <a name="_sub32" href="#_subfunctions" class="code">function msg=StrOp(Op)</a>
+2036 
+2037   <span class="keyword">if</span> ischar(Op)
+2038     msg=sprintf(<span class="string">'''%s'''</span>,Op);
+2039   <span class="keyword">elseif</span> issparse(Op), [n,k]=size(Op);
+2040     msg=sprintf(<span class="string">'[%ix%i sparse]'</span>,n,k);
+2041   <span class="keyword">else</span>, [n,k]=size(Op);
+2042     msg=sprintf(<span class="string">'[%ix%i double]'</span>,n,k);
+2043   <span class="keyword">end</span>
+2044 
+2045 <span class="keyword">return</span>
+2046 <span class="comment">%------------------------------------------------------------------------</span>
+2047 <a name="_sub33" href="#_subfunctions" class="code">function DisplayPreconditioner(n)</a>
+2048   <span class="keyword">global</span> Precond_Form Precond_Type <span class="keyword">...</span>
+2049          Precond_L Precond_U Precond_P
+2050 
+2051   FP=Precond_Form;
+2052   <span class="keyword">switch</span> Precond_Form
+2053     <span class="keyword">case</span> 0,    
+2054       fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'Precond'</span>,<span class="string">'No preconditioner'</span>); 
+2055     <span class="keyword">case</span> {1,2,5}
+2056       fprintf(<span class="string">'%13s: %s'</span>,<span class="string">'Precond'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Precond_L));
+2057       <span class="keyword">if</span> FP==2, fprintf(<span class="string">'  (M\\v = %s(v,''preconditioner''))'</span>,Precond_L); <span class="keyword">end</span> 
+2058       fprintf(<span class="string">'\n'</span>)
+2059     <span class="keyword">case</span> {3,4,6,7} 
+2060       fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'L precond'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Precond_L));
+2061       fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'U precond'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Precond_U));
+2062       <span class="keyword">if</span> FP==7, fprintf(<span class="string">'%13s: %s\n'</span>,<span class="string">'P precond'</span>,<a href="#_sub32" class="code" title="subfunction msg=StrOp(Op)">StrOp</a>(Precond_P)); <span class="keyword">end</span>
+2063       <span class="keyword">if</span> FP==4,fprintf(<span class="string">'%15s(M\\v = %s(%s(v,''L''),''U''))\n'</span>,<span class="keyword">...</span>
+2064           <span class="string">''</span>,Precond_L,Precond_L); <span class="keyword">end</span> 
+2065   <span class="keyword">end</span>
+2066 
+2067   <span class="keyword">if</span> FP
+2068   <span class="keyword">switch</span> Precond_Type
+2069     <span class="keyword">case</span> 0, str=<span class="string">'explicit left'</span>;
+2070     <span class="keyword">case</span> 1, str=<span class="string">'explicit right'</span>;
+2071     <span class="keyword">case</span> 2, str=<span class="string">'implicit'</span>;
+2072   <span class="keyword">end</span>
+2073   fprintf(<span class="string">'%15sTo be used as %s preconditioner.\n'</span>,<span class="string">''</span>,str)
+2074   <span class="keyword">end</span>
+2075 
+2076 <span class="keyword">return</span>
+2077 <span class="comment">%------------------------------------------------------------------------</span>
+2078 <a name="_sub34" href="#_subfunctions" class="code">function possibilities</a>
+2079 
+2080  fprintf(<span class="string">'\n'</span>)
+2081  fprintf(<span class="string">'PROBLEM\n'</span>)
+2082  fprintf(<span class="string">'            A: [ square matrix | string ]\n'</span>);
+2083  fprintf(<span class="string">'            B: [ square matrix {identity} | string ]\n'</span>);
+2084  fprintf(<span class="string">'      nselect: [ positive integer {5} ]\n\n'</span>);
+2085  fprintf(<span class="string">'TARGET\n'</span>)
+2086  fprintf(<span class="string">'        sigma: [ vector of scalars | \n'</span>);
+2087  fprintf(<span class="string">'                 pair of vectors of scalars |\n'</span>);
+2088  fprintf(<span class="string">'                 {''LM''} | {''SM''} | ''LR'' | ''SR'' | ''BE'' ]\n\n'</span>);
+2089 
+2090  fprintf(<span class="string">'OPTIONS\n'</span>);
+2091  fprintf(<span class="string">'        Schur: [ yes | {no} ]\n'</span>);
+2092  fprintf(<span class="string">'          Tol: [ positive scalar {1e-8} ]\n'</span>);
+2093  fprintf(<span class="string">'         Disp: [ yes | {no} ]\n'</span>);
+2094  fprintf(<span class="string">'         jmin: [ positive integer {nselect+5} ]\n'</span>);
+2095  fprintf(<span class="string">'         jmax: [ positive integer {jmin+5} ]\n'</span>);
+2096  fprintf(<span class="string">'        MaxIt: [ positive integer {200} ]\n'</span>);
+2097  fprintf(<span class="string">'           v0: '</span>);
+2098  fprintf(<span class="string">'[ size(A,1) by p vector of scalars {rand(size(A,1),1)} ]\n'</span>);
+2099  fprintf(<span class="string">'    TestSpace: '</span>);
+2100  fprintf(<span class="string">'[ Standard | {Harmonic} | SearchSpace | BV | AV ]\n'</span>);
+2101  fprintf(<span class="string">'        Pairs: [ yes | {no} ] \n'</span>);
+2102  fprintf(<span class="string">'    AvoidStag: [ yes | {no} ]\n'</span>);
+2103  fprintf(<span class="string">'        Track: [ {yes} | no non-negative scalar {1e-4} ]\n'</span>);
+2104  fprintf(<span class="string">'       NSigma: [ yes | {no} ]\n'</span>);
+2105  fprintf(<span class="string">'     FixShift: [ yes | {no} | non-negative scalar {1e+3} ]\n'</span>);
+2106  fprintf(<span class="string">'        Chord: [ {yes} | no ]\n'</span>);
+2107  fprintf(<span class="string">'        Scale: [ positive scalar {1} ]\n'</span>);
+2108  fprintf(<span class="string">'      LSolver: [ {gmres} | bicgstab ]\n'</span>);
+2109  fprintf(<span class="string">'       LS_Tol: [ row of positive scalar {[0.7,0.49]} ]\n'</span>);
+2110  fprintf(<span class="string">'     LS_MaxIt: [ positive integer {5} ]\n'</span>);
+2111  fprintf(<span class="string">'       LS_ell: [ positive integer {4} ]\n'</span>);
+2112  fprintf(<span class="string">'      Precond: '</span>);
+2113  fprintf(<span class="string">'[ n by n matrix {identity} | n by 2n matrix | string ]\n'</span>);
+2114  fprintf(<span class="string">'    L_Precond: same as ''Precond''\n'</span>);
+2115  fprintf(<span class="string">'    U_Precond: [ n by n matrix {identity} | string ]\n'</span>);
+2116  fprintf(<span class="string">'    P_Precond: [ n by n matrix {identity} ]\n'</span>);
+2117  fprintf(<span class="string">' Type_Precond: [ {left} | right | implicit ]\n'</span>);    
+2118  fprintf(<span class="string">'\n'</span>)
+2119 
+2120 
+2121 <span class="keyword">return</span>
+2122 <span class="comment">%------------------------------------------------------------------------</span>
+2123 <a name="_sub35" href="#_subfunctions" class="code">function x = boolean(x,gamma,string)</a>
+2124 <span class="comment">%Y = BOOLEAN(X,GAMMA,STRING)</span>
+2125 <span class="comment">%  GAMMA(1) is the default.</span>
+2126 <span class="comment">%  If GAMMA is not specified, GAMMA = 0.</span>
+2127 <span class="comment">%  STRING is a cell of accepted strings.</span>
+2128 <span class="comment">%  If STRING is not specified STRING = {'n' 'y'}</span>
+2129 <span class="comment">%  STRING{I} and GAMMA(I) are accepted expressions for X</span>
+2130 <span class="comment">%  If X=GAMMA(I) then Y=X. If the first L characters</span>
+2131 <span class="comment">%  of X matches those of STRING{I}, then Y=GAMMA(I+1).</span>
+2132 <span class="comment">%  Here L=SIZE({STRING{1},2).</span>
+2133 <span class="comment">%  For other values of X, Y=GAMMA(1);</span>
+2134 
+2135 <span class="keyword">if</span> nargin &lt; 2, gamma=[0,0,1]; <span class="keyword">end</span>
+2136 <span class="keyword">if</span> nargin &lt; 3, string={<span class="string">'n'</span> <span class="string">'y'</span>}; <span class="keyword">end</span>
+2137 
+2138 <span class="keyword">if</span> ischar(x)
+2139   l=size(string{1},2);
+2140   i=min(find(strncmpi(x,string,l)));
+2141   <span class="keyword">if</span> isempty(i), i=0; <span class="keyword">end</span>, x=gamma(i+1);
+2142 <span class="keyword">elseif</span> max((gamma-x)==0)
+2143 <span class="keyword">elseif</span> gamma(end) == inf
+2144 <span class="keyword">else</span>, x=gamma(1);
+2145 <span class="keyword">end</span>
+2146   
+2147 <span class="keyword">return</span>
+2148 <span class="comment">%------------------------------------------------------------------------</span>
+2149 <a name="_sub36" href="#_subfunctions" class="code">function [a,ok]=findfield(options,fopts,str,default,gamma,stri)</a>
+2150 <span class="comment">% Searches the fieldnames in FOPTS for the string STR.</span>
+2151 <span class="comment">% The field is detected if only the first part of the fieldname</span>
+2152 <span class="comment">% matches the string STR. The search is case insensitive.</span>
+2153 <span class="comment">% If the field is detected, then OK=1 and A is the fieldvalue.</span>
+2154 <span class="comment">% Otherwise OK=0 and A=DEFAULT</span>
+2155 
+2156    l=size(str,2); j=min(find(strncmpi(str,fopts,l)));
+2157    <span class="keyword">if</span> ~isempty(j)
+2158       a=<a href="../../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(options,<a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(fopts(j,:))); ok=1;
+2159       <span class="keyword">if</span> nargin == 5, a = <a href="#_sub35" class="code" title="subfunction x = boolean(x,gamma,string)">boolean</a>(a,[<a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>,gamma]); 
+2160       <span class="keyword">elseif</span> nargin == 6, a = <a href="#_sub35" class="code" title="subfunction x = boolean(x,gamma,string)">boolean</a>(a,[<a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>,gamma],stri); <span class="keyword">end</span>
+2161    <span class="keyword">elseif</span> nargin&gt;3
+2162       a=<a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>; ok=0;
+2163    <span class="keyword">else</span>
+2164       a=[]; ok=0;
+2165    <span class="keyword">end</span>
+2166 
+2167 <span class="keyword">return</span>
+2168 <span class="comment">%%%======================================================================</span>
+2169 <a name="_sub37" href="#_subfunctions" class="code">function n=CheckMatrix(A,gamma)</a>
+2170 
+2171   <span class="keyword">if</span> ischar(A), n=-1;
+2172     <span class="keyword">if</span> exist(A) ~=2
+2173       msg=sprintf(<span class="string">'  Can not find the M-file ''%s.m''  '</span>,A);
+2174       errordlg(msg,<span class="string">'MATRIX'</span>),n=-2;
+2175     <span class="keyword">end</span>
+2176     <span class="keyword">if</span> n==-1 &amp; gamma, eval(<span class="string">'n=feval(A,[],''dimension'');'</span>,<span class="string">'n=-1;'</span>), <span class="keyword">end</span>
+2177   <span class="keyword">else</span>, [n,n] = size(A);
+2178     <span class="keyword">if</span> any(size(A) ~= n)
+2179       msg=sprintf(<span class="string">'  The operator must be a square matrix or a string.  '</span>);
+2180       errordlg(msg,<span class="string">'MATRIX'</span>),n=-3;
+2181     <span class="keyword">end</span>
+2182   <span class="keyword">end</span>
+2183 
+2184 <span class="keyword">return</span>
+2185 <span class="comment">%------------------------------------------------------------------------</span>
+2186 <a name="_sub38" href="#_subfunctions" class="code">function [Av,Bv,n]=CheckDimMV(v)</a>
+2187 <span class="comment">% [Av,Bv]=CheckDimMV(v)</span>
+2188 <span class="comment">%  Av=A*v, Bv=B*v Checks correctness operator definitions</span>
+2189 
+2190 <span class="keyword">global</span> Operator_Form Operator_MVs Operator_A Operator_B Operator_Params
+2191 
+2192 [n,k]=size(v);
+2193 <span class="keyword">if</span> k&gt;1, V=v(:,2:k); v=v(:,1); <span class="keyword">end</span>
+2194 
+2195 Bv=v;
+2196 <span class="keyword">switch</span> Operator_Form
+2197    <span class="keyword">case</span> 1 <span class="comment">% both Operator_A and B are strings</span>
+2198       Operator_Params{1}=v;
+2199       Av=feval(Operator_A,Operator_Params{:}); 
+2200       Bv=feval(Operator_B,Operator_Params{:});
+2201    <span class="keyword">case</span> 2 <span class="comment">%%% or Operator_Form=3 or Operator_Form=5???</span>
+2202       Operator_Params{1}=v;
+2203       eval(<span class="string">'[Av,Bv]=feval(Operator_A,Operator_Params{:});'</span>,<span class="string">'Operator_Form=3;'</span>)
+2204       <span class="keyword">if</span> Operator_Form==3, 
+2205         ok=1; Operator_Params{2}=<span class="string">'A'</span>;
+2206         eval(<span class="string">'Av=feval(Operator_A,Operator_Params{:});'</span>,<span class="string">'ok=0;'</span>)
+2207         <span class="keyword">if</span> ok, 
+2208           Operator_Params{2}=<span class="string">'B'</span>;
+2209           eval(<span class="string">'Bv=feval(Operator_A,Operator_Params{:});'</span>,<span class="string">'ok=0;'</span>), 
+2210         <span class="keyword">end</span>
+2211         <span class="keyword">if</span> ~ok, 
+2212           Operator_Form=5; Operator_Params{2}=<span class="string">''</span>; 
+2213           Av=feval(Operator_A,Operator_Params{:}); 
+2214         <span class="keyword">end</span> 
+2215       <span class="keyword">end</span>
+2216    <span class="keyword">case</span> 3
+2217       Operator_Params{1}=v;
+2218       Operator_Params{2}=<span class="string">'A'</span>;
+2219       Av=feval(Operator_A,Operator_Params{:});
+2220       Operator_Params{2}=<span class="string">'B'</span>;
+2221       Bv=feval(Operator_A,Operator_Params{:});
+2222    <span class="keyword">case</span> 4
+2223       Operator_Params{1}=v;
+2224       Av=feval(Operator_A,Operator_Params{:}); 
+2225       Bv=Operator_B*v;
+2226    <span class="keyword">case</span> 5
+2227       Operator_Params{1}=v;
+2228       Av=feval(Operator_A,Operator_Params{:});
+2229    <span class="keyword">case</span> 6
+2230       Av=Operator_A*v; 
+2231       Operator_Params{1}=v;
+2232       Bv=feval(Operator_B,Operator_Params{:});
+2233    <span class="keyword">case</span> 7
+2234       Av=Operator_A*v; 
+2235       Bv=Operator_B*v;
+2236    <span class="keyword">case</span> 8
+2237       Av=Operator_A*v;
+2238 <span class="keyword">end</span>
+2239 
+2240 Operator_MVs = 1;
+2241 
+2242 ok_A=min(size(Av)==size(v));
+2243 ok_B=min(size(Bv)==size(v));
+2244 
+2245 <span class="keyword">if</span> ok_A &amp; ok_B
+2246   <span class="keyword">if</span> k&gt;1,
+2247     ok=1; eval(<span class="string">'[AV,BV]=MV(V);'</span>,<span class="string">'ok=0;'</span>) 
+2248     <span class="keyword">if</span> ok
+2249       Av=[Av,AV]; Bv=[Bv,BV];
+2250     <span class="keyword">else</span>
+2251       <span class="keyword">for</span> j=2:k, [Av(:,j),Bv(:,j)]=<a href="#_sub16" class="code" title="subfunction [Av,Bv]=MV(v)">MV</a>(V(:,j-1)); <span class="keyword">end</span>
+2252     <span class="keyword">end</span> 
+2253   <span class="keyword">end</span>
+2254   <span class="keyword">return</span>
+2255 <span class="keyword">end</span>
+2256 
+2257 <span class="keyword">if</span> ~ok_A
+2258   Operator=Operator_A;
+2259 <span class="keyword">elseif</span>  ~ok_B
+2260   Operator=Operator_B;
+2261 <span class="keyword">end</span>  
+2262 msg=sprintf(<span class="string">' %s does not produce a vector of size %d'</span>,Operator,n)
+2263 errordlg(msg,<span class="string">'MATRIX'</span>), n=-1; 
+2264 
+2265 <span class="keyword">return</span>
+2266 <span class="comment">%------------------------------------------------------------------------</span>
+2267 <a name="_sub39" href="#_subfunctions" class="code">function n=SetPrecond(n,TP)</a>
+2268 <span class="comment">% finds out how the preconditioners are defined (Precond_Form)</span>
+2269 <span class="comment">% and checks consistency of the definitions.</span>
+2270 <span class="comment">%</span>
+2271 <span class="comment">% If M is the preconditioner then P*M=L*U. Defaults: L=U=P=I.</span>
+2272 <span class="comment">%</span>
+2273 <span class="comment">% Precond_Form</span>
+2274 <span class="comment">%       0:   no L</span>
+2275 <span class="comment">%       1:   L M-file, no U,     L ~= A</span>
+2276 <span class="comment">%       2:   L M-file, no U,     L == A</span>
+2277 <span class="comment">%       3:   L M-file, U M-file, L ~= A, U ~= A, L ~=U</span>
+2278 <span class="comment">%       4:   L M-file, U M-file, L == U</span>
+2279 <span class="comment">%       5:   L matrix, no U</span>
+2280 <span class="comment">%       6:   L matrix, U matrix  no P</span>
+2281 <span class="comment">%       7:   L matrix, U matrix, P matrix</span>
+2282 <span class="comment">%</span>
+2283 <span class="comment">% Precond_Type</span>
+2284 <span class="comment">%       0:   Explicit left</span>
+2285 <span class="comment">%       1:   Explicit right</span>
+2286 <span class="comment">%       2:   Implicit</span>
+2287 <span class="comment">%</span>
+2288   <span class="keyword">global</span> Operator_A <span class="keyword">...</span>
+2289          Precond_Form Precond_Solves <span class="keyword">...</span>
+2290          Precond_Type <span class="keyword">...</span>
+2291          Precond_L Precond_U Precond_P Precond_Params
+2292 
+2293   Precond_Type = 0;
+2294   <span class="keyword">if</span> ischar(TP)
+2295     TP=lower(TP(1,1));
+2296     <span class="keyword">switch</span> TP
+2297       <span class="keyword">case</span> <span class="string">'l'</span>
+2298         Precond_Type = 0;
+2299       <span class="keyword">case</span> <span class="string">'r'</span>
+2300         Precond_Type = 1;
+2301       <span class="keyword">case</span> <span class="string">'i'</span>
+2302         Precond_Type = 2; 
+2303     <span class="keyword">end</span>
+2304   <span class="keyword">else</span>
+2305     Precond_Type=max(0,min(fix(TP),2));
+2306   <span class="keyword">end</span>
+2307 
+2308   Precond_Solves = 0;
+2309 
+2310   <span class="comment">% Set type preconditioner</span>
+2311   Precond_Form=0;
+2312   <span class="keyword">if</span> isempty(Precond_L), <span class="keyword">return</span>, <span class="keyword">end</span>
+2313 
+2314   <span class="keyword">if</span> ~isempty(Precond_U) &amp; ischar(Precond_L)~=ischar(Precond_U)
+2315     msg=sprintf(<span class="string">'  L and U should both be strings or matrices'</span>);
+2316     errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2317   <span class="keyword">end</span>
+2318   <span class="keyword">if</span> ~isempty(Precond_P) &amp; (ischar(Precond_P) | ischar(Precond_L))
+2319     msg=sprintf(<span class="string">'  P can be specified only if P, L and U are matrices'</span>); 
+2320     errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2321   <span class="keyword">end</span>  
+2322   tp=1+4*~ischar(Precond_L)+2*~isempty(Precond_U)+~isempty(Precond_P);
+2323   <span class="keyword">if</span> tp==1, tp = tp + strcmp(Precond_L,Operator_A); <span class="keyword">end</span>
+2324   <span class="keyword">if</span> tp==3, tp = tp + strcmp(Precond_L,Precond_U); <span class="keyword">end</span>
+2325   <span class="keyword">if</span> tp==3 &amp; strcmp(Precond_U,Operator_A)
+2326     msg=sprintf(<span class="string">'  If L and A use the same M-file,'</span>)
+2327     msg=[msg,sprintf(<span class="string">'\n  then so should U.'</span>)]; 
+2328     errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2329   <span class="keyword">end</span>
+2330   <span class="keyword">if</span> tp&gt;5, tp=tp-1; <span class="keyword">end</span>,  Precond_Form=tp;
+2331 
+2332   <span class="comment">% Check consistency definitions</span>
+2333   <span class="keyword">if</span> tp&lt;5 &amp; exist(Precond_L) ~=2
+2334     msg=sprintf(<span class="string">'  Can not find the M-file ''%s.m''  '</span>,Precond_L); 
+2335     errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2336   <span class="keyword">end</span>
+2337 
+2338   ok=1; 
+2339   <span class="keyword">if</span> tp == 2
+2340     Precond_Params{1}=zeros(n,1);
+2341     Precond_Params{2}=<span class="string">'preconditioner'</span>;
+2342     eval(<span class="string">'v=feval(Operator_A,Precond_Params{:});'</span>,<span class="string">'ok=0;'</span>)
+2343     <span class="keyword">if</span> ~ok
+2344        msg=<span class="string">'Preconditioner and matrix use the same M-file'</span>;
+2345        msg=[msg,sprintf(<span class="string">' ''%s.m''  \n'</span>,Precond_L)];
+2346        msg=[msg,<span class="string">'Therefore the preconditioner is called as'</span>];
+2347        msg=[msg,sprintf(<span class="string">'\n\n\tw=%s(v,''preconditioner'')\n\n'</span>,Precond_L)]; 
+2348        msg=[msg,sprintf(<span class="string">'Put this &quot;switch&quot; in ''%s.m''.'</span>,Precond_L)];
+2349     <span class="keyword">end</span>
+2350   <span class="keyword">end</span>
+2351 
+2352   <span class="keyword">if</span> tp == 4 | ~ok
+2353     ok1=1;
+2354     Precond_Params{1}=zeros(n,1);
+2355     Precond_Params{2}=<span class="string">'L'</span>;
+2356     eval(<span class="string">'v=feval(Precond_L,Precond_Params{:});'</span>,<span class="string">'ok1=0;'</span>)
+2357     Precond_Params{2}=<span class="string">'U'</span>;
+2358     eval(<span class="string">'v=feval(Precond_L,Precond_Params{:});'</span>,<span class="string">'ok1=0;'</span>)
+2359     <span class="keyword">if</span> ok1 
+2360       Precond_Form = 4; Precond_U = Precond_L; ok=1;
+2361     <span class="keyword">else</span>
+2362       <span class="keyword">if</span> tp == 4
+2363         msg=<span class="string">'L and U use the same M-file'</span>;
+2364         msg=[msg,sprintf(<span class="string">' ''%s.m''   \n'</span>,Precond_L)];
+2365         msg=[msg,<span class="string">'Therefore L and U are called'</span>];
+2366         msg=[msg,sprintf(<span class="string">' as\n\n\tw=%s(v,''L'')'</span>,Precond_L)]; 
+2367         msg=[msg,sprintf(<span class="string">' \n\tw=%s(v,''U'')\n\n'</span>,Precond_L)]; 
+2368         msg=[msg,sprintf(<span class="string">'Check the dimensions and/or\n'</span>)];
+2369         msg=[msg,sprintf(<span class="string">'put this &quot;switch&quot; in ''%s.m''.'</span>,Precond_L)];
+2370       <span class="keyword">end</span>
+2371       errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2372     <span class="keyword">end</span>
+2373   <span class="keyword">end</span>
+2374 
+2375   <span class="keyword">if</span> tp==1 | tp==3
+2376     Precond_Params{1}=zeros(n,1); Precond_Params{2}=<span class="string">''</span>;
+2377     eval(<span class="string">'v=feval(Precond_L,Precond_Params{:});'</span>,<span class="string">'ok=0'</span>)
+2378     <span class="keyword">if</span> ~ok
+2379        msg=sprintf(<span class="string">'''%s'' should produce %i-vectors'</span>,Precond_L,n); 
+2380        errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span> 
+2381     <span class="keyword">end</span>
+2382   <span class="keyword">end</span>
+2383 
+2384   <span class="keyword">if</span> tp==3
+2385     <span class="keyword">if</span> exist(Precond_U) ~=2
+2386       msg=sprintf(<span class="string">'  Can not find the M-file ''%s.m''  '</span>,Precond_U);
+2387       errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2388     <span class="keyword">else</span>
+2389       Precond_Params{1}=zeros(n,1); Precond_Params{2}=<span class="string">''</span>;
+2390       eval(<span class="string">'v=feval(Precond_U,Precond_Params{:});'</span>,<span class="string">'ok=0'</span>)
+2391       <span class="keyword">if</span> ~ok
+2392         msg=sprintf(<span class="string">'''%s'' should produce %i-vectors'</span>,Precond_U,n);
+2393         errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span> 
+2394       <span class="keyword">end</span>
+2395     <span class="keyword">end</span>
+2396   <span class="keyword">end</span>
+2397   
+2398   <span class="keyword">if</span> tp==5
+2399     <span class="keyword">if</span> min([n,2*n]==size(Precond_L)) 
+2400       Precond_U=Precond_L(:,n+1:2*n); Precond_L=Precond_L(:,1:n); 
+2401       Precond_Form=6;
+2402     <span class="keyword">elseif</span> min([n,3*n]==size(Precond_L)) 
+2403       Precond_U=Precond_L(:,n+1:2*n); Precond_P=Precond_L(:,2*n+1:3*n);
+2404       Precond_L=Precond_L(:,1:n); Precond_Form=7;
+2405     <span class="keyword">elseif</span> ~min([n,n]==size(Precond_L)) 
+2406       msg=sprintf(<span class="string">'The preconditioning matrix\n'</span>);
+2407       msg2=sprintf(<span class="string">'should be %iX%i or %ix%i ([L,U])\n'</span>,n,n,n,2*n); 
+2408       msg3=sprintf(<span class="string">'or %ix%i ([L,U,P])\n'</span>,n,3*n); 
+2409       errordlg([msg,msg2,msg3],<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span>
+2410     <span class="keyword">end</span>
+2411   <span class="keyword">end</span>
+2412 
+2413   <span class="keyword">if</span> tp==6 &amp; ~min([n,n]==size(Precond_L) &amp; [n,n]==size(Precond_U))
+2414     msg=sprintf(<span class="string">'Both L and U should be %iX%i.'</span>,n,n); n=-1;
+2415     errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span> 
+2416   <span class="keyword">end</span>
+2417 
+2418   <span class="keyword">if</span> tp==7 &amp; ~min([n,n]==size(Precond_L) &amp; <span class="keyword">...</span>
+2419        [n,n]==size(Precond_U) &amp; [n,n]==size(Precond_P))
+2420     msg=sprintf(<span class="string">'L, U, and P should all be %iX%i.'</span>,n,n); n=-1;
+2421     errordlg(msg,<span class="string">'PRECONDITIONER'</span>), n=-1; <span class="keyword">return</span> 
+2422   <span class="keyword">end</span>
+2423 
+2424 <span class="keyword">return</span>
+2425 <span class="comment">%%%======================================================================</span>
+2426 <span class="comment">%%%========= DISPLAY FUNCTIONS ===========================================</span>
+2427 <span class="comment">%%%======================================================================</span>
+2428 <a name="_sub40" href="#_subfunctions" class="code">function Result(Sigm,Target,S,T,tol)</a>
+2429 
+2430   <span class="keyword">if</span> nargin == 1
+2431      fprintf(<span class="string">'\n\n %20s\n'</span>,<span class="string">'Eigenvalues'</span>)
+2432      <span class="keyword">for</span> j=1:size(Sigm,1), 
+2433        fprintf(<span class="string">'%2i %s\n'</span>,j,<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(Sigm(j,:),5))
+2434      <span class="keyword">end</span>
+2435      <span class="keyword">return</span>
+2436   <span class="keyword">end</span>
+2437 
+2438   fprintf(<span class="string">'\n\n%17s  %25s%18s\n'</span>,<span class="string">'Targets'</span>,<span class="string">'Eigenvalues'</span>,<span class="string">'RelErr/Cond'</span>)
+2439   <span class="keyword">for</span> j=1:size(S,1), 
+2440     l=Target(j,1); s=S(j,:); t=T(j,:); lm=<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(s/t,5);
+2441     <span class="keyword">if</span> l&gt;0
+2442       fprintf(<span class="string">'%2i %8s ''%s'' %9s %23s'</span>,j,<span class="string">''</span>,Sigm(l,:),<span class="string">''</span>,lm)
+2443     <span class="keyword">else</span>
+2444       fprintf(<span class="string">'%2i %23s %23s'</span>,j,<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(Target(j,2:3),5),lm)
+2445     <span class="keyword">end</span>
+2446     re=1-tol/abs(t); 
+2447     <span class="keyword">if</span> re&gt;0, re=(1+tol/abs(s))/re; re=min(re-1,1); <span class="keyword">else</span>, re=1; <span class="keyword">end</span>
+2448     <span class="keyword">if</span> re&gt;0.999, fprintf(<span class="string">'  1\n'</span>), <span class="keyword">else</span>, fprintf(<span class="string">'  %5.0e\n'</span>,re), <span class="keyword">end</span>
+2449   <span class="keyword">end</span>
+2450 
+2451 <span class="keyword">return</span>
+2452 
+2453 <span class="comment">%------------------------------------------------------------------------</span>
+2454 <a name="_sub41" href="#_subfunctions" class="code">function s=mydisp(lambda,d)</a>
+2455 
+2456   <span class="keyword">if</span> nargin &lt;2, d=4; <span class="keyword">end</span>
+2457 
+2458   <span class="keyword">if</span> size(lambda,2)==2,
+2459     <span class="keyword">if</span> lambda(:,2)==0, s=<span class="string">'Inf'</span>; <span class="keyword">return</span>, <span class="keyword">end</span>
+2460     lambda=lambda(:,1)/lambda(:,2); 
+2461   <span class="keyword">end</span>
+2462 
+2463   a=real(lambda); b=imag(lambda);
+2464   <span class="keyword">if</span> max(a,b)==inf, s=<span class="string">'Inf'</span>; <span class="keyword">return</span>, <span class="keyword">end</span>
+2465 
+2466   e=0; 
+2467   <span class="keyword">if</span> abs(a)&gt;0; e= floor(log10(abs(a))); <span class="keyword">end</span>
+2468   <span class="keyword">if</span> abs(b)&gt;0; e= max(e,floor(log10(abs(b)))); <span class="keyword">end</span>
+2469   p=10^d; q=p/(10^e); a=round(a*q)/p; b=round(b*q)/p;
+2470 
+2471   st=[<span class="string">'%'</span>,num2str(d+2),<span class="string">'.'</span>,num2str(d),<span class="string">'f'</span>];
+2472   ab=abs(b)==0;
+2473   <span class="keyword">if</span> ab, str=[<span class="string">''' '</span>]; <span class="keyword">else</span>, str=[<span class="string">'''('</span>]; <span class="keyword">end</span>
+2474   <span class="keyword">if</span> a&gt;=0, str=[str,<span class="string">'+'</span>]; a=abs(a); <span class="keyword">end</span>, str=[str,st];
+2475   <span class="keyword">if</span> ab, str=[str,<span class="string">'e'</span>]; <span class="keyword">else</span>
+2476   <span class="keyword">if</span> b&gt;=0, str=[str,<span class="string">'+'</span>]; b=abs(b); <span class="keyword">end</span>, 
+2477   str=[str,st,<span class="string">'i)e'</span>]; <span class="keyword">end</span>
+2478   <span class="keyword">if</span> e&gt;=0, str=[str,<span class="string">'+'</span>]; <span class="keyword">else</span>, str=[str,<span class="string">'-'</span>]; e=-e; <span class="keyword">end</span>
+2479   <span class="keyword">if</span> e&lt;10, str=[str,<span class="string">'0%i'''</span>]; <span class="keyword">else</span>, str=[str,<span class="string">'%i'''</span>]; <span class="keyword">end</span>
+2480   <span class="keyword">if</span> ab, s=eval(sprintf(str,a,e));
+2481   <span class="keyword">else</span>, s=eval(sprintf(str,a,b,e)); <span class="keyword">end</span>
+2482 
+2483 <span class="keyword">return</span>
+2484 <span class="comment">%%%======================================================================</span>
+2485 <a name="_sub42" href="#_subfunctions" class="code">function ShowEig(theta,target,k)</a>
+2486 
+2487   <span class="keyword">if</span> ischar(target)
+2488     fprintf(<span class="string">'\n target=''%s'', '</span>,target)
+2489   <span class="keyword">else</span>
+2490     fprintf(<span class="string">'\n target=%s, '</span>,<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(target,5))
+2491   <span class="keyword">end</span>
+2492   fprintf(<span class="string">'lambda_%i=%s\n'</span>,k,<a href="#_sub41" class="code" title="subfunction s=mydisp(lambda,d)">mydisp</a>(theta,5)); 
+2493 
+2494 <span class="keyword">return</span>
+2495 <span class="comment">%%%======================================================================</span>
+2496 <a name="_sub43" href="#_subfunctions" class="code">function texttest(s,nr,gamma)</a>
+2497 
+2498   <span class="keyword">if</span> nargin&lt;3, gamma=100*eps; <span class="keyword">end</span>
+2499 
+2500   <span class="keyword">if</span> nr &gt; gamma
+2501  <span class="comment">% if nr&gt;100*eps</span>
+2502      fprintf(<span class="string">'\n %35s is: %9.3g\t'</span>,s,nr)
+2503   <span class="keyword">end</span>
+2504 
+2505 <span class="keyword">return</span>
+2506 <span class="comment">%%%======================================================================</span>
+2507 
+2508</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

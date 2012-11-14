@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_flops</title>
+  <meta name="keywords" content="test_flops">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_flops
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>	FLOPS         Get or set the global flopcount variable.</li><li><a href="../../../Otherbox/lightspeed/flops_exp.html" class="code" title="function f = flops_exp">flops_exp</a>	FLOPS_EXP    Flops for exponential</li><li><a href="../../../Otherbox/lightspeed/flops_log.html" class="code" title="function f = flops_log">flops_log</a>	FLOPS_LOG    Flops for logarithm</li><li><a href="../../../Otherbox/lightspeed/flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>	FLOPS_SQRT    Flops for square root</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="keyword">if</span> 0
+0002   <span class="comment">% run under matlab 5</span>
+0003   a = rand(2,3);
+0004   b = rand(3,4);
+0005   c = rand(3);
+0006   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a+a; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0007   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a.*a; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0008   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a./a; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0009   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a&lt;a; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0010   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); exp(a); <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0011   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); log(a); <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0012   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a*a'; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0013   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a*b; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0014   <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); a/b'; <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>
+0015   
+0016   ns = 1:10;
+0017   f = [];
+0018   <span class="keyword">for</span> n = ns
+0019     c = rand(n);
+0020     c = c*c';
+0021     <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>(0); chol(c); f(n) = <a href="../../../Otherbox/lightspeed/flops.html" class="code" title="function f = flops(fl)">flops</a>;
+0022   <span class="keyword">end</span>
+0023   f = [1 5 14 30 55 91 140 204 285 385];
+0024   x = [ones(size(ns)); ns; ns.^2; ns.^3];
+0025   a = f/x
+0026   plot(ns,f - a*x)
+0027 <span class="keyword">end</span>
+0028 
+0029 niter = 2000;
+0030 a = rand(100);
+0031 b = rand(100);
+0032 <span class="keyword">if</span> 0
+0033   tic; <span class="keyword">for</span> i=1:niter ones(100); <span class="keyword">end</span>; t_ones=toc/niter;
+0034   fprintf(<span class="string">'time for ones: %g\n'</span>, t_ones);
+0035 <span class="keyword">else</span>
+0036   t_ones = 0;
+0037 <span class="keyword">end</span>
+0038 t = [];
+0039 tic; <span class="keyword">for</span> i=1:niter a+4; <span class="keyword">end</span>; t(1)=toc/niter;
+0040 tic; <span class="keyword">for</span> i=1:niter a+b; <span class="keyword">end</span>; t(2)=toc/niter;
+0041 tic; <span class="keyword">for</span> i=1:niter a.*b; <span class="keyword">end</span>; t(3)=toc/niter;
+0042 t_arith = mean(t) - t_ones;
+0043 fprintf(<span class="string">'average for +,*: %g\n'</span>, t_arith);
+0044 <span class="keyword">if</span> 0
+0045   <span class="comment">% By time, == takes 2 flops, but this is processor dependent.</span>
+0046   t = [];
+0047   tic; <span class="keyword">for</span> i=1:niter a&gt;b; <span class="keyword">end</span>; t=toc/niter;
+0048   fprintf(<span class="string">'time for &gt;: %g\tflops = %g (should be %g)\n'</span>, t, t/t_arith, 2);
+0049   <span class="comment">%tic; for i=1:niter a==b; end; t=toc/niter;</span>
+0050   tic; <span class="keyword">for</span> i=1:niter a~=b; <span class="keyword">end</span>; t=toc/niter;
+0051   fprintf(<span class="string">'time for ~=: %g\tflops = %g\n'</span>, t, t/t_arith);
+0052 <span class="keyword">end</span>
+0053 <span class="keyword">if</span> 0
+0054   tic; <span class="keyword">for</span> i=1:niter randn(100); <span class="keyword">end</span>; t=toc/niter;
+0055   t = t-t_ones;
+0056   fprintf(<span class="string">'time for randn: %g\tflops = %g\n'</span>, t, t/t_arith);
+0057 <span class="keyword">end</span>
+0058 <span class="keyword">if</span> 0
+0059   tic; <span class="keyword">for</span> i=1:niter a.^(0.51); <span class="keyword">end</span>; t=toc/niter;
+0060   e1 = exp(1);
+0061   tic; <span class="keyword">for</span> i=1:niter e1.^a; <span class="keyword">end</span>; t=toc/niter;
+0062   t = t-t_ones;
+0063   fprintf(<span class="string">'time for pow: %g\tflops = %g\n'</span>, t, t/t_arith);
+0064   <span class="keyword">if</span> 0
+0065     tic; <span class="keyword">for</span> i=1:niter a.^(0.5); <span class="keyword">end</span>; toc
+0066     tic; <span class="keyword">for</span> i=1:niter sqrt(a); <span class="keyword">end</span>; toc
+0067   <span class="keyword">end</span>
+0068 <span class="keyword">end</span>
+0069 tic; <span class="keyword">for</span> i=1:niter sqrt(a); <span class="keyword">end</span>; t_sqrt=toc/niter;
+0070 fprintf(<span class="string">'time for sqrt: %g\tflops = %g (should be %g)\n'</span>, t_sqrt, t_sqrt/t_arith, <a href="../../../Otherbox/lightspeed/flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>);
+0071 tic; <span class="keyword">for</span> i=1:niter exp(a); <span class="keyword">end</span>; t_exp=toc/niter;
+0072 fprintf(<span class="string">'time for  exp: %g\tflops = %g (should be %g)\n'</span>, t_exp, t_exp/t_arith, <a href="../../../Otherbox/lightspeed/flops_exp.html" class="code" title="function f = flops_exp">flops_exp</a>);
+0073 tic; <span class="keyword">for</span> i=1:niter pow2(a); <span class="keyword">end</span>; t_pow2=toc/niter;
+0074 fprintf(<span class="string">'time for pow2: %g\tflops = %g (should be %g)\n'</span>, t_pow2, t_pow2/t_arith, <a href="../../../Otherbox/lightspeed/flops_exp.html" class="code" title="function f = flops_exp">flops_exp</a>);
+0075 tic; <span class="keyword">for</span> i=1:niter log(a); <span class="keyword">end</span>; t_log=toc/niter;
+0076 fprintf(<span class="string">'time for  log: %g\tflops = %g (should be %g)\n'</span>, t_log, t_log/t_arith, <a href="../../../Otherbox/lightspeed/flops_log.html" class="code" title="function f = flops_log">flops_log</a>);
+0077 tic; <span class="keyword">for</span> i=1:niter log2(a); <span class="keyword">end</span>; t_log=toc/niter;
+0078 fprintf(<span class="string">'time for log2: %g\tflops = %g (should be %g)\n'</span>, t_log, t_log/t_arith, <a href="../../../Otherbox/lightspeed/flops_log.html" class="code" title="function f = flops_log">flops_log</a>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

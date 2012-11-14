@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RYB_colors</title>
+  <meta name="keywords" content="RYB_colors">
+  <meta name="description" content="RYB_colors    A good diverging colormap.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>RYB_colors
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>RYB_colors    A good diverging colormap.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function colors = RYB_colors(n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> RYB_colors    A good diverging colormap.
+ RYB_colors(n) returns an RGB matrix of n colors (default 7).
+ These colors form a diverging colormap (colors easily perceived to lie
+ on a sequence on either side of a central color).
+
+ Example:
+   colormap(RYB_colors)
+
+ See also <a href="YR_colors.html" class="code" title="function colors = YR_colors(n)">YR_colors</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function colors = RYB_colors(n)</a>
+0002 <span class="comment">% RYB_colors    A good diverging colormap.</span>
+0003 <span class="comment">% RYB_colors(n) returns an RGB matrix of n colors (default 7).</span>
+0004 <span class="comment">% These colors form a diverging colormap (colors easily perceived to lie</span>
+0005 <span class="comment">% on a sequence on either side of a central color).</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Example:</span>
+0008 <span class="comment">%   colormap(RYB_colors)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% See also YR_colors.</span>
+0011 
+0012 <span class="comment">% Written by Tom Minka</span>
+0013 
+0014 <span class="keyword">if</span> nargin &lt; 1
+0015   n = 7;
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="comment">% In R: col2rgb(RYB.colors(3))</span>
+0019 <span class="keyword">switch</span> n
+0020   <span class="keyword">case</span> 7,
+0021     colors = [ 
+0022       215    61   41;
+0023       252   141   89;
+0024       254   224  144;
+0025       255   255  191;
+0026       224   243  248;
+0027       145   191  219;
+0028       69   117  180
+0029       ]/255;
+0030   <span class="keyword">case</span> 6,
+0031     colors = [
+0032        215    61   41
+0033        252   141   89
+0034        254   224  144
+0035        224   243  248
+0036        145   191  219
+0037         69   117  180
+0038       ]/255;
+0039   <span class="keyword">case</span> 5,
+0040     colors = [
+0041        202    55   59
+0042        253   174   97
+0043        255   255  191
+0044        171   217  233
+0045         44   123  182
+0046     ]/255;
+0047   <span class="keyword">case</span> 4,
+0048     colors = [ 
+0049       202    55   59;
+0050       253   174   97
+0051       171   217  233;
+0052        44   123  182
+0053        ]/255;
+0054    <span class="keyword">case</span> 3,
+0055      colors = [ 
+0056        252   141   89; 
+0057        255   255  191; 
+0058        145   191  219
+0059        ]/255;
+0060 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

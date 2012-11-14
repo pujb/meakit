@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mutable</title>
+  <meta name="keywords" content="mutable">
+  <meta name="description" content="MUTABLE    Convert to a mutable object.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html @mutable -->
+<h1>mutable
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MUTABLE    Convert to a mutable object.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mut = mutable(v) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">MUTABLE    Convert to a mutable object.
+ mutable(v) returns a mutable copy of v.  
+ v can be a numeric array, cell array, or structure (but not a string or 
+ user-defined object).
+ mutable (with no arguments) is equivalent to mutable(0).
+
+ Mutable objects are special because if you change them, the changes are 
+ visible to all parts of the program.  Ordinary Matlab values do not
+ have this property; changes must be explicitly passed from one routine
+ to another.
+
+ A mutable object is accessed and modified via subscripted reference, such
+ as x.a or x(5).  Mutable structures support getfield, setfield, rmfield,
+ isfield, and fieldnames.
+
+ The result is mutable all the way down, e.g. if
+   x = mutable(struct('a',[4 5]))
+ then x.a and x.a(1) are mutable.
+
+ Fields can be added to mutable structures but mutable arrays cannot be 
+ resized.  Thus there is little point to mutable([]) or mutable({}).
+
+ A mutable object cannot be used as an ordinary Matlab value, e.g. in 
+ matrix operations.  Use 'immutable' to convert to a Matlab value.
+
+ Mutable objects are less efficient than ordinary matlab values, so
+ you should use them sparingly.  Mutable structures are the most efficient,
+ followed by cell arrays and then numeric arrays.
+
+ Examples:
+   x = mutable;
+   y = x;   % y is a reference, not a copy
+   x(1) = 4;
+   y(1)  % prints 4
+
+   x = mutable(struct);
+   y = x;   % y is a reference, not a copy
+   x.a = 4; % add new field
+   y.a      % prints 4
+
+ See also <a href="immutable.html" class="code" title="function v = immutable(mut)">IMMUTABLE</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/tests/test_mutable.html" class="code" title="">test_mutable</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mut = mutable(v)</a>
+0002 <span class="comment">%MUTABLE    Convert to a mutable object.</span>
+0003 <span class="comment">% mutable(v) returns a mutable copy of v.</span>
+0004 <span class="comment">% v can be a numeric array, cell array, or structure (but not a string or</span>
+0005 <span class="comment">% user-defined object).</span>
+0006 <span class="comment">% mutable (with no arguments) is equivalent to mutable(0).</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Mutable objects are special because if you change them, the changes are</span>
+0009 <span class="comment">% visible to all parts of the program.  Ordinary Matlab values do not</span>
+0010 <span class="comment">% have this property; changes must be explicitly passed from one routine</span>
+0011 <span class="comment">% to another.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% A mutable object is accessed and modified via subscripted reference, such</span>
+0014 <span class="comment">% as x.a or x(5).  Mutable structures support getfield, setfield, rmfield,</span>
+0015 <span class="comment">% isfield, and fieldnames.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% The result is mutable all the way down, e.g. if</span>
+0018 <span class="comment">%   x = mutable(struct('a',[4 5]))</span>
+0019 <span class="comment">% then x.a and x.a(1) are mutable.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Fields can be added to mutable structures but mutable arrays cannot be</span>
+0022 <span class="comment">% resized.  Thus there is little point to mutable([]) or mutable({}).</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% A mutable object cannot be used as an ordinary Matlab value, e.g. in</span>
+0025 <span class="comment">% matrix operations.  Use 'immutable' to convert to a Matlab value.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Mutable objects are less efficient than ordinary matlab values, so</span>
+0028 <span class="comment">% you should use them sparingly.  Mutable structures are the most efficient,</span>
+0029 <span class="comment">% followed by cell arrays and then numeric arrays.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Examples:</span>
+0032 <span class="comment">%   x = mutable;</span>
+0033 <span class="comment">%   y = x;   % y is a reference, not a copy</span>
+0034 <span class="comment">%   x(1) = 4;</span>
+0035 <span class="comment">%   y(1)  % prints 4</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%   x = mutable(struct);</span>
+0038 <span class="comment">%   y = x;   % y is a reference, not a copy</span>
+0039 <span class="comment">%   x.a = 4; % add new field</span>
+0040 <span class="comment">%   y.a      % prints 4</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% See also IMMUTABLE.</span>
+0043 
+0044 <span class="comment">% Written by Tom Minka</span>
+0045 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0046 
+0047 <span class="keyword">if</span> nargin &lt; 1
+0048   v = 0;
+0049 <span class="keyword">end</span>
+0050 <span class="comment">% java object must be a collection</span>
+0051 mut.obj = <a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>(v,1);
+0052 <span class="comment">% cache the class name, to save time</span>
+0053 mut.cl = class(mut.obj);
+0054 mut = class(mut,<span class="string">'mutable'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

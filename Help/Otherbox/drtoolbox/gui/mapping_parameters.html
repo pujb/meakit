@@ -1,0 +1,768 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mapping_parameters</title>
+  <meta name="keywords" content="mapping_parameters">
+  <meta name="description" content="MAPPING_PARAMETERS M-file for mapping_parameters.fig">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html gui -->
+<h1>mapping_parameters
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MAPPING_PARAMETERS M-file for mapping_parameters.fig</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = mapping_parameters(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> MAPPING_PARAMETERS M-file for mapping_parameters.fig
+      MAPPING_PARAMETERS, by itself, creates a new MAPPING_PARAMETERS or raises the existing
+      singleton*.
+
+      H = MAPPING_PARAMETERS returns the handle to a new MAPPING_PARAMETERS or the handle to
+      the existing singleton*.
+
+      MAPPING_PARAMETERS('CALLBACK',hObject,eventData,handles,...) calls the local
+      function named CALLBACK in MAPPING_PARAMETERS.M with the given input arguments.
+
+      MAPPING_PARAMETERS('Property','Value',...) creates a new MAPPING_PARAMETERS or raises the
+      existing singleton*.  Starting from the left, property value pairs are
+      applied to the GUI before mapping_parameters_OpeningFunction gets called.  An
+      unrecognized property name or invalid value makes property application
+      stop.  All inputs are passed to mapping_parameters_OpeningFcn via varargin.
+
+      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one
+      instance to run (singleton)&quot;.
+
+ See also: GUIDE, GUIDATA, GUIHANDLES</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="case1.html" class="code" title="">case1</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="update_kernel_uipanel.html" class="code" title="">update_kernel_uipanel</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="update_type_uipanel.html" class="code" title="">update_type_uipanel</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function mapping_parameters_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = mapping_parameters_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function listbox1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function listbox1_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function nd_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function nd_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function mi_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub8" class="code">function mi_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub9" class="code">function k_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub10" class="code">function k_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub11" class="code">function prc_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub12" class="code">function prc_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub13" class="code">function sig_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub14" class="code">function sig_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub15" class="code">function kgs_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub16" class="code">function kgs_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub17" class="code">function kpR_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub18" class="code">function kpR_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub19" class="code">function kpd_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub20" class="code">function kpd_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub21" class="code">function prp_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub22" class="code">function prp_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub23" class="code">function na_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub24" class="code">function na_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub25" class="code">function sm_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub26" class="code">function t_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub27" class="code">function t_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub28" class="code">function uipanel_k_SelectionChangeFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub29" class="code">function uipanel_tp_SelectionChangeFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub30" class="code">function ka_Callback(hObject, eventdata, handles)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = mapping_parameters(varargin)</a>
+0002 <span class="comment">% MAPPING_PARAMETERS M-file for mapping_parameters.fig</span>
+0003 <span class="comment">%      MAPPING_PARAMETERS, by itself, creates a new MAPPING_PARAMETERS or raises the existing</span>
+0004 <span class="comment">%      singleton*.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%      H = MAPPING_PARAMETERS returns the handle to a new MAPPING_PARAMETERS or the handle to</span>
+0007 <span class="comment">%      the existing singleton*.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%      MAPPING_PARAMETERS('CALLBACK',hObject,eventData,handles,...) calls the local</span>
+0010 <span class="comment">%      function named CALLBACK in MAPPING_PARAMETERS.M with the given input arguments.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      MAPPING_PARAMETERS('Property','Value',...) creates a new MAPPING_PARAMETERS or raises the</span>
+0013 <span class="comment">%      existing singleton*.  Starting from the left, property value pairs are</span>
+0014 <span class="comment">%      applied to the GUI before mapping_parameters_OpeningFunction gets called.  An</span>
+0015 <span class="comment">%      unrecognized property name or invalid value makes property application</span>
+0016 <span class="comment">%      stop.  All inputs are passed to mapping_parameters_OpeningFcn via varargin.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one</span>
+0019 <span class="comment">%      instance to run (singleton)&quot;.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also: GUIDE, GUIDATA, GUIHANDLES</span>
+0022 
+0023 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0024 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0025 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0026 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0027 <span class="comment">% maintain the name of the original author.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0030 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0031 
+0032 <span class="comment">% Last Modified by GUIDE v2.5 28-Jul-2008 16:23:20</span>
+0033 
+0034 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0035 gui_Singleton = 1;
+0036 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0037                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0038                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction mapping_parameters_OpeningFcn(hObject, eventdata, handles, varargin)">mapping_parameters_OpeningFcn</a>, <span class="keyword">...</span>
+0039                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = mapping_parameters_OutputFcn(hObject, eventdata, handles)">mapping_parameters_OutputFcn</a>, <span class="keyword">...</span>
+0040                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0041                    <span class="string">'gui_Callback'</span>,   []);
+0042 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0043     gui_State.gui_Callback = str2func(varargin{1});
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="keyword">if</span> nargout
+0047     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0048 <span class="keyword">else</span>
+0049     gui_mainfcn(gui_State, varargin{:});
+0050 <span class="keyword">end</span>
+0051 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0052 
+0053 
+0054 <span class="comment">% --- Executes just before mapping_parameters is made visible.</span>
+0055 <a name="_sub1" href="#_subfunctions" class="code">function mapping_parameters_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0056 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0057 <span class="comment">% hObject    handle to figure</span>
+0058 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0059 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0060 <span class="comment">% varargin   command line arguments to mapping_parameters (see VARARGIN)</span>
+0061 
+0062 <span class="comment">% Choose default command line output for mapping_parameters</span>
+0063 handles.output = hObject;
+0064 
+0065 no_dims=varargin{1};
+0066 handles.islb=varargin{2};
+0067 
+0068 <span class="keyword">if</span> length(no_dims)~=0
+0069     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.nd,<span class="string">'string'</span>,num2str(round(no_dims)));
+0070 <span class="keyword">else</span>
+0071     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.nd,<span class="string">'string'</span>,<span class="string">'2'</span>);
+0072 <span class="keyword">end</span>
+0073 
+0074 <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% case one is default for start</span>
+0075 
+0076 <span class="comment">% Update handles structure</span>
+0077 guidata(hObject, handles);
+0078 
+0079 <span class="comment">% handles</span>
+0080 
+0081 <span class="comment">% UIWAIT makes mapping_parameters wait for user response (see UIRESUME)</span>
+0082 uiwait(handles.figure1);
+0083 
+0084 
+0085 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0086 <a name="_sub2" href="#_subfunctions" class="code">function varargout = mapping_parameters_OutputFcn(hObject, eventdata, handles) </a>
+0087 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0088 <span class="comment">% hObject    handle to figure</span>
+0089 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0090 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0091 
+0092 <span class="comment">% Get default command line output from handles structure</span>
+0093 varargout{1} = handles.output;
+0094 
+0095 
+0096 <span class="comment">% --- Executes on selection change in listbox1.</span>
+0097 <a name="_sub3" href="#_subfunctions" class="code">function listbox1_Callback(hObject, eventdata, handles)</a>
+0098 <span class="comment">%     figure1: 218.0023</span>
+0099 <span class="comment">%             sm: 240.0021</span>
+0100 <span class="comment">%             na: 239.0021</span>
+0101 <span class="comment">%            nat: 238.0021</span>
+0102 <span class="comment">%     uipanel_tp: 235.0021</span>
+0103 <span class="comment">%            prp: 234.0021</span>
+0104 <span class="comment">%           prpt: 233.0021</span>
+0105 <span class="comment">%            kpd: 232.0021</span>
+0106 <span class="comment">%           kpdt: 231.0021</span>
+0107 <span class="comment">%            kpR: 230.0021</span>
+0108 <span class="comment">%           kpRt: 229.0021</span>
+0109 <span class="comment">%            kgs: 228.0021</span>
+0110 <span class="comment">%           kgst: 227.0021</span>
+0111 <span class="comment">%      uipanel_k: 223.0022</span>
+0112 <span class="comment">%     uipanel_ft: 220.0022</span>
+0113 <span class="comment">%            sig: 53.0027</span>
+0114 <span class="comment">%           sigt: 52.0027</span>
+0115 <span class="comment">%     uipanel_ei: 49.0027</span>
+0116 <span class="comment">%            prc: 48.0027</span>
+0117 <span class="comment">%           prct: 47.0027</span>
+0118 <span class="comment">%              k: 46.0028</span>
+0119 <span class="comment">%             kt: 45.0028</span>
+0120 <span class="comment">%             mi: 44.0028</span>
+0121 <span class="comment">%            mit: 43.0029</span>
+0122 <span class="comment">%             nd: 42.0029</span>
+0123 <span class="comment">%          text3: 41.0034</span>
+0124 <span class="comment">%             wl: 40.0029</span>
+0125 <span class="comment">%          text1: 39.0033</span>
+0126 <span class="comment">%       listbox1: 219.0023</span>
+0127 <span class="comment">%             tl: 237.0021</span>
+0128 <span class="comment">%             tg: 236.0021</span>
+0129 <span class="comment">%             kp: 226.0022</span>
+0130 <span class="comment">%             kg: 225.0022</span>
+0131 <span class="comment">%             kl: 224.0022</span>
+0132 <span class="comment">%            ftn: 222.0022</span>
+0133 <span class="comment">%            fty: 221.0022</span>
+0134 <span class="comment">%            eij: 51.0027</span>
+0135 <span class="comment">%            eim: 50.0027</span>
+0136 <span class="comment">%         output: 218.0023</span>
+0137 <span class="comment">%           islb:</span>
+0138 
+0139 <span class="comment">% PCA</span>
+0140 <span class="comment">% LDA</span>
+0141 <span class="comment">% MDS</span>
+0142 <span class="comment">% SimplePCA</span>
+0143 <span class="comment">% ProbPCA</span>
+0144 <span class="comment">% FactorAnalysis</span>
+0145 <span class="comment">% Isomap</span>
+0146 <span class="comment">% LandmarkIsomap</span>
+0147 <span class="comment">% LLE</span>
+0148 <span class="comment">% Laplacian</span>
+0149 <span class="comment">% HessianLLE</span>
+0150 <span class="comment">% LTSA</span>
+0151 <span class="comment">% MVU</span>
+0152 <span class="comment">% CCA</span>
+0153 <span class="comment">% LandmarkMVU</span>
+0154 <span class="comment">% FastMVU</span>
+0155 <span class="comment">% DiffusionMaps</span>
+0156 <span class="comment">% KernelPCA</span>
+0157 <span class="comment">% GDA</span>
+0158 <span class="comment">% SNE</span>
+0159 <span class="comment">% SymSNE</span>
+0160 <span class="comment">% t-SNE</span>
+0161 <span class="comment">% LPP</span>
+0162 <span class="comment">% NPE</span>
+0163 <span class="comment">% LLTSA</span>
+0164 <span class="comment">% SPE</span>
+0165 <span class="comment">% AutoEncoderRBM</span>
+0166 <span class="comment">% AutoEncoderEA</span>
+0167 <span class="comment">% LLC</span>
+0168 <span class="comment">% ManifoldChart</span>
+0169 <span class="comment">% CFA</span>
+0170 <span class="comment">% GPLVM</span>
+0171 
+0172 <span class="keyword">switch</span> <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'Value'</span>)
+0173     <span class="keyword">case</span> 1 <span class="comment">% PCA</span>
+0174         <span class="comment">% no parameters;</span>
+0175          <a href="case1.html" class="code" title="">case1</a>;
+0176     <span class="keyword">case</span> 2 <span class="comment">% LDA</span>
+0177         <span class="comment">% no parameters;</span>
+0178          <a href="case1.html" class="code" title="">case1</a>;
+0179          <span class="keyword">if</span> handles.islb
+0180              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.wl,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0181              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sm,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0182          <span class="keyword">else</span>
+0183              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.wl,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0184              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sm,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0185          <span class="keyword">end</span>
+0186     <span class="keyword">case</span> 3 <span class="comment">% MDS</span>
+0187         <span class="comment">% no parameters;</span>
+0188         <a href="case1.html" class="code" title="">case1</a>;
+0189     <span class="keyword">case</span> 4 <span class="comment">% SimplePCA</span>
+0190         <span class="comment">% no parameters;</span>
+0191         <a href="case1.html" class="code" title="">case1</a>;
+0192     <span class="keyword">case</span> 5 <span class="comment">% ProbPCA</span>
+0193         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0194         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mi,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0195         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mit,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0196     <span class="keyword">case</span> 6 <span class="comment">% FactorAnalysis</span>
+0197         <span class="comment">% no parameters;</span>
+0198         <a href="case1.html" class="code" title="">case1</a>;
+0199     <span class="keyword">case</span> 7 <span class="comment">% Isomap</span>
+0200         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0201         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0202         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0203         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0204         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0205     <span class="keyword">case</span> 8 <span class="comment">% LandmarkIsomap</span>
+0206         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0207         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0208         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0209         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0210         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0211         
+0212         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prc,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0213         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prct,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0214     <span class="keyword">case</span> 9 <span class="comment">% LLE</span>
+0215         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0216         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0217         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0218         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0219         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0220         
+0221         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0222     <span class="keyword">case</span> 10 <span class="comment">% Laplacian</span>
+0223         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0224         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0225         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0226         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0227         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0228         
+0229         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0230         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sigt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0231         
+0232         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0233     <span class="keyword">case</span> 11 <span class="comment">% HessianLLE</span>
+0234         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0235         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0236         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0237         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0238         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0239         
+0240         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0241     <span class="keyword">case</span> 12 <span class="comment">% LTSA</span>
+0242         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0243         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0244         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0245         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0246         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0247         
+0248         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0249     <span class="keyword">case</span> 13 <span class="comment">% MVU</span>
+0250         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0251         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0252         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0253         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0254         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0255         
+0256         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0257     <span class="keyword">case</span> 14 <span class="comment">% CCA</span>
+0258         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0259         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0260         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0261         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0262         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0263         
+0264         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0265     <span class="keyword">case</span> 15 <span class="comment">% LandmarkMVU</span>
+0266         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0267         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,5);
+0268         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0269         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0270         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0271     <span class="keyword">case</span> 16 <span class="comment">% FastMVU</span>
+0272         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0273         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,5);
+0274         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0275         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0276         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0277         
+0278         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0279         
+0280         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ft,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0281     <span class="keyword">case</span> 17 <span class="comment">% DiffusionMaps</span>
+0282         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0283         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.t,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0284         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.tt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0285         
+0286         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0287         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sigt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0288     <span class="keyword">case</span> 18 <span class="comment">% KernelPCA</span>
+0289         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0290                 
+0291         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_k,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0292         <a href="update_kernel_uipanel.html" class="code" title="">update_kernel_uipanel</a>;
+0293     <span class="keyword">case</span> 19 <span class="comment">% GDA</span>
+0294         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0295         <span class="keyword">if</span> handles.islb
+0296              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.wl,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0297              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sm,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0298              
+0299              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_k,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0300              <a href="update_kernel_uipanel.html" class="code" title="">update_kernel_uipanel</a>;
+0301              
+0302          <span class="keyword">else</span>
+0303              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.wl,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0304              <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sm,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0305         <span class="keyword">end</span>
+0306     <span class="keyword">case</span> 20 <span class="comment">% SNE</span>
+0307         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0308         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prp,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0309         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prpt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0310     <span class="keyword">case</span> 21 <span class="comment">% SymSNE</span>
+0311         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0312         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prp,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0313         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prpt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0314     <span class="keyword">case</span> 22 <span class="comment">% t-SNE</span>
+0315         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0316         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prp,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0317         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.prpt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0318     <span class="keyword">case</span> 23 <span class="comment">% LPP</span>
+0319         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0320         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0321         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0322         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0323         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0324         
+0325         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0326         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sigt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0327         
+0328         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0329     <span class="keyword">case</span> 24 <span class="comment">% NPE</span>
+0330         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0331         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0332         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0333         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0334         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0335        
+0336         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0337     <span class="keyword">case</span> 25 <span class="comment">% LLTSA</span>
+0338         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0339         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0340         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0341         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0342         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0343        
+0344         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0345     <span class="keyword">case</span> 26 <span class="comment">% SPE</span>
+0346         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0347         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_tp,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0348         <a href="update_type_uipanel.html" class="code" title="">update_type_uipanel</a>;
+0349         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0350         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0351     <span class="keyword">case</span> 27 <span class="comment">% AutoEncoderRBM</span>
+0352         <span class="comment">% no parameters;</span>
+0353          <a href="case1.html" class="code" title="">case1</a>;
+0354     <span class="keyword">case</span> 28 <span class="comment">% AutoEncoderEA</span>
+0355         <span class="comment">% no parameters;</span>
+0356          <a href="case1.html" class="code" title="">case1</a>;
+0357     <span class="keyword">case</span> 29 <span class="comment">% LLC</span>
+0358         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0359         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.k,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'string'</span>,12);
+0360         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.kt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0361         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ka,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0362         <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0363         
+0364         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.na,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0365         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.nat,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0366         
+0367         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mi,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0368         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mit,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0369         
+0370         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0371     <span class="keyword">case</span> 30 <span class="comment">% ManifoldChart</span>
+0372         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0373         
+0374         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.na,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0375         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.nat,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0376         
+0377         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mi,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0378         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mit,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0379         
+0380         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.uipanel_ei,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0381     <span class="keyword">case</span> 31 <span class="comment">% CFA</span>
+0382         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0383         
+0384         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.na,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0385         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.nat,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0386         
+0387         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mi,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0388         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.mit,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0389     <span class="keyword">case</span> 32 <span class="comment">% GPLVM</span>
+0390         <a href="case1.html" class="code" title="">case1</a>; <span class="comment">% hide all contols first</span>
+0391         
+0392         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0393         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sigt,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0394     <span class="keyword">case</span> 33 <span class="comment">% NCA</span>
+0395         <a href="case1.html" class="code" title="">case1</a>;
+0396         
+0397     <span class="keyword">case</span> 34 <span class="comment">% MCML</span>
+0398         <a href="case1.html" class="code" title="">case1</a>;
+0399              
+0400 <span class="keyword">end</span>
+0401 
+0402 
+0403 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0404 <a name="_sub4" href="#_subfunctions" class="code">function listbox1_CreateFcn(hObject, eventdata, handles)</a>
+0405 <span class="comment">% hObject    handle to listbox1 (see GCBO)</span>
+0406 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0407 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0408 
+0409 <span class="comment">% Hint: listbox controls usually have a white background on Windows.</span>
+0410 <span class="comment">%       See ISPC and COMPUTER.</span>
+0411 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0412     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0413 <span class="keyword">end</span>
+0414 
+0415 
+0416 
+0417 <a name="_sub5" href="#_subfunctions" class="code">function nd_Callback(hObject, eventdata, handles)</a>
+0418 <span class="comment">% hObject    handle to nd (see GCBO)</span>
+0419 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0420 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0421 
+0422 <span class="comment">% Hints: get(hObject,'String') returns contents of nd as text</span>
+0423 <span class="comment">%        str2double(get(hObject,'String')) returns contents of nd as a double</span>
+0424 
+0425 
+0426 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0427 <a name="_sub6" href="#_subfunctions" class="code">function nd_CreateFcn(hObject, eventdata, handles)</a>
+0428 <span class="comment">% hObject    handle to nd (see GCBO)</span>
+0429 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0430 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0431 
+0432 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0433 <span class="comment">%       See ISPC and COMPUTER.</span>
+0434 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0435     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0436 <span class="keyword">end</span>
+0437 
+0438 
+0439 
+0440 <a name="_sub7" href="#_subfunctions" class="code">function mi_Callback(hObject, eventdata, handles)</a>
+0441 <span class="comment">% hObject    handle to mi (see GCBO)</span>
+0442 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0443 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0444 
+0445 <span class="comment">% Hints: get(hObject,'String') returns contents of mi as text</span>
+0446 <span class="comment">%        str2double(get(hObject,'String')) returns contents of mi as a double</span>
+0447 
+0448 
+0449 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0450 <a name="_sub8" href="#_subfunctions" class="code">function mi_CreateFcn(hObject, eventdata, handles)</a>
+0451 <span class="comment">% hObject    handle to mi (see GCBO)</span>
+0452 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0453 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0454 
+0455 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0456 <span class="comment">%       See ISPC and COMPUTER.</span>
+0457 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0458     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0459 <span class="keyword">end</span>
+0460 
+0461 
+0462 
+0463 <a name="_sub9" href="#_subfunctions" class="code">function k_Callback(hObject, eventdata, handles)</a>
+0464 <span class="comment">% hObject    handle to k (see GCBO)</span>
+0465 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0466 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0467 
+0468 <span class="comment">% Hints: get(hObject,'String') returns contents of k as text</span>
+0469 <span class="comment">%        str2double(get(hObject,'String')) returns contents of k as a double</span>
+0470 
+0471 
+0472 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0473 <a name="_sub10" href="#_subfunctions" class="code">function k_CreateFcn(hObject, eventdata, handles)</a>
+0474 <span class="comment">% hObject    handle to k (see GCBO)</span>
+0475 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0476 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0477 
+0478 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0479 <span class="comment">%       See ISPC and COMPUTER.</span>
+0480 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0481     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0482 <span class="keyword">end</span>
+0483 
+0484 
+0485 
+0486 <a name="_sub11" href="#_subfunctions" class="code">function prc_Callback(hObject, eventdata, handles)</a>
+0487 <span class="comment">% hObject    handle to prc (see GCBO)</span>
+0488 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0489 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0490 
+0491 <span class="comment">% Hints: get(hObject,'String') returns contents of prc as text</span>
+0492 <span class="comment">%        str2double(get(hObject,'String')) returns contents of prc as a double</span>
+0493 
+0494 
+0495 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0496 <a name="_sub12" href="#_subfunctions" class="code">function prc_CreateFcn(hObject, eventdata, handles)</a>
+0497 <span class="comment">% hObject    handle to prc (see GCBO)</span>
+0498 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0499 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0500 
+0501 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0502 <span class="comment">%       See ISPC and COMPUTER.</span>
+0503 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0504     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0505 <span class="keyword">end</span>
+0506 
+0507 
+0508 
+0509 <a name="_sub13" href="#_subfunctions" class="code">function sig_Callback(hObject, eventdata, handles)</a>
+0510 <span class="comment">% hObject    handle to sig (see GCBO)</span>
+0511 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0512 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0513 
+0514 <span class="comment">% Hints: get(hObject,'String') returns contents of sig as text</span>
+0515 <span class="comment">%        str2double(get(hObject,'String')) returns contents of sig as a double</span>
+0516 
+0517 
+0518 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0519 <a name="_sub14" href="#_subfunctions" class="code">function sig_CreateFcn(hObject, eventdata, handles)</a>
+0520 <span class="comment">% hObject    handle to sig (see GCBO)</span>
+0521 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0522 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0523 
+0524 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0525 <span class="comment">%       See ISPC and COMPUTER.</span>
+0526 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0527     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0528 <span class="keyword">end</span>
+0529 
+0530 
+0531 
+0532 <a name="_sub15" href="#_subfunctions" class="code">function kgs_Callback(hObject, eventdata, handles)</a>
+0533 <span class="comment">% hObject    handle to kgs (see GCBO)</span>
+0534 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0535 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0536 
+0537 <span class="comment">% Hints: get(hObject,'String') returns contents of kgs as text</span>
+0538 <span class="comment">%        str2double(get(hObject,'String')) returns contents of kgs as a double</span>
+0539 
+0540 
+0541 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0542 <a name="_sub16" href="#_subfunctions" class="code">function kgs_CreateFcn(hObject, eventdata, handles)</a>
+0543 <span class="comment">% hObject    handle to kgs (see GCBO)</span>
+0544 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0545 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0546 
+0547 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0548 <span class="comment">%       See ISPC and COMPUTER.</span>
+0549 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0550     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0551 <span class="keyword">end</span>
+0552 
+0553 
+0554 
+0555 <a name="_sub17" href="#_subfunctions" class="code">function kpR_Callback(hObject, eventdata, handles)</a>
+0556 <span class="comment">% hObject    handle to kpR (see GCBO)</span>
+0557 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0558 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0559 
+0560 <span class="comment">% Hints: get(hObject,'String') returns contents of kpR as text</span>
+0561 <span class="comment">%        str2double(get(hObject,'String')) returns contents of kpR as a double</span>
+0562 
+0563 
+0564 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0565 <a name="_sub18" href="#_subfunctions" class="code">function kpR_CreateFcn(hObject, eventdata, handles)</a>
+0566 <span class="comment">% hObject    handle to kpR (see GCBO)</span>
+0567 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0568 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0569 
+0570 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0571 <span class="comment">%       See ISPC and COMPUTER.</span>
+0572 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0573     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0574 <span class="keyword">end</span>
+0575 
+0576 
+0577 
+0578 <a name="_sub19" href="#_subfunctions" class="code">function kpd_Callback(hObject, eventdata, handles)</a>
+0579 <span class="comment">% hObject    handle to kpd (see GCBO)</span>
+0580 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0581 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0582 
+0583 <span class="comment">% Hints: get(hObject,'String') returns contents of kpd as text</span>
+0584 <span class="comment">%        str2double(get(hObject,'String')) returns contents of kpd as a double</span>
+0585 
+0586 
+0587 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0588 <a name="_sub20" href="#_subfunctions" class="code">function kpd_CreateFcn(hObject, eventdata, handles)</a>
+0589 <span class="comment">% hObject    handle to kpd (see GCBO)</span>
+0590 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0591 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0592 
+0593 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0594 <span class="comment">%       See ISPC and COMPUTER.</span>
+0595 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0596     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0597 <span class="keyword">end</span>
+0598 
+0599 
+0600 
+0601 <a name="_sub21" href="#_subfunctions" class="code">function prp_Callback(hObject, eventdata, handles)</a>
+0602 <span class="comment">% hObject    handle to prp (see GCBO)</span>
+0603 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0604 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0605 
+0606 <span class="comment">% Hints: get(hObject,'String') returns contents of prp as text</span>
+0607 <span class="comment">%        str2double(get(hObject,'String')) returns contents of prp as a double</span>
+0608 
+0609 
+0610 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0611 <a name="_sub22" href="#_subfunctions" class="code">function prp_CreateFcn(hObject, eventdata, handles)</a>
+0612 <span class="comment">% hObject    handle to prp (see GCBO)</span>
+0613 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0614 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0615 
+0616 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0617 <span class="comment">%       See ISPC and COMPUTER.</span>
+0618 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0619     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0620 <span class="keyword">end</span>
+0621 
+0622 
+0623 
+0624 <a name="_sub23" href="#_subfunctions" class="code">function na_Callback(hObject, eventdata, handles)</a>
+0625 <span class="comment">% hObject    handle to na (see GCBO)</span>
+0626 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0627 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0628 
+0629 <span class="comment">% Hints: get(hObject,'String') returns contents of na as text</span>
+0630 <span class="comment">%        str2double(get(hObject,'String')) returns contents of na as a double</span>
+0631 
+0632 
+0633 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0634 <a name="_sub24" href="#_subfunctions" class="code">function na_CreateFcn(hObject, eventdata, handles)</a>
+0635 <span class="comment">% hObject    handle to na (see GCBO)</span>
+0636 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0637 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0638 
+0639 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0640 <span class="comment">%       See ISPC and COMPUTER.</span>
+0641 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0642     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0643 <span class="keyword">end</span>
+0644 
+0645 
+0646 <span class="comment">% --- Executes on button press in sm.</span>
+0647 <a name="_sub25" href="#_subfunctions" class="code">function sm_Callback(hObject, eventdata, handles)</a>
+0648 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.sm,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0649 drawnow;
+0650 uiresume(handles.figure1);
+0651 
+0652 
+0653 
+0654 
+0655 <a name="_sub26" href="#_subfunctions" class="code">function t_Callback(hObject, eventdata, handles)</a>
+0656 <span class="comment">% hObject    handle to t (see GCBO)</span>
+0657 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0658 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0659 
+0660 <span class="comment">% Hints: get(hObject,'String') returns contents of t as text</span>
+0661 <span class="comment">%        str2double(get(hObject,'String')) returns contents of t as a double</span>
+0662 
+0663 
+0664 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0665 <a name="_sub27" href="#_subfunctions" class="code">function t_CreateFcn(hObject, eventdata, handles)</a>
+0666 <span class="comment">% hObject    handle to t (see GCBO)</span>
+0667 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0668 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0669 
+0670 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0671 <span class="comment">%       See ISPC and COMPUTER.</span>
+0672 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0673     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0674 <span class="keyword">end</span>
+0675 
+0676 
+0677 
+0678 
+0679 <span class="comment">% --------------------------------------------------------------------</span>
+0680 <a name="_sub28" href="#_subfunctions" class="code">function uipanel_k_SelectionChangeFcn(hObject, eventdata, handles)</a>
+0681 <a href="update_kernel_uipanel.html" class="code" title="">update_kernel_uipanel</a>;
+0682 
+0683 
+0684 
+0685 
+0686 <span class="comment">% --------------------------------------------------------------------</span>
+0687 <a name="_sub29" href="#_subfunctions" class="code">function uipanel_tp_SelectionChangeFcn(hObject, eventdata, handles)</a>
+0688 <a href="update_type_uipanel.html" class="code" title="">update_type_uipanel</a>;
+0689 
+0690 
+0691 
+0692 
+0693 <span class="comment">% --- Executes on button press in ka.</span>
+0694 <a name="_sub30" href="#_subfunctions" class="code">function ka_Callback(hObject, eventdata, handles)</a>
+0695 <a href="adaptive_callback.html" class="code" title="">adaptive_callback</a>;
+0696 
+0697</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of subsasgn</title>
+  <meta name="keywords" content="subsasgn">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>subsasgn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function p = subsasgn(p, s, val) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li><li><a href="export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function p = subsasgn(p, s, val)</a>
+0002 
+0003 <span class="keyword">if</span> ischar(s)
+0004     s = struct(<span class="string">'type'</span>,<span class="string">'.'</span>,<span class="string">'subs'</span>,s);
+0005 <span class="keyword">end</span>
+0006 
+0007 <span class="keyword">switch</span> s(1).type
+0008     
+0009     <span class="keyword">case</span> <span class="string">'.'</span>
+0010         
+0011         key = s(1).subs;
+0012         [P, panelroot] = <a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(p);
+0013     
+0014         <span class="keyword">switch</span> key
+0015             
+0016             <span class="keyword">case</span> <span class="string">'fontsize'</span>
+0017                 
+0018                 <span class="comment">% must be right</span>
+0019                 <span class="keyword">if</span> ~isnumeric(val) || ~isscalar(val) || val &lt; 1 || val &gt; 100
+0020                     error(<span class="string">'invalid value for &quot;fontsize&quot;'</span>);
+0021                 <span class="keyword">end</span>
+0022                 
+0023                 P.render_inh.fontsize = val;
+0024                 <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0025             
+0026             <span class="keyword">case</span> {<span class="string">'fontname'</span> <span class="string">'fontweight'</span>}
+0027                 
+0028                 <span class="keyword">if</span> ~ischar(val) || (ndims(val)~=2) || (size(val,1)~=1)
+0029                     error([<span class="string">'invalid value for &quot;'</span> key <span class="string">'&quot;'</span>]);
+0030                 <span class="keyword">end</span>
+0031                 
+0032                 P.render_inh.(key) = val;
+0033                 <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0034             
+0035             <span class="keyword">case</span> <span class="string">'edge'</span>
+0036                 
+0037                 <span class="comment">% must be right</span>
+0038                 <span class="keyword">if</span> ~ischar(val) || ~isscalar(val) || ~any(val == <span class="string">'lrtb'</span>)
+0039                     error(<span class="string">'invalid value for &quot;edge&quot;'</span>);
+0040                 <span class="keyword">end</span>
+0041                 
+0042                 P.render_inh.edge = val;
+0043                 <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0044             
+0045             <span class="comment">% margins must be translated into mm for storage</span>
+0046             <span class="keyword">case</span> {<span class="string">'axismargin'</span> <span class="string">'parentmargin'</span>}
+0047                 
+0048                 <span class="keyword">if</span> any(val&lt;0)
+0049                     error(<span class="string">'Negative values for margins are not allowed'</span>);
+0050                 <span class="keyword">end</span>
+0051                 u = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'units'</span>);
+0052                 <span class="keyword">switch</span> u
+0053                     <span class="keyword">case</span> <span class="string">'mm'</span>
+0054                         <span class="comment">% no change</span>
+0055                     <span class="keyword">case</span> <span class="string">'cm'</span>
+0056                         val = val * 10;
+0057                     <span class="keyword">case</span> <span class="string">'in'</span>
+0058                         val = val * 25.4;
+0059                 <span class="keyword">end</span>
+0060                 P.render_inh.(key) = val;
+0061                 <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0062                 
+0063             <span class="comment">% properties that are *not* inherited</span>
+0064             <span class="keyword">case</span> {<span class="string">'xscale'</span>, <span class="string">'yscale'</span>}
+0065                 
+0066                 <span class="keyword">if</span> isscalar(val) &amp;&amp; islogical(val) &amp;&amp; ~val
+0067                     val = <span class="string">''</span>;
+0068                 <span class="keyword">else</span>
+0069                     <span class="comment">% may be &quot;?$&quot;</span>
+0070                     dol = <span class="string">''</span>;
+0071                     <span class="keyword">if</span> ischar(val) &amp;&amp; ndims(val) == 2 &amp;&amp; all(size(val) == [1 2]) &amp;&amp; val(2) == <span class="string">'$'</span>
+0072                         val = val(1);
+0073                         dol = <span class="string">'$'</span>;
+0074                     <span class="keyword">end</span>
+0075                     <span class="keyword">if</span> ~isscalar(val) || ~any(val == <span class="string">'yzafpnum kMGTPEZY?'</span>)
+0076                         error([<span class="string">'invalid value for &quot;'</span> key <span class="string">'&quot;'</span>]);
+0077                     <span class="keyword">end</span>
+0078                     val = [val dol];
+0079                 <span class="keyword">end</span>
+0080                 P.render_notinh.(key) = val;
+0081                 <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0082                 
+0083             <span class="comment">% recursive properties</span>
+0084             <span class="keyword">case</span> {<span class="string">'xlabels'</span>, <span class="string">'ylabels'</span>, <span class="string">'xticklabels'</span>, <span class="string">'yticklabels'</span>, <span class="string">'xticks'</span>, <span class="string">'yticks'</span>, <span class="string">'titles'</span>}
+0085                 
+0086                 <span class="keyword">if</span> ~isempty(P.panel.children)
+0087                     c = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'children'</span>);
+0088                     <span class="keyword">for</span> n = 1:length(c)
+0089                         <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(c{n}, key, val);
+0090                     <span class="keyword">end</span>
+0091                 <span class="keyword">elseif</span> P.panel.axis
+0092                     <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p, key(1:end-1), val);
+0093                 <span class="keyword">end</span>
+0094                 
+0095             <span class="comment">% wrapped properties</span>
+0096             <span class="keyword">case</span> {<span class="string">'xlabel'</span>, <span class="string">'ylabel'</span>, <span class="string">'title'</span>}
+0097                 
+0098                 <span class="keyword">if</span> P.panel.axis
+0099                     <span class="comment">% it's an axis panel</span>
+0100                     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, key), <span class="string">'string'</span>, val);
+0101                 <span class="keyword">else</span>
+0102                     <span class="comment">% it's a parent panel - create as children of</span>
+0103                     <span class="comment">% hiddenaxis</span>
+0104                     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.hiddenaxis, key), <span class="string">'string'</span>, val, <span class="string">'visible'</span>, <span class="string">'on'</span>);
+0105 <span class="comment">%                     error(['assignment of &quot;' key '&quot; failed because panel is not committed as an axis panel']);</span>
+0106                 <span class="keyword">end</span>
+0107                 
+0108             <span class="comment">% wrapped properties</span>
+0109             <span class="keyword">case</span> {<span class="string">'xticklabel'</span>, <span class="string">'yticklabel'</span>, <span class="string">'xtick'</span>, <span class="string">'ytick'</span>}
+0110                 
+0111                 <span class="keyword">if</span> P.panel.axis
+0112                     <span class="comment">% if val is false, set mode to auto</span>
+0113                     <span class="keyword">if</span> isscalar(val) &amp;&amp; islogical(val) &amp;&amp; ~val
+0114                         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, [key <span class="string">'mode'</span>], <span class="string">'auto'</span>);
+0115                     <span class="keyword">else</span>
+0116                         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, key, val);
+0117                     <span class="keyword">end</span>
+0118                 <span class="keyword">else</span>
+0119                     error([<span class="string">'assignment of &quot;'</span> key <span class="string">'&quot; failed because panel is not committed as an axis panel'</span>]);
+0120                 <span class="keyword">end</span>
+0121             
+0122             <span class="comment">% root properties</span>
+0123             <span class="keyword">case</span> {<span class="string">'autorender'</span> <span class="string">'units'</span> <span class="string">'rootmargin'</span> <span class="string">'print'</span>}
+0124                 
+0125                 <span class="keyword">if</span> P.panel.parent
+0126                     error([<span class="string">'the property &quot;'</span> key <span class="string">'&quot; is only of the root panel'</span>]);
+0127                 <span class="keyword">end</span>
+0128                 
+0129                 <span class="keyword">switch</span> key
+0130                     <span class="keyword">case</span> {<span class="string">'autorender'</span> <span class="string">'print'</span>}
+0131                         <span class="keyword">if</span> ~islogical(val) || ~isscalar(val)
+0132                             error([<span class="string">'invalid value for &quot;'</span> key <span class="string">'&quot;'</span>]);
+0133                         <span class="keyword">end</span>
+0134                     <span class="keyword">case</span> <span class="string">'units'</span>
+0135                         <span class="keyword">switch</span> val
+0136                             <span class="keyword">case</span> {<span class="string">'mm'</span>, <span class="string">'in'</span>, <span class="string">'cm'</span>}
+0137                                 <span class="comment">% ok</span>
+0138                             <span class="keyword">otherwise</span>
+0139                                 error([<span class="string">'invalid value for &quot;'</span> key <span class="string">'&quot;'</span>]);
+0140                         <span class="keyword">end</span>
+0141                     <span class="keyword">case</span> {<span class="string">'rootmargin'</span>}
+0142                         <span class="keyword">if</span> any(val&lt;0)
+0143                             error(<span class="string">'Negative values for margins are not allowed'</span>);
+0144                         <span class="keyword">end</span>
+0145                         u = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'units'</span>);
+0146                         <span class="keyword">switch</span> u
+0147                             <span class="keyword">case</span> <span class="string">'mm'</span>
+0148                                 <span class="comment">% no change</span>
+0149                             <span class="keyword">case</span> <span class="string">'cm'</span>
+0150                                 val = val * 10;
+0151                             <span class="keyword">case</span> <span class="string">'in'</span>
+0152                                 val = val * 25.4;
+0153                         <span class="keyword">end</span>
+0154                 <span class="keyword">end</span>
+0155                 
+0156                 panelroot.(key) = val;
+0157                 <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P, panelroot);
+0158 
+0159                 
+0160                 
+0161             <span class="comment">% get panel's root panel</span>
+0162             <span class="keyword">case</span> <span class="string">'root'</span>
+0163                 
+0164                 <span class="keyword">if</span> P.panel.parent
+0165                     q = p;
+0166                     q.id = P.panel.parent;
+0167                     val = <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(q, s, val);
+0168                 <span class="keyword">else</span>
+0169                     val = <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p, s(2:end), val);
+0170                 <span class="keyword">end</span>
+0171             
+0172                 
+0173                 
+0174                 
+0175             <span class="keyword">otherwise</span>
+0176                 error([<span class="string">'unrecognised subsasgn &quot;'</span> s(1).subs <span class="string">'&quot;'</span>]);
+0177             
+0178         <span class="keyword">end</span>
+0179     
+0180 <span class="keyword">end</span>
+0181 
+0182 
+0183 <span class="comment">% autorender</span>
+0184 <span class="keyword">if</span> <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'autorender'</span>)
+0185     q = p;
+0186     ud = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0187     q.id = ud.panel.panelroot.rootpanelid;
+0188     <a href="render.html" class="code" title="function render(p)">render</a>(q)
+0189 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

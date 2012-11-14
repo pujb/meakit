@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of french</title>
+  <meta name="keywords" content="french">
+  <meta name="description" content="FRENCH    French's flag color map.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html colormaps -->
+<h1>french
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FRENCH    French's flag color map.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h = french(m,flag) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">FRENCH    French's flag color map.
+   FRENCH(M) returns an M-by-3 matrix containing a &quot;french flag&quot; colormap.
+   FRENCH, by itself, is the same length as the current colormap.
+
+   FRENCH(M,FLAG) enables a modification of the colormap, where
+   FLAG can be either 1 (default) or 2.
+
+   For example, to reset the colormap of the current figure:
+
+             colormap(french)
+
+   See also HOT, HSV, GRAY, PINK, COOL, BONE, COPPER, FLAG,
+   COLORMAP, RGBPLOT.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Plot/util_make_raster_colormap.html" class="code" title="function [result] = util_make_raster_colormap(type)">util_make_raster_colormap</a>	UTIL_MAKE_RASTER_COLORMAP Generate the colormap for RASTER PLOT</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = french(m,flag)</a>
+0002 <span class="comment">%FRENCH    French's flag color map.</span>
+0003 <span class="comment">%   FRENCH(M) returns an M-by-3 matrix containing a &quot;french flag&quot; colormap.</span>
+0004 <span class="comment">%   FRENCH, by itself, is the same length as the current colormap.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   FRENCH(M,FLAG) enables a modification of the colormap, where</span>
+0007 <span class="comment">%   FLAG can be either 1 (default) or 2.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   For example, to reset the colormap of the current figure:</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%             colormap(french)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   See also HOT, HSV, GRAY, PINK, COOL, BONE, COPPER, FLAG,</span>
+0014 <span class="comment">%   COLORMAP, RGBPLOT.</span>
+0015 
+0016 <span class="comment">% Copyright (c) 2002 by AMRON</span>
+0017 <span class="comment">% Norbert Marwan, Potsdam University, Germany</span>
+0018 <span class="comment">% http://www.agnld.uni-potsdam.de</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% $Date: 2006/03/16 13:52:43 $</span>
+0021 <span class="comment">% $Revision: 2.2 $</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% $Log: french.m,v $</span>
+0024 <span class="comment">% Revision 2.2  2006/03/16 13:52:43  marwan</span>
+0025 <span class="comment">% code refreshed</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Revision 2.1  2004/11/10 07:07:51  marwan</span>
+0028 <span class="comment">% initial import</span>
+0029 <span class="comment">%</span>
+0030 
+0031 
+0032 <span class="keyword">if</span> nargin &lt; 1
+0033     m = size(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'colormap'</span>),1); 
+0034 <span class="keyword">else</span>
+0035     <span class="keyword">if</span> isempty(m)
+0036         m = size(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gcf,<span class="string">'colormap'</span>),1); 
+0037     <span class="keyword">end</span>
+0038 <span class="keyword">end</span>
+0039 <span class="keyword">if</span> nargin &lt; 2, flag = 1; <span class="keyword">end</span>
+0040 
+0041 n1 = fix(3*m/8);
+0042 n2 = fix(m/4);
+0043 n3 = fix(m/2);
+0044 
+0045 <span class="keyword">switch</span> flag
+0046     <span class="keyword">case</span> 1
+0047         r = [ones(n3,1); (sqrt(1-((1:n3)/n3).^2))'];
+0048         g = [flipud( (sqrt(1-((1:n3)/n3).^2))'); (sqrt(1-((1:n3)/n3).^2))'];
+0049         b = [flipud((sqrt(1-((1:n3)/n3).^2))'); ones(n3,1)];
+0050     <span class="keyword">case</span> 2
+0051         r = [ones(n1+n2,1); (n1-1:-1:0)'/n1;];
+0052         g = [(0:n1-1)'/n1; ones(n2,1); (n1-1:-1:0)'/n1;];
+0053         b = [(0:n1-1)'/n1; ones(n1+n2,1);];
+0054 <span class="keyword">end</span>
+0055 
+0056 h = [r g b];
+0057 
+0058 <span class="keyword">if</span> size(h,1) &lt; m
+0059     h(ceil(m/2)+1:m,:) = h(ceil(m/2):<span class="keyword">end</span>,:);
+0060     h(ceil(m/2),:) = 1;
+0061 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

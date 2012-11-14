@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of histogram</title>
+  <meta name="keywords" content="histogram">
+  <meta name="description" content="HISTOGRAM generates a histogram using the &quot;optimal&quot; number of bins">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- # violin_plot --><!-- menu.html distributionPlot -->
+<h1>histogram
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>HISTOGRAM generates a histogram using the &quot;optimal&quot; number of bins</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [N,X,sp] = histogram(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> HISTOGRAM generates a histogram using the &quot;optimal&quot; number of bins
+
+ If called with no output argument, histogram plots into the current axes
+
+ SYNOPSIS [N,X,sp] = histogram(data,factor,normalize)
+          [...] = histogram(data,'smooth')
+          [...] = histogram(axesHandle,...)
+
+ INPUT    data: vector of input data
+          factor: (opt) factor by which the bin-widths are multiplied
+                   if 'smooth' (or 's'), a smooth histogram will be formed.
+                   (requires the spline toolbox). For an alternative
+                   approach to a smooth histogram, see ksdensity.m
+                   if 'discrete' (or 'd'), the data is assumed to be a discrete
+                   collection of values. Note that if every data point is,
+                   on average, repeated at least 3 times, histogram will
+                   consider it a discrete distribution automatically.
+                   if 'continuous' (or 'c'), histogram is not automatically
+                   checking for discreteness.
+          normalize : if 1 (default), integral of histogram equals number
+                       data points. If 0, height of bins equals counts.
+                       This option is exclusive to non-&quot;smooth&quot; histograms
+          axesHandle: (opt) if given, histogram will be plotted into these
+                       axes, even if output arguments are requested
+
+ OUTPUT   N   : number of points per bin (value of spline)
+          X   : center position of bins (sorted input data)
+          sp  : definition of the smooth spline
+
+ REMARKS: The smooth histogram is formed by calculating the cumulative
+           histogram, fitting it with a smoothening spline and then taking
+           the analytical derivative. If the number of data points is
+           markedly above 1000, the spline is fitting the curve too
+           locally, so that the derivative can have huge peaks. Therefore,
+           only 1000-1999 points are used for estimation.
+           Note that the integral of the spline is almost exactly the
+           total number of data points. For a standard histogram, the sum
+           of the hights of the bins (but not their integral) equals the
+           total number of data points. Therefore, the counts might seem
+           off.
+
+           WARNING: If there are multiples of the minimum value, the
+           smooth histogram might get very steep at the beginning and
+           produce an unwanted peak. In such a case, remove the
+           multiple small values first (for example, using isApproxEqual)
+
+
+ c: 2/05 jonas
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="countEntries.html" class="code" title="function [uniqueEntries,numberOfOccurences,whereIdx] = countEntries(m,isRow, keepNaN)">countEntries</a>	COUNTENTRIES returns all unique entries (sorted) in the array m and how many times the respective entries occured</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="distributionPlot.html" class="code" title="function handles = distributionPlot(varargin)">distributionPlot</a>	DISTRIBUTIONPLOT plots distributions similar to boxplot</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [N,X,sp] = histogram(varargin)</a>
+0002 <span class="comment">% HISTOGRAM generates a histogram using the &quot;optimal&quot; number of bins</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% If called with no output argument, histogram plots into the current axes</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% SYNOPSIS [N,X,sp] = histogram(data,factor,normalize)</span>
+0007 <span class="comment">%          [...] = histogram(data,'smooth')</span>
+0008 <span class="comment">%          [...] = histogram(axesHandle,...)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% INPUT    data: vector of input data</span>
+0011 <span class="comment">%          factor: (opt) factor by which the bin-widths are multiplied</span>
+0012 <span class="comment">%                   if 'smooth' (or 's'), a smooth histogram will be formed.</span>
+0013 <span class="comment">%                   (requires the spline toolbox). For an alternative</span>
+0014 <span class="comment">%                   approach to a smooth histogram, see ksdensity.m</span>
+0015 <span class="comment">%                   if 'discrete' (or 'd'), the data is assumed to be a discrete</span>
+0016 <span class="comment">%                   collection of values. Note that if every data point is,</span>
+0017 <span class="comment">%                   on average, repeated at least 3 times, histogram will</span>
+0018 <span class="comment">%                   consider it a discrete distribution automatically.</span>
+0019 <span class="comment">%                   if 'continuous' (or 'c'), histogram is not automatically</span>
+0020 <span class="comment">%                   checking for discreteness.</span>
+0021 <span class="comment">%          normalize : if 1 (default), integral of histogram equals number</span>
+0022 <span class="comment">%                       data points. If 0, height of bins equals counts.</span>
+0023 <span class="comment">%                       This option is exclusive to non-&quot;smooth&quot; histograms</span>
+0024 <span class="comment">%          axesHandle: (opt) if given, histogram will be plotted into these</span>
+0025 <span class="comment">%                       axes, even if output arguments are requested</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% OUTPUT   N   : number of points per bin (value of spline)</span>
+0028 <span class="comment">%          X   : center position of bins (sorted input data)</span>
+0029 <span class="comment">%          sp  : definition of the smooth spline</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% REMARKS: The smooth histogram is formed by calculating the cumulative</span>
+0032 <span class="comment">%           histogram, fitting it with a smoothening spline and then taking</span>
+0033 <span class="comment">%           the analytical derivative. If the number of data points is</span>
+0034 <span class="comment">%           markedly above 1000, the spline is fitting the curve too</span>
+0035 <span class="comment">%           locally, so that the derivative can have huge peaks. Therefore,</span>
+0036 <span class="comment">%           only 1000-1999 points are used for estimation.</span>
+0037 <span class="comment">%           Note that the integral of the spline is almost exactly the</span>
+0038 <span class="comment">%           total number of data points. For a standard histogram, the sum</span>
+0039 <span class="comment">%           of the hights of the bins (but not their integral) equals the</span>
+0040 <span class="comment">%           total number of data points. Therefore, the counts might seem</span>
+0041 <span class="comment">%           off.</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%           WARNING: If there are multiples of the minimum value, the</span>
+0044 <span class="comment">%           smooth histogram might get very steep at the beginning and</span>
+0045 <span class="comment">%           produce an unwanted peak. In such a case, remove the</span>
+0046 <span class="comment">%           multiple small values first (for example, using isApproxEqual)</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% c: 2/05 jonas</span>
+0050 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0051 
+0052 <span class="comment">% test input</span>
+0053 <span class="keyword">if</span> nargin &lt; 1
+0054     error(<span class="string">'not enough input arguments for histogram'</span>)
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">% check for axes handle</span>
+0058 <span class="keyword">if</span> length(varargin{1}) == 1 &amp;&amp; ishandle(varargin{1});
+0059     axesHandle = varargin{1};
+0060     varargin(1) = [];
+0061 <span class="keyword">else</span>
+0062     <span class="comment">% ensure compatibility to when axesHandle was given as last input</span>
+0063     <span class="keyword">if</span> nargin == 3 &amp;&amp; ishandle(varargin{end}) &amp;&amp; varargin{end} ~= 0
+0064         axesHandle = varargin{end};
+0065         varargin(end) = [];
+0066     <span class="keyword">else</span>
+0067         axesHandle = 0;
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">% assign data</span>
+0072 numArgIn = length(varargin);
+0073 data = varargin{1};
+0074 data = data(:);
+0075 
+0076 <span class="comment">% check for non-finite data points</span>
+0077 data(~isfinite(data)) = [];
+0078 
+0079 <span class="comment">% check for &quot;factor&quot;</span>
+0080 <span class="keyword">if</span> numArgIn &lt; 2 || isempty(varargin{2})
+0081     factor = 1;
+0082 <span class="keyword">else</span>
+0083     factor = varargin{2};
+0084 <span class="keyword">end</span>
+0085 <span class="keyword">if</span> ischar(factor)
+0086     <span class="keyword">switch</span> factor
+0087         <span class="keyword">case</span> {<span class="string">'smooth'</span>,<span class="string">'s'</span>}
+0088         factor = -1;
+0089         <span class="keyword">case</span> {<span class="string">'discrete'</span>,<span class="string">'d'</span>}
+0090             factor = -2;
+0091         <span class="keyword">case</span> {<span class="string">'continuous'</span>,<span class="string">'c'</span>}
+0092             factor = -3;
+0093     <span class="keyword">otherwise</span>
+0094         error(<span class="string">'The only string inputs permitted for histogram.m are ''smooth'',''discrete'', or ''continuous'''</span>)
+0095     <span class="keyword">end</span>
+0096 <span class="keyword">else</span>
+0097     <span class="comment">% check for normalize, but do so only if there is no &quot;smooth&quot;. Note</span>
+0098     <span class="comment">% that numArgIn is not necessarily equal to nargin</span>
+0099     <span class="keyword">if</span> numArgIn &lt; 3 || isempty(varargin{3})
+0100         normalize = true;
+0101     <span class="keyword">else</span>
+0102         normalize = varargin{3};
+0103     <span class="keyword">end</span>
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="comment">% doPlot is set to 1 for now. We change it to 0 below if necessary.</span>
+0107 doPlot = 1;
+0108 
+0109 nData = length(data);
+0110 <span class="comment">% check whether we do a standard or a smooth histogram</span>
+0111 <span class="keyword">if</span> factor ~= -1
+0112     <span class="comment">% check for discrete distribution</span>
+0113     [xx,nn] = <a href="countEntries.html" class="code" title="function [uniqueEntries,numberOfOccurences,whereIdx] = countEntries(m,isRow, keepNaN)">countEntries</a>(data);
+0114     <span class="comment">% consider the distribution discrete if there are, on average, 3</span>
+0115     <span class="comment">% entries per bin</span>
+0116     nBins = length(xx);
+0117     <span class="keyword">if</span> factor == -2 || (factor ~= -3 &amp;&amp; nBins*3 &lt; nData) 
+0118         <span class="comment">% discrete distribution.</span>
+0119         nn = nn';
+0120         xx = xx';
+0121     <span class="keyword">else</span>
+0122         <span class="comment">% not a discrete distribution</span>
+0123         <span class="keyword">if</span> nData &lt; 20
+0124             warning(<span class="string">'HISTOGRAM:notEnoughDataPoints'</span>,<span class="string">'Less than 20 data points!'</span>)
+0125             nBins = ceil(nData/4);
+0126         <span class="keyword">else</span>
+0127             
+0128             <span class="comment">% create bins with the optimal bin width</span>
+0129             <span class="comment">% W = 2*(IQD)*N^(-1/3)</span>
+0130             interQuartileDist = diff(prctile(data,[25,75]));
+0131             binLength = 2*interQuartileDist*length(data)^(-1/3)*factor;
+0132             
+0133             <span class="comment">% number of bins: divide data range by binLength</span>
+0134             nBins = round((max(data)-min(data))/binLength);
+0135             
+0136             <span class="keyword">if</span> ~isfinite(nBins)
+0137                 nBins = length(unique(data));
+0138             <span class="keyword">end</span>
+0139             
+0140         <span class="keyword">end</span>
+0141         
+0142         
+0143         
+0144         <span class="comment">% histogram</span>
+0145         [nn,xx] = hist(data,nBins);
+0146         <span class="comment">% adjust the height of the histogram</span>
+0147         <span class="keyword">if</span> normalize
+0148             Z = trapz(xx,nn);
+0149             nn = nn * nData/Z;
+0150         <span class="keyword">end</span>
+0151         
+0152     <span class="keyword">end</span>
+0153     <span class="keyword">if</span> nargout &gt; 0
+0154         N = nn;
+0155         X = xx;
+0156         doPlot = axesHandle;
+0157     <span class="keyword">end</span>
+0158     <span class="keyword">if</span> doPlot
+0159         <span class="keyword">if</span> axesHandle
+0160             bar(axesHandle,xx,nn,1);
+0161         <span class="keyword">else</span>
+0162             bar(xx,nn,1);
+0163         <span class="keyword">end</span>
+0164     <span class="keyword">end</span>
+0165     
+0166 <span class="keyword">else</span>
+0167     <span class="comment">% make cdf, smooth with spline, then take the derivative of the spline</span>
+0168     
+0169     <span class="comment">% cdf</span>
+0170     xData = sort(data);
+0171     yData = 1:nData;
+0172     
+0173     <span class="comment">% when using too many data points, the spline fits very locally, and</span>
+0174     <span class="comment">% the derivatives can still be huge. Good results can be obtained with</span>
+0175     <span class="comment">% 500-1000 points. Use 1000 for now</span>
+0176     step = max(floor(nData/1000),1);
+0177     xData2 = xData(1:step:end);
+0178     yData2 = yData(1:step:end);
+0179     
+0180     <span class="comment">% spline. Use strong smoothing</span>
+0181     cdfSpline = csaps(xData2,yData2,1./(1+mean(diff(xData2))^3/0.0006));
+0182     
+0183     <span class="comment">% pdf is the derivative of the cdf</span>
+0184     pdfSpline = fnder(cdfSpline);
+0185     
+0186     <span class="comment">% histogram</span>
+0187     <span class="keyword">if</span> nargout &gt; 0
+0188         xDataU = unique(xData);
+0189         N = fnval(pdfSpline,xDataU);
+0190         X = xDataU;
+0191         <span class="comment">% adjust the height of the histogram</span>
+0192         Z = trapz(X,N);
+0193         N = N * nData/Z;
+0194         sp = pdfSpline;
+0195         <span class="comment">% set doPlot. If there is an axesHandle, we will plot</span>
+0196         doPlot = axesHandle;
+0197     <span class="keyword">end</span>
+0198     <span class="comment">% check if we have to plot. If we assigned an output, there will only</span>
+0199     <span class="comment">% be plotting if there is an axesHandle.</span>
+0200     <span class="keyword">if</span> doPlot
+0201         <span class="keyword">if</span> axesHandle
+0202             plot(axesHandle,xData,fnval(pdfSpline,xData));
+0203         <span class="keyword">else</span>
+0204             plot(xData,fnval(pdfSpline,xData));
+0205         <span class="keyword">end</span>
+0206     <span class="keyword">end</span>
+0207 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

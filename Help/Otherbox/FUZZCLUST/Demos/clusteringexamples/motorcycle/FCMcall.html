@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FCMcall</title>
+  <meta name="keywords" content="FCMcall">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../../menu.html FUZZCLUST --><!-- # Demos --><!-- # clusteringexamples --><!-- menu.html motorcycle -->
+<h1>FCMcall
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>	data normalization</li><li><a href="../../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../../../../../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>	</li><li><a href="../../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>	validation of the clustering</li><li><a href="../../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../../brain.png)"><pre>0001 <a href="../../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0002 close all
+0003 path(path,<span class="string">'..\..\..\FUZZCLUST'</span>)
+0004 <span class="comment">%the data</span>
+0005 load motorcycle.txt
+0006 data.X = motorcycle(:,[1 2]);
+0007 
+0008 <span class="comment">%parameters</span>
+0009 param.c=4;
+0010 param.m=2;
+0011 param.e=1e-6;
+0012 param.ro=ones(1,param.c);
+0013 param.val=1;
+0014 <span class="comment">%normalization</span>
+0015 data=<a href="../../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>);
+0016 <span class="comment">%clustering</span>
+0017 result = <a href="../../../../../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>(data,param);
+0018 plot(data.X(:,1),data.X(:,2),<span class="string">'b.'</span>,result.cluster.v(:,1),result.cluster.v(:,2),<span class="string">'ro'</span>);
+0019 hold on
+0020 <span class="comment">%draw contour-map</span>
+0021 new.X=data.X;
+0022 eval=<a href="../../../../../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new,result,param);
+0023 <span class="comment">%validation</span>
+0024 result = <a href="../../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>(result,data,param);
+0025 result.validity</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

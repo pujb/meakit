@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of wishpdf</title>
+  <meta name="keywords" content="wishpdf">
+  <meta name="description" content="WISHPDF     Wishart probability density function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>wishpdf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>WISHPDF     Wishart probability density function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function p = wishpdf(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">WISHPDF     Wishart probability density function.
+ WISHPDF(X,A) returns the density at X under a Wishart distribution with 
+ shape parameter A and unit scale parameter.  
+ X is a positive definite matrix and A is scalar.
+ WISHPDF(X,A,B) specifies the scale parameter of the distribution (a 
+ positive definite matrix with the same size as X).
+
+ The probability density function has the form:
+ p(X) = |X|^(a-(d+1)/2)*exp(-tr(X*B))*|B|^a/Gamma_d(a)
+ where Gamma_d is the multivariate Gamma function.
+
+ WISHPDF(X,A,B,'inv') returns the density at X under an inverse Wishart
+ distribution.  The probability density function for an inverse Wishart is:
+ p(X) = |X|^(-a-(d+1)/2)*exp(-tr(inv(X)*B))*|B|^a/Gamma_d(a)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="wishpdfln.html" class="code" title="function lp = wishpdfln(x,a,b,inverse)">wishpdfln</a>	WISHPDFLN    Logarithm of Wishart probability density function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function p = wishpdf(varargin)</a>
+0002 <span class="comment">%WISHPDF     Wishart probability density function.</span>
+0003 <span class="comment">% WISHPDF(X,A) returns the density at X under a Wishart distribution with</span>
+0004 <span class="comment">% shape parameter A and unit scale parameter.</span>
+0005 <span class="comment">% X is a positive definite matrix and A is scalar.</span>
+0006 <span class="comment">% WISHPDF(X,A,B) specifies the scale parameter of the distribution (a</span>
+0007 <span class="comment">% positive definite matrix with the same size as X).</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% The probability density function has the form:</span>
+0010 <span class="comment">% p(X) = |X|^(a-(d+1)/2)*exp(-tr(X*B))*|B|^a/Gamma_d(a)</span>
+0011 <span class="comment">% where Gamma_d is the multivariate Gamma function.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% WISHPDF(X,A,B,'inv') returns the density at X under an inverse Wishart</span>
+0014 <span class="comment">% distribution.  The probability density function for an inverse Wishart is:</span>
+0015 <span class="comment">% p(X) = |X|^(-a-(d+1)/2)*exp(-tr(inv(X)*B))*|B|^a/Gamma_d(a)</span>
+0016 
+0017 <span class="comment">% Written by Tom Minka</span>
+0018 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0019 
+0020 p = exp(<a href="wishpdfln.html" class="code" title="function lp = wishpdfln(x,a,b,inverse)">wishpdfln</a>(varargin{:}));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

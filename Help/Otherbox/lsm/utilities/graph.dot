@@ -1,0 +1,25 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  bnd_gammarnd -> gammarnd;
+  bnd_normrnd -> gaussrnd;
+  collect_sr_data -> verbose;
+
+  anykey [URL="anykey.html"];
+  bnd_gammarnd [URL="bnd_gammarnd.html"];
+  bnd_normrnd [URL="bnd_normrnd.html"];
+  collect_sr_data [URL="collect_sr_data.html"];
+  corr_coef [URL="corr_coef.html"];
+  crosscorr [URL="crosscorr.html"];
+  funfit [URL="funfit.html"];
+  gammarnd [URL="gammarnd.html"];
+  gaussrnd [URL="gaussrnd.html"];
+  global_definitions [URL="global_definitions.html"];
+  install [URL="install.html"];
+  linreg [URL="linreg.html"];
+  lowerclean [URL="lowerclean.html"];
+  print_struct [URL="print_struct.html"];
+  record_movie [URL="record_movie.html"];
+  unirnd [URL="unirnd.html"];
+  vec2str [URL="vec2str.html"];
+  verbose [URL="verbose.html"];
+}

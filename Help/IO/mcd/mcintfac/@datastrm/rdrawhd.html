@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of rdrawhd</title>
+  <meta name="keywords" content="rdrawhd">
+  <meta name="description" content="rdrawhd - parses MCS data header (version 1) (datastream method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>rdrawhd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>rdrawhd - parses MCS data header (version 1) (datastream method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function a=rdrawhd(d) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> rdrawhd - parses MCS data header (version 1) (datastream method)
+ a=rdrawhd(d) parses MCS data header
+ To use this function data-files must be open already 
+ (fid is input parameter). ChannelID is incremented by 1 
+ because the first channel sampled is 0, i.e. its index 
+ in the sampling sequence is 0 matlab indices, however, 
+ start with 1.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="datastrm.html" class="code" title="function d = datastrm(a,varargin)">datastrm</a>	DATASTRM		- data object constructor for opening data recorded with MC Rack</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a=rdrawhd(d)</a>
+0002 <span class="comment">% rdrawhd - parses MCS data header (version 1) (datastream method)</span>
+0003 <span class="comment">% a=rdrawhd(d) parses MCS data header</span>
+0004 <span class="comment">% To use this function data-files must be open already</span>
+0005 <span class="comment">% (fid is input parameter). ChannelID is incremented by 1</span>
+0006 <span class="comment">% because the first channel sampled is 0, i.e. its index</span>
+0007 <span class="comment">% in the sampling sequence is 0 matlab indices, however,</span>
+0008 <span class="comment">% start with 1.</span>
+0009 
+0010 
+0011 <span class="comment">%-------------------------</span>
+0012 
+0013     fseek(d.fid,0,-1);                <span class="comment">% rewinds the data file</span>
+0014 
+0015 
+0016 
+0017 <span class="comment">%----- parseHeader -------------------------</span>
+0018 
+0019     d.offset_to_data = fread(d.fid,1,<span class="string">'ulong'</span>);  <span class="comment">% offset to data. 1100</span>
+0020 <span class="comment">%    disp(['data section should start at ' int2str(offset_to_data) ' byte']);</span>
+0021 
+0022     word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% header class tag</span>
+0023     word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% schema of header class</span>
+0024     word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% header class name length</span>
+0025    str   = <span class="string">''</span>;
+0026    <span class="keyword">if</span> word&gt;30
+0027       a=<span class="string">'invalid file'</span>;, <span class="keyword">return</span>;
+0028    <span class="keyword">end</span>
+0029     <span class="keyword">if</span> ~isempty(word)
+0030         str   = fread(d.fid, word, <span class="string">'char'</span>);        
+0031         str   = rot90(setstr(str));                         <span class="comment">% header class name. &quot;CMRawDataHeaderInfo&quot;</span>
+0032     <span class="keyword">end</span>
+0033     <span class="keyword">switch</span> str
+0034         <span class="keyword">case</span> {<span class="string">'CMRawDataHeaderInfo'</span>}, d.DataType = <span class="string">'raw'</span>;
+0035         <span class="keyword">case</span> {<span class="string">'CMSpikeDataHeaderInfo'</span>}, d.DataType = <span class="string">'spike'</span>;
+0036         <span class="keyword">otherwise</span>, a=<span class="string">'invalid file'</span>;, <span class="keyword">return</span>;
+0037     <span class="keyword">end</span>
+0038 
+0039     dword = fread(d.fid,1,<span class="string">'ulong'</span>);            <span class="comment">% header class version</span>
+0040     str   = fread(d.fid,16,<span class="string">'char'</span>);                        <span class="comment">% header class GUID</span>
+0041     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0042    timeOfDay=((dword/3600/24) - floor(dword/3600/24));
+0043    d.recordingdate = datenum(1970,1,1) + floor(dword/3600/24) + timeOfDay;    <span class="comment">% Datum der Messung</span>
+0044    disp([<span class="string">'Recording date:  '</span> datestr(d.recordingdate,0)]);
+0045 
+0046     dword = fread(d.fid,1,<span class="string">'ulong'</span>);            <span class="comment">% header class version</span>
+0047     word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% channel count</span>
+0048     <span class="keyword">if</span>(d.DataType(1:3) == <span class="string">'raw'</span>)
+0049         word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% segment count</span>
+0050     <span class="keyword">end</span>;
+0051 
+0052 <span class="comment">%----- parseChannelFilter -------------------------</span>
+0053 
+0054     word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% channel filter class tag. 0xFFFF</span>
+0055     word  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% schema</span>
+0056     word  = fread(d.fid,1,<span class="string">'ushort'</span>); 
+0057     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0058     str  = fread(d.fid,word,<span class="string">'char'</span>);            <span class="comment">% channel filter class name. &quot;CChannelFilter&quot;</span>
+0059     str  = rot90(setstr(str));                <span class="comment">% channel filter class name. &quot;CChannelFilter&quot;</span>
+0060    <span class="keyword">if</span> str ~=<span class="string">'CChannelFilter'</span> error(<span class="string">'invalid file at CChannelFilter'</span>), <span class="keyword">end</span>;
+0061 
+0062 <span class="comment">%----- read in mapping from selected to original channel numbers --------------------</span>
+0063 
+0064     d.NChannels  = fread(d.fid,1,<span class="string">'ushort'</span>);        <span class="comment">% no. of channels selected</span>
+0065    d.ChannelID = zeros(1,d.NChannels);
+0066     <span class="keyword">for</span> i=1:d.NChannels,                
+0067         d.ChannelID(i)  = 1+fread(d.fid,1,<span class="string">'int32'</span>);    <span class="comment">% original channelpos. in sampling sequence  (!startpos. is 0!)</span>
+0068     <span class="keyword">end</span>;
+0069 
+0070 <span class="comment">%----- read in chosen names for the channels -------------------------</span>
+0071 
+0072     nChannelNames  = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of channels selected</span>
+0073    <span class="keyword">if</span> nChannelNames ~=d.NChannels error(<span class="string">'can t handle #channels~=#channel names'</span>), <span class="keyword">end</span>;
+0074    d.ChannelNames=cell(1,d.NChannels);
+0075     <span class="keyword">for</span> i  =1:d.NChannels,
+0076       namelength = fread(d.fid,1,<span class="string">'int8'</span>);        <span class="comment">% Laenge des Namens</span>
+0077         str   = fread(d.fid,namelength,<span class="string">'char'</span>);<span class="comment">% Name selbst, read in chosen names for the channels</span>
+0078         str   = rot90(setstr(str));                <span class="comment">% channel name</span>
+0079         d.ChannelNames{i} = str;
+0080     <span class="keyword">end</span>;
+0081 <span class="comment">% ----- Anzeige der Kanalzuordnung, nur zur Information -------------------------</span>
+0082 <span class="comment">%    plotmea(d)</span>
+0083 
+0084 <span class="comment">%----- parseDispProperty -------------------------</span>
+0085 
+0086     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0087     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0088     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0089     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0090     str   = rot90(setstr(str));                <span class="comment">%display property class name. &quot;CMMEADispProperty&quot;</span>
+0091     <span class="keyword">if</span> str ~=<span class="string">'CMMEADispProperty'</span> error(<span class="string">'invalid file at CMMEADispProperty'</span>), <span class="keyword">end</span>;
+0092     long  = fread(d.fid,1,<span class="string">'long'</span>);
+0093     long  = fread(d.fid,1,<span class="string">'long'</span>);
+0094     long  = fread(d.fid,1,<span class="string">'long'</span>);
+0095     long  = fread(d.fid,1,<span class="string">'long'</span>);
+0096     long  = fread(d.fid,1,<span class="string">'long'</span>);
+0097 
+0098 <span class="comment">%----- parseUnitProperty -------------------------</span>
+0099     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0100     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0101     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0102     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0103     str   = rot90(setstr(str));                <span class="comment">% unit property class name. &quot;CMMEAUnitProperty&quot;</span>
+0104     <span class="keyword">if</span> str ~=<span class="string">'CMMEAUnitProperty'</span> error(<span class="string">'invalid file at CMMEAUnitProperty'</span>), <span class="keyword">end</span>;
+0105 
+0106     d.MicrovoltsPerAD = fread(d.fid,1,<span class="string">'double'</span>);        <span class="comment">% Microvolts per AD</span>
+0107     d.MicrosecondsPerTick = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% Microseconds per Tick</span>
+0108     d.ZeroADValue = fread(d.fid,1,<span class="string">'ushort'</span>);        <span class="comment">% AD value for zero Microvolts</span>
+0109 
+0110 <span class="comment">%------------------------- -------------------------</span>
+0111 
+0112     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0113     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0114     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0115     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0116     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0117     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0118 
+0119 <span class="comment">%----- parseViewProperty -------------------------</span>
+0120 
+0121     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0122     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0123     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0124     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0125     str   = rot90(setstr(str));                <span class="comment">%view property class name. &quot;CViewProperty&quot;</span>
+0126     <span class="keyword">if</span> str ~=<span class="string">'CViewProperty'</span> error(<span class="string">'invalid file at CViewProperty'</span>), <span class="keyword">end</span>;
+0127 
+0128     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0129     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0130     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0131     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0132 
+0133     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0134     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0135     dword = fread(d.fid,1,<span class="string">'ulong'</span>);
+0136 
+0137 <span class="comment">%----- parseMEALayout -------------------------</span>
+0138 
+0139     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0140     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0141     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0142     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0143     str   = rot90(setstr(str));                <span class="comment">% unit property class name. &quot;CMCLayout&quot;</span>
+0144     <span class="keyword">if</span> str ~=<span class="string">'CMCLayout'</span> error(<span class="string">'invalid file at CMCLayout'</span>), <span class="keyword">end</span>;
+0145 
+0146 <span class="comment">%----- read in positions of electrodes -------------------------</span>
+0147 
+0148     word  = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% electrode count. 64</span>
+0149 
+0150     <span class="keyword">for</span> i = 1:word,
+0151 
+0152         int  = fread(d.fid,1,<span class="string">'int'</span>);            <span class="comment">% x coordinate of electrode point</span>
+0153         int  = fread(d.fid,1,<span class="string">'int'</span>);            <span class="comment">% y coordinate of electrode point</span>
+0154 
+0155     <span class="keyword">end</span>;
+0156 
+0157 <span class="comment">%----- read in names for the electrodes -------------------------</span>
+0158 
+0159     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0160     ChannelNames_original = <span class="string">''</span>;
+0161     <span class="keyword">for</span> i = 1:word,
+0162 
+0163         byte  = fread(d.fid,1,<span class="string">'int8'</span>);            <span class="comment">% Laenge des Namens</span>
+0164         str   = fread(d.fid,byte,<span class="string">'char'</span>);
+0165         str   = rot90(setstr(str));            <span class="comment">% electrode name (original wie im MEA Layout)</span>
+0166         ChannelNames_original = str2mat(ChannelNames_original, str);
+0167 
+0168     <span class="keyword">end</span>;
+0169 
+0170 <span class="comment">%----- read in bounding rect of electrode layout -------------------------</span>
+0171 
+0172     int  = fread(d.fid,1,<span class="string">'int'</span>);
+0173     int  = fread(d.fid,1,<span class="string">'int'</span>);
+0174     int  = fread(d.fid,1,<span class="string">'int'</span>);
+0175     int  = fread(d.fid,1,<span class="string">'int'</span>);
+0176 
+0177 <span class="comment">%----- parseTriggerProperty -------------------------</span>
+0178 
+0179     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0180     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0181     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0182     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0183     str   = rot90(setstr(str));                <span class="comment">% unit property class name. &quot;CMMEATriggerProperty&quot;</span>
+0184     <span class="keyword">if</span> str ~=<span class="string">'CMMEATriggerProperty'</span> error(<span class="string">'invalid file at CMMEATriggerProperty'</span>), <span class="keyword">end</span>;
+0185     int  = fread(d.fid,1,<span class="string">'int'</span>);                <span class="comment">% Trigger? 1=Trig,0=</span>
+0186 
+0187     <span class="keyword">if</span> int==1
+0188         d.DataType = [d.DataType,<span class="string">' triggered'</span>];
+0189     <span class="keyword">elseif</span> int == 0
+0190         d.DataType = [d.DataType,<span class="string">' continous'</span>];
+0191     <span class="keyword">else</span> error(<span class="string">'invalid file at triggered/continous switch'</span>)
+0192     <span class="keyword">end</span>;
+0193 
+0194     int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% pre trigger extent in ticks, wrong its in ms</span>
+0195     pretriggerticks = int;
+0196     d.ticks_pre_event = pretriggerticks;
+0197    disp([<span class="string">'pretriggerticks = '</span> num2str(pretriggerticks)]);    
+0198     d.windowTicksPos = ftell(d.fid);
+0199     int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% total window extent in ticks, wrong its in ms</span>
+0200     <span class="keyword">if</span>(strcmp(d.DataType,<span class="string">'raw continous'</span>))
+0201         d.total_window_ticks=1536*25;
+0202     <span class="keyword">else</span>
+0203        disp([<span class="string">'total_window_ms = '</span> num2str(int)]);
+0204        d.total_window_ticks = int/(d.MicrosecondsPerTick/1000);
+0205     <span class="keyword">end</span>;
+0206    
+0207    int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">%trigger level chosen in uV</span>
+0208     triggerleveluV = int;
+0209 
+0210     int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% trigger level suggested in uV</span>
+0211     int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% slope? 0=positive 1=negative</span>
+0212     d.triggerChannel = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% hardware trigger channel</span>
+0213     int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% level display: 0=Don't display, 1=Triangle only, 2=Triangle and line</span>
+0214     int  = fread(d.fid,1,<span class="string">'int'</span>);        <span class="comment">% trigger time display: 0=Don't display, 1=Triangle only, 2=Triangle and line</span>
+0215     
+0216     dword = fread(d.fid,1,<span class="string">'ulong'</span>);    <span class="comment">% color level display</span>
+0217     dword = fread(d.fid,1,<span class="string">'ulong'</span>);    <span class="comment">% color trigger time display</span>
+0218 <span class="comment">%    dword = fread(d.fid,1,'ulong');    % sweep time</span>
+0219 
+0220 <span class="comment">%----- parseFilter -------------------------</span>
+0221 
+0222     dword = fread(d.fid,1,<span class="string">'ulong'</span>);        <span class="comment">% ?????</span>
+0223 
+0224     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0225     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0226     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0227 
+0228     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0229 
+0230     str   = rot90(setstr(str));            <span class="comment">%unit property class name. &quot;CMFilter&quot;</span>
+0231     <span class="keyword">if</span> str ~=<span class="string">'CMFilter'</span> error(<span class="string">'invalid file at CMFilter'</span>), <span class="keyword">end</span>;
+0232 
+0233     word  = fread(d.fid,1,<span class="string">'ushort'</span>);        <span class="comment">% window size (in ticks) = 2^word (Filterbreite in Tickmarks)</span>
+0234     filter_width_us = d.MicrosecondsPerTick * word;    <span class="comment">% window width in us</span>
+0235 <span class="comment">%    disp(['filter window width = ' num2str(filter_width_us) ' us'])</span>
+0236 
+0237     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0238     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0239 
+0240 
+0241 <span class="comment">% -------- read rest of file header specific for analog data files ------------------------------</span>
+0242 
+0243     word  = fread(d.fid,1,<span class="string">'ushort'</span>);
+0244     word  = fread(d.fid,1,<span class="string">'ushort'</span>);        <span class="comment">% evtl. fuer aeltere Daten auskommentieren ue 17.7.97</span>
+0245 
+0246     str   = fread(d.fid,word,<span class="string">'char'</span>);
+0247 
+0248     str   = rot90(setstr(str));            <span class="comment">%unit property class name. &quot;CMRawDataStreamPointer&quot;</span>
+0249 
+0250     <span class="keyword">if</span> (d.DataType(1:3) == <span class="string">'raw'</span>)
+0251         <span class="keyword">if</span> str ~=<span class="string">'CMRawDataStreamPointer'</span> error(<span class="string">'invalid file at CMRawDataStreamPointer'</span>), <span class="keyword">end</span>;
+0252     <span class="keyword">else</span>
+0253         <span class="keyword">if</span> str ~=<span class="string">'CMSpikeStreamPointer'</span> error(<span class="string">'invalid file at CMSpikeStreamPointer'</span>), <span class="keyword">end</span>;
+0254     <span class="keyword">end</span>;
+0255    
+0256       <span class="keyword">if</span> d.offset_to_data~=ftell(d.fid) error(<span class="string">'invalid file: offset_to_data not correct'</span>), <span class="keyword">end</span>;
+0257 
+0258     disp([<span class="string">'this file contains '</span> d.DataType])
+0259 
+0260    a=d;
+0261     drawnow;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

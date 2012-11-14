@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of errorfill</title>
+  <meta name="keywords" content="errorfill">
+  <meta name="description" content="Usage: figurehandle= errorfill(x, y, E1, E2, ..., LineSpec)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html errorfill -->
+<h1>errorfill
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Usage: figurehandle= errorfill(x, y, E1, E2, ..., LineSpec)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function figurehandle= errorfill(x, y, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Usage: figurehandle= errorfill(x, y, E1, E2, ..., LineSpec)
+ 
+ Use this function to draw a curve and its areas of confidence.
+ Draws the line y(x), then draws the areas E1(x), E2(x), ...
+ (Well actually it's done in the opposite order, to minimize overlap.)
+ 
+ x:        The x values for y, E1, E2, ... 
+           If x is a scalar, then (x, x+1, x+2, ...) is used.
+           If x is empty, then (1, 2, ...) is used.
+           Values must be finite and not NaN.
+ 
+ y:        Defines the curve, y(x).
+           Values must be finite and not NaN.
+ 
+ E:        The 'error' of y. Defines the area.
+           If E is a scalar, the shade will be between y(n)*(1+E) and y(n)*(1-E).
+           If E is of size (1,2) or (2,1), it will be between y(n)*(1+E(1)) and y(n)*(1-E(2)).
+           If E is a vector, the shade will be between y(n)+E(n) and y(n)-E(n).
+           If E is a double vector, the shade will be between y(n)+E(1,n) and y(n)-E(2,n).
+           Inf is marked by a jump up to a '^' symbol.
+           -Inf is marked by a jump down to a 'v' symbol.
+           NaN is marked by a jump up or down to a '*' symbol.
+ 
+ LineSpec: (Default: 'k') Line specification for y(x), e.g. 'b+'.
+ 
+ NOTE:     The E:s must be given in increasing size, or an area will be covered by a 
+           previous and larger area.
+ 
+ COMPATIBILITY:
+           errorbar(x, y, E, LineSpec)    corresponds to errorfill(x, y, E, LineSpec).
+           errorbar(x, y, L, U, LineSpec) corresponds to errorfill(x, y, [U; L], LineSpec).
+ 
+ EXAMPLE:  x= (1:0.25:10);    y= x.^2;
+           E3= [ones(1, length(x))*30; 0.7*y];  % 30 above and 0.3*y below
+           E3(1,7)= Inf;      E3(2,10)= Inf;       E3(2,25)= NaN;
+           errorfill(x, y, [0.1 0.02], 0.3, E3, 'b-+');
+           legend('E3', 'E2', 'E1', 'x^2','Inf','-Inf','NaN');
+ 
+ INSPIRATION: jackknife and confplot:
+           http://www.mathworks.com/matlabcentral/fileexchange/loadFile.do?objectId=10740
+           http://www.mathworks.com/matlabcentral/fileexchange/loadFile.do?objectId=2683
+ 
+ KEYWORDS: plot, errorplot, confidence interval, errors, patch, shaded plot, shading
+ 
+ TO DO:    Make it work for y-values of Inf, -Inf, and NaN.
+ 
+ Copyright (C) Peder Axensten (peder at axensten dot se), 2006.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function figurehandle= errorfill(x, y, varargin)</a>
+0002 
+0003 <span class="comment">% Usage: figurehandle= errorfill(x, y, E1, E2, ..., LineSpec)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Use this function to draw a curve and its areas of confidence.</span>
+0006 <span class="comment">% Draws the line y(x), then draws the areas E1(x), E2(x), ...</span>
+0007 <span class="comment">% (Well actually it's done in the opposite order, to minimize overlap.)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% x:        The x values for y, E1, E2, ...</span>
+0010 <span class="comment">%           If x is a scalar, then (x, x+1, x+2, ...) is used.</span>
+0011 <span class="comment">%           If x is empty, then (1, 2, ...) is used.</span>
+0012 <span class="comment">%           Values must be finite and not NaN.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% y:        Defines the curve, y(x).</span>
+0015 <span class="comment">%           Values must be finite and not NaN.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% E:        The 'error' of y. Defines the area.</span>
+0018 <span class="comment">%           If E is a scalar, the shade will be between y(n)*(1+E) and y(n)*(1-E).</span>
+0019 <span class="comment">%           If E is of size (1,2) or (2,1), it will be between y(n)*(1+E(1)) and y(n)*(1-E(2)).</span>
+0020 <span class="comment">%           If E is a vector, the shade will be between y(n)+E(n) and y(n)-E(n).</span>
+0021 <span class="comment">%           If E is a double vector, the shade will be between y(n)+E(1,n) and y(n)-E(2,n).</span>
+0022 <span class="comment">%           Inf is marked by a jump up to a '^' symbol.</span>
+0023 <span class="comment">%           -Inf is marked by a jump down to a 'v' symbol.</span>
+0024 <span class="comment">%           NaN is marked by a jump up or down to a '*' symbol.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% LineSpec: (Default: 'k') Line specification for y(x), e.g. 'b+'.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% NOTE:     The E:s must be given in increasing size, or an area will be covered by a</span>
+0029 <span class="comment">%           previous and larger area.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% COMPATIBILITY:</span>
+0032 <span class="comment">%           errorbar(x, y, E, LineSpec)    corresponds to errorfill(x, y, E, LineSpec).</span>
+0033 <span class="comment">%           errorbar(x, y, L, U, LineSpec) corresponds to errorfill(x, y, [U; L], LineSpec).</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% EXAMPLE:  x= (1:0.25:10);    y= x.^2;</span>
+0036 <span class="comment">%           E3= [ones(1, length(x))*30; 0.7*y];  % 30 above and 0.3*y below</span>
+0037 <span class="comment">%           E3(1,7)= Inf;      E3(2,10)= Inf;       E3(2,25)= NaN;</span>
+0038 <span class="comment">%           errorfill(x, y, [0.1 0.02], 0.3, E3, 'b-+');</span>
+0039 <span class="comment">%           legend('E3', 'E2', 'E1', 'x^2','Inf','-Inf','NaN');</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% INSPIRATION: jackknife and confplot:</span>
+0042 <span class="comment">%           http://www.mathworks.com/matlabcentral/fileexchange/loadFile.do?objectId=10740</span>
+0043 <span class="comment">%           http://www.mathworks.com/matlabcentral/fileexchange/loadFile.do?objectId=2683</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% KEYWORDS: plot, errorplot, confidence interval, errors, patch, shaded plot, shading</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% TO DO:    Make it work for y-values of Inf, -Inf, and NaN.</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% Copyright (C) Peder Axensten (peder at axensten dot se), 2006.</span>
+0050 
+0051 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0052 
+0053 <span class="comment">% Version 1.0, submitted to Matlab Central File Exchange 2006-04-23:</span>
+0054 <span class="comment">% - First version in a presentable form.</span>
+0055 
+0056 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0057     
+0058     lSpec=        <span class="string">'k'</span>;                                                <span class="comment">% Default values.</span>
+0059     N=            length(varargin);
+0060     
+0061     <span class="comment">% Check arguments.</span>
+0062     <span class="keyword">if</span>(ischar(varargin{end}))                                        <span class="comment">% Get LineSpec.</span>
+0063         lSpec=        [lSpec varargin{end}];
+0064         N=            N-1;
+0065     <span class="keyword">end</span>
+0066     
+0067     <span class="keyword">if</span>(N &lt; 1), error(<span class="string">'Need more arguments!'</span>); <span class="keyword">end</span>                    <span class="comment">% Arguments?</span>
+0068     len=        length(y);                                            <span class="comment">% Vector length.</span>
+0069     
+0070     <span class="keyword">if</span>(~isnumeric(y) || (len &lt; 2) || (len ~= numel(y)))                <span class="comment">% Check y.</span>
+0071         error(<span class="string">'Argument 2 (y) must be a numeric vector.'</span>);
+0072     <span class="keyword">end</span>
+0073     
+0074     <span class="keyword">if</span>(isempty(x))                                                    <span class="comment">% Check x.</span>
+0075         x=            1;
+0076     <span class="keyword">elseif</span>(~isnumeric(x))
+0077         error(<span class="string">'Argument 1 (x) must be numeric (scalar or vectror).'</span>);
+0078     <span class="keyword">end</span>
+0079     
+0080     <span class="keyword">if</span>(length(x) ~= length(y))                                        <span class="comment">% Check x &amp; y.</span>
+0081         <span class="keyword">if</span>(length(x) &gt; 1)
+0082             error(<span class="string">'Argument 1 (x) and 2 (y) must have same size (or 1 must be a scalar).'</span>);
+0083         <span class="keyword">else</span>
+0084             x=            (x:x+len-1);                                <span class="comment">% Make vector of scalar.</span>
+0085         <span class="keyword">end</span>
+0086     <span class="keyword">end</span>
+0087     
+0088     <span class="comment">% Get colors.</span>
+0089     c=            regexprep(lSpec, <span class="string">'([^rgbcmykw])'</span>, <span class="string">''</span>);                <span class="comment">% Calculate color.</span>
+0090     lSpec=        regexprep(lSpec, <span class="string">'([rgbcmykw])'</span>, <span class="string">''</span>);                <span class="comment">% (Remove [double] color.)</span>
+0091     cTable=        [1 0 0; 0 1 0; 0 0 1; 0 1 1; 1 0 1; 1 1 0; 0 0 0; 1 1 1];
+0092     color=        cTable(<span class="string">'rgbcmykw'</span> == c(end),:);                <span class="comment">% Line color.</span>
+0093     colorshade=    reshape(1 + (1:N)'*(color-1)/N/2, 1,N,3);            <span class="comment">% Calculate the shades.</span>
+0094     
+0095     
+0096     x=            transpose(repmat([x x(end:-1:1)], N, 1));            <span class="comment">% x &quot;there and back&quot;.</span>
+0097     hold on;                                                        <span class="comment">% Start the patches.</span>
+0098     
+0099     <span class="comment">% Get error values.</span>
+0100     <span class="keyword">for</span> n= 1:N                                                        <span class="comment">% Check E.</span>
+0101         temp=    varargin{N-n+1};
+0102         <span class="keyword">if</span>(~isnumeric(temp) )
+0103             error(<span class="string">'Argument %d must be a non-empty numeric.'</span>, n+2);
+0104         <span class="keyword">elseif</span>(length(temp) == 1)                                    <span class="comment">% A scalar.</span>
+0105             E(:,n)=        [y.*(1+temp)     y(end:-1:1).*(1-temp)];
+0106         <span class="keyword">elseif</span>(length(temp) == 2)                                    <span class="comment">% A double scalar.</span>
+0107             E(:,n)=        [y*(1+temp(1))   y(end:-1:1)*(1-temp(2))];
+0108         <span class="keyword">elseif</span>(numel(temp) == len)                                    <span class="comment">% A vector.</span>
+0109             E(:,n)=        [y+temp          y(end:-1:1)-temp(end:-1:1)];
+0110         <span class="keyword">elseif</span>(numel(temp) == 2*len)                                <span class="comment">% Double vector.</span>
+0111             E(:,n)=        [y+temp(1,:)     y(end:-1:1)-temp(2,end:-1:1)];
+0112         <span class="keyword">else</span>                                                        <span class="comment">% Something else...</span>
+0113             error(<span class="string">'Strange size of argument %d.'</span>, n+2);
+0114         <span class="keyword">end</span>
+0115     <span class="keyword">end</span>
+0116     
+0117     <span class="comment">% Handle NaN, Inf and -Inf.</span>
+0118     xInf=            x(E == Inf);                                    <span class="comment">% Infinity markers.</span>
+0119     xnInf=            x(E == -Inf);                                    <span class="comment">% -Infinity markers.</span>
+0120     xNaN=            x(isnan(E(1:len,:)));                            <span class="comment">% NaN markers.</span>
+0121     xnNaN=            x(isnan(E));                                    <span class="comment">% NaN markers.</span>
+0122     finiteE=        E(isfinite(E));                                    <span class="comment">% Find (ir)regularities.</span>
+0123     addition=        abs(max([finiteE(:)' y]))/10;                    <span class="comment">% Above/below max/min.</span>
+0124     maxval=            max([finiteE(:)' y])+addition;                    <span class="comment">% Represents Inf.</span>
+0125     minval=            min([finiteE(:)' y])-addition;                    <span class="comment">% Represents -Inf.</span>
+0126     E((E == Inf))=    maxval;
+0127     E(E == -Inf)=    minval;
+0128     E(isnan(E(1:len,:)))=    maxval;
+0129     E(isnan(E))=    minval;
+0130     
+0131     <span class="comment">% Draw.</span>
+0132     <span class="comment">% Tried, but created bad eps (loop instead): patch(x, E, colorshade, 'LineStyle', 'none');</span>
+0133     <span class="keyword">for</span> n= 1:N
+0134         patch(x(1:2*len), E(:,n), colorshade(1,n,:), <span class="string">'LineStyle'</span>, <span class="string">'none'</span>);    <span class="comment">% Draw error fill.</span>
+0135     <span class="keyword">end</span>
+0136     plot(x(1:len), y, lSpec, <span class="string">'Color'</span>, color, <span class="string">'linewidth'</span>, 2);        <span class="comment">% Draw y(x).</span>
+0137     <span class="keyword">if</span>(~isempty(xInf)),  plot(xInf,  maxval, <span class="string">'^k'</span>); <span class="keyword">end</span>                <span class="comment">% Draw Inf points.</span>
+0138     <span class="keyword">if</span>(~isempty(xnInf)), plot(xnInf, minval, <span class="string">'vk'</span>); <span class="keyword">end</span>                <span class="comment">% Draw -Inf points.</span>
+0139     <span class="keyword">if</span>(~isempty(xNaN)),  plot(xNaN,  maxval, <span class="string">'*k'</span>); <span class="keyword">end</span>                <span class="comment">% Draw high NaN points.</span>
+0140     <span class="keyword">if</span>(~isempty(xnNaN)), plot(xnNaN, minval, <span class="string">'*k'</span>); <span class="keyword">end</span>                <span class="comment">% Draw low NaN points.</span>
+0141     figurehandle=    <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'CurrentFigure'</span>);                        <span class="comment">% Return figure handle.</span>
+0142     hold off;                                                        <span class="comment">% We are done.</span>
+0143     
+0144     <span class="comment">% Notify.</span>
+0145     <span class="keyword">if</span>(numel(xInf)+numel(xnInf)+numel(xNaN)+numel(xnNaN) &gt; 0)        <span class="comment">% Irregular values?</span>
+0146         warning(<span class="string">'At least some arguments contain irregular values (see ''help errorfill'').'</span>);
+0147     <span class="keyword">end</span>
+0148 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

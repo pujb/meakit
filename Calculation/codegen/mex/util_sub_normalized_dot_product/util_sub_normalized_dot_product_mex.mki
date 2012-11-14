@@ -1,0 +1,15 @@
+# Make settings for util_sub_normalized_dot_product 
+COMPILER=lcc
+COMPFLAGS=-c -I"E:\PROGRA~1\MATLAB\R2012a\sys\lcc\include" -DMATLAB_MEX_FILE -noregistrylookup
+OPTIMFLAGS=-DNDEBUG
+DEBUGFLAGS=-g4
+LINKER=lcclnk
+LINKFLAGS= -tmpdir ".\." -dll "E:\PROGRA~1\MATLAB\R2012a\extern\lib\win32\lcc\mexFunction.def" -L"E:\PROGRA~1\MATLAB\R2012a\sys\lcc\lib" -libpath "E:\PROGRA~1\MATLAB\R2012a\extern\lib\win32\lcc" "util_sub_normalized_dot_product_mex2.obj"
+LINKOPTIMFLAGS=-s
+LINKDEBUGFLAGS=
+MATLAB_ARCH=win32
+BORLAND=
+OMPFLAGS= 
+OMPLINKFLAGS= 
+EMC_COMPILER=lcc
+EMC_CONFIG=optim

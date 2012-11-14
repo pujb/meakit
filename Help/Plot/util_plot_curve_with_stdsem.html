@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_curve_with_stdsem</title>
+  <meta name="keywords" content="util_plot_curve_with_stdsem">
+  <meta name="description" content="UTIL_PLOT_CURVE_WITH_STDSEM Plot a mean curve with std/sem error bars">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_curve_with_stdsem
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_CURVE_WITH_STDSEM Plot a mean curve with std/sem error bars</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [avg sem stdev total] = util_plot_curve_with_stdsem(datapoints, avgpoints) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_CURVE_WITH_STDSEM Plot a mean curve with std/sem error bars</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function pos = util_find_first_unstable_point(datapoints, range, threshold)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [avg sem stdev total] = util_plot_curve_with_stdsem(datapoints, avgpoints)</a>
+0002 <span class="comment">%UTIL_PLOT_CURVE_WITH_STDSEM Plot a mean curve with std/sem error bars</span>
+0003 
+0004 <span class="comment">% FOR GAP JUNCTION PAPER 2008</span>
+0005 <span class="comment">% Calculating the averaged and std/sem of a curve</span>
+0006 
+0007 <span class="comment">% avg : the averaged curve (of avg_points)</span>
+0008 <span class="comment">% sem : the sem of the avg_points of the dataset</span>
+0009 <span class="comment">% std : the std of ...</span>
+0010 <span class="comment">% total : total points of the dataset</span>
+0011 
+0012 total = length(datapoints);
+0013 counts = 1;
+0014 i = 1;
+0015 
+0016 <span class="keyword">while</span> i &lt;= total
+0017     <span class="keyword">if</span> (i+avgpoints-1) &lt;= total
+0018         segments = datapoints(i:(i + avgpoints - 1));
+0019         <span class="comment">% fix the std (too big, while changing stages)</span>
+0020         unstable_point_pos = <a href="#_sub1" class="code" title="subfunction pos = util_find_first_unstable_point(datapoints, range, threshold)">util_find_first_unstable_point</a>(segments,avgpoints,0.4);
+0021         <span class="keyword">if</span>  unstable_point_pos == 0
+0022             segments = datapoints(i:(i + avgpoints - 1));
+0023             avgp = avgpoints;
+0024         <span class="keyword">elseif</span> unstable_point_pos == 2
+0025             segments = datapoints(i:(i + unstable_point_pos - 1));
+0026             avgp = unstable_point_pos;
+0027         <span class="keyword">elseif</span> unstable_point_pos &gt; 2
+0028             segments = datapoints(i:(i + unstable_point_pos - 2));
+0029             avgp = unstable_point_pos - 1;
+0030         <span class="keyword">end</span>
+0031         
+0032         avg(counts) = mean(segments);
+0033         stdev(counts) = std(segments);
+0034         sem(counts) = stdev(counts) / sqrt(avgp);
+0035         
+0036         counts = counts + 1;
+0037         i = i + avgp;
+0038     <span class="keyword">else</span>
+0039         segments = datapoints(i:total);
+0040         
+0041         avg(counts) = mean(segments);
+0042         stdev(counts) = std(segments);
+0043         sem(counts) = stdev(counts) / sqrt(total - i + 1);
+0044         
+0045         counts = counts + 1;
+0046         i = i + avgpoints;
+0047     <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 
+0050 errorbar(avg, sem, <span class="string">'k'</span>);
+0051 <span class="keyword">end</span>
+0052 
+0053 <a name="_sub1" href="#_subfunctions" class="code">function pos = util_find_first_unstable_point(datapoints, range, threshold)</a>
+0054 <span class="comment">%UTIL_FIND_FIRST_UNSTABLE_POINT Return the first point which</span>
+0055 prev = datapoints(1);
+0056 <span class="keyword">for</span> i = 2:range
+0057     <span class="keyword">if</span> abs(datapoints(i) - prev) &gt; threshold
+0058         pos = i;
+0059         <span class="keyword">return</span>;
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 pos = 0;
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

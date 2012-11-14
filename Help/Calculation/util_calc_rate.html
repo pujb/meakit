@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_rate</title>
+  <meta name="keywords" content="util_calc_rate">
+  <meta name="description" content="UTIL_CALC_RATE Get firing rate from spif">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_rate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_RATE Get firing rate from spif</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_RATE Get firing rate from spif
+   Input:
+           spif:   Spike information structure.
+           bin:    Bin width, default = 1000 ms.
+           gnd:    Grounding electrode. default = [].
+                   If you provide [15], it will automatically add four
+                   corner electrodes.
+           threshold: 
+                   if spike per bin of any channel &lt; threshold, the
+                   channel will be removed (not an active channel).
+                   THIS WILL NOT AFFECT THE OUTPUT OF per electrode***
+                   results.
+           mode:
+                   'array' [default] / 'electrode'
+
+   Output:
+           array_spike_count_per_bin:
+                   The total number of spikes per bin of the whole array vs Time.
+           array_mean_spike_count_per_bin:
+                   The mean number of spikes per bin of the whole array vs Time.
+           array_mean_spike_count_per_bin_std/sem.
+                   ...
+           elec_spike_counts_per_bin:
+                   The number of spikes per bin of each electrode vs Time.
+           elec_spike_counts_per_bin_mean:
+                   The mean number of spikes per bin of each electrode
+                   during the whole period.
+           elec_spike_counts_per_bin_mean_std/sem:
+                   STD/SEM of the mean number of spikes per bin of each
+                   electrode during the whole period.
+                
+
+   Created on Jun/17/2009 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2009-07-13  Adding the ability to process four-well MEAs
+       PJB#2010-05-07  FIX: Crashes when the file length &lt; bin width.
+       PJB#2010-08-28  FIX: Crashes when network fires no spikes in one
+                       bin.
+                       CHG: Change name from UTIL_CALC_SPB_AVG to
+                       UTIL_CALC_RATE
+       PJB#2011-05-13  FIX: GND now can be a [].
+                       REMOVE: Fourwell
+                       FIX: Assuming 64 channel, now we can accept any
+                       number of channels.
+                       REWRITE &amp; INTEGRATE: UTIL_CALC_SPB_AVG_ELEC.
+                       FIX: Histc EDGE problem.
+      PJB#2012-06-08   CHG: Renamed internal variable names.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../Common/util_remove_colrow_based_on_mean.html" class="code" title="function [result] = util_remove_colrow_based_on_mean(matrix, threshold, varargin)">util_remove_colrow_based_on_mean</a>	UTIL_REMOVE_COLROW_BASED_ON_MEAN Remove the column / row of the matrix by</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li><li><a href="util_calc_network_vector.html" class="code" title="function [ network_vectors seq ] = util_calc_network_vector( spif, excluded_ch, varargin )">util_calc_network_vector</a>	UTIL_CALC_NETWORK_VECTOR Get the network activity vectors</li><li><a href="util_calc_pcc_from_rate.html" class="code" title="function [ pcc ] = util_calc_pcc_from_rate( spif, varargin )">util_calc_pcc_from_rate</a>	UTIL_CALC_PCC_FROM_RATE Get Pearson Corr. between electrodes v.s. Time</li><li><a href="util_calc_sd_from_rate.html" class="code" title="function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin )">util_calc_sd_from_rate</a>	UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike</li><li><a href="util_get_fractal_DFA.html" class="code" title="function [DFA_mean DFA_std DFA_sem DFA_list] = util_get_fractal_DFA( spif, gnds, varargin )">util_get_fractal_DFA</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li><li><a href="util_get_fractal_dim.html" class="code" title="function [DF_mean DF_std DF_sem DF_list] = util_get_fractal_dim( spif, gnds, varargin )">util_get_fractal_dim</a>	UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.</li><li><a href="util_get_fractal_hurst.html" class="code" title="function [H_mean H_std H_sem H_list] = util_get_fractal_hurst( spif, gnds, varargin )">util_get_fractal_hurst</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li><li><a href="../Plot/util_plot_raster_image.html" class="code" title="function [] = util_plot_raster_image( spif, gnd, bin, def_colormap)">util_plot_raster_image</a>	UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method</li><li><a href="../Plot/util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>	UTIL_PLOT_SPSA Generate the SPSA (Rate) graph</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter.html" class="code" title="function [ sizes alpha bp bp_1 mean_isi mean_rate ] = util_loop_calc_avalanche_parameter( filename, gnd, result_dir )">util_loop_calc_avalanche_parameter</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETER Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li><li><a href="../Scripts/util_loop_get_fractal_parameters.html" class="code" title="function util_loop_get_fractal_parameters( data_filename, result_dirname, gnd )">util_loop_get_fractal_parameters</a>	UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski</li><li><a href="../Scripts/util_script_print_channel_firing_rate_sd.html" class="code" title="function [] = util_script_print_channel_firing_rate_sd( spif, output_folder )">util_script_print_channel_firing_rate_sd</a>	UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ array_spike_count_per_bin </a><span class="keyword">...</span>
+0002            array_mean_spike_count_per_bin <span class="keyword">...</span>
+0003            array_mean_spike_count_per_bin_std <span class="keyword">...</span>
+0004            array_mean_spike_count_per_bin_sem <span class="keyword">...</span>
+0005            elec_spike_counts_per_bin <span class="keyword">...</span>
+0006            elec_spike_counts_per_bin_mean <span class="keyword">...</span>
+0007            elec_spike_counts_per_bin_mean_std <span class="keyword">...</span>
+0008            elec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )
+0009 <span class="comment">%UTIL_CALC_RATE Get firing rate from spif</span>
+0010 <span class="comment">%   Input:</span>
+0011 <span class="comment">%           spif:   Spike information structure.</span>
+0012 <span class="comment">%           bin:    Bin width, default = 1000 ms.</span>
+0013 <span class="comment">%           gnd:    Grounding electrode. default = [].</span>
+0014 <span class="comment">%                   If you provide [15], it will automatically add four</span>
+0015 <span class="comment">%                   corner electrodes.</span>
+0016 <span class="comment">%           threshold:</span>
+0017 <span class="comment">%                   if spike per bin of any channel &lt; threshold, the</span>
+0018 <span class="comment">%                   channel will be removed (not an active channel).</span>
+0019 <span class="comment">%                   THIS WILL NOT AFFECT THE OUTPUT OF per electrode***</span>
+0020 <span class="comment">%                   results.</span>
+0021 <span class="comment">%           mode:</span>
+0022 <span class="comment">%                   'array' [default] / 'electrode'</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   Output:</span>
+0025 <span class="comment">%           array_spike_count_per_bin:</span>
+0026 <span class="comment">%                   The total number of spikes per bin of the whole array vs Time.</span>
+0027 <span class="comment">%           array_mean_spike_count_per_bin:</span>
+0028 <span class="comment">%                   The mean number of spikes per bin of the whole array vs Time.</span>
+0029 <span class="comment">%           array_mean_spike_count_per_bin_std/sem.</span>
+0030 <span class="comment">%                   ...</span>
+0031 <span class="comment">%           elec_spike_counts_per_bin:</span>
+0032 <span class="comment">%                   The number of spikes per bin of each electrode vs Time.</span>
+0033 <span class="comment">%           elec_spike_counts_per_bin_mean:</span>
+0034 <span class="comment">%                   The mean number of spikes per bin of each electrode</span>
+0035 <span class="comment">%                   during the whole period.</span>
+0036 <span class="comment">%           elec_spike_counts_per_bin_mean_std/sem:</span>
+0037 <span class="comment">%                   STD/SEM of the mean number of spikes per bin of each</span>
+0038 <span class="comment">%                   electrode during the whole period.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%   Created on Jun/17/2009 By Pu Jiangbo</span>
+0042 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">%   $Revision:</span>
+0045 <span class="comment">%       PJB#2009-07-13  Adding the ability to process four-well MEAs</span>
+0046 <span class="comment">%       PJB#2010-05-07  FIX: Crashes when the file length &lt; bin width.</span>
+0047 <span class="comment">%       PJB#2010-08-28  FIX: Crashes when network fires no spikes in one</span>
+0048 <span class="comment">%                       bin.</span>
+0049 <span class="comment">%                       CHG: Change name from UTIL_CALC_SPB_AVG to</span>
+0050 <span class="comment">%                       UTIL_CALC_RATE</span>
+0051 <span class="comment">%       PJB#2011-05-13  FIX: GND now can be a [].</span>
+0052 <span class="comment">%                       REMOVE: Fourwell</span>
+0053 <span class="comment">%                       FIX: Assuming 64 channel, now we can accept any</span>
+0054 <span class="comment">%                       number of channels.</span>
+0055 <span class="comment">%                       REWRITE &amp; INTEGRATE: UTIL_CALC_SPB_AVG_ELEC.</span>
+0056 <span class="comment">%                       FIX: Histc EDGE problem.</span>
+0057 <span class="comment">%      PJB#2012-06-08   CHG: Renamed internal variable names.</span>
+0058 
+0059 
+0060 <span class="comment">% Analyzing parameters</span>
+0061 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0062 
+0063 <span class="keyword">if</span> ~exist(<span class="string">'bin'</span>, <span class="string">'var'</span>)
+0064     bin = 1000;
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="keyword">if</span> ~exist(<span class="string">'mode'</span>, <span class="string">'var'</span>)
+0068     mode = <span class="string">'array'</span>;
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="keyword">if</span> ~exist(<span class="string">'gnd'</span>, <span class="string">'var'</span>)
+0072     gnd = [];
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% Get time range</span>
+0076 stop_time = spif.startend(2);
+0077 bin_number = floor(stop_time/bin);
+0078 <span class="keyword">if</span> (bin_number &lt; 1)
+0079     error(<span class="string">'The bin length is bigger than file length!'</span>);
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="comment">% Convert GND to hwid</span>
+0083 gnd = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(gnd);
+0084 
+0085 <span class="keyword">if</span> ~isempty(gnd)
+0086     <span class="comment">% Adding default grounding electrodes (corner electrodes)</span>
+0087     <span class="comment">% if isempty, then we don't add those electrodes.</span>
+0088     gnd = unique([gnd 1 8 57 64]);
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">% How many units (electrode / neuron)?</span>
+0092 num_units = length(spif.spiketimes);
+0093 spikes_per_bin_in_each_channel = zeros(bin_number, num_units, <span class="string">'double'</span>);
+0094 
+0095 <span class="comment">% Main loop</span>
+0096 hwID = 1;
+0097 <span class="keyword">while</span> hwID &lt;= num_units
+0098     <span class="comment">% Ignore the excluded channels</span>
+0099     <span class="keyword">if</span> <a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>( hwID, gnd );
+0100         hwID = hwID + 1;
+0101         <span class="keyword">continue</span>;
+0102     <span class="keyword">end</span>
+0103 
+0104     <span class="comment">% Count spike number in each bin</span>
+0105     <span class="keyword">if</span> isempty(spif.spiketimes{hwID})
+0106         spikes_per_bin_in_each_channel(:,hwID) = zeros(bin_number, 1);
+0107     <span class="keyword">else</span>
+0108         temp = histc( spif.spiketimes{hwID}/bin, 0:1:bin_number );
+0109         spikes_per_bin_in_each_channel(:,hwID) = temp(1:end-1);
+0110     <span class="keyword">end</span>
+0111     
+0112     hwID = hwID + 1;
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="keyword">if</span> strcmpi(mode, <span class="string">'array'</span>)
+0116     <span class="comment">% Thresholding</span>
+0117     <span class="keyword">if</span> exist(<span class="string">'threshold'</span>, <span class="string">'var'</span>)
+0118         spikes_per_bin_in_each_channel = <a href="../Common/util_remove_colrow_based_on_mean.html" class="code" title="function [result] = util_remove_colrow_based_on_mean(matrix, threshold, varargin)">util_remove_colrow_based_on_mean</a>(spikes_per_bin_in_each_channel, threshold, <span class="string">'method'</span>, <span class="string">'col'</span>);
+0119     <span class="keyword">end</span>
+0120     
+0121     array_spike_count_per_bin =  sum( spikes_per_bin_in_each_channel, 2 );
+0122     array_mean_spike_count_per_bin = mean( spikes_per_bin_in_each_channel, 2 );
+0123     array_mean_spike_count_per_bin_std = std( spikes_per_bin_in_each_channel, 0, 2 );
+0124     array_mean_spike_count_per_bin_sem = array_mean_spike_count_per_bin_std / sqrt( num_units );
+0125     
+0126     elec_spike_counts_per_bin = [];
+0127     elec_spike_counts_per_bin_mean = [];
+0128     elec_spike_counts_per_bin_mean_std = [];
+0129     elec_spike_counts_per_bin_mean_sem = [];
+0130 <span class="keyword">elseif</span> strcmpi(mode, <span class="string">'electrode'</span>)
+0131     elec_spike_counts_per_bin = spikes_per_bin_in_each_channel;
+0132     elec_spike_counts_per_bin_mean = mean( spikes_per_bin_in_each_channel, 1 );
+0133     elec_spike_counts_per_bin_mean_std = std( spikes_per_bin_in_each_channel, 0, 1 );
+0134     elec_spike_counts_per_bin_mean_sem = elec_spike_counts_per_bin_mean_std / sqrt( bin_number );
+0135     
+0136     array_spike_count_per_bin = [];
+0137     array_mean_spike_count_per_bin = [];
+0138     array_mean_spike_count_per_bin_std = [];
+0139     array_mean_spike_count_per_bin_sem = [];
+0140 <span class="keyword">end</span>
+0141 
+0142 <span class="keyword">end</span>
+0143</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

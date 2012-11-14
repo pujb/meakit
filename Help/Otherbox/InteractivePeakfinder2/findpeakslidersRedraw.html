@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of findpeakslidersRedraw</title>
+  <meta name="keywords" content="findpeakslidersRedraw">
+  <meta name="description" content="Redraws graph for FindPeakSliders when slider are moved.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>findpeakslidersRedraw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Redraws graph for FindPeakSliders when slider are moved.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function P=findpeakslidersRedraw(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Redraws graph for FindPeakSliders when slider are moved.
+ Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>	function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="AmpTSlider.html" class="code" title="function AmpTSlider(n,h)">AmpTSlider</a>	Changes AmpThreshold when the AmpThreshold slider is moved.</li><li><a href="BGSlider.html" class="code" title="function BGSlider(n,h)">BGSlider</a>	Called when the BG slider is clicked.</li><li><a href="FitSlider.html" class="code" title="function FitSlider(n,h)">FitSlider</a>	Changes FitWidth when the FitWidth slider is moved.</li><li><a href="PeakSlider.html" class="code" title="function PeakSlider(n,h)">PeakSlider</a>	Changes PeakNumber when the Peak slider is moved.</li><li><a href="SlopeTSlider.html" class="code" title="function SlopeTSlider(n,h)">SlopeTSlider</a>	Changes SlopeThreshold when the SlopeThreshold slider is moved.</li><li><a href="SmoothSlider.html" class="code" title="function SmoothSlider(n,h)">SmoothSlider</a>	Changes SmoothWidth when the SmoothWidth slider is moved.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function P=findpeakslidersRedraw(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth)</a>
+0002 <span class="comment">% Redraws graph for FindPeakSliders when slider are moved.</span>
+0003 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</span>
+0004 
+0005 hold off
+0006 plot(x,y,<span class="string">'m'</span>)  <span class="comment">% Graph the signal in red</span>
+0007 P=<a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth);
+0008 title([num2str(max(P(:,1))) <span class="string">' peaks detected.'</span>])
+0009 xlabel([<span class="string">'SlopeT = '</span> num2str(SlopeThreshold) <span class="string">'    AmpT = '</span> num2str(AmpThreshold) <span class="string">'    SmoothWidth = '</span> num2str(SmoothWidth) <span class="string">'    FitWidth = '</span> num2str(FitWidth) ])
+0010 text(P(:, 2),P(:, 3),num2str(P(:,1)))  <span class="comment">% Number the peaks found on the graph</span>
+0011 axis([x(1) x(length(x)) min(y) max(y)]); <span class="comment">% Update plot</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

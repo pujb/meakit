@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modvalidity</title>
+  <meta name="keywords" content="modvalidity">
+  <meta name="description" content="modified validation function for clustering, it calculates all the">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html FUZZCLUST --><!-- # Demos --><!-- menu.html comparing -->
+<h1>modvalidity
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>modified validation function for clustering, it calculates all the</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function result = modvalidity(result,data,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">modified validation function for clustering, it calculates all the
+validity measures, so param.val is not needed</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li><li><a href="../../../../Otherbox/FUZZCLUST/Demos/optnumber/optnumber.html" class="code" title="">optnumber</a>	calling function to search the optimal number of clusters</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = modvalidity(result,data,param)</a>
+0002 <span class="comment">%modified validation function for clustering, it calculates all the</span>
+0003 <span class="comment">%validity measures, so param.val is not needed</span>
+0004 
+0005 N = size(result.data.f,1);
+0006 c = size(result.cluster.v,1);
+0007 n = size(result.cluster.v,2);
+0008 v = result.cluster.v;
+0009 
+0010 <span class="keyword">if</span> exist(<span class="string">'param.m'</span>)==1, m = param.m;<span class="keyword">else</span> m = 2;<span class="keyword">end</span>;
+0011 
+0012 <span class="comment">%partition coefficient (PC)</span>
+0013 fm = (result.data.f).^m;
+0014 PC = 1/N*sum(sum(fm));
+0015 
+0016 <span class="comment">%classification entropy (CE)</span>
+0017 fm = (result.data.f).*log(result.data.f);
+0018 CE = -1/N*sum(sum(fm));
+0019      
+0020 <span class="comment">%results</span>
+0021 result.validity.PC = PC;
+0022 result.validity.CE = CE;   
+0023         
+0024         
+0025         
+0026 
+0027 <span class="comment">%partition index(SC)</span>
+0028 ni = sum(result.data.f);                        <span class="comment">%calculate fuzzy cardinality</span>
+0029 si = sum(result.data.d.*result.data.f.^(m/2));  <span class="comment">%calculate fuzzy variation</span>
+0030 pii=si./ni;
+0031 mask = zeros(c,n,c);                            <span class="comment">%calculate separation of clusters</span>
+0032 <span class="keyword">for</span> i = 1:c
+0033     <span class="keyword">for</span> j =1:c
+0034          mask(j,:,i) = v(i,:);
+0035     <span class="keyword">end</span>
+0036     dist(i) = sum(sum((mask(:,:,i) - v).^2));
+0037 <span class="keyword">end</span>
+0038 s = dist;
+0039 SC = sum(pii./s);
+0040 
+0041 <span class="comment">%separation index (S)</span>
+0042 S = sum(pii)./(N*min(dist));
+0043 
+0044 <span class="comment">%Xie and Beni's index (XB)</span>
+0045 XB = sum((sum(result.data.d.*result.data.f.^2))./(N*min(result.data.d)));
+0046 <span class="comment">%results</span>
+0047 result.validity.SC = SC;
+0048 result.validity.S = S;
+0049 result.validity.XB = XB;    
+0050         
+0051         
+0052         
+0053 
+0054 <span class="comment">%Dunn's index (DI)</span>
+0055 <span class="comment">%for identification of compact and well separated clusters</span>
+0056 [m,label] = min(result.data.d');<span class="comment">%crisp clustering(Kmeans)</span>
+0057 
+0058 <span class="keyword">for</span> i = 1:c
+0059      index=find(label == i);
+0060      dat{i}=data.X(index,:);
+0061      meret(i)= size(dat{i},1);
+0062 <span class="keyword">end</span>
+0063 mindistmatrix =ones(c,c)*inf;
+0064 mindistmatrix2 =ones(c,c)*inf;
+0065         
+0066         <span class="keyword">for</span> cntrCurrentClust = 1:c
+0067            <span class="keyword">for</span> cntrOtherClust = (cntrCurrentClust+1):c
+0068                <span class="keyword">for</span> cntrCurrentPoints = 1:meret(cntrCurrentClust)
+0069                    dd = min(sqrt(sum([(repmat(dat{cntrCurrentClust}(cntrCurrentPoints,:),meret(cntrOtherClust),1) <span class="keyword">...</span>
+0070                    -dat{cntrOtherClust}).^2]')));
+0071                                        <span class="comment">%calculate distances for an alternative Dunn index</span>
+0072                    dd2 = min(abs(result.data.d(cntrCurrentClust,:)-result.data.d(cntrOtherClust,:)));
+0073                        
+0074                    <span class="keyword">if</span> mindistmatrix(cntrCurrentClust,cntrOtherClust) &gt; dd
+0075                       mindistmatrix(cntrCurrentClust,cntrOtherClust) = dd;
+0076                    <span class="keyword">end</span>
+0077                    <span class="keyword">if</span> mindistmatrix2(cntrCurrentClust,cntrOtherClust) &gt; dd2
+0078                       mindistmatrix2(cntrCurrentClust,cntrOtherClust) = dd2;
+0079                    <span class="keyword">end</span>
+0080                <span class="keyword">end</span>
+0081             <span class="keyword">end</span>
+0082         <span class="keyword">end</span>
+0083 
+0084         minimalDist = min(min(mindistmatrix));
+0085         minimalDist2 = min(min(mindistmatrix2));
+0086         
+0087         maxDispersion = 0;
+0088         <span class="keyword">for</span> cntrCurrentClust = 1:c
+0089             actualDispersion = 0;
+0090             <span class="keyword">for</span> cntrCurrentPoints1 = 1:meret(cntrCurrentClust)
+0091               dd = max(sqrt(sum([(repmat(dat{cntrCurrentClust}(cntrCurrentPoints1,:),meret(cntrCurrentClust),1) <span class="keyword">...</span>
+0092                            -dat{cntrCurrentClust}).^2]')));
+0093               <span class="keyword">if</span> actualDispersion &lt; dd
+0094                  actualDispersion = dd;
+0095               <span class="keyword">end</span>
+0096               <span class="keyword">if</span> maxDispersion &lt; actualDispersion
+0097                maxDispersion = actualDispersion;
+0098               <span class="keyword">end</span>
+0099            <span class="keyword">end</span>
+0100         <span class="keyword">end</span>
+0101 
+0102         DI = minimalDist/maxDispersion;
+0103         <span class="comment">%alternative Dunn index</span>
+0104         ADI = minimalDist2/maxDispersion;
+0105     <span class="comment">%results</span>
+0106     result.validity.DI = DI;
+0107     result.validity.ADI = ADI;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

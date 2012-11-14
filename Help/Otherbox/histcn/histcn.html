@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of histcn</title>
+  <meta name="keywords" content="histcn">
+  <meta name="description" content="function [count edges mid loc] = histcn(X, edge1, edge2, ..., edgeN)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html histcn -->
+<h1>histcn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [count edges mid loc] = histcn(X, edge1, edge2, ..., edgeN)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [count edges mid loc] = histcn(X, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> function [count edges mid loc] = histcn(X, edge1, edge2, ..., edgeN)
+
+ Purpose: compute n-dimensional histogram
+
+ INPUT
+   - X: is (M x N) array, represents M data points in R^N
+   - edgek: are the bin vectors on dimension k, k=1...N.
+     If it is a scalar (Nk), the bins will be the linear subdivision of
+     the data on the range [min(X(:,k)), max(X(:,k))] into Nk
+     sub-intervals
+     If it's empty, a default of 32 subdivions will be used
+ OUTPUT
+   - count: n-dimensional array count of X on the bins, i.e.,
+         count(i1,i2,...,iN) = cardinal of X such that
+                  edge1(i1) &lt;= X(:,i1) &lt; edge1(i1)+1 and
+                       ...
+                  edgeN(iN) &lt;= X(:,iN) &lt; edgeN(iN)+1
+   - edges: (1 x N) cell, each provides the effective edges used in the
+     respective dimension
+   - mid: (1 x N) cell, provides the mid points of the cellpatch used in
+     the respective dimension
+   - loc: (M x N) array, index location of X in the bins. Points have out
+     of range coordinates will have zero at the corresponding dimension.
+
+ Usage example:
+       M = 1e5;
+       N = 3;
+       X = randn(M,N);
+       [N edges mid loc] = histcn(X);
+       imagesc(mid{1:2},N(:,:,ceil(end/2)))
+ 
+ Bruno Luong: &lt;brunoluong@yahoo.com&gt;
+ Last update: 25/April/2009</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_get_datapoint_potential.html" class="code" title="function [ pot ] = util_get_datapoint_potential( datax, datay, bin_table)">util_get_datapoint_potential</a>	UNTITLED Summary of this function goes here</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [count edges mid loc] = histcn(X, varargin)</a>
+0002 <span class="comment">% function [count edges mid loc] = histcn(X, edge1, edge2, ..., edgeN)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Purpose: compute n-dimensional histogram</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% INPUT</span>
+0007 <span class="comment">%   - X: is (M x N) array, represents M data points in R^N</span>
+0008 <span class="comment">%   - edgek: are the bin vectors on dimension k, k=1...N.</span>
+0009 <span class="comment">%     If it is a scalar (Nk), the bins will be the linear subdivision of</span>
+0010 <span class="comment">%     the data on the range [min(X(:,k)), max(X(:,k))] into Nk</span>
+0011 <span class="comment">%     sub-intervals</span>
+0012 <span class="comment">%     If it's empty, a default of 32 subdivions will be used</span>
+0013 <span class="comment">% OUTPUT</span>
+0014 <span class="comment">%   - count: n-dimensional array count of X on the bins, i.e.,</span>
+0015 <span class="comment">%         count(i1,i2,...,iN) = cardinal of X such that</span>
+0016 <span class="comment">%                  edge1(i1) &lt;= X(:,i1) &lt; edge1(i1)+1 and</span>
+0017 <span class="comment">%                       ...</span>
+0018 <span class="comment">%                  edgeN(iN) &lt;= X(:,iN) &lt; edgeN(iN)+1</span>
+0019 <span class="comment">%   - edges: (1 x N) cell, each provides the effective edges used in the</span>
+0020 <span class="comment">%     respective dimension</span>
+0021 <span class="comment">%   - mid: (1 x N) cell, provides the mid points of the cellpatch used in</span>
+0022 <span class="comment">%     the respective dimension</span>
+0023 <span class="comment">%   - loc: (M x N) array, index location of X in the bins. Points have out</span>
+0024 <span class="comment">%     of range coordinates will have zero at the corresponding dimension.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Usage example:</span>
+0027 <span class="comment">%       M = 1e5;</span>
+0028 <span class="comment">%       N = 3;</span>
+0029 <span class="comment">%       X = randn(M,N);</span>
+0030 <span class="comment">%       [N edges mid loc] = histcn(X);</span>
+0031 <span class="comment">%       imagesc(mid{1:2},N(:,:,ceil(end/2)))</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% Bruno Luong: &lt;brunoluong@yahoo.com&gt;</span>
+0034 <span class="comment">% Last update: 25/April/2009</span>
+0035 
+0036 <span class="keyword">if</span> ndims(X)&gt;2
+0037     error(<span class="string">'histcn: X requires to be an (M x N) array of M points in R^N'</span>);
+0038 <span class="keyword">end</span>
+0039 DEFAULT_NBINS = 32;
+0040 
+0041 <span class="comment">% Get the dimension</span>
+0042 nd = size(X,2);
+0043 edges = varargin;
+0044 <span class="keyword">if</span> nd&lt;length(edges)
+0045     nd = length(edges); <span class="comment">% waisting CPU time warranty</span>
+0046 <span class="keyword">else</span>
+0047     edges(end+1:nd) = {DEFAULT_NBINS};
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% Allocation of array loc: index location of X in the bins</span>
+0051 loc = zeros(size(X));
+0052 sz = zeros(1,nd);
+0053 <span class="comment">% Loop in the dimension</span>
+0054 <span class="keyword">for</span> d=1:nd
+0055     ed = edges{d};
+0056     Xd = X(:,d);
+0057     <span class="keyword">if</span> isempty(ed)
+0058         ed = DEFAULT_NBINS;
+0059     <span class="keyword">end</span>
+0060     <span class="keyword">if</span> isscalar(ed) <span class="comment">% automatic linear subdivision</span>
+0061         ed = linspace(min(Xd),max(Xd),ed+1);
+0062     <span class="keyword">end</span>
+0063     edges{d} = ed;
+0064     <span class="comment">% Call histc on this dimension</span>
+0065     [dummy loc(:,d)] = histc(Xd, ed, 1);
+0066     sz(d) = length(ed)-1;
+0067 <span class="keyword">end</span> <span class="comment">% for-loop</span>
+0068 
+0069 <span class="comment">% Clean</span>
+0070 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> dummy
+0071 
+0072 <span class="comment">% This is need for seldome points that hit the right border</span>
+0073 sz = max([sz; max(loc,[],1)]);
+0074 
+0075 <span class="comment">% Compute the mid points</span>
+0076 mid = cellfun(@(e) 0.5*(e(1:end-1)+e(2:end)), edges, <span class="keyword">...</span>
+0077               <span class="string">'UniformOutput'</span>, false);
+0078           
+0079 <span class="comment">% Count for points where all coordinates are falling in a corresponding</span>
+0080 <span class="comment">% bins</span>
+0081 <span class="keyword">if</span> nd==1
+0082     sz = [sz 1]; <span class="comment">% Matlab doesn't know what is one-dimensional array!</span>
+0083 <span class="keyword">end</span>
+0084 count = accumarray(loc(all(loc&gt;0, 2),:),1,sz);
+0085 
+0086 <span class="keyword">return</span>
+0087 
+0088 <span class="keyword">end</span> <span class="comment">% histcn</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

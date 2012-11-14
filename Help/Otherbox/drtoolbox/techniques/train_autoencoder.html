@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of train_autoencoder</title>
+  <meta name="keywords" content="train_autoencoder">
+  <meta name="description" content="TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>train_autoencoder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, network] = train_autoencoder(X, layers) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining
+
+   [mappedX, network] = train_encoder(X, layers)
+
+ Trains up an autoencoder with the structure that is specified in layers. 
+ The low-dimensional data is returned in mappedX, and the network in
+ network. This function is mainly designed to be used for binary [0,1]
+ data.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="backprop.html" class="code" title="function network = backprop(network, X, T, max_iter)">backprop</a>	BACKPROP Trains a network on a dataset using backpropagation</li><li><a href="roll_out.html" class="code" title="function autoenc = roll_out(network)">roll_out</a>	ROLL_OUT Rolls out an autoencoder</li><li><a href="run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>	RUN_DATA_THROUGH_AUTOENC Summary of this function goes here</li><li><a href="train_lin_rbm.html" class="code" title="function machine = train_lin_rbm(X, h, eta, max_iter, weight_cost)">train_lin_rbm</a>	TRAIN_RBM Trains a Restricted Boltzmann Machine with Gaussian hiddens</li><li><a href="train_rbm.html" class="code" title="function machine = train_rbm(X, h, eta, max_iter, weight_cost)">train_rbm</a>	TRAIN_RBM Trains a Restricted Boltzmann Machine using CD1</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, network] = train_autoencoder(X, layers)</a>
+0002 <span class="comment">%TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, network] = train_encoder(X, layers)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Trains up an autoencoder with the structure that is specified in layers.</span>
+0007 <span class="comment">% The low-dimensional data is returned in mappedX, and the network in</span>
+0008 <span class="comment">% network. This function is mainly designed to be used for binary [0,1]</span>
+0009 <span class="comment">% data.</span>
+0010 
+0011 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0012 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0013 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0014 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0015 <span class="comment">% maintain the name of the original author.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0018 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0019 
+0020 
+0021     <span class="keyword">if</span> length(unique(X)) ~= 2 || any(unique(X) ~= [0 1])
+0022         warning(<span class="string">'This function is designed to work on binary data. Running on real-valued data that is scaled between 0 and 1 may work too.'</span>);
+0023     <span class="keyword">end</span>
+0024 
+0025     <span class="comment">% Pretrain the network</span>
+0026     origX = X;
+0027     no_layers = length(layers);
+0028     network = cell(1, no_layers);
+0029     <span class="keyword">for</span> i=1:no_layers
+0030 
+0031         <span class="comment">% Print progress</span>
+0032         disp([<span class="string">'Training layer '</span> num2str(i) <span class="string">' (size '</span> num2str(size(X, 2)) <span class="string">' -&gt; '</span> num2str(layers(i)) <span class="string">')...'</span>]);
+0033         
+0034         <span class="keyword">if</span> i ~= no_layers
+0035           
+0036             <span class="comment">% Train layer using binary units</span>
+0037             network{i} = <a href="train_rbm.html" class="code" title="function machine = train_rbm(X, h, eta, max_iter, weight_cost)">train_rbm</a>(X, layers(i));
+0038                 
+0039             <span class="comment">% Transform data using learned weights</span>
+0040             X = 1 ./ (1 + exp(-(bsxfun(@plus, X * network{i}.W, network{i}.bias_upW))));
+0041         <span class="keyword">else</span>
+0042             
+0043             <span class="comment">% Train layer using Gaussian hidden units</span>
+0044             network{i} = <a href="train_lin_rbm.html" class="code" title="function machine = train_lin_rbm(X, h, eta, max_iter, weight_cost)">train_lin_rbm</a>(X, layers(i));
+0045         <span class="keyword">end</span>
+0046     <span class="keyword">end</span>
+0047     
+0048     <span class="comment">% Perform backpropagation to minimize reconstruction error</span>
+0049     network = <a href="roll_out.html" class="code" title="function autoenc = roll_out(network)">roll_out</a>(network);
+0050     network = <a href="backprop.html" class="code" title="function network = backprop(network, X, T, max_iter)">backprop</a>(network, origX, origX, 10);
+0051     [foo, mappedX] = <a href="run_data_through_autoenc.html" class="code" title="function [reconX, mappedX] = run_data_through_autoenc(network, X)">run_data_through_autoenc</a>(network, origX);
+0052</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

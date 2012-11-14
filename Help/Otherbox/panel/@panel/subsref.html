@@ -1,0 +1,413 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of subsref</title>
+  <meta name="keywords" content="subsref">
+  <meta name="description" content="% extract panel">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>subsref
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% extract panel</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function val = subsref(p, s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">% extract panel</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>	default panel object</li><li><a href="../../../Otherbox/panel/@panel/private/translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>	user can insert "$" character to be replaced by</li><li><a href="render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>	fromJava    Convert from Java to Matlab.</li><li><a href="display.html" class="code" title="function display(p)">display</a>	disp([10 'panel: (' num2str(p.fig) ', ' int2str(p.id) ')' 10])</li><li><a href="export.html" class="code" title="function info = export(p, varargin)">export</a>	info = export(p, ...)</li><li><a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="../../../Otherbox/panel/@panel/private/subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="render.html" class="code" title="function render(p)">render</a>	render(p)</li><li><a href="select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li><li><a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function val = get_default(key)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function val = subsref(p, s)</a>
+0002 
+0003 
+0004 
+0005 <span class="comment">%% extract panel</span>
+0006 
+0007 <span class="comment">% extract panels array</span>
+0008 userData = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0009 <span class="keyword">if</span> ~<a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(userData, <span class="string">'panel'</span>)
+0010     error([<span class="string">'panel reference no longer valid -  &quot;'</span> int2str(p.id) <span class="string">'&quot; not found in figure &quot;'</span> num2str(p.fig) <span class="string">'&quot; (was associated figure closed/reopened?)'</span>])
+0011 <span class="keyword">end</span>
+0012 panels = userData.panel.panels;
+0013 
+0014 <span class="comment">% get panel by id (index)</span>
+0015 <span class="keyword">try</span>
+0016     P = panels{p.id};
+0017 <span class="keyword">catch</span>
+0018     error([<span class="string">'panel &quot;'</span> int2str(p.id) <span class="string">'&quot; not found in figure &quot;'</span> num2str(p.fig) <span class="string">'&quot;'</span>])
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% check exists</span>
+0022 <span class="keyword">if</span> isempty(P)
+0023     error(<span class="string">'panel no longer exists - this is a hanging reference'</span>)
+0024 <span class="keyword">end</span>
+0025 
+0026 
+0027 
+0028 <span class="comment">%% handle special internal subsref syntax</span>
+0029 
+0030 <span class="keyword">if</span> ischar(s)
+0031     s = struct(<span class="string">'type'</span>, <span class="string">'.'</span>, <span class="string">'subs'</span>, s);
+0032 <span class="keyword">end</span>
+0033 
+0034 
+0035 
+0036 <span class="comment">%% handle simple property calls separately</span>
+0037 
+0038 <span class="comment">% simple char field subsref</span>
+0039 <span class="keyword">switch</span> s(1).type
+0040     
+0041     <span class="keyword">case</span> <span class="string">'.'</span>
+0042     
+0043         key = s(1).subs;
+0044         
+0045         <span class="keyword">switch</span> key
+0046 
+0047             <span class="comment">% associated figure</span>
+0048             <span class="keyword">case</span> <span class="string">'figure'</span>
+0049 
+0050                 val = p.fig;
+0051                 
+0052 
+0053                 
+0054             <span class="comment">% associated axis</span>
+0055             <span class="keyword">case</span> <span class="string">'axis'</span>
+0056 
+0057                 val = P.panel.axis;
+0058                 
+0059 
+0060                 
+0061             <span class="comment">% inherited properties (that have units)</span>
+0062             <span class="keyword">case</span> {<span class="string">'axismargin'</span> <span class="string">'parentmargin'</span>}
+0063 
+0064                 <span class="comment">% inherit</span>
+0065                 <span class="keyword">while</span> 1
+0066                     val = P.render_inh.(key);
+0067                     <span class="keyword">if</span> isempty(val)
+0068                         <span class="keyword">if</span> P.panel.parent
+0069                             <span class="comment">% inherit</span>
+0070                             P = panels{P.panel.parent};
+0071                             <span class="keyword">continue</span>
+0072                         <span class="keyword">else</span>
+0073                             <span class="comment">% default</span>
+0074                             val = <a href="#_sub1" class="code" title="subfunction val = get_default(key)">get_default</a>(key);
+0075                         <span class="keyword">end</span>
+0076                     <span class="keyword">end</span>
+0077                     <span class="keyword">break</span>
+0078                 <span class="keyword">end</span>
+0079 
+0080                 <span class="comment">% convert to interface units (all values stored in mm)</span>
+0081                 <span class="keyword">switch</span> <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'units'</span>)
+0082                     <span class="keyword">case</span> <span class="string">'mm'</span>
+0083                         <span class="comment">% no change</span>
+0084                     <span class="keyword">case</span> <span class="string">'cm'</span>
+0085                         val = val / 10;
+0086                     <span class="keyword">case</span> <span class="string">'in'</span>
+0087                         val = val / 25.4;
+0088                 <span class="keyword">end</span>
+0089 
+0090                 
+0091                 
+0092             <span class="comment">% inherited properties (that do not have units)</span>
+0093             <span class="keyword">case</span> {<span class="string">'edge'</span>, <span class="string">'fontname'</span>, <span class="string">'fontsize'</span>, <span class="string">'fontweight'</span>}
+0094 
+0095                 <span class="comment">% inherit</span>
+0096                 <span class="keyword">while</span> 1
+0097                     val = P.render_inh.(key);
+0098                     <span class="keyword">if</span> isempty(val)
+0099                         <span class="keyword">if</span> P.panel.parent
+0100                             <span class="comment">% inherit</span>
+0101                             P = panels{P.panel.parent};
+0102                             <span class="keyword">continue</span>
+0103                         <span class="keyword">else</span>
+0104                             <span class="comment">% default</span>
+0105                             val = <a href="#_sub1" class="code" title="subfunction val = get_default(key)">get_default</a>(key);
+0106                         <span class="keyword">end</span>
+0107                     <span class="keyword">end</span>
+0108                     <span class="keyword">break</span>
+0109                 <span class="keyword">end</span>
+0110 
+0111                 
+0112                 
+0113             <span class="comment">% quick call used by subrender to get all font characteristics at once</span>
+0114             <span class="keyword">case</span> {<span class="string">'font'</span>}
+0115 
+0116                 val = [];
+0117                 val.fontname = P.render_inh.fontname;
+0118                 val.fontsize = P.render_inh.fontsize;
+0119                 val.fontweight = P.render_inh.fontweight;
+0120                 
+0121                 <span class="comment">% inherit</span>
+0122                 <span class="keyword">while</span> 1
+0123                     
+0124                     <span class="comment">% gone far enough</span>
+0125                     <span class="keyword">if</span> ~isempty(val.fontname) &amp;&amp; ~isempty(val.fontsize) &amp;&amp; ~isempty(val.fontweight)
+0126                         <span class="keyword">break</span>
+0127                     <span class="keyword">end</span>
+0128                     
+0129                     <span class="comment">% else, seek parent</span>
+0130                     <span class="keyword">if</span> P.panel.parent
+0131                         
+0132                         <span class="comment">% inherit</span>
+0133                         P = panels{P.panel.parent};
+0134                         
+0135                         <span class="comment">% extract</span>
+0136                         val_inh = P.render_inh;
+0137                         
+0138                     <span class="keyword">else</span>
+0139                         
+0140                         <span class="comment">% default</span>
+0141                         val_inh = <a href="#_sub1" class="code" title="subfunction val = get_default(key)">get_default</a>;
+0142                         
+0143                     <span class="keyword">end</span>
+0144                     
+0145                     <span class="comment">% merge</span>
+0146                     <span class="keyword">if</span> isempty(val.fontname)
+0147                         val.fontname = val_inh.fontname;
+0148                     <span class="keyword">end</span>
+0149                     
+0150                     <span class="comment">% merge</span>
+0151                     <span class="keyword">if</span> isempty(val.fontsize)
+0152                         val.fontsize = val_inh.fontsize;
+0153                     <span class="keyword">end</span>
+0154                     
+0155                     <span class="comment">% merge</span>
+0156                     <span class="keyword">if</span> isempty(val.fontweight)
+0157                         val.fontweight = val_inh.fontweight;
+0158                     <span class="keyword">end</span>
+0159                     
+0160                 <span class="keyword">end</span>
+0161                 
+0162                 
+0163                 
+0164             <span class="comment">% properties that are *not* inherited</span>
+0165             <span class="keyword">case</span> {<span class="string">'xscale'</span>, <span class="string">'yscale'</span>}
+0166                 
+0167                 val = P.render_notinh.(key);
+0168                 
+0169                 
+0170             
+0171             <span class="comment">% properties of the root panel (that have units)</span>
+0172             <span class="keyword">case</span> {<span class="string">'rootmargin'</span>}
+0173 
+0174                 val = userData.panel.panelroot.(key);
+0175                 <span class="keyword">if</span> isempty(val)
+0176                     val = <a href="#_sub1" class="code" title="subfunction val = get_default(key)">get_default</a>(key);
+0177                 <span class="keyword">end</span>
+0178 
+0179                 <span class="comment">% convert to interface units (all values stored in mm)</span>
+0180                 <span class="keyword">switch</span> <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'units'</span>)
+0181                     <span class="keyword">case</span> <span class="string">'mm'</span>
+0182                         <span class="comment">% no change</span>
+0183                     <span class="keyword">case</span> <span class="string">'cm'</span>
+0184                         val = val / 10;
+0185                     <span class="keyword">case</span> <span class="string">'in'</span>
+0186                         val = val / 25.4;
+0187                 <span class="keyword">end</span>
+0188 
+0189                 
+0190                 
+0191             <span class="comment">% properties of the root panel (that do not have units)</span>
+0192             <span class="keyword">case</span> {<span class="string">'autorender'</span> <span class="string">'units'</span> <span class="string">'print'</span>}
+0193 
+0194                 val = userData.panel.panelroot.(key);
+0195                 <span class="keyword">if</span> isempty(val)
+0196                     val = <a href="#_sub1" class="code" title="subfunction val = get_default(key)">get_default</a>(key);
+0197                 <span class="keyword">end</span>
+0198 
+0199                 
+0200                 
+0201             <span class="comment">% wrapped properties (stored in children of axis)</span>
+0202             <span class="keyword">case</span> {<span class="string">'xlabel'</span>, <span class="string">'ylabel'</span>, <span class="string">'title'</span>}
+0203                 
+0204                 <span class="keyword">if</span> P.panel.axis
+0205                     val = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, key), <span class="string">'string'</span>);
+0206                     val = <a href="../../../Otherbox/panel/@panel/private/translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>(val);
+0207                 <span class="keyword">else</span>
+0208                     error([<span class="string">'evaluation of &quot;'</span> key <span class="string">'&quot; failed because panel is not committed as an axis panel'</span>]);
+0209                 <span class="keyword">end</span>
+0210                 
+0211                 
+0212                 
+0213             <span class="comment">% wrapped properties (stored in axis)</span>
+0214             <span class="keyword">case</span> {<span class="string">'xticklabel'</span>, <span class="string">'yticklabel'</span>, <span class="string">'xtick'</span>, <span class="string">'ytick'</span>}
+0215                 
+0216                 <span class="keyword">if</span> P.panel.axis
+0217                     val = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, key);
+0218                 <span class="keyword">else</span>
+0219                     error([<span class="string">'evaluation of &quot;'</span> key <span class="string">'&quot; failed because panel is not committed as an axis panel'</span>]);
+0220                 <span class="keyword">end</span>                
+0221                 
+0222                 
+0223                 
+0224             <span class="comment">% panel's children</span>
+0225             <span class="keyword">case</span> <span class="string">'children'</span>
+0226                 
+0227                 val = {};
+0228                 <span class="keyword">for</span> c = 1:length(P.panel.children)
+0229                     p.id = P.panel.children(c);
+0230                     val{c} = p;
+0231                 <span class="keyword">end</span>
+0232                 
+0233                 
+0234             
+0235             <span class="comment">% select panel (commit as axis panel)</span>
+0236             <span class="keyword">case</span> <span class="string">'select'</span>
+0237                 
+0238                 <span class="keyword">if</span> length(s) == 2 &amp;&amp; strcmp(s(2).type, <span class="string">'()'</span>)
+0239                     val = <a href="select.html" class="code" title="function ax_out = select(p, ax)">select</a>(p, s(2).subs{:});
+0240                     s = s(1);
+0241                 <span class="keyword">else</span>
+0242                     val = <a href="select.html" class="code" title="function ax_out = select(p, ax)">select</a>(p);
+0243                 <span class="keyword">end</span>
+0244                 
+0245                 
+0246                 
+0247             <span class="comment">% (re)render panel</span>
+0248             <span class="keyword">case</span> <span class="string">'render'</span>
+0249                 
+0250                 <span class="keyword">if</span> length(s) ~= 1
+0251                     error(<span class="string">'invalid usage (render() takes no arguments)'</span>);
+0252                 <span class="keyword">end</span>
+0253                 <a href="render.html" class="code" title="function render(p)">render</a>(p);
+0254                 
+0255                 
+0256             <span class="comment">% pack panel</span>
+0257             <span class="keyword">case</span> <span class="string">'pack'</span>
+0258                 
+0259                 <span class="keyword">if</span> length(s) ~= 2 || ~strcmp(s(2).type,<span class="string">'()'</span>)
+0260                     error(<span class="string">'invalid usage (pack() requires arguments)'</span>);
+0261                 <span class="keyword">end</span>
+0262                 val = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p, s(2).subs);
+0263                 s = s(1);
+0264                 
+0265                 
+0266 
+0267             <span class="comment">% get panel's parent panel</span>
+0268             <span class="keyword">case</span> <span class="string">'parent'</span>
+0269                 
+0270                 <span class="keyword">if</span> P.panel.parent
+0271                     p.id = P.panel.parent;
+0272                     val = p;
+0273                 <span class="keyword">else</span>
+0274                     val = []; <span class="comment">% no parent, because is root panel</span>
+0275                 <span class="keyword">end</span>
+0276                 
+0277                 
+0278                 
+0279             <span class="comment">% get panel's root panel</span>
+0280             <span class="keyword">case</span> <span class="string">'root'</span>
+0281                 
+0282                 <span class="keyword">if</span> P.panel.parent
+0283                     p.id = P.panel.parent;
+0284                     val = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'root'</span>);
+0285                 <span class="keyword">else</span>
+0286                     val = p; <span class="comment">% is root</span>
+0287                 <span class="keyword">end</span>
+0288                 
+0289                 
+0290             
+0291             <span class="comment">% export panel as figure</span>
+0292             <span class="keyword">case</span> <span class="string">'export'</span>
+0293                 
+0294                 <span class="keyword">if</span> length(s) ~= 2 || ~strcmp(s(2).type,<span class="string">'()'</span>)
+0295                     error(<span class="string">'invalid usage (export() requires arguments)'</span>);
+0296                 <span class="keyword">end</span>
+0297                 <a href="export.html" class="code" title="function info = export(p, varargin)">export</a>(p, s(2).subs{:});
+0298                 s = s(1);
+0299                 
+0300                 
+0301                 
+0302             <span class="comment">% else unrecognised</span>
+0303             <span class="keyword">otherwise</span>
+0304         
+0305                 error([<span class="string">'unrecognised field reference &quot;'</span> s(1).subs <span class="string">'&quot;'</span>]);
+0306                 
+0307                 
+0308                 
+0309         <span class="keyword">end</span>
+0310 
+0311         
+0312         
+0313     <span class="comment">% else unrecognised</span>
+0314     <span class="keyword">otherwise</span>
+0315         
+0316         error([<span class="string">'unrecognised operation &quot;'</span> s(1).type <span class="string">'&quot;'</span>]);
+0317         
+0318 <span class="keyword">end</span>
+0319 
+0320 
+0321 
+0322 
+0323 
+0324 
+0325 
+0326 <span class="comment">%% delegate further subsref'ing</span>
+0327 
+0328 <span class="keyword">if</span> length(s) &gt; 1
+0329     val = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(val, s(2:end));
+0330 <span class="keyword">end</span>
+0331 
+0332 
+0333 
+0334 
+0335 
+0336 <span class="comment">%% defaults function</span>
+0337 
+0338 <a name="_sub1" href="#_subfunctions" class="code">function val = get_default(key)</a>
+0339 
+0340 <span class="comment">% all margins are % [l/b r/t] or [l b r t],</span>
+0341 <span class="comment">% like ordering to [x y w h] for abs</span>
+0342 <span class="comment">% positioning</span>
+0343 
+0344 <a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a> = [];
+0345 default.autorender = true;
+0346 default.units = <span class="string">'mm'</span>;
+0347 default.rootmargin = [0 0 5 5];
+0348 default.axismargin = [15 15 0 0];
+0349 default.parentmargin = [0 0 0 0];
+0350 default.edge = <span class="string">'t'</span>;
+0351 default.fontname = <span class="string">'arial'</span>;
+0352 default.fontsize = 10;
+0353 default.fontweight = <span class="string">'normal'</span>;
+0354 
+0355 <span class="keyword">if</span> nargin
+0356     val = default.(key);
+0357 <span class="keyword">else</span>
+0358     val = <a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>;
+0359 <span class="keyword">end</span>
+0360 
+0361</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of export_fig</title>
+  <meta name="keywords" content="export_fig">
+  <meta name="description" content="EXPORT_FIG  Exports figures suitable for publication">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html export_fig -->
+<h1>export_fig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EXPORT_FIG  Exports figures suitable for publication</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [im alpha] = export_fig(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">EXPORT_FIG  Exports figures suitable for publication
+
+ Examples:
+   im = export_fig
+   [im alpha] = export_fig
+   export_fig filename
+   export_fig filename -format1 -format2
+   export_fig ... -nocrop
+   export_fig ... -native
+   export_fig ... -m&lt;val&gt;
+   export_fig ... -r&lt;val&gt;
+   export_fig ... -a&lt;val&gt;
+   export_fig ... -q&lt;val&gt;
+   export_fig ... -&lt;renderer&gt;
+   export_fig ... -&lt;colorspace&gt;
+   export_fig ... -append
+   export_fig(..., handle)
+
+ This function saves a figure or single axes to one or more vector and/or
+ bitmap file formats, and/or outputs a rasterized version to the
+ workspace, with the following properties:
+   - Figure/axes reproduced as it appears on screen
+   - Cropped borders (optional)
+   - Embedded fonts (vector formats)
+   - Improved line and grid line styles
+   - Anti-aliased graphics (bitmap formats)
+   - Render images at native resolution (optional for bitmap formats)
+   - Transparent background supported (pdf, eps, png)
+   - Semi-transparent patch objects supported (png only)
+   - RGB, CMYK or grayscale output (CMYK only with pdf, eps, tiff)
+   - Variable image compression, including lossless (pdf, eps, jpg)
+   - Optionally append to file (pdf, tiff)
+   - Vector formats: pdf, eps
+   - Bitmap formats: png, tiff, jpg, bmp, export to workspace 
+   
+ This function is especially suited to exporting figures for use in
+ publications and presentations, because of the high quality and
+ portability of media produced.
+
+ Note that the background color and figure dimensions are reproduced
+ (the latter approximately, and ignoring cropping &amp; magnification) in the
+ output file. For transparent background (and semi-transparent patch
+ objects), set the figure (and axes) 'Color' property to 'none'; pdf, eps
+ and png are the only file formats to support a transparent background,
+ whilst the png format alone supports transparency of patch objects.
+
+ The choice of renderer (opengl, zbuffer or painters) has a large impact
+ on the quality of output. Whilst the default value (opengl for bitmaps,
+ painters for vector formats) generally gives good results, if you aren't
+ satisfied then try another renderer.  Notes: 1) For vector formats (eps,
+ pdf), only painters generates vector graphics. 2) For bitmaps, only
+ opengl can render transparent patch objects correctly. 3) For bitmaps,
+ only painters will correctly scale line dash and dot lengths when
+ magnifying or anti-aliasing. 4) Fonts may be substitued with Courier when
+ using painters.
+
+ When exporting to vector format (pdf &amp; eps) and bitmap format using the
+ painters renderer, this function requires that ghostscript is installed
+ on your system. You can download this from:
+   http://www.ghostscript.com
+ When exporting to eps it additionally requires pdftops, from the Xpdf
+ suite of functions. You can download this from:
+   http://www.foolabs.com/xpdf
+
+IN:
+   filename - string containing the name (optionally including full or
+              relative path) of the file the figure is to be saved as. If
+              a path is not specified, the figure is saved in the current
+              directory. If no name and no output arguments are specified,
+              the default name, 'export_fig_out', is used. If neither a
+              file extension nor a format are specified, a &quot;.png&quot; is added
+              and the figure saved in that format.
+   -format1, -format2, etc. - strings containing the extensions of the
+                              file formats the figure is to be saved as.
+                              Valid options are: '-pdf', '-eps', '-png',
+                              '-tif', '-jpg' and '-bmp'. All combinations
+                              of formats are valid.
+   -nocrop - option indicating that the borders of the output are not to
+             be cropped.
+   -m&lt;val&gt; - option where val indicates the factor to magnify the
+             on-screen figure dimensions by when generating bitmap
+             outputs. Default: '-m1'.
+   -r&lt;val&gt; - option val indicates the resolution (in pixels per inch) to
+             export bitmap outputs at, keeping the dimensions of the
+             on-screen figure. Default: sprintf('-r%g', get(0,
+             'ScreenPixelsPerInch')). Note that the -m and -r options
+             change the same property.
+   -native - option indicating that the output resolution (when outputting
+             a bitmap format) should be such that the vertical resolution
+             of the first suitable image found in the figure is at the
+             native resolution of that image. To specify a particular
+             image to use, give it the tag 'export_fig_native'. Notes:
+             This overrides any value set with the -m and -r options. It
+             also assumes that the image is displayed front-to-parallel
+             with the screen. The output resolution is approximate and
+             should not be relied upon. Anti-aliasing can have adverse
+             effects on image quality (disable with the -a1 option).
+   -a1, -a2, -a3, -a4 - option indicating the amount of anti-aliasing to
+                        use for bitmap outputs. '-a1' means no anti-
+                        aliasing; '-a4' is the maximum amount (default).
+   -&lt;renderer&gt; - option to force a particular renderer (painters, opengl
+                 or zbuffer) to be used over the default: opengl for
+                 bitmaps; painters for vector formats.
+   -&lt;colorspace&gt; - option indicating which colorspace color figures should
+                   be saved in: RGB (default), CMYK or gray. CMYK is only
+                   supported in pdf, eps and tiff output.
+   -q&lt;val&gt; - option to vary bitmap image quality (in pdf, eps and jpg
+             files only).  Larger val, in the range 0-100, gives higher
+             quality/lower compression. val &gt; 100 gives lossless
+             compression. Default: '-q95' for jpg, ghostscript prepress
+             default for pdf &amp; eps. Note: lossless compression can
+             sometimes give a smaller file size than the default lossy
+             compression, depending on the type of images.
+   -append - option indicating that if the file (pdfs only) already
+             exists, the figure is to be appended as a new page, instead
+             of being overwritten (default).
+   handle - The handle of the figure or axes (can be an array of handles
+            of several axes, but these must be in the same figure) to be
+            saved. Default: gcf.
+
+OUT:
+   im - MxNxC uint8 image array of the figure.
+   alpha - MxN single array of alphamatte values in range [0,1], for the
+           case when the background is transparent.
+
+   Some helpful examples and tips can be found at:
+      http://sites.google.com/site/oliverwoodford/software/export_fig
+
+   See also PRINT, SAVEAS.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality)">eps2pdf</a>	EPS2PDF  Convert an eps file to pdf format using ghostscript</li><li><a href="isolate_axes.html" class="code" title="function fh = isolate_axes(ah, vis)">isolate_axes</a>	ISOLATE_AXES Isolate the specified axes in a figure on their own</li><li><a href="pdf2eps.html" class="code" title="function pdf2eps(source, dest)">pdf2eps</a>	PDF2EPS  Convert a pdf file to eps format using pdftops</li><li><a href="print2array.html" class="code" title="function A = print2array(fig, res, renderer)">print2array</a>	PRINT2ARRAY  Exports a figure to an image array</li><li><a href="print2eps.html" class="code" title="function print2eps(name, fig, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li><li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Scripts/util_script_print_channel_firing_rate_sd.html" class="code" title="function [] = util_script_print_channel_firing_rate_sd( spif, output_folder )">util_script_print_channel_firing_rate_sd</a>	UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [fig options] = parse_args(nout, varargin)</a></li><li><a href="#_sub2" class="code">function A = downsize(A, factor)</a></li><li><a href="#_sub3" class="code">function A = rgb2grey(A)</a></li><li><a href="#_sub4" class="code">function A = check_greyscale(A)</a></li><li><a href="#_sub5" class="code">function [A v] = crop_background(A, bcol)</a></li><li><a href="#_sub6" class="code">function b = isvector(options)</a></li><li><a href="#_sub7" class="code">function b = isbitmap(options)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%EXPORT_FIG  Exports figures suitable for publication</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   im = export_fig</span>
+0005 <span class="comment">%   [im alpha] = export_fig</span>
+0006 <span class="comment">%   export_fig filename</span>
+0007 <span class="comment">%   export_fig filename -format1 -format2</span>
+0008 <span class="comment">%   export_fig ... -nocrop</span>
+0009 <span class="comment">%   export_fig ... -native</span>
+0010 <span class="comment">%   export_fig ... -m&lt;val&gt;</span>
+0011 <span class="comment">%   export_fig ... -r&lt;val&gt;</span>
+0012 <span class="comment">%   export_fig ... -a&lt;val&gt;</span>
+0013 <span class="comment">%   export_fig ... -q&lt;val&gt;</span>
+0014 <span class="comment">%   export_fig ... -&lt;renderer&gt;</span>
+0015 <span class="comment">%   export_fig ... -&lt;colorspace&gt;</span>
+0016 <span class="comment">%   export_fig ... -append</span>
+0017 <span class="comment">%   export_fig(..., handle)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% This function saves a figure or single axes to one or more vector and/or</span>
+0020 <span class="comment">% bitmap file formats, and/or outputs a rasterized version to the</span>
+0021 <span class="comment">% workspace, with the following properties:</span>
+0022 <span class="comment">%   - Figure/axes reproduced as it appears on screen</span>
+0023 <span class="comment">%   - Cropped borders (optional)</span>
+0024 <span class="comment">%   - Embedded fonts (vector formats)</span>
+0025 <span class="comment">%   - Improved line and grid line styles</span>
+0026 <span class="comment">%   - Anti-aliased graphics (bitmap formats)</span>
+0027 <span class="comment">%   - Render images at native resolution (optional for bitmap formats)</span>
+0028 <span class="comment">%   - Transparent background supported (pdf, eps, png)</span>
+0029 <span class="comment">%   - Semi-transparent patch objects supported (png only)</span>
+0030 <span class="comment">%   - RGB, CMYK or grayscale output (CMYK only with pdf, eps, tiff)</span>
+0031 <span class="comment">%   - Variable image compression, including lossless (pdf, eps, jpg)</span>
+0032 <span class="comment">%   - Optionally append to file (pdf, tiff)</span>
+0033 <span class="comment">%   - Vector formats: pdf, eps</span>
+0034 <span class="comment">%   - Bitmap formats: png, tiff, jpg, bmp, export to workspace</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% This function is especially suited to exporting figures for use in</span>
+0037 <span class="comment">% publications and presentations, because of the high quality and</span>
+0038 <span class="comment">% portability of media produced.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Note that the background color and figure dimensions are reproduced</span>
+0041 <span class="comment">% (the latter approximately, and ignoring cropping &amp; magnification) in the</span>
+0042 <span class="comment">% output file. For transparent background (and semi-transparent patch</span>
+0043 <span class="comment">% objects), set the figure (and axes) 'Color' property to 'none'; pdf, eps</span>
+0044 <span class="comment">% and png are the only file formats to support a transparent background,</span>
+0045 <span class="comment">% whilst the png format alone supports transparency of patch objects.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% The choice of renderer (opengl, zbuffer or painters) has a large impact</span>
+0048 <span class="comment">% on the quality of output. Whilst the default value (opengl for bitmaps,</span>
+0049 <span class="comment">% painters for vector formats) generally gives good results, if you aren't</span>
+0050 <span class="comment">% satisfied then try another renderer.  Notes: 1) For vector formats (eps,</span>
+0051 <span class="comment">% pdf), only painters generates vector graphics. 2) For bitmaps, only</span>
+0052 <span class="comment">% opengl can render transparent patch objects correctly. 3) For bitmaps,</span>
+0053 <span class="comment">% only painters will correctly scale line dash and dot lengths when</span>
+0054 <span class="comment">% magnifying or anti-aliasing. 4) Fonts may be substitued with Courier when</span>
+0055 <span class="comment">% using painters.</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% When exporting to vector format (pdf &amp; eps) and bitmap format using the</span>
+0058 <span class="comment">% painters renderer, this function requires that ghostscript is installed</span>
+0059 <span class="comment">% on your system. You can download this from:</span>
+0060 <span class="comment">%   http://www.ghostscript.com</span>
+0061 <span class="comment">% When exporting to eps it additionally requires pdftops, from the Xpdf</span>
+0062 <span class="comment">% suite of functions. You can download this from:</span>
+0063 <span class="comment">%   http://www.foolabs.com/xpdf</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">%IN:</span>
+0066 <span class="comment">%   filename - string containing the name (optionally including full or</span>
+0067 <span class="comment">%              relative path) of the file the figure is to be saved as. If</span>
+0068 <span class="comment">%              a path is not specified, the figure is saved in the current</span>
+0069 <span class="comment">%              directory. If no name and no output arguments are specified,</span>
+0070 <span class="comment">%              the default name, 'export_fig_out', is used. If neither a</span>
+0071 <span class="comment">%              file extension nor a format are specified, a &quot;.png&quot; is added</span>
+0072 <span class="comment">%              and the figure saved in that format.</span>
+0073 <span class="comment">%   -format1, -format2, etc. - strings containing the extensions of the</span>
+0074 <span class="comment">%                              file formats the figure is to be saved as.</span>
+0075 <span class="comment">%                              Valid options are: '-pdf', '-eps', '-png',</span>
+0076 <span class="comment">%                              '-tif', '-jpg' and '-bmp'. All combinations</span>
+0077 <span class="comment">%                              of formats are valid.</span>
+0078 <span class="comment">%   -nocrop - option indicating that the borders of the output are not to</span>
+0079 <span class="comment">%             be cropped.</span>
+0080 <span class="comment">%   -m&lt;val&gt; - option where val indicates the factor to magnify the</span>
+0081 <span class="comment">%             on-screen figure dimensions by when generating bitmap</span>
+0082 <span class="comment">%             outputs. Default: '-m1'.</span>
+0083 <span class="comment">%   -r&lt;val&gt; - option val indicates the resolution (in pixels per inch) to</span>
+0084 <span class="comment">%             export bitmap outputs at, keeping the dimensions of the</span>
+0085 <span class="comment">%             on-screen figure. Default: sprintf('-r%g', get(0,</span>
+0086 <span class="comment">%             'ScreenPixelsPerInch')). Note that the -m and -r options</span>
+0087 <span class="comment">%             change the same property.</span>
+0088 <span class="comment">%   -native - option indicating that the output resolution (when outputting</span>
+0089 <span class="comment">%             a bitmap format) should be such that the vertical resolution</span>
+0090 <span class="comment">%             of the first suitable image found in the figure is at the</span>
+0091 <span class="comment">%             native resolution of that image. To specify a particular</span>
+0092 <span class="comment">%             image to use, give it the tag 'export_fig_native'. Notes:</span>
+0093 <span class="comment">%             This overrides any value set with the -m and -r options. It</span>
+0094 <span class="comment">%             also assumes that the image is displayed front-to-parallel</span>
+0095 <span class="comment">%             with the screen. The output resolution is approximate and</span>
+0096 <span class="comment">%             should not be relied upon. Anti-aliasing can have adverse</span>
+0097 <span class="comment">%             effects on image quality (disable with the -a1 option).</span>
+0098 <span class="comment">%   -a1, -a2, -a3, -a4 - option indicating the amount of anti-aliasing to</span>
+0099 <span class="comment">%                        use for bitmap outputs. '-a1' means no anti-</span>
+0100 <span class="comment">%                        aliasing; '-a4' is the maximum amount (default).</span>
+0101 <span class="comment">%   -&lt;renderer&gt; - option to force a particular renderer (painters, opengl</span>
+0102 <span class="comment">%                 or zbuffer) to be used over the default: opengl for</span>
+0103 <span class="comment">%                 bitmaps; painters for vector formats.</span>
+0104 <span class="comment">%   -&lt;colorspace&gt; - option indicating which colorspace color figures should</span>
+0105 <span class="comment">%                   be saved in: RGB (default), CMYK or gray. CMYK is only</span>
+0106 <span class="comment">%                   supported in pdf, eps and tiff output.</span>
+0107 <span class="comment">%   -q&lt;val&gt; - option to vary bitmap image quality (in pdf, eps and jpg</span>
+0108 <span class="comment">%             files only).  Larger val, in the range 0-100, gives higher</span>
+0109 <span class="comment">%             quality/lower compression. val &gt; 100 gives lossless</span>
+0110 <span class="comment">%             compression. Default: '-q95' for jpg, ghostscript prepress</span>
+0111 <span class="comment">%             default for pdf &amp; eps. Note: lossless compression can</span>
+0112 <span class="comment">%             sometimes give a smaller file size than the default lossy</span>
+0113 <span class="comment">%             compression, depending on the type of images.</span>
+0114 <span class="comment">%   -append - option indicating that if the file (pdfs only) already</span>
+0115 <span class="comment">%             exists, the figure is to be appended as a new page, instead</span>
+0116 <span class="comment">%             of being overwritten (default).</span>
+0117 <span class="comment">%   handle - The handle of the figure or axes (can be an array of handles</span>
+0118 <span class="comment">%            of several axes, but these must be in the same figure) to be</span>
+0119 <span class="comment">%            saved. Default: gcf.</span>
+0120 <span class="comment">%</span>
+0121 <span class="comment">%OUT:</span>
+0122 <span class="comment">%   im - MxNxC uint8 image array of the figure.</span>
+0123 <span class="comment">%   alpha - MxN single array of alphamatte values in range [0,1], for the</span>
+0124 <span class="comment">%           case when the background is transparent.</span>
+0125 <span class="comment">%</span>
+0126 <span class="comment">%   Some helpful examples and tips can be found at:</span>
+0127 <span class="comment">%      http://sites.google.com/site/oliverwoodford/software/export_fig</span>
+0128 <span class="comment">%</span>
+0129 <span class="comment">%   See also PRINT, SAVEAS.</span>
+0130 
+0131 <span class="comment">% Copyright (C) Oliver Woodford 2008-2011</span>
+0132 
+0133 <span class="comment">% The idea of using ghostscript is inspired by Peder Axensten's SAVEFIG</span>
+0134 <span class="comment">% (fex id: 10889) which is itself inspired by EPS2PDF (fex id: 5782).</span>
+0135 <span class="comment">% The idea for using pdftops came from the MATLAB newsgroup (id: 168171).</span>
+0136 <span class="comment">% The idea of editing the EPS file to change line styles comes from Jiro</span>
+0137 <span class="comment">% Doke's FIXPSLINESTYLE (fex id: 17928).</span>
+0138 <span class="comment">% The idea of changing dash length with line width came from comments on</span>
+0139 <span class="comment">% fex id: 5743, but the implementation is mine :)</span>
+0140 <span class="comment">% The idea of anti-aliasing bitmaps came from Anders Brun's MYAA (fex id:</span>
+0141 <span class="comment">% 20979).</span>
+0142 <span class="comment">% The idea of appending figures in pdfs came from Matt C in comments on the</span>
+0143 <span class="comment">% FEX (id: 23629)</span>
+0144 
+0145 <span class="comment">% Thanks to Roland Martin for pointing out the colour MATLAB</span>
+0146 <span class="comment">% bug/feature with colorbar axes and transparent backgrounds.</span>
+0147 <span class="comment">% Thanks also to Andrew Matthews for describing a bug to do with the figure</span>
+0148 <span class="comment">% size changing in -nodisplay mode. I couldn't reproduce it, but included a</span>
+0149 <span class="comment">% fix anyway.</span>
+0150 <span class="comment">% Thanks to Tammy Threadgill for reporting a bug where an axes is not</span>
+0151 <span class="comment">% isolated from gui objects.</span>
+0152 
+0153 <a name="_sub0" href="#_subfunctions" class="code">function [im alpha] = export_fig(varargin)</a>
+0154 <span class="comment">% Parse the input arguments</span>
+0155 [fig options] = <a href="#_sub1" class="code" title="subfunction [fig options] = parse_args(nout, varargin)">parse_args</a>(nargout, varargin{:});
+0156 <span class="comment">% Isolate the subplot, if it is one</span>
+0157 cls = strcmp(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig(1), <span class="string">'Type'</span>), <span class="string">'axes'</span>);
+0158 <span class="keyword">if</span> cls
+0159     <span class="comment">% Given handles of one or more axes</span>
+0160     fig = <a href="isolate_axes.html" class="code" title="function fh = isolate_axes(ah, vis)">isolate_axes</a>(fig);
+0161 <span class="keyword">else</span>
+0162     old_mode = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'InvertHardcopy'</span>);
+0163 <span class="keyword">end</span>
+0164 <span class="comment">% Hack the font units where necessary (due to a font rendering bug in</span>
+0165 <span class="comment">% print?). This may not work perfectly in all cases. Also it can change the</span>
+0166 <span class="comment">% figure layout if reverted, so use a copy.</span>
+0167 magnify = options.magnify * options.aa_factor;
+0168 <span class="keyword">if</span> <a href="#_sub7" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options) &amp;&amp; magnify ~= 1
+0169     fontu = findobj(fig, <span class="string">'FontUnits'</span>, <span class="string">'normalized'</span>);
+0170     <span class="keyword">if</span> ~isempty(fontu)
+0171         <span class="comment">% Some normalized font units found</span>
+0172         <span class="keyword">if</span> ~cls
+0173             fig = copyfig(fig);
+0174             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Visible'</span>, <span class="string">'off'</span>);
+0175             fontu = findobj(fig, <span class="string">'FontUnits'</span>, <span class="string">'normalized'</span>);
+0176             cls = true;
+0177         <span class="keyword">end</span>
+0178         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fontu, <span class="string">'FontUnits'</span>, <span class="string">'points'</span>);
+0179     <span class="keyword">end</span>
+0180 <span class="keyword">end</span>
+0181 <span class="comment">% Set to print exactly what is there</span>
+0182 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'InvertHardcopy'</span>, <span class="string">'off'</span>);
+0183 <span class="comment">% Set the renderer</span>
+0184 <span class="keyword">switch</span> options.renderer
+0185     <span class="keyword">case</span> 1
+0186         renderer = <span class="string">'-opengl'</span>;
+0187     <span class="keyword">case</span> 2
+0188         renderer = <span class="string">'-zbuffer'</span>;
+0189     <span class="keyword">case</span> 3
+0190         renderer = <span class="string">'-painters'</span>;
+0191     <span class="keyword">otherwise</span>
+0192         renderer = <span class="string">'-opengl'</span>; <span class="comment">% Default for bitmaps</span>
+0193 <span class="keyword">end</span>
+0194 <span class="comment">% Do the bitmap formats first</span>
+0195 <span class="keyword">if</span> <a href="#_sub7" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0196     <span class="comment">% Get the background colour</span>
+0197     tcol = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'Color'</span>);
+0198     <span class="keyword">if</span> isequal(tcol, <span class="string">'none'</span>) &amp;&amp; (options.png || options.alpha)
+0199         <span class="comment">% Get out an alpha channel</span>
+0200         <span class="comment">% MATLAB &quot;feature&quot;: black colorbar axes can change to white and vice versa!</span>
+0201         hCB = findobj(fig, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'Tag'</span>, <span class="string">'Colorbar'</span>);
+0202         <span class="keyword">if</span> isempty(hCB)
+0203             yCol = [];
+0204             xCol = [];
+0205         <span class="keyword">else</span>
+0206             yCol = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hCB, <span class="string">'YColor'</span>);
+0207             xCol = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hCB, <span class="string">'XColor'</span>);
+0208             <span class="keyword">if</span> iscell(yCol)
+0209                 yCol = cell2mat(yCol);
+0210                 xCol = cell2mat(xCol);
+0211             <span class="keyword">end</span>
+0212             yCol = sum(yCol, 2);
+0213             xCol = sum(xCol, 2);
+0214         <span class="keyword">end</span>
+0215         <span class="comment">% MATLAB &quot;feature&quot;: apparently figure size can change when changing</span>
+0216         <span class="comment">% colour in -nodisplay mode</span>
+0217         pos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'Position'</span>);
+0218         <span class="comment">% Set the background colour to black, and set size in case it was</span>
+0219         <span class="comment">% changed internally</span>
+0220         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'Position'</span>, pos);
+0221         <span class="comment">% Correct the colorbar axes colours</span>
+0222         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hCB(yCol==0), <span class="string">'YColor'</span>, [0 0 0]);
+0223         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hCB(xCol==0), <span class="string">'XColor'</span>, [0 0 0]);
+0224         <span class="comment">% Print large version to array</span>
+0225         B = <a href="print2array.html" class="code" title="function A = print2array(fig, res, renderer)">print2array</a>(fig, magnify, renderer);
+0226         <span class="comment">% Downscale the image</span>
+0227         B = <a href="#_sub2" class="code" title="subfunction A = downsize(A, factor)">downsize</a>(single(B), options.aa_factor);
+0228         <span class="comment">% Set background to white (and set size)</span>
+0229         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Color'</span>, <span class="string">'w'</span>, <span class="string">'Position'</span>, pos);
+0230         <span class="comment">% Correct the colorbar axes colours</span>
+0231         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hCB(yCol==3), <span class="string">'YColor'</span>, [1 1 1]);
+0232         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hCB(xCol==3), <span class="string">'XColor'</span>, [1 1 1]);
+0233         <span class="comment">% Print large version to array</span>
+0234         A = <a href="print2array.html" class="code" title="function A = print2array(fig, res, renderer)">print2array</a>(fig, magnify, renderer);
+0235         <span class="comment">% Downscale the image</span>
+0236         A = <a href="#_sub2" class="code" title="subfunction A = downsize(A, factor)">downsize</a>(single(A), options.aa_factor);
+0237         <span class="comment">% Set the background colour (and size) back to normal</span>
+0238         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Color'</span>, <span class="string">'none'</span>, <span class="string">'Position'</span>, pos);
+0239         <span class="comment">% Compute the alpha map</span>
+0240         alpha = round(sum(B - A, 3)) / (255 * 3) + 1;
+0241         A = alpha;
+0242         A(A==0) = 1;
+0243         A = B ./ A(:,:,[1 1 1]);
+0244         <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> B
+0245         <span class="comment">% Convert to greyscale</span>
+0246         <span class="keyword">if</span> options.colourspace == 2
+0247             A = <a href="#_sub3" class="code" title="subfunction A = rgb2grey(A)">rgb2grey</a>(A);
+0248         <span class="keyword">end</span>
+0249         A = uint8(A);
+0250         <span class="comment">% Crop the background</span>
+0251         <span class="keyword">if</span> options.crop
+0252             [alpha v] = <a href="#_sub5" class="code" title="subfunction [A v] = crop_background(A, bcol)">crop_background</a>(alpha, 0);
+0253             A = A(v(1):v(2),v(3):v(4),:);
+0254         <span class="keyword">end</span>
+0255         <span class="keyword">if</span> options.png
+0256             <span class="comment">% Compute the resolution</span>
+0257             res = options.magnify * <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ScreenPixelsPerInch'</span>) / 25.4e-3;
+0258             <span class="comment">% Save the png</span>
+0259             imwrite(A, [options.name <span class="string">'.png'</span>], <span class="string">'Alpha'</span>, alpha, <span class="string">'ResolutionUnit'</span>, <span class="string">'meter'</span>, <span class="string">'XResolution'</span>, res, <span class="string">'YResolution'</span>, res);
+0260             <span class="comment">% Clear the png bit</span>
+0261             options.png = false;
+0262         <span class="keyword">end</span>
+0263         <span class="comment">% Return only one channel for greyscale</span>
+0264         <span class="keyword">if</span> <a href="#_sub7" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0265             A = <a href="#_sub4" class="code" title="subfunction A = check_greyscale(A)">check_greyscale</a>(A);
+0266         <span class="keyword">end</span>
+0267         <span class="keyword">if</span> options.alpha
+0268             <span class="comment">% Store the image</span>
+0269             im = A;
+0270             <span class="comment">% Clear the alpha bit</span>
+0271             options.alpha = false;
+0272         <span class="keyword">end</span>
+0273         <span class="comment">% Get the non-alpha image</span>
+0274         <span class="keyword">if</span> <a href="#_sub7" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0275             alph = alpha(:,:,ones(1, size(A, 3)));
+0276             A = uint8(single(A) .* alph + 255 * (1 - alph));
+0277             <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> alph
+0278         <span class="keyword">end</span>
+0279         <span class="keyword">if</span> options.im
+0280             <span class="comment">% Store the new image</span>
+0281             im = A;
+0282         <span class="keyword">end</span>
+0283     <span class="keyword">else</span>
+0284         <span class="comment">% Print large version to array</span>
+0285         <span class="keyword">if</span> isequal(tcol, <span class="string">'none'</span>)
+0286             <span class="comment">% MATLAB &quot;feature&quot;: apparently figure size can change when changing</span>
+0287             <span class="comment">% colour in -nodisplay mode</span>
+0288             pos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'Position'</span>);
+0289             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Color'</span>, <span class="string">'w'</span>, <span class="string">'Position'</span>, pos);
+0290             A = <a href="print2array.html" class="code" title="function A = print2array(fig, res, renderer)">print2array</a>(fig, magnify, renderer);
+0291             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Color'</span>, <span class="string">'none'</span>, <span class="string">'Position'</span>, pos);
+0292             tcol = 255;
+0293         <span class="keyword">else</span>
+0294             A = <a href="print2array.html" class="code" title="function A = print2array(fig, res, renderer)">print2array</a>(fig, magnify, renderer);
+0295             tcol = tcol * 255;
+0296             <span class="keyword">if</span> ~isequal(tcol, round(tcol))
+0297                 tcol = squeeze(A(1,1,:));
+0298             <span class="keyword">end</span>
+0299         <span class="keyword">end</span>
+0300         <span class="comment">% Crop the background</span>
+0301         <span class="keyword">if</span> options.crop
+0302             A = <a href="#_sub5" class="code" title="subfunction [A v] = crop_background(A, bcol)">crop_background</a>(A, tcol);
+0303         <span class="keyword">end</span>
+0304         <span class="comment">% Downscale the image</span>
+0305         A = <a href="#_sub2" class="code" title="subfunction A = downsize(A, factor)">downsize</a>(A, options.aa_factor);
+0306         <span class="keyword">if</span> options.colourspace == 2
+0307             <span class="comment">% Convert to greyscale</span>
+0308             A = <a href="#_sub3" class="code" title="subfunction A = rgb2grey(A)">rgb2grey</a>(A);
+0309         <span class="keyword">else</span>
+0310             <span class="comment">% Return only one channel for greyscale</span>
+0311             A = <a href="#_sub4" class="code" title="subfunction A = check_greyscale(A)">check_greyscale</a>(A);
+0312         <span class="keyword">end</span>
+0313         <span class="comment">% Outputs</span>
+0314         <span class="keyword">if</span> options.im
+0315             im = A;
+0316         <span class="keyword">end</span>
+0317         <span class="keyword">if</span> options.alpha
+0318             im = A;
+0319             alpha = zeros(size(A, 1), size(A, 2), <span class="string">'single'</span>);
+0320         <span class="keyword">end</span>
+0321     <span class="keyword">end</span>
+0322     <span class="comment">% Save the images</span>
+0323     <span class="keyword">if</span> options.png
+0324         res = options.magnify * <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ScreenPixelsPerInch'</span>) / 25.4e-3;
+0325         imwrite(A, [options.name <span class="string">'.png'</span>], <span class="string">'ResolutionUnit'</span>, <span class="string">'meter'</span>, <span class="string">'XResolution'</span>, res, <span class="string">'YResolution'</span>, res);
+0326     <span class="keyword">end</span>
+0327     <span class="keyword">if</span> options.bmp
+0328         imwrite(A, [options.name <span class="string">'.bmp'</span>]);
+0329     <span class="keyword">end</span>
+0330     <span class="comment">% Save jpeg with given quality</span>
+0331     <span class="keyword">if</span> options.jpg
+0332         quality = options.quality;
+0333         <span class="keyword">if</span> isempty(quality)
+0334             quality = 95;
+0335         <span class="keyword">end</span>
+0336         <span class="keyword">if</span> quality &gt; 100
+0337             imwrite(A, [options.name <span class="string">'.jpg'</span>], <span class="string">'Mode'</span>, <span class="string">'lossless'</span>);
+0338         <span class="keyword">else</span>
+0339             imwrite(A, [options.name <span class="string">'.jpg'</span>], <span class="string">'Quality'</span>, quality);
+0340         <span class="keyword">end</span>
+0341     <span class="keyword">end</span>
+0342     <span class="comment">% Save tif images in cmyk if wanted (and possible)</span>
+0343     <span class="keyword">if</span> options.tif
+0344         <span class="keyword">if</span> options.colourspace == 1 &amp;&amp; size(A, 3) == 3
+0345             A = double(255 - A);
+0346             K = min(A, [], 3);
+0347             K_ = 255 ./ max(255 - K, 1);
+0348             C = (A(:,:,1) - K) .* K_;
+0349             M = (A(:,:,2) - K) .* K_;
+0350             Y = (A(:,:,3) - K) .* K_;
+0351             A = uint8(cat(3, C, M, Y, K));
+0352             <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> C M Y K K_
+0353         <span class="keyword">end</span>
+0354         append_mode = {<span class="string">'overwrite'</span>, <span class="string">'append'</span>};
+0355         imwrite(A, [options.name <span class="string">'.tif'</span>], <span class="string">'Resolution'</span>, options.magnify*<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ScreenPixelsPerInch'</span>), <span class="string">'WriteMode'</span>, append_mode{options.append+1});
+0356     <span class="keyword">end</span>
+0357 <span class="keyword">end</span>
+0358 <span class="comment">% Now do the vector formats</span>
+0359 <span class="keyword">if</span> <a href="#_sub6" class="code" title="subfunction b = isvector(options)">isvector</a>(options)
+0360     <span class="comment">% Set the default renderer to painters</span>
+0361     <span class="keyword">if</span> ~options.renderer
+0362         renderer = <span class="string">'-painters'</span>;
+0363     <span class="keyword">end</span>
+0364     <span class="comment">% Generate some filenames</span>
+0365     tmp_nam = [tempname <span class="string">'.eps'</span>];
+0366     <span class="keyword">if</span> options.pdf
+0367         pdf_nam = [options.name <span class="string">'.pdf'</span>];
+0368     <span class="keyword">else</span>
+0369         pdf_nam = [tempname <span class="string">'.pdf'</span>];
+0370     <span class="keyword">end</span>
+0371     <span class="comment">% Generate the options for print</span>
+0372     p2eArgs = {renderer};
+0373     <span class="keyword">if</span> options.colourspace == 1
+0374         p2eArgs = [p2eArgs {<span class="string">'-cmyk'</span>}];
+0375     <span class="keyword">end</span>
+0376     <span class="keyword">if</span> ~options.crop
+0377         p2eArgs = [p2eArgs {<span class="string">'-loose'</span>}];
+0378     <span class="keyword">end</span>
+0379     <span class="keyword">try</span>
+0380         <span class="comment">% Generate an eps</span>
+0381         <a href="print2eps.html" class="code" title="function print2eps(name, fig, varargin)">print2eps</a>(tmp_nam, fig, p2eArgs{:});
+0382         <span class="comment">% Generate a pdf</span>
+0383         <a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality)">eps2pdf</a>(tmp_nam, pdf_nam, 1, options.append, options.colourspace==2, options.quality);
+0384     <span class="keyword">catch</span>
+0385         <span class="comment">% Delete the eps</span>
+0386         <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0387         rethrow(lasterror);
+0388     <span class="keyword">end</span>
+0389     <span class="comment">% Delete the eps</span>
+0390     <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0391     <span class="keyword">if</span> options.eps
+0392         <span class="keyword">try</span>
+0393             <span class="comment">% Generate an eps from the pdf</span>
+0394             <a href="pdf2eps.html" class="code" title="function pdf2eps(source, dest)">pdf2eps</a>(pdf_nam, [options.name <span class="string">'.eps'</span>]);
+0395         <span class="keyword">catch</span>
+0396             <span class="keyword">if</span> ~options.pdf
+0397                 <span class="comment">% Delete the pdf</span>
+0398                 <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(pdf_nam);
+0399             <span class="keyword">end</span>
+0400             rethrow(lasterror);
+0401         <span class="keyword">end</span>
+0402         <span class="keyword">if</span> ~options.pdf
+0403             <span class="comment">% Delete the pdf</span>
+0404             <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(pdf_nam);
+0405         <span class="keyword">end</span>
+0406     <span class="keyword">end</span>
+0407 <span class="keyword">end</span>
+0408 <span class="keyword">if</span> cls
+0409     <span class="comment">% Close the created figure</span>
+0410     close(fig);
+0411 <span class="keyword">else</span>
+0412     <span class="comment">% Reset the hardcopy mode</span>
+0413     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'InvertHardcopy'</span>, old_mode);
+0414 <span class="keyword">end</span>
+0415 <span class="keyword">return</span>
+0416 
+0417 <a name="_sub1" href="#_subfunctions" class="code">function [fig options] = parse_args(nout, varargin)</a>
+0418 <span class="comment">% Parse the input arguments</span>
+0419 <span class="comment">% Set the defaults</span>
+0420 fig = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'CurrentFigure'</span>);
+0421 options = struct(<span class="string">'name'</span>, <span class="string">'export_fig_out'</span>, <span class="keyword">...</span>
+0422                  <span class="string">'crop'</span>, true, <span class="keyword">...</span>
+0423                  <span class="string">'renderer'</span>, 0, <span class="keyword">...</span><span class="comment"> % 0: default, 1: OpenGL, 2: ZBuffer, 3: Painters</span>
+0424                  <span class="string">'pdf'</span>, false, <span class="keyword">...</span>
+0425                  <span class="string">'eps'</span>, false, <span class="keyword">...</span>
+0426                  <span class="string">'png'</span>, false, <span class="keyword">...</span>
+0427                  <span class="string">'tif'</span>, false, <span class="keyword">...</span>
+0428                  <span class="string">'jpg'</span>, false, <span class="keyword">...</span>
+0429                  <span class="string">'bmp'</span>, false, <span class="keyword">...</span>
+0430                  <span class="string">'colourspace'</span>, 0, <span class="keyword">...</span><span class="comment"> % 0: RGB/gray, 1: CMYK, 2: gray</span>
+0431                  <span class="string">'append'</span>, false, <span class="keyword">...</span>
+0432                  <span class="string">'im'</span>, nout == 1, <span class="keyword">...</span>
+0433                  <span class="string">'alpha'</span>, nout == 2, <span class="keyword">...</span>
+0434                  <span class="string">'aa_factor'</span>, 4, <span class="keyword">...</span>
+0435                  <span class="string">'magnify'</span>, 1, <span class="keyword">...</span>
+0436                  <span class="string">'quality'</span>, []);
+0437 native = false; <span class="comment">% Set resolution to native of an image</span>
+0438 
+0439 <span class="comment">% Go through the other arguments</span>
+0440 <span class="keyword">for</span> a = 1:nargin-1
+0441     <span class="keyword">if</span> all(ishandle(varargin{a}))
+0442         fig = varargin{a};
+0443     <span class="keyword">elseif</span> ischar(varargin{a}) &amp;&amp; ~isempty(varargin{a})
+0444         <span class="keyword">if</span> varargin{a}(1) == <span class="string">'-'</span>
+0445             <span class="keyword">switch</span> lower(varargin{a}(2:end))
+0446                 <span class="keyword">case</span> <span class="string">'nocrop'</span>
+0447                     options.crop = false;
+0448                 <span class="keyword">case</span> <span class="string">'opengl'</span>
+0449                     options.renderer = 1;
+0450                 <span class="keyword">case</span> <span class="string">'zbuffer'</span>
+0451                     options.renderer = 2;
+0452                 <span class="keyword">case</span> <span class="string">'painters'</span>
+0453                     options.renderer = 3;
+0454                 <span class="keyword">case</span> <span class="string">'pdf'</span>
+0455                     options.pdf = true;
+0456                 <span class="keyword">case</span> <span class="string">'eps'</span>
+0457                     options.eps = true;
+0458                 <span class="keyword">case</span> <span class="string">'png'</span>
+0459                     options.png = true;
+0460                 <span class="keyword">case</span> {<span class="string">'tif'</span>, <span class="string">'tiff'</span>}
+0461                     options.tif = true;
+0462                 <span class="keyword">case</span> {<span class="string">'jpg'</span>, <span class="string">'jpeg'</span>}
+0463                     options.jpg = true;
+0464                 <span class="keyword">case</span> <span class="string">'bmp'</span>
+0465                     options.bmp = true;
+0466                 <span class="keyword">case</span> <span class="string">'rgb'</span>
+0467                     options.colourspace = 0;
+0468                 <span class="keyword">case</span> <span class="string">'cmyk'</span>
+0469                     options.colourspace = 1;
+0470                 <span class="keyword">case</span> {<span class="string">'gray'</span>, <span class="string">'grey'</span>}
+0471                     options.colourspace = 2;
+0472                 <span class="keyword">case</span> {<span class="string">'a1'</span>, <span class="string">'a2'</span>, <span class="string">'a3'</span>, <span class="string">'a4'</span>}
+0473                     options.aa_factor = str2double(varargin{a}(3));
+0474                 <span class="keyword">case</span> <span class="string">'append'</span>
+0475                     options.append = true;
+0476                 <span class="keyword">case</span> <span class="string">'native'</span>
+0477                     native = true;
+0478                 <span class="keyword">otherwise</span>
+0479                     val = str2double(regexp(varargin{a}, <span class="string">'(?&lt;=-(m|M|r|R|q|Q))(\d*\.)?\d+(e-?\d+)?'</span>, <span class="string">'match'</span>));
+0480                     <span class="keyword">if</span> ~isscalar(val)
+0481                         error(<span class="string">'option %s not recognised'</span>, varargin{a});
+0482                     <span class="keyword">end</span>
+0483                     <span class="keyword">switch</span> lower(varargin{a}(2))
+0484                         <span class="keyword">case</span> <span class="string">'m'</span>
+0485                             options.magnify = val;
+0486                         <span class="keyword">case</span> <span class="string">'r'</span>
+0487                             options.magnify = val ./ <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ScreenPixelsPerInch'</span>);
+0488                         <span class="keyword">case</span> <span class="string">'q'</span>
+0489                             options.quality = max(val, 0);
+0490                     <span class="keyword">end</span>
+0491             <span class="keyword">end</span>
+0492         <span class="keyword">else</span>
+0493             name = varargin{a};
+0494             <span class="keyword">if</span> numel(name) &gt; 3 &amp;&amp; name(end-3) == <span class="string">'.'</span> &amp;&amp; any(strcmpi(name(end-2:end), {<span class="string">'pdf'</span>, <span class="string">'eps'</span>, <span class="string">'png'</span>, <span class="string">'tif'</span>, <span class="string">'jpg'</span>, <span class="string">'bmp'</span>}))
+0495                 options.(lower(name(end-2:end))) = true;
+0496                 name = name(1:end-4);
+0497             <span class="keyword">end</span>
+0498             options.name = name;
+0499         <span class="keyword">end</span>
+0500     <span class="keyword">end</span>
+0501 <span class="keyword">end</span>
+0502 
+0503 <span class="comment">% Check we have a figure handle</span>
+0504 <span class="keyword">if</span> isempty(fig)
+0505     error(<span class="string">'No figure found'</span>);
+0506 <span class="keyword">end</span>
+0507 
+0508 <span class="comment">% Set the default format</span>
+0509 <span class="keyword">if</span> ~<a href="#_sub6" class="code" title="subfunction b = isvector(options)">isvector</a>(options) &amp;&amp; ~<a href="#_sub7" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0510     options.png = true;
+0511 <span class="keyword">end</span>
+0512 
+0513 <span class="comment">% If requested, set the resolution to the native vertical resolution of the</span>
+0514 <span class="comment">% first suitable image found</span>
+0515 <span class="keyword">if</span> native &amp;&amp; <a href="#_sub7" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0516     <span class="comment">% Find a suitable image</span>
+0517     list = findobj(fig, <span class="string">'Type'</span>, <span class="string">'image'</span>, <span class="string">'Tag'</span>, <span class="string">'export_fig_native'</span>);
+0518     <span class="keyword">if</span> isempty(list)
+0519         list = findobj(fig, <span class="string">'Type'</span>, <span class="string">'image'</span>, <span class="string">'Visible'</span>, <span class="string">'on'</span>);
+0520     <span class="keyword">end</span>
+0521     <span class="keyword">for</span> hIm = list(:)'
+0522         <span class="comment">% Check height is &gt;= 2</span>
+0523         height = size(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hIm, <span class="string">'CData'</span>), 1);
+0524         <span class="keyword">if</span> height &lt; 2
+0525             <span class="keyword">continue</span>
+0526         <span class="keyword">end</span>
+0527         <span class="comment">% Account for the image filling only part of the axes, or vice</span>
+0528         <span class="comment">% versa</span>
+0529         yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hIm, <span class="string">'YData'</span>);
+0530         <span class="keyword">if</span> isscalar(yl)
+0531             yl = [yl(1)-0.5 yl(1)+height+0.5];
+0532         <span class="keyword">else</span>
+0533             <span class="keyword">if</span> ~diff(yl)
+0534                 <span class="keyword">continue</span>
+0535             <span class="keyword">end</span>
+0536             yl = yl + [-0.5 0.5] * (diff(yl) / (height - 1));
+0537         <span class="keyword">end</span>
+0538         hAx = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hIm, <span class="string">'Parent'</span>);
+0539         yl2 = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hAx, <span class="string">'YLim'</span>);
+0540         <span class="comment">% Find the pixel height of the axes</span>
+0541         oldUnits = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hAx, <span class="string">'Units'</span>);
+0542         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hAx, <span class="string">'Units'</span>, <span class="string">'pixels'</span>);
+0543         pos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hAx, <span class="string">'Position'</span>);
+0544         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hAx, <span class="string">'Units'</span>, oldUnits);
+0545         <span class="keyword">if</span> ~pos(4)
+0546             <span class="keyword">continue</span>
+0547         <span class="keyword">end</span>
+0548         <span class="comment">% Found a suitable image</span>
+0549         <span class="comment">% Account for stretch-to-fill being disabled</span>
+0550         pbar = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hAx, <span class="string">'PlotBoxAspectRatio'</span>);
+0551         pos = min(pos(4), pbar(2)*pos(3)/pbar(1));
+0552         <span class="comment">% Set the magnification to give native resolution</span>
+0553         options.magnify = (height * diff(yl2)) / (pos * diff(yl));
+0554         <span class="keyword">break</span>
+0555     <span class="keyword">end</span>
+0556 <span class="keyword">end</span>
+0557 <span class="keyword">return</span>
+0558 
+0559 <a name="_sub2" href="#_subfunctions" class="code">function A = downsize(A, factor)</a>
+0560 <span class="comment">% Downsample an image</span>
+0561 <span class="keyword">if</span> factor == 1
+0562     <span class="comment">% Nothing to do</span>
+0563     <span class="keyword">return</span>
+0564 <span class="keyword">end</span>
+0565 <span class="keyword">try</span>
+0566     <span class="comment">% Faster, but requires image processing toolbox</span>
+0567     A = imresize(A, 1/factor, <span class="string">'bilinear'</span>);
+0568 <span class="keyword">catch</span>
+0569     <span class="comment">% No image processing toolbox - resize manually</span>
+0570     <span class="comment">% Lowpass filter - use Gaussian as is separable, so faster</span>
+0571     <span class="comment">% Compute the 1d Gaussian filter</span>
+0572     filt = (-factor-1:factor+1) / (factor * 0.6);
+0573     filt = single(exp(-filt .* filt));
+0574     <span class="comment">% Normalize the filter</span>
+0575     filt = filt / sum(filt, <span class="string">'native'</span>);
+0576     <span class="comment">% Filter the image</span>
+0577     padding = floor(numel(filt) / 2);
+0578     <span class="keyword">for</span> a = 1:size(A, 3)
+0579         A(:,:,a) = conv2(filt, filt', single(A([ones(1, padding) 1:end repmat(<span class="keyword">end</span>, 1, padding)],[ones(1, padding) 1:end repmat(<span class="keyword">end</span>, 1, padding)],a)), <span class="string">'valid'</span>);
+0580     <span class="keyword">end</span>
+0581     <span class="comment">% Subsample</span>
+0582     A = A(1+floor(mod(end-1, factor)/2):factor:<span class="keyword">end</span>,1+floor(mod(end-1, factor)/2):factor:<span class="keyword">end</span>,:);
+0583 <span class="keyword">end</span>
+0584 <span class="keyword">return</span>
+0585 
+0586 <a name="_sub3" href="#_subfunctions" class="code">function A = rgb2grey(A)</a>
+0587 A = cast(reshape(reshape(single(A), [], 3) * single([0.299; 0.587; 0.114]), size(A, 1), size(A, 2)), class(A));
+0588 <span class="keyword">return</span>
+0589 
+0590 <a name="_sub4" href="#_subfunctions" class="code">function A = check_greyscale(A)</a>
+0591 <span class="comment">% Check if the image is greyscale</span>
+0592 <span class="keyword">if</span> size(A, 3) == 3 &amp;&amp; <span class="keyword">...</span>
+0593         all(reshape(A(:,:,1) == A(:,:,2), [], 1)) &amp;&amp; <span class="keyword">...</span>
+0594         all(reshape(A(:,:,2) == A(:,:,3), [], 1))
+0595     A = A(:,:,1); <span class="comment">% Save only one channel for 8-bit output</span>
+0596 <span class="keyword">end</span>
+0597 <span class="keyword">return</span>
+0598 
+0599 <a name="_sub5" href="#_subfunctions" class="code">function [A v] = crop_background(A, bcol)</a>
+0600 <span class="comment">% Map the foreground pixels</span>
+0601 [h w c] = size(A);
+0602 <span class="keyword">if</span> isscalar(bcol) &amp;&amp; c &gt; 1
+0603     bcol = bcol(ones(1, c));
+0604 <span class="keyword">end</span>
+0605 bail = false;
+0606 <span class="keyword">for</span> l = 1:w
+0607     <span class="keyword">for</span> a = 1:c
+0608         <span class="keyword">if</span> ~all(A(:,l,a) == bcol(a))
+0609             bail = true;
+0610             <span class="keyword">break</span>;
+0611         <span class="keyword">end</span>
+0612     <span class="keyword">end</span>
+0613     <span class="keyword">if</span> bail
+0614         <span class="keyword">break</span>;
+0615     <span class="keyword">end</span>
+0616 <span class="keyword">end</span>
+0617 bail = false;
+0618 <span class="keyword">for</span> r = w:-1:l
+0619     <span class="keyword">for</span> a = 1:c
+0620         <span class="keyword">if</span> ~all(A(:,r,a) == bcol(a))
+0621             bail = true;
+0622             <span class="keyword">break</span>;
+0623         <span class="keyword">end</span>
+0624     <span class="keyword">end</span>
+0625     <span class="keyword">if</span> bail
+0626         <span class="keyword">break</span>;
+0627     <span class="keyword">end</span>
+0628 <span class="keyword">end</span>
+0629 bail = false;
+0630 <span class="keyword">for</span> t = 1:h
+0631     <span class="keyword">for</span> a = 1:c
+0632         <span class="keyword">if</span> ~all(A(t,:,a) == bcol(a))
+0633             bail = true;
+0634             <span class="keyword">break</span>;
+0635         <span class="keyword">end</span>
+0636     <span class="keyword">end</span>
+0637     <span class="keyword">if</span> bail
+0638         <span class="keyword">break</span>;
+0639     <span class="keyword">end</span>
+0640 <span class="keyword">end</span>
+0641 bail = false;
+0642 <span class="keyword">for</span> b = h:-1:t
+0643     <span class="keyword">for</span> a = 1:c
+0644         <span class="keyword">if</span> ~all(A(b,:,a) == bcol(a))
+0645             bail = true;
+0646             <span class="keyword">break</span>;
+0647         <span class="keyword">end</span>
+0648     <span class="keyword">end</span>
+0649     <span class="keyword">if</span> bail
+0650         <span class="keyword">break</span>;
+0651     <span class="keyword">end</span>
+0652 <span class="keyword">end</span>
+0653 <span class="comment">% Crop the background, leaving one boundary pixel to avoid bleeding on</span>
+0654 <span class="comment">% resize</span>
+0655 v = [max(t-1, 1) min(b+1, h) max(l-1, 1) min(r+1, w)];
+0656 A = A(v(1):v(2),v(3):v(4),:);
+0657 <span class="keyword">return</span>
+0658 
+0659 <a name="_sub6" href="#_subfunctions" class="code">function b = isvector(options)</a>
+0660 b = options.pdf || options.eps;
+0661 <span class="keyword">return</span>
+0662 
+0663 <a name="_sub7" href="#_subfunctions" class="code">function b = isbitmap(options)</a>
+0664 b = options.png || options.tif || options.jpg || options.bmp || options.im || options.alpha;
+0665 <span class="keyword">return</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

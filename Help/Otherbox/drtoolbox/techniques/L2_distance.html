@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of L2_distance</title>
+  <meta name="keywords" content="L2_distance">
+  <meta name="description" content="L2_DISTANCE - computes Euclidean distance matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>L2_distance
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>L2_DISTANCE - computes Euclidean distance matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function d = L2_distance(a, b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> L2_DISTANCE - computes Euclidean distance matrix
+
+ E = L2_distance(A,B)
+
+    A - (DxM) matrix 
+    B - (DxN) matrix
+ 
+ Returns:
+    E - (MxN) Euclidean distances between vectors in A and B
+
+
+ Description : 
+    This fully vectorized (VERY FAST!) m-file computes the 
+    Euclidean distance between two vectors by:
+
+                 ||A-B|| = sqrt ( ||A||^2 + ||B||^2 - 2*A.B )
+
+ Example : 
+    A = rand(400,100); B = rand(400,200);
+    d = distance(A,B);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/generate_data.html" class="code" title="function [X, labels, t] = generate_data(dataname, n, noise)">generate_data</a>	GENERATE_DATA Generates an artificial dataset</li><li><a href="../../../Otherbox/drtoolbox/out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>	GRAM Computes the Gram-matrix of data points X using a kernel function</li><li><a href="kernel_function.html" class="code" title="function y = kernel_function(v, X, center, kernel, param1, param2, type)">kernel_function</a>	KERNEL_FUNCTION Computes sum of (K * X) where X is a possible eigenvector</li><li><a href="laplacian_eigen.html" class="code" title="function [mappedX, mapping] = laplacian_eigen(X, no_dims, k, sigma, eig_impl)">laplacian_eigen</a>	LAPLACIAN_EIGEN Performs non-linear dimensionality reduction using Laplacian Eigenmaps</li><li><a href="lmvu.html" class="code" title="function [mappedX, mapping] = lmvu(X, no_dims, K, LL)">lmvu</a>	LMVU Performs Landmark MVU on dataset X</li><li><a href="lpp.html" class="code" title="function [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl)">lpp</a>	LPP Perform linearity preserving projection</li><li><a href="spe.html" class="code" title="function Y = spe(X, no_dims, varargin)">spe</a>	SPE Perform the Stochastic Proximity Embedding algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function d = L2_distance(a, b)</a>
+0002 <span class="comment">% L2_DISTANCE - computes Euclidean distance matrix</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% E = L2_distance(A,B)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    A - (DxM) matrix</span>
+0007 <span class="comment">%    B - (DxN) matrix</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Returns:</span>
+0010 <span class="comment">%    E - (MxN) Euclidean distances between vectors in A and B</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Description :</span>
+0014 <span class="comment">%    This fully vectorized (VERY FAST!) m-file computes the</span>
+0015 <span class="comment">%    Euclidean distance between two vectors by:</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%                 ||A-B|| = sqrt ( ||A||^2 + ||B||^2 - 2*A.B )</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Example :</span>
+0020 <span class="comment">%    A = rand(400,100); B = rand(400,200);</span>
+0021 <span class="comment">%    d = distance(A,B);</span>
+0022 
+0023 <span class="comment">% Author   : Roland Bunschoten</span>
+0024 <span class="comment">%            University of Amsterdam</span>
+0025 <span class="comment">%            Intelligent Autonomous Systems (IAS) group</span>
+0026 <span class="comment">%            Kruislaan 403  1098 SJ Amsterdam</span>
+0027 <span class="comment">%            tel.(+31)20-5257524</span>
+0028 <span class="comment">%            bunschot@wins.uva.nl</span>
+0029 <span class="comment">% Last Rev : Wed Oct 20 08:58:08 MET DST 1999</span>
+0030 <span class="comment">% Tested   : PC Matlab v5.2 and Solaris Matlab v5.3</span>
+0031 
+0032 <span class="comment">% Copyright notice: You are free to modify, extend and distribute</span>
+0033 <span class="comment">%    this code granted that the author of the original code is</span>
+0034 <span class="comment">%    mentioned as the original author of the code.</span>
+0035 
+0036 <span class="comment">% Fixed by JBT (3/18/00) to work for 1-dimensional vectors</span>
+0037 <span class="comment">% and to warn for imaginary numbers.  Also ensures that</span>
+0038 <span class="comment">% output is all real, and allows the option of forcing diagonals to</span>
+0039 <span class="comment">% be zero.</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%</span>
+0042 
+0043 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0044 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0045 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0046 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0047 <span class="comment">% maintain the name of the original author.</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0050 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0051 
+0052 
+0053     <span class="keyword">if</span> nargin &lt; 2
+0054        error(<span class="string">'Not enough input arguments'</span>);
+0055     <span class="keyword">end</span>
+0056     <span class="keyword">if</span> size(a, 1) ~= size(b, 1)
+0057         error(<span class="string">'A and B should be of same dimensionality'</span>);
+0058     <span class="keyword">end</span>
+0059     <span class="keyword">if</span> ~isreal(a) || ~isreal(b)
+0060         warning(<span class="string">'Computing distance table using imaginary inputs. Results may be off.'</span>); 
+0061     <span class="keyword">end</span>
+0062 
+0063     <span class="comment">% Padd zeros if necessray</span>
+0064     <span class="keyword">if</span> size(a, 1) == 1
+0065         a = [a; zeros(1, size(a, 2))]; 
+0066         b = [b; zeros(1, size(b, 2))]; 
+0067     <span class="keyword">end</span>
+0068 
+0069     <span class="comment">% Compute distance table</span>
+0070     d = sqrt(bsxfun(@plus, sum(a .* a)', bsxfun(@minus, sum(b .* b), 2 * a' * b)));
+0071 
+0072     <span class="comment">% Make sure result is real</span>
+0073     d = real(d);
+0074</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,40 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  util_get_active_electrodes -> util_convert_hw2ch;
+  util_get_subdirs -> util_get_subdirs;
+  util_perform_op_in_directory -> util_get_dirfiles;
+  util_perform_op_in_directory -> util_get_fullpath;
+  util_perform_op_in_directory -> util_get_subdirs;
+  util_perform_op_in_directory -> util_show_progress_rounding;
+
+  util_calc_cv [URL="util_calc_cv.html"];
+  util_calc_sem [URL="util_calc_sem.html"];
+  util_convert_64to8s [URL="util_convert_64to8s.html"];
+  util_convert_8sto64 [URL="util_convert_8sto64.html"];
+  util_convert_ch2hw [URL="util_convert_ch2hw.html"];
+  util_convert_dp2ms [URL="util_convert_dp2ms.html"];
+  util_convert_hw2ch [URL="util_convert_hw2ch.html"];
+  util_convert_ms2dp [URL="util_convert_ms2dp.html"];
+  util_disp_hyperlink [URL="util_disp_hyperlink.html"];
+  util_escape_string [URL="util_escape_string.html"];
+  util_find_a_in_b [URL="util_find_a_in_b.html"];
+  util_find_fourwell_ch2well [URL="util_find_fourwell_ch2well.html"];
+  util_find_maxlength_of_chs [URL="util_find_maxlength_of_chs.html"];
+  util_find_not_continued_point [URL="util_find_not_continued_point.html"];
+  util_find_number_of_used_electrodes [URL="util_find_number_of_used_electrodes.html"];
+  util_get_active_electrodes [URL="util_get_active_electrodes.html"];
+  util_get_dirfiles [URL="util_get_dirfiles.html"];
+  util_get_fullpath [URL="util_get_fullpath.html"];
+  util_get_subdirs [URL="util_get_subdirs.html"];
+  util_get_toolbox_root [URL="util_get_toolbox_root.html"];
+  util_get_value_by_percent [URL="util_get_value_by_percent.html"];
+  util_moving_window [URL="util_moving_window.html"];
+  util_perform_op_in_directory [URL="util_perform_op_in_directory.html"];
+  util_remove_colrow_based_on_mean [URL="util_remove_colrow_based_on_mean.html"];
+  util_remove_elements_from_a_vector [URL="util_remove_elements_from_a_vector.html"];
+  util_set_colorbar [URL="util_set_colorbar.html"];
+  util_show_progress_rounding [URL="util_show_progress_rounding.html"];
+  util_show_workinfo [URL="util_show_workinfo.html"];
+  util_sort_matrix_by_indexer [URL="util_sort_matrix_by_indexer.html"];
+  util_trim_spif [URL="util_trim_spif.html"];
+}

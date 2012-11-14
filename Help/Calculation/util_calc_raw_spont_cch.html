@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_raw_spont_cch</title>
+  <meta name="keywords" content="util_calc_raw_spont_cch">
+  <meta name="description" content="UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_raw_spont_cch
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ lags cch peak] = util_calc_raw_spont_cch( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）
+   从给定SPIF结构体中计算两个电极之间的相关性，计算时没有使用各种correct方法，是raw直方图。
+   输入参数：
+               'spif'  spif结构体，必须给定
+               'ref'   参考电极，必须给定
+               'obs'   观察电极，必须给定
+               'bin'   bin的长度，单位ms，默认10 ms
+               'nlag'  使用histc方法时，窗口正向长度，单位ms，默认500 ms（负向对称）
+               'startend'      要计算的信号记录时间范围，单位ms，默认全程
+               'verbose'       是否显示计算参数等细节信息，默认不显示
+               'findpeakw'     是否返回峰值宽度，默认返回；若不计算则返回0（建议多试几个bin，特别是10ms bin比较可靠）
+               'normalization' 使用histc方法时的归一方法，默认为概率，'prob'。（prob可能导致不对称现象）
+                   'counts_bin'    每个bin内有多少count
+                   'prob'          counts_bin除以ref的counts，或执行其他的归一方法到[0 1]间
+               'method'        计算方法：
+                   'histc'     使用histc计算[default]，注意，使用这个方法时，归一化之后会导致失去严格的对称性（46/47的peak值和47/46的不一样，但曲线形状是一样的）
+                   'xcorr'     使用xcorr计算，此时normalization自动归一化到[0 1]，这个方法的问题是速度较慢。
+                   'migram'    使用migram计算互信息，此时normalization自动归一化到[0 1]，这个方法的问题也是速度慢。
+                   'corrgram'  使用corrgram计算互相关，此时归一化情况不明，一般而言是[0 1]，速度慢。
+                   'mi'        使用nmi计算互信息（无直方图，只有一个值），可选择归一到[0 1]，速度快。
+                   速度：mi &gt; histc &gt; xcorr &gt; corrgram &gt; migram
+   返回参数：
+               'lags'  x轴，bin分布
+               'cch'   y轴，直方图
+               'peak'  峰值结构体
+                       .value Peak值
+                       .position 峰值的位置（单位ms）
+                       .width 峰的宽度（单位ms）
+                       峰宽查找中部分原理请参考findpeaks函数（最小二乘拟合法）
+
+ Eg.
+ [d spif trif] = util_load_spike_trigger_mcdstream('isCompact',1);
+ list = [ 12 13 14 15 16 17 ];
+ for i = 1:length(list)
+     [lags cch] = util_calc_raw_spont_cch('spif',spif,'ref',21,'obs',list(i),'bin',10);
+     subplot(1,length(list)+1,i),plot(lags,cch),ylim([0 1]),axis off;
+ end
+ subplot(1,length(list)+1,length(list)+1),plot((-500:500:500),0),hold on,stem(0,1),ylim([0 1]);axis off
+
+   蒲江波 2010年3月22日
+       完成计算互相关的基本逻辑（startend未实现）
+   蒲江波 2010年3月23日
+       完成Startend参数的编写，完成峰值.value,.position的编写。（宽度未实现）
+   蒲江波 2010年3月24日
+       实现对互相关峰的准确测算（借助findpeaks函数），修改显示参数设置，修复各类运算中可能出现的Bug
+   蒲江波 2011年3月27日
+       增加了使用xcorr运算的方式，全面检查了整个程序的逻辑，改进了peak
+       width的运算逻辑，修复了各类Bug，特别是实现了对称的互相关运算
+   蒲江波 2011年3月28日
+       增加了使用migram/corrgram运算.
+       修改window_max/min为nlag，使各个方法调用形式统一。</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/InteractivePeakfinder2/findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>	function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)</li><li><a href="../Otherbox/corrgram/corrgram.html" class="code" title="function [c_out, l_out, t_out] = corrgram(varargin)">corrgram</a>	CORRGRAM Calculate windowed cross correlation between two signals.</li><li><a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>	CPRINTF displays styled formatted text in the Command Window</li><li><a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>	</li><li><a href="../Otherbox/migram/corrgram.html" class="code" title="function [c_out, l_out, t_out] = corrgram(varargin)">corrgram</a>	CORRGRAM Calculate windowed cross correlation between two signals.</li><li><a href="../Otherbox/migram/migram.html" class="code" title="function [c_out, l_out, t_out] = migram(varargin)">migram</a>	MIGRAM Calculate windowed mutual information between two signals.</li><li><a href="../Otherbox/nmi/MI.html" class="code" title="function v = MI(label, result)">MI</a>	Mutual information</li><li><a href="../Otherbox/nmi/nmi.html" class="code" title="function v = nmi(label, result)">nmi</a>	Nomalized mutual information</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ lags cch peak] = util_calc_raw_spont_cch( varargin )</a>
+0002 <span class="comment">%UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</span>
+0003 <span class="comment">%   从给定SPIF结构体中计算两个电极之间的相关性，计算时没有使用各种correct方法，是raw直方图。</span>
+0004 <span class="comment">%   输入参数：</span>
+0005 <span class="comment">%               'spif'  spif结构体，必须给定</span>
+0006 <span class="comment">%               'ref'   参考电极，必须给定</span>
+0007 <span class="comment">%               'obs'   观察电极，必须给定</span>
+0008 <span class="comment">%               'bin'   bin的长度，单位ms，默认10 ms</span>
+0009 <span class="comment">%               'nlag'  使用histc方法时，窗口正向长度，单位ms，默认500 ms（负向对称）</span>
+0010 <span class="comment">%               'startend'      要计算的信号记录时间范围，单位ms，默认全程</span>
+0011 <span class="comment">%               'verbose'       是否显示计算参数等细节信息，默认不显示</span>
+0012 <span class="comment">%               'findpeakw'     是否返回峰值宽度，默认返回；若不计算则返回0（建议多试几个bin，特别是10ms bin比较可靠）</span>
+0013 <span class="comment">%               'normalization' 使用histc方法时的归一方法，默认为概率，'prob'。（prob可能导致不对称现象）</span>
+0014 <span class="comment">%                   'counts_bin'    每个bin内有多少count</span>
+0015 <span class="comment">%                   'prob'          counts_bin除以ref的counts，或执行其他的归一方法到[0 1]间</span>
+0016 <span class="comment">%               'method'        计算方法：</span>
+0017 <span class="comment">%                   'histc'     使用histc计算[default]，注意，使用这个方法时，归一化之后会导致失去严格的对称性（46/47的peak值和47/46的不一样，但曲线形状是一样的）</span>
+0018 <span class="comment">%                   'xcorr'     使用xcorr计算，此时normalization自动归一化到[0 1]，这个方法的问题是速度较慢。</span>
+0019 <span class="comment">%                   'migram'    使用migram计算互信息，此时normalization自动归一化到[0 1]，这个方法的问题也是速度慢。</span>
+0020 <span class="comment">%                   'corrgram'  使用corrgram计算互相关，此时归一化情况不明，一般而言是[0 1]，速度慢。</span>
+0021 <span class="comment">%                   'mi'        使用nmi计算互信息（无直方图，只有一个值），可选择归一到[0 1]，速度快。</span>
+0022 <span class="comment">%                   速度：mi &gt; histc &gt; xcorr &gt; corrgram &gt; migram</span>
+0023 <span class="comment">%   返回参数：</span>
+0024 <span class="comment">%               'lags'  x轴，bin分布</span>
+0025 <span class="comment">%               'cch'   y轴，直方图</span>
+0026 <span class="comment">%               'peak'  峰值结构体</span>
+0027 <span class="comment">%                       .value Peak值</span>
+0028 <span class="comment">%                       .position 峰值的位置（单位ms）</span>
+0029 <span class="comment">%                       .width 峰的宽度（单位ms）</span>
+0030 <span class="comment">%                       峰宽查找中部分原理请参考findpeaks函数（最小二乘拟合法）</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Eg.</span>
+0033 <span class="comment">% [d spif trif] = util_load_spike_trigger_mcdstream('isCompact',1);</span>
+0034 <span class="comment">% list = [ 12 13 14 15 16 17 ];</span>
+0035 <span class="comment">% for i = 1:length(list)</span>
+0036 <span class="comment">%     [lags cch] = util_calc_raw_spont_cch('spif',spif,'ref',21,'obs',list(i),'bin',10);</span>
+0037 <span class="comment">%     subplot(1,length(list)+1,i),plot(lags,cch),ylim([0 1]),axis off;</span>
+0038 <span class="comment">% end</span>
+0039 <span class="comment">% subplot(1,length(list)+1,length(list)+1),plot((-500:500:500),0),hold on,stem(0,1),ylim([0 1]);axis off</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%   蒲江波 2010年3月22日</span>
+0042 <span class="comment">%       完成计算互相关的基本逻辑（startend未实现）</span>
+0043 <span class="comment">%   蒲江波 2010年3月23日</span>
+0044 <span class="comment">%       完成Startend参数的编写，完成峰值.value,.position的编写。（宽度未实现）</span>
+0045 <span class="comment">%   蒲江波 2010年3月24日</span>
+0046 <span class="comment">%       实现对互相关峰的准确测算（借助findpeaks函数），修改显示参数设置，修复各类运算中可能出现的Bug</span>
+0047 <span class="comment">%   蒲江波 2011年3月27日</span>
+0048 <span class="comment">%       增加了使用xcorr运算的方式，全面检查了整个程序的逻辑，改进了peak</span>
+0049 <span class="comment">%       width的运算逻辑，修复了各类Bug，特别是实现了对称的互相关运算</span>
+0050 <span class="comment">%   蒲江波 2011年3月28日</span>
+0051 <span class="comment">%       增加了使用migram/corrgram运算.</span>
+0052 <span class="comment">%       修改window_max/min为nlag，使各个方法调用形式统一。</span>
+0053 
+0054 <span class="comment">% 分析输入参数</span>
+0055 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0056 
+0057 <span class="keyword">if</span> ~exist(<span class="string">'spif'</span>, <span class="string">'var'</span>)
+0058     error(<span class="string">'SPIF must be provided.'</span>);
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">if</span> ~exist(<span class="string">'ref'</span>, <span class="string">'var'</span>)
+0062     error(<span class="string">'Reference Electrode # must be provided.'</span>);
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">if</span> ~exist(<span class="string">'obs'</span>, <span class="string">'var'</span>)
+0066     error(<span class="string">'Observing Electrode # must be provided.'</span>);
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> ~exist(<span class="string">'bin'</span>, <span class="string">'var'</span>)
+0070     bin = 10;
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="keyword">if</span> ~exist(<span class="string">'nlag'</span>, <span class="string">'var'</span>)
+0074     nlag = 500;
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">if</span> ~exist(<span class="string">'startend'</span>, <span class="string">'var'</span>)
+0078     start_time = spif.startend(1);
+0079     stop_time = spif.startend(2);
+0080 <span class="keyword">else</span>
+0081     <span class="keyword">if</span> startend(1) &lt; spif.startend(1) || startend(1) &gt;= startend(2)
+0082         start_time = spif.startend(1);
+0083     <span class="keyword">end</span>
+0084     <span class="keyword">if</span> startend(2) &gt; spif.startend(2) || startend(2) &lt;= startend(1)
+0085         stop_time = spif.startend(2);
+0086     <span class="keyword">end</span>
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> ~exist(<span class="string">'verbose'</span>, <span class="string">'var'</span>)
+0090     <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a> = 0;
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">if</span> ~exist(<span class="string">'findpeakw'</span>, <span class="string">'var'</span>)
+0094     findpeakw = 1;
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="keyword">if</span> ~exist(<span class="string">'normalization'</span>, <span class="string">'var'</span>)
+0098     normalization = <span class="string">'prob'</span>;
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0102     method = <span class="string">'histc'</span>;
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="comment">% 显示参数设置</span>
+0106 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0107     <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Comments'</span>, [<span class="string">'Bin width = '</span> num2str(bin) <span class="string">' ms\n'</span>]);
+0108     <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Comments'</span>, [<span class="string">'Reference electrode# = '</span> num2str(ref) <span class="string">'\n'</span>]);
+0109     <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Comments'</span>, [<span class="string">'Observing electrode# = '</span> num2str(obs) <span class="string">'\n'</span>]);
+0110     <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Comments'</span>, [<span class="string">'Range from '</span> num2str(-1*nlag) <span class="string">' to '</span> num2str(nlag) <span class="string">' ms\n'</span>]);
+0111 <span class="keyword">end</span>
+0112 
+0113 <span class="comment">% 创建Spiketime Table的副本</span>
+0114 ref_times = spif.spiketimes{<a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(ref)};
+0115 obs_times = spif.spiketimes{<a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(obs)};
+0116 
+0117 <span class="comment">% 根据指定的时间长度处理Spiketime Table，把不在指定时间长度范围内的删除掉</span>
+0118 ref_times(ref_times &lt; start_time | ref_times &gt; stop_time) = [];
+0119 obs_times(obs_times &lt; start_time | obs_times &gt; stop_time) = [];
+0120 
+0121 <span class="comment">% 获取两个序列的长度</span>
+0122 ref_num = size(ref_times,1);
+0123 obs_num = size(obs_times,1);
+0124 
+0125 <span class="keyword">if</span> strcmpi(method, <span class="string">'histc'</span>)
+0126     <span class="comment">% 初始化互相关直方图最终结果变量</span>
+0127     <span class="comment">% 初始化lags</span>
+0128     lags = -1 * nlag : bin : nlag;
+0129     
+0130     <span class="keyword">if</span> isempty(find(lags==0, 1))
+0131         error(<span class="string">'You may want to choose another bin or window range to correctly place 0.'</span>);
+0132     <span class="keyword">end</span>
+0133     
+0134     <span class="comment">% 初始化cch</span>
+0135     cch = zeros(length(lags),1);
+0136     
+0137     <span class="comment">% 计算</span>
+0138     <span class="keyword">for</span> i = 1:ref_num
+0139         <span class="comment">% 用观察电极每个spike发生的时刻减去第i个参考电极spike</span>
+0140         difference = obs_times - ref_times(i);      <span class="comment">% in ms</span>
+0141         
+0142         <span class="comment">% 将差值计算到每个bin内</span>
+0143         i_bin = histc(difference, lags);
+0144         
+0145         <span class="comment">% 累计</span>
+0146         <span class="keyword">try</span>
+0147             cch = cch + i_bin;
+0148         <span class="keyword">catch</span> ME
+0149             <span class="keyword">if</span> obs_num == 1
+0150                 cch = cch + i_bin';
+0151             <span class="keyword">else</span>
+0152                 rethrow(ME)
+0153             <span class="keyword">end</span>
+0154             
+0155         <span class="keyword">end</span>
+0156     <span class="keyword">end</span>
+0157     
+0158     <span class="comment">% 计算正交化</span>
+0159     <span class="keyword">if</span> strcmp(normalization,<span class="string">'prob'</span>)
+0160         cch = cch / ref_num;
+0161     <span class="keyword">end</span>
+0162 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'xcorr'</span>)
+0163     <span class="comment">% In this mode:</span>
+0164     <span class="comment">% Bin is set by histc</span>
+0165     <span class="comment">% Normalization is performed by xcorr 'coeff'</span>
+0166     <span class="comment">% 注意，xcorr方法比较慢（~7倍），计算出来的波形是大致类似的（bin=10），max值不同</span>
+0167     
+0168     <span class="comment">% 初始化lags</span>
+0169     lags = -1 * nlag : bin : nlag;
+0170    
+0171     <span class="keyword">if</span> isempty(find(lags==0, 1))
+0172         error(<span class="string">'You may want to choose another bin or window range to correctly place 0.'</span>);
+0173     <span class="keyword">end</span>
+0174     
+0175     <span class="keyword">if</span> ref ~= obs
+0176         <span class="comment">% 互相关</span>
+0177         [cch lags] = xcorr(histc(obs_times, start_time:bin:stop_time), histc(ref_times, start_time:bin:stop_time), nlag/bin, <span class="string">'coeff'</span>);
+0178     <span class="keyword">else</span>
+0179         <span class="comment">% 自相关</span>
+0180         [cch lags] = xcorr(histc(obs_times, start_time:bin:stop_time), nlag/bin, <span class="string">'coeff'</span>);
+0181     <span class="keyword">end</span>
+0182     <span class="comment">% 修正lags</span>
+0183     lags = lags * bin;
+0184 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'migram'</span>)
+0185     <span class="comment">% In this mode:</span>
+0186     <span class="comment">% Bin is set by histc</span>
+0187     <span class="comment">% Normalization is performed by migram 'norm'</span>
+0188     <span class="comment">% 注意，mi方法也比较慢（比xcorr慢），也是对称的。</span>
+0189     
+0190     <span class="comment">% 初始化lags</span>
+0191     lags = -1 * nlag : bin : nlag;
+0192     num_bins = length(lags);
+0193     window_length = length(start_time:bin:stop_time);
+0194     
+0195     <span class="keyword">if</span> isempty(find(lags==0, 1))
+0196         error(<span class="string">'You may want to choose another bin or window range to correctly place 0.'</span>);
+0197     <span class="keyword">end</span>
+0198     
+0199     [cch lags] = <a href="../Otherbox/migram/migram.html" class="code" title="function [c_out, l_out, t_out] = migram(varargin)">migram</a>(histc(obs_times, start_time:bin:stop_time), histc(ref_times, start_time:bin:stop_time), nlag/bin, window_length, 0, num_bins/bin, <span class="string">'norm'</span>);
+0200     <span class="comment">% 修正lags</span>
+0201     lags = lags * bin;
+0202 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'corrgram'</span>)
+0203     <span class="comment">% In this mode:</span>
+0204     <span class="comment">% Bin is set by histc</span>
+0205     <span class="comment">% Normalization is performed by migram 'norm'</span>
+0206     <span class="comment">% 注意，mi方法也比较慢（比xcorr慢），也是对称的。</span>
+0207     
+0208     <span class="comment">% 初始化lags</span>
+0209     lags = -1 * nlag : bin : nlag;
+0210     window_length = length(start_time:bin:stop_time);
+0211     
+0212     <span class="keyword">if</span> isempty(find(lags==0, 1))
+0213         error(<span class="string">'You may want to choose another bin or window range to correctly place 0.'</span>);
+0214     <span class="keyword">end</span>
+0215     
+0216     [cch lags] = <a href="../Otherbox/corrgram/corrgram.html" class="code" title="function [c_out, l_out, t_out] = corrgram(varargin)">corrgram</a>(histc(obs_times, start_time:bin:stop_time), histc(ref_times, start_time:bin:stop_time), nlag/bin, window_length, 0);
+0217     <span class="comment">% 修正lags</span>
+0218     lags = lags * bin;
+0219 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'mi'</span>)
+0220     <span class="comment">% In this mode:</span>
+0221     <span class="comment">% Bin is set by histc</span>
+0222     <span class="comment">% Normalization is performed by default.(you can use MI.m for non-normalized result)</span>
+0223     <span class="comment">% 注意，没有直方图的结果，所以不能测算peak位置和宽度</span>
+0224     
+0225     <span class="keyword">if</span> strcmp(normalization,<span class="string">'prob'</span>)
+0226         cch = <a href="../Otherbox/nmi/nmi.html" class="code" title="function v = nmi(label, result)">nmi</a>(histc(obs_times, start_time:bin:stop_time), histc(ref_times, start_time:bin:stop_time));
+0227     <span class="keyword">else</span>
+0228         cch = <a href="../Otherbox/nmi/MI.html" class="code" title="function v = MI(label, result)">MI</a>(histc(obs_times, start_time:bin:stop_time), histc(ref_times, start_time:bin:stop_time));
+0229     <span class="keyword">end</span>
+0230     
+0231     lags = 0;
+0232     <span class="comment">% 不支持peak width</span>
+0233     findpeakw = 0;
+0234 <span class="keyword">else</span>
+0235     error(<span class="string">'wrong input: method'</span>);
+0236 <span class="keyword">end</span>
+0237 
+0238 
+0239 <span class="comment">% 峰值计算</span>
+0240 <span class="comment">% 峰值</span>
+0241 peak.value = max(cch);
+0242 
+0243 <span class="comment">% 峰值位置</span>
+0244 peak.position = lags(cch == peak.value);
+0245 <span class="keyword">if</span> length(peak.position) &gt; 1
+0246     <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0247         <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Red'</span>, <span class="string">'&gt;= 2 peaks deteced, please recheck the result if needed.\n'</span>);
+0248     <span class="keyword">end</span>
+0249     peak.width = 0;
+0250     <span class="keyword">return</span>;
+0251 <span class="keyword">end</span>
+0252 
+0253 <span class="comment">% 计算峰宽度</span>
+0254 
+0255 <span class="comment">% 若用户指定不查找峰宽度（可能增加耗时），则直接返回</span>
+0256 <span class="keyword">if</span> ~findpeakw
+0257     peak.width = 0;
+0258     <span class="keyword">return</span>;
+0259 <span class="keyword">end</span>
+0260 
+0261 fitwidth = 3;
+0262 
+0263 <span class="keyword">while</span> 1
+0264     <span class="comment">% 尝试寻找合适的峰值</span>
+0265     P = <a href="../Otherbox/InteractivePeakfinder2/findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>(lags, cch, 0, max(cch) / 10, 3, fitwidth);
+0266     <span class="keyword">if</span> (isnan(P(1)) || P(1) == 0 || isempty(P))
+0267         <span class="comment">% fitwidth取值不合适</span>
+0268         <span class="keyword">if</span> fitwidth &lt;= window_max - window_min
+0269             fitwidth = fitwidth + 1;
+0270             <span class="keyword">continue</span>;
+0271         <span class="keyword">else</span>
+0272             <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0273                 <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Red'</span>, <span class="string">'Peak width error. Set to 0. \n'</span>);
+0274             <span class="keyword">end</span>
+0275             peak.width = 0;
+0276             <span class="keyword">break</span>;
+0277         <span class="keyword">end</span>
+0278     <span class="keyword">else</span>
+0279         <span class="comment">% 有P矩阵，则检查P矩阵中是否包含之前发现的peak峰值位置</span>
+0280         p = find(P(:,2) == peak.position);
+0281         <span class="keyword">if</span> p
+0282             <span class="comment">% 存在一致的peak位置，则返回对应的峰宽</span>
+0283             r = P(:,4);
+0284             <span class="keyword">if</span> isnan(r(p)) || r(p) &lt;= 0
+0285                 <span class="comment">% 虽然位置对，但是找的峰宽不对</span>
+0286                 <span class="comment">% 继续找</span>
+0287                 <span class="keyword">if</span> fitwidth &lt;= window_max - window_min
+0288                     fitwidth = fitwidth + 1;
+0289                     <span class="keyword">continue</span>;
+0290                 <span class="keyword">else</span>
+0291                     <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0292                         <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Red'</span>, <span class="string">'Peak width error. Set to 0. \n'</span>);
+0293                     <span class="keyword">end</span>
+0294                     peak.width = 0;
+0295                     <span class="keyword">break</span>;
+0296                 <span class="keyword">end</span>
+0297             <span class="keyword">else</span>
+0298                 <span class="comment">% 峰宽正常值</span>
+0299                 peak.width = r(p);
+0300                 <span class="keyword">break</span>;
+0301             <span class="keyword">end</span>
+0302         <span class="keyword">else</span>
+0303             <span class="comment">% 没有准确一致的peak峰值位置</span>
+0304             <span class="keyword">if</span> fitwidth &lt;= window_max - window_min
+0305                 fitwidth = fitwidth + 1;
+0306                 <span class="keyword">continue</span>;
+0307             <span class="keyword">else</span>
+0308                 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0309                     <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Red'</span>, <span class="string">'Peak width error. Set to 0. \n'</span>);
+0310                 <span class="keyword">end</span>
+0311                 peak.width = 0;
+0312                 <span class="keyword">break</span>;
+0313             <span class="keyword">end</span>
+0314         <span class="keyword">end</span>
+0315     <span class="keyword">end</span>
+0316 <span class="keyword">end</span>
+0317 
+0318 <span class="keyword">end</span>
+0319</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

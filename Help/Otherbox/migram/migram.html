@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of migram</title>
+  <meta name="keywords" content="migram">
+  <meta name="description" content="MIGRAM Calculate windowed mutual information between two signals.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html migram -->
+<h1>migram
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MIGRAM Calculate windowed mutual information between two signals.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [c_out, l_out, t_out] = migram(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MIGRAM Calculate windowed mutual information between two signals.
+   I = MIGRAM(A,B,MAXLAG,WINDOW,NOVERLAP) calculates the windowed mutual   
+   information between the signals in vector A and vector B. MIGRAM splits  
+   the signals into overlapping segments and forms the columns of I with 
+   their mutual information values up to maximum lag specified by scalar 
+   MAXLAG. Each column of I contains the mutual information function 
+   between the short-term, time-localized signals A and B.  Time increases
+   linearly across the columns of I, from left to right.  Lag increases 
+   linearly down the rows, starting at -MAXLAG. If lengths of A and B 
+   differ, the shorter signal is filled with zeros. If N is the length of 
+   the signals, I is a matrix with 2*MAXLAG+1 rows and 
+         k = fix((N-NOVERLAP)/(WINDOW-NOVERLAP)) 
+   columns.
+
+   I = MIGRAM(A,B,MAXLAG,WINDOW,NOVERLAP,NBINS) calculates the mutual
+   information based on histograms with the number of bins NBINS.
+
+   I = MIGRAM(...,'norm') calculates the renormalised mutual
+   information, which is I/log(NBINS) and ensures a value range [0 1].
+
+   [I,L,T] = MIGRAM(...) returns a column of lag L and one of time T
+   at which the mutual information is computed. L has length equal 
+   to the number of rows of I, T has length k.
+
+   I = MIGRAM(A,B) calculates windowed mutual information using defeault
+   settings; the defeaults are MAXLAG = floor(0.1*N), WINDOW = floor(0.1*N),
+   NOVERLAP = 0 and NBINS = 10. You can tell MIGRAM to use the defeault 
+   for any parameter by leaving it off or using [] for that parameter, e.g. 
+   MIGRAM(A,B,[],1000).
+
+   MIGRAM(A,B) with no output arguments plots the mutual information 
+   using the current figure.
+
+   Remark
+   Please note that the mutual information derived with MI slightly 
+   differs from the results derived with MIGRAM. The reason is that
+   MI also considers estimation errors. 
+
+   Example
+       x = cos(0:.01:10*pi)';
+       y = sin(0:.01:10*pi)' + .5 * randn(length(x),1);
+       migram(x,y)
+
+   See also MI, <a href="corrgram.html" class="code" title="function [c_out, l_out, t_out] = corrgram(varargin)">CORRGRAM</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>	</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_calc_raw_spont_cch.html" class="code" title="function [ lags cch peak] = util_calc_raw_spont_cch( varargin )">util_calc_raw_spont_cch</a>	UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Z = MI6(x, y, nbins)</a></li><li><a href="#_sub2" class="code">function Z = MI5(x, y, nbins)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c_out, l_out, t_out] = migram(varargin)</a>
+0002 <span class="comment">%MIGRAM Calculate windowed mutual information between two signals.</span>
+0003 <span class="comment">%   I = MIGRAM(A,B,MAXLAG,WINDOW,NOVERLAP) calculates the windowed mutual</span>
+0004 <span class="comment">%   information between the signals in vector A and vector B. MIGRAM splits</span>
+0005 <span class="comment">%   the signals into overlapping segments and forms the columns of I with</span>
+0006 <span class="comment">%   their mutual information values up to maximum lag specified by scalar</span>
+0007 <span class="comment">%   MAXLAG. Each column of I contains the mutual information function</span>
+0008 <span class="comment">%   between the short-term, time-localized signals A and B.  Time increases</span>
+0009 <span class="comment">%   linearly across the columns of I, from left to right.  Lag increases</span>
+0010 <span class="comment">%   linearly down the rows, starting at -MAXLAG. If lengths of A and B</span>
+0011 <span class="comment">%   differ, the shorter signal is filled with zeros. If N is the length of</span>
+0012 <span class="comment">%   the signals, I is a matrix with 2*MAXLAG+1 rows and</span>
+0013 <span class="comment">%         k = fix((N-NOVERLAP)/(WINDOW-NOVERLAP))</span>
+0014 <span class="comment">%   columns.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   I = MIGRAM(A,B,MAXLAG,WINDOW,NOVERLAP,NBINS) calculates the mutual</span>
+0017 <span class="comment">%   information based on histograms with the number of bins NBINS.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   I = MIGRAM(...,'norm') calculates the renormalised mutual</span>
+0020 <span class="comment">%   information, which is I/log(NBINS) and ensures a value range [0 1].</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   [I,L,T] = MIGRAM(...) returns a column of lag L and one of time T</span>
+0023 <span class="comment">%   at which the mutual information is computed. L has length equal</span>
+0024 <span class="comment">%   to the number of rows of I, T has length k.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   I = MIGRAM(A,B) calculates windowed mutual information using defeault</span>
+0027 <span class="comment">%   settings; the defeaults are MAXLAG = floor(0.1*N), WINDOW = floor(0.1*N),</span>
+0028 <span class="comment">%   NOVERLAP = 0 and NBINS = 10. You can tell MIGRAM to use the defeault</span>
+0029 <span class="comment">%   for any parameter by leaving it off or using [] for that parameter, e.g.</span>
+0030 <span class="comment">%   MIGRAM(A,B,[],1000).</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%   MIGRAM(A,B) with no output arguments plots the mutual information</span>
+0033 <span class="comment">%   using the current figure.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%   Remark</span>
+0036 <span class="comment">%   Please note that the mutual information derived with MI slightly</span>
+0037 <span class="comment">%   differs from the results derived with MIGRAM. The reason is that</span>
+0038 <span class="comment">%   MI also considers estimation errors.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%   Example</span>
+0041 <span class="comment">%       x = cos(0:.01:10*pi)';</span>
+0042 <span class="comment">%       y = sin(0:.01:10*pi)' + .5 * randn(length(x),1);</span>
+0043 <span class="comment">%       migram(x,y)</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   See also MI, CORRGRAM.</span>
+0046 
+0047 <span class="comment">% Copyright (c) 2007 by AMRON</span>
+0048 <span class="comment">% Norbert Marwan, Potsdam University, Germany</span>
+0049 <span class="comment">% http://www.agnld.uni-potsdam.de</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% $Date: 2007/12/20 16:26:06 $</span>
+0052 <span class="comment">% $Revision: 5.6 $</span>
+0053 
+0054 
+0055 error(nargchk(2,7,nargin))
+0056 <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a> = 0;
+0057 
+0058 x = varargin{1}; y = varargin{2};
+0059 x = x(:); y = y(:);
+0060 
+0061 
+0062 <span class="comment">% check input and inital setting of parameters</span>
+0063 
+0064 nx = length(x); ny = length(y);
+0065 <span class="keyword">if</span> nx &lt; ny    <span class="comment">% zero-pad x if it has length less than y</span>
+0066     x(ny) = 0; nx = ny;
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> ny &lt; nx    <span class="comment">% zero-pad y if it has length less than x</span>
+0070     y(nx) = 0;
+0071 <span class="keyword">end</span>
+0072 
+0073 maxlag = floor(nx/10); 
+0074 window = floor(nx/10);
+0075 noverlap = 0;
+0076 nbins = 10;
+0077 norm = 0;
+0078 
+0079 i_num = find(cellfun(<span class="string">'isclass'</span>,varargin,<span class="string">'double'</span>));
+0080 i_char = find(cellfun(<span class="string">'isclass'</span>,varargin,<span class="string">'char'</span>));
+0081 
+0082 <span class="keyword">if</span> length(i_num) &gt; 2 &amp;&amp; ~isempty(varargin{i_num(3)})
+0083     maxlag = varargin{i_num(3)};
+0084     <span class="keyword">if</span> maxlag &lt; 0, error(<span class="string">'Requires positive integer value for maximum lag.'</span>), <span class="keyword">end</span>
+0085     <span class="keyword">if</span> length(maxlag) &gt; 1, error(<span class="string">'Requires MAXLAG to be a scalar.'</span>), <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="keyword">if</span> length(i_num) &gt; 3 &amp;&amp; ~isempty(varargin{i_num(4)})
+0089     window = varargin{i_num(4)};
+0090     <span class="keyword">if</span> window &lt;= 0, error(<span class="string">'Requires positive integer value for window length.'</span>), <span class="keyword">end</span>
+0091     <span class="keyword">if</span> length(window) &gt; 1, error(<span class="string">'Requires WINDOW to be a scalar.'</span>), <span class="keyword">end</span>
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="keyword">if</span> length(i_num) &gt; 4 &amp;&amp; ~isempty(varargin{i_num(5)})
+0095     noverlap = varargin{i_num(5)};
+0096     <span class="keyword">if</span> noverlap &lt; 0, error(<span class="string">'Requires positive integer value for NOVERLAP.'</span>), <span class="keyword">end</span>
+0097     <span class="keyword">if</span> length(noverlap) &gt; 1, error(<span class="string">'Requires NOVERLAP to be a scalar.'</span>), <span class="keyword">end</span>
+0098     <span class="keyword">if</span> noverlap &gt;= window, error(<span class="string">'Requires NOVERLAP to be strictly less than the window length.'</span>), <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="keyword">if</span> length(i_num) &gt; 5 &amp;&amp; ~isempty(varargin{i_num(6)})
+0102     nbins = varargin{i_num(6)};
+0103     <span class="keyword">if</span> nbins &lt;= 0, error(<span class="string">'Requires positive integer value for NBINS.'</span>), <span class="keyword">end</span>
+0104     <span class="keyword">if</span> length(nbins) &gt; 1, error(<span class="string">'Requires NBINS to be a scalar.'</span>), <span class="keyword">end</span>
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="comment">% normalise the result</span>
+0108 <span class="keyword">for</span> i = 1:length(i_char)
+0109     <span class="keyword">if</span> strcmpi(varargin(i_char(i)), <span class="string">'norm'</span>), norm = 1; <span class="keyword">end</span>
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% prepare time delayed signals</span>
+0113 X = buffer(x,maxlag+1,maxlag)';
+0114 Y = fliplr(buffer(y,maxlag+1,maxlag)');
+0115 
+0116 <span class="comment">% divide the delayed signals into overlapping windows</span>
+0117 <span class="comment">% and compute the correlation coefficient</span>
+0118 cnt = 1;
+0119 
+0120 warning(<span class="string">'off'</span>,<span class="string">'MATLAB:divideByZero'</span>)
+0121 
+0122 C = zeros(2*maxlag+1, fix((nx-noverlap)/(window-noverlap)));
+0123 <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, h = waitbar(0,<span class="string">'Compute mutual information'</span>); <span class="keyword">end</span>
+0124 
+0125 <span class="comment">% -MAXLAG:0</span>
+0126 [Yi dummy] = buffer(Y(:,1),window,noverlap,<span class="string">'nodelay'</span>);
+0127 <span class="keyword">if</span> exist(<span class="string">'accumarray'</span>,<span class="string">'builtin'</span>) == 5
+0128     <span class="keyword">for</span> i = 1:size(X,2), <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, waitbar(cnt/(2*size(X,2))), <span class="keyword">end</span>
+0129         [Xi dummy] = buffer(X(:,i),window,noverlap,<span class="string">'nodelay'</span>);
+0130         C(cnt,:) = <a href="#_sub1" class="code" title="subfunction Z = MI6(x, y, nbins)">MI6</a>(Xi, Yi, nbins);
+0131         cnt = cnt + 1;
+0132     <span class="keyword">end</span>
+0133 <span class="keyword">else</span>
+0134     <span class="keyword">for</span> i = 1:size(X,2), <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, waitbar(cnt/(2*size(X,2))), <span class="keyword">end</span>
+0135         [Xi dummy] = buffer(X(:,i),window,noverlap,<span class="string">'nodelay'</span>);
+0136         C(cnt,:) = <a href="#_sub2" class="code" title="subfunction Z = MI5(x, y, nbins)">MI5</a>(Xi, Yi, nbins);
+0137         cnt = cnt + 1;
+0138     <span class="keyword">end</span>
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="comment">% 0:MAXLAG</span>
+0142 [Xi dummy] = buffer(X(:,end),window,noverlap,<span class="string">'nodelay'</span>);
+0143 <span class="keyword">if</span> exist(<span class="string">'accumarray'</span>,<span class="string">'builtin'</span>) == 5
+0144     <span class="keyword">for</span> i = 2:size(Y,2), <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, waitbar(cnt/(2*size(X,2))), <span class="keyword">end</span>
+0145         [Yi dummy] = buffer(Y(:,i),window,noverlap,<span class="string">'nodelay'</span>);
+0146         C(cnt,:) = <a href="#_sub1" class="code" title="subfunction Z = MI6(x, y, nbins)">MI6</a>(Xi, Yi, nbins);
+0147         cnt = cnt + 1;
+0148     <span class="keyword">end</span>
+0149 <span class="keyword">else</span>
+0150     <span class="keyword">for</span> i = 2:size(Y,2), <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, waitbar(cnt/(2*size(X,2))), <span class="keyword">end</span>
+0151         [Yi dummy] = buffer(Y(:,i),window,noverlap,<span class="string">'nodelay'</span>);
+0152         C(cnt,:) = <a href="#_sub2" class="code" title="subfunction Z = MI5(x, y, nbins)">MI5</a>(Xi, Yi, nbins);
+0153         cnt = cnt + 1;
+0154     <span class="keyword">end</span>
+0155 <span class="keyword">end</span>
+0156 
+0157 <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(h), <span class="keyword">end</span>
+0158 
+0159 warning(<span class="string">'on'</span>,<span class="string">'MATLAB:divideByZero'</span>)
+0160 
+0161 <span class="comment">% create time scale for the windows</span>
+0162 t = (1:nx/size(Xi,2):nx)';
+0163 l = (-maxlag:maxlag)';
+0164 
+0165 <span class="comment">% if result has to be normalised</span>
+0166 <span class="keyword">if</span> norm
+0167     C = C / log(nbins);
+0168 <span class="keyword">end</span>
+0169 
+0170 
+0171 <span class="comment">% display and output result</span>
+0172 <span class="keyword">if</span> nargout == 0
+0173     newplot
+0174     imagesc(t, l, C)
+0175     xlabel(<span class="string">'Time'</span>), ylabel(<span class="string">'Lag'</span>), axis xy
+0176     title(<span class="string">'Windowed mutual information'</span>, <span class="string">'fontweight'</span>, <span class="string">'bold'</span>)
+0177     colorbar
+0178 <span class="keyword">elseif</span> nargout == 1,
+0179     c_out = C;
+0180 <span class="keyword">elseif</span> nargout == 2,
+0181     c_out = C;
+0182     l_out = l;
+0183 <span class="keyword">elseif</span> nargout == 3,
+0184     c_out = C;
+0185     t_out = t;
+0186     l_out = l;
+0187 <span class="keyword">end</span>
+0188 
+0189 
+0190 <span class="comment">% mutual information for Matlab version &gt;= 6</span>
+0191 <a name="_sub1" href="#_subfunctions" class="code">function Z = MI6(x, y, nbins)</a>
+0192     
+0193     <span class="comment">% normalise the data and replace the values with integers</span>
+0194     <span class="comment">% in the range [1 nbins]</span>
+0195     x = x - repmat(min(x), size(x,1), 1); 
+0196     y = y - repmat(min(y), size(y,1), 1);
+0197     x = x ./ repmat(max(x) + eps, size(x,1), 1); 
+0198     y = y ./ repmat(max(y) + eps, size(y,1), 1);
+0199     
+0200     x = floor(x * nbins) + 1;
+0201     y = floor(y * nbins) + 1;
+0202     
+0203     <span class="comment">% compute probabilities</span>
+0204     Z = zeros(1,size(x,2));
+0205     <span class="keyword">for</span> i = 1:size(x,2)
+0206     
+0207         Pxy = accumarray([x(:,i) y(:,i)] + 1, 1);
+0208         Px = sum(Pxy,1);
+0209         Py = sum(Pxy,2);
+0210 
+0211         Pxy = Pxy / sum(Pxy(:));
+0212         Px = Px / sum(Px(:));
+0213         Py = Py / sum(Py(:));
+0214 
+0215         <span class="comment">% entropies</span>
+0216         Ix = -sum((Px(Px ~= 0)) .* log(Px(Px ~= 0)));
+0217         Iy = -sum((Py(Py ~= 0)) .* log(Py(Py ~= 0)));
+0218         Ixy = -sum(Pxy(Pxy ~= 0) .* log(Pxy(Pxy ~= 0)));                                                                    
+0219         
+0220         <span class="comment">% mutual information</span>
+0221         Z(i) = Ix + Iy - Ixy;
+0222     <span class="keyword">end</span>    
+0223     
+0224     
+0225 <span class="comment">% mutual information for Matlab version &lt; 6</span>
+0226 <a name="_sub2" href="#_subfunctions" class="code">function Z = MI5(x, y, nbins)   </a>
+0227     
+0228     <span class="comment">% normalise the data and replace the values with integers</span>
+0229     <span class="comment">% in the range [1 nbins]</span>
+0230     x = x - repmat(min(x), size(x,1), 1); 
+0231     y = y - repmat(min(y), size(y,1), 1);
+0232     x = x ./ repmat(max(x) + eps, size(x,1), 1); 
+0233     y = y ./ repmat(max(y) + eps, size(y,1), 1);
+0234     
+0235     x = floor(x * nbins) + 1;
+0236     y = floor(y * nbins) + 1;
+0237     
+0238     <span class="comment">% compute probabilities</span>
+0239     Z = zeros(1,size(x,2));
+0240     <span class="keyword">for</span> i = 1:size(x,2)
+0241     
+0242         Pxy = full(sparse(x(:,i) + 1, y(:,i) + 1, 1));
+0243         Px = sum(Pxy,1);
+0244         Py = sum(Pxy,2);
+0245 
+0246         Pxy = Pxy / sum(Pxy(:));
+0247         Px = Px / sum(Px(:));
+0248         Py = Py / sum(Py(:));
+0249 
+0250         <span class="comment">% entropies</span>
+0251         Ix = -sum((Px(Px ~= 0)) .* log(Px(Px ~= 0)));
+0252         Iy = -sum((Py(Py ~= 0)) .* log(Py(Py ~= 0)));
+0253         Ixy = -sum(Pxy(Pxy ~= 0) .* log(Pxy(Pxy ~= 0)));                                                                    
+0254         
+0255         <span class="comment">% mutual information</span>
+0256         Z(i) = Ix + Iy - Ixy;
+0257     <span class="keyword">end</span>    
+0258</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel</title>
+  <meta name="keywords" content="panel">
+  <meta name="description" content="p = panel(...)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>panel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>p = panel(...)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function p = panel(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> p = panel(...)
+
+ construct a panel as the root panel of the current figure,
+ destroying any existing panels associated with that
+ figure. any axes associated with those existing panels are
+ also destroyed.
+
+ p = panel(fig, ...)
+
+ as above, but for a specified figure.
+
+ c = panel(..., [m n], sm, sn)
+
+ pack the new panel with a grid of m by n child panels (see
+ panel/pack() for more details - sm and sn are optional extra
+ arguments to pack()).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li><li><a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>	default panel object</li><li><a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/panel_resizefcn.html" class="code" title="function panel_resizefcn(varargin)">panel_resizefcn</a>	this stub gets the root panel from the callback</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../../Otherbox/panel/panel_demo_1.html" class="code" title="">panel_demo_1</a>	% PANEL DEMO 1</li><li><a href="../../../Otherbox/panel/panel_demo_2.html" class="code" title="">panel_demo_2</a>	% PANEL DEMO 2</li><li><a href="../../../Otherbox/panel/panel_demo_3.html" class="code" title="">panel_demo_3</a>	% PANEL DEMO 3</li><li><a href="../../../Otherbox/panel/panel_demo_4.html" class="code" title="">panel_demo_4</a>	% PANEL DEMO 4</li><li><a href="../../../Otherbox/panel/panel_demo_5.html" class="code" title="">panel_demo_5</a>	% PANEL DEMO 5</li><li><a href="../../../Otherbox/panel/panel_demo_6.html" class="code" title="">panel_demo_6</a>	% PANEL DEMO 6</li><li><a href="../../../Otherbox/panel/panel_demo_7.html" class="code" title="">panel_demo_7</a>	% PANEL DEMO 7</li><li><a href="../../../Otherbox/panel/panel_demo_8.html" class="code" title="">panel_demo_8</a>	% PANEL DEMO 8</li><li><a href="../../../Otherbox/panel/panel_demo_9.html" class="code" title="">panel_demo_9</a>	% PANEL DEMO 9</li><li><a href="../../../Otherbox/panel/panel_demo_A.html" class="code" title="">panel_demo_A</a>	% PANEL DEMO A</li><li><a href="../../../Otherbox/panel/panel_demo_B.html" class="code" title="">panel_demo_B</a>	% PANEL DEMO B</li><li><a href="../../../Otherbox/panel/panel_render_all.html" class="code" title="function panel_render_all">panel_render_all</a>	panel_render_all</li><li><a href="../../../Otherbox/panel/panel_resizefcn.html" class="code" title="function panel_resizefcn(varargin)">panel_resizefcn</a>	this stub gets the root panel from the callback</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function p = panel(varargin)</a>
+0002 
+0003 <span class="comment">% p = panel(...)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% construct a panel as the root panel of the current figure,</span>
+0006 <span class="comment">% destroying any existing panels associated with that</span>
+0007 <span class="comment">% figure. any axes associated with those existing panels are</span>
+0008 <span class="comment">% also destroyed.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% p = panel(fig, ...)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% as above, but for a specified figure.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% c = panel(..., [m n], sm, sn)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% pack the new panel with a grid of m by n child panels (see</span>
+0017 <span class="comment">% panel/pack() for more details - sm and sn are optional extra</span>
+0018 <span class="comment">% arguments to pack()).</span>
+0019 
+0020 
+0021 
+0022 <span class="comment">%    NOT USER HELP</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% p = panel(fig, 'root')</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% the root panel associated with that figure is returned</span>
+0027 <span class="comment">% (rather than generating a new one that overwrites existing</span>
+0028 <span class="comment">% ones) - this is used by panel_resizefcn and panel_render_all</span>
+0029 
+0030 
+0031 
+0032 <span class="comment">% IMPLEMENTATION NOTES</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% due to the idiosyncrasies of matlab's OO implementation,</span>
+0035 <span class="comment">% it is not possible to generate a true object that honors</span>
+0036 <span class="comment">% a sensible syntax yet allows full object functionality.</span>
+0037 <span class="comment">% specifically, member functions cannot operate on the</span>
+0038 <span class="comment">% object itself, only on a copy of it, so a call such as:</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%   ax = panel.axis</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% cannot affect the state of the object &quot;panel&quot;. to get</span>
+0043 <span class="comment">% round this, this implementation stores all data in the</span>
+0044 <span class="comment">% UserData of the targeted figure, and only stores a</span>
+0045 <span class="comment">% reference to that data in the object itself. for the</span>
+0046 <span class="comment">% sake of code brevity, it is not possible (sort of</span>
+0047 <span class="comment">% therefore) to delete a panel object, only to discard a</span>
+0048 <span class="comment">% reference to it. this is not a problem.</span>
+0049 
+0050 
+0051 
+0052 
+0053 <span class="comment">%% SPECIAL CASE (MATLAB OO): single panel object argument</span>
+0054 <span class="comment">%% should just be returned</span>
+0055 
+0056 <span class="keyword">if</span> nargin == 1 &amp;&amp; isa(varargin{1}, <span class="string">'panel'</span>)
+0057     
+0058     <span class="comment">% return single argument</span>
+0059     p = varargin{1};
+0060     
+0061     <span class="comment">% ok</span>
+0062     <span class="keyword">return</span>
+0063     
+0064 <span class="keyword">end</span>
+0065 
+0066 
+0067 
+0068 <span class="comment">%% CREATE EMPTY PANEL REFERENCE</span>
+0069 
+0070 <span class="comment">% create empty</span>
+0071 p = [];
+0072 p.fig = [];
+0073 p.id = [];
+0074 
+0075 <span class="comment">% make it a class</span>
+0076 p = class(p, <span class="string">'panel'</span>);
+0077 
+0078 
+0079 
+0080 <span class="comment">%% IF FIGURE SUPPLIED: attach to that figure, otherwise</span>
+0081 <span class="comment">%% leave unattached (necessary, since OO implementation may</span>
+0082 <span class="comment">%% call panel with no arguments to see what a default panel</span>
+0083 <span class="comment">%% object looks like, and we don't want this call to create</span>
+0084 <span class="comment">%% a spurious figure window).</span>
+0085 
+0086 args = varargin;
+0087 
+0088 <span class="keyword">if</span> nargin &gt;= 1 &amp;&amp; isnumeric(args{1}) &amp;&amp; isscalar(args{1}) &amp;&amp; ishandle(args{1}) &amp;&amp; strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(args{1}, <span class="string">'type'</span>), <span class="string">'figure'</span>)
+0089     
+0090     p.fig = args{1};
+0091     args = args(2:end);
+0092     
+0093 <span class="keyword">else</span>
+0094     
+0095     p.fig = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'CurrentFigure'</span>);
+0096     <span class="keyword">if</span> isempty(p.fig)
+0097         p.fig = 0;
+0098         
+0099         <span class="comment">% if no figure, any additional arguments is an error</span>
+0100         <span class="keyword">if</span> nargin
+0101             error(<span class="string">'not expecting arguments since panel is not attached to a figure'</span>);
+0102         <span class="keyword">end</span>
+0103         
+0104         <span class="comment">% so we can safely return now</span>
+0105         <span class="keyword">return</span>
+0106     <span class="keyword">end</span>
+0107     
+0108 <span class="keyword">end</span>
+0109 
+0110 
+0111 
+0112 <span class="comment">%% return root panel, if it exists</span>
+0113 
+0114 <span class="keyword">if</span> nargin == 2 &amp;&amp; p.fig &amp;&amp; ischar(args{1}) &amp;&amp; strcmp(args{1}, <span class="string">'root'</span>)
+0115     
+0116     <span class="comment">% get user data</span>
+0117     ud = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0118     
+0119     <span class="comment">% get panel data</span>
+0120     <span class="keyword">if</span> ~<a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(ud, <span class="string">'panel'</span>)
+0121         p = [];
+0122         <span class="keyword">return</span>;
+0123     <span class="keyword">end</span>
+0124     
+0125     <span class="comment">% get root panel associated with figure</span>
+0126     p.id = ud.panel.panelroot.rootpanelid;
+0127     
+0128     <span class="comment">% check it's there</span>
+0129     <span class="keyword">if</span> isempty(ud.panel.panels{p.id})
+0130         p = [];
+0131         <span class="keyword">return</span>
+0132     <span class="keyword">end</span>
+0133     
+0134     <span class="comment">% ok</span>
+0135     <span class="keyword">return</span>
+0136     
+0137 <span class="keyword">end</span>
+0138 
+0139 
+0140 
+0141 <span class="comment">%% DELETE EXISTING PANELS</span>
+0142 
+0143 <span class="comment">% get root panel</span>
+0144 q = <a href="panel.html" class="code" title="function p = panel(varargin)">panel</a>(p.fig, <span class="string">'root'</span>);
+0145 
+0146 <span class="comment">% delete it</span>
+0147 <span class="keyword">if</span> ~isempty(q)
+0148     <a href="delete.html" class="code" title="function delete(p)">delete</a>(q);
+0149 <span class="keyword">end</span>
+0150 
+0151 
+0152 
+0153 
+0154 
+0155 <span class="comment">%% CREATE PANEL OBJECT</span>
+0156 
+0157 <span class="comment">% get user data</span>
+0158 ud = <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(p.fig, <span class="string">'UserData'</span>);
+0159 
+0160 <span class="comment">% create panel object</span>
+0161 [P, panelroot] = <a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>;
+0162 
+0163 <span class="comment">% create new root panel</span>
+0164 p = <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P, panelroot, <span class="string">'createroot'</span>);
+0165 
+0166 <span class="comment">% and lay in the resize function</span>
+0167 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p.fig, <span class="string">'ResizeFcn'</span>, @<a href="../../../Otherbox/panel/panel_resizefcn.html" class="code" title="function panel_resizefcn(varargin)">panel_resizefcn</a>)
+0168 
+0169 
+0170 
+0171 
+0172 
+0173 <span class="comment">%% HANDLE REMAINING ARGUMENTS</span>
+0174 
+0175 <span class="keyword">if</span> ~isempty(args)
+0176     
+0177     <span class="comment">% first must be 1x2 numeric</span>
+0178     sz = size(args{1});
+0179     <span class="keyword">if</span> length(sz) ~= 2 || ~all(sz == [1 2]) || ~isnumeric(args{1})
+0180         error(<span class="string">'invalid call to panel() - first supplemental argument must be grid layout size [m n]'</span>);
+0181     <span class="keyword">end</span>
+0182     
+0183     <span class="comment">% if figure not specified, this can't work</span>
+0184     <span class="keyword">if</span> ~p.fig
+0185         error(<span class="string">'invalid call to panel() - cannot create sub-panels since parent panel has no figure associated'</span>);
+0186     <span class="keyword">end</span>
+0187     
+0188     <span class="comment">% pack sub-panels</span>
+0189     p = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p, args{:});
+0190     
+0191 <span class="keyword">end</span>
+0192 
+0193 
+0194 
+0195 
+0196</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

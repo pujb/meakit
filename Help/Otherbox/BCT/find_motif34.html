@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_motif34</title>
+  <meta name="keywords" content="find_motif34">
+  <meta name="description" content="FIND_MOTIF34       Motif legend">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>find_motif34
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FIND_MOTIF34       Motif legend</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function M=find_motif34(m,n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">FIND_MOTIF34       Motif legend
+
+   Motif_matrices = find_motif34(Motif_id,Motif_class);
+   Motif_id = find_motif34(Motif_matrix);
+
+   This function returns all motif isomorphs for a given motif id and 
+   class (3 or 4). The function also returns the motif id for a given
+   motif matrix
+
+   1. Input:       Motif_id,           e.g. 1 to 13, if class is 3
+                   Motif_class,        number of nodes, 3 or 4.
+
+      Output:      Motif_matrices,     all isomorphs for the given motif
+
+   2. Input:       Motif_matrix        e.g. [0 1 0; 0 0 1; 1 0 0]
+
+      Output       Motif_id            e.g. 1 to 13, if class is 3
+
+
+Mika Rubinov, UNSW, 2007 (last modified July 2008)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function M=find_motif34(m,n)</a>
+0002 <span class="comment">%FIND_MOTIF34       Motif legend</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   Motif_matrices = find_motif34(Motif_id,Motif_class);</span>
+0005 <span class="comment">%   Motif_id = find_motif34(Motif_matrix);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   This function returns all motif isomorphs for a given motif id and</span>
+0008 <span class="comment">%   class (3 or 4). The function also returns the motif id for a given</span>
+0009 <span class="comment">%   motif matrix</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   1. Input:       Motif_id,           e.g. 1 to 13, if class is 3</span>
+0012 <span class="comment">%                   Motif_class,        number of nodes, 3 or 4.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%      Output:      Motif_matrices,     all isomorphs for the given motif</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   2. Input:       Motif_matrix        e.g. [0 1 0; 0 0 1; 1 0 0]</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%      Output       Motif_id            e.g. 1 to 13, if class is 3</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%Mika Rubinov, UNSW, 2007 (last modified July 2008)</span>
+0022 
+0023 <span class="keyword">persistent</span> M3 ID3 M4 ID4
+0024 
+0025 <span class="keyword">if</span> isscalar(m)
+0026     <span class="keyword">if</span> n==3
+0027         <span class="keyword">if</span> isempty(ID3);
+0028             load motif34lib M3 ID3;
+0029         <span class="keyword">end</span>
+0030         ind=find(ID3==m).';
+0031         M=zeros(3,3,length(ind));
+0032         <span class="keyword">for</span> i=1:length(ind)
+0033             M(:,:,i)=reshape([0 M3(ind(i),1:3) 0 <span class="keyword">...</span>
+0034                 M3(ind(i),4:6) 0],3,3);
+0035         <span class="keyword">end</span>
+0036     <span class="keyword">elseif</span> n==4
+0037         <span class="keyword">if</span> isempty(ID4);
+0038             load motif34lib M4 ID4;
+0039         <span class="keyword">end</span>
+0040         ind=find(ID4==m).';
+0041         M=zeros(4,4,length(ind));
+0042         <span class="keyword">for</span> i=1:length(ind)
+0043             M(:,:,i)=reshape([0 M4(ind(i),1:4) 0 <span class="keyword">...</span>
+0044                 M4(ind(i),5:8) 0 M4(ind(i),9:12) 0],4,4);
+0045         <span class="keyword">end</span>
+0046     <span class="keyword">end</span>
+0047 <span class="keyword">else</span>
+0048     n=size(m,1);
+0049     M=eval([<span class="string">'find(motif'</span> int2str(n) <span class="string">'struct_bin(m))'</span>]);
+0050 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

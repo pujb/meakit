@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_load_nsfile</title>
+  <meta name="keywords" content="util_load_nsfile">
+  <meta name="description" content="UTIL_LOAD_NSFILE Read a data file in Neuroshare format then returns a handle.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_load_nsfile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOAD_NSFILE Read a data file in Neuroshare format then returns a handle.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ handle ] = util_load_nsfile( filename ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOAD_NSFILE Read a data file in Neuroshare format then returns a handle.
+   Open a data file which is supported in Neuroshare, then returns the
+   file handle.
+
+   Created on Jun/10/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/neuroshare/Matlab/ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>	ns_OpenFile   Opens a neural data file</li><li><a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>	UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_load_raw.html" class="code" title="function [ rawif ] = util_load_raw( varargin )">util_load_raw</a>	UTIL_LOAD_RAW Get the raw data stream from a data file.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ handle ] = util_load_nsfile( filename )</a>
+0002 <span class="comment">%UTIL_LOAD_NSFILE Read a data file in Neuroshare format then returns a handle.</span>
+0003 <span class="comment">%   Open a data file which is supported in Neuroshare, then returns the</span>
+0004 <span class="comment">%   file handle.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Created on Jun/10/2010 By Pu Jiangbo</span>
+0007 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0008 
+0009 <span class="comment">% Open data file</span>
+0010 [nsresult, handle] = <a href="../IO/mcd/neuroshare/Matlab/ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>(filename);
+0011 
+0012 <span class="comment">% Check if open successfully</span>
+0013 <span class="keyword">if</span> nsresult ~= 0
+0014     <a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>(nsresult, true);
+0015     error(<span class="string">'Opening data file failed.'</span>);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">end</span>
+0019</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

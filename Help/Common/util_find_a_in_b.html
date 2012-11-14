@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_find_a_in_b</title>
+  <meta name="keywords" content="util_find_a_in_b">
+  <meta name="description" content="UTIL_FIND_A_IN_B Find whether one element of B equals each element of A">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_find_a_in_b
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_FIND_A_IN_B Find whether one element of B equals each element of A
+   Looking into all elements of the collection B, to find out if one or
+   more elements equals the value of each element in A. If no elements in 
+   B equals A, then it returns false; else it will return true and the
+   first location of the matched elements in b.
+
+   Input:
+       a,b:    Both should be a 1D array
+       a,b,string_mode:
+               if string_more is true, then a/b must be a cell array like
+               {'one','two','three'}. We will compare these two arrays
+               by each cell.
+   Returns:
+       isFind: The flag indicating the results of all finding. If A
+               contains multiple elements, this flag only reflects the
+               result of all rounds of searching, i.e. if only a matches b
+               just once, it will be true no matter the later searches.
+       loc_a:  The index (in A) of the element which is of a but also
+               found in b.
+       loc_b:  The index (in B) of the element which is of a but also
+               found in b.
+
+   Created on May/4/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_isi.html" class="code" title="function [ isi, seq, ts, mean_isi, std_isi ] = util_calc_isi( spif, varargin )">util_calc_isi</a>	UTIL_CALC_ISI Get inter-spike intervals between selected channels and time</li><li><a href="../Calculation/util_calc_network_vector.html" class="code" title="function [ network_vectors seq ] = util_calc_network_vector( spif, excluded_ch, varargin )">util_calc_network_vector</a>	UTIL_CALC_NETWORK_VECTOR Get the network activity vectors</li><li><a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../IO/util_get_nsfile_info.html" class="code" title="function [ info ] = util_get_nsfile_info( handle, property_name, varargin )">util_get_nsfile_info</a>	UTIL_GET_NSFILE_INFO Get file info from a opened handle</li><li><a href="../IO/util_load_spike_from_mcdraw.html" class="code" title="function [ D spif raw] = util_load_spike_from_mcdraw ( varargin )">util_load_spike_from_mcdraw</a>	UTIL_LOAD_SPIKE_FROM_MCDRAW 工具函数，从mcd文件中检测Spike</li><li><a href="../Plot/util_plot_channel_of_state.html" class="code" title="function [ ch_state ] = util_plot_channel_of_state( network_vectors, seq, clu_sub, threshold, method, varargin )">util_plot_channel_of_state</a>	UTIL_PLOT_CHANNEL_OF_STATE Visualize the network states by showing</li><li><a href="../Plot/util_plot_raster_simple.html" class="code" title="function [] = util_plot_raster_simple( spif, gnd, bin, draw_command, quickmode )">util_plot_raster_simple</a>	UTIL_PLOT_RASTER_SIMPLE Plot the RASTER PLOT using simple plotting methods</li><li><a href="../Plot/util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li><li><a href="../Stimulation/util_parse_para_fromstimulation.html" class="code" title="function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation )">util_parse_para_fromstimulation</a>	UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )</a>
+0002 <span class="comment">%UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</span>
+0003 <span class="comment">%   Looking into all elements of the collection B, to find out if one or</span>
+0004 <span class="comment">%   more elements equals the value of each element in A. If no elements in</span>
+0005 <span class="comment">%   B equals A, then it returns false; else it will return true and the</span>
+0006 <span class="comment">%   first location of the matched elements in b.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Input:</span>
+0009 <span class="comment">%       a,b:    Both should be a 1D array</span>
+0010 <span class="comment">%       a,b,string_mode:</span>
+0011 <span class="comment">%               if string_more is true, then a/b must be a cell array like</span>
+0012 <span class="comment">%               {'one','two','three'}. We will compare these two arrays</span>
+0013 <span class="comment">%               by each cell.</span>
+0014 <span class="comment">%   Returns:</span>
+0015 <span class="comment">%       isFind: The flag indicating the results of all finding. If A</span>
+0016 <span class="comment">%               contains multiple elements, this flag only reflects the</span>
+0017 <span class="comment">%               result of all rounds of searching, i.e. if only a matches b</span>
+0018 <span class="comment">%               just once, it will be true no matter the later searches.</span>
+0019 <span class="comment">%       loc_a:  The index (in A) of the element which is of a but also</span>
+0020 <span class="comment">%               found in b.</span>
+0021 <span class="comment">%       loc_b:  The index (in B) of the element which is of a but also</span>
+0022 <span class="comment">%               found in b.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   Created on May/4/2010 By Pu Jiangbo</span>
+0025 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0026 
+0027 <span class="comment">%   $Revision:</span>
+0028 <span class="comment">%       PJB#2010-06-11  Adding the ability of processing cell array</span>
+0029 <span class="comment">%                       (numberic/string)</span>
+0030 
+0031 <span class="comment">% Get the parameters</span>
+0032 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0033 
+0034 <span class="keyword">if</span> ~exist(<span class="string">'string_mode'</span>, <span class="string">'var'</span>)
+0035     string_mode = false;
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% Init</span>
+0039 isFind = false;
+0040 loc_a = [];
+0041 loc_b = [];
+0042 
+0043 <span class="keyword">if</span> string_mode
+0044     <span class="comment">% Compare by strings</span>
+0045     
+0046     <span class="comment">% Check running condition</span>
+0047     <span class="keyword">if</span> ~iscell(a) || ~iscell(b)
+0048         error(<span class="string">'String mode needs two cell array.'</span>);
+0049     <span class="keyword">end</span>
+0050     
+0051     <span class="keyword">for</span> i = 1:length(a)
+0052         <span class="keyword">for</span> j = 1:length(b)
+0053             <span class="keyword">if</span> strcmp(b{j}, a{i})
+0054                 isFind = true;
+0055                 loc_a = [loc_a i];
+0056                 loc_b = [loc_b j];
+0057             <span class="keyword">end</span>
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">end</span>
+0060 <span class="keyword">else</span>
+0061     <span class="comment">% Compare by digits (Numberic Mode)</span>
+0062     <span class="keyword">for</span> i = 1:length(a)
+0063         <span class="comment">% Get the current element in a</span>
+0064         <span class="keyword">if</span> iscell(a)
+0065             current_a = a{i};
+0066         <span class="keyword">else</span>
+0067             current_a = a(i);
+0068         <span class="keyword">end</span>
+0069         
+0070         <span class="comment">% Search in b with current_a</span>
+0071         <span class="keyword">if</span> iscell(b)
+0072             <span class="comment">% if b is a cell array, turn it into a matrix temporally</span>
+0073             find_result = find([b{:}] == current_a, 1);
+0074         <span class="keyword">else</span>
+0075             <span class="comment">% if b is a normal matrix</span>
+0076             find_result = find(b == current_a, 1);
+0077         <span class="keyword">end</span>
+0078         
+0079         <span class="keyword">if</span> ~isempty( find_result )
+0080             isFind = true;
+0081             loc_a = [loc_a i];
+0082             loc_b = [loc_b find_result];
+0083         <span class="keyword">end</span>
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

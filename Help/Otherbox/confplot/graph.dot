@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  confidence_plot_test -> confplot;
+
+  confidence_plot_test [URL="confidence_plot_test.html"];
+  confplot [URL="confplot.html"];
+}

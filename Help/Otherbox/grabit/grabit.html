@@ -1,0 +1,2175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of grabit</title>
+  <meta name="keywords" content="grabit">
+  <meta name="description" content="GRABIT Extracts data points from an image file.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html grabit -->
+<h1>grabit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GRABIT Extracts data points from an image file.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function grabit(fname) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">GRABIT Extracts data points from an image file.
+
+ GRABIT starts a GUI program for extracting data from an image file.
+ It is capable of reading in BMP, JPG, TIF, GIF, and PNG files (anything
+ that is readable by IMREAD).  Multiple data sets can be extracted from a
+ single image file, and the data is saved as an n-by-2 matrix variable in
+ the workspace.  It can also be renamed and saved as a MAT file.
+
+ Following steps should be taken:
+   1. Load the image file.
+   2. Calibrate axes dimensions.  You will be prompted to select 4 points
+      on the image. Zoom and pan enabled.
+   3. Grab points by clicking on points.  Right-click to delete a point.
+      Image can be zoomed  and panned.
+   4. Multiple data sets will remain in memory so long as the GUI is open.
+      Variables can be renamed, saved to file, or edited in Array Editor.
+ 
+ Panning is achieved by clicking and dragging on the image. Double-click
+ to center view. Right click and drag to zoom in and out. In addition,
+ there are keyboard shortcuts for zooming:
+   &lt;a&gt;     - zoom in
+   &lt;b&gt;     - zoom out
+   &lt;space&gt; - reset view
+
+ This code will also work for extracting data points from a tilted or a
+ skewed image (even upside-down or mirrored).  The calibration stage
+ ensures that the imperfect orientation or quality of the image is
+ accounted for.
+
+ The types of files that will most likely work are BMP, JPG, TIF, GIF (up
+ to 8-bit), and PNG files.  Basically,  any format supported by the IMREAD
+ is accepted.
+
+ GRABIT(FILENAME) will start the GUI program and open the image file
+ FILENAME.
+
+ Type GRABIT('-sample') to load a sample image.
+
+ 
+ VERSIONS:
+   v1.0 - first version
+   v1.1 - use imshow instead of image (takes care of colormap)
+   v1.5 - convert to a GUI version
+   v1.6 - added functionality to open a file from the command window and
+          embedded a sample image file to the function
+   v1.6.1 - changed cross cursor to crosshair
+   v1.6.2 - brought back 'image' in case the user doesn't have Image Toolbox
+   v1.6.5 - fixed zoom problem in R14
+   v2.0 - major code change. added zoom feature during calibration. added
+          panning feature. (March 3, 2006)
+   v2.1 - store sample image as HEX to reduce file size. (March 6, 2006)
+   v2.1.1 - animate view change and zooming for a better visual perception
+            (March 11, 2006)
+   v2.1.5 - added features: double-click to center view. right-click and
+            drag to zoom. other minor code changes. (March 16, 2006)
+   v2.2 - fixed loadImageFcn bug. (May 4, 2006)
+   v2.3 - fixed bug to work with grayscale image (Jan, 2007)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>	RMFIELD Remove fields from a mutable structure.</li><li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function variableManipulationFcn(varargin)</a></li><li><a href="#_sub2" class="code">function saveDatFcn(pname, fname, var)</a></li><li><a href="#_sub3" class="code">function selectVariableFcn(varargin)</a></li><li><a href="#_sub4" class="code">function loadImageFcn(varargin)</a></li><li><a href="#_sub5" class="code">function calibrateImageFcn(varargin)</a></li><li><a href="#_sub6" class="code">function grabPointsFcn(varargin)</a></li><li><a href="#_sub7" class="code">function showAllVarsFcn(handles)</a></li><li><a href="#_sub8" class="code">function newVarName = findNextVarNameFcn(varNames)</a></li><li><a href="#_sub9" class="code">function zoomBtnFcn(varargin)</a></li><li><a href="#_sub10" class="code">function pointerFcn(varargin)</a></li><li><a href="#_sub11" class="code">function figResizeFcn(varargin)</a></li><li><a href="#_sub12" class="code">function keyPressFcn(varargin)</a></li><li><a href="#_sub13" class="code">function resetViewFcn(varargin)</a></li><li><a href="#_sub14" class="code">function loseFocusFcn(handles)</a></li><li><a href="#_sub15" class="code">function winBtnDownFcn(varargin)</a></li><li><a href="#_sub16" class="code">function zoomMotionFcn(varargin)</a></li><li><a href="#_sub17" class="code">function winBtnMotionPauseFcn(varargin)</a></li><li><a href="#_sub18" class="code">function winBtnMotionFcn(varargin)</a></li><li><a href="#_sub19" class="code">function winBtnUpFcn(varargin)</a></li><li><a href="#_sub20" class="code">function btnUpTimerFcn(varargin)</a></li><li><a href="#_sub21" class="code">function coordinateEditFcn(varargin)</a></li><li><a href="#_sub22" class="code">function handles = calculateCalibrationFcn(handles)</a></li><li><a href="#_sub23" class="code">function varargout = splitvar(varargout)</a></li><li><a href="#_sub24" class="code">function fname = createSampleImageFcn</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function grabit(fname)</a>
+0002 
+0003 <span class="comment">%GRABIT Extracts data points from an image file.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% GRABIT starts a GUI program for extracting data from an image file.</span>
+0006 <span class="comment">% It is capable of reading in BMP, JPG, TIF, GIF, and PNG files (anything</span>
+0007 <span class="comment">% that is readable by IMREAD).  Multiple data sets can be extracted from a</span>
+0008 <span class="comment">% single image file, and the data is saved as an n-by-2 matrix variable in</span>
+0009 <span class="comment">% the workspace.  It can also be renamed and saved as a MAT file.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Following steps should be taken:</span>
+0012 <span class="comment">%   1. Load the image file.</span>
+0013 <span class="comment">%   2. Calibrate axes dimensions.  You will be prompted to select 4 points</span>
+0014 <span class="comment">%      on the image. Zoom and pan enabled.</span>
+0015 <span class="comment">%   3. Grab points by clicking on points.  Right-click to delete a point.</span>
+0016 <span class="comment">%      Image can be zoomed  and panned.</span>
+0017 <span class="comment">%   4. Multiple data sets will remain in memory so long as the GUI is open.</span>
+0018 <span class="comment">%      Variables can be renamed, saved to file, or edited in Array Editor.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Panning is achieved by clicking and dragging on the image. Double-click</span>
+0021 <span class="comment">% to center view. Right click and drag to zoom in and out. In addition,</span>
+0022 <span class="comment">% there are keyboard shortcuts for zooming:</span>
+0023 <span class="comment">%   &lt;a&gt;     - zoom in</span>
+0024 <span class="comment">%   &lt;b&gt;     - zoom out</span>
+0025 <span class="comment">%   &lt;space&gt; - reset view</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% This code will also work for extracting data points from a tilted or a</span>
+0028 <span class="comment">% skewed image (even upside-down or mirrored).  The calibration stage</span>
+0029 <span class="comment">% ensures that the imperfect orientation or quality of the image is</span>
+0030 <span class="comment">% accounted for.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% The types of files that will most likely work are BMP, JPG, TIF, GIF (up</span>
+0033 <span class="comment">% to 8-bit), and PNG files.  Basically,  any format supported by the IMREAD</span>
+0034 <span class="comment">% is accepted.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% GRABIT(FILENAME) will start the GUI program and open the image file</span>
+0037 <span class="comment">% FILENAME.</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% Type GRABIT('-sample') to load a sample image.</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% VERSIONS:</span>
+0043 <span class="comment">%   v1.0 - first version</span>
+0044 <span class="comment">%   v1.1 - use imshow instead of image (takes care of colormap)</span>
+0045 <span class="comment">%   v1.5 - convert to a GUI version</span>
+0046 <span class="comment">%   v1.6 - added functionality to open a file from the command window and</span>
+0047 <span class="comment">%          embedded a sample image file to the function</span>
+0048 <span class="comment">%   v1.6.1 - changed cross cursor to crosshair</span>
+0049 <span class="comment">%   v1.6.2 - brought back 'image' in case the user doesn't have Image Toolbox</span>
+0050 <span class="comment">%   v1.6.5 - fixed zoom problem in R14</span>
+0051 <span class="comment">%   v2.0 - major code change. added zoom feature during calibration. added</span>
+0052 <span class="comment">%          panning feature. (March 3, 2006)</span>
+0053 <span class="comment">%   v2.1 - store sample image as HEX to reduce file size. (March 6, 2006)</span>
+0054 <span class="comment">%   v2.1.1 - animate view change and zooming for a better visual perception</span>
+0055 <span class="comment">%            (March 11, 2006)</span>
+0056 <span class="comment">%   v2.1.5 - added features: double-click to center view. right-click and</span>
+0057 <span class="comment">%            drag to zoom. other minor code changes. (March 16, 2006)</span>
+0058 <span class="comment">%   v2.2 - fixed loadImageFcn bug. (May 4, 2006)</span>
+0059 <span class="comment">%   v2.3 - fixed bug to work with grayscale image (Jan, 2007)</span>
+0060 <span class="comment">%</span>
+0061 
+0062 <span class="comment">% Created in Matlab R13. Tested up to R2006b</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% Copyright 2003</span>
+0065 <span class="comment">% Jiro Doke</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% To Do: Capability to deal with logarithmic axes</span>
+0068 <span class="comment">%</span>
+0069 
+0070 <span class="comment">%--------------------------------------------------------------------------</span>
+0071 <span class="comment">% Initialize</span>
+0072 <span class="comment">%--------------------------------------------------------------------------</span>
+0073 sh = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ShowHiddenHandles'</span>);
+0074 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="string">'ShowHiddenHandles'</span>, <span class="string">'on'</span>);
+0075 
+0076 <span class="comment">% close existing windows</span>
+0077 im  =  findobj(<span class="string">'type'</span>,  <span class="string">'figure'</span>,  <span class="string">'tag'</span>,  <span class="string">'GrabitGUI'</span>);
+0078 <span class="keyword">if</span> ishandle(im)
+0079   close(im);
+0080 <span class="keyword">end</span>
+0081 
+0082 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="string">'ShowHiddenHandles'</span>, sh);
+0083 
+0084 <span class="comment">% background colors</span>
+0085 bgcolor1 = [.8, .8, .8];
+0086 bgcolor2 = [ 1,  1,  1];
+0087 bgcolor3 = [.7, .7, .7];
+0088 bgcolor4 = [ 1, .5, .5];
+0089 
+0090 <span class="comment">%--------------------------------------------------------------------------</span>
+0091 <span class="comment">% Custom cursor pointers</span>
+0092 <span class="comment">%--------------------------------------------------------------------------</span>
+0093 zoomPointer = [
+0094      2     2     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0095      2     1     1     1     1     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0096      2     1     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0097      2     1     2   NaN   NaN   NaN   NaN     2     2     2     2   NaN   NaN   NaN   NaN   NaN
+0098      2     1     2   NaN   NaN     2     2     1     1     1     1     2     2   NaN   NaN   NaN
+0099      2     1     2   NaN     2     1     1     2     2     2     2     1     1     2   NaN   NaN
+0100    NaN     2   NaN   NaN     2     1     2     2     1     1     2     2     1     2   NaN   NaN
+0101    NaN   NaN   NaN     2     1     2     2     2     1     1     2     2     2     1     2   NaN
+0102    NaN   NaN   NaN     2     1     2     1     1     1     1     1     1     2     1     2   NaN
+0103    NaN   NaN   NaN     2     1     2     1     1     1     1     1     1     2     1     2   NaN
+0104    NaN   NaN   NaN     2     1     2     2     2     1     1     2     2     2     1     2   NaN
+0105    NaN   NaN   NaN   NaN     2     1     2     2     1     1     2     2     1     2   NaN   NaN
+0106    NaN   NaN   NaN   NaN     2     1     1     2     2     2     2     1     1     1     2   NaN
+0107    NaN   NaN   NaN   NaN   NaN     2     2     1     1     1     1     2     1     1     1     2
+0108    NaN   NaN   NaN   NaN   NaN   NaN   NaN     2     2     2     2   NaN     2     1     1     1
+0109    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     2     1     2
+0110  ];
+0111 
+0112 zoomInOutPointer = [
+0113    NaN   NaN   NaN     2     2   NaN   NaN   NaN   NaN   NaN   NaN     1     1     1   NaN   NaN
+0114    NaN   NaN     2     1     1     2   NaN   NaN   NaN   NaN     1     2     2     2     1   NaN
+0115    NaN     2     1     1     1     1     2   NaN   NaN     1     2     2     1     2     2     1
+0116      2     1     1     1     1     1     1     2   NaN     1     2     1     1     1     2     1
+0117      2     1     2     1     1     2     1     2   NaN     1     2     2     1     2     2     1
+0118    NaN     2     2     1     1     2     2   NaN   NaN     1     1     2     2     2     1   NaN
+0119    NaN   NaN     2     1     1     2   NaN   NaN     1     1     1     1     1     1   NaN   NaN
+0120    NaN   NaN   NaN     2     2   NaN   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0121    NaN   NaN   NaN     2     2   NaN   NaN   NaN   NaN   NaN   NaN     1     1     1   NaN   NaN
+0122    NaN   NaN     2     1     1     2   NaN   NaN   NaN   NaN     1     2     2     2     1   NaN
+0123    NaN     2     2     1     1     2     2   NaN   NaN     1     2     2     2     2     2     1
+0124      2     1     2     1     1     2     1     2   NaN     1     2     1     1     1     2     1
+0125      2     1     1     1     1     1     1     2   NaN     1     2     2     2     2     2     1
+0126    NaN     2     1     1     1     1     2   NaN   NaN     1     1     2     2     2     1   NaN
+0127    NaN   NaN     2     1     1     2   NaN   NaN     1     1     1     1     1     1   NaN   NaN
+0128    NaN   NaN   NaN     2     2   NaN   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0129  ];
+0130  
+0131 <span class="comment">% closed hand pointer (from J閞鬽e Briot)</span>
+0132 closedHandPointer = [
+0133    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0134    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0135    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0136    NaN   NaN   NaN   NaN     2     2   NaN     2     2   NaN     2     2   NaN   NaN   NaN   NaN
+0137    NaN   NaN   NaN     2     1     1     2     1     1     2     1     1     2     2   NaN   NaN
+0138    NaN   NaN     2     1     2     2     1     2     2     1     2     2     1     1     2   NaN
+0139    NaN   NaN     2     1     2     2     2     2     2     2     2     2     1     2     1     2
+0140    NaN   NaN   NaN     2     1     2     2     2     2     2     2     2     2     2     1     2
+0141    NaN   NaN     2     1     1     2     2     2     2     2     2     2     2     2     1     2
+0142    NaN     2     1     2     2     2     2     2     2     2     2     2     2     2     1     2
+0143    NaN     2     1     2     2     2     2     2     2     2     2     2     2     2     1     2
+0144    NaN     2     1     2     2     2     2     2     2     2     2     2     2     1     2   NaN
+0145    NaN   NaN     2     1     2     2     2     2     2     2     2     2     2     1     2   NaN
+0146    NaN   NaN   NaN     2     1     2     2     2     2     2     2     2     1     2   NaN   NaN
+0147    NaN   NaN   NaN   NaN     2     1     2     2     2     2     2     2     1     2   NaN   NaN
+0148    NaN   NaN   NaN   NaN     2     1     2     2     2     2     2     2     1     2   NaN   NaN
+0149  ];
+0150 
+0151 <span class="comment">% X-axis Origin pointer</span>
+0152 xoPointer = [
+0153      2     2     2     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0154      2     1     1     1     1     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0155      2     1     1     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0156      2     1     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0157      2     1     2     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0158      2     1     2   NaN     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0159      2     2     2   NaN   NaN     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0160    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0161    NaN   NaN   NaN     1     1   NaN   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0162    NaN   NaN   NaN     1     1     1   NaN     1     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0163    NaN   NaN   NaN   NaN     1     1     1     1     1   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0164    NaN   NaN   NaN   NaN   NaN     1     1     1   NaN   NaN   NaN   NaN     1     1     1   NaN
+0165    NaN   NaN   NaN   NaN     1     1     1     1     1   NaN   NaN     1   NaN   NaN   NaN     1
+0166    NaN   NaN   NaN     1     1     1   NaN     1     1     1   NaN     1   NaN   NaN   NaN     1
+0167    NaN   NaN   NaN     1     1   NaN   NaN   NaN     1     1   NaN     1   NaN   NaN   NaN     1
+0168    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     1     1     1   NaN
+0169  ];
+0170 
+0171 <span class="comment">% X-axis Max pointer</span>
+0172 xmPointer = [
+0173      2     2     2     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0174      2     1     1     1     1     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0175      2     1     1     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0176      2     1     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0177      2     1     2     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0178      2     1     2   NaN     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0179      2     2     2   NaN   NaN     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0180    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0181    NaN   NaN   NaN     1     1   NaN   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0182    NaN   NaN   NaN     1     1     1   NaN     1     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0183    NaN   NaN   NaN   NaN     1     1     1     1     1   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0184    NaN   NaN   NaN   NaN   NaN     1     1     1   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0185    NaN   NaN   NaN   NaN     1     1     1     1     1   NaN   NaN     1     1   NaN     1     1
+0186    NaN   NaN   NaN     1     1     1   NaN     1     1     1   NaN     1   NaN     1   NaN     1
+0187    NaN   NaN   NaN     1     1   NaN   NaN   NaN     1     1   NaN     1   NaN   NaN   NaN     1
+0188    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0189  ];
+0190  
+0191 <span class="comment">% Y-axis Origin pointer</span>
+0192 yoPointer = [
+0193      2     2     2     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0194      2     1     1     1     1     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0195      2     1     1     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0196      2     1     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0197      2     1     2     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0198      2     1     2   NaN     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0199      2     2     2   NaN   NaN     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0200    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0201    NaN   NaN   NaN     1     1   NaN   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0202    NaN   NaN   NaN     1     1     1   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0203    NaN   NaN   NaN   NaN     1     1     1     1     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0204    NaN   NaN   NaN   NaN   NaN     1     1     1     1   NaN   NaN   NaN     1     1     1   NaN
+0205    NaN   NaN   NaN   NaN   NaN     1     1     1   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0206    NaN   NaN   NaN     1     1     1     1     1   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0207    NaN   NaN   NaN     1     1     1   NaN   NaN   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0208    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     1     1     1   NaN
+0209  ];
+0210  
+0211 <span class="comment">% Y-axis Max pointer</span>
+0212 ymPointer = [
+0213      2     2     2     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0214      2     1     1     1     1     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0215      2     1     1     2     2     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0216      2     1     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0217      2     1     2     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0218      2     1     2   NaN     2     1     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0219      2     2     2   NaN   NaN     2     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0220    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+0221    NaN   NaN   NaN     1     1   NaN   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0222    NaN   NaN   NaN     1     1     1   NaN   NaN     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0223    NaN   NaN   NaN   NaN     1     1     1     1     1     1   NaN   NaN   NaN   NaN   NaN   NaN
+0224    NaN   NaN   NaN   NaN   NaN     1     1     1     1   NaN   NaN     1   NaN   NaN   NaN     1
+0225    NaN   NaN   NaN   NaN   NaN     1     1     1   NaN   NaN   NaN     1     1   NaN     1     1
+0226    NaN   NaN   NaN     1     1     1     1     1   NaN   NaN   NaN     1   NaN     1   NaN     1
+0227    NaN   NaN   NaN     1     1     1   NaN   NaN   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0228    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     1   NaN   NaN   NaN     1
+0229  ];
+0230 
+0231 <span class="comment">% zoom button icon</span>
+0232 zoomIcon = [
+0233      1     1     1     1     1     0     0     0     0     1     1     1     1     1     1     1
+0234      1     1     1     0     0     0     0     0     0     0     0     1     1     1     1     1
+0235      1     1     0     0     0     1     1     1     1     0     0     0     1     1     1     1
+0236      1     0     0     1     1     1     0     0     1     1     1     0     0     1     1     1
+0237      1     0     0     1     1     1     0     0     1     1     1     0     0     1     1     1
+0238      0     0     1     1     1     1     0     0     1     1     1     1     0     0     1     1
+0239      0     0     1     0     0     0     0     0     0     0     0     1     0     0     1     1
+0240      0     0     1     0     0     0     0     0     0     0     0     1     0     0     1     1
+0241      0     0     1     1     1     1     0     0     1     1     1     1     0     0     1     1
+0242      1     0     0     1     1     1     0     0     1     1     1     0     0     1     1     1
+0243      1     0     0     1     1     1     0     0     1     1     1     0     0     1     1     1
+0244      1     1     0     0     0     1     1     1     1     0     0     0     0     0     1     1
+0245      1     1     1     0     0     0     0     0     0     0     0     0     0     0     0     1
+0246      1     1     1     1     1     0     0     0     0     1     1     0     0     0     0     0
+0247      1     1     1     1     1     1     1     1     1     1     1     1     0     0     0     0
+0248      1     1     1     1     1     1     1     1     1     1     1     1     1     0     0     0
+0249    ];  
+0250 
+0251 <span class="comment">% create zoom icon (RGB matrix)</span>
+0252 fgID = zoomIcon==0;
+0253 bgID = ~fgID;
+0254 zI1  = zeros([size(zoomIcon), 3]);
+0255 zI2  = zeros([size(zoomIcon), 3]);
+0256 <span class="keyword">for</span> id = 1:3
+0257   tmp         = zoomIcon;
+0258   tmp(fgID)   = 0;
+0259   tmp(bgID)   = bgcolor3(id);
+0260   zI1(:,:,id) = tmp;
+0261   tmp(bgID)   = bgcolor4(id);
+0262   zI2(:,:,id) = tmp;
+0263 <span class="keyword">end</span>
+0264 
+0265 <span class="comment">% get screen size in pixels</span>
+0266 un          = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'units'</span>);
+0267 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="string">'units'</span>, <span class="string">'pixels'</span>);
+0268 screenSize  = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ScreenSize'</span>);
+0269 sW          = screenSize(3);
+0270 sH          = screenSize(4);
+0271 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="string">'units'</span>, un);
+0272 
+0273 <span class="comment">% figure width and height (in pixels)</span>
+0274 fW          = sW-200;
+0275 fH          = sH-100;
+0276 
+0277 im = figure(<span class="keyword">...</span>
+0278   <span class="string">'units'</span>                           , <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0279   <span class="string">'position'</span>                        , [100, 50, fW, fH], <span class="keyword">...</span>
+0280   <span class="string">'backingstore'</span>                    , <span class="string">'off'</span>, <span class="keyword">...</span>
+0281   <span class="string">'doublebuffer'</span>                    , <span class="string">'on'</span>, <span class="keyword">...</span>
+0282   <span class="string">'name'</span>                            , <span class="string">'Grabit'</span>, <span class="keyword">...</span>
+0283   <span class="string">'numbertitle'</span>                     , <span class="string">'off'</span>, <span class="keyword">...</span>
+0284   <span class="string">'menubar'</span>                         , <span class="string">'none'</span>, <span class="keyword">...</span>
+0285   <span class="string">'color'</span>                           , bgcolor1, <span class="keyword">...</span>
+0286   <span class="string">'pointer'</span>                         , <span class="string">'arrow'</span>, <span class="keyword">...</span>
+0287   <span class="string">'visible'</span>                         , <span class="string">'off'</span>, <span class="keyword">...</span>
+0288   <span class="string">'interruptible'</span>                   , <span class="string">'off'</span>, <span class="keyword">...</span>
+0289   <span class="string">'busyaction'</span>                      , <span class="string">'cancel'</span>, <span class="keyword">...</span>
+0290   <span class="string">'resizefcn'</span>                       , @<a href="#_sub11" class="code" title="subfunction figResizeFcn(varargin)">figResizeFcn</a>, <span class="keyword">...</span>
+0291   <span class="string">'windowbuttonupfcn'</span>               , @<a href="#_sub19" class="code" title="subfunction winBtnUpFcn(varargin)">winBtnUpFcn</a>, <span class="keyword">...</span>
+0292   <span class="string">'keypressfcn'</span>                     , @<a href="#_sub12" class="code" title="subfunction keyPressFcn(varargin)">keyPressFcn</a>, <span class="keyword">...</span>
+0293   <span class="string">'deletefcn'</span>                       , <span class="string">'delete(timerfind(''name'', ''BtnUpTimer''));'</span>, <span class="keyword">...</span>
+0294   <span class="string">'tag'</span>                             , <span class="string">'GrabitGUI'</span>, <span class="keyword">...</span>
+0295   <span class="string">'defaultUicontrolUnits'</span>           , <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0296   <span class="string">'defaultUicontrolBackgroundColor'</span> , bgcolor3, <span class="keyword">...</span>
+0297   <span class="string">'defaultUicontrolFontname'</span>        , <span class="string">'Verdana'</span>, <span class="keyword">...</span>
+0298   <span class="string">'defaultUicontrolFontUnits'</span>       , <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0299   <span class="string">'defaultUicontrolFontsize'</span>        , 10, <span class="keyword">...</span>
+0300   <span class="string">'defaultUicontrolInterruptible'</span>   , <span class="string">'off'</span>, <span class="keyword">...</span>
+0301   <span class="string">'defaultUicontrolBusyAction'</span>      , <span class="string">'cancel'</span>, <span class="keyword">...</span>
+0302   <span class="string">'defaultAxesFontName'</span>             , <span class="string">'Verdana'</span>, <span class="keyword">...</span>
+0303   <span class="string">'defaultAxesUnits'</span>                , <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0304   <span class="string">'defaultAxesFontSize'</span>             , 8);
+0305 
+0306 panelW = 0.8*fW;
+0307 uicontrol(<span class="keyword">...</span>
+0308   <span class="string">'style'</span>                           , <span class="string">'frame'</span>, <span class="keyword">...</span>
+0309   <span class="string">'position'</span>                        , [10, fH-110, panelW, 100], <span class="keyword">...</span>
+0310   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0311 uicontrol(<span class="keyword">...</span>
+0312   <span class="string">'style'</span>                           , <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0313   <span class="string">'string'</span>                          , <span class="string">'Load Image...'</span>, <span class="keyword">...</span>
+0314   <span class="string">'callback'</span>                        , {@<a href="#_sub4" class="code" title="subfunction loadImageFcn(varargin)">loadImageFcn</a>, []}, <span class="keyword">...</span>
+0315   <span class="string">'position'</span>                        , [15, fH-40, 200, 25], <span class="keyword">...</span>
+0316   <span class="string">'tag'</span>                             , <span class="string">'LoadImageBtn'</span>);
+0317 uicontrol(<span class="keyword">...</span>
+0318   <span class="string">'style'</span>                           , <span class="string">'edit'</span>, <span class="keyword">...</span>
+0319   <span class="string">'backgroundcolor'</span>                 , bgcolor2, <span class="keyword">...</span>
+0320   <span class="string">'string'</span>                          , <span class="string">''</span>, <span class="keyword">...</span>
+0321   <span class="string">'position'</span>                        , [220, fH-40, panelW-215, 25], <span class="keyword">...</span>
+0322   <span class="string">'horizontalalignment'</span>             , <span class="string">'left'</span>, <span class="keyword">...</span>
+0323   <span class="string">'enable'</span>                          , <span class="string">'inactive'</span>, <span class="keyword">...</span>
+0324   <span class="string">'tag'</span>                             , <span class="string">'ImageFileLoc'</span>);
+0325 
+0326 uicontrol(<span class="keyword">...</span>
+0327   <span class="string">'style'</span>                           , <span class="string">'frame'</span>, <span class="keyword">...</span>
+0328   <span class="string">'position'</span>                        , [15, fH-75, 3*(panelW-20)/4-5, 30], <span class="keyword">...</span>
+0329   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0330 uicontrol(<span class="keyword">...</span>
+0331   <span class="string">'style'</span>                           , <span class="string">'togglebutton'</span>, <span class="keyword">...</span>
+0332   <span class="string">'string'</span>                          , <span class="string">'Calibrate'</span>, <span class="keyword">...</span>
+0333   <span class="string">'buttondownfcn'</span>                   , @<a href="#_sub5" class="code" title="subfunction calibrateImageFcn(varargin)">calibrateImageFcn</a>, <span class="keyword">...</span>
+0334   <span class="string">'position'</span>                        , [20, fH-72, panelW/4-25, 25], <span class="keyword">...</span>
+0335   <span class="string">'enable'</span>                          , <span class="string">'off'</span>, <span class="keyword">...</span>
+0336   <span class="string">'tag'</span>                             , <span class="string">'CalibrateImageBtn'</span>);
+0337 calibFrameX = panelW/4-5;
+0338 calibFrameW = panelW/2-10;
+0339 uicontrol(<span class="keyword">...</span>
+0340   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0341   <span class="string">'position'</span>                        , [calibFrameX+5, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0342   <span class="string">'string'</span>                          , <span class="string">'Xo:'</span>, <span class="keyword">...</span>
+0343   <span class="string">'fontweight'</span>                      , <span class="string">'bold'</span>, <span class="keyword">...</span>
+0344   <span class="string">'horizontalalignment'</span>             , <span class="string">'right'</span>, <span class="keyword">...</span>
+0345   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nX-Axis Origin'</span>), <span class="keyword">...</span>
+0346   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0347 uicontrol(<span class="keyword">...</span>
+0348   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0349   <span class="string">'position'</span>                        , [calibFrameX+5+calibFrameW/8, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0350   <span class="string">'string'</span>                          , <span class="string">' NaN'</span>, <span class="keyword">...</span>
+0351   <span class="string">'horizontalalignment'</span>             , <span class="string">'left'</span>, <span class="keyword">...</span>
+0352   <span class="string">'tag'</span>                             , <span class="string">'hXoValue'</span>, <span class="keyword">...</span>
+0353   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nX-Axis Origin'</span>), <span class="keyword">...</span>
+0354   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0355 uicontrol(<span class="keyword">...</span>
+0356   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0357   <span class="string">'position'</span>                        , [calibFrameX+5+calibFrameW/4, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0358   <span class="string">'string'</span>                          , <span class="string">'Xm:'</span>, <span class="keyword">...</span>
+0359   <span class="string">'fontweight'</span>                      , <span class="string">'bold'</span>, <span class="keyword">...</span>
+0360   <span class="string">'horizontalalignment'</span>             , <span class="string">'right'</span>, <span class="keyword">...</span>
+0361   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nX-Axis Max'</span>), <span class="keyword">...</span>
+0362   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0363 uicontrol(<span class="keyword">...</span>
+0364   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0365   <span class="string">'position'</span>                        , [calibFrameX+5+3*calibFrameW/8, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0366   <span class="string">'string'</span>                          , <span class="string">' NaN'</span>, <span class="keyword">...</span>
+0367   <span class="string">'horizontalalignment'</span>             , <span class="string">'left'</span>, <span class="keyword">...</span>
+0368   <span class="string">'tag'</span>                             , <span class="string">'hXmValue'</span>, <span class="keyword">...</span>
+0369   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nX-Axis Max'</span>), <span class="keyword">...</span>
+0370   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0371 uicontrol(<span class="keyword">...</span>
+0372   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0373   <span class="string">'position'</span>                        , [calibFrameX+5+calibFrameW/2, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0374   <span class="string">'string'</span>                          , <span class="string">'Yo:'</span>, <span class="keyword">...</span>
+0375   <span class="string">'fontweight'</span>                      , <span class="string">'bold'</span>, <span class="keyword">...</span>
+0376   <span class="string">'horizontalalignment'</span>             , <span class="string">'right'</span>, <span class="keyword">...</span>
+0377   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nY-Axis Origin'</span>), <span class="keyword">...</span>
+0378   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0379 uicontrol(<span class="keyword">...</span>
+0380   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0381   <span class="string">'position'</span>                        , [calibFrameX+5+5*calibFrameW/8, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0382   <span class="string">'string'</span>                          , <span class="string">' NaN'</span>, <span class="keyword">...</span>
+0383   <span class="string">'horizontalalignment'</span>             , <span class="string">'left'</span>, <span class="keyword">...</span>
+0384   <span class="string">'tag'</span>                             , <span class="string">'hYoValue'</span>, <span class="keyword">...</span>
+0385   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nY-Axis Origin'</span>), <span class="keyword">...</span>
+0386   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0387 uicontrol(<span class="keyword">...</span>
+0388   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0389   <span class="string">'position'</span>                        , [calibFrameX+5+3*calibFrameW/4, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0390   <span class="string">'string'</span>                          , <span class="string">'Ym:'</span>, <span class="keyword">...</span>
+0391   <span class="string">'fontweight'</span>                      , <span class="string">'bold'</span>, <span class="keyword">...</span>
+0392   <span class="string">'horizontalalignment'</span>             , <span class="string">'right'</span>, <span class="keyword">...</span>
+0393   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nY-Axis Max'</span>), <span class="keyword">...</span>
+0394   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0395 uicontrol(<span class="keyword">...</span>
+0396   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0397   <span class="string">'position'</span>                        , [calibFrameX+5+7*calibFrameW/8, fH-70, calibFrameW/8, 15], <span class="keyword">...</span>
+0398   <span class="string">'string'</span>                          , <span class="string">' NaN'</span>, <span class="keyword">...</span>
+0399   <span class="string">'horizontalalignment'</span>             , <span class="string">'left'</span>, <span class="keyword">...</span>
+0400   <span class="string">'tag'</span>                             , <span class="string">'hYmValue'</span>, <span class="keyword">...</span>
+0401   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Calibration:\nY-Axis Max'</span>), <span class="keyword">...</span>
+0402   <span class="string">'backgroundcolor'</span>                 , bgcolor2);
+0403 
+0404 uicontrol(<span class="keyword">...</span>
+0405   <span class="string">'style'</span>                           , <span class="string">'togglebutton'</span>, <span class="keyword">...</span>
+0406   <span class="string">'string'</span>                          , <span class="string">'Grab Points'</span>, <span class="keyword">...</span>
+0407   <span class="string">'buttondownfcn'</span>                   , @<a href="#_sub6" class="code" title="subfunction grabPointsFcn(varargin)">grabPointsFcn</a>, <span class="keyword">...</span>
+0408   <span class="string">'position'</span>                        , [3*(panelW)/4, fH-72, panelW/4+5, 25], <span class="keyword">...</span>
+0409   <span class="string">'enable'</span>                          , <span class="string">'off'</span>, <span class="keyword">...</span>
+0410   <span class="string">'tag'</span>                             , <span class="string">'GrabPointsBtn'</span>);
+0411 uicontrol(<span class="keyword">...</span>
+0412   <span class="string">'style'</span>                           , <span class="string">'togglebutton'</span>, <span class="keyword">...</span>
+0413   <span class="string">'cdata'</span>                           , zI1, <span class="keyword">...</span>
+0414   <span class="string">'buttondownfcn'</span>                   , @<a href="#_sub9" class="code" title="subfunction zoomBtnFcn(varargin)">zoomBtnFcn</a>, <span class="keyword">...</span>
+0415   <span class="string">'position'</span>                        , [15, fH-105, 25, 25], <span class="keyword">...</span>
+0416   <span class="string">'enable'</span>                          , <span class="string">'inactive'</span>, <span class="keyword">...</span>
+0417   <span class="string">'tag'</span>                             , <span class="string">'ZoomStateBtn'</span>);
+0418 uicontrol(<span class="keyword">...</span>
+0419   <span class="string">'style'</span>                           , <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0420   <span class="string">'string'</span>                          , <span class="string">'Reset View '</span>, <span class="keyword">...</span>
+0421   <span class="string">'callback'</span>                        , @<a href="#_sub13" class="code" title="subfunction resetViewFcn(varargin)">resetViewFcn</a>, <span class="keyword">...</span>
+0422   <span class="string">'position'</span>                        , [45, fH-105, 100, 25], <span class="keyword">...</span>
+0423   <span class="string">'tag'</span>                             , <span class="string">'ResetViewBtn'</span>);
+0424 uicontrol(<span class="keyword">...</span>
+0425   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0426   <span class="string">'position'</span>                        , [150, fH-108, panelW-145, 31], <span class="keyword">...</span>
+0427   <span class="string">'horizontalalignment'</span>             , <span class="string">'center'</span>, <span class="keyword">...</span>
+0428   <span class="string">'foregroundcolor'</span>                 , [0 0 .5], <span class="keyword">...</span>
+0429   <span class="string">'backgroundcolor'</span>                 , bgcolor2, <span class="keyword">...</span>
+0430   <span class="string">'fontsize'</span>                        , 10, <span class="keyword">...</span>
+0431   <span class="string">'string'</span>                          , {<span class="string">'Click and drag to pan. Double-click to center. Right-click and drag to zoom.'</span>, <span class="keyword">...</span>
+0432     <span class="string">'Keyboard Shortcuts: &lt;a&gt; - zoom in, &lt;z&gt; - zoom out, &lt;space&gt; - reset view'</span>});
+0433 
+0434 rPanelX = 0.82 * fW;
+0435 rPanelW = fW - rPanelX - 10;
+0436 uicontrol(<span class="keyword">...</span>
+0437   <span class="string">'style'</span>                           , <span class="string">'listbox'</span>, <span class="keyword">...</span>
+0438   <span class="string">'callback'</span>                        , @<a href="#_sub3" class="code" title="subfunction selectVariableFcn(varargin)">selectVariableFcn</a>, <span class="keyword">...</span>
+0439   <span class="string">'position'</span>                        , [rPanelX+10, 100, rPanelW-20, 0.6*fH], <span class="keyword">...</span>
+0440   <span class="string">'backgroundcolor'</span>                 , bgcolor2, <span class="keyword">...</span>
+0441   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Double-click to edit\nvariable in Array Editor'</span>), <span class="keyword">...</span>
+0442   <span class="string">'tag'</span>                             , <span class="string">'VariableList'</span>);
+0443 uicontrol(<span class="keyword">...</span>
+0444   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0445   <span class="string">'string'</span>                          , <span class="string">'Data in Memory'</span>, <span class="keyword">...</span>
+0446   <span class="string">'position'</span>                        , [rPanelX+10, 0.6*fH+100, rPanelW-20, 20], <span class="keyword">...</span>
+0447   <span class="string">'backgroundcolor'</span>                 , bgcolor1, <span class="keyword">...</span>
+0448   <span class="string">'fontweight'</span>                      , <span class="string">'bold'</span>);
+0449 uicontrol(<span class="keyword">...</span>
+0450   <span class="string">'style'</span>                           , <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0451   <span class="string">'string'</span>                          , <span class="string">'Save to file as...'</span>, <span class="keyword">...</span>
+0452   <span class="string">'position'</span>                        , [rPanelX+10, 70, rPanelW-20, 25], <span class="keyword">...</span>
+0453   <span class="string">'callback'</span>                        , @<a href="#_sub1" class="code" title="subfunction variableManipulationFcn(varargin)">variableManipulationFcn</a>, <span class="keyword">...</span>
+0454   <span class="string">'tooltipstring'</span>                   , sprintf(<span class="string">'Save variable as a MAT file or\nDouble-precision, tab-delimited TXT file'</span>), <span class="keyword">...</span>
+0455   <span class="string">'tag'</span>                             , <span class="string">'SaveAs'</span>);
+0456 uicontrol(<span class="keyword">...</span>
+0457   <span class="string">'style'</span>                           , <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0458   <span class="string">'string'</span>                          , <span class="string">'Rename...'</span>, <span class="keyword">...</span>
+0459   <span class="string">'position'</span>                        , [rPanelX+10, 45, rPanelW-20, 25], <span class="keyword">...</span>
+0460   <span class="string">'callback'</span>                        , @<a href="#_sub1" class="code" title="subfunction variableManipulationFcn(varargin)">variableManipulationFcn</a>, <span class="keyword">...</span>
+0461   <span class="string">'tooltipstring'</span>                   , <span class="string">'Rename variable in workspace'</span>, <span class="keyword">...</span>
+0462   <span class="string">'tag'</span>                             , <span class="string">'Rename'</span>);
+0463 uicontrol(<span class="keyword">...</span>
+0464   <span class="string">'style'</span>                           , <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0465   <span class="string">'string'</span>                          , <span class="string">'Delete...'</span>, <span class="keyword">...</span>
+0466   <span class="string">'position'</span>                        , [rPanelX+10, 20, rPanelW-20, 25], <span class="keyword">...</span>
+0467   <span class="string">'callback'</span>                        , @<a href="#_sub1" class="code" title="subfunction variableManipulationFcn(varargin)">variableManipulationFcn</a>, <span class="keyword">...</span>
+0468   <span class="string">'tooltipstring'</span>                   , <span class="string">'Delete variable from workspace'</span>, <span class="keyword">...</span>
+0469   <span class="string">'tag'</span>                             , <span class="string">'Delete'</span>);
+0470 
+0471 axes(<span class="keyword">...</span>
+0472   <span class="string">'position'</span>                        , [10, 10, 0.8*fW, fH-200], <span class="keyword">...</span>
+0473   <span class="string">'visible'</span>                         , <span class="string">'on'</span>, <span class="keyword">...</span>
+0474   <span class="string">'handlevisibility'</span>                , <span class="string">'on'</span>, <span class="keyword">...</span>
+0475   <span class="string">'box'</span>                             , <span class="string">'on'</span>, <span class="keyword">...</span>
+0476   <span class="string">'drawmode'</span>                        , <span class="string">'fast'</span>, <span class="keyword">...</span>
+0477   <span class="string">'xtick'</span>                           , [], <span class="keyword">...</span>
+0478   <span class="string">'ytick'</span>                           , [], <span class="keyword">...</span>
+0479   <span class="string">'interruptible'</span>                   , <span class="string">'off'</span>, <span class="keyword">...</span>
+0480   <span class="string">'buttondownfcn'</span>                   , @<a href="#_sub15" class="code" title="subfunction winBtnDownFcn(varargin)">winBtnDownFcn</a>, <span class="keyword">...</span>
+0481   <span class="string">'tag'</span>                             , <span class="string">'ImageAxis'</span>);
+0482 imAxRatio = (fH - 200) / (0.8 * fW);
+0483 title(<span class="string">''</span>, <span class="string">'fontunits'</span>, <span class="string">'pixels'</span>, <span class="string">'fontsize'</span>, 24, <span class="string">'color'</span>, <span class="string">'red'</span>);
+0484 
+0485 axes(<span class="keyword">...</span>
+0486   <span class="string">'position'</span>                        , [rPanelX+20, 0.6*fH+150, rPanelW-30, 0.4*fH-190], <span class="keyword">...</span>
+0487   <span class="string">'box'</span>                             , <span class="string">'on'</span>, <span class="keyword">...</span>
+0488   <span class="string">'tag'</span>                             , <span class="string">'PreviewAxis'</span>);
+0489 
+0490 uicontrol(<span class="keyword">...</span>
+0491   <span class="string">'style'</span>                           , <span class="string">'text'</span>, <span class="keyword">...</span>
+0492   <span class="string">'string'</span>                          , <span class="string">'Preview Box'</span>, <span class="keyword">...</span>
+0493   <span class="string">'fontweight'</span>                      , <span class="string">'bold'</span>, <span class="keyword">...</span>
+0494   <span class="string">'position'</span>                        , [rPanelX+20, fH-40, rPanelW-30, 25], <span class="keyword">...</span>
+0495   <span class="string">'backgroundcolor'</span>                 , bgcolor1);
+0496 
+0497 uicontrol(<span class="keyword">...</span>
+0498   <span class="string">'style'</span>                           , <span class="string">'edit'</span>, <span class="keyword">...</span>
+0499   <span class="string">'backgroundcolor'</span>                 , bgcolor4, <span class="keyword">...</span>
+0500   <span class="string">'string'</span>                          , <span class="string">'Enter Value'</span>, <span class="keyword">...</span>
+0501   <span class="string">'position'</span>                        , [0 0 100 25], <span class="keyword">...</span>
+0502   <span class="string">'horizontalalignment'</span>             , <span class="string">'left'</span>, <span class="keyword">...</span>
+0503   <span class="string">'visible'</span>                         , <span class="string">'off'</span>, <span class="keyword">...</span>
+0504   <span class="string">'callback'</span>                        , @<a href="#_sub21" class="code" title="subfunction coordinateEditFcn(varargin)">coordinateEditFcn</a>, <span class="keyword">...</span>
+0505   <span class="string">'tag'</span>                             , <span class="string">'CoordinateEdit'</span>);
+0506 
+0507 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(findobj(im, <span class="string">'type'</span>, <span class="string">'uicontrol'</span>), <span class="string">'units'</span>, <span class="string">'normalized'</span>);
+0508 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(findobj(im, <span class="string">'type'</span>, <span class="string">'axes'</span>), <span class="string">'units'</span>, <span class="string">'normalized'</span>);
+0509 
+0510 <span class="comment">% create handles structure</span>
+0511 handles                           = guihandles(im);
+0512 handles.zoomPointer               = zoomPointer;
+0513 handles.zoomPointerHotSpot        = [2 2];
+0514 handles.zoomInOutPointer          = zoomInOutPointer;
+0515 handles.zoomInOutPointerHotSpot   = [9 9];
+0516 handles.closedHandPointer         = closedHandPointer;
+0517 handles.closedHandPointerHotSpot  = [9 9];
+0518 handles.xoPointer                 = xoPointer;
+0519 handles.xoPointerHotSpot          = [2 2];
+0520 handles.xmPointer                 = xmPointer;
+0521 handles.xmPointerHotSpot          = [2 2];
+0522 handles.yoPointer                 = yoPointer;
+0523 handles.yoPointerHotSpot          = [2 2];
+0524 handles.ymPointer                 = ymPointer;
+0525 handles.ymPointerHotSpot          = [2 2];
+0526 handles.zoomIconUp                = zI1;
+0527 handles.zoomIconDown              = zI2;
+0528 handles.curPointer                = <span class="string">'arrow'</span>;
+0529 handles.curPointerData.CData      = zoomPointer;
+0530 handles.curPointerData.HotSpot    = [1 1];
+0531 handles.state                     = <span class="string">'normal'</span>;
+0532 handles.bgcolor1                  = bgcolor1;
+0533 handles.bgcolor2                  = bgcolor2;
+0534 handles.bgcolor3                  = bgcolor3;
+0535 handles.bgcolor4                  = bgcolor4;
+0536 handles.imAxRatio                 = imAxRatio;
+0537 handles.I                         = [];
+0538 handles.map                       = [];
+0539 handles.savedVars                 = struct;
+0540 handles.isPanning                 = false;
+0541 handles.curTitle                  = <span class="string">''</span>;
+0542 handles.CurrentPointAxes          = [];
+0543 handles.CurrentPointFig           = [];
+0544 handles.timer                     = timer(<span class="keyword">...</span>
+0545                                           <span class="string">'Name'</span>, <span class="string">'BtnUpTimer'</span>, <span class="keyword">...</span>
+0546                                           <span class="string">'StartDelay'</span>, 0.2, <span class="keyword">...</span>
+0547                                           <span class="string">'TimerFcn'</span>, {@<a href="#_sub20" class="code" title="subfunction btnUpTimerFcn(varargin)">btnUpTimerFcn</a>, im});
+0548 
+0549 guidata(im, handles);
+0550 
+0551 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(im, <span class="string">'handlevisibility'</span>, <span class="string">'callback'</span>);
+0552 
+0553 <span class="keyword">if</span> nargin == 1 &amp;&amp; ischar(fname)
+0554   <span class="keyword">switch</span> lower(fname)
+0555     <span class="keyword">case</span> <span class="string">'-sample'</span>
+0556       fname = <a href="#_sub24" class="code" title="subfunction fname = createSampleImageFcn">createSampleImageFcn</a>;
+0557       <span class="keyword">if</span> ~isempty(fname)
+0558         <a href="#_sub4" class="code" title="subfunction loadImageFcn(varargin)">loadImageFcn</a>(handles.LoadImageBtn, [], fname);
+0559         <span class="keyword">try</span>
+0560           pause(0.5);
+0561           <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(fname);
+0562         <span class="keyword">catch</span>
+0563           errordlg(lasterr);
+0564         <span class="keyword">end</span>
+0565       <span class="keyword">end</span>
+0566       
+0567     <span class="keyword">otherwise</span>
+0568       filename = which(fname);
+0569       <span class="keyword">if</span> ~isempty(filename)
+0570         <a href="#_sub4" class="code" title="subfunction loadImageFcn(varargin)">loadImageFcn</a>(handles.LoadImageBtn, [], filename);
+0571       <span class="keyword">else</span>
+0572         errordlg(sprintf(<span class="string">'%s\nnot found.'</span>, fname));
+0573         <span class="keyword">return</span>;
+0574       <span class="keyword">end</span>
+0575   <span class="keyword">end</span>
+0576 <span class="keyword">end</span>
+0577 
+0578 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(im, <span class="string">'visible'</span>, <span class="string">'on'</span>);
+0579 
+0580 
+0581 <span class="comment">%--------------------------------------------------------------------------</span>
+0582 <span class="comment">%--------------------------------------------------------------------------</span>
+0583 <span class="comment">% variableManipulationFcn</span>
+0584 <span class="comment">%--------------------------------------------------------------------------</span>
+0585 <span class="comment">%--------------------------------------------------------------------------</span>
+0586 <a name="_sub1" href="#_subfunctions" class="code">function variableManipulationFcn(varargin)</a>
+0587 <span class="comment">% This callback is called when one of the three buttons under the variable</span>
+0588 <span class="comment">% listbox is pressed.</span>
+0589 
+0590 obj = varargin{1};
+0591 
+0592 handles = guidata(obj);
+0593 
+0594 vars = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(handles.savedVars);
+0595 <span class="keyword">if</span> isempty(vars)
+0596   <span class="keyword">return</span>;
+0597 <span class="keyword">end</span>
+0598 listboxVal = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.VariableList, <span class="string">'value'</span>);
+0599 varName = vars{listboxVal};
+0600 <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'Tag'</span>)
+0601   
+0602   <span class="keyword">case</span> <span class="string">'SaveAs'</span> <span class="comment">% save the variable as a .mat file</span>
+0603     [fname, pname] = uiputfile(<span class="keyword">...</span>
+0604       {<span class="string">'*.mat'</span>, <span class="string">'MAT files (*.mat)'</span>; <span class="keyword">...</span>
+0605       <span class="string">'*.txt'</span>, <span class="string">'TXT files (*.txt)'</span>}, <span class="keyword">...</span>
+0606       sprintf(<span class="string">'Save ''%s'' as:'</span>, varName), <span class="keyword">...</span>
+0607       varName);
+0608     <span class="keyword">if</span> ~isequal(fname, 0) &amp;&amp; ~isequal(pname, 0)
+0609       <a href="#_sub2" class="code" title="subfunction saveDatFcn(pname, fname, var)">saveDatFcn</a>(pname, fname, handles.savedVars.(varName))
+0610     <span class="keyword">end</span>      
+0611     
+0612   <span class="keyword">case</span> <span class="string">'Rename'</span>  <span class="comment">% rename the variable in the base workspace</span>
+0613     answer = inputdlg({sprintf(<span class="string">'Rename ''%s'' as:'</span>, varName)}, <span class="keyword">...</span>
+0614       <span class="string">'Rename...'</span>, 1, {varName});
+0615     <span class="keyword">if</span> ~isempty(answer) &amp;&amp; ~strcmp(varName, answer{1})
+0616       <span class="keyword">if</span> ~(evalin(<span class="string">'base'</span>, sprintf(<span class="string">'exist(''%s'', ''var'')'</span>, answer{1}))) &amp;&amp; <span class="keyword">...</span>
+0617           isempty(strmatch(answer{1}, vars, <span class="string">'exact'</span>))
+0618         newVarNames = vars;
+0619         newVarNames{listboxVal} = answer{1};
+0620         <span class="keyword">for</span> id = 1:length(vars)
+0621           tmp.(newVarNames{id}) = handles.savedVars.(vars{id});
+0622         <span class="keyword">end</span>
+0623         handles.savedVars = tmp;
+0624         <a href="#_sub7" class="code" title="subfunction showAllVarsFcn(handles)">showAllVarsFcn</a>(handles);
+0625         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.VariableList, <span class="string">'value'</span>, listboxVal);
+0626         assignin(<span class="string">'base'</span>, answer{1}, handles.savedVars.(answer{1}));
+0627         evalin(<span class="string">'base'</span>, sprintf(<span class="string">'clear %s;'</span>, varName));
+0628       <span class="keyword">else</span>
+0629         errordlg(<span class="string">'That name is already in use.'</span>);
+0630         <span class="keyword">return</span>;
+0631       <span class="keyword">end</span>
+0632     <span class="keyword">end</span>
+0633     
+0634   <span class="keyword">case</span> <span class="string">'Delete'</span> <span class="comment">% delete the variable from the base workspace</span>
+0635     btn = questdlg(sprintf(<span class="string">'Delete ''%s'' from the workspace?'</span>, varName), <span class="keyword">...</span>
+0636       <span class="string">'Delete from workspace...'</span>, <span class="string">'Yes'</span>, <span class="string">'No'</span>, <span class="string">'No'</span>);
+0637     <span class="keyword">switch</span> btn
+0638       <span class="keyword">case</span> <span class="string">'Yes'</span>
+0639         handles.savedVars = <a href="../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>(handles.savedVars, varName);
+0640         <a href="#_sub7" class="code" title="subfunction showAllVarsFcn(handles)">showAllVarsFcn</a>(handles);
+0641         evalin(<span class="string">'base'</span>, sprintf(<span class="string">'clear %s;'</span>, varName));
+0642       <span class="keyword">case</span> <span class="string">'No'</span>
+0643     <span class="keyword">end</span>
+0644     
+0645 <span class="keyword">end</span>
+0646 
+0647 guidata(obj, handles);
+0648 
+0649 
+0650 <span class="comment">%--------------------------------------------------------------------------</span>
+0651 <span class="comment">%--------------------------------------------------------------------------</span>
+0652 <span class="comment">% saveDatFcn</span>
+0653 <span class="comment">%--------------------------------------------------------------------------</span>
+0654 <span class="comment">%--------------------------------------------------------------------------</span>
+0655 <a name="_sub2" href="#_subfunctions" class="code">function saveDatFcn(pname, fname, var)</a>
+0656 <span class="comment">% this function saves the variable to file</span>
+0657 
+0658 [p, fname, ext] = fileparts(fname);
+0659 <span class="keyword">switch</span> lower(ext)
+0660   <span class="keyword">case</span> <span class="string">'.mat'</span>
+0661     eval(sprintf(<span class="string">'%s = var;'</span>, fname));
+0662     save(fullfile(pname, [fname, ext]), fname, <span class="string">'-v6'</span>);
+0663   <span class="keyword">case</span> <span class="string">'.txt'</span>
+0664     eval(sprintf(<span class="string">'%s = var;'</span>, fname));
+0665     save(fullfile(pname, [fname, ext]), fname, <span class="string">'-ascii'</span>, <span class="string">'-double'</span>, <span class="string">'-tabs'</span>);
+0666   <span class="keyword">otherwise</span>
+0667     errordlg(<span class="string">'Unknown extension.'</span>);
+0668 <span class="keyword">end</span>
+0669 
+0670 
+0671 <span class="comment">%--------------------------------------------------------------------------</span>
+0672 <span class="comment">%--------------------------------------------------------------------------</span>
+0673 <span class="comment">% selectVariableFcn</span>
+0674 <span class="comment">%--------------------------------------------------------------------------</span>
+0675 <span class="comment">%--------------------------------------------------------------------------</span>
+0676 <a name="_sub3" href="#_subfunctions" class="code">function selectVariableFcn(varargin)</a>
+0677 <span class="comment">% this callback is called when a variable is selected from the variable</span>
+0678 <span class="comment">% listbox.  When the variable is clicked, it will plot the data in the</span>
+0679 <span class="comment">% Preview Box above.  If the variable is double-clicked, it will be opened</span>
+0680 <span class="comment">% in the Array Editor.  It also ensures that the variable in the base</span>
+0681 <span class="comment">% workspace is the same copy as the variable stored in the GRABIT</span>
+0682 <span class="comment">% workspace.  This means that if you change the contents of a variable in</span>
+0683 <span class="comment">% the base workspace (via other functions), then it will allow you to</span>
+0684 <span class="comment">% update the variable in the GRABIT workspace.</span>
+0685 
+0686 obj = varargin{1};
+0687 
+0688 handles = guidata(obj);
+0689 
+0690 sType = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'SelectionType'</span>);
+0691 <span class="keyword">switch</span> sType
+0692   <span class="keyword">case</span> {<span class="string">'normal'</span>, <span class="string">'open'</span>} <span class="comment">% single or double click</span>
+0693     vars = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(handles.savedVars);
+0694     <span class="keyword">if</span> isempty(vars)
+0695       <span class="keyword">return</span>;
+0696     <span class="keyword">end</span>
+0697     listVal = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'value'</span>);
+0698     varName = vars{listVal};
+0699     
+0700     <span class="comment">% check to see if the stored var is the same as the var in the</span>
+0701     <span class="comment">% base workspace</span>
+0702     <span class="keyword">if</span> evalin(<span class="string">'base'</span>, sprintf(<span class="string">'exist(''%s'', ''var'')'</span>, varName))
+0703       
+0704       <span class="comment">% the copy in the base workspace must be a n-by-2 DOUBLE array</span>
+0705       <span class="keyword">if</span> strcmp(class(evalin(<span class="string">'base'</span>, varName)), <span class="string">'double'</span>) &amp;&amp; <span class="keyword">...</span>
+0706           ndims(evalin(<span class="string">'base'</span>, varName)) == 2 &amp;&amp; <span class="keyword">...</span>
+0707           size(evalin(<span class="string">'base'</span>, varName), 2) == 2
+0708         
+0709         <span class="keyword">if</span> ~isequal(evalin(<span class="string">'base'</span>, varName), handles.savedVars.(varName))
+0710           <span class="comment">% may have been modified in the base workspace</span>
+0711           btn = questdlg(sprintf(<span class="string">'''%s'' may have been modified in the base workspace (e.g. Array Editor).\nUpdate the variable?'</span>, varName), <span class="keyword">...</span>
+0712             <span class="string">'Modified Variable'</span>, <span class="string">'Update Base Workspace'</span>, <span class="string">'Update Grabit'</span>, <span class="string">'Neither'</span>, <span class="string">'Update Grabit'</span>);
+0713         
+0714           <span class="keyword">switch</span> btn
+0715             <span class="keyword">case</span> <span class="string">'Update Base Workspace'</span>
+0716               assignin(<span class="string">'base'</span>, varName, handles.savedVars.(varName));
+0717               
+0718             <span class="keyword">case</span> <span class="string">'Update Grabit'</span>
+0719               handles.savedVars.(varName) = evalin(<span class="string">'base'</span>, varName);
+0720               <a href="#_sub7" class="code" title="subfunction showAllVarsFcn(handles)">showAllVarsFcn</a>(handles);
+0721               <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'value'</span>, listVal);
+0722               
+0723           <span class="keyword">end</span>
+0724           
+0725         <span class="keyword">end</span>
+0726         
+0727       <span class="keyword">else</span>
+0728         btn = questdlg(sprintf(<span class="string">'''%s'' in the base workspace is different from the one in Grabit.\nUpdate the base workspace variable?'</span>, varName), <span class="keyword">...</span>
+0729           <span class="string">'Wrong Variable'</span>, <span class="string">'Update Base Workspace'</span>, <span class="string">'Leave Untouched'</span>, <span class="string">'Update Base Workspace'</span>);
+0730         
+0731         <span class="keyword">switch</span> btn
+0732           <span class="keyword">case</span> <span class="string">'Update Base Workspace'</span>
+0733             assignin(<span class="string">'base'</span>, varName, handles.savedVars.(varName));
+0734             
+0735         <span class="keyword">end</span>
+0736         
+0737       <span class="keyword">end</span>
+0738       
+0739     <span class="keyword">else</span> <span class="comment">% the variable does not exist in base workspace, so make a copy</span>
+0740       assignin(<span class="string">'base'</span>, varName, handles.savedVars.(varName));
+0741     <span class="keyword">end</span>
+0742     
+0743     <span class="keyword">switch</span> sType
+0744       <span class="keyword">case</span> <span class="string">'normal'</span> <span class="comment">% single click</span>
+0745         axes(handles.PreviewAxis);
+0746         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.PreviewLine, <span class="keyword">...</span>
+0747           <span class="string">'xdata'</span>, handles.savedVars.(varName)(:, 1), <span class="keyword">...</span>
+0748           <span class="string">'ydata'</span>, handles.savedVars.(varName)(:, 2));
+0749         axis auto;
+0750         
+0751       <span class="keyword">case</span> <span class="string">'open'</span> <span class="comment">% double click</span>
+0752         <span class="keyword">try</span>
+0753           openvar(varName);
+0754         <span class="keyword">catch</span>
+0755           errordlg(lasterr);
+0756         <span class="keyword">end</span>
+0757         
+0758     <span class="keyword">end</span>
+0759 <span class="keyword">end</span>
+0760 
+0761 guidata(obj, handles);
+0762 
+0763 
+0764 <span class="comment">%--------------------------------------------------------------------------</span>
+0765 <span class="comment">%--------------------------------------------------------------------------</span>
+0766 <span class="comment">% loadImageFcn</span>
+0767 <span class="comment">%--------------------------------------------------------------------------</span>
+0768 <span class="comment">%--------------------------------------------------------------------------</span>
+0769 <a name="_sub4" href="#_subfunctions" class="code">function loadImageFcn(varargin)</a>
+0770 <span class="comment">% this function loads an image file</span>
+0771 
+0772 [obj, filename] = <a href="#_sub23" class="code" title="subfunction varargout = splitvar(varargout)">splitvar</a>(varargin([1, 3]));
+0773 
+0774 handles = guidata(obj);
+0775 
+0776 <span class="keyword">if</span> isempty(filename)
+0777   [fname, pathname] = uigetfile(<span class="keyword">...</span>
+0778     {<span class="string">'*.bmp;*.jpg;*.jpeg;*.tif;*.tiff;*.gif;*.png'</span>, <span class="keyword">...</span>
+0779     <span class="string">'Image Files (*.bmp,  *.jpg,  *.jpeg,  *.tif,  *.tiff,  *.gif,  *.png)'</span>;
+0780     <span class="string">'*.bpm'</span>, <span class="string">'BPM files (*.bpm)'</span>;
+0781     <span class="string">'*.jpg;*jpeg'</span>, <span class="string">'JPG files (*.jpg,  *.jpeg)'</span>;
+0782     <span class="string">'*.tif;*tiff'</span>, <span class="string">'TIFF files (*.tif,  *.tiff)'</span>;
+0783     <span class="string">'*.gif'</span>, <span class="string">'GIF files (*.gif)'</span>;
+0784     <span class="string">'*.png'</span>, <span class="string">'PNG files (*.png)'</span>;
+0785     <span class="string">'*.*'</span>, <span class="string">'All files (*.*)'</span>}, <span class="string">'Select an image file'</span>);
+0786   <span class="keyword">if</span> ischar(fname)
+0787     filename = fullfile(pathname, fname);
+0788   <span class="keyword">else</span>
+0789     <span class="keyword">return</span>;
+0790   <span class="keyword">end</span>
+0791 <span class="keyword">end</span>
+0792 
+0793 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageFileLoc, <span class="string">'string'</span>, filename);
+0794 
+0795 <span class="keyword">try</span>
+0796   <span class="comment">%warning off;</span>
+0797   [A, map] = imread(filename);
+0798   <span class="comment">%warning on;</span>
+0799 <span class="keyword">catch</span>
+0800   errordlg(lasterr);
+0801   <span class="keyword">return</span>;
+0802 <span class="keyword">end</span>
+0803 
+0804 <span class="keyword">if</span> ndims(A) == 3   <span class="comment">%some TIFF files have wrong size matrices.</span>
+0805   <span class="keyword">if</span> size(A, 3)&gt;3
+0806     A = A(:, :, 1:3);
+0807   <span class="keyword">elseif</span> size(A, 3)&lt;3
+0808     errordlg(<span class="string">'This is a weird image file...possibly a bad TIFF file...'</span>);
+0809     <span class="keyword">return</span>;
+0810   <span class="keyword">end</span>
+0811 <span class="keyword">end</span>
+0812 
+0813 <span class="comment">% Need this so that image shows up when not called by a CALLBACK</span>
+0814 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="string">'ShowHiddenHandles'</span>, <span class="string">'on'</span>);
+0815 
+0816 cla(handles.PreviewAxis);
+0817 handles.PreviewLine = line(NaN, NaN, <span class="keyword">...</span>
+0818   <span class="string">'color'</span>     , <span class="string">'blue'</span>, <span class="keyword">...</span>
+0819   <span class="string">'linestyle'</span> , <span class="string">'-'</span>, <span class="keyword">...</span>
+0820   <span class="string">'marker'</span>    , <span class="string">'.'</span>, <span class="keyword">...</span>
+0821   <span class="string">'tag'</span>       , <span class="string">'PreviewLine'</span>, <span class="keyword">...</span>
+0822   <span class="string">'parent'</span>    , handles.PreviewAxis);
+0823 axes(handles.ImageAxis);
+0824 cla(handles.ImageAxis);
+0825 NP = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'nextplot'</span>);  <span class="comment">% for compatibility with R14</span>
+0826 
+0827 <span class="keyword">if</span> isempty(map)
+0828   imageInfo = imfinfo(filename);
+0829   <span class="keyword">if</span> strcmpi(imageInfo.ColorType, <span class="string">'grayscale'</span>)
+0830     colormap(gray(2^imageInfo.BitDepth));
+0831   <span class="keyword">end</span>
+0832 <span class="keyword">else</span>
+0833   colormap(map);
+0834 <span class="keyword">end</span>
+0835 iH = image(A);
+0836 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(iH, <span class="string">'HitTest'</span>, <span class="string">'off'</span>, <span class="string">'EraseMode'</span>, <span class="string">'normal'</span>);
+0837 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="string">'xtick'</span>, [], <span class="string">'ytick'</span>, []);
+0838 axis equal;
+0839 
+0840 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="string">'nextplot'</span>, NP);
+0841 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+0842   <span class="string">'drawmode'</span>        , <span class="string">'fast'</span>, <span class="keyword">...</span>
+0843   <span class="string">'tag'</span>             , <span class="string">'ImageAxis'</span>, <span class="keyword">...</span>
+0844   <span class="string">'handlevisibility'</span>, <span class="string">'callback'</span>, <span class="keyword">...</span>
+0845   <span class="string">'buttondownfcn'</span>   , @<a href="#_sub15" class="code" title="subfunction winBtnDownFcn(varargin)">winBtnDownFcn</a>);
+0846 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="keyword">...</span>
+0847   <span class="string">'string'</span>          , <span class="string">''</span>, <span class="keyword">...</span>
+0848   <span class="string">'fontunits'</span>       , <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0849   <span class="string">'fontsize'</span>        , 24, <span class="keyword">...</span>
+0850   <span class="string">'color'</span>           , <span class="string">'red'</span>);
+0851 handles.ImageLine = line(NaN, NaN, <span class="keyword">...</span>
+0852   <span class="string">'color'</span>           , <span class="string">'red'</span>, <span class="keyword">...</span>
+0853   <span class="string">'linestyle'</span>       , <span class="string">'none'</span>, <span class="keyword">...</span>
+0854   <span class="string">'marker'</span>          , <span class="string">'.'</span>, <span class="keyword">...</span>
+0855   <span class="string">'tag'</span>             , <span class="string">'ImageLine'</span>, <span class="keyword">...</span>
+0856   <span class="string">'hittest'</span>         , <span class="string">'off'</span>);
+0857 handles.CalibPtsH(:,1) = line(repmat(NaN, 2, 4), repmat(NaN, 2, 4));
+0858 handles.CalibPtsH(:,2) = line(repmat(NaN, 2, 4), repmat(NaN, 2, 4));
+0859 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH(:,1), <span class="keyword">...</span>
+0860   {<span class="string">'marker'</span>,<span class="string">'color'</span>}, {<span class="string">'o'</span>,<span class="string">'r'</span>;<span class="string">'o'</span>,<span class="string">'r'</span>;<span class="string">'o'</span>,<span class="string">'b'</span>;<span class="string">'o'</span>,<span class="string">'b'</span>}, <span class="keyword">...</span>
+0861   <span class="string">'markersize'</span>      , 10, <span class="keyword">...</span>
+0862   <span class="string">'hittest'</span>         , <span class="string">'off'</span>);
+0863 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH(:,2), <span class="keyword">...</span>
+0864   {<span class="string">'marker'</span>,<span class="string">'color'</span>}, {<span class="string">'+'</span>,<span class="string">'r'</span>;<span class="string">'x'</span>,<span class="string">'r'</span>;<span class="string">'+'</span>,<span class="string">'b'</span>;<span class="string">'x'</span>,<span class="string">'b'</span>}, <span class="keyword">...</span>
+0865   <span class="string">'markersize'</span>      , 20, <span class="keyword">...</span>
+0866   <span class="string">'hittest'</span>         , <span class="string">'off'</span>);
+0867 
+0868 <span class="comment">% initialize image data</span>
+0869 handles.I           = A;
+0870 handles.map         = map;
+0871 handles.CalibVals   = [];
+0872 handles.CalibPts    = [NaN, NaN, NaN, NaN];
+0873 handles.CalibPtsIm  = repmat(NaN, 4, 2);
+0874 handles.ImLimits    = [<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>); <span class="keyword">...</span>
+0875                        <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>)];
+0876 
+0877 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibrateImageBtn, <span class="keyword">...</span>
+0878   <span class="string">'string'</span>, <span class="string">'Calibrate'</span>, <span class="keyword">...</span>
+0879   <span class="string">'enable'</span>, <span class="string">'inactive'</span>, <span class="keyword">...</span>
+0880   <span class="string">'value'</span> , 0);
+0881 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabPointsBtn, <span class="keyword">...</span>
+0882   <span class="string">'enable'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+0883   <span class="string">'value'</span> , 0);
+0884 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ZoomStateBtn, <span class="keyword">...</span>
+0885   <span class="string">'enable'</span>, <span class="string">'inactive'</span>, <span class="keyword">...</span>
+0886   <span class="string">'value'</span> , 0);
+0887 zoom off;
+0888 
+0889 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="string">'ShowHiddenHandles'</span>, <span class="string">'off'</span>);
+0890 
+0891 guidata(obj, handles);
+0892 
+0893 
+0894 <span class="comment">%--------------------------------------------------------------------------</span>
+0895 <span class="comment">%--------------------------------------------------------------------------</span>
+0896 <span class="comment">% calibrateImageFcn</span>
+0897 <span class="comment">%--------------------------------------------------------------------------</span>
+0898 <span class="comment">%--------------------------------------------------------------------------</span>
+0899 <a name="_sub5" href="#_subfunctions" class="code">function calibrateImageFcn(varargin)</a>
+0900 <span class="comment">% this function performs calibration of the image by prompting the user to</span>
+0901 <span class="comment">% select 4 points on the image as reference points.</span>
+0902 
+0903 obj = varargin{1};
+0904 
+0905 handles = guidata(obj);
+0906 
+0907 <span class="keyword">if</span> isempty(handles.I)
+0908   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'enable'</span>, <span class="string">'off'</span>);
+0909 <span class="keyword">else</span>
+0910   <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'value'</span>)
+0911     <span class="keyword">case</span> 0  <span class="comment">% start calibration</span>
+0912       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'value'</span>, 1, <span class="string">'backgroundcolor'</span>, handles.bgcolor4);
+0913             
+0914       handles.curPointer              = <span class="string">'custom'</span>;
+0915       handles.curPointerData.CData    = handles.xoPointer;
+0916       handles.curPointerData.HotSpot  = handles.xoPointerHotSpot;
+0917       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+0918         <span class="string">'PointerShapeCData'</span>     , handles.curPointerData.CData, <span class="keyword">...</span>
+0919         <span class="string">'PointerShapeHotSpot'</span>   , handles.curPointerData.HotSpot, <span class="keyword">...</span>
+0920         <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+0921       
+0922       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+0923           handles.SaveAs, <span class="keyword">...</span>
+0924           handles.Rename, <span class="keyword">...</span>
+0925           handles.Delete], <span class="keyword">...</span>
+0926         <span class="string">'enable'</span>, <span class="string">'off'</span>);
+0927       
+0928       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH, <span class="string">'xdata'</span>, NaN, <span class="string">'ydata'</span>, NaN);
+0929       handles.CalibVals = [];
+0930       handles.CalibPts = [NaN, NaN, NaN, NaN];
+0931       handles.CalibPtsIm = repmat(NaN, 4, 2);
+0932       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.hXoValue, handles.hXmValue, <span class="keyword">...</span>
+0933           handles.hYoValue, handles.hYmValue], <span class="keyword">...</span>
+0934         <span class="string">'string'</span>, <span class="string">' NaN'</span>);
+0935       
+0936       <span class="comment">% this is the first calibration point: X-Axis Origin</span>
+0937       handles.curTitle = <span class="string">'Click on the ORIGIN of x-axis'</span>;
+0938       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="keyword">...</span>
+0939         <span class="string">'string'</span>, handles.curTitle);
+0940       
+0941       <span class="comment">% change state to CALIBRATION</span>
+0942       handles.state = <span class="string">'calibration'</span>;
+0943 
+0944     <span class="keyword">case</span> 1  <span class="comment">% stop (prematurely) calibration</span>
+0945       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+0946         <span class="string">'value'</span>           , 0, <span class="keyword">...</span>
+0947         <span class="string">'backgroundcolor'</span> , handles.bgcolor3, <span class="keyword">...</span>
+0948         <span class="string">'string'</span>          , <span class="string">'Calibrate'</span>);
+0949       handles.curTitle = <span class="string">''</span>;
+0950       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, <span class="string">''</span>);
+0951             
+0952       handles.curPointer          = <span class="string">'arrow'</span>;
+0953       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+0954         <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+0955            
+0956       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+0957           handles.SaveAs, <span class="keyword">...</span>
+0958           handles.Rename, <span class="keyword">...</span>
+0959           handles.Delete], <span class="keyword">...</span>
+0960         <span class="string">'enable'</span>, <span class="string">'on'</span>);
+0961       
+0962       <span class="comment">% calibration was prematurely stopped, so reset all values</span>
+0963       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH, <span class="string">'xdata'</span>, NaN, <span class="string">'ydata'</span>, NaN);
+0964       handles.CalibVals = [];
+0965       handles.CalibPts = [NaN, NaN, NaN, NaN];
+0966       handles.CalibPtsIm = repmat(NaN, 4, 2);
+0967       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.hXoValue, handles.hXmValue, <span class="keyword">...</span>
+0968           handles.hYoValue, handles.hYmValue], <span class="keyword">...</span>
+0969         <span class="string">'string'</span>, <span class="string">' NaN'</span>);
+0970       
+0971       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabPointsBtn, <span class="string">'enable'</span>, <span class="string">'off'</span>);
+0972       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CoordinateEdit, <span class="string">'visible'</span>, <span class="string">'off'</span>);
+0973       
+0974       <span class="comment">% change state to NORMAL</span>
+0975       handles.state = <span class="string">'normal'</span>;
+0976   <span class="keyword">end</span>
+0977 <span class="keyword">end</span>
+0978 
+0979 guidata(obj, handles);
+0980 
+0981 
+0982 <span class="comment">%--------------------------------------------------------------------------</span>
+0983 <span class="comment">%--------------------------------------------------------------------------</span>
+0984 <span class="comment">% grabPointsFcn</span>
+0985 <span class="comment">%--------------------------------------------------------------------------</span>
+0986 <span class="comment">%--------------------------------------------------------------------------</span>
+0987 <a name="_sub6" href="#_subfunctions" class="code">function grabPointsFcn(varargin)</a>
+0988 <span class="comment">% this function is used to extract data points by prompting the user to</span>
+0989 <span class="comment">% select points on the image.</span>
+0990 
+0991 obj = varargin{1};
+0992 
+0993 handles = guidata(obj);
+0994 
+0995 <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'value'</span>)
+0996   <span class="keyword">case</span> 0  <span class="comment">% initiate point grabbing</span>
+0997     calib = handles.CalibVals;
+0998     
+0999     axes(handles.ImageAxis);
+1000     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+1001       <span class="string">'xlim'</span>, handles.ImLimits(1,:), <span class="keyword">...</span>
+1002       <span class="string">'ylim'</span>, handles.ImLimits(2,:));
+1003     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageLine, <span class="string">'xdata'</span>, NaN, <span class="string">'ydata'</span>, NaN);
+1004     handles.curTitle = {<span class="string">'Grab points by clicking on data points.'</span>, <span class="keyword">...</span>
+1005     <span class="string">'&lt;BACKSPACE&gt; or &lt;DEL&gt; to delete previous point. &lt;ENTER&gt; to finish.'</span>};
+1006     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="keyword">...</span>
+1007       <span class="string">'string'</span>, handles.curTitle);
+1008     
+1009     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.PreviewLine, <span class="string">'xdata'</span>, NaN, <span class="string">'ydata'</span>, NaN);
+1010     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.PreviewAxis, <span class="keyword">...</span>
+1011       <span class="string">'xlim'</span>, [min([calib.Xo calib.Xm]) max([calib.Xo calib.Xm])], <span class="keyword">...</span>
+1012       <span class="string">'ylim'</span>, [min([calib.Yo calib.Ym]) max([calib.Yo calib.Ym])]);
+1013     
+1014     handles.ImDat   = [];
+1015     handles.TrueDat = [];
+1016     
+1017     handles.curPointer          = <span class="string">'crosshair'</span>;
+1018     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+1019       <span class="string">'WindowButtonMotionFcn'</span>, {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+1020         
+1021     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1022       <span class="string">'value'</span>           , 1, <span class="keyword">...</span>
+1023       <span class="string">'string'</span>          , <span class="string">'Grabbing Points (0)'</span>, <span class="keyword">...</span>
+1024       <span class="string">'backgroundcolor'</span> , handles.bgcolor4);
+1025     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.CalibrateImageBtn, <span class="keyword">...</span>
+1026         handles.LoadImageBtn, <span class="keyword">...</span>
+1027         handles.SaveAs, <span class="keyword">...</span>
+1028         handles.Rename, <span class="keyword">...</span>
+1029         handles.Delete], <span class="keyword">...</span>
+1030       <span class="string">'enable'</span>, <span class="string">'off'</span>);
+1031 
+1032     <span class="comment">% change state to GRAB</span>
+1033     handles.state = <span class="string">'grab'</span>;
+1034     
+1035   <span class="keyword">case</span> 1  <span class="comment">% finish point grabbing</span>
+1036     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1037       <span class="string">'value'</span>           , 0, <span class="keyword">...</span>
+1038       <span class="string">'string'</span>          , <span class="string">'Grab Points'</span>, <span class="keyword">...</span>
+1039       <span class="string">'backgroundcolor'</span> , handles.bgcolor1);
+1040 
+1041     handles.curTitle = <span class="string">''</span>;
+1042     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, <span class="string">''</span>);
+1043     handles.curPointer            = <span class="string">'arrow'</span>;
+1044     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="string">'WindowButtonMotionFcn'</span>, {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+1045     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibrateImageBtn, <span class="string">'enable'</span>, <span class="string">'inactive'</span>);
+1046     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1047         handles.SaveAs, <span class="keyword">...</span>
+1048         handles.Rename, <span class="keyword">...</span>
+1049         handles.Delete], <span class="keyword">...</span>
+1050       <span class="string">'enable'</span>, <span class="string">'on'</span>);
+1051     <span class="keyword">if</span> ~isempty(handles.TrueDat) <span class="comment">% some points were grabbed</span>
+1052       varNames                          = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(handles.savedVars);
+1053       varNames{end + 1}                 = <a href="#_sub8" class="code" title="subfunction newVarName = findNextVarNameFcn(varNames)">findNextVarNameFcn</a>(varNames);
+1054       handles.savedVars.(varNames{end}) = handles.TrueDat;
+1055       assignin(<span class="string">'base'</span>, varNames{end}, handles.savedVars.(varNames{end}));
+1056       <a href="#_sub7" class="code" title="subfunction showAllVarsFcn(handles)">showAllVarsFcn</a>(handles);
+1057     <span class="keyword">end</span>
+1058     
+1059     <span class="comment">% change to NORMAL state</span>
+1060     handles.state = <span class="string">'normal'</span>;
+1061 <span class="keyword">end</span>  
+1062 
+1063 guidata(obj, handles);
+1064 
+1065 
+1066 <span class="comment">%--------------------------------------------------------------------------</span>
+1067 <span class="comment">%--------------------------------------------------------------------------</span>
+1068 <span class="comment">% showAllVarsFcn</span>
+1069 <span class="comment">%--------------------------------------------------------------------------</span>
+1070 <span class="comment">%--------------------------------------------------------------------------</span>
+1071 <a name="_sub7" href="#_subfunctions" class="code">function showAllVarsFcn(handles)</a>
+1072 <span class="comment">% this function shows all data set variables that exist in the GRABIT</span>
+1073 <span class="comment">% workspace in the variable listbox.</span>
+1074 
+1075 varNames = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(handles.savedVars);
+1076 
+1077 <span class="keyword">if</span> isempty(varNames)
+1078   listboxStr = {<span class="string">''</span>};
+1079 <span class="keyword">else</span>
+1080   <span class="keyword">for</span> id = 1:length(varNames)
+1081     [m, n] = size(handles.savedVars.(varNames{id}));
+1082     listboxStr{id} = sprintf(<span class="string">'%s [%dx%d]'</span>, varNames{id}, m, n);
+1083   <span class="keyword">end</span>
+1084 <span class="keyword">end</span>
+1085 
+1086 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.VariableList, <span class="string">'string'</span>, listboxStr, <span class="string">'value'</span>, length(listboxStr));
+1087 
+1088 
+1089 <span class="comment">%--------------------------------------------------------------------------</span>
+1090 <span class="comment">%--------------------------------------------------------------------------</span>
+1091 <span class="comment">% findNextVarNameFcn</span>
+1092 <span class="comment">%--------------------------------------------------------------------------</span>
+1093 <span class="comment">%--------------------------------------------------------------------------</span>
+1094 <a name="_sub8" href="#_subfunctions" class="code">function newVarName = findNextVarNameFcn(varNames)</a>
+1095 <span class="comment">% this helper function determines the next available variable name by</span>
+1096 <span class="comment">% checking the existing variable names in the base workspace and GRABIT</span>
+1097 <span class="comment">% workspace.</span>
+1098 
+1099 wsVarNames = evalin(<span class="string">'base'</span>, <span class="string">'who'</span>);
+1100 vars = unique([wsVarNames(:); varNames(:)]);
+1101 idx = 1;
+1102 <span class="keyword">while</span> 1
+1103   <span class="keyword">if</span> isempty(strmatch(sprintf(<span class="string">'Data%03d'</span>, idx), vars, <span class="string">'exact'</span>))
+1104     newVarName = sprintf(<span class="string">'Data%03d'</span>, idx);
+1105     <span class="keyword">return</span>;
+1106   <span class="keyword">else</span>
+1107     idx = idx + 1;
+1108   <span class="keyword">end</span>
+1109 <span class="keyword">end</span>
+1110 
+1111 
+1112 <span class="comment">%--------------------------------------------------------------------------</span>
+1113 <span class="comment">%--------------------------------------------------------------------------</span>
+1114 <span class="comment">% zoomBtnFcn</span>
+1115 <span class="comment">%--------------------------------------------------------------------------</span>
+1116 <span class="comment">%--------------------------------------------------------------------------</span>
+1117 <a name="_sub9" href="#_subfunctions" class="code">function zoomBtnFcn(varargin)</a>
+1118 <span class="comment">% this function toggles the zoom state</span>
+1119 
+1120 obj = varargin{1};
+1121 
+1122 handles = guidata(obj);
+1123 
+1124 <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'value'</span>)
+1125   <span class="keyword">case</span> 0
+1126     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1127       <span class="string">'value'</span>          , 1, <span class="keyword">...</span>
+1128       <span class="string">'backgroundcolor'</span>, handles.bgcolor4, <span class="keyword">...</span>
+1129       <span class="string">'cdata'</span>          , handles.zoomIconDown);
+1130     udata.titlestring = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'Title'</span>), <span class="string">'string'</span>);
+1131     udata.btnstate = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1132         handles.CalibrateImageBtn, <span class="keyword">...</span>
+1133         handles.GrabPointsBtn, <span class="keyword">...</span>
+1134         handles.VariableList, <span class="keyword">...</span>
+1135         handles.SaveAs, <span class="keyword">...</span>
+1136         handles.Rename, <span class="keyword">...</span>
+1137         handles.Delete],<span class="string">'enable'</span>);
+1138     udata.imgstate = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ButtonDownFcn'</span>);
+1139     udata.handlevisibility = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'handlevisibility'</span>);
+1140     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'userdata'</span>, udata);
+1141     
+1142     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'Title'</span>), <span class="string">'string'</span>, <span class="string">'Zoom ON'</span>);
+1143     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1144         handles.CalibrateImageBtn, <span class="keyword">...</span>
+1145         handles.GrabPointsBtn, <span class="keyword">...</span>
+1146         handles.VariableList, <span class="keyword">...</span>
+1147         handles.SaveAs, <span class="keyword">...</span>
+1148         handles.Rename, <span class="keyword">...</span>
+1149         handles.Delete], <span class="string">'enable'</span>, <span class="string">'off'</span>);
+1150     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="string">'ButtonDownFcn'</span>, <span class="string">''</span>);
+1151     zoom(<span class="string">'on'</span>);
+1152     handles.curPointerData.CData   = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'PointerShapeCData'</span>);
+1153     handles.curPointerData.HotSpot = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'PointerShapeHotSpot'</span>);
+1154     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+1155       <span class="string">'PointerShapeCData'</span>     , handles.zoomPointer, <span class="keyword">...</span>
+1156       <span class="string">'PointerShapeHotSpot'</span>   , handles.zoomPointerHotSpot, <span class="keyword">...</span>
+1157       <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, <span class="string">'custom'</span>}, <span class="keyword">...</span>
+1158       <span class="string">'keypressfcn'</span>           , <span class="string">';'</span>); <span class="comment">% this prevents switching to command window</span>
+1159 
+1160     <span class="comment">% this seems necessary in some versions of Matlab</span>
+1161     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="string">'handlevisibility'</span>, <span class="string">'on'</span>);
+1162   
+1163   <span class="keyword">case</span> 1
+1164     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1165       <span class="string">'value'</span>, 0, <span class="keyword">...</span>
+1166       <span class="string">'backgroundcolor'</span>, handles.bgcolor3, <span class="keyword">...</span>
+1167       <span class="string">'cdata'</span>, handles.zoomIconUp);
+1168     zoom(<span class="string">'off'</span>);
+1169     
+1170     <span class="comment">%----------------------------------------------------------------------</span>
+1171     <span class="comment">% If zoom created a compact view window, expand it to fill the whole</span>
+1172     <span class="comment">% axes.</span>
+1173     <span class="comment">%----------------------------------------------------------------------</span>
+1174     xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>); xrng = diff(xl);
+1175     yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>); yrng = diff(yl);
+1176     <span class="keyword">if</span> abs(yrng/xrng - handles.imAxRatio) &gt; .01 <span class="comment">% wrong axes ratio</span>
+1177       <span class="keyword">if</span> yrng/xrng &gt; handles.imAxRatio
+1178         xrng = yrng / handles.imAxRatio;
+1179         xl   = mean(xl) + [-0.5, 0.5] * xrng;
+1180       <span class="keyword">else</span>
+1181         yrng = xrng * handles.imAxRatio;
+1182         yl   = mean(yl) + [-0.5, 0.5] * yrng;
+1183       <span class="keyword">end</span>
+1184       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="string">'xlim'</span>, xl, <span class="string">'ylim'</span>, yl);
+1185     <span class="keyword">end</span>
+1186     <span class="comment">%----------------------------------------------------------------------</span>
+1187     
+1188     udata = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'userdata'</span>);
+1189     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'Title'</span>), <span class="string">'string'</span>, udata.titlestring);
+1190     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="string">'handlevisibility'</span>, udata.handlevisibility);
+1191     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1192         handles.CalibrateImageBtn, <span class="keyword">...</span>
+1193         handles.GrabPointsBtn, <span class="keyword">...</span>
+1194         handles.VariableList, <span class="keyword">...</span>
+1195         handles.SaveAs, <span class="keyword">...</span>
+1196         handles.Rename, <span class="keyword">...</span>
+1197         handles.Delete], {<span class="string">'enable'</span>}, udata.btnstate);
+1198     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="string">'ButtonDownFcn'</span>, udata.imgstate);
+1199     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+1200       <span class="string">'PointerShapeCData'</span>     , handles.curPointerData.CData, <span class="keyword">...</span>
+1201       <span class="string">'PointerShapeHotSpot'</span>   , handles.curPointerData.HotSpot, <span class="keyword">...</span>
+1202       <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer}, <span class="keyword">...</span>
+1203       <span class="string">'keypressfcn'</span>           , @<a href="#_sub12" class="code" title="subfunction keyPressFcn(varargin)">keyPressFcn</a>);
+1204 <span class="keyword">end</span>
+1205 
+1206 guidata(obj, handles);
+1207 
+1208 
+1209 <span class="comment">%--------------------------------------------------------------------------</span>
+1210 <span class="comment">%--------------------------------------------------------------------------</span>
+1211 <span class="comment">% pointerFcn</span>
+1212 <span class="comment">%--------------------------------------------------------------------------</span>
+1213 <span class="comment">%--------------------------------------------------------------------------</span>
+1214 <a name="_sub10" href="#_subfunctions" class="code">function pointerFcn(varargin)</a>
+1215 <span class="comment">% this changes the pointer based on whether the cursor is in the image</span>
+1216 <span class="comment">% axes.</span>
+1217 
+1218 [handles, ptr] = <a href="#_sub23" class="code" title="subfunction varargout = splitvar(varargout)">splitvar</a>(varargin(3:4));
+1219 
+1220 pt = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'CurrentPoint'</span>);
+1221 xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>);
+1222 yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>);
+1223 <span class="keyword">if</span> pt(1,1) &gt; xl(1) &amp;&amp; pt(1,1) &lt; xl(2) &amp;&amp; pt(1,2) &gt; yl(1) &amp;&amp; pt(1,2) &lt; yl(2)
+1224   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="string">'pointer'</span>, ptr);
+1225 <span class="keyword">else</span>
+1226   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="string">'pointer'</span>, <span class="string">'arrow'</span>);
+1227 <span class="keyword">end</span>
+1228 
+1229 
+1230 <span class="comment">%--------------------------------------------------------------------------</span>
+1231 <span class="comment">%--------------------------------------------------------------------------</span>
+1232 <span class="comment">% figResize</span>
+1233 <span class="comment">%--------------------------------------------------------------------------</span>
+1234 <span class="comment">%--------------------------------------------------------------------------</span>
+1235 <a name="_sub11" href="#_subfunctions" class="code">function figResizeFcn(varargin)</a>
+1236 <span class="comment">% this function makes sure the axis fills the whole axes extent</span>
+1237 
+1238 obj = varargin{1};
+1239 
+1240 handles = guidata(obj);
+1241 
+1242 axis(handles.ImageAxis, <span class="string">'equal'</span>);
+1243 handles.imAxRatio = diff(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>)) / <span class="keyword">...</span>
+1244   diff(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>));
+1245 handles.ImLimits = [<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>); <span class="keyword">...</span>
+1246     <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>)];
+1247 
+1248 guidata(obj, handles);
+1249 
+1250 
+1251 <span class="comment">%--------------------------------------------------------------------------</span>
+1252 <span class="comment">%--------------------------------------------------------------------------</span>
+1253 <span class="comment">% keyPressFcn</span>
+1254 <span class="comment">%--------------------------------------------------------------------------</span>
+1255 <span class="comment">%--------------------------------------------------------------------------</span>
+1256 <a name="_sub12" href="#_subfunctions" class="code">function keyPressFcn(varargin)</a>
+1257 <span class="comment">% this is for the keyboard shortcuts. During 'grab' mode, &lt;backspace&gt;</span>
+1258 <span class="comment">% deletes the last point clicked and &lt;return&gt; ends the 'grab' mode.</span>
+1259 
+1260 obj = varargin{1};
+1261 
+1262 handles = guidata(obj);
+1263 
+1264 <span class="keyword">if</span> ~isempty(handles.I)
+1265   k = lower(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'CurrentKey'</span>));
+1266   
+1267   <span class="keyword">switch</span> k
+1268     <span class="keyword">case</span> <span class="string">'a'</span>         <span class="comment">% zoom in</span>
+1269       xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>); xrng = diff(xl);
+1270       yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>); yrng = diff(yl);
+1271       
+1272       <span class="comment">% prevent zooming in too much.</span>
+1273       <span class="comment">% set the limit to 64x zoom.</span>
+1274       <span class="keyword">if</span> xrng &gt;= size(handles.I, 2)/64*2
+1275         <span class="comment">% animate zoom</span>
+1276         <span class="keyword">for</span> id = 0:0.2:1
+1277           <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+1278             <span class="string">'xlim'</span>, xl + id * xrng / 4 * [1, -1], <span class="keyword">...</span>
+1279             <span class="string">'ylim'</span>, yl + id * yrng / 4 * [1, -1]);
+1280           drawnow;
+1281         <span class="keyword">end</span>
+1282       <span class="keyword">end</span>
+1283       
+1284     <span class="keyword">case</span> <span class="string">'z'</span>        <span class="comment">% zoom out</span>
+1285       xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>); xrng = diff(xl);
+1286       yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>); yrng = diff(yl);
+1287       <span class="comment">% animate zoom</span>
+1288       <span class="keyword">for</span> id = 0:0.2:1
+1289         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+1290           <span class="string">'xlim'</span>, xl + id * xrng / 2 * [-1, 1], <span class="keyword">...</span>
+1291           <span class="string">'ylim'</span>, yl + id * yrng / 2 * [-1, 1]);
+1292         drawnow;
+1293       <span class="keyword">end</span>
+1294       
+1295     <span class="keyword">case</span> <span class="string">'space'</span>    <span class="comment">% reset view</span>
+1296       <a href="#_sub13" class="code" title="subfunction resetViewFcn(varargin)">resetViewFcn</a>(handles.ResetViewBtn);
+1297       
+1298     <span class="keyword">case</span> {<span class="string">'backspace'</span>, <span class="string">'delete'</span>}
+1299       
+1300       <span class="keyword">switch</span> handles.state
+1301         <span class="keyword">case</span> <span class="string">'grab'</span>
+1302           <span class="keyword">if</span> ~handles.isPanning
+1303             
+1304             <span class="keyword">if</span> isempty(handles.ImDat)
+1305               <span class="keyword">return</span>;
+1306             <span class="keyword">else</span>
+1307               handles.ImDat(<span class="keyword">end</span>, :)   = [];
+1308               handles.TrueDat(<span class="keyword">end</span>, :) = [];
+1309             <span class="keyword">end</span>
+1310             
+1311             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.PreviewLine, <span class="keyword">...</span>
+1312               <span class="string">'xdata'</span>, handles.TrueDat(:, 1), <span class="keyword">...</span>
+1313               <span class="string">'ydata'</span>, handles.TrueDat(:, 2));
+1314             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageLine, <span class="keyword">...</span>
+1315               <span class="string">'xdata'</span>, handles.ImDat(:, 1), <span class="keyword">...</span>
+1316               <span class="string">'ydata'</span>, handles.ImDat(:, 2));
+1317             
+1318             <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabPointsBtn, <span class="string">'string'</span>, sprintf(<span class="string">'Grabbing Points (%d)'</span>, size(handles.ImDat, 1)));
+1319             
+1320             guidata(obj, handles);
+1321           <span class="keyword">end</span>
+1322           
+1323       <span class="keyword">end</span>
+1324       
+1325     <span class="keyword">case</span> {<span class="string">'return'</span>, <span class="string">'enter'</span>}
+1326       
+1327       <span class="keyword">switch</span> handles.state
+1328         <span class="keyword">case</span> <span class="string">'grab'</span>
+1329           <a href="#_sub6" class="code" title="subfunction grabPointsFcn(varargin)">grabPointsFcn</a>(handles.GrabPointsBtn);
+1330           
+1331       <span class="keyword">end</span>
+1332 
+1333   <span class="keyword">end</span>
+1334 <span class="keyword">end</span>
+1335 
+1336 
+1337 <span class="comment">%--------------------------------------------------------------------------</span>
+1338 <span class="comment">%--------------------------------------------------------------------------</span>
+1339 <span class="comment">% resetViewFcn</span>
+1340 <span class="comment">%--------------------------------------------------------------------------</span>
+1341 <span class="comment">%--------------------------------------------------------------------------</span>
+1342 <a name="_sub13" href="#_subfunctions" class="code">function resetViewFcn(varargin)</a>
+1343 <span class="comment">% this function resets the view</span>
+1344 
+1345 obj = varargin{1};
+1346 
+1347 handles = guidata(obj);
+1348 
+1349 <span class="keyword">if</span> ~isempty(handles.I)
+1350   xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>);
+1351   yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>);
+1352   xd = (handles.ImLimits(1, :) - xl) / 10;
+1353   yd = (handles.ImLimits(2, :) - yl) / 10;
+1354   <span class="comment">% animate zoom</span>
+1355   <span class="keyword">for</span> id = 0:10
+1356     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+1357       <span class="string">'xlim'</span>, xl + id * xd, <span class="keyword">...</span>
+1358       <span class="string">'ylim'</span>, yl + id * yd);
+1359     drawnow;
+1360   <span class="keyword">end</span>
+1361 <span class="keyword">end</span>
+1362 
+1363 <span class="comment">% take focus away</span>
+1364 <a href="#_sub14" class="code" title="subfunction loseFocusFcn(handles)">loseFocusFcn</a>(handles)
+1365 
+1366 
+1367 <span class="comment">%--------------------------------------------------------------------------</span>
+1368 <span class="comment">%--------------------------------------------------------------------------</span>
+1369 <span class="comment">% loseFocusFcn</span>
+1370 <span class="comment">%--------------------------------------------------------------------------</span>
+1371 <span class="comment">%--------------------------------------------------------------------------</span>
+1372 <a name="_sub14" href="#_subfunctions" class="code">function loseFocusFcn(handles)</a>
+1373 <span class="comment">% attempt to take focus away by setting the ENABLE property to off and then</span>
+1374 <span class="comment">% back to the original setting</span>
+1375 
+1376 settings = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1377     handles.ResetViewBtn, <span class="keyword">...</span>
+1378     handles.VariableList, <span class="keyword">...</span>
+1379     handles.SaveAs, <span class="keyword">...</span>
+1380     handles.Rename, <span class="keyword">...</span>
+1381     handles.Delete], <span class="keyword">...</span>
+1382   <span class="string">'enable'</span>);
+1383 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1384     handles.ResetViewBtn, <span class="keyword">...</span>
+1385     handles.VariableList, <span class="keyword">...</span>
+1386     handles.SaveAs, <span class="keyword">...</span>
+1387     handles.Rename, <span class="keyword">...</span>
+1388     handles.Delete], <span class="keyword">...</span>
+1389   <span class="string">'enable'</span>, <span class="string">'off'</span>);
+1390 drawnow;
+1391 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1392     handles.ResetViewBtn, <span class="keyword">...</span>
+1393     handles.VariableList, <span class="keyword">...</span>
+1394     handles.SaveAs, <span class="keyword">...</span>
+1395     handles.Rename, <span class="keyword">...</span>
+1396     handles.Delete], <span class="keyword">...</span>
+1397  {<span class="string">'enable'</span>}, settings);
+1398 
+1399 
+1400 <span class="comment">%--------------------------------------------------------------------------</span>
+1401 <span class="comment">%--------------------------------------------------------------------------</span>
+1402 <span class="comment">% winBtnDownFcn</span>
+1403 <span class="comment">%--------------------------------------------------------------------------</span>
+1404 <span class="comment">%--------------------------------------------------------------------------</span>
+1405 <a name="_sub15" href="#_subfunctions" class="code">function winBtnDownFcn(varargin)</a>
+1406 <span class="comment">% this function is called when the mouse click initiates</span>
+1407 
+1408 obj = varargin{1};
+1409 
+1410 handles = guidata(obj);
+1411 
+1412 <span class="keyword">if</span> strcmpi(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.timer, <span class="string">'Running'</span>), <span class="string">'on'</span>) || isempty(handles.I)
+1413   <span class="keyword">return</span>;
+1414 <span class="keyword">end</span>
+1415 
+1416 handles.CurrentPointAxes = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'CurrentPoint'</span>);
+1417 handles.CurrentPointFig  = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'CurrentPoint'</span>);
+1418 
+1419 <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'SelectionType'</span>)
+1420   <span class="keyword">case</span> <span class="string">'normal'</span>
+1421     
+1422     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CoordinateEdit, <span class="string">'visible'</span>, <span class="string">'off'</span>);
+1423     id = find(isnan(handles.CalibPts));
+1424     <span class="keyword">if</span> ~isempty(id)
+1425       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH(id(1),:), <span class="string">'xdata'</span>, NaN, <span class="string">'ydata'</span>, NaN);
+1426     <span class="keyword">end</span>
+1427     
+1428     <span class="comment">% first call winBtnMotionPauseFcn to prevent immediate click-n-drag</span>
+1429     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+1430       <span class="string">'WindowButtonMotionFcn'</span>, <span class="keyword">...</span>
+1431       {@<a href="#_sub17" class="code" title="subfunction winBtnMotionPauseFcn(varargin)">winBtnMotionPauseFcn</a>, handles, handles.CurrentPointAxes(1,1:2), clock});
+1432     
+1433   <span class="keyword">case</span> <span class="string">'alt'</span>
+1434     
+1435     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CoordinateEdit, <span class="string">'visible'</span>, <span class="string">'off'</span>);
+1436     id = find(isnan(handles.CalibPts));
+1437     <span class="keyword">if</span> ~isempty(id)
+1438       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH(id(1),:), <span class="string">'xdata'</span>, NaN, <span class="string">'ydata'</span>, NaN);
+1439     <span class="keyword">end</span>
+1440     
+1441     xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'XLim'</span>);midX = (xl(1)+xl(2))/2;
+1442     yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'YLim'</span>);midY = (yl(1)+yl(2))/2;
+1443     figPos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'Position'</span>);
+1444     handles.curTitle = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>);
+1445     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+1446       <span class="string">'Pointer'</span>, <span class="string">'custom'</span>, <span class="keyword">...</span>
+1447       <span class="string">'PointerShapeCData'</span>     , handles.zoomInOutPointer, <span class="keyword">...</span>
+1448       <span class="string">'PointerShapeHotSpot'</span>   , handles.zoomInOutPointerHotSpot, <span class="keyword">...</span>
+1449       <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub16" class="code" title="subfunction zoomMotionFcn(varargin)">zoomMotionFcn</a>, handles, <span class="keyword">...</span>
+1450                                  <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'CurrentPoint'</span>), <span class="keyword">...</span>
+1451                                  figPos(4), <span class="keyword">...</span>
+1452                                  size(handles.I, 2), <span class="keyword">...</span>
+1453                                  midX, <span class="keyword">...</span>
+1454                                  midY, <span class="keyword">...</span>
+1455                                  diff(xl)/2, <span class="keyword">...</span>
+1456                                  diff(yl)/2});      
+1457     
+1458     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, <span class="string">'Zooming...'</span>);
+1459                              
+1460 <span class="keyword">end</span>
+1461 
+1462 guidata(obj, handles);
+1463 
+1464 
+1465 <span class="comment">%--------------------------------------------------------------------------</span>
+1466 <span class="comment">%--------------------------------------------------------------------------</span>
+1467 <span class="comment">% zoomMotionFcn</span>
+1468 <span class="comment">%--------------------------------------------------------------------------</span>
+1469 <span class="comment">%--------------------------------------------------------------------------</span>
+1470 <a name="_sub16" href="#_subfunctions" class="code">function zoomMotionFcn(varargin)</a>
+1471 <span class="comment">% this performs the click-n-drag zooming function. The pointer location</span>
+1472 <span class="comment">% relative to the initial point determines the amount of zoom (in or out).</span>
+1473 
+1474 [obj, handles, initPt, figHt, horizPx, midX, <span class="keyword">...</span>
+1475   midY, rngXhalf, rngYhalf] = <a href="#_sub23" class="code" title="subfunction varargout = splitvar(varargout)">splitvar</a>(varargin([1, 3:end]));
+1476 
+1477 pt = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'CurrentPoint'</span>);
+1478 
+1479 <span class="comment">% get relative pointer location (y-coord only).</span>
+1480 <span class="comment">% power law allows for the inverse to work:</span>
+1481 <span class="comment">%   C^(x) * C^(-x) = 1</span>
+1482 <span class="comment">% Choose C to get &quot;appropriate&quot; zoom factor</span>
+1483 r = 30 ^ ((initPt(2) - pt(2)) / figHt);
+1484 
+1485 <span class="comment">% make sure it doesn't zoom in too much.</span>
+1486 <span class="comment">% the limit is based on the size of the original image.</span>
+1487 <span class="comment">% set limit to 64x zoom.</span>
+1488 <span class="keyword">if</span> r &lt; horizPx/64/rngXhalf/2  <span class="comment">% stop zoom</span>
+1489   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, <span class="string">'Max Zoom Reached'</span>);
+1490   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1491     <span class="string">'Pointer'</span>               , <span class="string">'arrow'</span>, <span class="keyword">...</span>
+1492     <span class="string">'WindowButtonMotionFcn'</span> , <span class="string">''</span>);
+1493 <span class="keyword">else</span>
+1494   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+1495     <span class="string">'XLim'</span>, [midX - r * rngXhalf, midX + r * rngXhalf], <span class="keyword">...</span>
+1496     <span class="string">'YLim'</span>, [midY - r * rngYhalf, midY + r * rngYhalf]);
+1497 <span class="keyword">end</span>
+1498 
+1499 
+1500 <span class="comment">%--------------------------------------------------------------------------</span>
+1501 <span class="comment">%--------------------------------------------------------------------------</span>
+1502 <span class="comment">% winBtnMotionPauseFcn</span>
+1503 <span class="comment">%--------------------------------------------------------------------------</span>
+1504 <span class="comment">%--------------------------------------------------------------------------</span>
+1505 <a name="_sub17" href="#_subfunctions" class="code">function winBtnMotionPauseFcn(varargin)</a>
+1506 <span class="comment">% this prevents click-n-drag from happening for X seconds. This is useful</span>
+1507 <span class="comment">% because users may move the mouse as they are clicking.</span>
+1508 
+1509 [obj, handles, xy, c] = <a href="#_sub23" class="code" title="subfunction varargout = splitvar(varargout)">splitvar</a>(varargin([1, 3:end]));
+1510 
+1511 <span class="keyword">if</span> etime(clock, c) &gt; .15  <span class="comment">% waits .15 seconds before dragging occurs</span>
+1512   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1513     <span class="string">'Pointer'</span>             , <span class="string">'custom'</span>, <span class="keyword">...</span>
+1514     <span class="string">'PointerShapeCData'</span>   , handles.closedHandPointer, <span class="keyword">...</span>
+1515     <span class="string">'PointerShapeHotSpot'</span> , handles.closedHandPointerHotSpot);
+1516   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'WindowButtonMotionFcn'</span>, {@<a href="#_sub18" class="code" title="subfunction winBtnMotionFcn(varargin)">winBtnMotionFcn</a>, handles.ImageAxis, xy});
+1517   handles.curTitle = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>);
+1518   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, <span class="string">'Panning...'</span>);
+1519   handles.isPanning = true;
+1520   guidata(obj, handles);
+1521 <span class="keyword">end</span>
+1522 
+1523 
+1524 <span class="comment">%--------------------------------------------------------------------------</span>
+1525 <span class="comment">%--------------------------------------------------------------------------</span>
+1526 <span class="comment">% winBtnMotionFcn</span>
+1527 <span class="comment">%--------------------------------------------------------------------------</span>
+1528 <span class="comment">%--------------------------------------------------------------------------</span>
+1529 <a name="_sub18" href="#_subfunctions" class="code">function winBtnMotionFcn(varargin)</a>
+1530 <span class="comment">% this function is called when click-n-drag (panning) is happening</span>
+1531 
+1532 [axH, xy] = <a href="#_sub23" class="code" title="subfunction varargout = splitvar(varargout)">splitvar</a>(varargin(3:4));
+1533 
+1534 pt = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(axH, <span class="string">'CurrentPoint'</span>);
+1535 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(axH, <span class="keyword">...</span>
+1536   <span class="string">'xlim'</span>, <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(axH, <span class="string">'xlim'</span>)+(xy(1)-pt(1,1)), <span class="keyword">...</span>
+1537   <span class="string">'ylim'</span>, <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(axH, <span class="string">'ylim'</span>)+(xy(2)-pt(1,2)));
+1538 
+1539 
+1540 <span class="comment">%--------------------------------------------------------------------------</span>
+1541 <span class="comment">%--------------------------------------------------------------------------</span>
+1542 <span class="comment">% winBtnUpFcn</span>
+1543 <span class="comment">%--------------------------------------------------------------------------</span>
+1544 <span class="comment">%--------------------------------------------------------------------------</span>
+1545 <a name="_sub19" href="#_subfunctions" class="code">function winBtnUpFcn(varargin)</a>
+1546 <span class="comment">% this is called when the mouse button is released. It initiates the button</span>
+1547 <span class="comment">% down timer object (see btnUpTimerFcn). This timer waits for 0.2 seconds</span>
+1548 <span class="comment">% before any action is taken. This is in order to detect a double click. If</span>
+1549 <span class="comment">% a double click is detected, the single click action is NOT executed.</span>
+1550 
+1551 obj = varargin{1};
+1552 
+1553 handles = guidata(obj);
+1554 <span class="keyword">if</span> ~isempty(handles.I)  <span class="comment">% there is an image displayed</span>
+1555   <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'SelectionType'</span>)
+1556     <span class="keyword">case</span> <span class="string">'normal'</span>
+1557       <span class="keyword">if</span> strcmpi(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.timer, <span class="string">'Running'</span>), <span class="string">'off'</span>)
+1558         
+1559         <span class="comment">% start the timer which waits some time to see if double-clicking</span>
+1560         <span class="comment">% occurs</span>
+1561         start(handles.timer);
+1562         
+1563         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1564           <span class="string">'Pointer'</span>               , handles.curPointer, <span class="keyword">...</span>
+1565           <span class="string">'PointerShapeCData'</span>     , handles.curPointerData.CData, <span class="keyword">...</span>
+1566           <span class="string">'PointerShapeHotSpot'</span>   , handles.curPointerData.HotSpot, <span class="keyword">...</span>
+1567           <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+1568         
+1569         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, handles.curTitle);
+1570       <span class="keyword">end</span>
+1571       
+1572     <span class="keyword">case</span> <span class="string">'alt'</span>
+1573       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="keyword">...</span>
+1574         <span class="string">'Pointer'</span>               , handles.curPointer, <span class="keyword">...</span>
+1575         <span class="string">'PointerShapeCData'</span>     , handles.curPointerData.CData, <span class="keyword">...</span>
+1576         <span class="string">'PointerShapeHotSpot'</span>   , handles.curPointerData.HotSpot, <span class="keyword">...</span>
+1577         <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+1578       
+1579       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, handles.curTitle);
+1580   <span class="keyword">end</span>
+1581 <span class="keyword">end</span>
+1582 
+1583 
+1584 <span class="comment">%--------------------------------------------------------------------------</span>
+1585 <span class="comment">%--------------------------------------------------------------------------</span>
+1586 <span class="comment">% btnUpTimerFcn</span>
+1587 <span class="comment">%--------------------------------------------------------------------------</span>
+1588 <span class="comment">%--------------------------------------------------------------------------</span>
+1589 <a name="_sub20" href="#_subfunctions" class="code">function btnUpTimerFcn(varargin)</a>
+1590 
+1591 figH = varargin{3};
+1592 
+1593 handles = guidata(figH);
+1594 
+1595 <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'SelectionType'</span>)
+1596   <span class="keyword">case</span> <span class="string">'open'</span> <span class="comment">% double click</span>
+1597     <span class="comment">% this will center the view</span>
+1598     
+1599     <span class="comment">% get current units</span>
+1600     un = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>([0, handles.GrabitGUI, handles.ImageAxis], <span class="string">'units'</span>);
+1601     
+1602     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([0, handles.GrabitGUI, handles.ImageAxis], <span class="string">'units'</span>, <span class="string">'pixels'</span>);
+1603     pt     = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'PointerLocation'</span>);
+1604     figPos = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.GrabitGUI, <span class="string">'Position'</span>);
+1605     pt2    = pt - figPos(1:2);
+1606     axPos  = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'position'</span>);
+1607     
+1608     <span class="comment">% check to see if pointer is inside the image axes</span>
+1609     <span class="keyword">if</span> pt2(1) &gt; axPos(1) &amp;&amp; pt2(1) &lt; axPos(1)+axPos(3) &amp;&amp; <span class="keyword">...</span>
+1610         pt2(2) &gt; axPos(2) &amp;&amp; pt2(2) &lt; axPos(2)+axPos(4)
+1611       xl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'xlim'</span>); xrng = diff(xl);
+1612       yl = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'ylim'</span>); yrng = diff(yl);
+1613       x  = (pt2(1)-axPos(1))/axPos(3)*xrng+xl(1);
+1614       y  = (axPos(2)+axPos(4)-pt2(2))/axPos(4)*yrng+yl(1);
+1615       
+1616       <span class="comment">% animate (slide) to the new location. this may give a better</span>
+1617       <span class="comment">% visual perception of the view change</span>
+1618       
+1619       <span class="comment">% determine how fast to animate, depending on the location of the</span>
+1620       <span class="comment">% pointer</span>
+1621       interval = ceil(norm((figPos(1:2)+axPos(1:2)+axPos(3:4)/2) - pt)/30);
+1622       
+1623       <span class="keyword">if</span> interval
+1624         ld = (([x, y] - [xrng, yrng]/2) - [xl(1), yl(1)])/interval;
+1625         pd = ((figPos(1:2)+axPos(1:2)+axPos(3:4)/2) - pt)/interval;
+1626       <span class="keyword">else</span>
+1627         <span class="comment">% interval == 0, meaning it's the same point</span>
+1628         ld = [0, 0];
+1629         pd = [0, 0];
+1630       <span class="keyword">end</span>
+1631       
+1632       <span class="keyword">for</span> id = 0:interval
+1633         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageAxis, <span class="keyword">...</span>
+1634           <span class="string">'xlim'</span>, xl + id * ld(1), <span class="keyword">...</span>
+1635           <span class="string">'ylim'</span>, yl + id * ld(2));
+1636         
+1637         <span class="comment">% center the pointer location</span>
+1638         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(0, <span class="keyword">...</span>
+1639           <span class="string">'PointerLocation'</span>, pt + id * pd);
+1640         drawnow;
+1641       <span class="keyword">end</span>
+1642     <span class="keyword">end</span>
+1643     
+1644     <span class="comment">% reset UNITS</span>
+1645     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([0, handles.GrabitGUI, handles.ImageAxis], {<span class="string">'units'</span>}, un);
+1646     
+1647   <span class="keyword">case</span> <span class="string">'normal'</span>  <span class="comment">% single click</span>
+1648     
+1649     <span class="keyword">switch</span> handles.state
+1650       <span class="keyword">case</span> <span class="string">'grab'</span>
+1651         <span class="keyword">if</span> ~handles.isPanning &amp;&amp; ~isempty(handles.CurrentPointAxes)
+1652           calib = handles.CalibVals;
+1653           
+1654           X = handles.CurrentPointAxes(1, 1);
+1655           Y = handles.CurrentPointAxes(1, 2);
+1656           
+1657           <span class="comment">% the point on the image</span>
+1658           handles.ImDat(end + 1, :) = [X, Y];
+1659           
+1660           <span class="comment">% the true data point coordinates</span>
+1661           handles.TrueDat(end + 1, :) = ([calib.Xo; calib.Yo] + <span class="keyword">...</span>
+1662             [calib.e1 calib.e2] \ [X - calib.Xxo; Y - calib.Yyo])';
+1663           <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.PreviewLine, <span class="keyword">...</span>
+1664             <span class="string">'xdata'</span>, handles.TrueDat(:, 1), <span class="keyword">...</span>
+1665             <span class="string">'ydata'</span>, handles.TrueDat(:, 2));
+1666           <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.ImageLine, <span class="keyword">...</span>
+1667             <span class="string">'xdata'</span>, handles.ImDat(:, 1), <span class="keyword">...</span>
+1668             <span class="string">'ydata'</span>, handles.ImDat(:, 2));
+1669           
+1670           <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabPointsBtn, <span class="string">'string'</span>, sprintf(<span class="string">'Grabbing Points (%d)'</span>, size(handles.ImDat, 1)));
+1671           
+1672         <span class="keyword">end</span>
+1673         
+1674       <span class="keyword">case</span> <span class="string">'calibration'</span>
+1675         <span class="keyword">if</span> ~handles.isPanning &amp;&amp; ~isempty(handles.CurrentPointAxes)
+1676           id = find(isnan(handles.CalibPts));
+1677           pt = handles.CurrentPointAxes;
+1678           <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibPtsH(id(1),:), <span class="string">'xdata'</span>, pt(1,1), <span class="string">'ydata'</span>, pt(1,2));
+1679           handles.CalibPtsIm(id(1),:) = pt(1,1:2);
+1680           <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CoordinateEdit, <span class="keyword">...</span>
+1681             <span class="string">'units'</span>   , <span class="string">'pixels'</span>, <span class="keyword">...</span>
+1682             <span class="string">'position'</span>, [handles.CurrentPointFig+[5, 5], 100, 25], <span class="keyword">...</span>
+1683             <span class="string">'visible'</span> , <span class="string">'on'</span>, <span class="keyword">...</span>
+1684             <span class="string">'string'</span>  , <span class="string">'Enter Value'</span>);
+1685         <span class="keyword">end</span>
+1686         
+1687     <span class="keyword">end</span>
+1688 <span class="keyword">end</span>
+1689 
+1690 handles.CurrentPointAxes = [];
+1691 handles.CurrentPointFig  = [];
+1692 handles.isPanning        = false;
+1693 
+1694 guidata(handles.GrabitGUI, handles);
+1695 
+1696 
+1697 <span class="comment">%--------------------------------------------------------------------------</span>
+1698 <span class="comment">%--------------------------------------------------------------------------</span>
+1699 <span class="comment">% coordinateEditFcn</span>
+1700 <span class="comment">%--------------------------------------------------------------------------</span>
+1701 <span class="comment">%--------------------------------------------------------------------------</span>
+1702 <a name="_sub21" href="#_subfunctions" class="code">function coordinateEditFcn(varargin)</a>
+1703 <span class="comment">% this function is called when a value is entered in the edit box for</span>
+1704 <span class="comment">% calibration values</span>
+1705 
+1706 obj = varargin{1};
+1707 
+1708 handles = guidata(obj);
+1709 
+1710 strs = {<span class="string">'Click on the MAXIMUM value of x-axis'</span>, <span class="keyword">...</span>
+1711     <span class="string">'Click on the ORIGIN of y-axis'</span>, <span class="keyword">...</span>
+1712     <span class="string">'Click on the MAXIMUM value of y-axis'</span>, <span class="keyword">...</span>
+1713     <span class="string">''</span>};
+1714 ptrs = {<span class="string">'xmPointer'</span>, <span class="string">'yoPointer'</span>, <span class="string">'ymPointer'</span>};
+1715 hs = {<span class="string">'hXoValue'</span>, <span class="string">'hXmValue'</span>, <span class="string">'hYoValue'</span>, <span class="string">'hYmValue'</span>};
+1716 
+1717 val = str2double(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(obj, <span class="string">'string'</span>));
+1718 <span class="keyword">if</span> ~isnan(val)
+1719   id = find(isnan(handles.CalibPts));
+1720   <span class="keyword">if</span> ~isempty(id)
+1721     handles.CalibPts(id(1)) = val;
+1722     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.(hs{id(1)}), <span class="string">'string'</span>, sprintf(<span class="string">' %g'</span>, val));
+1723     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'visible'</span>, <span class="string">'off'</span>);
+1724     handles.curTitle = strs{id(1)};
+1725     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.ImageAxis, <span class="string">'title'</span>), <span class="string">'string'</span>, strs{id(1)});
+1726     <span class="keyword">if</span> id(1) == 4 <span class="comment">% last calibration point</span>
+1727       handles = <a href="#_sub22" class="code" title="subfunction handles = calculateCalibrationFcn(handles)">calculateCalibrationFcn</a>(handles);
+1728     <span class="keyword">else</span>
+1729       handles.curPointerData.CData    = handles.(ptrs{id(1)});
+1730       handles.curPointerData.HotSpot  = handles.([ptrs{id(1)} <span class="string">'HotSpot'</span>]);
+1731       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI, <span class="keyword">...</span>
+1732         <span class="string">'PointerShapeCData'</span>   , handles.curPointerData.CData, <span class="keyword">...</span>
+1733         <span class="string">'PointerShapeHotSpot'</span> , handles.curPointerData.HotSpot);
+1734     <span class="keyword">end</span>
+1735   <span class="keyword">else</span>
+1736     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'string'</span>, <span class="string">''</span>);
+1737   <span class="keyword">end</span>
+1738 <span class="keyword">else</span>
+1739   <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(obj, <span class="string">'string'</span>, <span class="string">''</span>);
+1740 <span class="keyword">end</span>
+1741 
+1742 guidata(handles.GrabitGUI, handles);
+1743 
+1744 
+1745 <span class="comment">%--------------------------------------------------------------------------</span>
+1746 <span class="comment">%--------------------------------------------------------------------------</span>
+1747 <span class="comment">% calculateCalibrationFcn</span>
+1748 <span class="comment">%--------------------------------------------------------------------------</span>
+1749 <span class="comment">%--------------------------------------------------------------------------</span>
+1750 <a name="_sub22" href="#_subfunctions" class="code">function handles = calculateCalibrationFcn(handles)</a>
+1751 <span class="comment">% this function calculates the calibration values</span>
+1752 
+1753 Xxo = handles.CalibPtsIm(1,1);
+1754 Yxo = handles.CalibPtsIm(1,2);
+1755 Xxm = handles.CalibPtsIm(2,1);
+1756 Yxm = handles.CalibPtsIm(2,2);
+1757 Xyo = handles.CalibPtsIm(3,1);
+1758 Yyo = handles.CalibPtsIm(3,2);
+1759 Xym = handles.CalibPtsIm(4,1);
+1760 Yym = handles.CalibPtsIm(4,2);
+1761 
+1762 v1  = [Xxm - Xxo; Yxm - Yxo];
+1763 v2  = [Xym - Xyo; Yym - Yyo];
+1764 
+1765 Xo  = handles.CalibPts(1);
+1766 Xm  = handles.CalibPts(2);
+1767 Yo  = handles.CalibPts(3);
+1768 Ym  = handles.CalibPts(4);
+1769 
+1770 Xlength = Xm - Xo;
+1771 Ylength = Ym - Yo;
+1772 
+1773 <span class="comment">% the basis vectors in the MATLAB domain</span>
+1774 e1 = v1 / Xlength;
+1775 e2 = v2 / Ylength;
+1776 
+1777 <span class="comment">% rearrage axes</span>
+1778 C     = [e1 e2] \ [Xyo - Xxo; Yyo - Yxo];
+1779 blahX = [Xxo; Yxo] + C(2) * e2; Xxo = blahX(1); Yxo = blahX(2);
+1780 blahY = [Xyo; Yyo] - C(1) * e1; Xyo = blahY(1); Yyo = blahY(2);
+1781 
+1782 calib.Xo  = Xo;
+1783 calib.Xm  = Xm;
+1784 calib.Yo  = Yo;
+1785 calib.Ym  = Ym;
+1786 calib.e1  = e1;
+1787 calib.e2  = e2;
+1788 calib.Xxo = Xxo;
+1789 calib.Yyo = Yyo;
+1790 
+1791 handles.CalibVals = calib;
+1792 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabPointsBtn, <span class="keyword">...</span>
+1793   <span class="string">'enable'</span>, <span class="string">'inactive'</span>);
+1794 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.CalibrateImageBtn, <span class="keyword">...</span>
+1795   <span class="string">'value'</span>           , 0, <span class="keyword">...</span>
+1796   <span class="string">'backgroundcolor'</span> , handles.bgcolor3, <span class="keyword">...</span>
+1797   <span class="string">'enable'</span>          , <span class="string">'inactive'</span>, <span class="keyword">...</span>
+1798   <span class="string">'string'</span>          , <span class="string">'Re-Calibrate'</span>);
+1799 
+1800 handles.state = <span class="string">'normal'</span>;
+1801 
+1802 handles.curPointer = <span class="string">'arrow'</span>;
+1803 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.GrabitGUI     , <span class="keyword">...</span>
+1804   <span class="string">'WindowButtonMotionFcn'</span> , {@<a href="#_sub10" class="code" title="subfunction pointerFcn(varargin)">pointerFcn</a>, handles, handles.curPointer});
+1805 
+1806 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([handles.LoadImageBtn, <span class="keyword">...</span>
+1807     handles.SaveAs, <span class="keyword">...</span>
+1808     handles.Rename, <span class="keyword">...</span>
+1809     handles.Delete], <span class="keyword">...</span>
+1810   <span class="string">'enable'</span>, <span class="string">'on'</span>);
+1811 
+1812 
+1813 <span class="comment">%--------------------------------------------------------------------------</span>
+1814 <span class="comment">%--------------------------------------------------------------------------</span>
+1815 <span class="comment">% splitvar</span>
+1816 <span class="comment">%--------------------------------------------------------------------------</span>
+1817 <span class="comment">%--------------------------------------------------------------------------</span>
+1818 <a name="_sub23" href="#_subfunctions" class="code">function varargout = splitvar(varargout)</a>
+1819 <span class="comment">% this function splits input arguments into individual variables.</span>
+1820 
+1821 
+1822 <span class="comment">%--------------------------------------------------------------------------</span>
+1823 <span class="comment">%--------------------------------------------------------------------------</span>
+1824 <span class="comment">% createSampleImageFcn</span>
+1825 <span class="comment">%--------------------------------------------------------------------------</span>
+1826 <span class="comment">%--------------------------------------------------------------------------</span>
+1827 <a name="_sub24" href="#_subfunctions" class="code">function fname = createSampleImageFcn</a>
+1828 <span class="comment">% this function creates a temporary image file in the temp directory by</span>
+1829 <span class="comment">% loading in a sample binary image data.</span>
+1830 
+1831 str = [
+1832   <span class="string">'4749463839611002CA01F70000000000800000008000808000000080800080008080C0'</span>
+1833   <span class="string">'C0C0C0DCC0A6CAF0402000602000802000A02000C02000E02000004000204000404000'</span>
+1834   <span class="string">'604000804000A04000C04000E04000006000206000406000606000806000A06000C060'</span>
+1835   <span class="string">'00E06000008000208000408000608000808000A08000C08000E0800000A00020A00040'</span>
+1836   <span class="string">'A00060A00080A000A0A000C0A000E0A00000C00020C00040C00060C00080C000A0C000'</span>
+1837   <span class="string">'C0C000E0C00000E00020E00040E00060E00080E000A0E000C0E000E0E0000000402000'</span>
+1838   <span class="string">'40400040600040800040A00040C00040E00040002040202040402040602040802040A0'</span>
+1839   <span class="string">'2040C02040E02040004040204040404040604040804040A04040C04040E04040006040'</span>
+1840   <span class="string">'206040406040606040806040A06040C06040E060400080402080404080406080408080'</span>
+1841   <span class="string">'40A08040C08040E0804000A04020A04040A04060A04080A040A0A040C0A040E0A04000'</span>
+1842   <span class="string">'C04020C04040C04060C04080C040A0C040C0C040E0C04000E04020E04040E04060E040'</span>
+1843   <span class="string">'80E040A0E040C0E040E0E040000080200080400080600080800080A00080C00080E000'</span>
+1844   <span class="string">'80002080202080402080602080802080A02080C02080E0208000408020408040408060'</span>
+1845   <span class="string">'4080804080A04080C04080E04080006080206080406080606080806080A06080C06080'</span>
+1846   <span class="string">'E06080008080208080408080608080808080A08080C08080E0808000A08020A08040A0'</span>
+1847   <span class="string">'8060A08080A080A0A080C0A080E0A08000C08020C08040C08060C08080C080A0C080C0'</span>
+1848   <span class="string">'C080E0C08000E08020E08040E08060E08080E080A0E080C0E080E0E0800000C02000C0'</span>
+1849   <span class="string">'4000C06000C08000C0A000C0C000C0E000C00020C02020C04020C06020C08020C0A020'</span>
+1850   <span class="string">'C0C020C0E020C00040C02040C04040C06040C08040C0A040C0C040C0E040C00060C020'</span>
+1851   <span class="string">'60C04060C06060C08060C0A060C0C060C0E060C00080C02080C04080C06080C08080C0'</span>
+1852   <span class="string">'A080C0C080C0E080C000A0C020A0C040A0C060A0C080A0C0A0A0C0C0A0C0E0A0C000C0'</span>
+1853   <span class="string">'C020C0C040C0C060C0C080C0C0A0C0C0FFFBF0A0A0A4808080FF000000FF00FFFF0000'</span>
+1854   <span class="string">'00FFFF00FF00FFFFFFFFFF2C000000001002CA010008FF00FF091C48B0A0C18308132A'</span>
+1855   <span class="string">'5CC8B0A1C38710234A9C48B1A2C58B18336ADCC8B1A3C78F20438A1C49B2A4C9932853'</span>
+1856   <span class="string">'AA5CC9B2A5CB973063CA9C49B3A6CD9B3873EADCC9B3A7CF9F40830A1D4AB4A8D1A348'</span>
+1857   <span class="string">'932A5DCAB4A9D3A750A34A9D4AB5AAD5AB58B36ADDCAB5ABD7AF60C38A1D4BB6ACD986'</span>
+1858   <span class="string">'00D29E5DCBB66DD9B470010894EBB6AEDDBB4FE3D235B817AFDFBF806FEAED9B9070E0'</span>
+1859   <span class="string">'C388137F1C3CD1B0E2C79023178E8BD1B1E4CB98FF32E66839B3E7CF613787EC0CBAB4'</span>
+1860   <span class="string">'69A97A53923ECDBAB550D12B57BB9E4D5B266C98B26BEBDE3D3275CEDCBC830B6FECBB'</span>
+1861   <span class="string">'27F0E1C84916F07B1BE8F1E4D01B2748686FF9C0B4E8C81647FA3CBA77EA01E0DAFF0B'</span>
+1862   <span class="string">'400FA13D02D37FC9FD85BE6BF3A4FCF87D9F5FB13A41F6D701A01B4F77FC747B854C67'</span>
+1863   <span class="string">'D57B4EC5271F7D083E649F4000A6B71E7A0BE6D75E54DB5165E08509D2176142D63168'</span>
+1864   <span class="string">'4202FEFDD36084E389182053045A78A18119CEB7E1411BDAF3A184205A57DD742F4C48'</span>
+1865   <span class="string">'548A59AD88618BD1D9C79F8E0C7668E27F011C79E33FF80140CF8CCE51D69D8A3EC607'</span>
+1866   <span class="string">'2472FF2DD72093446EF80B382216802384050000A20953B6D45C9A525569E595BA5567'</span>
+1867   <span class="string">'4B5A62DAF7A5870216495000E911F08F931FCAE8138F7399E5269C81A1891D4366DE92'</span>
+1868   <span class="string">'1692D9D9F3023D765648A28032B2191B6511691A55958802664F76229A406A417202A0'</span>
+1869   <span class="string">'5E79772EF9CFA47682FF39509E228607D74F841EF663A87FBD9067A5D881485E985986'</span>
+1870   <span class="string">'3910AC5A9E0820AA8356F8D9AEBCDEB52CAA7C725963B1C6BA5AA78DB6D2AA53AE9E41'</span>
+1871   <span class="string">'1BAD5B32A2B3A84123DAA86EAD9162DBECADC2893B2EB949F2472A7F0090A967B605CC'</span>
+1872   <span class="string">'E9294AE0BA76E1BFF37675E392E9EE2BA49182390BDD8A0417BC958C09E0F7AABEE631'</span>
+1873   <span class="string">'1C93C3F46118B1C453592CD02D60660A28432F6ECA29AF1E834CAE09E0C025EBBBF082'</span>
+1874   <span class="string">'DCB2CB6EBD80EBCA380BF4E3C73DD71670C13F070DE4D03D176DF4771C2F9DD0AE403B'</span>
+1875   <span class="string">'7D18D252130475D5AE518DF541576FED596A51570D6DD85E73B566D918B1781DDA80E5'</span>
+1876   <span class="string">'4AF6D263B35D57D385C93DD18A04BD6D77515AEFFF7D91B87AFBCD53DF826B0478E155'</span>
+1877   <span class="string">'D18DF849872F8EA2E28EA3246FE091934478E5234D8E39CD946F9EB6DA0575EE39713C'</span>
+1878   <span class="string">'8F9E13D4A59BAE1AE4AAD7A474A1AD9BC47AEC37C9FB27ED205D8EBB4CA087BE7B65B3'</span>
+1879   <span class="string">'FFCE93EDB70B0F51F0C6FB84F741A2A3AD7BF23B115F3CF4CF43FF93F4CDE38CBCF54A'</span>
+1880   <span class="string">'2DCF7CEBD5736F94F4D33B7E5BF6E2D7DE3B5F882B8E7EFAAEAFEF3BDB48BF0F3FEFF2'</span>
+1881   <span class="string">'CF2FB5EEF6DF0F13F9E573D9F6FC371600F62F33E123E0570CC8AB042AB0806F52C801'</span>
+1882   <span class="string">'DB96BA07460680B0F38E032DC8160C0670371BE4A05D3C3841B00C508492F19E045B13'</span>
+1883   <span class="string">'4214EA2A7FDFFBDA095D681A0F7E702A699919672A48C387D9B084283159A6FFFC7491'</span>
+1884   <span class="string">'16F6F059308C61C89C2410F530F178333C62BC92A8BF90E5C989A79A4CCDA438AF1F6E'</span>
+1885   <span class="string">'C551FAE14B14B9F81D1BDE702AF82A4FDEC828352AB22F2B6024D219D948343756D12A'</span>
+1886   <span class="string">'B652E31AE998343BDE912AF6C8A1129F220001FCC3907CA4D2811E024495F047877B74'</span>
+1887   <span class="string">'4A212759C844B6C98F7F8C4AA620B9364252729296848A0A1DD2C893982C2EB42A2548'</span>
+1888   <span class="string">'3E49C95016C88C9D9C0A18D58210557E8495A07465F77C24115B6ECC93B844A42E8FE2'</span>
+1889   <span class="string">'A64592722CBEE448307339CCA214F378DA01E6329B499467421399925CE627A919146B'</span>
+1890   <span class="string">'32329A4B69E5210D394D6E5E0F54D7144B322FB24D8304D39CCA1BE531B199947622A4'</span>
+1891   <span class="string">'9CF0C4092C33E9FF1EA4D85321F8CC67FC22D84B7A1685950F09A840F147D04E197428'</span>
+1892   <span class="string">'0895082E0752C985BA649F9134A151FE19116D32D3A292C3642D1F0A148E4EC4A31505'</span>
+1893   <span class="string">'29E3443AC8AFAC3321AD346945B4A9D29460742D2F75A7423342D39A96449EDF24A94D'</span>
+1894   <span class="string">'3CEA919EFA34732C9D0B0FCDB613A32AF39D4725C93EFB9253353515AAB79C68544502'</span>
+1895   <span class="string">'D4A0AA53273B7D6A44B70A92A4B6D4A560C5EA2AB54AD68EDC949F5BA92A41C66A1299'</span>
+1896   <span class="string">'B6D5226FCD285AAFFAD19388F3AE8633EB1B43C393BFA6C4AE808D485EF5EA15B95234'</span>
+1897   <span class="string">'A52BE96B6229B2D8586A34AD903DAC61277B37C10EF6B23991AC6633CB598854368384'</span>
+1898   <span class="string">'0DAD685182D8D22AE4B4738C2B6663B259D7FF3604B68E55895C6B1B59DEDA1621B08D'</span>
+1899   <span class="string">'AD56764BDA96F8F6B706096E6E558393E3F6B6B8C8B59A67CFDAD8E6AE9625AD456E70'</span>
+1900   <span class="string">'858B95AA3A17BBD7D5EE76977B929C7E17BCE1B5ED76B97B15F34297B6E975ED7AC92B'</span>
+1901   <span class="string">'BBA1C617BDEFFDED7CBB9245F68E16B3F92DED7AFD9B94B3D1E4BC2F417062F75B1527'</span>
+1902   <span class="string">'EA91BA2EB96F82157C570653C5C12B9C0985232CE1B60E98BE0A01A3B70A82E1BA6938'</span>
+1903   <span class="string">'C007EEF0563F7C14542AC48970418FB7C6C853154F18C5159EEE488952A2173CEAC5FD'</span>
+1904   <span class="string">'5114247DB9619814B9A63A36B1517C6C2605858788A8BDB1307D92DD152779C74BFEB1'</span>
+1905   <span class="string">'43F80357951CD9C8388EEA80A33C14268FD83C4FEE326B6D0C5F365B74FFCC04CE8999'</span>
+1906   <span class="string">'1D824535FB35CCF6C5B34ABB5A44A4CCB9206A7CC54086F859E3EAB92655F6299CE37C'</span>
+1907   <span class="string">'933F8F2C2D6ACC5102E0D25F327BD9CD273EF442E10CE28438FA1F6054A31317524A4C'</span>
+1908   <span class="string">'67DAD4D4E4B49FB5FCE8EE34F2CB8866AB951BBA914ED7322E954E277AEB296B315F19'</span>
+1909   <span class="string">'CB42E172AD39ACE99B8475CFBF8630530D5DEC3CD355D1C956B66CF1CBEB5E43DB981E'</span>
+1910   <span class="string">'B17554601DEB675F1BDB1DD1F668881D4E6F2339DAD2C6CAA217C2ED6E9BFBCDE84E77'</span>
+1911   <span class="string">'55D0B9E6A69033D1DC5CB7A5D54DEF92B41BC0533E37ADC3BDC043D5B5D954FE3719F9'</span>
+1912   <span class="string">'9C1171BBD5E0245138C08FAA6F46BFB2DF2179B752346ECE8A3B7C23DE1409BE372AF1'</span>
+1913   <span class="string">'1E32BCE160FF81F85A477ED092D3B0E2167F8ACA3BA2D66DBB1C859CA631534ECECE9A'</span>
+1914   <span class="string">'4B53E0E0CE3604E33DD76397FBE62224BABCDBCB738A189D292CA723CCF71DD7A63BDD'</span>
+1915   <span class="string">'DAD20C78C795BEF401F132AB512739AA5FCEF54257D7EA274578CB91EEBFA99B852E8B'</span>
+1916   <span class="string">'667B4FC27E44B77F7C313E83B3DC0B4B77B20F1CEFF4FCFA46F63E77C25BCFED31A7D0'</span>
+1917   <span class="string">'40D0EE10C3F355ED1C44FCDD859EF7783BFEF1F9963C382B1FF4995E5EB56357A0E02D'</span>
+1918   <span class="string">'B779C633E4F3A00FFDFD302E92C97346BADB457DEAB52EF5D193FEABB0FFBB44656F5D'</span>
+1919   <span class="string">'D58B2FE4BD21A9E961EAFBA3F47DF5C06FBD50877F10DECFDE92C9573EEE73DFF98E42'</span>
+1920   <span class="string">'FEE8C54FDECC833FFDC533FFB1D787BAFFF331C77AE977DFFB3A1E3FE6A15F762567E5'</span>
+1921   <span class="string">'CC8EF9BE40D43FF14422DEB255113184E54FFFE7DBBFFDC02615F8C26A8CC5799E177E'</span>
+1922   <span class="string">'F6D67F88737FF847159FD680FF607B09957D1B777CBF078001E88004984184F17D0AE8'</span>
+1923   <span class="string">'7F6CC4805407154CC63C5B847ED5075014887DB46772BAC77D56F18023387C1F587F52'</span>
+1924   <span class="string">'247F7D761532185B12C86E2BC8820B8781EEA7814D667605C1781638151CF740220881'</span>
+1925   <span class="string">'51B183AB818408281549283C4D98784501850C617535C8773F383A5788854461666154'</span>
+1926   <span class="string">'804768435DE88553D83A61E87A0F612B2738829C9782E0D78266B184C8F78230884668'</span>
+1927   <span class="string">'B1851E94868F078870238443B857AFF5875F988058D776849881FDFF745B0024880027'</span>
+1928   <span class="string">'897DA4877B68880B717294686C3E4740612887DDE5103D588776F174E9D38885F88890'</span>
+1929   <span class="string">'98449BD87B55683A9F088AEDF5107CD68A9C8887D083831AE186BB685A12688BC6364E'</span>
+1930   <span class="string">'C0182DB128864EF11C2AF78A5B318C2C838A8EA88AABE83DCC6883796889B7777E9948'</span>
+1931   <span class="string">'6FD3385BA2E78CCFB86CA2A88D895815CA1839C5688C4D011CDEB48D00D68DD6788DA9'</span>
+1932   <span class="string">'E587E2B8865C518E8B738EBCA81210C78EED588DB6215487082AFC488DDC538C71088D'</span>
+1933   <span class="string">'B4883703D98FA7F88EB9434BF958199485210BC990B9E88D19168F1271211549905688'</span>
+1934   <span class="string">'91A9088E1B69201D6991C6738EB2388B13191FE3D81525191C289992038257F638162F'</span>
+1935   <span class="string">'C91B31FF898E2852112CD9922E7993BA91931129913C0994A9A77D42B97957478F6461'</span>
+1936   <span class="string">'94B391933AB9149EF2497498184ED91A50399416F12F940492547195A7A18B94A79169'</span>
+1937   <span class="string">'57485EA98460591A50199505D67366799654E89338B3965A591153394962C916698944'</span>
+1938   <span class="string">'55191B0039816F099771C99483E890E5A594BB574979B9167B79196BC9966DB99488F4'</span>
+1939   <span class="string">'9815489841F3987569970738877D79188D994282D975335996C2B49867519395D899BA'</span>
+1940   <span class="string">'85988DF751A6799A72498CA1299A89939899F59A65819A2E43999929419466673AD557'</span>
+1941   <span class="string">'B8999BB189289409993A016321497C1C358A90A19B756498CCD56090B69CCD5773C3D9'</span>
+1942   <span class="string">'94C57925C7E986690165065162DFFF789DD6969D62019DB2399BB4691399026AF97266'</span>
+1943   <span class="string">'18F69E6F444BCC696EE6799E9F0918EA399E3BC11F94121EB9C62471A12833469F2AB8'</span>
+1944   <span class="string">'88C7596DF97917099A65ED41680B610F8F049C75C85BF719168BC83609FA7169562AF2'</span>
+1945   <span class="string">'19A11DEA84F7F46ECEA918A688350DEA7013EAA1720423212A93F3975E17EA15272A36'</span>
+1946   <span class="string">'FBB99E33B1A243746624762E224A9E768882D2598A9DA8A1376A843DA1A368D2A2FF20'</span>
+1947   <span class="string">'6803B1A4483AA23836A3CB58A465D3A0C8694AE1212B43D26A91F6A06548A1313AA558'</span>
+1948   <span class="string">'0A5156BA3558AAA21D6A2F5EDA443CF41C1446A55AE154463AA4AB391492229F8E3221'</span>
+1949   <span class="string">'A1E6550D11A7654A1467DA46471AA53CE19F7FC2490E059841FF7A86812AA8E8D93185'</span>
+1950   <span class="string">'6AA887AA2828C7A8BE38A94058A7767AA76479A07A56A28F818BBB29A744F9A9F53992'</span>
+1951   <span class="string">'9DEA17A41A9D9A6A8622E9838766AA5FD1AACD28AAFFF897C1A969E57719B66A9CDB67'</span>
+1952   <span class="string">'13BDD918AD596CC12A19BF9A8032177D3531AC05F5A7CD76ACC81AA9EBB714CCDAACAC'</span>
+1953   <span class="string">'09A42B89AB264AADB79896D24A13CEBAA8B2DAA84F13AE91E1ADEEA6AE2B45AB3988AA'</span>
+1954   <span class="string">'BBBAADEE4AA3EC5A54E63AA6350A148F9AA59D029E2E911BB076AD9951AF62455A2895'</span>
+1955   <span class="string">'ACD1F3AA949A6D3AF77AA7676AE83AAD0B79B0144BB05CB5AFD9236C38211BFFD6AB9E'</span>
+1956   <span class="string">'81B0CC56B1220B1F0ABBB0BDE1AF5655AE9FB3AFFE64B11621B2CC54B1CE54B24A7590'</span>
+1957   <span class="string">'22FF3180003029B90AAA8145B39BAA86745A10E2746F207B5165BA17FD4332A0561E29'</span>
+1958   <span class="string">'C3121C5B7C2C6B7C2E6B7DF90AAADBD9B3AA3913499B1D7722322FB11A4817B562074A'</span>
+1959   <span class="string">'F77A69414B9A86B589F37AA928D12ACB5184B8A1B21C21B6633BB5407AB692895236B1'</span>
+1960   <span class="string">'B6A78A122F901D8E22AE3CEB1174BB7645AB1144659907BBB73E2BA6B529A584C9B7F4'</span>
+1961   <span class="string">'7AB813B8AB16ABB73421B619DB0E3B411A8427B9F598A1883BB2CF35A836A5B926612F'</span>
+1962   <span class="string">'612AB8A95A56851B143455B6688BB77726BA2B41B7EF331E9912A0290BB917BBAA7F41'</span>
+1963   <span class="string">'B1F64A546D66BB21D5B88EDB118E820E28EBB483EBBAC01BBCC23B78C42B13552B55C8'</span>
+1964   <span class="string">'9BBC1EF10B5ADBBA2101BAC4FF645A302BBB966BBC210B88855B42CBDBBDBE8B54D1CB'</span>
+1965   <span class="string">'15C4E3265DC90F8B5B74D055BFB377B5C085BB2BB1BBD8DABEBFFBBEFCB63CC5E42381'</span>
+1966   <span class="string">'49BFF43BBE158AB9404BBED06B1407B4BAEC1BAF3F95BD465BC0189CC1E3ABC03F41B9'</span>
+1967   <span class="string">'78F5BAF653221B0BC0D82BC0F396C106B72B06BCC1FF746F664A7FE0DBB723C1A6234C'</span>
+1968   <span class="string">'9EC79BB55D81C2544450F251251CAC88FA1B8116ACBDF5C1B90C7222AC2BB457FBBA26'</span>
+1969   <span class="string">'81C119B1C20C9C750E8CB52DC6125B52ADED6AC2A224B08A05C51EDCC1161BC3326C4A'</span>
+1970   <span class="string">'48BCB3F63BC54F3CC44DCCC57723C43D4995385CB768CC936A0CABC3A5ADFA58C701CC'</span>
+1971   <span class="string">'AD7F93C0F31BC7723CC7AA0AC8FFFBA9532BC6998B4E84FF3CC88139A7A887C8EF3AC3'</span>
+1972   <span class="string">'85B031F9725630CCC473CBC70F17B1406C998EBAC8494C123E06268A3AC368E29E7264'</span>
+1973   <span class="string">'18FD07C9170CBA059C155F1C905ADCBB27E1288AF29D2481A834DC800A88C91FECB115'</span>
+1974   <span class="string">'CCC69D2CC8D1189929610FA51C123EF6A04B9A4A14CC12AC8C54D407CA1F21CC2C48CC'</span>
+1975   <span class="string">'F2A814217CCA41B4A6CD9C37945183BE5CCCC0DCCAB35C787217CD5B694A6892CC21A1'</span>
+1976   <span class="string">'A41F1A655D38CEE7FACA3AA1C995B982EAAC99A93BC9FDBBA51E12CF0134CFFB9CC6F6'</span>
+1977   <span class="string">'3C3C052D72E61B8EE7FCAF5501CFFEDA17415CCFF4CC992C8BCF0A5A85094DAC8004D0'</span>
+1978   <span class="string">'B552C9912488E5DC4D071D4F1BBD72947BD2E42A806B0AA01985BE23ADAF9CAC3E2AFF'</span>
+1979   <span class="string">'3DBC0A57D1E32A10CB9C007B3A63673C13D6DC1341CDB8186DB81658D3BAA649E1511E'</span>
+1980   <span class="string">'00A0A87B01D3332DD4319DB0155D9F875BD539EDA19DF1D413CD35518DD048CDD07A5C'</span>
+1981   <span class="string">'AC293DD6263B9AC288CD9B5CD444FD26D4DCD60DED6CED16D6F3847B76BBBF433D5071'</span>
+1982   <span class="string">'0DD43FF2D6F9AB7655ADD63B99D6704DD7D37C49790DC60BFDC9406CD75D9D899C2914'</span>
+1983   <span class="string">'862DAF6C4D65693DC515BDD8A881AF60DDB8952DD9892D145147CFA65B9B779DA9345B'</span>
+1984   <span class="string">'D5623DD9A489DA7E6DBDA58D43C2784E09FAD9E313DAB0AB62AC0DB9B1CC37846DD239'</span>
+1985   <span class="string">'694CBB6DD0B6ADD87846DAB1BDD9FC58DC996C25C38DB5AA7DB7AB2D7EBDCD3715C9DC'</span>
+1986   <span class="string">'7DFCD55B3CD5527B5FCFFF7DB79EEC1C1D89DD941DDD9DC5DD635BCC8DAD4EE34DDE83'</span>
+1987   <span class="string">'FCDDD5ECDE58ECD566ADC4E1FD1A2589DED00DDFD05BDF0F7B5DFC6DDF0290D5644D4C'</span>
+1988   <span class="string">'F22D8FFA3DC0FE5DAE5A97E07CC5AF868B140E7EDEDADD23E6FDCC16FDDAB05D4904FE'</span>
+1989   <span class="string">'DFF79DC55CA7C36E71E0AE3865158E59360BCBD56DCE0386C20C1AE01E3ECD7B5DBA30'</span>
+1990   <span class="string">'6A73A7DDDCFA4D6BC0A7E1277CE1A4E8C6244E6E352EC51F0EE28CD7D725AD9F306EB5'</span>
+1991   <span class="string">'40BEE47FD5E1BCFDD884EBC442BC78429AE48A11E4A736995ABE6B3FFA95C92DD53A3C'</span>
+1992   <span class="string">'E65DEE153E8EAF8654E6663B65502EE037BED6643EE67CB9E0A9BAE49CFDE560BEE2FF'</span>
+1993   <span class="string">'13E72E5E43760EB9747EE7788E966F3EE52AC42272FFCE1A6A0E6678C9E31B1E706DEE'</span>
+1994   <span class="string">'4EE3F429559E908B3E74812EDDEB3DE82A89E9994ED59F2EE0D9A475916E9DF01BEA9D'</span>
+1995   <span class="string">'3DE331E1C7455EBB38BAD967E1E87F71E9B7FBC6AD1E71A255EAFC194AB47EBCD77B8B'</span>
+1996   <span class="string">'BB1E8A9BD6EBC17CD952EE962DA8EB67CD7E13AED7C67EEC9B19EC683DECC4DEDF68DE'</span>
+1997   <span class="string">'91C7A5EC441C82279EC807F2EB29F65EDA6EC7CD84DB0CF5ED611EEE413AEE9CCEECD5'</span>
+1998   <span class="string">'BED6675CE8B69991A02550584EDBC604EE8CBEEE5ED15FEC9E20F7DED992AED9C54BEF'</span>
+1999   <span class="string">'546160F066EED01C89FC8862592D9EAF2E754D9EBD18C48EE7F5F0D569EAF9F4EEBF0C'</span>
+2000   <span class="string">'ADD0EEF17D6814B7EC273C0AF1CB9E79818A86CC8860771748E5B1A7010A63DFFF9900'</span>
+2001   <span class="string">'059AE21B5FA649B5F261F671E3F1A02F7A1F412648EDBE751C6FE9687B94215F6620BD'</span>
+2002   <span class="string">'A328131EDB5EEE458FE047EF8A751D1410CDA383F6F3FF3E2E512FCB842CEFA25EF540'</span>
+2003   <span class="string">'71F5200AD2436FEFFBBC589B48616ADAD4018DF5035167E4FE6DAA7EDEC82ED834A767'</span>
+2004   <span class="string">'B6E6F6C206A10311688306A54F4FF428795A60FFDB49AF1303C8201EDDA5EEF94492F6'</span>
+2005   <span class="string">'9B279FF0620C5B92A8626DEFF365D8A702BA1A5B6F33AEDCC3265CE8B6FA71CBFCF21F'</span>
+2006   <span class="string">'0A462B2D607CDBEC964B6C6CC6F370E8F6912C5F22E8FA788C5F9AD6F226E0B0FAA5F0'</span>
+2007   <span class="string">'AB3D602EFBEB9F1F5D133FA3DDCEE4A3F5AB5B5FFC7309FCD988FBBCBD66040FE143E1'</span>
+2008   <span class="string">'FCA9999D015F63C5FF09EECD6FFC19DED0540E767AEEE647F6FDE03FFEC42DFD0C4E78'</span>
+2009   <span class="string">'FA8EFEE99FC1BF0CFD64FD8508D56C9F8FFDCF2FFFEF0D92E95EFF00F14FE04082050D'</span>
+2010   <span class="string">'0E047050E142860D1D3E8418F15F4289152D5EC49851E3468E1D3D7E8CC84F24BF8123'</span>
+2011   <span class="string">'4DFE2309D1E448901505BC8409B365CC971D29B6C49953E14D9D3D7DFE041A54284891'</span>
+2012   <span class="string">'25579E2458D4E851A54307D2A4F911EA479E4EAD46AC7A55EB56AE5DBD3664CA12E5C9'</span>
+2013   <span class="string">'B05EA14E15A0312AC8AC5FBBB6751B57EE5CBA1CC3DE15EBF6ECD98C6BA9D67D0B58F0'</span>
+2014   <span class="string">'60C28597E25D2917ED5E973273C235FC38F264CA95AF224E09B8E653BE69194EF50840'</span>
+2015   <span class="string">'F468CB3F2197469D5AB5CAB2A5F77A16B8F91FFF688CA349AF368D5BF76EDE8713ABE6'</span>
+2016   <span class="string">'3B3BA670C7126D9FEEFD37F972E6935BA77EFD1AE271E4CD955BC79EDD2DD3DDD1FD1A'</span>
+2017   <span class="string">'A4CE96807686D5C99F474FB429EFB4DE0B1EC769CF84E85B000824484FD07C7EFEFDFD'</span>
+2018   <span class="string">'1F7C2D3CAAC021C89E0000A0E71F030140C7BFFDFE8330C2F3A40349BED1E61B4FA017'</span>
+2019   <span class="string">'ECC3CFC20CF97B50421147DC6D34C640FA0541055354F19F0333F4103F1049A4B1C612'</span>
+2020   <span class="string">'E18B8DB68F7E91F11F161B5C90400531EC31BD106D4432C9AB0454A83DD87CAA8F4105'</span>
+2021   <span class="string">'0F1432C6FE8E54324B2DA9B26DB003550C52202BF3C3724B33CF748849C2EC11EDBE29'</span>
+2022   <span class="string">'01A8F2C52BD1A4B34EAC70B42CCA04DF84F1C00667B433500737C253B530FFC5DCD0CD'</span>
+2023   <span class="string">'FADC04545047D13B524DDD0E1D68C104851CF4514DB5434ED2E42CCC0AD4327B1B7553'</span>
+2024   <span class="string">'530DCBAAD0EC400567B422472CF5545901A32ED6D4A2BC2D495B67E5752B4F7B4D6E57'</span>
+2025   <span class="string">'60877D4C5562757B5520618F65F622639BC52DCA642782B65A9D7EB5D6D02F454B76D9'</span>
+2026   <span class="string">'6C9BC5362329BF956BC3B6BC2577D667350A37DDABCC9DF62674DD45B35D8B8A64714F'</span>
+2027   <span class="string">'7AE382F7A02EF765D65E8CA425285F80F9E5D6DF83875DD7A3055D2D58347DA75D38A8'</span>
+2028   <span class="string">'7EC1AB78538171BA582016472300008A330E0D530D13C698E47A1B1EAA631F2B9D0F4E'</span>
+2029   <span class="string">'953F7AB82D97119A594996B7BAB940397306AA676A819670E3AE8416F367A27B82775C'</span>
+2030   <span class="string">'9C973672E7BAFF907EF34FA85BDA563485AF16CC56A90BA33AC50FB976F8A179C90EAD'</span>
+2031   <span class="string">'22A32773F915372D44DBAAB3E3E6A8D3AF5573D95CD1ACA63BA8B9FB1617BC7FD1D3FB'</span>
+2032   <span class="string">'CF1401D7EA6FC42DAAB5BFAC155F7CBAC813BF1B3B7B26970B72CC951D7C739535077C'</span>
+2033   <span class="string">'6DCFE905FD6AD1475FB8F4992B473D67D5013EBD21510960B475706D9F8875875E3D30'</span>
+2034   <span class="string">'C128F9C69D61CF758788E04A39E43378E5358D5DA2AC8B4C544C229707F6758D89CFE8'</span>
+2035   <span class="string">'F27F3A3E744CEAD55D1AFB96B8A7527AE4BF073FE3E67D225FE621CF47FF54EB6D5CBF'</span>
+2036   <span class="string">'6594DFAC12C3F8D3B7567CAEDAEF93D3F6A7B12CEDAA7E6E0160870250BB0132AF808C'</span>
+2037   <span class="string">'F31F60F2D6BB7FD4A781B29A5F65CC1341FFC3B84C5426BBA00375E62F0E56A670950A'</span>
+2038   <span class="string">'61F51E7840D59430855BCA20AA3AE71F03BD305B31A40B0B6DB8437639C8853C04620F'</span>
+2039   <span class="string">'CFF3C320169150D6D161A0EC5100236A0987384922428067A3292A88894D1C616A88C8'</span>
+2040   <span class="string">'B95C29E905D35A2216B31899281AC46036920FDF6A6890308A515783296343CE28A117'</span>
+2041   <span class="string">'F0ED17B5BBA38F46838E04B4D18DF49BCB162532C79135E716E0E810390AB2C6ED25C8'</span>
+2042   <span class="string">'40F8B9631FAFF8C71A3D317733DCCAC7DA24B2F4C887405F2C481DC5548857D983947E'</span>
+2043   <span class="string">'A42489AC17C71D518455F9F9453D14694637FD02530FBB0F2A532922CD0932280B1A1B'</span>
+2044   <span class="string">'795E5000309AA0412FD8D3123B74CA49EEB26850F4A55580991F36E9FF6B227FBA4501'</span>
+2045   <span class="string">'1030C93C6E2F97CD742679F6F89EBA45B32B0BAA22766E81804208C482302385D54045'</span>
+2046   <span class="string">'0F1384F33C9A5C4899CC2917B151B39DB7A8A23D5254487B6A678E5B6B082BEBF28A7F'</span>
+2047   <span class="string">'74683EFCB985234959D02B15F2A0297BCF3E05F38290ED8D3F7E3C2445D3633C85180C'</span>
+2048   <span class="string">'7E4FD3A86158F41FF95853A4E4A9192717A2C998BDAA8B2FC5A96EA8B6484AE5D4A7CB'</span>
+2049   <span class="string">'D9E92295F653A2EE26A83EB34F5195AAD3FB39E4474B856A6A76CAD081E82FAA57A595'</span>
+2050   <span class="string">'6840E8323D69E86DC08B5952098A55B256E8400BE1AAC4B8A8B502A96851E92C6B5CED'</span>
+2051   <span class="string">'2753CEEDE9170B31D0DB862A57BECE755CB78848F4DEC7C0BE16362759C348F7A66758'</span>
+2052   <span class="string">'C6B6447B4B1B51EC491B3BD9AF4496B094C5AC562C9B59CE72659A55EB6C68A5F92205'</span>
+2053   <span class="string">'D255B4A7FD89B97C9754D4B6D6273503A16B655BA17ACED6B6B7C56D6E75BB5BDEF6D6'</span>
+2054   <span class="string">'B7BF056E70854BA78000003B                                              '</span>];
+2055 
+2056 <span class="comment">% convert hex to dec</span>
+2057 s = hex2dec(reshape(deblank(reshape(str', 1, [])), 2, [])');
+2058 
+2059 fname = [tempname <span class="string">'.gif'</span>];
+2060 fid = fopen(fname, <span class="string">'w'</span>);
+2061 <span class="keyword">if</span> fid &gt; 0
+2062   fwrite(fid, s);
+2063   fclose(fid);
+2064 <span class="keyword">else</span>
+2065   fname = <span class="string">''</span>;
+2066   errordlg(<span class="string">'Error trying to create sample image.'</span>);
+2067 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,49 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  color_plot -> YlGnBu_colors;
+  color_plot -> cut_quantile;
+  cut_diverging -> cut_quantile;
+  cut_quantile -> quantile;
+  draw_ellipse_axes -> set_linespec;
+  draw_line_clip -> set_linespec;
+  hhist -> axis_pct;
+  labeled_curves -> axis_pct;
+  labeled_curves -> mobile_text;
+  linechart -> axis_pct;
+  linechart -> labeled_curves;
+  mobile_points -> set_linespec;
+  plot_errorbars -> axis_pct;
+  plot_errorbars -> set_linespec;
+  test_draw -> draw_circle;
+  test_draw -> draw_ellipse;
+  test_draw -> draw_ellipse_axes;
+  test_hhist -> axis_pct;
+  test_hhist -> hhist;
+
+  Contents [URL="Contents.html"];
+  RYB_colors [URL="RYB_colors.html"];
+  YR_colors [URL="YR_colors.html"];
+  YlGnBu_colors [URL="YlGnBu_colors.html"];
+  axis_pct [URL="axis_pct.html"];
+  category_colors [URL="category_colors.html"];
+  color_plot [URL="color_plot.html"];
+  cut_diverging [URL="cut_diverging.html"];
+  cut_quantile [URL="cut_quantile.html"];
+  draw_circle [URL="draw_circle.html"];
+  draw_ellipse [URL="draw_ellipse.html"];
+  draw_ellipse_axes [URL="draw_ellipse_axes.html"];
+  draw_line_clip [URL="draw_line_clip.html"];
+  hhist [URL="hhist.html"];
+  labeled_curves [URL="labeled_curves.html"];
+  linechart [URL="linechart.html"];
+  min_errorbar_scale [URL="min_errorbar_scale.html"];
+  mobile_points [URL="mobile_points.html"];
+  mobile_text [URL="mobile_text.html"];
+  move_obj [URL="move_obj.html"];
+  plot_errorbars [URL="plot_errorbars.html"];
+  quantile [URL="quantile.html"];
+  send_to_back [URL="send_to_back.html"];
+  set_linespec [URL="set_linespec.html"];
+  test_draw [URL="test_draw.html"];
+  test_hhist [URL="test_hhist.html"];
+}

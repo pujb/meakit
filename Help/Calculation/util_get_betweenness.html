@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_betweenness</title>
+  <meta name="keywords" content="util_get_betweenness">
+  <meta name="description" content="UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_get_betweenness
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function bc = util_get_betweenness( network_connection_matrix, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network
+connection matrix.
+   Input:
+       network_connection_matrix:  The network connection matrix. (CCPeak)
+       thresholding:               Used to threshold the network connection matrix. [default: 0.1]
+       thresholding_method:        'percent' / 'direct' [default]
+                                   @percent, lower thresholding% will be removed.
+                                   @direct, values &lt; thresholding will be
+                                   removed.
+       betweenness_threshold:      Used to threshold the BC. [default: 100]
+       upper_triangle:             If you gives an upper-triangle matrix,
+                                   (half of the matrix is 0), then set
+                                   this to 1, the program will complete
+                                   the matrix by symmetrically copying
+                                   upper half to lower half.
+                                   [default = 0]
+
+   Note:
+       network_connection_matrix is given by MI.
+       The thresholdings should be reviewed carefully, you may first set
+       the betweenness_theshold to 0 to see what happens. If the
+       connection_theshold is too small, then some nodes with small
+       degrees will be choosen, which may be inproper.
+
+   Created on Oct/20/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-04-05  Bug fix, adding 'upper_triangle' switch.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_get_value_by_percent.html" class="code" title="function value = util_get_value_by_percent( input, percent, isAscending )">util_get_value_by_percent</a>	UTIL_GET_VALUE_BY_PERCENT Get the value level in the input vector or</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/BCT/betweenness_wei.html" class="code" title="function BC=betweenness_wei(G)">betweenness_wei</a>	BETWEENNESS_WEI    Node betweenness centrality</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/util_loop_calc_topo.html" class="code" title="function [cc_matrix xc_matrix mi_matrix nmi_matrix bc_cc bc_xc bc_mi bc_nmi] = util_loop_calc_topo( data_filename, result_dirname, gnd )">util_loop_calc_topo</a>	UTIL_LOOP_CALC_TOPO Get Topology parameters</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function bc = util_get_betweenness( network_connection_matrix, varargin )</a>
+0002 <span class="comment">%UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network</span>
+0003 <span class="comment">%connection matrix.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%       network_connection_matrix:  The network connection matrix. (CCPeak)</span>
+0006 <span class="comment">%       thresholding:               Used to threshold the network connection matrix. [default: 0.1]</span>
+0007 <span class="comment">%       thresholding_method:        'percent' / 'direct' [default]</span>
+0008 <span class="comment">%                                   @percent, lower thresholding% will be removed.</span>
+0009 <span class="comment">%                                   @direct, values &lt; thresholding will be</span>
+0010 <span class="comment">%                                   removed.</span>
+0011 <span class="comment">%       betweenness_threshold:      Used to threshold the BC. [default: 100]</span>
+0012 <span class="comment">%       upper_triangle:             If you gives an upper-triangle matrix,</span>
+0013 <span class="comment">%                                   (half of the matrix is 0), then set</span>
+0014 <span class="comment">%                                   this to 1, the program will complete</span>
+0015 <span class="comment">%                                   the matrix by symmetrically copying</span>
+0016 <span class="comment">%                                   upper half to lower half.</span>
+0017 <span class="comment">%                                   [default = 0]</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Note:</span>
+0020 <span class="comment">%       network_connection_matrix is given by MI.</span>
+0021 <span class="comment">%       The thresholdings should be reviewed carefully, you may first set</span>
+0022 <span class="comment">%       the betweenness_theshold to 0 to see what happens. If the</span>
+0023 <span class="comment">%       connection_theshold is too small, then some nodes with small</span>
+0024 <span class="comment">%       degrees will be choosen, which may be inproper.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Created on Oct/20/2010 By Pu Jiangbo</span>
+0027 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   $Revision:</span>
+0030 <span class="comment">%       PJB#2011-04-05  Bug fix, adding 'upper_triangle' switch.</span>
+0031 
+0032 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0033 
+0034 <span class="keyword">if</span> ~exist(<span class="string">'thresholding'</span>, <span class="string">'var'</span>)
+0035     thresholding = 0.1;
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> ~exist(<span class="string">'thresholding_method'</span>, <span class="string">'var'</span>)
+0039     thresholding_method = <span class="string">'direct'</span>;
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> ~exist(<span class="string">'betweenness_threshold'</span>, <span class="string">'var'</span>)
+0043     betweenness_threshold = 100;
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="keyword">if</span> ~exist(<span class="string">'upper_triangle'</span>, <span class="string">'var'</span>)
+0047     upper_triangle = 0;
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% Make the connection matrix to a mixed-binary one.</span>
+0051 <span class="keyword">if</span> upper_triangle
+0052     <span class="comment">% If using chen's method, you need to complete the matrix</span>
+0053     network_matrix = (network_connection_matrix + network_connection_matrix');
+0054 <span class="keyword">else</span>
+0055     network_matrix = network_connection_matrix;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> strcmpi(thresholding_method, <span class="string">'percent'</span>)
+0059     thresholding = <a href="../Common/util_get_value_by_percent.html" class="code" title="function value = util_get_value_by_percent( input, percent, isAscending )">util_get_value_by_percent</a>(network_connection_matrix, thresholding, 1);
+0060     disp([<span class="string">'Thresholding by percent, current value level is '</span> num2str(thresholding)]);
+0061 <span class="keyword">else</span>
+0062     disp([<span class="string">'Thresholding by value: '</span> num2str(thresholding)]);
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">for</span> i = 1:64
+0066     <span class="keyword">for</span> j = 1:64
+0067         <span class="keyword">if</span> network_matrix(i,j) &lt; thresholding
+0068             network_matrix(i,j) = 0;
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">% Calc the betweenness in this unidirectional weighted network</span>
+0074 <span class="comment">% Ref: NeuroImage 52 (2010) 1059–1069</span>
+0075 bc = <a href="../Otherbox/BCT/betweenness_wei.html" class="code" title="function BC=betweenness_wei(G)">betweenness_wei</a>(network_matrix);
+0076 
+0077 <span class="comment">% Generate the list of electrodes</span>
+0078 elecs = (1:64);
+0079 
+0080 <span class="comment">% Output the hub electrodes list</span>
+0081 disp([<span class="string">'Displaying electrodes with betweenness higher than the threshold ['</span> num2str(betweenness_threshold) <span class="string">']:'</span>]);
+0082 disp(<span class="string">'Elec:'</span>)
+0083 disp(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(elecs(bc &gt; betweenness_threshold)));
+0084 disp(<span class="string">'BC Level:'</span>);
+0085 disp(bc(bc &gt; betweenness_threshold)');
+0086 
+0087 <span class="keyword">end</span>
+0088</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

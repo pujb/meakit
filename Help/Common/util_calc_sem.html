@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_sem</title>
+  <meta name="keywords" content="util_calc_sem">
+  <meta name="description" content="UTIL_CALC_SEM Get the standard error of the mean (SEM)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_calc_sem
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_SEM Get the standard error of the mean (SEM)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ sem ] = util_calc_sem( vector ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_SEM Get the standard error of the mean (SEM)
+   Calculate the standard error of the mean.
+   
+   Jiangbo Pu / May-31-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_avalanche_branching_parameter.html" class="code" title="function [ bp bp_std bp_sem bp_1 bp_1_std bp_1_sem ] = util_calc_avalanche_branching_parameter( ava_length, ava_vector, varargin )">util_calc_avalanche_branching_parameter</a>	UTIL_CALC_AVALANCHE_BRANCHING_PARAMETER Calculate the branching parameter</li><li><a href="../Calculation/util_calc_energy.html" class="code" title="function [ sum_e mean_e sem_e ] = util_calc_energy( spif, chlist, active_thres )">util_calc_energy</a>	UTIL_CALC_ENERGY Calculate the neural energy from spike trains</li><li><a href="../Calculation/util_calc_isi.html" class="code" title="function [ isi, seq, ts, mean_isi, std_isi ] = util_calc_isi( spif, varargin )">util_calc_isi</a>	UTIL_CALC_ISI Get inter-spike intervals between selected channels and time</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ sem ] = util_calc_sem( vector )</a>
+0002 <span class="comment">%UTIL_CALC_SEM Get the standard error of the mean (SEM)</span>
+0003 <span class="comment">%   Calculate the standard error of the mean.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Jiangbo Pu / May-31-2010</span>
+0006 
+0007 sem = std(vector) / sqrt( length(vector) );
+0008 
+0009 <span class="keyword">end</span>
+0010</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

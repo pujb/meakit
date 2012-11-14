@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of movie2gif</title>
+  <meta name="keywords" content="movie2gif">
+  <meta name="description" content="Movie2Gif ver. 1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html movie2gif -->
+<h1>movie2gif
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Movie2Gif ver. 1.0</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function movie2gif(mov, gifFile, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Movie2Gif ver. 1.0
+ ==================
+ Matlab movie to GIF Converter.
+
+ Syntax: movie2gif(mov, gifFile, prop, value, ...)
+ =================================================
+ The list of properties is the same like for the command 'imwrite' for the
+ file format gif:
+
+ 'BackgroundColor' - A scalar integer. This value specifies which index in 
+                     the colormap should be treated as the transparent 
+                     color for the image and is used for certain disposal 
+                     methods in animated GIFs. If X is uint8 or logical, 
+                     then indexing starts at 0. If X is double, then 
+                     indexing starts at 1.
+
+ 'Comment' - A string or cell array of strings containing a comment to be
+             added to the image. For a cell array of strings, a carriage 
+             return is added after each row.
+
+ 'DelayTime' - A scalar value between 0 and 655 inclusive, that specifies 
+               the delay in seconds before displaying the next image. 
+
+ 'DisposalMethod' - One of the following strings, which sets the disposal 
+                    method of an animated GIF: 'leaveInPlace', 
+                    'restoreBG', 'restorePrevious', or 'doNotSpecify'.
+
+ 'LoopCount' - A finite integer between 0 and 65535 or the value Inf (the
+               default) which specifies the number of times to repeat the
+               animation. By default, the animation loops continuously. 
+               For a value of 0, the animation will be played once. For a 
+               value of 1, the animation will be played twice, etc. 
+
+ 'TransparentColor' - A scalar integer. This value specifies which index 
+                      in the colormap should be treated as the transparent
+                      color for the image. If X is uint8 or logical, then 
+                      indexing starts at 0. If X is double, then indexing
+                      starts at 1
+
+ *************************************************************************
+ Copyright 2007 Nicolae CINDEA</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="aRGB2IND.html" class="code" title="function [X, map] = aRGB2IND(RGB)">aRGB2IND</a>	writted by Nicolae CINDEA</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Stimulation/generate_gif_for_animation.html" class="code" title="function [] = generate_gif_for_animation( movie_frames )">generate_gif_for_animation</a>	GENERATE_GIF_FOR_ANIMATION 通过Movie帧生成GIF动画</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function movie2gif(mov, gifFile, varargin)</a>
+0002 <span class="comment">% Movie2Gif ver. 1.0</span>
+0003 <span class="comment">% ==================</span>
+0004 <span class="comment">% Matlab movie to GIF Converter.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Syntax: movie2gif(mov, gifFile, prop, value, ...)</span>
+0007 <span class="comment">% =================================================</span>
+0008 <span class="comment">% The list of properties is the same like for the command 'imwrite' for the</span>
+0009 <span class="comment">% file format gif:</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% 'BackgroundColor' - A scalar integer. This value specifies which index in</span>
+0012 <span class="comment">%                     the colormap should be treated as the transparent</span>
+0013 <span class="comment">%                     color for the image and is used for certain disposal</span>
+0014 <span class="comment">%                     methods in animated GIFs. If X is uint8 or logical,</span>
+0015 <span class="comment">%                     then indexing starts at 0. If X is double, then</span>
+0016 <span class="comment">%                     indexing starts at 1.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% 'Comment' - A string or cell array of strings containing a comment to be</span>
+0019 <span class="comment">%             added to the image. For a cell array of strings, a carriage</span>
+0020 <span class="comment">%             return is added after each row.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% 'DelayTime' - A scalar value between 0 and 655 inclusive, that specifies</span>
+0023 <span class="comment">%               the delay in seconds before displaying the next image.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% 'DisposalMethod' - One of the following strings, which sets the disposal</span>
+0026 <span class="comment">%                    method of an animated GIF: 'leaveInPlace',</span>
+0027 <span class="comment">%                    'restoreBG', 'restorePrevious', or 'doNotSpecify'.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% 'LoopCount' - A finite integer between 0 and 65535 or the value Inf (the</span>
+0030 <span class="comment">%               default) which specifies the number of times to repeat the</span>
+0031 <span class="comment">%               animation. By default, the animation loops continuously.</span>
+0032 <span class="comment">%               For a value of 0, the animation will be played once. For a</span>
+0033 <span class="comment">%               value of 1, the animation will be played twice, etc.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% 'TransparentColor' - A scalar integer. This value specifies which index</span>
+0036 <span class="comment">%                      in the colormap should be treated as the transparent</span>
+0037 <span class="comment">%                      color for the image. If X is uint8 or logical, then</span>
+0038 <span class="comment">%                      indexing starts at 0. If X is double, then indexing</span>
+0039 <span class="comment">%                      starts at 1</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% *************************************************************************</span>
+0042 <span class="comment">% Copyright 2007 Nicolae CINDEA</span>
+0043 
+0044 <span class="keyword">if</span> (nargin &lt; 2)
+0045   error(<span class="string">'Too few input arguments'</span>);
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">if</span> (nargin == 2)
+0049     h = waitbar(0, <span class="string">'Generate GIF file...'</span>); 
+0050     frameNb = size(mov, 2);
+0051     isFirst = true;
+0052     <span class="keyword">for</span> i = 1:frameNb
+0053         waitbar((i-1)/frameNb, h);
+0054         [RGB, colMap] = frame2im(mov(i)); 
+0055         [IND, map] = <a href="aRGB2IND.html" class="code" title="function [X, map] = aRGB2IND(RGB)">aRGB2IND</a>(RGB); 
+0056         <span class="keyword">if</span> isFirst
+0057             imwrite(IND, map, gifFile, <span class="string">'gif'</span>); 
+0058             isFirst=false;
+0059         <span class="keyword">else</span>
+0060             imwrite(IND, map, gifFile, <span class="string">'gif'</span>, <span class="string">'WriteMode'</span>, <span class="string">'append'</span>); 
+0061         <span class="keyword">end</span> 
+0062     <span class="keyword">end</span>
+0063     close(h);
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="keyword">if</span> (nargin &gt; 2) 
+0067     h = waitbar(0, <span class="string">'Generate GIF file...'</span>);
+0068     frameNb = size(mov, 2);
+0069     isFirst = true;
+0070     <span class="keyword">for</span> i = 1:frameNb
+0071         waitbar((i-1)/frameNb, h);
+0072         [RGB, colMap] = frame2im(mov(i)); 
+0073         [IND, map] = <a href="aRGB2IND.html" class="code" title="function [X, map] = aRGB2IND(RGB)">aRGB2IND</a>(RGB); 
+0074         <span class="keyword">if</span> isFirst
+0075             imwrite(IND, map, gifFile, <span class="string">'gif'</span>, varargin{:}); 
+0076             isFirst=false;
+0077         <span class="keyword">else</span>
+0078             imwrite(IND, map, gifFile, <span class="string">'gif'</span>, <span class="string">'WriteMode'</span>, <span class="string">'append'</span>, <span class="keyword">...</span>
+0079                 varargin{:}); 
+0080         <span class="keyword">end</span> 
+0081     <span class="keyword">end</span>
+0082     close(h);
+0083 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

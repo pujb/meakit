@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plotn</title>
+  <meta name="keywords" content="plotn">
+  <meta name="description" content="This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html gui -->
+<h1>plotn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function plotn(name,data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.
+ The toolbox can be obtained from http://homepage.tudelft.nl/19j49
+ You are free to use, change, or redistribute this code in any way you
+ want for non-commercial purposes. However, it is appreciated if you 
+ maintain the name of the original author.
+
+ (C) Laurens van der Maaten, 2010
+ University California, San Diego / Delft University of Technology</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li><li><a href="plot12n.html" class="code" title="function plot12n(name,data)">plot12n</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0002 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0003 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0004 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0005 <span class="comment">% maintain the name of the original author.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0008 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0009 
+0010 <a name="_sub0" href="#_subfunctions" class="code">function plotn(name,data)</a>
+0011 <span class="comment">% plot if dimensionality&gt;=3</span>
+0012 <span class="comment">% format: plotn(name,data)</span>
+0013 <span class="comment">% name - text that will be dispayed as name of figure</span>
+0014 <span class="comment">% data - multidimentional data, row - is one datapoint</span>
+0015 
+0016 
+0017 bgc=[0.8313725490196079 0.8156862745098039 0.7843137254901961];
+0018 bgc1=[1 1 1];
+0019 bgc1=bgc;
+0020 
+0021 <span class="comment">% if length(varargin)==1</span>
+0022 <span class="comment">%     labels=varargin{1};</span>
+0023 <span class="comment">%     islb=true;</span>
+0024 <span class="comment">% else</span>
+0025     islb=false;
+0026 <span class="comment">% end</span>
+0027 
+0028 hf=figure;
+0029 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'name'</span>,name,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0030 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'units'</span>,<span class="string">'normalized'</span>);
+0031 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'position'</span>,[0.1 0.1 0.7 0.75]);
+0032 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'color'</span>,bgc);
+0033 ha=axes;
+0034 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ha,<span class="string">'units'</span>,<span class="string">'normalized'</span>);
+0035 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(ha,<span class="string">'position'</span>,[0.1 0.1 0.8 0.7]);
+0036 <span class="comment">% if islb</span>
+0037 <span class="comment">%     hs=scatter3(data(:,1),data(:,2),data(:,3),5,labels,'parent',ha);</span>
+0038 <span class="comment">% else</span>
+0039     hs=plot3(data(:,1),data(:,2),data(:,3),<span class="string">'x-'</span>,<span class="string">'parent'</span>,ha);
+0040 <span class="comment">% end</span>
+0041 
+0042 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hs,<span class="string">'UserData'</span>,data); <span class="comment">% memorize data in userdata of plot</span>
+0043 
+0044 <span class="comment">% title as text contol:</span>
+0045 xc=0.5;
+0046 yc=0.94;
+0047 dx=0.8;
+0048 dy=0.04;
+0049 uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>,<span class="keyword">...</span>
+0050        <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0051        <span class="string">'String'</span>, name,<span class="keyword">...</span>
+0052        <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0053        <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0054        <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="keyword">...</span>
+0055        <span class="string">'Position'</span>, [xc-dx/2 yc dx dy],<span class="keyword">...</span>
+0056        <span class="string">'backgroundcolor'</span>,bgc1);
+0057 
+0058 <span class="comment">% dimensionality text</span>
+0059 xc=0.5;
+0060 yc=0.9;
+0061 dx=0.2;
+0062 dy=0.04;
+0063 uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>,<span class="keyword">...</span>
+0064        <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0065        <span class="string">'String'</span>, [<span class="string">'dimensionality='</span> num2str(length(data(1,:)))],<span class="keyword">...</span>
+0066        <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0067        <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0068        <span class="string">'Position'</span>, [xc-dx/2 yc dx dy],<span class="keyword">...</span>
+0069        <span class="string">'backgroundcolor'</span>,bgc1);
+0070 
+0071 <span class="comment">% edits:</span>
+0072 xc=0.5;
+0073 yc=0.86;
+0074 dy=0.04;
+0075 dytx=0.03;
+0076 x0=0.03;
+0077 dxg=0.03;
+0078 xt=x0;
+0079 <span class="keyword">for</span> cc=1:3
+0080     <span class="keyword">switch</span> cc
+0081         <span class="keyword">case</span> 1
+0082             ls=<span class="string">'X'</span>;
+0083         <span class="keyword">case</span> 2
+0084             ls=<span class="string">'Y'</span>;
+0085         <span class="keyword">case</span> 3
+0086             ls=<span class="string">'Z'</span>;
+0087     <span class="keyword">end</span>
+0088     
+0089     dx1=0.07;
+0090     uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>,<span class="keyword">...</span>
+0091            <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0092            <span class="string">'String'</span>, [ls <span class="string">' '</span> <span class="string">'data:'</span>],<span class="keyword">...</span>
+0093            <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0094            <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0095            <span class="string">'Position'</span>, [xt yc-dytx/2 dx1 dytx],<span class="keyword">...</span>
+0096            <span class="string">'backgroundcolor'</span>,bgc1);
+0097        
+0098     xt=xt+dx1+0.005;
+0099     
+0100     dx1=0.07;
+0101     he=uicontrol(<span class="string">'Style'</span>, <span class="string">'edit'</span>,<span class="keyword">...</span>
+0102            <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0103            <span class="string">'String'</span>, num2str(cc),<span class="keyword">...</span>
+0104            <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0105            <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0106            <span class="string">'Position'</span>, [xt yc-dy/2 dx1 dy],<span class="keyword">...</span>
+0107            <span class="string">'backgroundcolor'</span>,[1 1 1]);
+0108        
+0109     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(he,<span class="string">'callback'</span>,[<span class="string">'ded('</span> num2str(cc) <span class="string">','</span> num2str(hs,<span class="string">'%20.20f'</span>) <span class="string">','</span> num2str(he,<span class="string">'%20.20f'</span>) <span class="string">')'</span>]);
+0110        
+0111     xt=xt+dx1+0.005;
+0112     
+0113     
+0114     dx1=0.065;
+0115     uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>,<span class="keyword">...</span>
+0116            <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0117            <span class="string">'String'</span>, <span class="string">'column'</span>,<span class="keyword">...</span>
+0118            <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0119            <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0120            <span class="string">'Position'</span>, [xt yc-dytx/2 dx1 dytx],<span class="keyword">...</span>
+0121            <span class="string">'backgroundcolor'</span>,bgc1);
+0122        
+0123     xt=xt+dx1+0.005;
+0124     
+0125     xt=xt+dxg;
+0126 <span class="keyword">end</span>
+0127 
+0128     dx1=0.1;
+0129     uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>,<span class="keyword">...</span>
+0130            <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0131            <span class="string">'String'</span>, <span class="string">'line style:'</span>,<span class="keyword">...</span>
+0132            <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0133            <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0134            <span class="string">'Position'</span>, [xt yc-dytx/2 dx1 dytx],<span class="keyword">...</span>
+0135            <span class="string">'backgroundcolor'</span>,bgc1);
+0136        
+0137     xt=xt+dx1+0.005;
+0138     
+0139     dx1=0.07;
+0140     he=uicontrol(<span class="string">'Style'</span>, <span class="string">'popupmenu'</span>,<span class="keyword">...</span>
+0141            <span class="string">'parent'</span>,hf,<span class="keyword">...</span>
+0142            <span class="string">'String'</span>, <span class="string">'1|2|3|4|5'</span>,<span class="keyword">...</span>
+0143            <span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0144            <span class="string">'fontunits'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0145            <span class="string">'Position'</span>, [xt yc-dy/2 dx1 dy],<span class="keyword">...</span>
+0146            <span class="string">'backgroundcolor'</span>,[1 1 1]);
+0147        
+0148     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(he,<span class="string">'callback'</span>,[<span class="string">'lnst('</span> num2str(hs,<span class="string">'%20.20f'</span>) <span class="string">','</span> num2str(he,<span class="string">'%20.20f'</span>) <span class="string">')'</span>]);
+0149 
+0150 
+0151 xlabel(ha,<span class="string">'X'</span>);
+0152 ylabel(ha,<span class="string">'Y'</span>);
+0153 zlabel(ha,<span class="string">'Z'</span>);
+0154 
+0155 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'Toolbar'</span>,<span class="string">'figure'</span>);
+0156</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

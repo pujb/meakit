@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of bnd_gammarnd</title>
+  <meta name="keywords" content="bnd_gammarnd">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>bnd_gammarnd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Y = bnd_gammarnd(mu,cv,ub,m,n,msg) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="gammarnd.html" class="code" title="function r = gammarnd(a,b,m,n);">gammarnd</a>	GAMMARND Random matrices from gamma distribution.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Y = bnd_gammarnd(mu,cv,ub,m,n,msg)</a>
+0002 
+0003 <span class="keyword">if</span> n*m == 0
+0004   Y=[];
+0005   <span class="keyword">return</span>;
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="keyword">if</span> cv&gt;1.6
+0009   error(<span class="string">'CV &gt; 2!!'</span>);
+0010 <span class="keyword">end</span>
+0011 
+0012 lb=0;
+0013 <span class="keyword">if</span> cv &gt; 0
+0014   maxd = min(min(mu-lb,ub-mu),abs(5*cv*mu));
+0015   clb = mu-maxd;
+0016   cub = mu+maxd;
+0017   <span class="keyword">if</span> mu ~= 0
+0018     acv=-1;
+0019     s=1;
+0020     cnt = 0;
+0021     <span class="keyword">while</span> abs(acv-cv) &gt; 0.02*cv &amp; cnt &lt; 100
+0022       b=mu*cv*cv;
+0023       a=mu/b;
+0024       Y      = <a href="gammarnd.html" class="code" title="function r = gammarnd(a,b,m,n);">gammarnd</a>(a,b,m,n);
+0025       inv    = find(Y &gt; ub);
+0026       Y(inv) = clb+abs(cub-clb)*rand(1,length(inv));
+0027       acv=abs(std(Y(:))/mean(Y(:)));
+0028       <span class="keyword">if</span> ~isnan(acv) &amp; acv ~= 0
+0029     s = s*cv/acv;
+0030       <span class="keyword">else</span>
+0031     s = 1;
+0032       <span class="keyword">end</span>
+0033       cnt = cnt + 1;
+0034     <span class="keyword">end</span>
+0035     <span class="keyword">if</span> ( n*m &gt; 100 )
+0036       amu=mean(Y(:)); 
+0037       acv=abs(std(Y(:))/amu);
+0038 <span class="comment">%       if abs(acv-cv) &gt; 0.03*cv</span>
+0039 <span class="comment">%     fprintf('WARNING: acv (%g) not equal cv (%g)! (%s, %i)\n',acv,cv,msg,length(Y(:)));</span>
+0040 <span class="comment">%       end</span>
+0041 <span class="comment">%       if abs(amu-mu) &gt; abs(0.1*mu)</span>
+0042 <span class="comment">%         fprintf('WARNING: amu (%g) not equal mu (%g)! (%s, %i)\n',amu,mu,msg,length(Y(:)));</span>
+0043 <span class="comment">%       end</span>
+0044     <span class="keyword">end</span>
+0045   <span class="keyword">else</span>  
+0046     Y = mu * ones(m,n);
+0047   <span class="keyword">end</span>
+0048 <span class="keyword">else</span>
+0049   Y = mu * ones(m,n);
+0050 <span class="keyword">end</span>
+0051 
+0052 <span class="comment">%  figure(1); clf;</span>
+0053 <span class="comment">%  hist(Y,100);</span>
+0054 <span class="comment">%  yl=get(gca,'Ylim');</span>
+0055 <span class="comment">%  line([mu ub; mu ub],yl(:)*ones(1,2),'Color','r');</span>
+0056 <span class="comment">%  title(sprintf('%s: mean=%g (%g), cv=%g (%g), [0,%g]\n',msg,mean(Y(:)),mu,abs(std(Y(:))/mean(Y(:))),cv,ub));</span>
+0057 <span class="comment">%  pause</span>
+0058 
+0059 
+0060 inv    = find(Y &gt; ub);
+0061 <span class="keyword">if</span> ~isempty(inv)
+0062   error(<span class="string">'values out of boundaries!'</span>);
+0063 <span class="keyword">end</span>
+0064 
+0065</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

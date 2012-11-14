@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of set_linespec</title>
+  <meta name="keywords" content="set_linespec">
+  <meta name="description" content="SET_LINESPEC    Set the color and line style of a graphics object.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>set_linespec
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SET_LINESPEC    Set the color and line style of a graphics object.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function set_linespec(h,linespec) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> SET_LINESPEC    Set the color and line style of a graphics object.
+ SET_LINESPEC(h,linespec) will set the color and line style of a graphics
+ object, using the linespec convention of 'plot', e.g. 
+   set_linespec(h,'g:')
+   set_linespec(h,'r--')</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="draw_ellipse_axes.html" class="code" title="function h = draw_ellipse_axes(x, c, linespec)">draw_ellipse_axes</a>	DRAW_ELLIPSE_AXES(x, c, linespec)</li><li><a href="draw_line_clip.html" class="code" title="function h = draw_line_clip(m,b,a, linespec, varargin)">draw_line_clip</a>	DRAW_LINE_CLIP  Draw a line defined by an equation.</li><li><a href="mobile_points.html" class="code" title="function h = mobile_points(n, linespec)">mobile_points</a>	Places n random points in the style given by linespec (e.g. 'bo').</li><li><a href="plot_errorbars.html" class="code" title="function plot_errorbars(means,stderrs,rownames)">plot_errorbars</a>	plot_errorbars(means,stderrs,rownames)</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function set_linespec(h,linespec)</a>
+0002 <span class="comment">% SET_LINESPEC    Set the color and line style of a graphics object.</span>
+0003 <span class="comment">% SET_LINESPEC(h,linespec) will set the color and line style of a graphics</span>
+0004 <span class="comment">% object, using the linespec convention of 'plot', e.g.</span>
+0005 <span class="comment">%   set_linespec(h,'g:')</span>
+0006 <span class="comment">%   set_linespec(h,'r--')</span>
+0007 
+0008 <span class="comment">% break linespec into color and linestyle.</span>
+0009 [linestyle, color, marker, msg] = colstyle(linespec);
+0010 <span class="keyword">if</span> ~isempty(msg)
+0011   error(msg)
+0012 <span class="keyword">end</span>
+0013 <span class="keyword">if</span> length(color) &gt; 0
+0014   <span class="keyword">if</span> strcmp(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h,<span class="string">'Type'</span>),<span class="string">'patch'</span>)
+0015     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'EdgeColor'</span>,color);
+0016   <span class="keyword">else</span>
+0017     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'color'</span>,color);
+0018   <span class="keyword">end</span>
+0019 <span class="keyword">end</span>
+0020 <span class="keyword">if</span> length(linestyle) &gt; 0
+0021   <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'linestyle'</span>,linestyle);
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> length(marker) &gt; 0
+0024   <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'marker'</span>,marker);
+0025 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

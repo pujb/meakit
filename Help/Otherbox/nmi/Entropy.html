@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Entropy</title>
+  <meta name="keywords" content="Entropy">
+  <meta name="description" content="Entropy: Returns entropy (in bits) of each column of 'X'">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html nmi -->
+<h1>Entropy
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Entropy: Returns entropy (in bits) of each column of 'X'</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function H = Entropy(X) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Entropy: Returns entropy (in bits) of each column of 'X'
+ by Will Dwinnell
+
+ H = Entropy(X)
+
+ H = row vector of calculated entropies (in bits)
+ X = data to be analyzed
+
+ Example: Measure sample entropy of observations of variables with
+   1, 2, 3 and 4 bits of entropy.
+
+ Note: Estimated entropy values are slightly less than true, due to
+ finite sample size.
+
+ X = ceil(repmat([2 4 8 16],[1e3,1]) .* rand(1e3,4));
+ Entropy(X)
+
+ Last modified: Nov-12-2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ConditionalEntropy.html" class="code" title="function H = ConditionalEntropy(Y,X)">ConditionalEntropy</a>	ConditionalEntropy: Calculates conditional entropy (in bits) of Y, given X</li><li><a href="JointEntropy.html" class="code" title="function H = JointEntropy(X)">JointEntropy</a>	JointEntropy: Returns joint entropy (in bits) of each column of 'X'</li><li><a href="MutualInformation.html" class="code" title="function I = MutualInformation(X,Y);">MutualInformation</a>	MutualInformation: returns mutual information (in bits) of the 'X' and 'Y'</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% Entropy: Returns entropy (in bits) of each column of 'X'</span>
+0002 <span class="comment">% by Will Dwinnell</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% H = Entropy(X)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% H = row vector of calculated entropies (in bits)</span>
+0007 <span class="comment">% X = data to be analyzed</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Example: Measure sample entropy of observations of variables with</span>
+0010 <span class="comment">%   1, 2, 3 and 4 bits of entropy.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Note: Estimated entropy values are slightly less than true, due to</span>
+0013 <span class="comment">% finite sample size.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% X = ceil(repmat([2 4 8 16],[1e3,1]) .* rand(1e3,4));</span>
+0016 <span class="comment">% Entropy(X)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Last modified: Nov-12-2006</span>
+0019 
+0020 <a name="_sub0" href="#_subfunctions" class="code">function H = Entropy(X)</a>
+0021 
+0022 <span class="comment">% Establish size of data</span>
+0023 [n m] = size(X);
+0024 
+0025 <span class="comment">% Housekeeping</span>
+0026 H = zeros(1,m);
+0027 
+0028 <span class="keyword">for</span> Column = 1:m,
+0029     <span class="comment">% Assemble observed alphabet</span>
+0030     Alphabet = unique(X(:,Column));
+0031     
+0032     <span class="comment">% Housekeeping</span>
+0033     Frequency = zeros(size(Alphabet));
+0034     
+0035     <span class="comment">% Calculate sample frequencies</span>
+0036     <span class="keyword">for</span> symbol = 1:length(Alphabet)
+0037         Frequency(symbol) = sum(X(:,Column) == Alphabet(symbol));
+0038     <span class="keyword">end</span>
+0039     
+0040     <span class="comment">% Calculate sample class probabilities</span>
+0041     P = Frequency / sum(Frequency);
+0042     
+0043     <span class="comment">% Calculate entropy in bits</span>
+0044     <span class="comment">% Note: floating point underflow is never an issue since we are</span>
+0045     <span class="comment">%   dealing only with the observed alphabet</span>
+0046     H(Column) = -sum(P .* log2(P));
+0047 <span class="keyword">end</span>
+0048 
+0049 
+0050 <span class="comment">% God bless Claude Shannon.</span>
+0051 
+0052 <span class="comment">% EOF</span>
+0053 
+0054</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

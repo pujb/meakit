@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modularity_und</title>
+  <meta name="keywords" content="modularity_und">
+  <meta name="description" content="MODULARITY_UND     Optimal community structure and modularity">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>modularity_und
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MODULARITY_UND     Optimal community structure and modularity</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Ci Q NodeStrength NormNodeStrength]=modularity_und(A) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MODULARITY_UND     Optimal community structure and modularity
+
+   Ci = modularity_und(W);
+   [Ci Q Nc NNc] = modularity_und(W);
+
+   The optimal community structure is a subdivision of the network into
+   nonoverlapping groups of nodes in a way that maximizes the number of
+   within-group edges, and minimizes the number of between-group edges. 
+   The modularity is a statistic that quantifies the degree to which the
+   network may be subdivided into such clearly delineated groups. 
+
+   Input:      W,      undirected (weighted or binary) connection matrix.
+
+   Outputs:    Ci,     optimal community structure
+               Q,      maximized modularity
+               Nc,     nodewise community centrality (see Note 2)
+               NNc,    nodewise normalized community centrality
+                       (normalized to [0,1] for each community)
+
+   Note 1: Ci and Q may vary from run to run, due to heuristics in the 
+   algorithm. Consequently, it may be worth to compare multiple runs.
+   Also see Good et al. (2010) Phys. Rev. E 81:046106.
+
+   Note 2: The community centrality is described in Newman (2006) PNAS
+   23:8577-8582
+
+   Reference: Newman (2006) -- Phys Rev E 74:036104, PNAS 23:8577-8582.
+
+
+   2008-2010
+   Mika Rubinov, UNSW
+   Jonathan Power, WUSTL
+   Alexandros Goulas, Maastricht University
+   Dani Bassett, UCSB</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Ci Q NodeStrength NormNodeStrength]=modularity_und(A)</a>
+0002 <span class="comment">%MODULARITY_UND     Optimal community structure and modularity</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   Ci = modularity_und(W);</span>
+0005 <span class="comment">%   [Ci Q Nc NNc] = modularity_und(W);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   The optimal community structure is a subdivision of the network into</span>
+0008 <span class="comment">%   nonoverlapping groups of nodes in a way that maximizes the number of</span>
+0009 <span class="comment">%   within-group edges, and minimizes the number of between-group edges.</span>
+0010 <span class="comment">%   The modularity is a statistic that quantifies the degree to which the</span>
+0011 <span class="comment">%   network may be subdivided into such clearly delineated groups.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Input:      W,      undirected (weighted or binary) connection matrix.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Outputs:    Ci,     optimal community structure</span>
+0016 <span class="comment">%               Q,      maximized modularity</span>
+0017 <span class="comment">%               Nc,     nodewise community centrality (see Note 2)</span>
+0018 <span class="comment">%               NNc,    nodewise normalized community centrality</span>
+0019 <span class="comment">%                       (normalized to [0,1] for each community)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Note 1: Ci and Q may vary from run to run, due to heuristics in the</span>
+0022 <span class="comment">%   algorithm. Consequently, it may be worth to compare multiple runs.</span>
+0023 <span class="comment">%   Also see Good et al. (2010) Phys. Rev. E 81:046106.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   Note 2: The community centrality is described in Newman (2006) PNAS</span>
+0026 <span class="comment">%   23:8577-8582</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   Reference: Newman (2006) -- Phys Rev E 74:036104, PNAS 23:8577-8582.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   2008-2010</span>
+0032 <span class="comment">%   Mika Rubinov, UNSW</span>
+0033 <span class="comment">%   Jonathan Power, WUSTL</span>
+0034 <span class="comment">%   Alexandros Goulas, Maastricht University</span>
+0035 <span class="comment">%   Dani Bassett, UCSB</span>
+0036 
+0037 
+0038 <span class="comment">%   Modification History:</span>
+0039 <span class="comment">%   Jul 2008: Original (Mika Rubinov)</span>
+0040 <span class="comment">%   Oct 2008: Positive eigenvalues made insufficient for division (Jonathan Power)</span>
+0041 <span class="comment">%   Dec 2008: Fine-tuning made consistent with Newman's description (Jonathan Power)</span>
+0042 <span class="comment">%   Dec 2008: Fine-tuning vectorized (Mika Rubinov)</span>
+0043 <span class="comment">%   Jul 2010: Community centrality included (Alexandros Goulas)</span>
+0044 <span class="comment">%   Sep 2010: Node identities permuted (Dani Bassett)</span>
+0045 
+0046 N=length(A);                            <span class="comment">%number of vertices</span>
+0047 n_perm = randperm(N);                   <span class="comment">%DB: randomly permute order of nodes</span>
+0048 A = A(n_perm,n_perm);                   <span class="comment">%DB: use permuted matrix for subsequent analysis</span>
+0049 K=sum(A);                               <span class="comment">%degree</span>
+0050 m=sum(K);                               <span class="comment">%number of edges</span>
+0051 B=A-(K.'*K)/m;                          <span class="comment">%modularity matrix</span>
+0052 Ci=ones(N,1);                           <span class="comment">%community indices</span>
+0053 cn=1;                                   <span class="comment">%number of communities</span>
+0054 U=[1 0];                                <span class="comment">%array of unexamined communites</span>
+0055 
+0056 <span class="comment">%%community centrality</span>
+0057 NodeStrength=zeros(N,1);                <span class="comment">%community centrality</span>
+0058 NormNodeStrength=zeros(N,1);            <span class="comment">%normalized community centrality</span>
+0059 
+0060 ind=1:N;
+0061 Bg=B;
+0062 Ng=N;
+0063 
+0064 <span class="keyword">while</span> U(1)                              <span class="comment">%examine community U(1)</span>
+0065     [V D]=eig(Bg);
+0066     [d1 i1]=max(diag(D));               <span class="comment">%most positive eigenvalue of Bg</span>
+0067     v1=V(:,i1);                         <span class="comment">%corresponding eigenvector</span>
+0068 
+0069     S=ones(Ng,1);
+0070     S(v1&lt;0)=-1;
+0071     q=S.'*Bg*S;                         <span class="comment">%contribution to modularity</span>
+0072 
+0073     <span class="keyword">if</span> q&gt;1e-10                           <span class="comment">%contribution positive: U(1) is divisible</span>
+0074         qmax=q;                         <span class="comment">%maximal contribution to modularity</span>
+0075         Bg(logical(eye(Ng)))=0;          <span class="comment">%Bg is modified, to enable fine-tuning</span>
+0076         indg=ones(Ng,1);                <span class="comment">%array of unmoved indices</span>
+0077         Sit=S;
+0078         
+0079         <span class="comment">%%community centrality</span>
+0080         NodeStrength(ind)=abs(v1);      <span class="comment">%community centrality</span>
+0081         
+0082         <span class="keyword">while</span> any(indg);                <span class="comment">%iterative fine-tuning</span>
+0083             Qit=qmax-4*Sit.*(Bg*Sit);     <span class="comment">%this line is equivalent to:</span>
+0084             qmax=max(Qit.*indg);        <span class="comment">%for i=1:Ng</span>
+0085             imax=(Qit==qmax);           <span class="comment">%    Sit(i)=-Sit(i);</span>
+0086             Sit(imax)=-Sit(imax);       <span class="comment">%    Qit(i)=Sit.'*Bg*Sit;</span>
+0087             indg(imax)=nan;             <span class="comment">%    Sit(i)=-Sit(i);</span>
+0088             <span class="keyword">if</span> qmax&gt;q;                  <span class="comment">%end</span>
+0089                 q=qmax;
+0090                 S=Sit;
+0091             <span class="keyword">end</span>
+0092         <span class="keyword">end</span>
+0093 
+0094         <span class="keyword">if</span> abs(sum(S))==Ng              <span class="comment">%unsuccessful splitting of U(1)</span>
+0095             U(1)=[];
+0096         <span class="keyword">else</span>
+0097             cn=cn+1;
+0098             Ci(ind(S==1))=U(1);         <span class="comment">%split old U(1) into new U(1) and into cn</span>
+0099             Ci(ind(S==-1))=cn;
+0100             U=[cn U];
+0101         <span class="keyword">end</span>
+0102     <span class="keyword">else</span>                                <span class="comment">%contribution nonpositive: U(1) is indivisible</span>
+0103         U(1)=[];
+0104     <span class="keyword">end</span>
+0105 
+0106     ind=find(Ci==U(1));                 <span class="comment">%indices of unexamined community U(1)</span>
+0107     bg=B(ind,ind);
+0108     Bg=bg-diag(sum(bg));                <span class="comment">%modularity matrix for U(1)</span>
+0109     Ng=length(ind);                     <span class="comment">%number of vertices in U(1)</span>
+0110 <span class="keyword">end</span>
+0111 
+0112 s=Ci(:,ones(1,N));                      <span class="comment">%compute modularity</span>
+0113 Q=~(s-s.').*B/m;
+0114 Q=sum(Q(:));
+0115 Ci_corrected = zeros(N,1);              <span class="comment">% DB: initialize Ci_corrected</span>
+0116 Ci_corrected(n_perm) = Ci;              <span class="comment">% DB: return order of nodes to the order used at the input stage.</span>
+0117 Ci = Ci_corrected;                      <span class="comment">% DB: output corrected community assignments</span>
+0118 
+0119 <span class="comment">%%normalize community centrality to 0-1 for each community.</span>
+0120 unique_ind=unique(Ci);
+0121 <span class="keyword">for</span> i=1:size(unique_ind,1)
+0122     ind=find(Ci==unique_ind(i));
+0123     NormNodeStrength(ind) = <span class="keyword">...</span>
+0124         (NodeStrength(ind) - repmat(min(NodeStrength(ind)),size(NodeStrength(ind),1),1)) ./ <span class="keyword">...</span>
+0125         repmat(max(NodeStrength(ind))-min(NodeStrength(ind)),size(NodeStrength(ind),1),1);
+0126 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_fractal_dim</title>
+  <meta name="keywords" content="util_get_fractal_dim">
+  <meta name="description" content="UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_get_fractal_dim
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [DF_mean DF_std DF_sem DF_list] = util_get_fractal_dim( spif, gnds, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.
+   For details, see also boxcount
+   Input:
+           spif:       Spike information structure
+           gnds:       Grouding electrodes
+           threshold:
+                       default = 0 spikes/second of each channel, you can set
+                       a value bigger than 0 to exclude some in-activated
+                       channel.
+           binwidth:   binwidth, default = 1 ms.
+           startend:   Start/End time, default = whole length. (unit:ms)
+           method:     'box'[default]
+                       'box': Box-counting method (Minkowski Dimension)
+
+   Note: Those electrodes in [gnds] and didn't pass the threshold will
+         appear in the DF_list (1*64), but will not be counted while
+         averaging the mean_DF.
+
+   Output:
+           DF_mean:    Mean fractal dimension
+           DF_std/sem.
+           DF_list:    1*64 vector containing DF for each electrode.
+                       0 means grounding / &lt; threshold
+
+   Created on Apr/07/2011 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/fractal/boxcount/boxcount.html" class="code" title="function [n,r] = boxcount(c,varargin)">boxcount</a>	BOXCOUNT  Box-Counting of a D-dimensional array (with D=1,2,3).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/util_loop_get_fractal_parameters.html" class="code" title="function util_loop_get_fractal_parameters( data_filename, result_dirname, gnd )">util_loop_get_fractal_parameters</a>	UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [DF_mean DF_std DF_sem DF_list] = util_get_fractal_dim( spif, gnds, varargin )</a>
+0002 <span class="comment">%UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.</span>
+0003 <span class="comment">%   For details, see also boxcount</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           spif:       Spike information structure</span>
+0006 <span class="comment">%           gnds:       Grouding electrodes</span>
+0007 <span class="comment">%           threshold:</span>
+0008 <span class="comment">%                       default = 0 spikes/second of each channel, you can set</span>
+0009 <span class="comment">%                       a value bigger than 0 to exclude some in-activated</span>
+0010 <span class="comment">%                       channel.</span>
+0011 <span class="comment">%           binwidth:   binwidth, default = 1 ms.</span>
+0012 <span class="comment">%           startend:   Start/End time, default = whole length. (unit:ms)</span>
+0013 <span class="comment">%           method:     'box'[default]</span>
+0014 <span class="comment">%                       'box': Box-counting method (Minkowski Dimension)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Note: Those electrodes in [gnds] and didn't pass the threshold will</span>
+0017 <span class="comment">%         appear in the DF_list (1*64), but will not be counted while</span>
+0018 <span class="comment">%         averaging the mean_DF.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Output:</span>
+0021 <span class="comment">%           DF_mean:    Mean fractal dimension</span>
+0022 <span class="comment">%           DF_std/sem.</span>
+0023 <span class="comment">%           DF_list:    1*64 vector containing DF for each electrode.</span>
+0024 <span class="comment">%                       0 means grounding / &lt; threshold</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Created on Apr/07/2011 By Pu Jiangbo</span>
+0027 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0028 
+0029 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0030 
+0031 <span class="keyword">if</span> ~exist(<span class="string">'threshold'</span>, <span class="string">'var'</span>)
+0032     threshold = 0;
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0036     method = <span class="string">'box'</span>;
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> ~exist(<span class="string">'binwidth'</span>, <span class="string">'var'</span>)
+0040     binwidth = 1;
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> ~exist(<span class="string">'startend'</span>, <span class="string">'var'</span>)
+0044     startend = [];
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="keyword">if</span> isempty(startend)
+0048     start_time = spif.startend(1);
+0049     stop_time = spif.startend(2);
+0050 <span class="keyword">else</span>
+0051     start_time = startend(1);
+0052     stop_time = startend(2);
+0053     <span class="keyword">if</span> start_time &lt; stop_time || <span class="keyword">...</span>
+0054        start_time &lt; spif.startend(1) || <span class="keyword">...</span>
+0055        start_time &gt; spif.startend(2) || <span class="keyword">...</span>
+0056        stop_time &lt; spif.startend(1) || <span class="keyword">...</span>
+0057        stop_time &gt; spif.startend(2)
+0058         error(<span class="string">'wrong input - startend'</span>);
+0059     <span class="keyword">end</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% Thresholding to exclude electrodes</span>
+0063 [~, ~, ~, ~, ~, avg] = <a href="util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>(spif, <span class="string">'gnd'</span>, gnds, <span class="string">'bin'</span>, 1000, <span class="string">'mode'</span>, <span class="string">'electrode'</span>);
+0064 <span class="keyword">if</span> threshold == 0
+0065     chlist = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(find( avg&gt;threshold ));
+0066 <span class="keyword">elseif</span> threshold &gt; 0
+0067     chlist = <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(find( avg&gt;=threshold ));
+0068 <span class="keyword">else</span>
+0069     error(<span class="string">'threshold must &gt;= 0'</span>);
+0070 <span class="keyword">end</span>
+0071 num_chlist = length(chlist);
+0072 <span class="comment">% Converting 11-88 to 1-64</span>
+0073 chlist_hwid = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(chlist);
+0074 disp([<span class="string">'Available active channels: '</span> num2str(num_chlist)]);
+0075 
+0076 <span class="comment">% Init</span>
+0077 DF_mean = [];
+0078 DF_list = zeros(1, 64, <span class="string">'double'</span>);
+0079 binedge = start_time:binwidth:stop_time;
+0080 <span class="comment">% Available counting</span>
+0081 available_num = 0;
+0082 
+0083 <span class="keyword">if</span> strcmpi(method, <span class="string">'box'</span>)
+0084     <span class="comment">% Main loop</span>
+0085     <span class="keyword">for</span> i = 1:num_chlist
+0086         hwid = chlist_hwid(i);
+0087         
+0088         <span class="comment">% Get the data</span>
+0089         channel_data = histc(spif.spiketimes{hwid}, binedge);
+0090         
+0091         <span class="comment">% Run boxcount</span>
+0092         [N R] = <a href="../Otherbox/fractal/boxcount/boxcount.html" class="code" title="function [n,r] = boxcount(c,varargin)">boxcount</a>(channel_data);
+0093         
+0094         <span class="comment">% Get DF</span>
+0095         <span class="comment">% logfunc = @log10;</span>
+0096         logfunc = @log2;
+0097         r = -diff(logfunc(N));     <span class="comment">% Label bad points: N(R) &gt; 2 || &lt;1</span>
+0098         <span class="comment">%r = logfunc(N);     % Label bad points: N(R) &gt; 2 || &lt;1</span>
+0099         id = find(r&lt;=2&amp;r&gt;0);   <span class="comment">% Index: points to be kept</span>
+0100         
+0101         <span class="comment">% Check points</span>
+0102         <span class="keyword">if</span> length(id) &lt; 2
+0103             <span class="comment">% Reporting abnormal calculation</span>
+0104             figure, <a href="../Otherbox/fractal/boxcount/boxcount.html" class="code" title="function [n,r] = boxcount(c,varargin)">boxcount</a>(channel_data, <span class="string">'plot'</span>);
+0105             P = polyfit(logfunc(R(id)), logfunc(N(id)), 1);
+0106             title([<span class="string">'Channel '</span> num2str(chlist(i)) <span class="string">', DF = '</span> num2str(abs(P(1)))]);
+0107         <span class="keyword">else</span>
+0108             available_num = available_num + 1;
+0109             
+0110             P = polyfit(log10(R(id)), log10(N(id)), 1); <span class="comment">% polyfit returns slope and intercept</span>
+0111             DF_list(hwid) = abs(P(1));
+0112             DF_mean = [DF_mean abs(P(1))];
+0113         <span class="keyword">end</span>
+0114     <span class="keyword">end</span>
+0115 <span class="keyword">else</span>
+0116     error(<span class="string">'wrong input - method.'</span>)
+0117 <span class="keyword">end</span>
+0118 
+0119 disp([<span class="string">'Counted channels: '</span> num2str(available_num)])
+0120 
+0121 DF_std = std(DF_mean);
+0122 DF_sem = DF_std / sqrt(available_num);
+0123 DF_mean = mean(DF_mean);
+0124 
+0125 <span class="keyword">end</span>
+0126</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

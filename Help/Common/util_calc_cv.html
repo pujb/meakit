@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_cv</title>
+  <meta name="keywords" content="util_calc_cv">
+  <meta name="description" content="UTIL_CALC_CV Get the coefficient of variation of the given vector.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_calc_cv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_CV Get the coefficient of variation of the given vector.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ cv ] = util_calc_cv( vector ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_CV Get the coefficient of variation of the given vector.
+   Input:
+           vector:     Given vector;
+   Output:
+           cv:         The ratio of the standard deviation to the mean.
+
+   Comparison to standard deviation [wiki]
+   * Advantages:
+   The coefficient of variation is useful because the standard deviation of
+   data must always be understood in the context of the mean of the data. 
+   The coefficient of variation is a dimensionless number. 
+   So when comparing between data sets with different units or widely different means, 
+   one should use the coefficient of variation for comparison instead of the standard deviation.
+   * Disadvantages:
+   When the mean value is near zero, the coefficient of variation is
+   sensitive to small changes in the mean, limiting its usefulness.
+   Unlike the standard deviation, it cannot be used to construct confidence intervals for the mean.
+
+   Created on Aug/24/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ cv ] = util_calc_cv( vector )</a>
+0002 <span class="comment">%UTIL_CALC_CV Get the coefficient of variation of the given vector.</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           vector:     Given vector;</span>
+0005 <span class="comment">%   Output:</span>
+0006 <span class="comment">%           cv:         The ratio of the standard deviation to the mean.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Comparison to standard deviation [wiki]</span>
+0009 <span class="comment">%   * Advantages:</span>
+0010 <span class="comment">%   The coefficient of variation is useful because the standard deviation of</span>
+0011 <span class="comment">%   data must always be understood in the context of the mean of the data.</span>
+0012 <span class="comment">%   The coefficient of variation is a dimensionless number.</span>
+0013 <span class="comment">%   So when comparing between data sets with different units or widely different means,</span>
+0014 <span class="comment">%   one should use the coefficient of variation for comparison instead of the standard deviation.</span>
+0015 <span class="comment">%   * Disadvantages:</span>
+0016 <span class="comment">%   When the mean value is near zero, the coefficient of variation is</span>
+0017 <span class="comment">%   sensitive to small changes in the mean, limiting its usefulness.</span>
+0018 <span class="comment">%   Unlike the standard deviation, it cannot be used to construct confidence intervals for the mean.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Created on Aug/24/2010 By Pu Jiangbo</span>
+0021 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0022 
+0023 mean_v = mean(vector);
+0024 <span class="keyword">if</span> mean_v == 0
+0025     error(<span class="string">'CV is only defined when MEAN is not ZERO.'</span>);
+0026 <span class="keyword">end</span>
+0027 
+0028 cv = std(vector) / mean_v;
+0029 
+0030 <span class="keyword">end</span>
+0031</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

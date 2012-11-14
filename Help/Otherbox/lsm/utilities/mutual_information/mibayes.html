@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mibayes</title>
+  <meta name="keywords" content="mibayes">
+  <meta name="description" content="MIBAYES Calculate mutual information and train/test Bayes classifier">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html lsm --><!-- ../menu.html utilities --><!-- menu.html mutual_information -->
+<h1>mibayes
+&nbsp;&nbsp;<img src="../../../../c.png" alt="Linux PC, Windows, Windows 32" border="0" title="Linux PC, Windows, Windows 32"></h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>MIBAYES Calculate mutual information and train/test Bayes classifier</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> MIBAYES Calculate mutual information and train/test Bayes classifier
+ 
+   Syntax
+ 
+     [MI,HX,HY,HXY,bayes,tables] = mibayes(X,Y,evalSize,handle);
+     tables = mibayes(handle);
+
+   Arguments
+
+            X ... array of x-samples; one column X(:,k) is one sample
+            Y ... array of y-samples; one column Y(:,k) is one sample
+     evalSize ... optional vector of sizes at which to estimate the
+                  mutual  information;
+       handle ... optional handle (double scalar) to distributions/tables;
+                  for details see below.
+
+   Return Values
+
+           MI ... vector of estimated mutual information; same length
+                  as evalSize or one if evalSize is omitted
+           HX ... vector of entropy estimates of the x-samples.  same
+                  length as evalSize or one if evalSize is omitted
+           HY ... vector of entropy estimates of the y-samples.  same
+                  length as evalSize or one if evalSize is omitted
+          HXY ... vector of joint entropy estimates of the y-samples.
+                  same length as evalSize or one if evalSize is omitted
+       tables ... resulting margin and joint count tables; details see below;
+        bayes ... struct array reporting the performance of the empirical 
+                  Bayes classifier trained on the data; details see below
+
+   Basic Description
+ 
+     MI = mibayes(X,Y) calculates the direct estimate of the mutual
+     information (MI) between X and Y. X and Y are assumed to be lists of
+     observations/samples of stationary discrete random variables. The k-th
+     pair of samples is given by the two column vectors X(:,k) and Y(:,k).
+ 
+   Algorithm
+ 
+     The mutual information is directly calculated from the estimated joint
+     probability density function which is just the normalized joint count
+     table. During the counting process we find the minimum set of unique
+     vectors XU and YU: for each sample X(:,k) and Y(:,k) there are
+     index i and j such that X(:,k) == XU(:,i) and Y(:,k) == YU(:,j). We
+     call i (j) the class of sample X(:,k) (Y(:,k)).
+ 
+   Detailed Description
+ 
+     MI = mibayes(X,Y,evalSize) calculates MI for several data sizes.
+     MI(i) contains  the mutual information calculated from the subsets 
+     X(:,1:evalSize(i)) and Y(:,1:evalSize(i)) where i=1:length(evalSize). 
+     It is required that evalSize is a vector of increasing integers.
+     The samples evalSize(end):nTotalSamples are used as a test set for the
+     Bayes classifier (see below).
+
+     MI = mibayes(X,Y,evalSize,handle) is as described as above but
+     the internal counting tables (see below and Algorithm) which are
+     generated are not delete when MIBAYES exits. If on a subsequent
+     call to MIBAYES the same handle is used the existing count
+     tables are used as initial tables and the new data is added to
+     this previous counts. This allows for incremental estimation of
+     the mutual information as more and more data becomes available.
+
+     tables = mibayes(handle) just returns the current tables with the 
+     given handle.
+
+     [MI,HX,HY,HXY,bayes,tables] = mibayes(X,Y,evalSize,handle)
+     returns in addition to the mutual information (MI) also the following:
+ 
+       - HX: entropy of X
+       - HY: entropy of Y
+       - HXY: joint entropy of the pair of samples (X,Y)
+ 
+       - bayes: performance of the empirical Bayes classifier which tries to 
+                predict X(:,k) given Y(:,k). Performance is reported as
+ 
+           bayes.TrainError ... percentage of miss-classified/miss-predicted 
+                                training samples
+           bayes.LooError   ... percentage of miss-classified/miss-predicted 
+                                samples using a leave-one-out procedure
+           bayes.TestError  ... percentage of miss-classified/miss-predicted 
+                                test samples evalSize(end):nTotalSamples
+
+           bayes.TrainCM  ... the train &quot;confusion matrix&quot; where TrainCM(i,j) 
+                              is the number of cases where a sample of class i 
+                              was classified as class j. 
+           bayes.LooCM    ... the leave-one-out &quot;confusion matrix&quot;
+                              was classified as class j.
+           bayes.TrainCM  ... the test &quot;confusion matrix&quot;
+ 
+       TrainError and LooError are of the same length as evalSize
+       (or 1 if evalSize is omitted) and are evaluated for the 
+       corresponding subsets (see above). Note that for the &quot;confusion matrices&quot;
+       and TestError the subset 1:evalSize(end) is used.
+
+       - tables: A struct containing the count tables.
+ 
+            tables.UX:  Unique set of vectors for X
+            tables.NX:  Counts of vektors in UX
+            tables.UY:  Unique set of vectors for Y
+            tables.NY:  Counts of vektors in UY
+            tables.NXY: The joint count table. NXY(i,j) is the number of occurrences
+                   of a pair &lt;UX(:,i),UY(:,j)&gt;.
+ 
+         Note that for the &quot;state&quot; information the subset 1:evalSize(end) is used.
+
+
+   See also
+
+     <a href="mibayes.html" class="code" title="">mibayes</a>.c, mi_and_bayes.c, unique
+
+   Installation
+
+     Since <a href="mibayes.html" class="code" title="">MIBAYES</a> is a MEX file one has to compile it. Use the command
+
+        mex <a href="mibayes.html" class="code" title="">mibayes</a>.c mi_and_bayes.c
+
+     at the matlab prompt to do this.
+
+   Author
+
+     Thomas Natschlaeger, Apr. 2003, tnatschl@igi.tu-graz.ac.at</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">% MIBAYES Calculate mutual information and train/test Bayes classifier</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%   Syntax</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%     [MI,HX,HY,HXY,bayes,tables] = mibayes(X,Y,evalSize,handle);</span>
+0006 <span class="comment">%     tables = mibayes(handle);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Arguments</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%            X ... array of x-samples; one column X(:,k) is one sample</span>
+0011 <span class="comment">%            Y ... array of y-samples; one column Y(:,k) is one sample</span>
+0012 <span class="comment">%     evalSize ... optional vector of sizes at which to estimate the</span>
+0013 <span class="comment">%                  mutual  information;</span>
+0014 <span class="comment">%       handle ... optional handle (double scalar) to distributions/tables;</span>
+0015 <span class="comment">%                  for details see below.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Return Values</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%           MI ... vector of estimated mutual information; same length</span>
+0020 <span class="comment">%                  as evalSize or one if evalSize is omitted</span>
+0021 <span class="comment">%           HX ... vector of entropy estimates of the x-samples.  same</span>
+0022 <span class="comment">%                  length as evalSize or one if evalSize is omitted</span>
+0023 <span class="comment">%           HY ... vector of entropy estimates of the y-samples.  same</span>
+0024 <span class="comment">%                  length as evalSize or one if evalSize is omitted</span>
+0025 <span class="comment">%          HXY ... vector of joint entropy estimates of the y-samples.</span>
+0026 <span class="comment">%                  same length as evalSize or one if evalSize is omitted</span>
+0027 <span class="comment">%       tables ... resulting margin and joint count tables; details see below;</span>
+0028 <span class="comment">%        bayes ... struct array reporting the performance of the empirical</span>
+0029 <span class="comment">%                  Bayes classifier trained on the data; details see below</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   Basic Description</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%     MI = mibayes(X,Y) calculates the direct estimate of the mutual</span>
+0034 <span class="comment">%     information (MI) between X and Y. X and Y are assumed to be lists of</span>
+0035 <span class="comment">%     observations/samples of stationary discrete random variables. The k-th</span>
+0036 <span class="comment">%     pair of samples is given by the two column vectors X(:,k) and Y(:,k).</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%   Algorithm</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%     The mutual information is directly calculated from the estimated joint</span>
+0041 <span class="comment">%     probability density function which is just the normalized joint count</span>
+0042 <span class="comment">%     table. During the counting process we find the minimum set of unique</span>
+0043 <span class="comment">%     vectors XU and YU: for each sample X(:,k) and Y(:,k) there are</span>
+0044 <span class="comment">%     index i and j such that X(:,k) == XU(:,i) and Y(:,k) == YU(:,j). We</span>
+0045 <span class="comment">%     call i (j) the class of sample X(:,k) (Y(:,k)).</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%   Detailed Description</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%     MI = mibayes(X,Y,evalSize) calculates MI for several data sizes.</span>
+0050 <span class="comment">%     MI(i) contains  the mutual information calculated from the subsets</span>
+0051 <span class="comment">%     X(:,1:evalSize(i)) and Y(:,1:evalSize(i)) where i=1:length(evalSize).</span>
+0052 <span class="comment">%     It is required that evalSize is a vector of increasing integers.</span>
+0053 <span class="comment">%     The samples evalSize(end):nTotalSamples are used as a test set for the</span>
+0054 <span class="comment">%     Bayes classifier (see below).</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">%     MI = mibayes(X,Y,evalSize,handle) is as described as above but</span>
+0057 <span class="comment">%     the internal counting tables (see below and Algorithm) which are</span>
+0058 <span class="comment">%     generated are not delete when MIBAYES exits. If on a subsequent</span>
+0059 <span class="comment">%     call to MIBAYES the same handle is used the existing count</span>
+0060 <span class="comment">%     tables are used as initial tables and the new data is added to</span>
+0061 <span class="comment">%     this previous counts. This allows for incremental estimation of</span>
+0062 <span class="comment">%     the mutual information as more and more data becomes available.</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">%     tables = mibayes(handle) just returns the current tables with the</span>
+0065 <span class="comment">%     given handle.</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">%     [MI,HX,HY,HXY,bayes,tables] = mibayes(X,Y,evalSize,handle)</span>
+0068 <span class="comment">%     returns in addition to the mutual information (MI) also the following:</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">%       - HX: entropy of X</span>
+0071 <span class="comment">%       - HY: entropy of Y</span>
+0072 <span class="comment">%       - HXY: joint entropy of the pair of samples (X,Y)</span>
+0073 <span class="comment">%</span>
+0074 <span class="comment">%       - bayes: performance of the empirical Bayes classifier which tries to</span>
+0075 <span class="comment">%                predict X(:,k) given Y(:,k). Performance is reported as</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">%           bayes.TrainError ... percentage of miss-classified/miss-predicted</span>
+0078 <span class="comment">%                                training samples</span>
+0079 <span class="comment">%           bayes.LooError   ... percentage of miss-classified/miss-predicted</span>
+0080 <span class="comment">%                                samples using a leave-one-out procedure</span>
+0081 <span class="comment">%           bayes.TestError  ... percentage of miss-classified/miss-predicted</span>
+0082 <span class="comment">%                                test samples evalSize(end):nTotalSamples</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">%           bayes.TrainCM  ... the train &quot;confusion matrix&quot; where TrainCM(i,j)</span>
+0085 <span class="comment">%                              is the number of cases where a sample of class i</span>
+0086 <span class="comment">%                              was classified as class j.</span>
+0087 <span class="comment">%           bayes.LooCM    ... the leave-one-out &quot;confusion matrix&quot;</span>
+0088 <span class="comment">%                              was classified as class j.</span>
+0089 <span class="comment">%           bayes.TrainCM  ... the test &quot;confusion matrix&quot;</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%       TrainError and LooError are of the same length as evalSize</span>
+0092 <span class="comment">%       (or 1 if evalSize is omitted) and are evaluated for the</span>
+0093 <span class="comment">%       corresponding subsets (see above). Note that for the &quot;confusion matrices&quot;</span>
+0094 <span class="comment">%       and TestError the subset 1:evalSize(end) is used.</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">%       - tables: A struct containing the count tables.</span>
+0097 <span class="comment">%</span>
+0098 <span class="comment">%            tables.UX:  Unique set of vectors for X</span>
+0099 <span class="comment">%            tables.NX:  Counts of vektors in UX</span>
+0100 <span class="comment">%            tables.UY:  Unique set of vectors for Y</span>
+0101 <span class="comment">%            tables.NY:  Counts of vektors in UY</span>
+0102 <span class="comment">%            tables.NXY: The joint count table. NXY(i,j) is the number of occurrences</span>
+0103 <span class="comment">%                   of a pair &lt;UX(:,i),UY(:,j)&gt;.</span>
+0104 <span class="comment">%</span>
+0105 <span class="comment">%         Note that for the &quot;state&quot; information the subset 1:evalSize(end) is used.</span>
+0106 <span class="comment">%</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">%   See also</span>
+0109 <span class="comment">%</span>
+0110 <span class="comment">%     mibayes.c, mi_and_bayes.c, unique</span>
+0111 <span class="comment">%</span>
+0112 <span class="comment">%   Installation</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">%     Since MIBAYES is a MEX file one has to compile it. Use the command</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">%        mex mibayes.c mi_and_bayes.c</span>
+0117 <span class="comment">%</span>
+0118 <span class="comment">%     at the matlab prompt to do this.</span>
+0119 <span class="comment">%</span>
+0120 <span class="comment">%   Author</span>
+0121 <span class="comment">%</span>
+0122 <span class="comment">%     Thomas Natschlaeger, Apr. 2003, tnatschl@igi.tu-graz.ac.at</span>
+0123 <span class="comment">%</span>
+0124  
+0125 <span class="comment">%   $Author: tnatschl $, $Date: 2003/05/26 12:42:24 $, $Revision: 1.1 $</span>
+0126 <span class="comment">%   $Cross-References$</span>
+0127</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

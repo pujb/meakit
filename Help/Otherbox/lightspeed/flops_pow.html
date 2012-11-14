@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_pow</title>
+  <meta name="keywords" content="flops_pow">
+  <meta name="description" content="FLOPS_POW    Flops for raising to real power.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_pow
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_POW    Flops for raising to real power.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_pow(a) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_POW    Flops for raising to real power.
+ FLOPS_POW(A) returns the number of flops for (X .^ A) where X is scalar.
+ Powers like 0, 1, 2, and 1/2 are handled specially.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>	FLOPS_DIV   Flops for division.</li><li><a href="flops_pow.html" class="code" title="function f = flops_pow(a)">flops_pow</a>	FLOPS_POW    Flops for raising to real power.</li><li><a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>	FLOPS_SQRT    Flops for square root</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="flops_pow.html" class="code" title="function f = flops_pow(a)">flops_pow</a>	FLOPS_POW    Flops for raising to real power.</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function b = num_bits(x)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_pow(a)</a>
+0002 <span class="comment">% FLOPS_POW    Flops for raising to real power.</span>
+0003 <span class="comment">% FLOPS_POW(A) returns the number of flops for (X .^ A) where X is scalar.</span>
+0004 <span class="comment">% Powers like 0, 1, 2, and 1/2 are handled specially.</span>
+0005 
+0006 <a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a> = 8;
+0007 <a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a> = 8;
+0008 <span class="keyword">if</span> nargin &lt; 1
+0009   a = 0.1;
+0010 <span class="keyword">end</span>
+0011 f = 0;
+0012 <span class="keyword">if</span> a &lt; 0
+0013   f = f + <a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>;
+0014   a = -a;
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">if</span> a == 0 || a == 1
+0017   <span class="keyword">return</span>;
+0018 <span class="keyword">end</span>
+0019 <span class="keyword">if</span> fix(a) == a
+0020   <span class="comment">% number of multiplications to raise to integer power</span>
+0021   f = f + floor(log2(a)) + <a href="#_sub1" class="code" title="subfunction b = num_bits(x)">num_bits</a>(a)-1;
+0022 <span class="keyword">elseif</span> a == 1/2
+0023   <span class="comment">% sqrt is built-in function</span>
+0024   f = f + <a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>;
+0025 <span class="keyword">elseif</span> fix(2*a) == 2*a
+0026   <span class="comment">% this handles flops_pow(1/2+1)</span>
+0027   f = f + <a href="flops_pow.html" class="code" title="function f = flops_pow(a)">flops_pow</a>(2*a) - 1 + <a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>;
+0028 <span class="keyword">elseif</span> a == 1/4
+0029   f = f + 2*<a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>;
+0030 <span class="keyword">elseif</span> a == 3/4
+0031   f = f + 2*<a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>+1;
+0032 <span class="keyword">elseif</span> fix(4*a) == 4*a
+0033   <span class="comment">% this handles flops_pow(1/4+1)</span>
+0034   f = f + <a href="flops_pow.html" class="code" title="function f = flops_pow(a)">flops_pow</a>(2*a) - 1 + <a href="flops_sqrt.html" class="code" title="function f = flops_sqrt">flops_sqrt</a>;
+0035 <span class="keyword">else</span>
+0036   f = Inf;
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">% The identities</span>
+0040 <span class="comment">%   exp(a) = e^a</span>
+0041 <span class="comment">%   a^b = exp(b*log(a))</span>
+0042 <span class="comment">% require that</span>
+0043 <span class="comment">%   flops_exp &lt; flops_pow &lt; flops_exp+flops_log+1.</span>
+0044 <span class="comment">% But in practice, I find that the runtime exceeds this upper bound.</span>
+0045 
+0046 f_upper = 61;  <span class="comment">% flops_exp+flops_log+1</span>
+0047 <span class="keyword">if</span> f &gt; f_upper
+0048   f = f_upper;
+0049 <span class="keyword">end</span>
+0050 
+0051 
+0052 <a name="_sub1" href="#_subfunctions" class="code">function b = num_bits(x)</a>
+0053 <span class="comment">% Returns the number of 1 bits in the binary representation of x.</span>
+0054 <span class="comment">% x must be a non-negative integer.</span>
+0055 
+0056 <span class="comment">% lookup table for 0-15</span>
+0057 bits = [0 1 1 2 1 2 2 3 1 2 2 3 2 3 3 4];
+0058 
+0059 b = 0;
+0060 <span class="keyword">while</span>(x &gt; 0)
+0061   b = b + bits(mod(x,16)+1);
+0062   x = floor(x/16);
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

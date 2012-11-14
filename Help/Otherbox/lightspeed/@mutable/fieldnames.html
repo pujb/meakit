@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fieldnames</title>
+  <meta name="keywords" content="fieldnames">
+  <meta name="description" content="FIELDNAMES Get mutable structure field names.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html @mutable -->
+<h1>fieldnames
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FIELDNAMES Get mutable structure field names.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function names = fieldnames(s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">FIELDNAMES Get mutable structure field names.
+ names = fieldnames(s) returns a cell array of strings containing the 
+ structure field names associated with the mutable structure s.
+
+ See also <a href="getfield.html" class="code" title="function v = getfield(s,field)">GETFIELD</a>, <a href="setfield.html" class="code" title="function s = setfield(s,field,v)">SETFIELD</a>, <a href="rmfield.html" class="code" title="function s = rmfield(s,field)">RMFIELD</a>, <a href="isfield.html" class="code" title="function tf = isfield(s,f)">ISFIELD</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Calculation/util_convert_struct_2_vector_cluster.html" class="code" title="function [ cluvector ] = util_convert_struct_2_vector_cluster( clu_sub )">util_convert_struct_2_vector_cluster</a>	UTIL_CONVERT_STRUCT_2_VECTOR_CLUSTER Convert the clustering result from a</li><li><a href="../../../IO/mcd/mcintfac/@datastrm/datastrm.html" class="code" title="function d = datastrm(a,varargin)">datastrm</a>	DATASTRM		- data object constructor for opening data recorded with MC Rack</li><li><a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="../../../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/gui/drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li><li><a href="../../../Otherbox/drtoolbox/techniques/jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li><li><a href="../../../Otherbox/grabit/grabit.html" class="code" title="function grabit(fname)">grabit</a>	GRABIT Extracts data points from an image file.</li><li><a href="../../../Otherbox/highlight/highlight.html" class="code" title="function highlight(mfile,options,outfile)">highlight</a>	HIGHLIGHT - Syntax Highlighting of Matlab M-files in HTML, LaTeX, RTF and XML.</li><li><a href="../../../Otherbox/lightspeed/graphics/labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li><li><a href="../../../Otherbox/lightspeed/graphics/linechart.html" class="code" title="function linechart(y,color,varargin)">linechart</a>	LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.</li><li><a href="../../../Otherbox/lightspeed/maxdiff.html" class="code" title="function e = maxdiff(a,b,rel)">maxdiff</a>	MAXDIFF(A,B) returns the maximum difference in any field or element.</li><li><a href="../../../Otherbox/lightspeed/setfields.html" class="code" title="function ab = setfields(a, b, newfield_flag)">setfields</a>	SETFIELDS   Set multiple fields of a structure.</li><li><a href="../../../Otherbox/lightspeed/struct2arglist.html" class="code" title="function c = struct2arglist(s)">struct2arglist</a>	STRUCT2ARGLIST  Convert structure to cell array of fields/values.</li><li><a href="../../../Otherbox/lightspeed/tests/test_repmat_struct.html" class="code" title="">test_repmat_struct</a>	thanks to Marek Petrik for finding this bug</li><li><a href="../../../Otherbox/lightspeed/toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li><li><a href="../../../Otherbox/lsm/utilities/print_struct.html" class="code" title="function print_struct(p,b)">print_struct</a>	</li><li><a href="../../../Otherbox/m2html/m2html.html" class="code" title="function m2html(varargin)">m2html</a>	M2HTML - Documentation Generator for Matlab M-files and Toolboxes in HTML</li><li><a href="../../../Otherbox/panel/@panel/display.html" class="code" title="function display(p)">display</a>	disp([10 'panel: (' num2str(p.fig) ', ' int2str(p.id) ')' 10])</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function names = fieldnames(s)</a>
+0002 <span class="comment">%FIELDNAMES Get mutable structure field names.</span>
+0003 <span class="comment">% names = fieldnames(s) returns a cell array of strings containing the</span>
+0004 <span class="comment">% structure field names associated with the mutable structure s.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% See also GETFIELD, SETFIELD, RMFIELD, ISFIELD.</span>
+0007 
+0008 <span class="comment">% Written by Tom Minka</span>
+0009 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0010 
+0011 names = {};
+0012 ke = s.obj.get(<span class="string">'_fields'</span>).elements;
+0013 <span class="keyword">while</span> ke.hasMoreElements
+0014   names{end+1} = ke.nextElement;
+0015 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

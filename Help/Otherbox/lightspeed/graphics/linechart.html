@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of linechart</title>
+  <meta name="keywords" content="linechart">
+  <meta name="description" content="LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>linechart
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function linechart(y,color,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.
+ Examples:
+   linechart(y,color)
+ See also <a href="labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">LABELED_CURVES</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>	setfield - sets any field in datastream objects (datastream method)</li><li><a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../../Otherbox/lightspeed/@mutable/setfield.html" class="code" title="function s = setfield(s,field,v)">setfield</a>	SETFIELD Set mutable structure field contents.</li><li><a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>	AXIS_PCT       Set reasonable axis limits.</li><li><a href="labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li><li><a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function linechart(y,color,varargin)</a>
+0002 <span class="comment">% LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   linechart(y,color)</span>
+0005 <span class="comment">% See also LABELED_CURVES.</span>
+0006 
+0007 <span class="comment">% sort</span>
+0008 f = <a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(y);
+0009 f = f{1};
+0010 v = <a href="../../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(y,<a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f));
+0011 [dummy,order] = sort(v);
+0012 <span class="keyword">for</span> f = <a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(y)'
+0013   v = <a href="../../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(y,<a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f));
+0014   y = <a href="../../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>(y,<a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f),v(order));
+0015 <span class="keyword">end</span>
+0016 x = 1:length(v);
+0017 x = x(order);
+0018 <span class="comment">%fprintf('columns are');fprintf(' %d',x);fprintf('\n');</span>
+0019 
+0020 <a href="labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>(1:length(x),y,<span class="string">'color'</span>,color,varargin{:});
+0021 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'XTick'</span>,1:length(x),<span class="string">'XTickLabel'</span>,num2str(x'));
+0022 <a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

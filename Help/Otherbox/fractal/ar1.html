@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ar1</title>
+  <meta name="keywords" content="ar1">
+  <meta name="description" content="AR1 - Allen and Smith AR(1) model estimation.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html fractal -->
+<h1>ar1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>AR1 - Allen and Smith AR(1) model estimation.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [g,a,mu2]=ar1(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> AR1 - Allen and Smith AR(1) model estimation.
+ Syntax: [g,a,mu2]=ar1(x);
+
+ Input:  x - time series (univariate).
+
+ Output: g - estimate of the lag-one autocorrelation.
+         a - estimate of the noise variance.[unbiased_var(x)~=a^2/(1-g^2)]
+         mu2 - estimated square on the mean.
+
+ AR1 uses the algorithm described by Allen and Smith 1995, except
+ that Matlab's 'fzero' is used rather than Newton-Raphson.
+
+ Fzero in general can be rather picky - although
+ I haven't had any problem with its implementation
+ here, I recommend occasionally checking the output
+ against the simple estimators in AR1NV.
+
+ Alternative AR(1) estimatators: ar1cov, ar1nv, arburg, aryule
+
+ Original version written by Eric Breitenberger.
+
+ Updated,optimized&amp;stabilized by Aslak Grinsted 2003-2007</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="hurst.html" class="code" title="function [H,sigma]=hurst(d, k)">hurst</a>	Unbiased estimator of the Hurst exponent.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [g,a,mu2]=ar1(x)</a>
+0002 <span class="comment">% AR1 - Allen and Smith AR(1) model estimation.</span>
+0003 <span class="comment">% Syntax: [g,a,mu2]=ar1(x);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Input:  x - time series (univariate).</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Output: g - estimate of the lag-one autocorrelation.</span>
+0008 <span class="comment">%         a - estimate of the noise variance.[unbiased_var(x)~=a^2/(1-g^2)]</span>
+0009 <span class="comment">%         mu2 - estimated square on the mean.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% AR1 uses the algorithm described by Allen and Smith 1995, except</span>
+0012 <span class="comment">% that Matlab's 'fzero' is used rather than Newton-Raphson.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Fzero in general can be rather picky - although</span>
+0015 <span class="comment">% I haven't had any problem with its implementation</span>
+0016 <span class="comment">% here, I recommend occasionally checking the output</span>
+0017 <span class="comment">% against the simple estimators in AR1NV.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Alternative AR(1) estimatators: ar1cov, ar1nv, arburg, aryule</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Original version written by Eric Breitenberger.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Updated,optimized&amp;stabilized by Aslak Grinsted 2003-2007</span>
+0024 <span class="comment">%</span>
+0025 
+0026 
+0027 x=x(:);
+0028 N=length(x);
+0029 m=mean(x);
+0030 x=x-m;
+0031 
+0032 <span class="comment">% Lag zero and one covariance estimates:</span>
+0033 c0=x'*x/N;
+0034 c1=x(1:N-1)'*x(2:N)/(N-1);
+0035 
+0036 <span class="comment">%how the expression below was derived:</span>
+0037 <span class="comment">%mu2=(-1/N+(2/N^2)*((N-g^N)/(1-g)-g*(1-g^(N-1))/(1-g)));</span>
+0038 <span class="comment">%solve('c0t=c0+c0t*(mu2)','c0t')</span>
+0039 <span class="comment">%c0t=(c0*N^2*(-1+g)/(-N^2+g*N^2+N+N*g-2*g));</span>
+0040 <span class="comment">%solve('g=(c1+c0t*mu2)/(c0+c0t*mu2)','g')</span>
+0041 <span class="comment">%g=1/2/c0/N^2*(c1*N+c0*N^2+2*c0-2*c1+c1*N^2-c0*N-(4*c0^2+4*c1^2-4*c1^2*N-6*c0^2*N^3+5*c0^2*N^2+c1^2*N^4+c0^2*N^4-8*c0*c1-4*c0^2*N-3*c1^2*N^2+2*c1^2*N^3-2*c0*c1*N^2-2*c0*N^4*c1+8*c0*c1*N+4*c0*N^3*c1)^(1/2));</span>
+0042 <span class="comment">%other solution:</span>
+0043 <span class="comment">%g(2)= 1/2/c0/N^2*(c1*N+c0*N^2+2*c0-2*c1+c1*N^2-c0*N+(4*c0^2+4*c1^2-4*c1^2*N-6*c0^2*N^3+5*c0^2*N^2+c1^2*N^4+c0^2*N^4-8*c0*c1-4*c0^2*N-3*c1^2*N^2+2*c1^2*N^3-2*c0*c1*N^2-2*c0*N^4*c1+8*c0*c1*N+4*c0*N^3*c1)^(1/2));</span>
+0044 
+0045 <span class="comment">%A.Grinsteds substitutions:</span>
+0046 B=-c1*N-c0*N^2-2*c0+2*c1-c1*N^2+c0*N;
+0047 A=c0*N^2;
+0048 C=N*(c0+c1*N-c1);
+0049 D=B^2-4*A*C;
+0050 <span class="keyword">if</span> D&gt;0
+0051     g=(-B-sqrt(D))/(2*A);
+0052 <span class="keyword">else</span>
+0053     warning(<span class="string">'REDNOISE:unboundAr1'</span>,<span class="string">'Can not place an upperbound on the unbiased AR1.\n\t\t -Series too short or too large trend.'</span>);
+0054     g=nan; 
+0055 <span class="keyword">end</span>
+0056 
+0057 
+0058 <span class="keyword">if</span> nargout&gt;1
+0059     mu2=-1/N+(2/N^2)*((N-g^N)/(1-g)-g*(1-g^(N-1))/(1-g)); <span class="comment">%allen&amp;smith96(footnote4)</span>
+0060     c0t=c0/(1-mu2);
+0061     a=sqrt((1-g^2)*c0t);
+0062 <span class="keyword">end</span>
+0063 
+0064 
+0065 
+0066 <span class="comment">%--------------------OLD STUFF---------------------------</span>
+0067 <span class="comment">%     function g=oldar1(c0,c1,N)</span>
+0068 <span class="comment">%         g0=c1/c0; % Initial estimate for gamma</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">%         o=optimset('fzero');</span>
+0072 <span class="comment">%         o.TolX=1e-5;</span>
+0073 <span class="comment">%         o.Display='off';</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%         % Find g by getting zero of 'gammest':</span>
+0077 <span class="comment">%         g=fzero(@gammest,g0,o); %-updated to accomodate newer versions of matlab</span>
+0078 <span class="comment">%         if isnan(g) %optimization failed use homemade zero finder... (aslak 2005)</span>
+0079 <span class="comment">%             ginout=[g0*.999;g0];</span>
+0080 <span class="comment">%             ginout(:,2)=[gammest(ginout(1,1)); gammest(ginout(2,1));];</span>
+0081 <span class="comment">%             ii=0;</span>
+0082 <span class="comment">%             while (ii&lt;10)&amp;(abs(ginout(end,2))&gt;1e-6)</span>
+0083 <span class="comment">%                 ii=ii+1;</span>
+0084 <span class="comment">%                 dx=ginout(end,1)-ginout(end-1,1);</span>
+0085 <span class="comment">%                 dy=ginout(end,2)-ginout(end-1,2);</span>
+0086 <span class="comment">%                 xguess=ginout(end,1)-ginout(end,2)*dx/dy; %linear extrap</span>
+0087 <span class="comment">%                 ginout(end+1,:)=[xguess gammest(xguess)];</span>
+0088 <span class="comment">%             end</span>
+0089 <span class="comment">%             [m,mi]=nanmin(abs(ginout(:,2)));</span>
+0090 <span class="comment">%             g=ginout(mi,1);</span>
+0091 <span class="comment">%             if (m&gt;1e-6)</span>
+0092 <span class="comment">%                 g=nan;</span>
+0093 <span class="comment">%             end</span>
+0094 <span class="comment">%         end</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">%         function gout=gammest(gin)</span>
+0097 <span class="comment">%             % GAMMEST - used by AR1 to compute</span>
+0098 <span class="comment">%             % a function for minimization by fzero.</span>
+0099 <span class="comment">%             %</span>
+0100 <span class="comment">%             % Written by Eric Breitenberger.      Version 1/21/96</span>
+0101 <span class="comment">%             % Please send comments and suggestions to eric@gi.alaska.edu</span>
+0102 <span class="comment">%             %</span>
+0103 <span class="comment">%</span>
+0104 <span class="comment">%             %gk=1:N-1; gk=gin.^gk; %old slow gk</span>
+0105 <span class="comment">%             %gk=cumprod(repmat(gin,1,N-1)); %optimization - aslak 2007</span>
+0106 <span class="comment">%             %mu2=(1/N)+(2/N^2)*sum((N-1:-1:1).*gk);</span>
+0107 <span class="comment">%             mu2=-1/N+(2/N^2)*((N-gin^N)/(1-gin)-gin*(1-gin^(N-1))/(1-gin));</span>
+0108 <span class="comment">%             %^^ aslaks07 optimization: explicit sum from allen&amp;smith-jclim96(footnote4)</span>
+0109 <span class="comment">%             gout=(1-g0)*mu2+g0-gin;</span>
+0110 <span class="comment">%             if gout&gt;1, gout=nan; end</span>
+0111 <span class="comment">%         end</span>
+0112 <span class="comment">%     end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

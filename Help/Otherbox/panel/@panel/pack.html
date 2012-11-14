@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pack</title>
+  <meta name="keywords" content="pack">
+  <meta name="description" content="q = pack(p, varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html panel --><!-- menu.html @panel -->
+<h1>pack
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>q = pack(p, varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function q = pack(p, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> q = pack(p, varargin)
+
+ pack a new panel, q, into an existing panel, p. q can be
+ packed &quot;relatively&quot;, in which case it takes up some of p
+ along the edge specified in &quot;p.edge&quot;, and the amount of
+ space it takes up away from that edge is specified (either
+ as a percentage or as an absolute value). or, q can be
+ packed &quot;absolutely&quot;, in which case you specify it's absolute
+ positioning within p in your desired units.
+
+ arguments may include, in any order:
+
+ 'mm', 'in', 'cm', '%': specify units to use when
+   interpreting numeric packing argument (default '%').
+
+ [&lt;numeric&gt;]: (scalar numeric) amount of parent panel to
+   use for child panel (e.g. [50] to use half, assuming
+   percentage packing).
+
+ [&lt;numeric&gt;]: (1x4 numeric) amount of parent panel to use
+   for child panel, specified in absolute terms as [l b w h].
+
+ [&lt;numeric&gt;]: (1x2 numeric) [m n] pack a regular grid of m
+   x n sub-panels into the parent panel. the m x n panels
+   are returned in a cell array in q. in this case, two
+   optional further numeric arguments are accepted, being
+   the vector of sizes of rows and columns, respectively.
+   either can have as few as zero elements, if it is not
+   desired to specify all sizes (remaining sizes are left
+   unspecified, see below).
+
+ note that, when using percentage packing, numbers between
+ 0 and 1 are automatically interpreted as fractions, rather
+ than percentages (i.e. they are multiplied by 100 before
+ use).
+
+ if amount of parent panel is not specified, the panel is
+ left as a &quot;stretchable&quot; panel. during rendering, remaining
+ free space is shared out amongst all stretchable panels.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>	default panel object</li><li><a href="../../../Otherbox/panel/@panel/private/getform.html" class="code" title="function form = getform(arg)">getform</a>	</li><li><a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="../../../Otherbox/panel/@panel/private/storeform.html" class="code" title="function f = storeform(val, form, flags)">storeform</a>	convert a value in some form (%, mm, cm, in)</li><li><a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../../Otherbox/panel/@panel/private/subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function q = pack(p, varargin)</a>
+0002 
+0003 <span class="comment">% q = pack(p, varargin)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% pack a new panel, q, into an existing panel, p. q can be</span>
+0006 <span class="comment">% packed &quot;relatively&quot;, in which case it takes up some of p</span>
+0007 <span class="comment">% along the edge specified in &quot;p.edge&quot;, and the amount of</span>
+0008 <span class="comment">% space it takes up away from that edge is specified (either</span>
+0009 <span class="comment">% as a percentage or as an absolute value). or, q can be</span>
+0010 <span class="comment">% packed &quot;absolutely&quot;, in which case you specify it's absolute</span>
+0011 <span class="comment">% positioning within p in your desired units.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% arguments may include, in any order:</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% 'mm', 'in', 'cm', '%': specify units to use when</span>
+0016 <span class="comment">%   interpreting numeric packing argument (default '%').</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% [&lt;numeric&gt;]: (scalar numeric) amount of parent panel to</span>
+0019 <span class="comment">%   use for child panel (e.g. [50] to use half, assuming</span>
+0020 <span class="comment">%   percentage packing).</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% [&lt;numeric&gt;]: (1x4 numeric) amount of parent panel to use</span>
+0023 <span class="comment">%   for child panel, specified in absolute terms as [l b w h].</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% [&lt;numeric&gt;]: (1x2 numeric) [m n] pack a regular grid of m</span>
+0026 <span class="comment">%   x n sub-panels into the parent panel. the m x n panels</span>
+0027 <span class="comment">%   are returned in a cell array in q. in this case, two</span>
+0028 <span class="comment">%   optional further numeric arguments are accepted, being</span>
+0029 <span class="comment">%   the vector of sizes of rows and columns, respectively.</span>
+0030 <span class="comment">%   either can have as few as zero elements, if it is not</span>
+0031 <span class="comment">%   desired to specify all sizes (remaining sizes are left</span>
+0032 <span class="comment">%   unspecified, see below).</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% note that, when using percentage packing, numbers between</span>
+0035 <span class="comment">% 0 and 1 are automatically interpreted as fractions, rather</span>
+0036 <span class="comment">% than percentages (i.e. they are multiplied by 100 before</span>
+0037 <span class="comment">% use).</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% if amount of parent panel is not specified, the panel is</span>
+0040 <span class="comment">% left as a &quot;stretchable&quot; panel. during rendering, remaining</span>
+0041 <span class="comment">% free space is shared out amongst all stretchable panels.</span>
+0042 
+0043 
+0044 
+0045 <span class="comment">% CHANGE: 23/08/10</span>
+0046 <span class="comment">% old syntax was q = pack(p, args), with args a cell array.</span>
+0047 <span class="comment">% this is to make this function easy to call from subsref</span>
+0048 <span class="comment">% (for the syntax p.pack(...)). i've changed it to the more</span>
+0049 <span class="comment">% conventional form given above. so that those old calls</span>
+0050 <span class="comment">% don't stop working, this code handles the cell array form.</span>
+0051 <span class="keyword">if</span> nargin == 2 &amp;&amp; iscell(varargin{1})
+0052     args = varargin{1};
+0053 <span class="keyword">else</span>
+0054     args = varargin;
+0055 <span class="keyword">end</span>
+0056 
+0057 
+0058 
+0059 <span class="comment">% check subject panel is, or can be, a parent panel (i.e.</span>
+0060 <span class="comment">% has not been committed as an axis panel)</span>
+0061 P = <a href="../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(p);
+0062 <span class="keyword">if</span> P.panel.axis
+0063     error(<span class="string">'cannot pack into panel that has already been committed an axis'</span>);
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% default arguments</span>
+0067 form = <span class="string">''</span>;
+0068 mode = <span class="string">'?'</span>;
+0069 packing = [];
+0070 smn = {};
+0071 sm = [];
+0072 sn = [];
+0073 flags = <span class="string">'sf'</span>;
+0074 
+0075 
+0076 
+0077 <span class="comment">% interpret arguments</span>
+0078 <span class="keyword">for</span> n = 1:length(args)
+0079     
+0080     <span class="comment">% extract arg</span>
+0081     arg = args{n};
+0082     sz = size(arg);
+0083     <span class="keyword">if</span> length(sz) &gt; 2
+0084         error(<span class="string">'multi-dimensional argument unrecognised'</span>);
+0085     <span class="keyword">end</span>
+0086     
+0087     <span class="comment">% form</span>
+0088     <span class="keyword">if</span> ischar(arg) &amp;&amp; ischar(<a href="../../../Otherbox/panel/@panel/private/getform.html" class="code" title="function form = getform(arg)">getform</a>(arg))
+0089         <span class="keyword">if</span> ~isempty(form)
+0090             error(<span class="string">'units specified more than once'</span>);
+0091         <span class="keyword">end</span>
+0092         form = <a href="../../../Otherbox/panel/@panel/private/getform.html" class="code" title="function form = getform(arg)">getform</a>(arg);
+0093         <span class="keyword">continue</span>
+0094     <span class="keyword">end</span>
+0095     
+0096     <span class="comment">% packing</span>
+0097     <span class="keyword">if</span> isnumeric(arg)
+0098         <span class="keyword">if</span> mode == <span class="string">'g'</span>
+0099             <span class="keyword">if</span> length(smn) == 2
+0100                 error(<span class="string">'too many numeric arguments'</span>);
+0101             <span class="keyword">end</span>
+0102             smn{end+1} = arg;
+0103             <span class="keyword">continue</span>;
+0104         <span class="keyword">end</span>
+0105         <span class="keyword">if</span> isscalar(arg)
+0106             <span class="keyword">if</span> mode ~= <span class="string">'?'</span>
+0107                 error(<span class="string">'packing specified more than once'</span>);
+0108             <span class="keyword">end</span>
+0109             mode = <span class="string">'r'</span>; <span class="comment">% relative</span>
+0110             packing = arg;
+0111             <span class="keyword">continue</span>;
+0112         <span class="keyword">elseif</span> all(sz == [1 4])
+0113             <span class="keyword">if</span> mode ~= <span class="string">'?'</span>
+0114                 error(<span class="string">'packing specified more than once'</span>);
+0115             <span class="keyword">end</span>
+0116             mode = <span class="string">'a'</span>; <span class="comment">% absolute</span>
+0117             packing = arg;
+0118             <span class="keyword">continue</span>;
+0119         <span class="keyword">elseif</span> all(sz == [1 2])
+0120             <span class="keyword">if</span> mode ~= <span class="string">'?'</span>
+0121                 error(<span class="string">'packing specified more than once'</span>);
+0122             <span class="keyword">end</span>
+0123             mode = <span class="string">'g'</span>; <span class="comment">% grid</span>
+0124             packing = arg;
+0125             <span class="keyword">continue</span>;
+0126         <span class="keyword">end</span>
+0127     <span class="keyword">end</span>
+0128     
+0129     <span class="comment">% unrecognised</span>
+0130     disp(arg)
+0131     error(<span class="string">'unrecognised argument above'</span>)
+0132     
+0133 <span class="keyword">end</span>
+0134 
+0135 
+0136 
+0137 <span class="comment">% default arguments</span>
+0138 <span class="keyword">if</span> isempty(form)
+0139     form = <span class="string">'%'</span>;
+0140 <span class="keyword">end</span>
+0141 <span class="keyword">if</span> mode == <span class="string">'?'</span>
+0142     mode = <span class="string">'r'</span>;
+0143     packing = 0; <span class="comment">% zero means auto-pack</span>
+0144 <span class="keyword">end</span>
+0145 <span class="keyword">if</span> length(smn) &gt;= 1
+0146     sm = smn{1};
+0147 <span class="keyword">end</span>
+0148 <span class="keyword">if</span> length(smn) &gt;= 2
+0149     sn = smn{2};
+0150 <span class="keyword">end</span>
+0151 
+0152 
+0153 
+0154 <span class="comment">% switch on mode</span>
+0155 <span class="keyword">switch</span> mode
+0156     
+0157     <span class="keyword">case</span> {<span class="string">'r'</span> <span class="string">'a'</span>}
+0158         
+0159         <span class="comment">% if this is the parent's first child, we need to create</span>
+0160         <span class="comment">% the parent's axis (this is not displayed, but is used</span>
+0161         <span class="comment">% if the user asks for the parent to have xlabel and</span>
+0162         <span class="comment">% ylabel)</span>
+0163         <span class="keyword">if</span> isempty(P.panel.children)
+0164             P.panel.hiddenaxis = axes(<span class="string">'visible'</span>, <span class="string">'off'</span>, <span class="string">'xtick'</span>, [], <span class="string">'ytick'</span>, []);
+0165         <span class="keyword">end</span>
+0166         
+0167         <span class="comment">% create child object</span>
+0168         Q = <a href="../../../Otherbox/panel/@panel/private/default.html" class="code" title="function [P, panelroot] = default">default</a>;
+0169         Q.panel.parent = p.id;
+0170         Q.panel.pack = <a href="../../../Otherbox/panel/@panel/private/storeform.html" class="code" title="function f = storeform(val, form, flags)">storeform</a>(packing, form, flags);
+0171         
+0172         <span class="comment">% create child reference</span>
+0173         q = p;
+0174         q.id = [];
+0175         
+0176         <span class="comment">% add child to figure</span>
+0177         q = <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(q, Q);
+0178         
+0179         <span class="comment">% add child to parent</span>
+0180         P.panel.children(end+1) = q.id;
+0181         <a href="../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0182         
+0183     <span class="keyword">case</span> <span class="string">'g'</span>
+0184         
+0185         <span class="comment">% access</span>
+0186         m = packing(1);
+0187         n = packing(2);
+0188         
+0189         <span class="comment">% parent panel may already have some content - depending</span>
+0190         <span class="comment">% on if it's packing on a top/bottom or a left/right</span>
+0191         <span class="comment">% edge, we use slightly different code, so that rows and</span>
+0192         <span class="comment">% columns are interpreted correctly.</span>
+0193         edge = <a href="subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>(p, <span class="string">'edge'</span>);
+0194         
+0195         <span class="comment">% switch on edge</span>
+0196         <span class="keyword">switch</span> edge
+0197             <span class="keyword">case</span> <span class="string">'l'</span>
+0198                 col_first = true;
+0199                 flip = false;
+0200             <span class="keyword">case</span> <span class="string">'r'</span>
+0201                 col_first = true;
+0202                 flip = true;
+0203             <span class="keyword">case</span> <span class="string">'t'</span>
+0204                 col_first = false;
+0205                 flip = false;
+0206             <span class="keyword">case</span> <span class="string">'b'</span>
+0207                 col_first = false;
+0208                 flip = true;
+0209         <span class="keyword">end</span>
+0210         
+0211         <span class="comment">% left/right</span>
+0212         <span class="keyword">if</span> col_first
+0213             
+0214             <span class="comment">% handle flip</span>
+0215             <span class="keyword">if</span> flip
+0216                 ins = n:-1:1;
+0217             <span class="keyword">else</span>
+0218                 ins = 1:n;
+0219             <span class="keyword">end</span>
+0220 
+0221             <span class="comment">% for each strip</span>
+0222             <span class="keyword">for</span> in = ins
+0223 
+0224                 <span class="comment">% pack strip</span>
+0225                 <span class="keyword">if</span> length(sn) &gt;= in
+0226                     p_strip = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p, sn(in));
+0227                 <span class="keyword">else</span>
+0228                     p_strip = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p);
+0229                 <span class="keyword">end</span>
+0230 
+0231                 <span class="comment">% set strip to pack on orthogonal edge</span>
+0232                 <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p_strip, <span class="string">'edge'</span>, <span class="string">'t'</span>);
+0233 
+0234                 <span class="comment">% for each cell</span>
+0235                 <span class="keyword">for</span> im = 1:m
+0236 
+0237                     <span class="comment">% pack cell</span>
+0238                     <span class="keyword">if</span> length(sm) &gt;= im
+0239                         p_cell = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p_strip, sm(im));
+0240                     <span class="keyword">else</span>
+0241                         p_cell = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p_strip);
+0242                     <span class="keyword">end</span>
+0243 
+0244                     <span class="comment">% store</span>
+0245                     q{im, in} = p_cell;
+0246 
+0247                 <span class="keyword">end</span>
+0248 
+0249             <span class="keyword">end</span>
+0250 
+0251         <span class="comment">% top/bottom</span>
+0252         <span class="keyword">else</span>
+0253             
+0254             <span class="comment">% handle flip</span>
+0255             <span class="keyword">if</span> flip
+0256                 ims = m:-1:1;
+0257             <span class="keyword">else</span>
+0258                 ims = 1:m;
+0259             <span class="keyword">end</span>
+0260 
+0261             <span class="comment">% for each strip</span>
+0262             <span class="keyword">for</span> im = ims
+0263 
+0264                 <span class="comment">% pack strip</span>
+0265                 <span class="keyword">if</span> length(sm) &gt;= im
+0266                     p_strip = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p, sm(im));
+0267                 <span class="keyword">else</span>
+0268                     p_strip = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p);
+0269                 <span class="keyword">end</span>
+0270 
+0271                 <span class="comment">% set strip to pack on orthogonal edge</span>
+0272                 <a href="subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>(p_strip, <span class="string">'edge'</span>, <span class="string">'l'</span>);
+0273 
+0274                 <span class="comment">% for each cell</span>
+0275                 <span class="keyword">for</span> in = 1:n
+0276 
+0277                     <span class="comment">% pack cell</span>
+0278                     <span class="keyword">if</span> length(sn) &gt;= in
+0279                         p_cell = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p_strip, {sn(in)});
+0280                     <span class="keyword">else</span>
+0281                         p_cell = <a href="pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(p_strip, {});
+0282                     <span class="keyword">end</span>
+0283 
+0284                     <span class="comment">% store</span>
+0285                     q{im, in} = p_cell;
+0286 
+0287                 <span class="keyword">end</span>
+0288 
+0289             <span class="keyword">end</span>
+0290 
+0291         <span class="keyword">end</span>
+0292         
+0293 <span class="keyword">end</span>
+0294 
+0295</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

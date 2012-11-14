@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getfileindexspikes</title>
+  <meta name="keywords" content="getfileindexspikes">
+  <meta name="description" content="getfileindexspikes - get the file indexes of all segments (datastrm method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>getfileindexspikes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>getfileindexspikes - get the file indexes of all segments (datastrm method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function a=getfileindexspikes(d) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> getfileindexspikes - get the file indexes of all segments (datastrm method)
+
+ Usage:
+ a=getfileindexspikes(d)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a=getfileindexspikes(d)</a>
+0002 <span class="comment">% getfileindexspikes - get the file indexes of all segments (datastrm method)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">% a=getfileindexspikes(d)</span>
+0006 
+0007 error(<span class="string">'getfileindexspikes code is now in MEX file GetFileEntries'</span>);
+0008 
+0009 disp(<span class="string">'segment indexes are needed for the first time and are now read'</span>);
+0010 drawnow;
+0011 
+0012 fseek(d.fid,d.offset_to_data,-1);
+0013 i=0;
+0014 segmentPointer=zeros(56250,1); <span class="comment">%enough for 2 hours</span>
+0015 segmentStartTime=zeros(56250,1);
+0016 maxSpkPerSegmPerChanl=zeros(56250,1);
+0017 nPointsPerSegement=zeros(56250,1);
+0018 
+0019 <span class="keyword">while</span> ftell(d.fid)&lt;d.filesize
+0020     i=i+1;
+0021     segmentPointer(i)=ftell(d.fid);
+0022     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);                <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0023     sweepStartTime = (timebin(2)*2^32+timebin(1))*d.MicrosecondsPerTick/1000;
+0024     segmentsamples = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of samples in segment. 3200 (always)</span>
+0025     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);                <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0026     segmentStartTime(i) = (timebin(2)*2^32+timebin(1))*d.MicrosecondsPerTick/1000;
+0027     segmentsamples = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of samples in segment. 3200 (always)</span>
+0028     <span class="keyword">if</span> segmentsamples ~= 3200
+0029         error(<span class="string">'unexpected data-file structure, value segmentsamples is not valid (~=3200)'</span>)
+0030     <span class="keyword">end</span>;
+0031     nChannels = fread(d.fid,1,<span class="string">'ulong'</span>);                    <span class="comment">% number of spike lists in segment (immer 64, je Kanal 1)</span>
+0032     <span class="keyword">if</span> nChannels ~= 64
+0033         error(<span class="string">'unexpected data-file structure, value end1 is not valid (~=64)'</span>)
+0034     <span class="keyword">end</span>;
+0035     <span class="keyword">for</span> i1=1:nChannels                                            <span class="comment">% Kanal nummer (0-63) in der ausgew鋒lten Reihenfolge,</span>
+0036         <span class="comment">%read in spike list                                  also gew鋒lte Kan鋖e zuerst, dann alle nicht gew鋒lten mit Eintr鋑en von 0 Spikes!!!</span>
+0037         nSpikes = fread(d.fid,1,<span class="string">'ulong'</span>);        <span class="comment">% number of spikes in list (i.e. spikes auf diesem Kanal in diesem Segment)</span>
+0038         <span class="keyword">if</span> nSpikes&gt;0
+0039             timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);    
+0040             d.ticks_pre_event = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">%ticks pre event</span>
+0041             d.spikeSize  = fread(d.fid,1,<span class="string">'ushort'</span>);        <span class="comment">% window size in ticks, i.e. # of samples in this trace</span>
+0042             fseek(d.fid,nSpikes*(d.spikeSize*2)+(nSpikes-1)*(8+2+2),0);
+0043             <span class="keyword">if</span> (nSpikes&gt;maxSpkPerSegmPerChanl(i))
+0044                 maxSpkPerSegmPerChanl(i)=nSpikes;
+0045             <span class="keyword">end</span>;
+0046             nPointsPerSegement(i) = nPointsPerSegement(i) + nSpikes*d.spikeSize;
+0047         <span class="keyword">end</span>;
+0048     <span class="keyword">end</span>; 
+0049 <span class="keyword">end</span>;
+0050 d.sweepStartTime = segmentStartTime(1:i);
+0051 d.sweepStartPointer = segmentPointer(1:i);
+0052 d.maxSpkPerSegmPerChanl = maxSpkPerSegmPerChanl(1:i);
+0053 d.nPointsPerSegement = nPointsPerSegement(1:i);
+0054 fseek(d.fid,d.offset_to_data,-1);
+0055 a=d;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

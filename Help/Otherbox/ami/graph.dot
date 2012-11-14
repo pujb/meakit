@@ -1,0 +1,14 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ami -> prob;
+  ami -> probxy;
+  demoami -> ami;
+  prob -> rhist;
+
+  Contents [URL="Contents.html"];
+  ami [URL="ami.html"];
+  demoami [URL="demoami.html"];
+  prob [URL="prob.html"];
+  probxy [URL="probxy.html"];
+  rhist [URL="rhist.html"];
+}

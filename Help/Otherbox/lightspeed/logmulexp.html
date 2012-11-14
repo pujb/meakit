@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of logmulexp</title>
+  <meta name="keywords" content="logmulexp">
+  <meta name="description" content="LOGMULEXP        Matrix multiply in the log domain.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>logmulexp
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>LOGMULEXP        Matrix multiply in the log domain.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s = logmulexp(a,b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">LOGMULEXP        Matrix multiply in the log domain.
+ logmulexp(a,b) returns log(exp(a)*exp(b)) while avoiding numerical underflow.
+ The * is matrix multiplication.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="logsumexp.html" class="code" title="function s = logsumexp(a, dim)">logsumexp</a>	Returns log(sum(exp(a),dim)) while avoiding numerical underflow.</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_logmulexp.html" class="code" title="">test_logmulexp</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s = logmulexp(a,b)</a>
+0002 <span class="comment">%LOGMULEXP        Matrix multiply in the log domain.</span>
+0003 <span class="comment">% logmulexp(a,b) returns log(exp(a)*exp(b)) while avoiding numerical underflow.</span>
+0004 <span class="comment">% The * is matrix multiplication.</span>
+0005 
+0006 <span class="comment">% Written by Tom Minka</span>
+0007 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0008 
+0009 s = repmat(a,<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(b),1) + kron(b',ones(<a href="rows.html" class="code" title="function r = rows(x)">rows</a>(a),1));
+0010 s = reshape(<a href="logsumexp.html" class="code" title="function s = logsumexp(a, dim)">logsumexp</a>(s,2),<a href="rows.html" class="code" title="function r = rows(x)">rows</a>(a),<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(b));
+0011 
+0012 <span class="comment">%s = kron(a',ones(1,cols(b))) + repmat(b,1,rows(a));</span>
+0013 <span class="comment">%s = reshape(logsumexp(s),cols(b),rows(a))';</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

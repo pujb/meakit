@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_toolbox</title>
+  <meta name="keywords" content="test_toolbox">
+  <meta name="description" content="TEST_TOOLBOX Tests all functionalities of the dimension reduction toolbox">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html drtoolbox -->
+<h1>test_toolbox
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>TEST_TOOLBOX Tests all functionalities of the dimension reduction toolbox</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function test_toolbox </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">TEST_TOOLBOX Tests all functionalities of the dimension reduction toolbox
+
+   test_toolbox
+
+ Tests all functionalities of the dimension reduction toolbox.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li><li><a href="generate_data.html" class="code" title="function [X, labels, t] = generate_data(dataname, n, noise)">generate_data</a>	GENERATE_DATA Generates an artificial dataset</li><li><a href="intrinsic_dim.html" class="code" title="function no_dims = intrinsic_dim(X, method)">intrinsic_dim</a>	INTRINSIC_DIM Eestimate the intrinsic dimensionality of dataset X</li><li><a href="prewhiten.html" class="code" title="function [X, W, mu_X] = prewhiten(X)">prewhiten</a>	PREWHITEN Performs prewhitening of a dataset X</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function test_toolbox</a>
+0002 <span class="comment">%TEST_TOOLBOX Tests all functionalities of the dimension reduction toolbox</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   test_toolbox</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Tests all functionalities of the dimension reduction toolbox.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0011 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0012 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0013 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0014 <span class="comment">% maintain the name of the original author.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0017 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0018 
+0019 
+0020     <span class="comment">% Generate data</span>
+0021     disp(<span class="string">'Testing data generation functions...'</span>);
+0022     datasets = {<span class="string">'helix'</span>, <span class="string">'twinpeaks'</span>, <span class="string">'3d_clusters'</span>, <span class="string">'intersect'</span>, <span class="string">'swiss'</span>};
+0023     <span class="keyword">for</span> i=1:length(datasets)
+0024         <span class="keyword">try</span>        
+0025             X = <a href="generate_data.html" class="code" title="function [X, labels, t] = generate_data(dataname, n, noise)">generate_data</a>(datasets{i}, 500);
+0026         <span class="keyword">catch</span> e
+0027             disp(e);
+0028             warning([<span class="string">'Generation of data set '</span> datasets{i} <span class="string">' failed! Press any key to continue tests...'</span>]);
+0029             pause
+0030         <span class="keyword">end</span>
+0031     <span class="keyword">end</span>
+0032     
+0033     <span class="comment">% Test prewhitening</span>
+0034     disp(<span class="string">'Testing prewhitening...'</span>);
+0035     <span class="keyword">try</span> 
+0036         X = <a href="prewhiten.html" class="code" title="function [X, W, mu_X] = prewhiten(X)">prewhiten</a>(X);
+0037     <span class="keyword">catch</span> e
+0038         disp(e);
+0039         warning(<span class="string">'Prewhitening failed! Press any key to continue tests...'</span>);
+0040         pause
+0041     <span class="keyword">end</span>
+0042     unscaled_X = X;
+0043     X = X - min(X(:));
+0044     X = X / max(X(:));
+0045     
+0046     <span class="comment">% Test all intrinsic dimensionality estimators</span>
+0047     disp(<span class="string">'Testing intrinsic dimensionality estimators...'</span>);
+0048     techniques = {<span class="string">'CorrDim'</span>, <span class="string">'NearNbDim'</span>, <span class="string">'GMST'</span>, <span class="string">'PackingNumbers'</span>, <span class="string">'EigValue'</span>, <span class="string">'MLE'</span>};
+0049     <span class="keyword">for</span> i=1:length(techniques)
+0050         <span class="keyword">try</span>
+0051             <a href="intrinsic_dim.html" class="code" title="function no_dims = intrinsic_dim(X, method)">intrinsic_dim</a>(X, techniques{i});
+0052         <span class="keyword">catch</span> e
+0053             disp(e);
+0054             warning([<span class="string">'Intrinsic dimensionality estimation using '</span> techniques{i} <span class="string">' failed! Press any key to continue tests...'</span>]);
+0055             pause
+0056         <span class="keyword">end</span>
+0057     <span class="keyword">end</span>
+0058     
+0059     <span class="comment">% Test all unsupervised dimension reduction techniques</span>
+0060     disp(<span class="string">'Testing dimensionality reduction techniques...'</span>);
+0061     techniques = {<span class="string">'PCA'</span>, <span class="string">'MDS'</span>, <span class="string">'ProbPCA'</span>, <span class="string">'FactorAnalysis'</span>, <span class="string">'GPLVM'</span>, <span class="string">'Sammon'</span>, <span class="string">'Isomap'</span>, <span class="keyword">...</span>
+0062         <span class="string">'LandmarkIsomap'</span>, <span class="string">'LLE'</span>, <span class="string">'Laplacian'</span>, <span class="string">'HessianLLE'</span>, <span class="string">'LTSA'</span>, <span class="string">'MVU'</span>, <span class="string">'CCA'</span>, <span class="string">'LandmarkMVU'</span>, <span class="keyword">...</span>
+0063         <span class="string">'FastMVU'</span>, <span class="string">'DiffusionMaps'</span>, <span class="string">'KernelPCA'</span>, <span class="string">'GDA'</span>, <span class="string">'SNE'</span>, <span class="string">'SymSNE'</span>, <span class="string">'tSNE'</span>, <span class="string">'LPP'</span>, <span class="string">'NPE'</span>, <span class="keyword">...</span>
+0064         <span class="string">'LLTSA'</span>, <span class="string">'SPE'</span>, <span class="string">'AutoEncoderRBM'</span>, <span class="string">'AutoEncoderEA'</span>, <span class="string">'LLC'</span>, <span class="string">'ManifoldChart'</span>, <span class="string">'CFA'</span>};
+0065     <span class="keyword">for</span> i=1:length(techniques)
+0066         <span class="keyword">try</span>
+0067             <span class="keyword">if</span> any(strcmpi(techniques{i}, {<span class="string">'GPLVM'</span>, <span class="string">'CFA'</span>}))
+0068                 <a href="compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>(unscaled_X, techniques{i}, 2);
+0069             <span class="keyword">else</span>
+0070                 <a href="compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>(X, techniques{i}, 2);
+0071             <span class="keyword">end</span>
+0072             <span class="keyword">if</span> any(strcmpi(techniques{i}, {<span class="string">'Isomap'</span>, <span class="string">'LandmarkIsomap'</span>, <span class="string">'LLE'</span>, <span class="string">'Laplacian'</span>, <span class="string">'MVU'</span>, <span class="string">'CCA'</span>, <span class="string">'FastMVU'</span>, <span class="string">'LPP'</span>, <span class="string">'NPE'</span>, <span class="string">'LLTSA'</span>}))
+0073                 <a href="compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>(X, techniques{i}, 2, <span class="string">'adaptive'</span>);
+0074             <span class="keyword">end</span>
+0075         <span class="keyword">catch</span> e
+0076             disp(e);
+0077             warning([<span class="string">'Technique '</span> techniques{i} <span class="string">' failed! Press any key to continue tests...'</span>]);
+0078             pause
+0079         <span class="keyword">end</span>
+0080     <span class="keyword">end</span>
+0081     
+0082     <span class="comment">% Test all supervised dimension reduction techniques</span>
+0083     labels = double(X &gt; .5) + 1;
+0084     X = [labels; X];
+0085     techniques = {<span class="string">'LDA'</span>, <span class="string">'NCA'</span>, <span class="string">'MCML'</span>};
+0086     <span class="keyword">for</span> i=1:length(techniques)
+0087         <span class="keyword">try</span>
+0088             <a href="compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>(X, techniques{i}, 2);
+0089         <span class="keyword">catch</span> e
+0090             disp(e);
+0091             warning([<span class="string">'Technique '</span> techniques{i} <span class="string">' failed! Press any key to continue tests...'</span>]);
+0092             pause
+0093         <span class="keyword">end</span>
+0094     <span class="keyword">end</span>
+0095     disp(<span class="string">'All tests completed!'</span>);    
+0096</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of combn</title>
+  <meta name="keywords" content="combn">
+  <meta name="description" content="COMBN - all combinations of elements">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>combn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>COMBN - all combinations of elements</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [M,IND] = combn(V,N) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> COMBN - all combinations of elements
+ M = COMBN(V,N) returns all combinations of N elements of the elements in
+ vector V. M has the size (length(V).^N)-by-N.
+
+ [M,I] = COMBN(V,N) also returns the index matrix I so that M = V(I).
+
+ V can be an array of numbers, cells or strings.
+
+ Example:
+   M = COMBN([0 1],3) returns the 8-by-3 matrix:
+     0     0     0
+     0     0     1
+     0     1     0
+     0     1     1
+     ...
+     1     1     1
+
+ All elements in V are regarded as unique, so M = COMBN([2 2],3) returns 
+ a 8-by-3 matrix with all elements equal to 2.
+
+ NB Matrix sizes increases exponentially at rate (n^N)*N.
+ 
+ COMBN is very fast using a single matrix multiplication, without any
+ explicit for-loops. 
+
+ See also PERMS, NCHOOSEK
+ and ALLCOMB, PERMPOS on the File Exchange</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/generate_data.html" class="code" title="function [X, labels, t] = generate_data(dataname, n, noise)">generate_data</a>	GENERATE_DATA Generates an artificial dataset</li><li><a href="../../../Otherbox/drtoolbox/reconstruction_error.html" class="code" title="function err = reconstruction_error(O, R)">reconstruction_error</a>	RECONSTRUCTION_ERROR Computes the reconstruction error up to affine transformations</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [M,IND] = combn(V,N)</a>
+0002 <span class="comment">% COMBN - all combinations of elements</span>
+0003 <span class="comment">% M = COMBN(V,N) returns all combinations of N elements of the elements in</span>
+0004 <span class="comment">% vector V. M has the size (length(V).^N)-by-N.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% [M,I] = COMBN(V,N) also returns the index matrix I so that M = V(I).</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% V can be an array of numbers, cells or strings.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Example:</span>
+0011 <span class="comment">%   M = COMBN([0 1],3) returns the 8-by-3 matrix:</span>
+0012 <span class="comment">%     0     0     0</span>
+0013 <span class="comment">%     0     0     1</span>
+0014 <span class="comment">%     0     1     0</span>
+0015 <span class="comment">%     0     1     1</span>
+0016 <span class="comment">%     ...</span>
+0017 <span class="comment">%     1     1     1</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% All elements in V are regarded as unique, so M = COMBN([2 2],3) returns</span>
+0020 <span class="comment">% a 8-by-3 matrix with all elements equal to 2.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% NB Matrix sizes increases exponentially at rate (n^N)*N.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% COMBN is very fast using a single matrix multiplication, without any</span>
+0025 <span class="comment">% explicit for-loops.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% See also PERMS, NCHOOSEK</span>
+0028 <span class="comment">% and ALLCOMB, PERMPOS on the File Exchange</span>
+0029 
+0030 <span class="comment">% for Matlab R13</span>
+0031 <span class="comment">% version 3.2 (may 2006)</span>
+0032 <span class="comment">% (c) Jos van der Geest</span>
+0033 <span class="comment">% email: jos@jasen.nl</span>
+0034 
+0035 <span class="comment">% History</span>
+0036 <span class="comment">% 1.1 updated help text</span>
+0037 <span class="comment">% 2.0 new faster algorithm</span>
+0038 <span class="comment">% 3.0 (aug 2006) implemented very fast algorithm</span>
+0039 <span class="comment">% 3.1 (may 2007) Improved algorithm Roger Stafford pointed out that for some values, the floor</span>
+0040 <span class="comment">% operation on floating points, according to the IEEE 754 standard, could return</span>
+0041 <span class="comment">% erroneous values. His excellent solution was to add (1/2) to the values</span>
+0042 <span class="comment">% of A.</span>
+0043 <span class="comment">% 3.2 (may 2007) changed help and error messages slightly</span>
+0044 
+0045 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0046 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0047 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0048 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0049 <span class="comment">% maintain the name of the original author.</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0052 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0053 
+0054 <span class="keyword">if</span> nargin ~=2,
+0055     error(<span class="string">'Two arguments required.'</span>) ;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> isempty(V) || N == 0,
+0059     M = [] ;
+0060     IND = [] ;
+0061 <span class="keyword">elseif</span> fix(N) ~= N || N &lt; 1 || numel(N) ~= 1 ;
+0062     error(<span class="string">'Second argument should be a positive integer.'</span>) ;
+0063 <span class="keyword">else</span>
+0064     nV = numel(V) ;
+0065     <span class="comment">% use a math trick</span>
+0066     A = [0:nV^N-1]+(1/2) ;
+0067     B = [nV.^(1-N:0)] ;
+0068     IND = rem(floor((A(:) * B(:)')),nV) + 1 ;
+0069     M = V(IND) ;     
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% Previous algorithms</span>
+0073 
+0074 <span class="comment">% Version 2.0</span>
+0075 <span class="comment">%     for i = N:-1:1</span>
+0076 <span class="comment">%         X = repmat(1:nV,nV^(N-i),nV^(i-1));</span>
+0077 <span class="comment">%         IND(:,i) = X(:);</span>
+0078 <span class="comment">%     end</span>
+0079 <span class="comment">%     M = V(IND) ;</span>
+0080 
+0081 <span class="comment">% Version 1.0</span>
+0082 <span class="comment">%     nV = numel(V) ;</span>
+0083 <span class="comment">%     % don waste space, if only one output is requested</span>
+0084 <span class="comment">%     [IND{1:N}] = ndgrid(1:nV) ;</span>
+0085 <span class="comment">%     IND = fliplr(reshape(cat(ndims(IND{1}),IND{:}),[],N)) ;</span>
+0086 <span class="comment">%     M = V(IND) ;</span>
+0087 
+0088 <span class="comment">% Combinations using for-loops</span>
+0089 <span class="comment">% can be implemented in C or VB</span>
+0090 <span class="comment">% nv = length(V) ;</span>
+0091 <span class="comment">% C = zeros(nv^N,N) ; % declaration</span>
+0092 <span class="comment">% for ii=1:N,</span>
+0093 <span class="comment">%     cc = 1 ;</span>
+0094 <span class="comment">%     for jj=1:(nv^(ii-1)),</span>
+0095 <span class="comment">%         for kk=1:nv,</span>
+0096 <span class="comment">%             for mm=1:(nv^(N-ii)),</span>
+0097 <span class="comment">%                 C(cc,ii) = V(kk) ;</span>
+0098 <span class="comment">%                 cc = cc + 1 ;</span>
+0099 <span class="comment">%             end</span>
+0100 <span class="comment">%         end</span>
+0101 <span class="comment">%     end</span>
+0102 <span class="comment">% end</span>
+0103 
+0104</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

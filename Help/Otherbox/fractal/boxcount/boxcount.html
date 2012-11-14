@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of boxcount</title>
+  <meta name="keywords" content="boxcount">
+  <meta name="description" content="BOXCOUNT  Box-Counting of a D-dimensional array (with D=1,2,3).">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html fractal --><!-- menu.html boxcount -->
+<h1>boxcount
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BOXCOUNT  Box-Counting of a D-dimensional array (with D=1,2,3).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [n,r] = boxcount(c,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">BOXCOUNT  Box-Counting of a D-dimensional array (with D=1,2,3).
+   [N, R] = BOXCOUNT(C), where C is a D-dimensional array (with D=1,2,3),
+   counts the number N of D-dimensional boxes of size R needed to cover
+   the nonzero elements of C. The box sizes are powers of two, i.e., 
+   R = 1, 2, 4 ... 2^P, where P is the smallest integer such that
+   MAX(SIZE(C)) &lt;= 2^P. If the sizes of C over each dimension are smaller
+   than 2^P, C is padded with zeros to size 2^P over each dimension (e.g.,
+   a 320-by-200 image is padded to 512-by-512). The output vectors N and R
+   are of size P+1. For a RGB color image (m-by-n-by-3 array), a summation
+   over the 3 RGB planes is done first.
+
+   The Box-counting method is useful to determine fractal properties of a
+   1D segment, a 2D image or a 3D array. If C is a fractal set, with
+   fractal dimension DF &lt; D, then N scales as R^(-DF). DF is known as the
+   Minkowski-Bouligand dimension, or Kolmogorov capacity, or Kolmogorov
+   dimension, or simply box-counting dimension.
+
+   BOXCOUNT(C,'plot') also shows the log-log plot of N as a function of R
+   (if no output argument, this option is selected by default).
+
+   BOXCOUNT(C,'slope') also shows the semi-log plot of the local slope
+   DF = - dlnN/dlnR as a function of R. If DF is contant in a certain
+   range of R, then DF is the fractal dimension of the set C. The
+   derivative is computed as a 2nd order finite difference (see GRADIENT).
+
+   The execution time depends on the sizes of C. It is fastest for powers
+   of two over each dimension.
+
+   Examples:
+
+      % Plots the box-count of a vector containing randomly-distributed
+      % 0 and 1. This set is not fractal: one has N = R^-2 at large R,
+      % and N = cste at small R.
+      c = (rand(1,2048)&lt;0.2);
+      boxcount(c);
+
+      % Plots the box-count and the fractal dimension of a 2D fractal set
+      % of size 512^2 (obtained by RANDCANTOR), with fractal dimension
+      % DF = 2 + log(P) / log(2) = 1.68 (with P=0.8).
+      c = randcantor(0.8, 512, 2);
+      boxcount(c);
+      figure, boxcount(c, 'slope');
+
+   F. Moisy
+   Revision: 2.10,  Date: 2008/07/09</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Calculation/util_get_fractal_dim.html" class="code" title="function [DF_mean DF_std DF_sem DF_list] = util_get_fractal_dim( spif, gnds, varargin )">util_get_fractal_dim</a>	UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.</li><li><a href="demo_df.html" class="code" title="">demo_df</a>	% Computing a fractal dimension with Matlab: 1D, 2D and 3D Box-counting</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [n,r] = boxcount(c,varargin)</a>
+0002 <span class="comment">%BOXCOUNT  Box-Counting of a D-dimensional array (with D=1,2,3).</span>
+0003 <span class="comment">%   [N, R] = BOXCOUNT(C), where C is a D-dimensional array (with D=1,2,3),</span>
+0004 <span class="comment">%   counts the number N of D-dimensional boxes of size R needed to cover</span>
+0005 <span class="comment">%   the nonzero elements of C. The box sizes are powers of two, i.e.,</span>
+0006 <span class="comment">%   R = 1, 2, 4 ... 2^P, where P is the smallest integer such that</span>
+0007 <span class="comment">%   MAX(SIZE(C)) &lt;= 2^P. If the sizes of C over each dimension are smaller</span>
+0008 <span class="comment">%   than 2^P, C is padded with zeros to size 2^P over each dimension (e.g.,</span>
+0009 <span class="comment">%   a 320-by-200 image is padded to 512-by-512). The output vectors N and R</span>
+0010 <span class="comment">%   are of size P+1. For a RGB color image (m-by-n-by-3 array), a summation</span>
+0011 <span class="comment">%   over the 3 RGB planes is done first.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   The Box-counting method is useful to determine fractal properties of a</span>
+0014 <span class="comment">%   1D segment, a 2D image or a 3D array. If C is a fractal set, with</span>
+0015 <span class="comment">%   fractal dimension DF &lt; D, then N scales as R^(-DF). DF is known as the</span>
+0016 <span class="comment">%   Minkowski-Bouligand dimension, or Kolmogorov capacity, or Kolmogorov</span>
+0017 <span class="comment">%   dimension, or simply box-counting dimension.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   BOXCOUNT(C,'plot') also shows the log-log plot of N as a function of R</span>
+0020 <span class="comment">%   (if no output argument, this option is selected by default).</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   BOXCOUNT(C,'slope') also shows the semi-log plot of the local slope</span>
+0023 <span class="comment">%   DF = - dlnN/dlnR as a function of R. If DF is contant in a certain</span>
+0024 <span class="comment">%   range of R, then DF is the fractal dimension of the set C. The</span>
+0025 <span class="comment">%   derivative is computed as a 2nd order finite difference (see GRADIENT).</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%   The execution time depends on the sizes of C. It is fastest for powers</span>
+0028 <span class="comment">%   of two over each dimension.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%   Examples:</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%      % Plots the box-count of a vector containing randomly-distributed</span>
+0033 <span class="comment">%      % 0 and 1. This set is not fractal: one has N = R^-2 at large R,</span>
+0034 <span class="comment">%      % and N = cste at small R.</span>
+0035 <span class="comment">%      c = (rand(1,2048)&lt;0.2);</span>
+0036 <span class="comment">%      boxcount(c);</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%      % Plots the box-count and the fractal dimension of a 2D fractal set</span>
+0039 <span class="comment">%      % of size 512^2 (obtained by RANDCANTOR), with fractal dimension</span>
+0040 <span class="comment">%      % DF = 2 + log(P) / log(2) = 1.68 (with P=0.8).</span>
+0041 <span class="comment">%      c = randcantor(0.8, 512, 2);</span>
+0042 <span class="comment">%      boxcount(c);</span>
+0043 <span class="comment">%      figure, boxcount(c, 'slope');</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   F. Moisy</span>
+0046 <span class="comment">%   Revision: 2.10,  Date: 2008/07/09</span>
+0047 
+0048 
+0049 <span class="comment">% History:</span>
+0050 <span class="comment">% 2006/11/22: v2.00, joined into a single file boxcountn (n=1,2,3).</span>
+0051 <span class="comment">% 2008/07/09: v2.10, minor improvements</span>
+0052 
+0053 <span class="comment">% control input argument</span>
+0054 error(nargchk(1,2,nargin));
+0055 
+0056 <span class="comment">% check for true color image (m-by-n-by-3 array)</span>
+0057 <span class="keyword">if</span> ndims(c)==3
+0058     <span class="keyword">if</span> size(c,3)==3 &amp;&amp; size(c,1)&gt;=8 &amp;&amp; size(c,2)&gt;=8
+0059         c = sum(c,3);
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 
+0063 warning off
+0064 c = logical(squeeze(c));
+0065 warning on
+0066 
+0067 dim = ndims(c); <span class="comment">% dim is 2 for a vector or a matrix, 3 for a cube</span>
+0068 <span class="keyword">if</span> dim&gt;3
+0069     error(<span class="string">'Maximum dimension is 3.'</span>);
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% transpose the vector to a 1-by-n vector</span>
+0073 <span class="keyword">if</span> length(c)==numel(c)
+0074     dim=1;
+0075     <span class="keyword">if</span> size(c,1)~=1   
+0076         c = c';
+0077     <span class="keyword">end</span>   
+0078 <span class="keyword">end</span>
+0079 
+0080 width = max(size(c));    <span class="comment">% largest size of the box</span>
+0081 p = log(width)/log(2);   <span class="comment">% nbre of generations</span>
+0082 
+0083 <span class="comment">% remap the array if the sizes are not all equal,</span>
+0084 <span class="comment">% or if they are not power of two</span>
+0085 <span class="comment">% (this slows down the computation!)</span>
+0086 <span class="keyword">if</span> p~=round(p) || any(size(c)~=width)
+0087     p = ceil(p);
+0088     width = 2^p;
+0089     <span class="keyword">switch</span> dim
+0090         <span class="keyword">case</span> 1
+0091             mz = zeros(1,width);
+0092             mz(1:length(c)) = c;
+0093             c = mz;
+0094         <span class="keyword">case</span> 2
+0095             mz = zeros(width, width);
+0096             mz(1:size(c,1), 1:size(c,2)) = c;
+0097             c = mz;
+0098         <span class="keyword">case</span> 3
+0099             mz = zeros(width, width, width);
+0100             mz(1:size(c,1), 1:size(c,2), 1:size(c,3)) = c;
+0101             c = mz;            
+0102     <span class="keyword">end</span>
+0103 <span class="keyword">end</span>
+0104 
+0105 n=zeros(1,p+1); <span class="comment">% pre-allocate the number of box of size r</span>
+0106 
+0107 <span class="keyword">switch</span> dim
+0108 
+0109     <span class="keyword">case</span> 1        <span class="comment">%------------------- 1D boxcount ---------------------%</span>
+0110 
+0111         n(p+1) = sum(c);
+0112         <span class="keyword">for</span> g=(p-1):-1:0
+0113             siz = 2^(p-g);
+0114             siz2 = round(siz/2);
+0115             <span class="keyword">for</span> i=1:siz:(width-siz+1)
+0116                 c(i) = ( c(i) || c(i+siz2));
+0117             <span class="keyword">end</span>
+0118             n(g+1) = sum(c(1:siz:(width-siz+1)));
+0119         <span class="keyword">end</span>
+0120 
+0121     <span class="keyword">case</span> 2         <span class="comment">%------------------- 2D boxcount ---------------------%</span>
+0122 
+0123         n(p+1) = sum(c(:));
+0124         <span class="keyword">for</span> g=(p-1):-1:0
+0125             siz = 2^(p-g);
+0126             siz2 = round(siz/2);
+0127             <span class="keyword">for</span> i=1:siz:(width-siz+1)
+0128                 <span class="keyword">for</span> j=1:siz:(width-siz+1)
+0129                     c(i,j) = ( c(i,j) || c(i+siz2,j) || c(i,j+siz2) || c(i+siz2,j+siz2) );
+0130                 <span class="keyword">end</span>
+0131             <span class="keyword">end</span>
+0132             n(g+1) = sum(sum(c(1:siz:(width-siz+1),1:siz:(width-siz+1))));
+0133         <span class="keyword">end</span>
+0134 
+0135     <span class="keyword">case</span> 3         <span class="comment">%------------------- 3D boxcount ---------------------%</span>
+0136 
+0137         n(p+1) = sum(c(:));
+0138         <span class="keyword">for</span> g=(p-1):-1:0
+0139             siz = 2^(p-g);
+0140             siz2 = round(siz/2);
+0141             <span class="keyword">for</span> i=1:siz:(width-siz+1),
+0142                 <span class="keyword">for</span> j=1:siz:(width-siz+1),
+0143                     <span class="keyword">for</span> k=1:siz:(width-siz+1),
+0144                         c(i,j,k)=( c(i,j,k) || c(i+siz2,j,k) || c(i,j+siz2,k) <span class="keyword">...</span>
+0145                             || c(i+siz2,j+siz2,k) || c(i,j,k+siz2) || c(i+siz2,j,k+siz2) <span class="keyword">...</span>
+0146                             || c(i,j+siz2,k+siz2) || c(i+siz2,j+siz2,k+siz2));
+0147                     <span class="keyword">end</span>
+0148                 <span class="keyword">end</span>
+0149             <span class="keyword">end</span>
+0150             n(g+1) = sum(sum(sum(c(1:siz:(width-siz+1),1:siz:(width-siz+1),1:siz:(width-siz+1)))));
+0151         <span class="keyword">end</span>
+0152 
+0153 <span class="keyword">end</span>
+0154 n = n(end:-1:1);
+0155 r = 2.^(0:p); <span class="comment">% box size (1, 2, 4, 8...)</span>
+0156 
+0157 <span class="keyword">if</span> any(strncmpi(varargin,<span class="string">'slope'</span>,1))
+0158     s=-gradient(log(n))./gradient(log(r));
+0159     semilogx(r, s, <span class="string">'s-'</span>);
+0160     ylim([0 dim]);
+0161     xlabel(<span class="string">'r, box size'</span>); ylabel(<span class="string">'- d ln n / d ln r, local dimension'</span>);
+0162     title([num2str(dim) <span class="string">'D box-count'</span>]);
+0163 <span class="keyword">elseif</span> nargout==0 || any(strncmpi(varargin,<span class="string">'plot'</span>,1))
+0164     loglog(r,n,<span class="string">'s-'</span>);
+0165     xlabel(<span class="string">'r, box size'</span>); ylabel(<span class="string">'n(r), number of boxes'</span>);
+0166     title([num2str(dim) <span class="string">'D box-count'</span>]);
+0167 <span class="keyword">end</span>
+0168 <span class="keyword">if</span> nargout==0
+0169     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> r n
+0170 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

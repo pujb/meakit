@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of participation_coef</title>
+  <meta name="keywords" content="participation_coef">
+  <meta name="description" content="PARTICIPATION_COEF     Participation coefficient">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>participation_coef
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PARTICIPATION_COEF     Participation coefficient</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function P=participation_coef(A,Ci) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">PARTICIPATION_COEF     Participation coefficient
+
+   P = participation_coef(A,Ci);
+
+   Participation coefficient is a measure of diversity of intermodular
+   connections of individual nodes.
+
+   Inputs:     A,      binary/weighted, directed/undirected connection matrix
+               Ci,     community affiliation vector
+
+   Output:     P,      participation coefficient
+
+   Note: The output for directed graphs is the &quot;out-neighbor&quot;
+         participation coefficient.
+
+   Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.
+
+
+   Mika Rubinov, UNSW, 2008-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function P=participation_coef(A,Ci)</a>
+0002 <span class="comment">%PARTICIPATION_COEF     Participation coefficient</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   P = participation_coef(A,Ci);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Participation coefficient is a measure of diversity of intermodular</span>
+0007 <span class="comment">%   connections of individual nodes.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Inputs:     A,      binary/weighted, directed/undirected connection matrix</span>
+0010 <span class="comment">%               Ci,     community affiliation vector</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Output:     P,      participation coefficient</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Note: The output for directed graphs is the &quot;out-neighbor&quot;</span>
+0015 <span class="comment">%         participation coefficient.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Mika Rubinov, UNSW, 2008-2010</span>
+0021 
+0022 n=length(A);                        <span class="comment">%number of vertices</span>
+0023 Ko=sum(A,2);                        <span class="comment">%(out)degree</span>
+0024 Ko(~Ko)=inf;                        <span class="comment">%p_ind=0 if no (out)neighbors</span>
+0025 Gc=A*diag(Ci);                      <span class="comment">%neighbor community affiliation</span>
+0026 Kc2=zeros(n,1);                     <span class="comment">%community-specific neighbors</span>
+0027 
+0028 <span class="keyword">for</span> i=1:max(Ci);
+0029    Kc2=Kc2+(sum(Gc==i,2).^2);
+0030 <span class="keyword">end</span>
+0031 
+0032 P=ones(n,1)-Kc2./(Ko.^2);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

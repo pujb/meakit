@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_sort_mcdfile_by_rectime</title>
+  <meta name="keywords" content="util_sort_mcdfile_by_rectime">
+  <meta name="description" content="UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_sort_mcdfile_by_rectime
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time
+   Input:
+           input_list:     A cell array which contains the full path of
+                           all files.
+                           e.g. {'E:\DATA\xxxx.mcd','F:\2.mcd'}
+           number_of_files:    Number of processing files
+           method:         'RecAsc'[default] / 'RecDes'
+   Output:
+           sorted_filename_list:   A cell array which contains filename.
+           sorted_timestamp_list:  A cell array which contains recording
+                                   StartTime.
+           isOverlapped:           True if one of the given files started
+                                   when the previous one has not stopped.
+
+   Example:
+           [filelist, ~, ~] = util_sort_mcdfile_by_rectime( filelist,
+           length(listings), 'method', 'RecAsc' );
+
+   Created on Jun/26/2009 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2009-06-27  Debugging, adding following lines:
+                       [sorted_filename_list{1:end}] = sort_struct(:).filename;
+                       sorted_timestamp_list = cellstr(datestr([sort_struct(:).start]));
+       PJB#2010-08-17  Adding 'method', to get descending sort.
+                       Adding escping funtion to make sure the displaying
+                       is correct.
+       PJB#2010-09-07  Before reporting 'Overlapped', now we first check
+                       if these two files are recorded continously, for
+                       example, 'xxxxx.mcd' and 'xxxxx0001.mcd'. Because
+                       in such situation, these two have the same start
+                       time.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>	UTIL_ESCAPE_STRING Convert escape sequence into string</li><li><a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="util_check_two_files_are_continuous_recording.html" class="code" title="function result = util_check_two_files_are_continuous_recording( filenames, timestamps )">util_check_two_files_are_continuous_recording</a>	UTIL_CHECK_TWO_FILES_ARE_CONTINUOUS_RECORDING Check if the given two files</li><li><a href="../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_get_dirfiles.html" class="code" title="function [ filelist ] = util_get_dirfiles( varargin )">util_get_dirfiles</a>	UTIL_GET_DIRFILES Get the files in the given dir.</li><li><a href="util_load_spike_trigger_mcdstream_from_multiple_files.html" class="code" title="function [ spif triggerif ] = util_load_spike_trigger_mcdstream_from_multiple_files( varargin )">util_load_spike_trigger_mcdstream_from_multiple_files</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM_WHOLE_LENGTH_FROM_MULTIPLE_FILES 工具函数：从多个MCD文件中获取SPIF/TRIGGERIF信息</li><li><a href="util_print_bins_with_files.html" class="code" title="function bin_table = util_print_bins_with_files( varargin )">util_print_bins_with_files</a>	UTIL_PRINT_BINS_WITH_FILES Print out how many bins in each data file.</li><li><a href="util_rename_datafile_based_on_div.html" class="code" title="function util_rename_datafile_based_on_div(MEANO, culdate)">util_rename_datafile_based_on_div</a>	UTIL_RENAME_DATAFILE_BASED_ON_DIV Rename the data file by DIV</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )</a>
+0002 <span class="comment">%UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           input_list:     A cell array which contains the full path of</span>
+0005 <span class="comment">%                           all files.</span>
+0006 <span class="comment">%                           e.g. {'E:\DATA\xxxx.mcd','F:\2.mcd'}</span>
+0007 <span class="comment">%           number_of_files:    Number of processing files</span>
+0008 <span class="comment">%           method:         'RecAsc'[default] / 'RecDes'</span>
+0009 <span class="comment">%   Output:</span>
+0010 <span class="comment">%           sorted_filename_list:   A cell array which contains filename.</span>
+0011 <span class="comment">%           sorted_timestamp_list:  A cell array which contains recording</span>
+0012 <span class="comment">%                                   StartTime.</span>
+0013 <span class="comment">%           isOverlapped:           True if one of the given files started</span>
+0014 <span class="comment">%                                   when the previous one has not stopped.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Example:</span>
+0017 <span class="comment">%           [filelist, ~, ~] = util_sort_mcdfile_by_rectime( filelist,</span>
+0018 <span class="comment">%           length(listings), 'method', 'RecAsc' );</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Created on Jun/26/2009 By Pu Jiangbo</span>
+0021 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   $Revision:</span>
+0024 <span class="comment">%       PJB#2009-06-27  Debugging, adding following lines:</span>
+0025 <span class="comment">%                       [sorted_filename_list{1:end}] = sort_struct(:).filename;</span>
+0026 <span class="comment">%                       sorted_timestamp_list = cellstr(datestr([sort_struct(:).start]));</span>
+0027 <span class="comment">%       PJB#2010-08-17  Adding 'method', to get descending sort.</span>
+0028 <span class="comment">%                       Adding escping funtion to make sure the displaying</span>
+0029 <span class="comment">%                       is correct.</span>
+0030 <span class="comment">%       PJB#2010-09-07  Before reporting 'Overlapped', now we first check</span>
+0031 <span class="comment">%                       if these two files are recorded continously, for</span>
+0032 <span class="comment">%                       example, 'xxxxx.mcd' and 'xxxxx0001.mcd'. Because</span>
+0033 <span class="comment">%                       in such situation, these two have the same start</span>
+0034 <span class="comment">%                       time.</span>
+0035 
+0036 echo off all
+0037 
+0038 <span class="comment">% Analyze parameter</span>
+0039 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0040 
+0041 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0042     method = <span class="string">'RecAsc'</span>;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% Reading</span>
+0046 unsort_struct = struct(<span class="string">'filename'</span>, {cell(number_of_files,1)}, <span class="keyword">...</span>
+0047                      <span class="string">'start'</span>, zeros(number_of_files,1), <span class="keyword">...</span>
+0048                      <span class="string">'end'</span>, zeros(number_of_files,1));
+0049 
+0050 <span class="keyword">for</span> i = 1:number_of_files
+0051     unsort_struct(i).filename = input_list{i};
+0052     [~] = evalc(<span class="string">'D = datastrm(unsort_struct(i).filename)'</span>);
+0053     unsort_struct(i).start = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingdate'</span>);
+0054     unsort_struct(i).end = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingStopDate'</span>);
+0055     <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> D;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% Sort</span>
+0059 <span class="keyword">if</span> strcmpi(method, <span class="string">'RecAsc'</span>)
+0060     [~, order] = sort([unsort_struct(:).start]);
+0061 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'RecDes'</span>)
+0062     [~, order] = sort([unsort_struct(:).start], <span class="string">'descend'</span>);
+0063 <span class="keyword">else</span>
+0064     error(<span class="string">'Not supported yet.'</span>);
+0065 <span class="keyword">end</span>
+0066 sort_struct = unsort_struct(order);
+0067 
+0068 
+0069 <span class="comment">% Construct the final results</span>
+0070 <span class="comment">% sorted_filename_list = sort_struct(:).filename only returns the first</span>
+0071 <span class="comment">% one.</span>
+0072 sorted_filename_list = cell(number_of_files,1);
+0073 
+0074 [sorted_filename_list{1:end}] = sort_struct(:).filename;
+0075 sorted_timestamp_list = cellstr(datestr([sort_struct(:).start]));
+0076 
+0077 <span class="comment">% Check overlapped</span>
+0078 isOverlapped = 0;
+0079 <span class="keyword">for</span> i = 1:(number_of_files-1)
+0080     <span class="keyword">if</span> strcmpi(method, <span class="string">'RecAsc'</span>)
+0081         <span class="keyword">if</span> sort_struct(i).end &gt; sort_struct(i+1).start
+0082             <span class="keyword">if</span> <a href="util_check_two_files_are_continuous_recording.html" class="code" title="function result = util_check_two_files_are_continuous_recording( filenames, timestamps )">util_check_two_files_are_continuous_recording</a>({sort_struct(i).filename;sort_struct(i+1).filename}, [sort_struct(i).start;sort_struct(i+1).start])
+0083                 fprintf([<a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i+1).filename) <span class="string">'\n\tis continued with\n\t'</span> <a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i).filename) <span class="string">'.\n'</span>]);
+0084             <span class="keyword">else</span>
+0085                 isOverlapped = 1;
+0086                 fprintf([<a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i+1).filename) <span class="string">'\n\tis overlapped with\n\t'</span> <a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i).filename) <span class="string">'.\n'</span>]);
+0087             <span class="keyword">end</span>
+0088         <span class="keyword">end</span>
+0089     <span class="keyword">elseif</span> strcmpi(method, <span class="string">'RecDes'</span>)
+0090         <span class="keyword">if</span> sort_struct(i).start &lt; sort_struct(i+1).end
+0091             <span class="keyword">if</span> <a href="util_check_two_files_are_continuous_recording.html" class="code" title="function result = util_check_two_files_are_continuous_recording( filenames, timestamps )">util_check_two_files_are_continuous_recording</a>({sort_struct(i).filename;sort_struct(i+1).filename}, [sort_struct(i).start;sort_struct(i+1).start])
+0092                 fprintf([<a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i+1).filename) <span class="string">'\n\tis continued with\n\t'</span> <a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i).filename) <span class="string">'.\n'</span>]);
+0093             <span class="keyword">else</span>
+0094                 isOverlapped = 1;
+0095                 fprintf([<a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i+1).filename) <span class="string">'\n\tis overlapped with\n\t'</span> <a href="../Common/util_escape_string.html" class="code" title="function [ converted ] = util_escape_string( inputs )">util_escape_string</a>(sort_struct(i).filename) <span class="string">'.\n'</span>]);
+0096             <span class="keyword">end</span>
+0097         <span class="keyword">end</span>
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 
+0101 
+0102 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

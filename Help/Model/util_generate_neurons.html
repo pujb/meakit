@@ -1,0 +1,393 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_generate_neurons</title>
+  <meta name="keywords" content="util_generate_neurons">
+  <meta name="description" content="UNTITLED Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Model -->
+<h1>util_generate_neurons
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UNTITLED Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [csim_electrodes csim_neurons csim_synapses] = util_generate_neurons( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UNTITLED Summary of this function goes here
+   Detailed explanation goes here
+   The work began on Sep/1/2010
+   The first version of worked distribution was done on Sep/21/2010
+   Modifying distribution started since Oct/1/2010
+   The first version of worked csim connection network was done on
+   Oct/12/2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_get_toolbox_root.html" class="code" title="function toolbox_path = util_get_toolbox_root(varargin)">util_get_toolbox_root</a>	UTIL_GET_TOOLBOX_ROOT Get the root directory of this toolbox</li><li><a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>	UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/anyrnd/anyrnd.html" class="code" title="function r= anyrnd(f,M,N)">anyrnd</a>	r= ANYRND(F,M,N) returns a matrix of random numbers of size M by N</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function distance = euclidean_dist(a, b)</a></li><li><a href="#_sub2" class="code">function number = neuralrnd(neural_distribution_curve)</a></li><li><a href="#_sub3" class="code">function distribution = load_neural_distribution()</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [csim_electrodes csim_neurons csim_synapses] = util_generate_neurons( varargin )</a>
+0002 <span class="comment">%UNTITLED Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 <span class="comment">%   The work began on Sep/1/2010</span>
+0005 <span class="comment">%   The first version of worked distribution was done on Sep/21/2010</span>
+0006 <span class="comment">%   Modifying distribution started since Oct/1/2010</span>
+0007 <span class="comment">%   The first version of worked csim connection network was done on</span>
+0008 <span class="comment">%   Oct/12/2010</span>
+0009 
+0010 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0011 csim(<span class="string">'reset'</span>);
+0012 csim(<span class="string">'destroy'</span>);
+0013 
+0014 <span class="keyword">if</span> ~exist(<span class="string">'neuron_number'</span>, <span class="string">'var'</span>)
+0015     neuron_number = 1000;
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">if</span> ~exist(<span class="string">'excitatory_percent'</span>, <span class="string">'var'</span>)
+0019     excitatory_percent = 0.7;
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="keyword">if</span> ~exist(<span class="string">'self_firing_percent'</span>, <span class="string">'var'</span>)
+0023     self_firing_percent = 0.3;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">if</span> ~exist(<span class="string">'conduction_velocity'</span>, <span class="string">'var'</span>)
+0027     conduction_velocity = 0.3; <span class="comment">% meter / second</span>
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="keyword">if</span> ~exist(<span class="string">'connection_distribution'</span>, <span class="string">'var'</span>)
+0031     connection_distribution = <span class="string">'normal'</span>;
+0032 <span class="keyword">end</span>
+0033 
+0034 AREA_SIZE = 3000;   <span class="comment">% Micro-meters</span>
+0035 EXCITATORY_FLAG = 1;
+0036 INHIBITORY_FLAG = 2;
+0037 SYNAPSES_PER_NEURON_MEAN = 50;
+0038 SYNAPSES_PER_NEURON_ERROR = 15;
+0039 DISTRIBUTION_REFINE_LENGTH_NEARBY_STANDARD = 15;
+0040 DISTRIBUTION_RANDOM_SCOPE = 20;
+0041 
+0042 <span class="comment">% Generate the locations of neurons randomly</span>
+0043 fprintf(<span class="string">'\nSetting locations of neurons... '</span>);
+0044 neuron_location = randi([0 AREA_SIZE], [neuron_number, 2]);
+0045 fprintf(<span class="string">'Done.\n'</span>);
+0046 
+0047 <span class="comment">% Generate the types of neurons randomly</span>
+0048 fprintf(<span class="string">'Setting types of neurons... '</span>);
+0049 excitatory_neuron_number = neuron_number * excitatory_percent;
+0050 inhibitory_neuron_number = neuron_number - excitatory_neuron_number;
+0051 neuron_type = [ones(1, excitatory_neuron_number) * EXCITATORY_FLAG ones(1, inhibitory_neuron_number) * INHIBITORY_FLAG];
+0052 neuron_type = neuron_type(randperm(neuron_number));
+0053 fprintf(<span class="string">'Done.\n'</span>);
+0054 
+0055 <span class="comment">% Generate the number of synapses of each individual neurons (normally distributed - Gaussian)</span>
+0056 fprintf(<span class="string">'Setting synapses number of each neuron... '</span>);
+0057 synapse_number = round(SYNAPSES_PER_NEURON_MEAN + SYNAPSES_PER_NEURON_ERROR * randn(neuron_number, 1));
+0058 sum_synapse_number = sum(synapse_number);
+0059 fprintf(<span class="string">'Done.\n'</span>);
+0060 
+0061 <span class="comment">% Connect neurons accoring to their locations and number of synapses</span>
+0062 <span class="comment">% coonections.location(:, 1) is x, (:, 2) is y of the neurons connected to</span>
+0063 <span class="comment">% the current neuron.</span>
+0064 fprintf(<span class="string">'Constructing connections according to the neural distribution... '</span>);
+0065 connections = struct(<span class="string">'locations'</span>, cell(neuron_number, 1), <span class="string">'length'</span>, cell(neuron_number, 1));
+0066 neural_distribution_curve = <a href="#_sub3" class="code" title="subfunction distribution = load_neural_distribution()">load_neural_distribution</a>(); <span class="comment">% Load distribution curve</span>
+0067 <span class="keyword">for</span> i = 1:neuron_number
+0068     <span class="comment">% The location of current neuron</span>
+0069     this_locxy = neuron_location(i, :);
+0070     
+0071     <span class="comment">% The ids of neurons will be connected to this neurons</span>
+0072     connected_id = [];
+0073     
+0074     <span class="comment">% Get the distances from the current neuron to other neurons</span>
+0075     all_connected_length = zeros(neuron_number, 1);
+0076     <span class="keyword">for</span> j = 1:neuron_number
+0077         all_connected_length(j) = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(this_locxy, neuron_location(j, :));
+0078     <span class="keyword">end</span>
+0079     
+0080     <span class="comment">% Find all nearby neurons (not itself)</span>
+0081     nearby_index = find( all_connected_length &lt;= DISTRIBUTION_REFINE_LENGTH_NEARBY_STANDARD &amp; all_connected_length ~= 0);
+0082     nearby_index = nearby_index';
+0083     
+0084     <span class="comment">% Make sure we do have available synapses to connect more neurons</span>
+0085     num_left_synapses = synapse_number(i) - length(nearby_index);
+0086     
+0087     <span class="keyword">if</span> num_left_synapses &lt; 0
+0088         <span class="comment">% There's not enough synapses, choose those nearest</span>
+0089         distance_of_nearby_index = all_connected_length(nearby_index);
+0090         [~, sorted_index] = sort(distance_of_nearby_index, 1, <span class="string">'ascend'</span>);
+0091         nearby_index = nearby_index(sorted_index);
+0092         <span class="comment">% Update the connected id</span>
+0093         connected_id = nearby_index(1:synapse_number(i));
+0094     <span class="keyword">elseif</span> num_left_synapses == 0
+0095         <span class="comment">% Do nothing</span>
+0096         connected_id = nearby_index;
+0097     <span class="keyword">else</span>
+0098         <span class="comment">% Save nearby neurons first</span>
+0099         connected_id = nearby_index;
+0100         <span class="comment">% Randomly select the neurons</span>
+0101         <span class="comment">% The neurons prefer to connect nearby neighbors, but also some few</span>
+0102         <span class="comment">% faraway ones.</span>
+0103         
+0104         <span class="comment">% First we should make sure how many neurons left can be choosen</span>
+0105         <span class="comment">% randomly (not those nearby ones and itself)</span>
+0106         left_neuron_pool = setdiff((1:neuron_number), [nearby_index i]);
+0107         
+0108         <span class="comment">% Select neurons one by one and make sure the connection length is</span>
+0109         <span class="comment">% fit to our predefined distribution</span>
+0110         <span class="keyword">for</span> j = 1:num_left_synapses
+0111             <span class="comment">% Randomly select one neuron</span>
+0112             candidate_id = left_neuron_pool(randi(length(left_neuron_pool), 1));
+0113             
+0114             <span class="comment">% This can be used to control the probability of keeping the</span>
+0115             <span class="comment">% original distribution (1 - x, x is the original%)</span>
+0116             <span class="keyword">if</span> rand &gt; 1
+0117                 connected_id = [connected_id candidate_id];
+0118             <span class="keyword">else</span>
+0119                 <span class="comment">% Get the limit</span>
+0120                 rand_limit = <a href="#_sub2" class="code" title="subfunction number = neuralrnd(neural_distribution_curve)">neuralrnd</a>(neural_distribution_curve);
+0121                 <span class="comment">% Init search limit (to avoid dead-loops)</span>
+0122                 num_searched_neurons = 1;
+0123                 <span class="comment">% Get distance from current candidate to this neuron</span>
+0124                 candidate_distance = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(this_locxy, neuron_location(candidate_id, :));
+0125                 <span class="keyword">while</span> (candidate_distance &gt; rand_limit + DISTRIBUTION_RANDOM_SCOPE || candidate_distance &lt; rand_limit - DISTRIBUTION_RANDOM_SCOPE)
+0126                     <span class="comment">% Re-find one candidate</span>
+0127                     candidate_id = left_neuron_pool(randi(length(left_neuron_pool), 1));
+0128                     <span class="comment">% Recalc the distance</span>
+0129                     candidate_distance = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(this_locxy, neuron_location(candidate_id, :));
+0130                     
+0131                     <span class="comment">% Increase search times</span>
+0132                     num_searched_neurons = num_searched_neurons + 1;
+0133                     <span class="comment">% Safety check</span>
+0134                     <span class="keyword">if</span> num_searched_neurons &gt;= neuron_number - 1
+0135                         <span class="comment">% Update the limit to avoid dead-loops</span>
+0136                         rand_limit = <a href="#_sub2" class="code" title="subfunction number = neuralrnd(neural_distribution_curve)">neuralrnd</a>(neural_distribution_curve);
+0137                         <span class="comment">% Reset search limit</span>
+0138                         num_searched_neurons = 1;
+0139                     <span class="keyword">end</span>
+0140                 <span class="keyword">end</span>
+0141                 <span class="comment">% Save</span>
+0142                 connected_id = [connected_id candidate_id];
+0143             <span class="keyword">end</span>
+0144         <span class="keyword">end</span>
+0145     <span class="keyword">end</span>
+0146 
+0147     <span class="comment">% Refresh (and save) the location indices (refined)</span>
+0148     connections(i).locations = connected_id;
+0149     
+0150     <span class="comment">% Save the lengths (refined)</span>
+0151     connected_locxy = neuron_location(connected_id, :);
+0152     <span class="keyword">for</span> j = 1:synapse_number(i)
+0153         connections(i).length(j) = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(this_locxy, connected_locxy(j, :));
+0154     <span class="keyword">end</span>
+0155     
+0156     <span class="comment">% Progress</span>
+0157     <span class="keyword">if</span> ~mod(i, 10)
+0158         <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(i/neuron_number*100);
+0159     <span class="keyword">end</span>
+0160 <span class="keyword">end</span>
+0161 
+0162 <span class="comment">% See the distribution of connection length</span>
+0163 connection_lengths_all = [];
+0164 <span class="keyword">for</span> i = 1:neuron_number
+0165     connection_lengths_all = [connection_lengths_all connections(i).length];
+0166 <span class="keyword">end</span>
+0167 connection_lengths_distribution_bins = 1:3:max(connection_lengths_all);
+0168 connection_lengths_distribution = histc(connection_lengths_all, connection_lengths_distribution_bins);
+0169 figure, scatter(connection_lengths_distribution_bins, connection_lengths_distribution, <span class="string">'.'</span>);
+0170 disp(<span class="string">'Connection Length Distribution has been plotted.'</span>);ylim([0 350]);xlim([0 4500]);title(<span class="string">'Connection Length Distribution'</span>);xlabel(<span class="string">'Connection Length (um)'</span>);ylabel(<span class="string">'Number of Synapses'</span>);
+0171 
+0172 <span class="comment">% Connect neurons using CSIM</span>
+0173 
+0174 <span class="comment">% Create the object of all neurons</span>
+0175 fprintf(<span class="string">'\nCreating and setting neuron models... '</span>);
+0176 csim_neurons = zeros(neuron_number, 1);
+0177 <span class="keyword">for</span> i = 1:neuron_number
+0178     <span class="comment">% Create</span>
+0179     csim_neurons(i) = csim(<span class="string">'create'</span>, <span class="string">'LifNeuron'</span>);
+0180     <span class="comment">% Set properties</span>
+0181     csim(<span class="string">'set'</span>, csim_neurons(i), <span class="string">'Vresting'</span>, -0.07, <span class="string">'Vinit'</span>, -0.07, <span class="string">'Vthresh'</span>, -0.054, <span class="string">'Vreset'</span>, -0.06, <span class="string">'Trefract'</span>, 0.003, <span class="string">'Cm'</span>, 3e-8, <span class="string">'Rm'</span>, 1e6);
+0182     <span class="comment">% Set SELF_FIRING</span>
+0183     <span class="keyword">if</span> rand &lt;= self_firing_percent
+0184         <span class="comment">% This neurons is self-firing</span>
+0185         csim(<span class="string">'set'</span>, csim_neurons(i), <span class="string">'Inoise'</span>, 30e-9);
+0186     <span class="keyword">else</span>
+0187         <span class="comment">% This neuron is not self-firing.</span>
+0188         csim(<span class="string">'set'</span>, csim_neurons(i), <span class="string">'Inoise'</span>, 10e-9);
+0189     <span class="keyword">end</span>
+0190     <span class="comment">% Set Excitatory/Inhibitory</span>
+0191     <span class="keyword">if</span> neuron_type(i) == EXCITATORY_FLAG
+0192         csim(<span class="string">'set'</span>, csim_neurons(i), <span class="string">'type'</span>, 0);
+0193     <span class="keyword">elseif</span> neuron_type(i) == INHIBITORY_FLAG
+0194         csim(<span class="string">'set'</span>, csim_neurons(i), <span class="string">'type'</span>, 1);
+0195     <span class="keyword">end</span>
+0196 <span class="keyword">end</span>
+0197 fprintf(<span class="string">'Done.\n'</span>);
+0198 
+0199 <span class="comment">% Form the synapses</span>
+0200 fprintf(<span class="string">'Creating and setting synapses models and connecting neurons through synapses... '</span>);
+0201 csim_synapses = zeros(sum_synapse_number, 1);
+0202 total_count_synapses = 0;
+0203 <span class="keyword">for</span> i = 1:neuron_number
+0204     <span class="keyword">if</span> neuron_type(i) == EXCITATORY_FLAG
+0205         <span class="comment">% All synapses started from this neuron should be STDP excitatory</span>
+0206         <span class="comment">% synapses</span>
+0207         <span class="keyword">for</span> j = 1:synapse_number(i)
+0208             total_count_synapses = total_count_synapses + 1;
+0209             <span class="comment">% Create synapse</span>
+0210             csim_synapses(total_count_synapses) = csim(<span class="string">'create'</span>, <span class="string">'DynamicStdpSynapse'</span>);
+0211             <span class="comment">% Calc the connection velocity</span>
+0212             conn_v = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(neuron_location(i, :), neuron_location(connections(i).locations(j), :)) / 1e6 / conduction_velocity;
+0213             <span class="comment">% Set properties</span>
+0214             csim(<span class="string">'set'</span>, csim_synapses(total_count_synapses), <span class="string">'r0'</span>, 1, <span class="string">'U'</span>, 0.5, <span class="string">'u0'</span>, 0.5, <span class="string">'D'</span>, 800e-3, <span class="string">'F'</span>, 1, <span class="string">'tau'</span>, 3e-3, <span class="string">'Apos'</span>, 0.5, <span class="string">'Aneg'</span>, 0.5*1.05/100, <span class="string">'taupos'</span>, 20e-3, <span class="string">'tauneg'</span>, 20e-3, <span class="string">'Wex'</span>, 0.1, <span class="string">'mupos'</span>, 1, <span class="string">'muneg'</span>, 1, <span class="string">'tauspre'</span>, 34e-3, <span class="string">'tauspost'</span>, 75e-3, <span class="string">'delay'</span>, conn_v, <span class="string">'W'</span>, 0.05);
+0215             <span class="comment">% Connect</span>
+0216             <span class="comment">%csim('connect', csim_neurons(connections(i).locations(j)), csim_neurons(i), csim_synapses(total_count_synapses));</span>
+0217             csim(<span class="string">'connect'</span>, csim_synapses(total_count_synapses), csim_neurons(i));
+0218             csim(<span class="string">'connect'</span>, csim_neurons(connections(i).locations(j)), csim_synapses(total_count_synapses));
+0219         <span class="keyword">end</span>
+0220     <span class="keyword">elseif</span> neuron_type(i) == INHIBITORY_FLAG
+0221         <span class="comment">% All synapses started from this neuron should be inhibitory</span>
+0222         <span class="comment">% Frequency-dependent synapses</span>
+0223         <span class="keyword">for</span> j = 1:synapse_number(i)
+0224             total_count_synapses = total_count_synapses + 1;
+0225             <span class="comment">% Create synapse</span>
+0226             csim_synapses(total_count_synapses) = csim(<span class="string">'create'</span>, <span class="string">'DynamicSpikingSynapse'</span>);
+0227             <span class="comment">% Calc the connection velocity</span>
+0228             conn_v = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(neuron_location(i, :), neuron_location(connections(i).locations(j), :)) / 1e6 / conduction_velocity;
+0229             <span class="comment">% Set properties</span>
+0230             csim(<span class="string">'set'</span>, csim_synapses(total_count_synapses), <span class="string">'r0'</span>, 1, <span class="string">'U'</span>, 0.5, <span class="string">'u0'</span>, 0.5, <span class="string">'D'</span>, 800e-3, <span class="string">'F'</span>, 1, <span class="string">'tau'</span>, 3e-3, <span class="string">'delay'</span>, conn_v, <span class="string">'W'</span>, -0.05);
+0231             <span class="comment">% Connect</span>
+0232             <span class="comment">%csim('connect', csim_neurons(connections(i).locations(j)), csim_neurons(i), csim_synapses(total_count_synapses));</span>
+0233             csim(<span class="string">'connect'</span>, csim_synapses(total_count_synapses), csim_neurons(i));
+0234             csim(<span class="string">'connect'</span>, csim_neurons(connections(i).locations(j)), csim_synapses(total_count_synapses));
+0235          <span class="keyword">end</span>
+0236     <span class="keyword">end</span>
+0237 <span class="keyword">end</span>
+0238 fprintf(<span class="string">'Done.\n'</span>);
+0239 
+0240 <span class="comment">% Create electrodes</span>
+0241 fprintf(<span class="string">'Creating and connecting electrodes to closest neurons... '</span>);
+0242 csim_electrodes = zeros(8, 8);
+0243 electrodes_location = zeros(8, 8, 2);
+0244 <span class="keyword">for</span> row = 1:8
+0245     <span class="keyword">for</span> col = 1:8
+0246         <span class="keyword">if</span> (row == 1 &amp;&amp; col == 1) || (row == 1 &amp;&amp; col == 8) || (row == 8 &amp;&amp; col == 1) || (row == 8 &amp;&amp; col == 8)
+0247             <span class="keyword">continue</span>;
+0248         <span class="keyword">end</span>
+0249         <span class="comment">% Create</span>
+0250         csim_electrodes(row, col) = csim(<span class="string">'create'</span>, <span class="string">'Recorder'</span>);
+0251         csim(<span class="string">'set'</span>, csim_electrodes(row, col), <span class="string">'dt'</span>, 100e-6, <span class="string">'Tprealloc'</span>, 100);
+0252         electrodes_location(row, col, :) = [row * 333, col * 333];
+0253         
+0254         <span class="comment">% Connect 5 +/- 1 closest neurons</span>
+0255         
+0256         <span class="comment">% How many neurons this recorder?</span>
+0257         rec_number = round(5 + 1 * randn);
+0258         <span class="comment">% Search all neurons &amp; Sort</span>
+0259         distance = zeros(neuron_number, 1);
+0260         <span class="keyword">for</span> i = 1:neuron_number
+0261             distance(i) = <a href="#_sub1" class="code" title="subfunction distance = euclidean_dist(a, b)">euclidean_dist</a>(electrodes_location(row, col, :), neuron_location(i, :));
+0262         <span class="keyword">end</span>
+0263         [~, sorted_index] = sort(distance, 1, <span class="string">'ascend'</span>);
+0264         <span class="comment">% Connect</span>
+0265         <span class="keyword">for</span> i = 1:rec_number
+0266             csim(<span class="string">'connect'</span>, csim_electrodes(row, col), csim_neurons(sorted_index(i)), <span class="string">'Vm'</span>);
+0267         <span class="keyword">end</span>
+0268     <span class="keyword">end</span>
+0269 <span class="keyword">end</span>
+0270 fprintf(<span class="string">'Done.\n'</span>);
+0271 
+0272 <span class="comment">% Plot the network</span>
+0273 fprintf(<span class="string">'\nCreating model plot... '</span>);
+0274 figure, hold on
+0275 fprintf(<span class="string">'Links... '</span>);
+0276 <span class="keyword">for</span> i = 1:neuron_number
+0277     loc_x = neuron_location(i, 1);
+0278     loc_y = neuron_location(i, 2);
+0279     <span class="keyword">for</span> j = 1:synapse_number(i)
+0280         conn_id = connections(i).locations(j);
+0281         conn_x = neuron_location(conn_id, 1);
+0282         conn_y = neuron_location(conn_id, 2);
+0283         <span class="keyword">if</span> neuron_type(i) == EXCITATORY_FLAG
+0284             plot([loc_x conn_x], [loc_y conn_y], <span class="string">'Color'</span>, [1 0 0]);
+0285         <span class="keyword">elseif</span> neuron_type(i) == INHIBITORY_FLAG
+0286             plot([loc_x conn_x], [loc_y conn_y], <span class="string">'Color'</span>, [0 0 1]);
+0287         <span class="keyword">end</span>
+0288     <span class="keyword">end</span>
+0289 <span class="keyword">end</span>
+0290 fprintf(<span class="string">'Neurons... '</span>);
+0291 <span class="keyword">for</span> i = 1:neuron_number
+0292     loc_x = neuron_location(i, 1);
+0293     loc_y = neuron_location(i, 2);
+0294     <span class="keyword">if</span> neuron_type(i) == EXCITATORY_FLAG
+0295         scatter(loc_x, loc_y,<span class="string">'MarkerFaceColor'</span>, [1 0 0], <span class="string">'MarkerEdgeColor'</span>, [1 1 1], <span class="string">'SizeData'</span>, 60, <span class="string">'Marker'</span>, <span class="string">'o'</span>);
+0296     <span class="keyword">elseif</span> neuron_type(i) == INHIBITORY_FLAG
+0297         scatter(loc_x, loc_y,<span class="string">'MarkerFaceColor'</span>, [0 0 1], <span class="string">'MarkerEdgeColor'</span>, [1 1 1], <span class="string">'SizeData'</span>, 60, <span class="string">'Marker'</span>, <span class="string">'s'</span>);
+0298     <span class="keyword">end</span>
+0299 <span class="keyword">end</span>
+0300 fprintf(<span class="string">'Electrodes... '</span>);
+0301 <span class="keyword">for</span> row = 1:8
+0302     <span class="keyword">for</span> col = 1:8
+0303         <span class="keyword">if</span> (row == 1 &amp;&amp; col == 1) || (row == 1 &amp;&amp; col == 8) || (row == 8 &amp;&amp; col == 1) || (row == 8 &amp;&amp; col == 8)
+0304             <span class="keyword">continue</span>;
+0305         <span class="keyword">end</span>
+0306         scatter(electrodes_location(row, col, 1),electrodes_location(row, col, 2), <span class="string">'MarkerFaceColor'</span>, [0 0 0], <span class="string">'MarkerEdgeColor'</span>, <span class="string">'none'</span>, <span class="string">'SizeData'</span>, 144);
+0307     <span class="keyword">end</span>
+0308 <span class="keyword">end</span>
+0309 hold off;
+0310 fprintf(<span class="string">'Done.\n'</span>);
+0311 
+0312 <span class="comment">% Set the network</span>
+0313 csim(<span class="string">'set'</span>, <span class="string">'dt'</span>, 100e-6);
+0314 
+0315 <span class="keyword">end</span>
+0316 
+0317 <a name="_sub1" href="#_subfunctions" class="code">function distance = euclidean_dist(a, b)</a>
+0318 <span class="comment">% Calculate the eulidean distance between two points, a and b.</span>
+0319 <span class="comment">% a(1) = a.x, a(2) = a.y</span>
+0320 distance = sqrt((b(1) - a(1)) ^ 2 + (b(2) - a(2)) ^ 2);
+0321 <span class="keyword">end</span>
+0322 
+0323 <a name="_sub2" href="#_subfunctions" class="code">function number = neuralrnd(neural_distribution_curve)</a>
+0324 number = <a href="../Otherbox/anyrnd/anyrnd.html" class="code" title="function r= anyrnd(f,M,N)">anyrnd</a>(neural_distribution_curve, 1, 1);
+0325 <span class="keyword">end</span>
+0326 
+0327 <a name="_sub3" href="#_subfunctions" class="code">function distribution = load_neural_distribution()</a>
+0328 distribution = load([<a href="../Common/util_get_toolbox_root.html" class="code" title="function toolbox_path = util_get_toolbox_root(varargin)">util_get_toolbox_root</a>() filesep <span class="string">'Model'</span> filesep <span class="string">'connection_length_distribution.mat'</span>], <span class="string">'neural_distribution_curve'</span>);
+0329 distribution = distribution.neural_distribution_curve;
+0330 <span class="comment">% enlength to 4.14</span>
+0331 new_i = [distribution(:,1); (4002:4140)'];  <span class="comment">% The original size is (4001,2).</span>
+0332 new_v = [distribution(:,2);ones(4140-4001,1)*distribution(<span class="keyword">end</span>,2)];
+0333 distribution = [new_i new_v];
+0334 distribution(:,2) = distribution(:,2) + 5;
+0335 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

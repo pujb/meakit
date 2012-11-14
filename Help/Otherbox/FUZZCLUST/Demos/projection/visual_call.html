@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of visual_call</title>
+  <meta name="keywords" content="visual_call">
+  <meta name="description" content="Calling function of the visualization functions">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html FUZZCLUST --><!-- # Demos --><!-- menu.html projection -->
+<h1>visual_call
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Calling function of the visualization functions</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">Calling function of the visualization functions</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/FUZZCLUST/FuzSam.html" class="code" title="function result = FuzSam(proj,result,param)">FuzSam</a>	rand('seed',120)</li><li><a href="../../../../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>	checking the parameters given</li><li><a href="../../../../Otherbox/FUZZCLUST/PCA.html" class="code" title="function result = PCA(data,param,result)">PCA</a>	%beletehet� hogy veszi e bementnek az eigenvektoroat, if existes t閙a</li><li><a href="../../../../Otherbox/FUZZCLUST/Sammon.html" class="code" title="function result = Sammon(proj,data,result,param)">Sammon</a>	function P = sammon(D, P, varargin)</li><li><a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../../../../Otherbox/FUZZCLUST/projeval.html" class="code" title="function perf = projeval(result,param)">projeval</a>	function perf =projeval(x,v,m,c,f)</li><li><a href="../../../../Otherbox/FUZZCLUST/samstr.html" class="code" title="function result=samstr(data,result);">samstr</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>	validation of the clustering</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">%Calling function of the visualization functions</span>
+0002 close all
+0003 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0004 colors={<span class="string">'r.'</span> <span class="string">'gx'</span> <span class="string">'b+'</span> <span class="string">'ys'</span> <span class="string">'m.'</span> <span class="string">'c.'</span> <span class="string">'k.'</span> <span class="string">'r*'</span> <span class="string">'g*'</span> <span class="string">'b*'</span> <span class="string">'y*'</span> <span class="string">'m*'</span> <span class="string">'c*'</span> <span class="string">'k*'</span> };
+0005 path(path,<span class="string">'..\..'</span>)
+0006 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0007 <span class="comment">%Selecting the data set</span>
+0008 wine=1;
+0009 iris=0;
+0010 wisc=0;
+0011 
+0012 <span class="keyword">if</span> wine
+0013     load winedat.txt
+0014     data=winedat(:,1:end-1);
+0015     C=winedat(:,end);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">if</span> iris
+0019     load iris
+0020     data=iris(:,1:4);
+0021     C=zeros(length(data),1);
+0022     <span class="keyword">for</span> i=1:3
+0023         C(find(iris(:,4+i)==1))=i;
+0024     <span class="keyword">end</span>    
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">if</span> wisc
+0027    <span class="comment">%Data preprocessing</span>
+0028     wisc=wk1read(<span class="string">'wisconsin.wk1'</span>);
+0029     NI=9;
+0030     NT=length(wisc);
+0031     data.X=[wisc(:,11) wisc(:,2:10)];
+0032     data.X=sortrows(data.X,1);
+0033     [I,J]=find(data.X(:,7)~=0);
+0034     data.X=data.X(I,:);
+0035     [I,J]=find(data.X(:,1)==2);
+0036     data.X(I,1)=1;
+0037     [I,J]=find(data.X(:,1)==4);
+0038     data.X(I,1)=2;
+0039     C=data.X(:,1);
+0040     data=data.X(:,2:end); 
+0041 <span class="keyword">end</span>    
+0042 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0043 <span class="comment">% %normalization of the data</span>
+0044 data.X=data;
+0045 data=<a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>);
+0046 <span class="comment">%fuzzy c-means clustering</span>
+0047 param.m=2;
+0048 param.c=2;
+0049 param.val=1;
+0050 param.vis=0;
+0051 result=<a href="../../../../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>(data,param);
+0052 result=<a href="../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>(result,data,param);
+0053 <span class="comment">%Assignment for classification</span>
+0054 [d1,d2]=max(result.data.f');
+0055 Cc=[];
+0056 <span class="keyword">for</span> i=1:param.c
+0057     Ci=C(find(d2==i));
+0058     dum1=hist(Ci,1:param.c);
+0059     [dd1,dd2]=max(dum1);
+0060     Cc(i)=dd2;
+0061 <span class="keyword">end</span>
+0062 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0063 <span class="comment">%Principal Component Projection of the data and the cluster centers</span>
+0064 param.q=2;
+0065 result = <a href="../../../../Otherbox/FUZZCLUST/PCA.html" class="code" title="function result = PCA(data,param,result)">PCA</a>(data,param,result); 
+0066 <span class="comment">%visualization</span>
+0067 figure(1)
+0068 clf
+0069 <span class="keyword">for</span> i=1:max(C)
+0070     index=find(C==i);
+0071     err=(Cc(d2(index))~=i);
+0072     eindex=find(err);
+0073     misclass(i)=sum(err);
+0074     plot(result.proj.P(index,1),result.proj.P(index,2),[colors{i}])
+0075     hold on
+0076     plot(result.proj.P(index(eindex),1),result.proj.P(index(eindex),2),<span class="string">'o'</span>)
+0077     hold on
+0078 <span class="keyword">end</span> 
+0079     xlabel(<span class="string">'y_1'</span>)
+0080     ylabel(<span class="string">'y_2'</span>)
+0081     title(<span class="string">'PCA projection'</span>)
+0082 <span class="comment">%The error value of classification</span>
+0083 perfclass=sum(misclass)/length(C)*100    
+0084 <span class="comment">%</span>
+0085 plot(result.proj.vp(:,1),result.proj.vp(:,2),<span class="string">'r*'</span>);
+0086 <span class="comment">%calculating realtion-indexes</span>
+0087 result = <a href="../../../../Otherbox/FUZZCLUST/samstr.html" class="code" title="function result=samstr(data,result);">samstr</a>(data,result);
+0088 perf = [<a href="../../../../Otherbox/FUZZCLUST/projeval.html" class="code" title="function perf = projeval(result,param)">projeval</a>(result,param) result.proj.e];
+0089 <span class="comment">%</span>
+0090 disp(<span class="string">'Press any key.'</span>)
+0091 pause   
+0092 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0093 <span class="comment">%SAMMON mapping</span>
+0094 
+0095 proj.P=result.proj.P;   <span class="comment">%Sammon uses the output of PCA for initializing</span>
+0096 param.alpha = 0.4;
+0097 param.max=100;
+0098 
+0099 figure(2)
+0100 result = <a href="../../../../Otherbox/FUZZCLUST/Sammon.html" class="code" title="function result = Sammon(proj,data,result,param)">Sammon</a>(proj,data,result,param)
+0101 <span class="comment">%visualization</span>
+0102 clf
+0103 <span class="keyword">for</span> i=1:max(C)
+0104     index=find(C==i);
+0105     err=(Cc(d2(index))~=i);
+0106     eindex=find(err);
+0107     misclass(i)=sum(err);
+0108     plot(result.proj.P(index,1),result.proj.P(index,2),[colors{i}] )
+0109     hold on
+0110     plot(result.proj.P(index(eindex),1),result.proj.P(index(eindex),2),<span class="string">'o'</span>)
+0111     hold on
+0112 <span class="keyword">end</span>    
+0113     xlabel(<span class="string">'y_1'</span>)
+0114     ylabel(<span class="string">'y_2'</span>)
+0115     title(<span class="string">'Conventional Sammon mapping'</span>)
+0116 <span class="comment">%</span>
+0117 plot(result.proj.vp(:,1),result.proj.vp(:,2),<span class="string">'r*'</span>);    
+0118 <span class="comment">%calculating realtion-indexes</span>
+0119 result = <a href="../../../../Otherbox/FUZZCLUST/samstr.html" class="code" title="function result=samstr(data,result);">samstr</a>(data,result);
+0120 perfs = [<a href="../../../../Otherbox/FUZZCLUST/projeval.html" class="code" title="function perf = projeval(result,param)">projeval</a>(result,param) result.proj.e];
+0121 <span class="comment">%</span>
+0122 disp(<span class="string">'Press any key.'</span>)
+0123 pause
+0124 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0125 <span class="comment">%Modified fuzzy SAMMON mapping</span>
+0126   
+0127 proj.P=result.proj.P; <span class="comment">%FuzSam uses the output of Sammon for initializing</span>
+0128 param.alpha = 0.4;
+0129 param.max=100;
+0130 
+0131 figure(3)
+0132 result=<a href="../../../../Otherbox/FUZZCLUST/FuzSam.html" class="code" title="function result = FuzSam(proj,result,param)">FuzSam</a>(proj,result,param);
+0133 
+0134 clf
+0135 <span class="keyword">for</span> i=1:max(C)
+0136     index=find(C==i);
+0137     err=(Cc(d2(index))~=i);
+0138     eindex=find(err);
+0139     misclass(i)=sum(err);
+0140     plot(result.proj.P(index,1),result.proj.P(index,2),[colors{i}] )
+0141     hold on
+0142     plot(result.proj.P(index(eindex),1),result.proj.P(index(eindex),2),<span class="string">'o'</span>)
+0143     hold on
+0144 <span class="keyword">end</span>    
+0145     xlabel(<span class="string">'y_1'</span>)
+0146     ylabel(<span class="string">'y_2'</span>)
+0147     title(<span class="string">'Fuzzy Sammon mapping'</span>)
+0148     
+0149 plot(result.proj.vp(:,1),result.proj.vp(:,2),<span class="string">'r*'</span>)
+0150 <span class="comment">%calculating realtion-indexes</span>
+0151 result = <a href="../../../../Otherbox/FUZZCLUST/samstr.html" class="code" title="function result=samstr(data,result);">samstr</a>(data,result);
+0152 perff = [<a href="../../../../Otherbox/FUZZCLUST/projeval.html" class="code" title="function perf = projeval(result,param)">projeval</a>(result,param) result.proj.e];
+0153 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0154 perf
+0155 perfs
+0156 perff
+0157 
+0158 
+0159 
+0160 
+0161 
+0162</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

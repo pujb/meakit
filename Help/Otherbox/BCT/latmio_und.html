@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of latmio_und</title>
+  <meta name="keywords" content="latmio_und">
+  <meta name="description" content="LATMIO_UND     Lattice with preserved degree distribution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>latmio_und
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>LATMIO_UND     Lattice with preserved degree distribution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function R=latmio_und(R, ITER) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">LATMIO_UND     Lattice with preserved degree distribution
+
+   L = latmio_und(A,ITER);
+
+   This function &quot;latticizes&quot; an undirected network, while preserving the 
+   degree distribution. The function does not preserve the out-strength 
+   distribution in weighted networks.
+
+   Input:      A,      undirected (binary/weighted) connection matrix
+               ITER,   rewiring parameter
+                       (each edge is rewired approximately ITER times)
+
+   Output:     L,      latticized network
+
+   References: Maslov and Sneppen (2002) Science 296:910
+               Sporns and Zwi (2004); Neuroinformatics 2:145
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function R=latmio_und(R, ITER)</a>
+0002 <span class="comment">%LATMIO_UND     Lattice with preserved degree distribution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   L = latmio_und(A,ITER);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function &quot;latticizes&quot; an undirected network, while preserving the</span>
+0007 <span class="comment">%   degree distribution. The function does not preserve the out-strength</span>
+0008 <span class="comment">%   distribution in weighted networks.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      A,      undirected (binary/weighted) connection matrix</span>
+0011 <span class="comment">%               ITER,   rewiring parameter</span>
+0012 <span class="comment">%                       (each edge is rewired approximately ITER times)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Output:     L,      latticized network</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   References: Maslov and Sneppen (2002) Science 296:910</span>
+0017 <span class="comment">%               Sporns and Zwi (2004); Neuroinformatics 2:145</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0021 
+0022 
+0023 <span class="comment">%Modification History:</span>
+0024 <span class="comment">%Jun 2007: Original</span>
+0025 <span class="comment">%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore</span>
+0026 <span class="comment">%          all potential rewirings (Jonathan Power, WUSTL)</span>
+0027 
+0028 
+0029 <span class="comment">%create 'distance to diagonal' matrix</span>
+0030 <span class="keyword">persistent</span> D
+0031 <span class="keyword">if</span> isempty(D)
+0032     n=length(R);
+0033     D=zeros(n);
+0034     u=[0 min([mod(1:n-1,n);mod(n-1:-1:1,n)])];
+0035     <span class="keyword">for</span> v=1:ceil(n/2)
+0036         D(n-v+1,:)=u([v+1:n 1:v]);
+0037         D(v,:)=D(n-v+1,n:-1:1);
+0038     <span class="keyword">end</span>
+0039 <span class="keyword">end</span>
+0040 <span class="comment">%end create</span>
+0041 
+0042 [i j]=find(tril(R));
+0043 K=length(i);
+0044 ITER=K*ITER;
+0045 
+0046 <span class="keyword">for</span> iter=1:ITER
+0047     <span class="keyword">while</span> 1                                     <span class="comment">%while not rewired</span>
+0048         <span class="keyword">while</span> 1
+0049             e1=ceil(K*rand);
+0050             e2=ceil(K*rand);
+0051             <span class="keyword">while</span> (e2==e1),
+0052                 e2=ceil(K*rand);
+0053             <span class="keyword">end</span>
+0054             a=i(e1); b=j(e1);
+0055             c=i(e2); d=j(e2);
+0056 
+0057             <span class="keyword">if</span> all(a~=[c d]) &amp;&amp; all(b~=[c d]);
+0058                 <span class="keyword">break</span>           <span class="comment">%all four vertices must be different</span>
+0059             <span class="keyword">end</span>
+0060         <span class="keyword">end</span>
+0061 
+0062         <span class="keyword">if</span> rand&gt;0.5
+0063             i(e2)=d; j(e2)=c;     <span class="comment">%flip edge c-d with 50% probability</span>
+0064             c=i(e2); d=j(e2);     <span class="comment">%to explore all potential rewirings</span>
+0065         <span class="keyword">end</span>
+0066         
+0067         <span class="comment">%rewiring condition</span>
+0068         <span class="keyword">if</span> ~(R(a,d) || R(c,b))
+0069             <span class="comment">%lattice condition</span>
+0070             <span class="keyword">if</span> (D(a,b)+D(c,d))&gt;=(D(a,d)+D(c,b))
+0071                 R(a,d)=R(a,b); R(a,b)=0;
+0072                 R(d,a)=R(b,a); R(b,a)=0;
+0073                 R(c,b)=R(c,d); R(c,d)=0;
+0074                 R(b,c)=R(d,c); R(d,c)=0;
+0075 
+0076                 j(e1) = d;          <span class="comment">%reassign edge indices</span>
+0077                 j(e2) = b;
+0078                 <span class="keyword">break</span>;
+0079             <span class="keyword">end</span> <span class="comment">%lattice condition</span>
+0080         <span class="keyword">end</span> <span class="comment">%rewiring condition</span>
+0081     <span class="keyword">end</span> <span class="comment">%while not rewired</span>
+0082 <span class="keyword">end</span> <span class="comment">%iterations</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

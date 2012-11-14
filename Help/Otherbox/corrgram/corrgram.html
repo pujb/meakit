@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of corrgram</title>
+  <meta name="keywords" content="corrgram">
+  <meta name="description" content="CORRGRAM Calculate windowed cross correlation between two signals.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html corrgram -->
+<h1>corrgram
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CORRGRAM Calculate windowed cross correlation between two signals.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [c_out, l_out, t_out] = corrgram(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">CORRGRAM Calculate windowed cross correlation between two signals.
+   C = CORRGRAM(A,B,MAXLAG,WINDOW,NOVERLAP) calculates the windowed cross   
+   correlation between the signals in vector A and vector B. CORRGRAM splits  
+   the signals into overlapping segments and forms the columns of C with 
+   their cross correlation values up to maximum lag specified by scalar 
+   MAXLAG. Each column of C contains the cross correlation function between 
+   the short-term, time-localized signals A and B. Time increases linearly 
+   across the columns of C, from left to right.  Lag increases linearly down 
+   the rows, starting at -MAXLAG. If lengths of A and B differ, the shorter
+   signal is filled with zeros. If N is the length of the signals, C is
+   a matrix with 2*MAXLAG+1 rows and 
+         k = fix((N-NOVERLAP)/(WINDOW-NOVERLAP)) 
+   columns.
+
+   [C,L,T] = CORRGRAM(...) returns a column of lag L and one of time T
+   at which the correlation coefficients are computed. L has length equal 
+   to the number of rows of C, T has length k.
+
+   C = CORRGRAM(A,B) calculates windowed cross correlation using defeault
+   settings; the defeaults are MAXLAG = floor(0.1*N), WINDOW = floor(0.1*N)
+   and NOVERLAP = 0. You can tell CORRGRAM to use the defeault for any 
+   parameter by leaving it off or using [] for that parameter, e.g. 
+   CORRGRAM(A,B,[],1000).
+
+   CORRGRAM(A,B) with no output arguments plots the windowed cross 
+   correlation using the current figure.
+
+   EXAMPLE:
+       x = cos(0:.01:10*pi)';
+       y = sin(0:.01:10*pi)' + .5 * randn(length(x),1);
+       corrgram(x,y)
+
+   See also CORRCOEF, CORR, XCORR, MIGRAM.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>	</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_calc_raw_spont_cch.html" class="code" title="function [ lags cch peak] = util_calc_raw_spont_cch( varargin )">util_calc_raw_spont_cch</a>	UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Y = normalize(X)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c_out, l_out, t_out] = corrgram(varargin)</a>
+0002 <span class="comment">%CORRGRAM Calculate windowed cross correlation between two signals.</span>
+0003 <span class="comment">%   C = CORRGRAM(A,B,MAXLAG,WINDOW,NOVERLAP) calculates the windowed cross</span>
+0004 <span class="comment">%   correlation between the signals in vector A and vector B. CORRGRAM splits</span>
+0005 <span class="comment">%   the signals into overlapping segments and forms the columns of C with</span>
+0006 <span class="comment">%   their cross correlation values up to maximum lag specified by scalar</span>
+0007 <span class="comment">%   MAXLAG. Each column of C contains the cross correlation function between</span>
+0008 <span class="comment">%   the short-term, time-localized signals A and B. Time increases linearly</span>
+0009 <span class="comment">%   across the columns of C, from left to right.  Lag increases linearly down</span>
+0010 <span class="comment">%   the rows, starting at -MAXLAG. If lengths of A and B differ, the shorter</span>
+0011 <span class="comment">%   signal is filled with zeros. If N is the length of the signals, C is</span>
+0012 <span class="comment">%   a matrix with 2*MAXLAG+1 rows and</span>
+0013 <span class="comment">%         k = fix((N-NOVERLAP)/(WINDOW-NOVERLAP))</span>
+0014 <span class="comment">%   columns.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   [C,L,T] = CORRGRAM(...) returns a column of lag L and one of time T</span>
+0017 <span class="comment">%   at which the correlation coefficients are computed. L has length equal</span>
+0018 <span class="comment">%   to the number of rows of C, T has length k.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   C = CORRGRAM(A,B) calculates windowed cross correlation using defeault</span>
+0021 <span class="comment">%   settings; the defeaults are MAXLAG = floor(0.1*N), WINDOW = floor(0.1*N)</span>
+0022 <span class="comment">%   and NOVERLAP = 0. You can tell CORRGRAM to use the defeault for any</span>
+0023 <span class="comment">%   parameter by leaving it off or using [] for that parameter, e.g.</span>
+0024 <span class="comment">%   CORRGRAM(A,B,[],1000).</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   CORRGRAM(A,B) with no output arguments plots the windowed cross</span>
+0027 <span class="comment">%   correlation using the current figure.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   EXAMPLE:</span>
+0030 <span class="comment">%       x = cos(0:.01:10*pi)';</span>
+0031 <span class="comment">%       y = sin(0:.01:10*pi)' + .5 * randn(length(x),1);</span>
+0032 <span class="comment">%       corrgram(x,y)</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%   See also CORRCOEF, CORR, XCORR, MIGRAM.</span>
+0035 
+0036 <span class="comment">% Copyright (c) 2007 by AMRON</span>
+0037 <span class="comment">% Norbert Marwan, Potsdam University, Germany</span>
+0038 <span class="comment">% http://www.agnld.uni-potsdam.de</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% $Date: 2007/06/14 08:52:19 $</span>
+0041 <span class="comment">% $Revision: 5.1 $</span>
+0042 
+0043 
+0044 error(nargchk(2,5,nargin))
+0045 <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a> = 0;
+0046 
+0047 x = varargin{1}; y = varargin{2};
+0048 x = x(:); y = y(:);
+0049 
+0050 
+0051 <span class="comment">% check input and inital setting of parameters</span>
+0052 
+0053 nx = length(x); ny = length(y);
+0054 <span class="keyword">if</span> nx &lt; ny    <span class="comment">% zero-pad x if it has length less than y</span>
+0055     x(ny) = 0; nx = ny;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> ny &lt; nx    <span class="comment">% zero-pad y if it has length less than x</span>
+0059     y(nx) = 0;
+0060 <span class="keyword">end</span>
+0061 
+0062 maxlag = floor(nx/10); 
+0063 window = floor(nx/10);
+0064 noverlap = 0;
+0065 
+0066 <span class="keyword">if</span> length(varargin) &gt; 2 &amp; ~isempty(varargin{3})
+0067     maxlag = varargin{3};
+0068     <span class="keyword">if</span> maxlag &lt; 0, error(<span class="string">'Requires positive integer value for maximum lag.'</span>), <span class="keyword">end</span>
+0069     <span class="keyword">if</span> length(maxlag) &gt; 1, error(<span class="string">'Requires MAXLAG to be a scalar.'</span>), <span class="keyword">end</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">if</span> length(varargin) &gt; 3 &amp; ~isempty(varargin{4})
+0073     window = varargin{4};
+0074     <span class="keyword">if</span> window &lt; 0, error(<span class="string">'Requires positive integer value for window length.'</span>), <span class="keyword">end</span>
+0075     <span class="keyword">if</span> length(window) &gt; 1, error(<span class="string">'Requires WINDOW to be a scalar.'</span>), <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="keyword">if</span> length(varargin) &gt; 4 &amp; ~isempty(varargin{5})
+0079     noverlap = varargin{5};
+0080     <span class="keyword">if</span> noverlap &lt; 0, error(<span class="string">'Requires positive integer value for NOVERLAP.'</span>), <span class="keyword">end</span>
+0081     <span class="keyword">if</span> length(noverlap) &gt; 1, error(<span class="string">'Requires NOVERLAP to be a scalar.'</span>), <span class="keyword">end</span>
+0082     <span class="keyword">if</span> noverlap &gt;= window, error(<span class="string">'Requires NOVERLAP to be strictly less than the window length.'</span>), <span class="keyword">end</span>
+0083 <span class="keyword">end</span>
+0084 
+0085 
+0086 <span class="comment">% prepare time delayed signals</span>
+0087 X = buffer(x,maxlag+1,maxlag)';
+0088 Y = fliplr(buffer(y,maxlag+1,maxlag)');
+0089 
+0090 <span class="comment">% divide the delayed signals into overlapping windows</span>
+0091 <span class="comment">% and compute the correlation coefficient</span>
+0092 cnt = 1;
+0093 
+0094 warning off
+0095 C = zeros(2*maxlag+1, fix((nx-noverlap)/(window-noverlap)));
+0096 <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, h = waitbar(0,<span class="string">'Compute cross correlation'</span>); <span class="keyword">end</span>
+0097 
+0098 <span class="comment">% -MAXLAG:0</span>
+0099 [Yi dummy] = buffer(Y(:,1),window,noverlap,<span class="string">'nodelay'</span>); 
+0100 Yi = <a href="#_sub1" class="code" title="subfunction Y = normalize(X)">normalize</a>(Yi);
+0101 <span class="keyword">for</span> i = 1:size(X,2), <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, waitbar(cnt/(2*size(X,2))), <span class="keyword">end</span>
+0102     [Xi dummy] = buffer(X(:,i),window,noverlap,<span class="string">'nodelay'</span>);
+0103     Xi = <a href="#_sub1" class="code" title="subfunction Y = normalize(X)">normalize</a>(Xi);
+0104     C(cnt,:) = mean(Xi .* Yi);
+0105     cnt = cnt + 1;
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="comment">% 0:MAXLAG</span>
+0109 [Xi dummy] = buffer(X(:,end),window,noverlap,<span class="string">'nodelay'</span>);
+0110 Xi = <a href="#_sub1" class="code" title="subfunction Y = normalize(X)">normalize</a>(Xi);
+0111 <span class="keyword">for</span> i = 2:size(Y,2), <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, waitbar(cnt/(2*size(X,2))), <span class="keyword">end</span>
+0112     [Yi dummy] = buffer(Y(:,i),window,noverlap,<span class="string">'nodelay'</span>);
+0113     Yi = <a href="#_sub1" class="code" title="subfunction Y = normalize(X)">normalize</a>(Yi);
+0114     C(cnt,:) = mean(Xi .* Yi);
+0115     cnt = cnt + 1;
+0116 <span class="keyword">end</span>
+0117 <span class="keyword">if</span> <a href="../../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>, <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(h), <span class="keyword">end</span>
+0118 
+0119 warning on
+0120 
+0121 <span class="comment">% create time scale for the windows</span>
+0122 t = (1:nx/size(Xi,2):nx)';
+0123 l = (-maxlag:maxlag)';
+0124 
+0125 <span class="comment">% display and output result</span>
+0126 <span class="keyword">if</span> nargout == 0
+0127     newplot
+0128     imagesc(t, l, C)
+0129     xlabel(<span class="string">'Time'</span>), ylabel(<span class="string">'Lag'</span>), axis xy
+0130     title(<span class="string">'Windowed cross correlation'</span>, <span class="string">'fontweight'</span>, <span class="string">'bold'</span>)
+0131     colorbar
+0132 <span class="keyword">elseif</span> nargout == 1,
+0133     c_out = C;
+0134 <span class="keyword">elseif</span> nargout == 2,
+0135     c_out = C;
+0136     l_out = l;
+0137 <span class="keyword">elseif</span> nargout == 3,
+0138     c_out = C;
+0139     l_out = l;
+0140     t_out = t;
+0141 <span class="keyword">end</span>
+0142 
+0143 
+0144 <a name="_sub1" href="#_subfunctions" class="code">function Y = normalize(X)</a>
+0145     Y = X - repmat(mean(X), size(X,1), 1);
+0146     s = sqrt( sum(conj(Y) .* Y) / (size(Y,1) - 1) );
+0147     Y = Y ./ repmat(s, size(Y,1), 1);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

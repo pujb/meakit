@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tsne</title>
+  <meta name="keywords" content="tsne">
+  <meta name="description" content="TSNE Performs symmetric t-SNE on dataset X">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>tsne
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>TSNE Performs symmetric t-SNE on dataset X</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function ydata = tsne(X, labels, no_dims, initial_dims, perplexity) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">TSNE Performs symmetric t-SNE on dataset X
+
+   mappedX = tsne(X, labels, no_dims, initial_dims, perplexity)
+   mappedX = tsne(X, labels, initial_solution, perplexity)
+
+ The function performs symmetric t-SNE on the NxD dataset X to reduce its 
+ dimensionality to no_dims dimensions (default = 2). The data is 
+ preprocessed using PCA, reducing the dimensionality to initial_dims 
+ dimensions (default = 30). Alternatively, an initial solution obtained 
+ from an other dimensionality reduction technique may be specified in 
+ initial_solution. The perplexity of the Gaussian kernel that is employed 
+ can be specified through perplexity (default = 30). The labels of the
+ data are not used by t-SNE itself, however, they are used to color
+ intermediate plots. Please provide an empty labels matrix [] if you
+ don't want to plot results during the optimization.
+ The low-dimensional data representation is returned in mappedX.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="d2p.html" class="code" title="function [P, beta] = d2p(D, u, tol)">d2p</a>	D2P Identifies appropriate sigma's to get kk NNs up to some tolerance</li><li><a href="tsne_p.html" class="code" title="function ydata = tsne_p(P, labels, no_dims)">tsne_p</a>	TSNE_P Performs symmetric t-SNE on affinity matrix P</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ydata = tsne(X, labels, no_dims, initial_dims, perplexity)</a>
+0002 <span class="comment">%TSNE Performs symmetric t-SNE on dataset X</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = tsne(X, labels, no_dims, initial_dims, perplexity)</span>
+0005 <span class="comment">%   mappedX = tsne(X, labels, initial_solution, perplexity)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% The function performs symmetric t-SNE on the NxD dataset X to reduce its</span>
+0008 <span class="comment">% dimensionality to no_dims dimensions (default = 2). The data is</span>
+0009 <span class="comment">% preprocessed using PCA, reducing the dimensionality to initial_dims</span>
+0010 <span class="comment">% dimensions (default = 30). Alternatively, an initial solution obtained</span>
+0011 <span class="comment">% from an other dimensionality reduction technique may be specified in</span>
+0012 <span class="comment">% initial_solution. The perplexity of the Gaussian kernel that is employed</span>
+0013 <span class="comment">% can be specified through perplexity (default = 30). The labels of the</span>
+0014 <span class="comment">% data are not used by t-SNE itself, however, they are used to color</span>
+0015 <span class="comment">% intermediate plots. Please provide an empty labels matrix [] if you</span>
+0016 <span class="comment">% don't want to plot results during the optimization.</span>
+0017 <span class="comment">% The low-dimensional data representation is returned in mappedX.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 
+0021 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0022 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0023 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0024 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0025 <span class="comment">% maintain the name of the original author.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0028 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0029 
+0030 
+0031     <span class="keyword">if</span> ~exist(<span class="string">'labels'</span>, <span class="string">'var'</span>)
+0032         labels = [];
+0033     <span class="keyword">end</span>
+0034     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>) || isempty(no_dims)
+0035         no_dims = 2;
+0036     <span class="keyword">end</span>
+0037     <span class="keyword">if</span> ~exist(<span class="string">'initial_dims'</span>, <span class="string">'var'</span>) || isempty(initial_dims)
+0038         initial_dims = min(50, size(X, 2));
+0039     <span class="keyword">end</span>
+0040     <span class="keyword">if</span> ~exist(<span class="string">'perplexity'</span>, <span class="string">'var'</span>) || isempty(perplexity)
+0041         perplexity = 30;
+0042     <span class="keyword">end</span>
+0043     
+0044     <span class="comment">% First check whether we already have an initial solution</span>
+0045     <span class="keyword">if</span> numel(no_dims) &gt; 1
+0046         initial_solution = true;
+0047         ydata = no_dims;
+0048         no_dims = size(ydata, 2);
+0049         perplexity = initial_dims;
+0050     <span class="keyword">else</span>
+0051         initial_solution = false;
+0052     <span class="keyword">end</span>
+0053     
+0054     <span class="comment">% Normalize input data</span>
+0055     X = X - min(X(:));
+0056     X = X / max(X(:));
+0057     
+0058     <span class="comment">% Perform preprocessing using PCA</span>
+0059     <span class="keyword">if</span> ~initial_solution
+0060         disp(<span class="string">'Preprocessing data using PCA...'</span>);
+0061         <span class="keyword">if</span> size(X, 2) &lt; size(X, 1)
+0062             C = X' * X;
+0063         <span class="keyword">else</span>
+0064             C = (1 / size(X, 1)) * (X * X');
+0065         <span class="keyword">end</span>
+0066         [M, lambda] = eig(C);
+0067         [lambda, ind] = sort(diag(lambda), <span class="string">'descend'</span>);
+0068         M = M(:,ind(1:initial_dims));
+0069         lambda = lambda(1:initial_dims);
+0070         <span class="keyword">if</span> ~(size(X, 2) &lt; size(X, 1))
+0071             M = bsxfun(@times, X' * M, (1 ./ sqrt(size(X, 1) .* lambda))');
+0072         <span class="keyword">end</span>
+0073         X = X * M;
+0074         <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> M lambda ind
+0075     <span class="keyword">end</span>
+0076     
+0077     <span class="comment">% Compute pairwise distance matrix</span>
+0078     sum_X = sum(X .^ 2, 2);
+0079     D = bsxfun(@plus, sum_X, bsxfun(@plus, sum_X', -2 * (X * X')));
+0080     
+0081     <span class="comment">% Compute joint probabilities</span>
+0082     P = <a href="d2p.html" class="code" title="function [P, beta] = d2p(D, u, tol)">d2p</a>(D, perplexity, 1e-5);                                           <span class="comment">% compute affinities using fixed perplexity</span>
+0083     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> D
+0084     
+0085     <span class="comment">% Run t-SNE</span>
+0086     <span class="keyword">if</span> initial_solution
+0087         ydata = <a href="tsne_p.html" class="code" title="function ydata = tsne_p(P, labels, no_dims)">tsne_p</a>(P, labels, ydata);
+0088     <span class="keyword">else</span>
+0089         ydata = <a href="tsne_p.html" class="code" title="function ydata = tsne_p(P, labels, no_dims)">tsne_p</a>(P, labels, no_dims);
+0090     <span class="keyword">end</span>
+0091</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

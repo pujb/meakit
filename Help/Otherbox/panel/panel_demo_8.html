@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_8</title>
+  <meta name="keywords" content="panel_demo_8">
+  <meta name="description" content="% PANEL DEMO 8">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_8
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 8</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 8
+%
+% (a) Create a grid of panels all at once
+% (b) Plotting into those panels, setting axis labels</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 8</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create a grid of panels all at once</span>
+0005 <span class="comment">%% (b) Plotting into those panels, setting axis labels</span>
+0006 
+0007 
+0008 
+0009 <span class="comment">%% (a)</span>
+0010 
+0011 <span class="comment">% clear or create figure and create a grid of panels covering</span>
+0012 <span class="comment">% whole figure - you needn't supply the last two arguments,</span>
+0013 <span class="comment">% in which case you'll get a regular grid of panels</span>
+0014 clf
+0015 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>(gcf, [3 2], [50 20], [40]);
+0016 p_root = p{1}.root;
+0017 p_root.fontsize = 12;
+0018 
+0019 
+0020 
+0021 <span class="comment">%% (b)</span>
+0022 
+0023 <span class="comment">% plot into all those panels to show that they are real</span>
+0024 <a href="../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a> = <span class="string">'brmbrm'</span>;
+0025 <span class="keyword">for</span> i = 1:6
+0026     <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(p{i})
+0027     plot(randn(100,1), <a href="../../Otherbox/lightspeed/cols.html" class="code" title="function c = cols(x)">cols</a>(i));
+0028     p{i}.xlabel = <span class="string">'time (s)'</span>;
+0029     p{i}.ylabel = [<span class="string">'my data '</span> int2str(i)];
+0030 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

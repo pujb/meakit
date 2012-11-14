@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of probxy</title>
+  <meta name="keywords" content="probxy">
+  <meta name="description" content="PROBXY calculates joint probability distribution of x and y among nBinsX">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html ami -->
+<h1>probxy
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PROBXY calculates joint probability distribution of x and y among nBinsX</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function pxy = probxy(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> PROBXY calculates joint probability distribution of x and y among nBinsX
+        (for X data)and nBinsY (for Y data) 
+
+ USAGE:
+        pxy = probxy(XY)
+        pxy = probxy(XY, nBinsX, nBinsY)
+
+ INPUT:
+       XY:    2 dimesnional vector of data i.e. [X Y] where X and Y are
+              vectors of length n
+      
+      nBinsX:    either number of bins (scalar) or vector of edges with 
+              monotonically non-decreasing values to compute the 
+              distribution of X among nBinsX or length (nBinX) bins
+   nBinsY:    either number of bins (scalar) or vector of edges with 
+              monotonically non-decreasing values to compute the
+              distribution of Y among nBinsY or length (nBinY) bins
+      
+ OUTPUT:
+      pxy:    joint probability distribution of X and Y
+
+ EXAMPLES:
+       
+ See also <a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">AMI</a>, <a href="prob.html" class="code" title="function [py nBins]= prob(varargin)">PROB</a>, <a href="rhist.html" class="code" title="function [no,xo] = rhist(varargin)">RHIST</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ami.html" class="code" title="function [amis corrs] = ami(xy,nBins,nLags)">ami</a>	AMI computes and plots average mutual information (ami) and correlation for</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [varargout]= computeEdge(varargin)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pxy = probxy(varargin)</a>
+0002 <span class="comment">% PROBXY calculates joint probability distribution of x and y among nBinsX</span>
+0003 <span class="comment">%        (for X data)and nBinsY (for Y data)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% USAGE:</span>
+0006 <span class="comment">%        pxy = probxy(XY)</span>
+0007 <span class="comment">%        pxy = probxy(XY, nBinsX, nBinsY)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% INPUT:</span>
+0010 <span class="comment">%       XY:    2 dimesnional vector of data i.e. [X Y] where X and Y are</span>
+0011 <span class="comment">%              vectors of length n</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%      nBinsX:    either number of bins (scalar) or vector of edges with</span>
+0014 <span class="comment">%              monotonically non-decreasing values to compute the</span>
+0015 <span class="comment">%              distribution of X among nBinsX or length (nBinX) bins</span>
+0016 <span class="comment">%   nBinsY:    either number of bins (scalar) or vector of edges with</span>
+0017 <span class="comment">%              monotonically non-decreasing values to compute the</span>
+0018 <span class="comment">%              distribution of Y among nBinsY or length (nBinY) bins</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% OUTPUT:</span>
+0021 <span class="comment">%      pxy:    joint probability distribution of X and Y</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% EXAMPLES:</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% See also AMI, PROB, RHIST</span>
+0026 
+0027 <span class="comment">% Copyright 2004-2005 by Durga Lal Shrestha.</span>
+0028 <span class="comment">% eMail: durgals@hotmail.com</span>
+0029 <span class="comment">% $Date: 2005/06/27</span>
+0030 <span class="comment">% $Revision: 1.1.0 $ $Date: 2005/07/01 $</span>
+0031 
+0032 <span class="comment">% ***********************************************************************</span>
+0033 <span class="comment">%% INPUT ARGUMENTS CHECK</span>
+0034 error(nargchk(1,3,nargin));
+0035 XY = varargin{1};
+0036 [m, n] = size(XY);
+0037 <span class="keyword">if</span> n &gt; m
+0038   XY = XY';    <span class="comment">% Column vectors</span>
+0039   [m, n] = size(XY);
+0040 <span class="keyword">end</span>
+0041 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> m;
+0042 <span class="keyword">if</span> n ~= 2
+0043   error(<span class="string">'Invalid data size: XY should be two column vectors'</span>)
+0044 <span class="keyword">else</span>
+0045   X = XY(:,1);
+0046   Y = XY(:,2);
+0047 <span class="keyword">end</span>
+0048 <span class="keyword">if</span>  nargin == 1
+0049     nBinsX = 10;
+0050     nBinsY = 10;
+0051 <span class="keyword">elseif</span>  nargin == 2
+0052     nBinsX = varargin{2};
+0053     nBinsY = 10;
+0054 <span class="keyword">else</span>
+0055     nBinsX = varargin{2};
+0056     nBinsY = varargin{3};
+0057 <span class="keyword">end</span>
+0058 <span class="keyword">if</span> isscalar(nBinsX) &amp;  nBinsX &gt; 0    <span class="comment">% number of bins</span>
+0059     edgeX = <a href="#_sub1" class="code" title="subfunction [varargout]= computeEdge(varargin)">computeEdge</a>(X,nBinsX);
+0060 <span class="keyword">elseif</span> size(nBinsX,1) == 1 | size(nBinsX,2) == 1
+0061     edgeX = nBinsX(:);         <span class="comment">% vector of edges</span>
+0062     nBinsX = length(edgeX)-1;
+0063 <span class="keyword">end</span>
+0064 <span class="keyword">if</span> isscalar(nBinsY) &amp;  nBinsY &gt; 0    <span class="comment">% number of bins</span>
+0065     edgeY = <a href="#_sub1" class="code" title="subfunction [varargout]= computeEdge(varargin)">computeEdge</a>(Y,nBinsY);    
+0066 <span class="keyword">elseif</span> size(nBinsY,1) == 1 | size(nBinsY,2) == 1
+0067     edgeY = nBinsY(:);         <span class="comment">% vector of edges</span>
+0068     nBinsY = length(edgeY)-1;
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">%**************************************************************************</span>
+0072 <span class="comment">%% COMPUTATION OF JOINT PROBABILITY DISTRIBUTION</span>
+0073 nn = zeros(nBinsX,nBinsY);
+0074 
+0075 <span class="keyword">for</span> i = 1:nBinsX     
+0076     [indX] = find(X &gt;= edgeX(i) &amp; X &lt; edgeX(i+1));
+0077     yFound = Y(indX);   
+0078     <span class="keyword">if</span> (~isempty(yFound))
+0079         n = histc (yFound, edgeY);
+0080         <span class="comment">% combine last and second last bin since last bin contains value</span>
+0081         <span class="comment">% matching edgeY(end)</span>
+0082         n(length(n)-1) = n(length(n)-1)+ n(length(n));
+0083         n = n(1:length(n)-1);
+0084         nn(i,:) = n';
+0085     <span class="keyword">end</span>    
+0086 <span class="keyword">end</span>
+0087 
+0088 pxy = nn./length(X);
+0089 <span class="comment">%</span>
+0090 <span class="comment">%**************************************************************************</span>
+0091 <span class="comment">%% INTERNAL FUNCTION TO COMPUTE EDGE OF BINS</span>
+0092 <a name="_sub1" href="#_subfunctions" class="code">function [varargout]= computeEdge(varargin)</a>
+0093 <span class="comment">% COMPUTEEDGE computes edges and centre of bins</span>
+0094 <span class="comment">%</span>
+0095 <span class="comment">% USAGE:</span>
+0096 <span class="comment">%       [edge] = computeEdge(X)</span>
+0097 <span class="comment">%       [edge] = computeEdge(X,nBins)</span>
+0098 <span class="comment">%  [edge cntr] = computeEdge(...)</span>
+0099 <span class="comment">%</span>
+0100 <span class="comment">% INPUT:</span>
+0101 <span class="comment">%       X:     x data</span>
+0102 <span class="comment">%      nBins:     number of bins to compute the distribution of y among nBins</span>
+0103 <span class="comment">%</span>
+0104 <span class="comment">% OUTPUT:</span>
+0105 <span class="comment">%     edge:    vector of bin edges</span>
+0106 <span class="comment">%     cntr:    vector of bin centres</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">% EXAMPLES:</span>
+0109 <span class="comment">%</span>
+0110 <span class="comment">% See also</span>
+0111 
+0112 <span class="comment">% Copyright 2004-2005 by Durga Lal Shrestha.</span>
+0113 <span class="comment">% eMail: durgals@hotmail.com</span>
+0114 <span class="comment">% $Date: 2005/06/27</span>
+0115 <span class="comment">% $Revision: 1.0.0 $ $Date: 2005/06/27 $</span>
+0116 
+0117 <span class="comment">% ***********************************************************************</span>
+0118 <span class="comment">%% INPUT ARGUMENTS CHECK</span>
+0119 error(nargchk(1,2,nargin));
+0120 X = varargin{1};
+0121 
+0122 <span class="keyword">if</span>  nargin == 1
+0123     nBins = 10;
+0124 <span class="keyword">else</span>
+0125     nBins = varargin{2};
+0126 <span class="keyword">end</span>
+0127 <span class="keyword">if</span> ~isvector(X)
+0128     error(<span class="string">'Invalid data size: X should be vector'</span>)
+0129 <span class="keyword">else</span>
+0130     X = X(:);
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="comment">%**************************************************************************</span>
+0134 <span class="comment">%% COMPUTATION</span>
+0135 minX = min(X);
+0136 maxX = max(X);              
+0137 binwidth = (maxX - minX) ./ nBins;
+0138 edge = minX + binwidth*(0:nBins);
+0139 <span class="keyword">if</span> nargout == 2
+0140     varargout{2} = edge(1:length(edge)-1) + binwidth/2;      
+0141 <span class="keyword">end</span>
+0142 varargout{1} = [-Inf edge(2:end-1) Inf];</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

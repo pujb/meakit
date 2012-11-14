@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_raster_simple</title>
+  <meta name="keywords" content="util_plot_raster_simple">
+  <meta name="description" content="UTIL_PLOT_RASTER_SIMPLE Plot the RASTER PLOT using simple plotting methods">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_raster_simple
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_RASTER_SIMPLE Plot the RASTER PLOT using simple plotting methods</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = util_plot_raster_simple( spif, gnd, bin, draw_command, quickmode ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_RASTER_SIMPLE Plot the RASTER PLOT using simple plotting methods
+   This function draws the raster plot using 'plot' or 'scatter' method.
+   Compared to UTIL_PLOT_RASTER_IMAGE, this function is suitable for
+   drawing data sets with sparse firing patterns.
+
+   Input:
+       spif:   Spike information structure.
+       gnd:    Grounding electrodes.
+       draw_command:   'plot' or 'scatter'. If you are drawing an
+                       extremely large data set, please use 'plot'.
+       quickmode:  true/false, if true, the raster will be based on spike
+                   rate (ASDR/SPB) instead of precisely timing.
+
+   Jiangbo Pu / May-27-2010
+   Jiangbo Pu / Jun-01-2010
+       Add 'plot' method.
+   Jiangbo Pu / May-16-2011
+       Fix plot SPSA method;
+       Add automatically X tick.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>	UTIL_PLOT_SPSA Generate the SPSA (Rate) graph</li><li><a href="util_set_xtick.html" class="code" title="function util_set_xtick( rate, bin )">util_set_xtick</a>	UTIL_SET_XTICK Set X axis by bin-width and numbers.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = util_plot_raster_simple( spif, gnd, bin, draw_command, quickmode )</a>
+0002 <span class="comment">%UTIL_PLOT_RASTER_SIMPLE Plot the RASTER PLOT using simple plotting methods</span>
+0003 <span class="comment">%   This function draws the raster plot using 'plot' or 'scatter' method.</span>
+0004 <span class="comment">%   Compared to UTIL_PLOT_RASTER_IMAGE, this function is suitable for</span>
+0005 <span class="comment">%   drawing data sets with sparse firing patterns.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Input:</span>
+0008 <span class="comment">%       spif:   Spike information structure.</span>
+0009 <span class="comment">%       gnd:    Grounding electrodes.</span>
+0010 <span class="comment">%       draw_command:   'plot' or 'scatter'. If you are drawing an</span>
+0011 <span class="comment">%                       extremely large data set, please use 'plot'.</span>
+0012 <span class="comment">%       quickmode:  true/false, if true, the raster will be based on spike</span>
+0013 <span class="comment">%                   rate (ASDR/SPB) instead of precisely timing.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Jiangbo Pu / May-27-2010</span>
+0016 <span class="comment">%   Jiangbo Pu / Jun-01-2010</span>
+0017 <span class="comment">%       Add 'plot' method.</span>
+0018 <span class="comment">%   Jiangbo Pu / May-16-2011</span>
+0019 <span class="comment">%       Fix plot SPSA method;</span>
+0020 <span class="comment">%       Add automatically X tick.</span>
+0021 
+0022 <span class="comment">% First plot, SPSA</span>
+0023 subplot(2,1,1);
+0024 [spb] = <a href="util_plot_spsa.html" class="code" title="function [rate] = util_plot_spsa( spif, varargin )">util_plot_spsa</a>( spif, <span class="string">'bin'</span>, bin, <span class="string">'mode'</span>, <span class="string">'mean'</span>);
+0025 
+0026 <span class="comment">% Second plot, RASTER</span>
+0027 
+0028 <span class="comment">% Get Spikes Per Bin of Each electrode</span>
+0029 index = 1;
+0030 bin_size = 1000; <span class="comment">% 1s</span>
+0031 bin_range = 1:1:fix( spif.startend(2)/bin_size );
+0032 
+0033 <span class="keyword">for</span> hwid = 1:length(spif.spiketimes)
+0034     <span class="keyword">if</span> ~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid), [11 18 81 88 gnd])
+0035         <span class="keyword">if</span> quickmode
+0036             locationX = find(histc(spif.spiketimes{hwid}/bin_size, bin_range) &gt; 1);
+0037             locationY = ones(length(locationX),1) * index;
+0038         <span class="keyword">else</span>
+0039             locationX = spif.spiketimes{hwid} / bin_size;
+0040             locationY = ones(length(locationX),1) * index;
+0041         <span class="keyword">end</span>
+0042         
+0043         <span class="comment">% PLOT METHOD</span>
+0044         <span class="keyword">if</span> strcmp(draw_command, <span class="string">'plot'</span>)
+0045             <span class="comment">% PLOT (Recommended)</span>
+0046             subplot(2,1,2),plot([locationX,locationX]', [locationY-0.3,locationY+0.3]', <span class="string">'k'</span>);
+0047         <span class="keyword">elseif</span> strcmp(draw_command, <span class="string">'scatter'</span>)
+0048             <span class="comment">% SCATTER METHOD (Fatter markers)</span>
+0049             subplot(2,1,2),scatter(<span class="keyword">...</span>
+0050                 locationX, locationY, 10, <span class="keyword">...</span>
+0051                 <span class="string">'Marker'</span>,<span class="string">'.'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'black'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'black'</span>,<span class="string">'EraseMode'</span>,<span class="string">'none'</span>);
+0052         <span class="keyword">else</span>
+0053             error(<span class="string">'Not supported drawing command.'</span>);
+0054         <span class="keyword">end</span>
+0055         hold on;
+0056         index = index + 1;
+0057     <span class="keyword">end</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 box off
+0061 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'TickDir'</span>,<span class="string">'Out'</span>)
+0062 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'TickLength'</span>,[0.005 0.01])
+0063 
+0064 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YTick'</span>,[0 index])
+0065 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'YTickLabel'</span>,[1 index-1])
+0066 
+0067 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'XMinorTick'</span>,<span class="string">'on'</span>)
+0068 ylabel(<span class="string">'Electrodes'</span>)
+0069 
+0070 <span class="comment">% Set X Axis</span>
+0071 <a href="util_set_xtick.html" class="code" title="function util_set_xtick( rate, bin )">util_set_xtick</a>( spb, bin );</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

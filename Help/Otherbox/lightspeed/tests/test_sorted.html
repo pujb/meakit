@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_sorted</title>
+  <meta name="keywords" content="test_sorted">
+  <meta name="description" content="demonstrates the difference in speed between sorted and non-sorted set">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_sorted
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>demonstrates the difference in speed between sorted and non-sorted set</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> demonstrates the difference in speed between sorted and non-sorted set 
+ operations.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/ismember_sorted.html" class="code" title="function [tf,loc] = ismember_sorted(a,s)">ismember_sorted</a>	ISMEMBER_SORTED   True for member of sorted set.</li><li><a href="../../../Otherbox/lightspeed/row_sum.html" class="code" title="function s = row_sum(x)">row_sum</a>	ROW_SUM   Sum for each row.</li><li><a href="../../../Otherbox/lightspeed/setdiff_sorted.html" class="code" title="function c = setdiff_sorted(a,b)">setdiff_sorted</a>	SETDIFF_SORTED   Set difference between sorted sets.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% demonstrates the difference in speed between sorted and non-sorted set</span>
+0002 <span class="comment">% operations.</span>
+0003 
+0004 tim = [];
+0005 <span class="keyword">for</span> iter = 1:100
+0006   a = 1:10;
+0007   s = 1:1000;
+0008   tic;<span class="keyword">for</span> iter2=1:100;tf1=ismember(a,s);<span class="keyword">end</span>;tim(1,iter)=toc;
+0009   tic;<span class="keyword">for</span> iter2=1:100;tf=<a href="../../../Otherbox/lightspeed/ismember_sorted.html" class="code" title="function [tf,loc] = ismember_sorted(a,s)">ismember_sorted</a>(a,s);<span class="keyword">end</span>;tim(2,iter)=toc;
+0010   assert(all(tf==tf1));
+0011 
+0012   tic;<span class="keyword">for</span> iter2=1:100;tf1=setdiff(a,s);<span class="keyword">end</span>;tim(3,iter)=toc;
+0013   tic;<span class="keyword">for</span> iter2=1:100;tf=<a href="../../../Otherbox/lightspeed/setdiff_sorted.html" class="code" title="function c = setdiff_sorted(a,b)">setdiff_sorted</a>(a,s);<span class="keyword">end</span>;tim(4,iter)=toc;
+0014   assert(all(tf==tf1));
+0015 <span class="keyword">end</span>
+0016 tim = <a href="../../../Otherbox/lightspeed/row_sum.html" class="code" title="function s = row_sum(x)">row_sum</a>(tim);
+0017 fprintf(<span class="string">'       ismember: %gs\nismember_sorted: %gs (%g times faster)\n       setdiff: %gs\nsetdiff_sorted: %gs (%g times faster)\n'</span>,[tim(1) tim(2) tim(1)/tim(2) tim(3) tim(4) tim(3)/tim(4)]);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

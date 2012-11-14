@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gda</title>
+  <meta name="keywords" content="gda">
+  <meta name="description" content="GDA Perform Generalized Discriminant Analysis">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>gda
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GDA Perform Generalized Discriminant Analysis</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = gda(X, Y, no_dims, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">GDA Perform Generalized Discriminant Analysis
+
+    mappedX = gda(X, Y, no_dims)
+    mappedX = gda(X, Y, no_dims, kernel)
+    mappedX = gda(X, Y, no_dims, kernel, param1)
+    mappedX = gda(X, Y, no_dims, kernel, param1, param2)
+
+ Perform Generalized Discriminant Analysis. GDA or Kernel LDA is the 
+ nonlinear generalization of LDA by means of the kernel trick. X is the
+ data on which to perform GDA, Y are the corresponding labels.
+ The value of kernel determines the used kernel. Possible values are 'linear',
+ 'gauss', 'poly', 'subsets', or 'princ_angles' (default = 'gauss'). For
+ more info on setting the parameters of the kernel function, type HELP
+ GRAM.
+ The function returns the locations of the embedded trainingdata in 
+ mappedX.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>	GRAM Computes the Gram-matrix of data points X using a kernel function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = gda(X, Y, no_dims, varargin)</a>
+0002 <span class="comment">%GDA Perform Generalized Discriminant Analysis</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    mappedX = gda(X, Y, no_dims)</span>
+0005 <span class="comment">%    mappedX = gda(X, Y, no_dims, kernel)</span>
+0006 <span class="comment">%    mappedX = gda(X, Y, no_dims, kernel, param1)</span>
+0007 <span class="comment">%    mappedX = gda(X, Y, no_dims, kernel, param1, param2)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Perform Generalized Discriminant Analysis. GDA or Kernel LDA is the</span>
+0010 <span class="comment">% nonlinear generalization of LDA by means of the kernel trick. X is the</span>
+0011 <span class="comment">% data on which to perform GDA, Y are the corresponding labels.</span>
+0012 <span class="comment">% The value of kernel determines the used kernel. Possible values are 'linear',</span>
+0013 <span class="comment">% 'gauss', 'poly', 'subsets', or 'princ_angles' (default = 'gauss'). For</span>
+0014 <span class="comment">% more info on setting the parameters of the kernel function, type HELP</span>
+0015 <span class="comment">% GRAM.</span>
+0016 <span class="comment">% The function returns the locations of the embedded trainingdata in</span>
+0017 <span class="comment">% mappedX.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 
+0021 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0022 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0023 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0024 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0025 <span class="comment">% maintain the name of the original author.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0028 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0029 
+0030     <span class="comment">% Process inputs</span>
+0031     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0032         no_dims = 2;
+0033     <span class="keyword">end</span>
+0034     kernel = <span class="string">'gauss'</span>;
+0035     param1 = 1;
+0036     param2 = 0;
+0037     <span class="keyword">if</span> length(varargin) &gt; 0 &amp; strcmp(class(varargin{1}), <span class="string">'char'</span>), kernel = varargin{1}; <span class="keyword">end</span> 
+0038     <span class="keyword">if</span> length(varargin) &gt; 1 &amp; strcmp(class(varargin{2}), <span class="string">'double'</span>), param1 = varargin{2}; <span class="keyword">end</span>
+0039     <span class="keyword">if</span> length(varargin) &gt; 2 &amp; strcmp(class(varargin{3}), <span class="string">'double'</span>), param2 = varargin{3}; <span class="keyword">end</span>
+0040     
+0041     <span class="comment">% Make sure labels are nice</span>
+0042     [foo, bar, Y] = unique(Y, <span class="string">'rows'</span>);
+0043 
+0044     <span class="comment">% Get dimensions</span>
+0045     [n, dim] = size(X);
+0046     nclass = max(Y);
+0047 
+0048     <span class="comment">% Sort data according to labels</span>
+0049     [foo, ind] = sort(Y);
+0050     Y = Y(ind);
+0051     X = X(ind,:);
+0052 
+0053     <span class="comment">% Compute kernel matrix</span>
+0054     disp(<span class="string">'Computing kernel matrix...'</span>);
+0055     K = <a href="gram.html" class="code" title="function G = gram(X1, X2, kernel, param1, param2)">gram</a>(X, X, kernel, param1, param2);
+0056 
+0057     <span class="comment">% Compute centering matrix</span>
+0058     ell = size(X, 1);
+0059     D = sum(K) / ell;
+0060     E = sum(D) / ell;
+0061     J = ones(ell, 1) * D;
+0062     K = K - J - J' + E * ones(ell, ell);
+0063 
+0064     <span class="comment">% Perform eigenvector decomposition of kernel matrix (Kc = P * gamma * P')</span>
+0065     disp(<span class="string">'Performing eigendecomposition of kernel matrix...'</span>);
+0066     K(isnan(K)) = 0;
+0067     K(isinf(K)) = 0;
+0068     [P, gamma] = eig(K);
+0069 
+0070     <span class="keyword">if</span> size(P, 2) &lt; n
+0071         error(<span class="string">'Singularities in kernel matrix prevent solution.'</span>);
+0072     <span class="keyword">end</span>
+0073     
+0074     <span class="comment">% Sort eigenvalues and vectors in descending order</span>
+0075     [gamma, ind] = sort(diag(gamma), <span class="string">'descend'</span>);
+0076     gamma = gamma(ind);
+0077     P = P(:,ind);
+0078 
+0079     <span class="comment">% Remove eigenvectors with relatively small value</span>
+0080     minEigv = max(gamma) / 1e5;
+0081     ind = find(gamma &gt; minEigv);
+0082     P = P(:,ind);
+0083     gamma = gamma(ind);
+0084     rankK = length(ind);
+0085     
+0086     <span class="comment">% Recompute kernel matrix</span>
+0087     K = P * diag(gamma) * P';
+0088 
+0089     <span class="comment">% Construct diagonal block matrix W</span>
+0090     W = [];
+0091     <span class="keyword">for</span> i=1:nclass
+0092         num_data_class = length(find(Y == i));
+0093         W = blkdiag(W, ones(num_data_class) / num_data_class);
+0094     <span class="keyword">end</span>  
+0095 
+0096     <span class="comment">% Determine target dimensionality of data</span>
+0097     old_no_dims = no_dims;
+0098     no_dims = min([no_dims rankK nclass]);
+0099     <span class="keyword">if</span> old_no_dims &gt; no_dims
+0100         warning([<span class="string">'Target dimensionality reduced to '</span> num2str(no_dims) <span class="string">'.'</span>]);
+0101     <span class="keyword">end</span>
+0102 
+0103     <span class="comment">% Perform eigendecomposition of matrix (P' * W * P)</span>
+0104     disp(<span class="string">'Performing GDA eigenanalysis...'</span>);
+0105     [Beta, lambda] = eig(P' * W * P);
+0106     lambda = diag(lambda);
+0107     
+0108     <span class="comment">% Sort eigenvalues and eigenvectors in descending order</span>
+0109     [tmp, ind] = sort(lambda, <span class="string">'descend'</span>);
+0110     lambda = lambda(ind);
+0111     Beta = Beta(:,ind(1:no_dims));
+0112 
+0113     <span class="comment">% Compute final embedding mappedX</span>
+0114     mappedX = P * diag(1 ./ gamma) * Beta;
+0115 
+0116     <span class="comment">% Normalize embedding</span>
+0117     <span class="keyword">for</span> i=1:no_dims
+0118         mappedX(:,i) = mappedX(:,i) / sqrt(mappedX(:,i)' * K * mappedX(:,i));
+0119     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

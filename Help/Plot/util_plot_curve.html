@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_curve</title>
+  <meta name="keywords" content="util_plot_curve">
+  <meta name="description" content="UTIL_PLOT_CURVE Plot a curve from (x1,y1) to (x2,y2)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_curve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_CURVE Plot a curve from (x1,y1) to (x2,y2)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function util_plot_curve(x1,y1,x2,y2,  lwidth,lcolor,lalpha,  min_radian,modified_length,  method) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_CURVE Plot a curve from (x1,y1) to (x2,y2)
+   Input:
+           x1,x2,y1,y2:    Position of (x1,y1), (x2,y2)
+           lwidth:     Line width
+           lcolor:     Line color, [r g b; r g b] -&gt; [begin color, end color]
+           lalpha:     Line alpha transparency, [0 1] -&gt; [begin alpha, end alpha]
+                       if begin color = end color, lcolor = [r g b],
+                       if begin alpha = end alpha, lalpha = [a].
+           min_radian: Max:pi, Min:0. Smaller means more straight line.
+           modified_length:    The line can be shorter(-value) or longer(+value) than a
+                               predefined value.
+           method:     'plot': default, single color, vector output
+                       'gradient': using patch, gradient color, vector output
+                       'alpha': using patch, supporting gradient color and
+                                alpha blending, bitmap output.
+   Explanation:
+           @alpha, we will generate lines with gradient color and
+           alpha blending. But the result cannot be saved in vector
+           format.
+           @gradient, we can only support gradient colored lines. The
+           result is in vector format, but please note the bold lines will
+           be very ugly (lw &gt; 10).
+           @plot, only single colored lines are supported. but it is the
+           fastest and have a smooth outline.
+
+   Color:
+           @plot / @alpha, the color is givened by true color RGB values.
+           @gradient, the color should be given as the index in colormap.
+
+   The calculation of angle is based on Feng Xian &amp; Chen Wenjuan's work
+
+   Created on Mar/29/2011 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-03-30  Adding 'modified_length'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function util_plot_curve(x1,y1,x2,y2,  lwidth,lcolor,lalpha,  min_radian,modified_length,  method)</a>
+0002 <span class="comment">%UTIL_PLOT_CURVE Plot a curve from (x1,y1) to (x2,y2)</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           x1,x2,y1,y2:    Position of (x1,y1), (x2,y2)</span>
+0005 <span class="comment">%           lwidth:     Line width</span>
+0006 <span class="comment">%           lcolor:     Line color, [r g b; r g b] -&gt; [begin color, end color]</span>
+0007 <span class="comment">%           lalpha:     Line alpha transparency, [0 1] -&gt; [begin alpha, end alpha]</span>
+0008 <span class="comment">%                       if begin color = end color, lcolor = [r g b],</span>
+0009 <span class="comment">%                       if begin alpha = end alpha, lalpha = [a].</span>
+0010 <span class="comment">%           min_radian: Max:pi, Min:0. Smaller means more straight line.</span>
+0011 <span class="comment">%           modified_length:    The line can be shorter(-value) or longer(+value) than a</span>
+0012 <span class="comment">%                               predefined value.</span>
+0013 <span class="comment">%           method:     'plot': default, single color, vector output</span>
+0014 <span class="comment">%                       'gradient': using patch, gradient color, vector output</span>
+0015 <span class="comment">%                       'alpha': using patch, supporting gradient color and</span>
+0016 <span class="comment">%                                alpha blending, bitmap output.</span>
+0017 <span class="comment">%   Explanation:</span>
+0018 <span class="comment">%           @alpha, we will generate lines with gradient color and</span>
+0019 <span class="comment">%           alpha blending. But the result cannot be saved in vector</span>
+0020 <span class="comment">%           format.</span>
+0021 <span class="comment">%           @gradient, we can only support gradient colored lines. The</span>
+0022 <span class="comment">%           result is in vector format, but please note the bold lines will</span>
+0023 <span class="comment">%           be very ugly (lw &gt; 10).</span>
+0024 <span class="comment">%           @plot, only single colored lines are supported. but it is the</span>
+0025 <span class="comment">%           fastest and have a smooth outline.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%   Color:</span>
+0028 <span class="comment">%           @plot / @alpha, the color is givened by true color RGB values.</span>
+0029 <span class="comment">%           @gradient, the color should be given as the index in colormap.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   The calculation of angle is based on Feng Xian &amp; Chen Wenjuan's work</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   Created on Mar/29/2011 By Pu Jiangbo</span>
+0034 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   $Revision:</span>
+0037 <span class="comment">%       PJB#2011-03-30  Adding 'modified_length'</span>
+0038 
+0039 <span class="comment">% initial radian of the curve</span>
+0040 init_radian = pi/4;
+0041 
+0042 <span class="comment">% max radian</span>
+0043 <span class="keyword">if</span> isempty(min_radian)
+0044     min_radian = pi/4/4.5;
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% distance between (x1,y1) &amp; (x2,y2)</span>
+0048 distance = sqrt((x2-x1)^2 + (y2-y1)^2);
+0049 
+0050 <span class="keyword">if</span> ~isempty(modified_length)
+0051     <span class="comment">% x2,y2 need to be modified</span>
+0052     x2 = x2 + ((x2-x1) * modified_length / distance);
+0053     y2 = y2 + ((y2-y1) * modified_length / distance);
+0054     <span class="comment">% Recalc</span>
+0055     distance = sqrt((x2-x1)^2 + (y2-y1)^2);
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% polar angle between (x1,y1) &amp; (x2,y2)</span>
+0059 angle = atan2(-(x2-x1), (y2-y1));
+0060 
+0061 <span class="comment">% radian</span>
+0062 radian = init_radian / distance;
+0063 <span class="keyword">if</span> radian &lt; min_radian
+0064     radian = min_radian;
+0065 <span class="keyword">end</span>
+0066 radian_range = linspace(angle - radian, angle + radian);
+0067 
+0068 <span class="comment">% radius</span>
+0069 radius = distance/2/sin(radian);
+0070 
+0071 <span class="comment">% distance between the circle center and the median between (x1,y1) &amp; (x2,y2)</span>
+0072 distance_center = sqrt(radius^2 - distance^2/4);
+0073 
+0074 <span class="comment">% Convert the polar coordinate of the curve into Cartesian coordinate</span>
+0075 <span class="comment">% system</span>
+0076 m = (x1+x2) / 2 - distance_center * cos(angle) + radius * cos(radian_range);
+0077 n = (y1+y2) / 2 - distance_center * sin(angle) + radius * sin(radian_range);
+0078 
+0079 <span class="comment">% Determine and remember the hold status, toggle if necessary</span>
+0080 <span class="keyword">if</span> ishold,
+0081     washold = true;
+0082 <span class="keyword">else</span>
+0083     washold = false;
+0084     hold on;
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">if</span> strcmpi(method, <span class="string">'plot'</span>)
+0088     plot(m, n, <span class="string">'LineWidth'</span>, lwidth, <span class="string">'Color'</span>, lcolor);
+0089 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'gradient'</span>)
+0090     <span class="comment">% Forming color</span>
+0091     <span class="comment">% Check if the line need gradient coloring (Begin Color != End Color)</span>
+0092     <span class="comment">% Color is in index format not true color format</span>
+0093     <span class="keyword">if</span> length(lcolor) &gt; 1
+0094         <span class="keyword">if</span> lcolor(1) ~= lcolor(end)
+0095             needcoloring = true;
+0096         <span class="keyword">else</span>
+0097             needcoloring = false;
+0098         <span class="keyword">end</span>
+0099     <span class="keyword">else</span>
+0100         needcoloring = false;
+0101     <span class="keyword">end</span>
+0102     
+0103     num_points = length(m);
+0104     <span class="keyword">if</span> num_points &gt; 2 &amp;&amp; needcoloring
+0105         <span class="comment">% Need to form a gradient coloring mapping</span>
+0106         linecolors = linspace(lcolor(1), lcolor(end), num_points);
+0107     <span class="keyword">else</span>
+0108         <span class="comment">% All color points should be the same</span>
+0109         linecolors = ones(num_points, 1) * lcolor(1);
+0110     <span class="keyword">end</span>
+0111     
+0112     patch([m nan], [n nan], [linecolors' nan], <span class="keyword">...</span>
+0113         <span class="string">'EdgeColor'</span>, <span class="string">'interp'</span>, <span class="string">'LineWidth'</span>, lwidth);
+0114     
+0115 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'alpha'</span>)
+0116     <span class="comment">% Forming color</span>
+0117     <span class="comment">% Check if the line need gradient coloring (Begin Color != End Color)</span>
+0118     <span class="keyword">if</span> size(lcolor, 1) ~= 1
+0119         <span class="keyword">if</span> lcolor(1,1) ~= lcolor(2,1) &amp;&amp; lcolor(1,2) ~= lcolor(2,2) &amp;&amp; lcolor(1,3) ~= lcolor(2,3)
+0120             needcoloring = true;
+0121         <span class="keyword">else</span>
+0122             needcoloring = false;
+0123         <span class="keyword">end</span>
+0124     <span class="keyword">else</span>
+0125         needcoloring = false;
+0126     <span class="keyword">end</span>
+0127     
+0128     num_points = length(m);
+0129     <span class="keyword">if</span> num_points &gt; 2 &amp;&amp; needcoloring
+0130         <span class="comment">% Need to form a gradient coloring mapping</span>
+0131         linecolors = zeros(num_points, 3, <span class="string">'double'</span>);
+0132         color_space = [linspace(lcolor(1,1), lcolor(2,1), num_points); linspace(lcolor(1,1), lcolor(2,1), num_points); linspace(lcolor(1,1), lcolor(2,1), num_points)]';
+0133         <span class="keyword">for</span> i = 1:num_points
+0134             linecolors(i, :) = color_space(i, :);
+0135         <span class="keyword">end</span>
+0136     <span class="keyword">else</span>
+0137         <span class="comment">% All color points should be the same</span>
+0138         linecolors = repmat(lcolor(1,:), num_points, 1);
+0139     <span class="keyword">end</span>
+0140     
+0141     <span class="comment">% Forming alpha</span>
+0142     <span class="comment">% Check if the line need gradient alpha mapping (Begin alpha != End alpha)</span>
+0143     <span class="keyword">if</span> length(lalpha) &gt; 1
+0144         <span class="keyword">if</span> lalpha(1) ~= lalpha(end)
+0145             needalpha = true;
+0146         <span class="keyword">else</span>
+0147             needalpha = false;
+0148         <span class="keyword">end</span>
+0149     <span class="keyword">else</span>
+0150         needalpha = false;
+0151     <span class="keyword">end</span>
+0152     
+0153     <span class="keyword">if</span> num_points &gt; 2 &amp;&amp; needalpha
+0154         <span class="comment">% Need to form a gradient alpha mapping</span>
+0155         linealphas = linspace(lalpha(1), lalpha(end), num_points);
+0156     <span class="keyword">else</span>
+0157         <span class="comment">% All points should be the same</span>
+0158         linealphas = ones(num_points, 1) * lalpha(1);
+0159     <span class="keyword">end</span>
+0160 
+0161     patch([m nan], [n nan], 0, <span class="string">'FaceVertexCData'</span>, [linecolors; nan nan nan], <span class="keyword">...</span>
+0162         <span class="string">'FaceVertexAlphaData'</span>, [linealphas 1]', <span class="keyword">...</span>
+0163         <span class="string">'EdgeColor'</span>, <span class="string">'interp'</span>, <span class="string">'EdgeAlpha'</span>, <span class="string">'interp'</span>, <span class="string">'LineWidth'</span>, lwidth);
+0164 <span class="keyword">else</span>
+0165     error(<span class="string">'wrong input - method.'</span>);
+0166 <span class="keyword">end</span>
+0167 
+0168 <span class="comment">% restore hold status</span>
+0169 <span class="keyword">if</span> ~washold
+0170     hold off
+0171 <span class="keyword">end</span>
+0172 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

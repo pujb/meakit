@@ -1,0 +1,56 @@
+
+classdef panel_group < handle
+	
+	properties
+		
+		autopack
+		pr
+		pp
+		pi
+		
+	end
+	
+	methods
+
+		function obj = panel_group(layout)
+
+			if nargin
+				obj.autopack = false;
+				obj.pp = panel(layout);
+				obj.pr = obj.pp{1}.root;
+			else
+				obj.autopack = true;
+				obj.pr = panel;
+				obj.pp = {};
+			end
+			obj.pi = 0;
+			
+		end
+		
+		function p = next(obj, pack_size)
+			
+			obj.pi = obj.pi + 1;
+			if obj.autopack
+				if nargin == 2
+					obj.pp{obj.pi} = obj.pr.pack(pack_size);
+				else
+					obj.pp{obj.pi} = obj.pr.pack();
+				end
+			end
+			p = obj.pp{obj.pi};
+			select(p);
+			
+		end
+		
+		function p = root(obj)
+			
+			p = obj.pr;
+			
+		end
+		
+	end
+	
+end
+
+
+

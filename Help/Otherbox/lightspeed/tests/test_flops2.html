@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_flops2</title>
+  <meta name="keywords" content="test_flops2">
+  <meta name="description" content="test flops for matrix operations">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_flops2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>test flops for matrix operations</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> test flops for matrix operations</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>	FLOPS_CHOL    Flops for Cholesky decomposition.</li><li><a href="../../../Otherbox/lightspeed/flops_det.html" class="code" title="function f = flops_det(n)">flops_det</a>	FLOPS_DET     Flops for matrix determinant.</li><li><a href="../../../Otherbox/lightspeed/flops_inv.html" class="code" title="function f = flops_inv(n)">flops_inv</a>	FLOPS_INV    Flops for matrix inversion.</li><li><a href="../../../Otherbox/lightspeed/flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>	FLOPS_MUL    Flops for real matrix multiplication.</li><li><a href="../../../Otherbox/lightspeed/flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>	FLOPS_SOLVE    Flops for matrix left division.</li><li><a href="../../../Otherbox/lightspeed/flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>	FLOPS_SOLVE_TRI   Flops for triangular left division.</li><li><a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li><li><a href="../../../Otherbox/lightspeed/solve_triu.html" class="code" title="function x = solve_triu(T,b)">solve_triu</a>	SOLVE_TRIU      Left division by upper triangular matrix.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% test flops for matrix operations</span>
+0002 
+0003 niter = 50000;
+0004 a = rand(100);
+0005 a = a*a';
+0006 T = chol(a);
+0007 b = rand(100);
+0008 c = rand(<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(a),1);
+0009 
+0010 t = [];
+0011 tic; <span class="keyword">for</span> i=1:niter a+4; <span class="keyword">end</span>; t(1)=toc/niter;
+0012 tic; <span class="keyword">for</span> i=1:niter a+b; <span class="keyword">end</span>; t(2)=toc/niter;
+0013 tic; <span class="keyword">for</span> i=1:niter a.*b; <span class="keyword">end</span>; t(3)=toc/niter;
+0014 t_arith = mean(t);
+0015 <span class="comment">%fprintf('average for +,*: %g\n', t_arith);</span>
+0016 t_flop = t_arith/prod(size(a));
+0017 fprintf(<span class="string">'time for 1 flop: %g\n'</span>, t_flop);
+0018 
+0019 tic; <span class="keyword">for</span> i=1:niter <a href="../../../Otherbox/lightspeed/solve_triu.html" class="code" title="function x = solve_triu(T,b)">solve_triu</a>(T,c); <span class="keyword">end</span>; t_solve_triu=toc/niter;
+0020 fprintf(<span class="string">'time for solve_triu: %g\tflops = %g (should be %d)\n'</span>, t_solve_triu, t_solve_triu/t_flop, <a href="../../../Otherbox/lightspeed/flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>(a,c));
+0021 
+0022 niter = niter/10;
+0023 tic; <span class="keyword">for</span> i=1:niter chol(a); <span class="keyword">end</span>; t_chol=toc/niter;
+0024 fprintf(<span class="string">'time for chol: %g\tflops = %g (should be %d)\n'</span>, t_chol, t_chol/t_flop, <a href="../../../Otherbox/lightspeed/flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>(<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(a)));
+0025 
+0026 tic; <span class="keyword">for</span> i=1:niter det(a); <span class="keyword">end</span>; t_det=toc/niter;
+0027 fprintf(<span class="string">'time for det: %g\tflops = %g (should be %d)\n'</span>, t_det, t_det/t_flop, <a href="../../../Otherbox/lightspeed/flops_det.html" class="code" title="function f = flops_det(n)">flops_det</a>(<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(a)));
+0028 
+0029 tic; <span class="keyword">for</span> i=1:niter a\c; <span class="keyword">end</span>; t_solve=toc/niter;
+0030 fprintf(<span class="string">'time for solve: %g\tflops = %g (should be %d)\n'</span>, t_solve, t_solve/t_flop, <a href="../../../Otherbox/lightspeed/flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>(a,c));
+0031 
+0032 <span class="comment">% matrix multiply is incredibly fast</span>
+0033 tic; <span class="keyword">for</span> i=1:niter a*b; <span class="keyword">end</span>; t_mtimes=toc/niter;
+0034 fprintf(<span class="string">'time for mtimes: %g\tflops = %g (should be %d)\n'</span>, t_mtimes, t_mtimes/t_flop, <a href="../../../Otherbox/lightspeed/flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(a,b));
+0035 
+0036 niter = niter/10;
+0037 tic; <span class="keyword">for</span> i=1:niter inv(a); <span class="keyword">end</span>; t_inv=toc/niter;
+0038 fprintf(<span class="string">'time for inv: %g\tflops = %g (should be %d)\n'</span>, t_inv, t_inv/t_flop, <a href="../../../Otherbox/lightspeed/flops_inv.html" class="code" title="function f = flops_inv(n)">flops_inv</a>(<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(a)));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_assortativity</title>
+  <meta name="keywords" content="util_get_assortativity">
+  <meta name="description" content="UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_get_assortativity
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function A = util_get_assortativity( network_connection_matrix, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network
+   Input:
+       network_connection_matrix:  The network connection matrix. (CCPeak)
+       thresholding:   Used to threshold the network connection matrix. [default: 0.1]
+       thresholding_method:   'percent' / 'direct' [default]
+                           @percent, lower thresholding% will be removed.
+                           @direct, values &lt; thresholding will be removed.
+
+   Created on Oct/20/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-04-06  Bug fix.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_get_value_by_percent.html" class="code" title="function value = util_get_value_by_percent( input, percent, isAscending )">util_get_value_by_percent</a>	UTIL_GET_VALUE_BY_PERCENT Get the value level in the input vector or</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/BCT/assortativity.html" class="code" title="function   r = assortativity(CIJ,flag)">assortativity</a>	ASSORTATIVITY      Assortativity coefficient</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/util_loop_calc_topo.html" class="code" title="function [cc_matrix xc_matrix mi_matrix nmi_matrix bc_cc bc_xc bc_mi bc_nmi] = util_loop_calc_topo( data_filename, result_dirname, gnd )">util_loop_calc_topo</a>	UTIL_LOOP_CALC_TOPO Get Topology parameters</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [r,M] = assortativity(CCpeak,lv)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function A = util_get_assortativity( network_connection_matrix, varargin )</a>
+0002 <span class="comment">%UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%       network_connection_matrix:  The network connection matrix. (CCPeak)</span>
+0005 <span class="comment">%       thresholding:   Used to threshold the network connection matrix. [default: 0.1]</span>
+0006 <span class="comment">%       thresholding_method:   'percent' / 'direct' [default]</span>
+0007 <span class="comment">%                           @percent, lower thresholding% will be removed.</span>
+0008 <span class="comment">%                           @direct, values &lt; thresholding will be removed.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Created on Oct/20/2010 By Pu Jiangbo</span>
+0011 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   $Revision:</span>
+0014 <span class="comment">%       PJB#2011-04-06  Bug fix.</span>
+0015 
+0016 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0017 
+0018 <span class="keyword">if</span> ~exist(<span class="string">'thresholding'</span>, <span class="string">'var'</span>)
+0019     thresholding = 0.1;
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="keyword">if</span> ~exist(<span class="string">'thresholding_method'</span>, <span class="string">'var'</span>)
+0023     thresholding_method = <span class="string">'direct'</span>;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">if</span> strcmpi(thresholding_method, <span class="string">'percent'</span>)
+0027     thresholding = <a href="../Common/util_get_value_by_percent.html" class="code" title="function value = util_get_value_by_percent( input, percent, isAscending )">util_get_value_by_percent</a>(network_connection_matrix, thresholding, 1);
+0028     disp([<span class="string">'Thresholding by percent, current value level is '</span> num2str(thresholding)]);
+0029 <span class="keyword">else</span>
+0030     disp([<span class="string">'Thresholding by value: '</span> num2str(thresholding)]);
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="comment">% Call</span>
+0034 [A, M] = <a href="../Otherbox/BCT/assortativity.html" class="code" title="function   r = assortativity(CIJ,flag)">assortativity</a>(network_connection_matrix, thresholding);
+0035 disp([<span class="string">'Number of valid connection: '</span> num2str(M) <span class="string">'.'</span>]);
+0036 
+0037 <span class="keyword">end</span>
+0038 
+0039 
+0040 <a name="_sub1" href="#_subfunctions" class="code">function [r,M] = assortativity(CCpeak,lv)</a>
+0041 <span class="comment">% By Chen Wenjuan, v. 2010/10/19</span>
+0042 <span class="comment">% r&gt;0 ---- 正匹配网络，节点倾向与自己相似的点建立连接</span>
+0043 <span class="comment">% r&lt;0 ---- 负匹配网络，节点倾向与自己不相似的点建立连接</span>
+0044 <span class="comment">% M   ---- 网络中大于阈值的功能连接数目</span>
+0045 
+0046 [x,y]=find(CCpeak&gt;lv);
+0047 M=length(x);
+0048 <span class="keyword">if</span> M&gt;0
+0049     j=zeros(M,1);
+0050     k=zeros(M,1);
+0051     <span class="keyword">for</span> i=1:M
+0052         j(i)=length(find(CCpeak(x(i),:)&gt;lv))+length(find(CCpeak(:,x(i))&gt;lv));
+0053         k(i)=length(find(CCpeak(y(i),:)&gt;lv))+length(find(CCpeak(:,y(i))&gt;lv));
+0054     <span class="keyword">end</span>
+0055     upvalue=sum(j.*k)/M-(sum((j+k)/(2*M)))^2;
+0056     downvalue=(sum(j.^2)+sum(k.^2))/(2*M)-(sum((j+k)/(2*M)))^2;
+0057     r=upvalue/downvalue;
+0058 <span class="keyword">else</span>
+0059     r=0;
+0060 <span class="keyword">end</span>
+0061 
+0062 
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

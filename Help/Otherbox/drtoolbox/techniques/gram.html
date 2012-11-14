@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gram</title>
+  <meta name="keywords" content="gram">
+  <meta name="description" content="GRAM Computes the Gram-matrix of data points X using a kernel function">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>gram
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GRAM Computes the Gram-matrix of data points X using a kernel function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function G = gram(X1, X2, kernel, param1, param2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">GRAM Computes the Gram-matrix of data points X using a kernel function
+
+   G = gram(X1, X2, kernel, param1, param2)
+
+ Computes the Gram-matrix of data points X1 and X2 using the specified kernel
+ function. If no kernel is specified, no kernel function is applied. The
+ function GRAM is than equal to X1*X2'. The use of the function is different
+ depending on the specified kernel function (because different kernel
+ functions require different parameters. The possibilities are listed
+ below.
+ Linear kernel: G = gram(X1, X2, 'linear')
+           which is parameterless
+ Gaussian kernel: G = gram(X1, X2, 'gauss', s)
+           where s is the variance of the used Gaussian function (default = 1).
+ Polynomial kernel: G = gram(X1, X2, 'poly', R, d)
+           where R is the addition value and d the power number (default = 0 and 3)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li><li><a href="gda.html" class="code" title="function mappedX = gda(X, Y, no_dims, varargin)">gda</a>	GDA Perform Generalized Discriminant Analysis</li><li><a href="kernel_pca.html" class="code" title="function [mappedX, mapping] = kernel_pca(X, no_dims, varargin)">kernel_pca</a>	KERNEL_PCA Perform the kernel PCA algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function G = gram(X1, X2, kernel, param1, param2)</a>
+0002 <span class="comment">%GRAM Computes the Gram-matrix of data points X using a kernel function</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   G = gram(X1, X2, kernel, param1, param2)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Computes the Gram-matrix of data points X1 and X2 using the specified kernel</span>
+0007 <span class="comment">% function. If no kernel is specified, no kernel function is applied. The</span>
+0008 <span class="comment">% function GRAM is than equal to X1*X2'. The use of the function is different</span>
+0009 <span class="comment">% depending on the specified kernel function (because different kernel</span>
+0010 <span class="comment">% functions require different parameters. The possibilities are listed</span>
+0011 <span class="comment">% below.</span>
+0012 <span class="comment">% Linear kernel: G = gram(X1, X2, 'linear')</span>
+0013 <span class="comment">%           which is parameterless</span>
+0014 <span class="comment">% Gaussian kernel: G = gram(X1, X2, 'gauss', s)</span>
+0015 <span class="comment">%           where s is the variance of the used Gaussian function (default = 1).</span>
+0016 <span class="comment">% Polynomial kernel: G = gram(X1, X2, 'poly', R, d)</span>
+0017 <span class="comment">%           where R is the addition value and d the power number (default = 0 and 3)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 
+0021 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0022 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0023 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0024 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0025 <span class="comment">% maintain the name of the original author.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0028 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0029 
+0030     <span class="comment">% Check inputs</span>
+0031     <span class="keyword">if</span> size(X1, 2) ~= size(X2, 2)
+0032         error(<span class="string">'Dimensionality of both datasets should be equal'</span>);
+0033     <span class="keyword">end</span>
+0034 
+0035     <span class="comment">% If no kernel function is specified</span>
+0036     <span class="keyword">if</span> nargin == 2 || strcmp(kernel, <span class="string">'none'</span>)
+0037         kernel = <span class="string">'linear'</span>;
+0038     <span class="keyword">end</span>
+0039     
+0040     <span class="keyword">switch</span> kernel
+0041         
+0042         <span class="comment">% Linear kernel</span>
+0043         <span class="keyword">case</span> <span class="string">'linear'</span>
+0044             G = X1 * X2';
+0045         
+0046         <span class="comment">% Gaussian kernel</span>
+0047         <span class="keyword">case</span> <span class="string">'gauss'</span>
+0048             <span class="keyword">if</span> ~exist(<span class="string">'param1'</span>, <span class="string">'var'</span>), param1 = 1; <span class="keyword">end</span>
+0049             G = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X1', X2');
+0050             G = exp(-(G.^2 / (2 * param1.^2)));
+0051                         
+0052         <span class="comment">% Polynomial kernel</span>
+0053         <span class="keyword">case</span> <span class="string">'poly'</span>
+0054             <span class="keyword">if</span> ~exist(<span class="string">'param1'</span>, <span class="string">'var'</span>), param1 = 1; param2 = 3; <span class="keyword">end</span>
+0055             G = ((X1 * X2') + param1) .^ param2;
+0056             
+0057         <span class="keyword">otherwise</span>
+0058             error(<span class="string">'Unknown kernel function.'</span>);
+0059     <span class="keyword">end</span>
+0060</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randwishart</title>
+  <meta name="keywords" content="randwishart">
+  <meta name="description" content="RANDWISHART    Sample from Wishart distribution.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>randwishart
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RANDWISHART    Sample from Wishart distribution.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function cholX = randwishart(a,d) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RANDWISHART    Sample from Wishart distribution.
+
+ cholX = RANDWISHART(A,D) returns a DxD upper triangular matrix such that
+ cholX'*cholX is a sample from a Wishart distribution with shape parameter
+ A and unit scale.
+
+ The probability density function has the form:
+ p(X) = |X|^(a-(d+1)/2)*exp(-tr(X))/Gamma_d(a)
+ where Gamma_d is the multivariate Gamma function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="finddiag.html" class="code" title="function i = finddiag(A,k)">finddiag</a>	FINDDIAG    Index elements on the diagonal.</li><li><a href="randgamma.html" class="code" title="function x = randgamma(a)">randgamma</a>	RANDGAMMA   Sample from Gamma distribution</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/tests/test_randwishart.html" class="code" title="">test_randwishart</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function cholX = randwishart(a,d)</a>
+0002 <span class="comment">%RANDWISHART    Sample from Wishart distribution.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% cholX = RANDWISHART(A,D) returns a DxD upper triangular matrix such that</span>
+0005 <span class="comment">% cholX'*cholX is a sample from a Wishart distribution with shape parameter</span>
+0006 <span class="comment">% A and unit scale.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% The probability density function has the form:</span>
+0009 <span class="comment">% p(X) = |X|^(a-(d+1)/2)*exp(-tr(X))/Gamma_d(a)</span>
+0010 <span class="comment">% where Gamma_d is the multivariate Gamma function.</span>
+0011 
+0012 <span class="comment">% Written by Tom Minka</span>
+0013 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0014 
+0015 sqrth = 0.70710678118655;  <span class="comment">% sqrt(0.5)</span>
+0016 cholX = triu(randn(d,d))*sqrth;
+0017 i = 0:(d-1);
+0018 cholX(<a href="finddiag.html" class="code" title="function i = finddiag(A,k)">finddiag</a>(cholX)) = sqrt(<a href="randgamma.html" class="code" title="function x = randgamma(a)">randgamma</a>(a - i*0.5));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

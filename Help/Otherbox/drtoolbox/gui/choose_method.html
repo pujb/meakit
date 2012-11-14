@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of choose_method</title>
+  <meta name="keywords" content="choose_method">
+  <meta name="description" content="CHOOSE_METHOD M-file for choose_method.fig">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html gui -->
+<h1>choose_method
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CHOOSE_METHOD M-file for choose_method.fig</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = choose_method(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> CHOOSE_METHOD M-file for choose_method.fig
+      CHOOSE_METHOD, by itself, creates a new CHOOSE_METHOD or raises the existing
+      singleton*.
+
+      H = CHOOSE_METHOD returns the handle to a new CHOOSE_METHOD or the handle to
+      the existing singleton*.
+
+      CHOOSE_METHOD('CALLBACK',hObject,eventData,handles,...) calls the local
+      function named CALLBACK in CHOOSE_METHOD.M with the given input arguments.
+
+      CHOOSE_METHOD('Property','Value',...) creates a new CHOOSE_METHOD or raises the
+      existing singleton*.  Starting from the left, property value pairs are
+      applied to the GUI before choose_method_OpeningFunction gets called.  An
+      unrecognized property name or invalid value makes property application
+      stop.  All inputs are passed to choose_method_OpeningFcn via varargin.
+
+      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one
+      instance to run (singleton)&quot;.
+
+ See also: GUIDE, GUIDATA, GUIHANDLES</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function choose_method_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = choose_method_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function listbox1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function listbox1_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function str_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function str_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function ok_Callback(hObject, eventdata, handles)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = choose_method(varargin)</a>
+0002 <span class="comment">% CHOOSE_METHOD M-file for choose_method.fig</span>
+0003 <span class="comment">%      CHOOSE_METHOD, by itself, creates a new CHOOSE_METHOD or raises the existing</span>
+0004 <span class="comment">%      singleton*.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%      H = CHOOSE_METHOD returns the handle to a new CHOOSE_METHOD or the handle to</span>
+0007 <span class="comment">%      the existing singleton*.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%      CHOOSE_METHOD('CALLBACK',hObject,eventData,handles,...) calls the local</span>
+0010 <span class="comment">%      function named CALLBACK in CHOOSE_METHOD.M with the given input arguments.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      CHOOSE_METHOD('Property','Value',...) creates a new CHOOSE_METHOD or raises the</span>
+0013 <span class="comment">%      existing singleton*.  Starting from the left, property value pairs are</span>
+0014 <span class="comment">%      applied to the GUI before choose_method_OpeningFunction gets called.  An</span>
+0015 <span class="comment">%      unrecognized property name or invalid value makes property application</span>
+0016 <span class="comment">%      stop.  All inputs are passed to choose_method_OpeningFcn via varargin.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one</span>
+0019 <span class="comment">%      instance to run (singleton)&quot;.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also: GUIDE, GUIDATA, GUIHANDLES</span>
+0022 
+0023 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0024 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0025 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0026 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0027 <span class="comment">% maintain the name of the original author.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0030 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0031 
+0032 <span class="comment">% Edit the above text to modify the response to help choose_method</span>
+0033 
+0034 <span class="comment">% Last Modified by GUIDE v2.5 25-Jul-2008 10:40:42</span>
+0035 
+0036 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0037 gui_Singleton = 1;
+0038 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0039                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0040                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction choose_method_OpeningFcn(hObject, eventdata, handles, varargin)">choose_method_OpeningFcn</a>, <span class="keyword">...</span>
+0041                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = choose_method_OutputFcn(hObject, eventdata, handles)">choose_method_OutputFcn</a>, <span class="keyword">...</span>
+0042                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0043                    <span class="string">'gui_Callback'</span>,   []);
+0044 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0045     gui_State.gui_Callback = str2func(varargin{1});
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">if</span> nargout
+0049     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0050 <span class="keyword">else</span>
+0051     gui_mainfcn(gui_State, varargin{:});
+0052 <span class="keyword">end</span>
+0053 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0054 
+0055 
+0056 <span class="comment">% --- Executes just before choose_method is made visible.</span>
+0057 <a name="_sub1" href="#_subfunctions" class="code">function choose_method_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0058 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0059 <span class="comment">% hObject    handle to figure</span>
+0060 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0061 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0062 <span class="comment">% varargin   command line arguments to choose_method (see VARARGIN)</span>
+0063 
+0064 <span class="comment">% Choose default command line output for choose_method</span>
+0065 handles.output = hObject;
+0066 
+0067 <span class="comment">% Update handles structure</span>
+0068 guidata(hObject, handles);
+0069 
+0070 <span class="comment">% UIWAIT makes choose_method wait for user response (see UIRESUME)</span>
+0071 uiwait(handles.figure1);
+0072 
+0073 
+0074 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0075 <a name="_sub2" href="#_subfunctions" class="code">function varargout = choose_method_OutputFcn(hObject, eventdata, handles) </a>
+0076 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0077 <span class="comment">% hObject    handle to figure</span>
+0078 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0079 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0080 
+0081 <span class="comment">% Get default command line output from handles structure</span>
+0082 varargout{1} = handles.output;
+0083 
+0084 
+0085 <span class="comment">% --- Executes on selection change in listbox1.</span>
+0086 <a name="_sub3" href="#_subfunctions" class="code">function listbox1_Callback(hObject, eventdata, handles)</a>
+0087 vl=<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'Value'</span>);
+0088 <span class="keyword">switch</span> vl
+0089     <span class="keyword">case</span> 1
+0090         str=<span class="string">'CorrDim'</span>;
+0091     <span class="keyword">case</span> 2
+0092         str=<span class="string">'NearNbDim'</span>;
+0093     <span class="keyword">case</span> 3
+0094         str=<span class="string">'GMST'</span>;
+0095     <span class="keyword">case</span> 4
+0096         str=<span class="string">'PackingNumbers'</span>;
+0097     <span class="keyword">case</span> 5
+0098         str=<span class="string">'EigValue'</span>;
+0099     <span class="keyword">case</span> 6
+0100         str=<span class="string">'MLE'</span>;
+0101 <span class="keyword">end</span>
+0102 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(handles.str,<span class="string">'string'</span>,str);
+0103 drawnow;
+0104         
+0105 
+0106 
+0107 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0108 <a name="_sub4" href="#_subfunctions" class="code">function listbox1_CreateFcn(hObject, eventdata, handles)</a>
+0109 <span class="comment">% hObject    handle to listbox1 (see GCBO)</span>
+0110 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0111 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0112 
+0113 <span class="comment">% Hint: listbox controls usually have a white background on Windows.</span>
+0114 <span class="comment">%       See ISPC and COMPUTER.</span>
+0115 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0116     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0117 <span class="keyword">end</span>
+0118 
+0119 
+0120 
+0121 <a name="_sub5" href="#_subfunctions" class="code">function str_Callback(hObject, eventdata, handles)</a>
+0122 <span class="comment">% hObject    handle to str (see GCBO)</span>
+0123 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0124 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0125 
+0126 <span class="comment">% Hints: get(hObject,'String') returns contents of str as text</span>
+0127 <span class="comment">%        str2double(get(hObject,'String')) returns contents of str as a double</span>
+0128 
+0129 
+0130 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0131 <a name="_sub6" href="#_subfunctions" class="code">function str_CreateFcn(hObject, eventdata, handles)</a>
+0132 <span class="comment">% hObject    handle to str (see GCBO)</span>
+0133 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0134 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0135 
+0136 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0137 <span class="comment">%       See ISPC and COMPUTER.</span>
+0138 <span class="keyword">if</span> ispc &amp;&amp; isequal(<a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hObject,<span class="string">'BackgroundColor'</span>), <a href="../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0139     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0140 <span class="keyword">end</span>
+0141 
+0142 
+0143 <span class="comment">% --- Executes on button press in ok.</span>
+0144 <a name="_sub7" href="#_subfunctions" class="code">function ok_Callback(hObject, eventdata, handles)</a>
+0145 uiresume(handles.figure1);
+0146 
+0147</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of hhist</title>
+  <meta name="keywords" content="hhist">
+  <meta name="description" content="HHIST       Locally-adaptive unbiased density estimate.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>hhist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>HHIST       Locally-adaptive unbiased density estimate.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [density,test] = hhist(data, resolution) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> HHIST       Locally-adaptive unbiased density estimate.
+
+ hhist(data) plots a density estimate of p(data).
+ hhist(data,resolution) increases the resolution of the plotted curve.
+ density = hhist(data,resolution) returns the density estimate instead of 
+ plotting it.  length(density) == resolution.
+ [density,test] = hhist(data,resolution) also returns the locations at which
+ the density was evaluated.
+
+ The algorithm is linear interpolation of the empirical cumulative 
+ distribution.  Reference:
+ Bruce M. Hill, &quot;Posterior Distribution of Percentiles: Bayes'
+ Theorem for Sampling from a Population&quot;, Journal of the American
+ Statistical Association, Vol. 63, No. 322. (Jun., 1968),
+ pp. 677-691.
+ http://links.jstor.org/sici?sici=0162-1459%28196806%2963%3A322%3C677%3APDOPBT%3E2.0.CO%3B2-O
+
+ See test_hhist.m for a demonstration.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>	AXIS_PCT       Set reasonable axis limits.</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_hhist.html" class="code" title="">test_hhist</a>	demonstrate use of hhist</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [density,test] = hhist(data, resolution)</a>
+0002 <span class="comment">% HHIST       Locally-adaptive unbiased density estimate.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% hhist(data) plots a density estimate of p(data).</span>
+0005 <span class="comment">% hhist(data,resolution) increases the resolution of the plotted curve.</span>
+0006 <span class="comment">% density = hhist(data,resolution) returns the density estimate instead of</span>
+0007 <span class="comment">% plotting it.  length(density) == resolution.</span>
+0008 <span class="comment">% [density,test] = hhist(data,resolution) also returns the locations at which</span>
+0009 <span class="comment">% the density was evaluated.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% The algorithm is linear interpolation of the empirical cumulative</span>
+0012 <span class="comment">% distribution.  Reference:</span>
+0013 <span class="comment">% Bruce M. Hill, &quot;Posterior Distribution of Percentiles: Bayes'</span>
+0014 <span class="comment">% Theorem for Sampling from a Population&quot;, Journal of the American</span>
+0015 <span class="comment">% Statistical Association, Vol. 63, No. 322. (Jun., 1968),</span>
+0016 <span class="comment">% pp. 677-691.</span>
+0017 <span class="comment">% http://links.jstor.org/sici?sici=0162-1459%28196806%2963%3A322%3C677%3APDOPBT%3E2.0.CO%3B2-O</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% See test_hhist.m for a demonstration.</span>
+0020 
+0021 <span class="comment">% Written by Tom Minka</span>
+0022 
+0023 n = length(data);
+0024 data = data(:);
+0025 data = sort(data);
+0026 <span class="comment">% find the number of occurrences of each point.</span>
+0027 <span class="comment">% keep only the first two occurrences, and remember the total count.</span>
+0028 d = [0; data(1:end-1)==data(2:end)];
+0029 dd = diff([d; 0]);
+0030 dd2 = [0; dd(1:end-1)];
+0031 firstdup = (dd &gt; 0);
+0032 seconddup = (dd2 &gt; 0);
+0033 lastdup = (dd &lt; 0);
+0034 nodup = (dd == 0 &amp; d == 0);
+0035 <span class="comment">% set the second occurrence to be the next larger double-precision number.</span>
+0036 data(seconddup) = data(seconddup) + eps(data(seconddup));
+0037 dstart = find(firstdup | seconddup | nodup);
+0038 dend = find(firstdup | lastdup | nodup);
+0039 data = data(dstart);
+0040 <span class="comment">% count(i) is the number of occurrences of data(i)</span>
+0041 count = dend-dstart+1;
+0042 
+0043 <span class="keyword">if</span> nargin &lt; 2
+0044   resolution = 1000;
+0045 <span class="keyword">end</span>
+0046 delta = 0.05*range(data);
+0047 <span class="keyword">if</span> delta == 0
+0048   delta = 1;
+0049 <span class="keyword">end</span>
+0050 mind = min(data)-delta;
+0051 maxd = max(data)+delta;
+0052 <span class="keyword">if</span> length(resolution) == 1
+0053   test = linspace(mind,maxd,resolution);
+0054 <span class="keyword">else</span>
+0055   test = resolution;
+0056   mind = min(mind, min(test));
+0057   maxd = max(maxd, max(test));
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">% A tricky aspect of this algorithm is that it is not enough to simply</span>
+0061 <span class="comment">% evaluate the density at the test locations.  If you do that, you may miss</span>
+0062 <span class="comment">% sharp spikes.  Instead, you must compute the average density around each</span>
+0063 <span class="comment">% test location.</span>
+0064 
+0065 <span class="keyword">if</span> 0
+0066 <span class="comment">% Algorithm to evaluate the density at test locations only:</span>
+0067 <span class="comment">% 1. Compute the slope of the cdf between consecutive input points.</span>
+0068 <span class="comment">%    For the last point, the slope is zero.</span>
+0069 <span class="comment">% 2. For each test location, find the nearest input point which is smaller.</span>
+0070 <span class="comment">%    This is cleverly done via the interp1 function.</span>
+0071 <span class="comment">% 3. Use the previously computed slope as the density at that test location.</span>
+0072 
+0073 <span class="comment">% g(i) = slope of the cdf between data(i) and data(i+1)</span>
+0074 g = [0; 1./diff(data); 0; 0];
+0075 <span class="comment">% extend data so that interp1 doesn't fail</span>
+0076 <span class="comment">% note mind &lt; min(data), maxd &gt; max(data)</span>
+0077 datax = [mind; data; maxd];
+0078 index = [0; cumsum(count); 0];
+0079 test_index = floor(interp1(datax,index,test));
+0080 density = g(test_index)/(length(data)+1);
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">% Algorithm to compute the average density around each test location:</span>
+0084 <span class="comment">% 1. Find the borders of the nearest-neighbor cell for each test location.</span>
+0085 <span class="comment">% 2. Evaluate the cdf at the border locations.</span>
+0086 <span class="comment">% 3. Use the cdf slope between borders as the density for the test location.</span>
+0087 test = test(:);
+0088 border = [mind; (test(1:end-1) + test(2:end))/2; maxd];
+0089 <span class="comment">% extend data so that interp1 doesn't fail</span>
+0090 <span class="comment">% note mind &lt; min(data), maxd &gt; max(data)</span>
+0091 datax = [mind; data; maxd];
+0092 index = [0; cumsum(count); 0];
+0093 border_cdf = interp1(datax,index,border);
+0094 <span class="comment">% this prevents the estimate from extending beyond the data limits.</span>
+0095 border_cdf(border&lt;min(data)) = 1;
+0096 border_cdf(border&gt;max(data)) = n;
+0097 <span class="comment">%plot(border,border_cdf)</span>
+0098 density = diff(border_cdf)./diff(border)/(n-1);
+0099 
+0100 <span class="keyword">if</span> nargout == 0
+0101   plot(test, density)
+0102   <a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>
+0103   <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> density
+0104 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

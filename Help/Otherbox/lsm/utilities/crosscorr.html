@@ -1,0 +1,477 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of crosscorr</title>
+  <meta name="keywords" content="crosscorr">
+  <meta name="description" content="CROSSCORR Cross-correlation function estimates.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>crosscorr
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CROSSCORR Cross-correlation function estimates.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [c,lags] = crosscorr(x,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">CROSSCORR Cross-correlation function estimates.
+   C = CROSSCORR(A,B), where A and B are length M vectors (M&gt;1), returns
+   the length 2*M-1 cross-correlation sequence C. If A and B are of
+   different length, the shortest one is zero-padded.  C will be a
+   row vector if A is a row vector, and a column vector if A is a 
+   column vector.
+
+   CROSSCORR produces an estimate of the correlation between two random
+   (jointly stationary) sequences:
+          C(m) = E[A(n+m)*conj(B(n))] = E[A(n)*conj(B(n-m))]
+   It is also the deterministic correlation between two deterministic
+   signals.
+
+   CROSSCORR(A), when A is a vector, is the auto-correlation sequence.   
+   CROSSCORR(A), when A is an M-by-N matrix, is a large matrix with
+   2*M-1 rows whose N^2 columns contain the cross-correlation
+   sequences for all combinations of the columns of A.
+   The zeroth lag of the output correlation is in the middle of the 
+   sequence, at element or row M.
+
+   CROSSCORR(...,MAXLAG) computes the (auto/cross) correlation over the
+   range of lags:  -MAXLAG to MAXLAG, i.e., 2*MAXLAG+1 lags.
+   If missing, default is MAXLAG = M-1.
+
+   [C,LAGS] = CROSSCORR(...)  returns a vector of lag indices (LAGS).
+
+   CROSSCORR(...,SCALEOPT), normalizes the correlation according to SCALEOPT:
+     'biased'   - scales the raw cross-correlation by 1/M.
+     'unbiased' - scales the raw correlation by 1/(M-abs(lags)).
+     'coeff'    - normalizes the sequence so that the auto-correlations
+                  at zero lag are identically 1.0.
+     'none'     - no scaling (this is the default).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [c,M,N] = matrixCorr(x,maxlag)</a></li><li><a href="#_sub2" class="code">function [c,M,N] = vectorXcorr(x,autoFlag,maxlag,varargin)</a></li><li><a href="#_sub3" class="code">function [c,msg] = scaleXcorr(c,xIsMatrix,scaleType,autoFlag,</a></li><li><a href="#_sub4" class="code">function [xIsMatrix,autoFlag,maxlag,scaleType,msg] = parseinput(x,varargin)</a></li><li><a href="#_sub5" class="code">function [xIsMatrix,m] = parse_x(x)</a></li><li><a href="#_sub6" class="code">function [maxlag,msg] = parse_y(y,m,xIsMatrix,maxlag)</a></li><li><a href="#_sub7" class="code">function [maxlag,msg] = parse_maxlag(maxlag,m)</a></li><li><a href="#_sub8" class="code">function c = forceRealCorr(c,x,autoFlag,varargin)</a></li><li><a href="#_sub9" class="code">function [scaleType,msg] = parse_scaleType(scaleType,errMsg,autoFlag,m,varargin)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,lags] = crosscorr(x,varargin)</a>
+0002 <span class="comment">%CROSSCORR Cross-correlation function estimates.</span>
+0003 <span class="comment">%   C = CROSSCORR(A,B), where A and B are length M vectors (M&gt;1), returns</span>
+0004 <span class="comment">%   the length 2*M-1 cross-correlation sequence C. If A and B are of</span>
+0005 <span class="comment">%   different length, the shortest one is zero-padded.  C will be a</span>
+0006 <span class="comment">%   row vector if A is a row vector, and a column vector if A is a</span>
+0007 <span class="comment">%   column vector.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   CROSSCORR produces an estimate of the correlation between two random</span>
+0010 <span class="comment">%   (jointly stationary) sequences:</span>
+0011 <span class="comment">%          C(m) = E[A(n+m)*conj(B(n))] = E[A(n)*conj(B(n-m))]</span>
+0012 <span class="comment">%   It is also the deterministic correlation between two deterministic</span>
+0013 <span class="comment">%   signals.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   CROSSCORR(A), when A is a vector, is the auto-correlation sequence.</span>
+0016 <span class="comment">%   CROSSCORR(A), when A is an M-by-N matrix, is a large matrix with</span>
+0017 <span class="comment">%   2*M-1 rows whose N^2 columns contain the cross-correlation</span>
+0018 <span class="comment">%   sequences for all combinations of the columns of A.</span>
+0019 <span class="comment">%   The zeroth lag of the output correlation is in the middle of the</span>
+0020 <span class="comment">%   sequence, at element or row M.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   CROSSCORR(...,MAXLAG) computes the (auto/cross) correlation over the</span>
+0023 <span class="comment">%   range of lags:  -MAXLAG to MAXLAG, i.e., 2*MAXLAG+1 lags.</span>
+0024 <span class="comment">%   If missing, default is MAXLAG = M-1.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   [C,LAGS] = CROSSCORR(...)  returns a vector of lag indices (LAGS).</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   CROSSCORR(...,SCALEOPT), normalizes the correlation according to SCALEOPT:</span>
+0029 <span class="comment">%     'biased'   - scales the raw cross-correlation by 1/M.</span>
+0030 <span class="comment">%     'unbiased' - scales the raw correlation by 1/(M-abs(lags)).</span>
+0031 <span class="comment">%     'coeff'    - normalizes the sequence so that the auto-correlations</span>
+0032 <span class="comment">%                  at zero lag are identically 1.0.</span>
+0033 <span class="comment">%     'none'     - no scaling (this is the default).</span>
+0034 
+0035 error(nargchk(1,4,nargin));
+0036 
+0037 [x,nshift] = shiftdim(x);
+0038 [xIsMatrix,autoFlag,maxlag,scaleType,msg] = <a href="#_sub4" class="code" title="subfunction [xIsMatrix,autoFlag,maxlag,scaleType,msg] = parseinput(x,varargin)">parseinput</a>(x,varargin{:});
+0039 error(msg);
+0040 
+0041 <span class="keyword">if</span> xIsMatrix,
+0042     [c,M,N] = <a href="#_sub1" class="code" title="subfunction [c,M,N] = matrixCorr(x,maxlag)">matrixCorr</a>(x,maxlag);
+0043 <span class="keyword">else</span>
+0044     [c,M,N] = <a href="#_sub2" class="code" title="subfunction [c,M,N] = vectorXcorr(x,autoFlag,maxlag,varargin)">vectorXcorr</a>(x,autoFlag,maxlag,varargin{:});
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% Force correlation to be real when inputs are real</span>
+0048 c = <a href="#_sub8" class="code" title="subfunction c = forceRealCorr(c,x,autoFlag,varargin)">forceRealCorr</a>(c,x,autoFlag,varargin{:});
+0049 
+0050 
+0051 lags = [-maxlag:maxlag];
+0052 
+0053 
+0054 <span class="comment">% Keep only the lags we want and move negative lags before positive lags</span>
+0055 <span class="keyword">if</span> maxlag &gt;= M,
+0056     c = [zeros(maxlag-M+1,N^2);c(end-M+2:<span class="keyword">end</span>,:);c(1:M,:);zeros(maxlag-M+1,N^2)];
+0057 <span class="keyword">else</span>
+0058     c = [c(end-maxlag+1:<span class="keyword">end</span>,:);c(1:maxlag+1,:)];
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% Scale as specified</span>
+0062 [c,msg] = <a href="#_sub3" class="code" title="subfunction [c,msg] = scaleXcorr(c,xIsMatrix,scaleType,autoFlag,">scaleXcorr</a>(c,xIsMatrix,scaleType,autoFlag,M,maxlag,lags,x,varargin{:});
+0063 error(msg);
+0064 
+0065 <span class="comment">% If first vector is a row, return a row</span>
+0066 c = shiftdim(c,-nshift);
+0067 
+0068 <span class="comment">%----------------------------------------------------------------</span>
+0069 <a name="_sub1" href="#_subfunctions" class="code">function [c,M,N] = matrixCorr(x,maxlag)</a>
+0070 <span class="comment">% Compute all possible auto- and cross-correlations for a matrix input</span>
+0071 
+0072 [M,N] = size(x);
+0073 
+0074 X = fft(x,2^nextpow2(2*M-1));
+0075 
+0076 Xc = conj(X);
+0077 
+0078 C = [];
+0079 <span class="keyword">for</span> n =1:N,
+0080     C = [C,repmat(X(:,n),1,N).*Xc];
+0081 <span class="keyword">end</span>
+0082 c = ifft(C);
+0083 
+0084 <span class="comment">%----------------------------------------------------------------</span>
+0085 <a name="_sub2" href="#_subfunctions" class="code">function [c,M,N] = vectorXcorr(x,autoFlag,maxlag,varargin)</a>
+0086 <span class="comment">% Compute auto- or cross-correlation for vector inputs</span>
+0087 
+0088 x = x(:);
+0089 
+0090 [M,N] = size(x);
+0091 
+0092 <span class="keyword">if</span> autoFlag,
+0093     <span class="comment">% Autocorrelation</span>
+0094     <span class="comment">% Compute correlation via FFT</span>
+0095     X = fft(x,2^nextpow2(2*M-1));
+0096     c = ifft(abs(X).^2);
+0097     
+0098 <span class="keyword">else</span>,
+0099     <span class="comment">% xcorrelation</span>
+0100     y = varargin{1};
+0101     y = y(:);
+0102     L = length(y);
+0103     
+0104     <span class="comment">% Cache the length(x)</span>
+0105     Mcached = M;
+0106     
+0107     <span class="comment">% Recompute length(x) in case length(y) &gt; length(x)</span>
+0108     M = max(Mcached,L);
+0109     
+0110     <span class="keyword">if</span> (L ~= Mcached) &amp; any([L./Mcached, Mcached./L] &gt; 10),
+0111 
+0112         <span class="comment">% Vector sizes differ by a factor greater than 10,</span>
+0113         <span class="comment">% fftfilt is faster</span>
+0114         neg_c = conj(fftfilt(conj(x),flipud(y))); <span class="comment">% negative lags</span>
+0115         pos_c = flipud(fftfilt(conj(y),flipud(x))); <span class="comment">% positive lags</span>
+0116         
+0117         <span class="comment">% Make them of almost equal length (remove zero-th lag from neg)</span>
+0118         lneg = length(neg_c); lpos = length(pos_c);
+0119         neg_c = [zeros(lpos-lneg,1);neg_c(1:end-1)];
+0120         pos_c = [pos_c;zeros(lneg-lpos,1)];
+0121         
+0122         c = [pos_c;neg_c];
+0123         
+0124     <span class="keyword">else</span>
+0125         <span class="keyword">if</span> L ~= Mcached,
+0126             <span class="comment">% Force equal lengths</span>
+0127             <span class="keyword">if</span> L &gt; Mcached
+0128                 x = [x;zeros(L-Mcached,1)];
+0129                 
+0130             <span class="keyword">else</span>,
+0131                 y = [y;zeros(Mcached-L,1)];
+0132             <span class="keyword">end</span>                                    
+0133         <span class="keyword">end</span>
+0134         
+0135         <span class="comment">% Transform both vectors</span>
+0136         X = fft(x,2^nextpow2(2*M-1));
+0137         Y = fft(y,2^nextpow2(2*M-1));
+0138         
+0139         <span class="comment">% Compute cross-correlation</span>
+0140         c = ifft(X.*conj(Y));
+0141     <span class="keyword">end</span>
+0142 <span class="keyword">end</span>
+0143     
+0144 <span class="comment">%----------------------------------------------------------------</span>
+0145 <a name="_sub3" href="#_subfunctions" class="code">function [c,msg] = scaleXcorr(c,xIsMatrix,scaleType,autoFlag,</a><span class="keyword">...</span>
+0146     M,maxlag,lags,x,varargin)
+0147 <span class="comment">% Scale correlation as specified</span>
+0148 
+0149 msg = <span class="string">''</span>;
+0150 
+0151 <span class="keyword">switch</span> scaleType,
+0152 <span class="keyword">case</span> <span class="string">'none'</span>,
+0153     <span class="keyword">return</span>
+0154 <span class="keyword">case</span> <span class="string">'biased'</span>, 
+0155     <span class="comment">% Scales the raw cross-correlation by 1/M.</span>
+0156     c = c./M;
+0157 <span class="keyword">case</span> <span class="string">'unbiased'</span>, 
+0158     <span class="comment">% Scales the raw correlation by 1/(M-abs(lags)).</span>
+0159     scale = (M-abs(lags)).';
+0160     scale(scale&lt;=0)=1; <span class="comment">% avoid divide by zero, when correlation is zero</span>
+0161     
+0162     <span class="keyword">if</span> xIsMatrix,
+0163         scale = repmat(scale,1,size(c,2));
+0164     <span class="keyword">end</span>
+0165     c = c./scale;
+0166 <span class="keyword">case</span> <span class="string">'coeff'</span>,
+0167     <span class="comment">% Normalizes the sequence so that the auto-correlations</span>
+0168     <span class="comment">% at zero lag are identically 1.0.</span>
+0169     <span class="keyword">if</span> ~autoFlag,
+0170         <span class="comment">% crosscorr(x,y)</span>
+0171         <span class="comment">% Compute autocorrelations at zero lag</span>
+0172         cxx0 = sum(abs(x).^2);
+0173         cyy0 = sum(abs(varargin{1}).^2);
+0174         scale = sqrt(cxx0*cyy0);
+0175         c = c./scale;
+0176     <span class="keyword">else</span>,
+0177         <span class="keyword">if</span> ~xIsMatrix,
+0178             <span class="comment">% Autocorrelation case, simply normalize by c[0]</span>
+0179             c = c./c(maxlag+1);
+0180         <span class="keyword">else</span>,
+0181             <span class="comment">% Compute the indices corresponding to the columns for which</span>
+0182             <span class="comment">% we have autocorrelations (e.g. if c = n by 9, the autocorrelations</span>
+0183             <span class="comment">% are at columns [1,5,9] the other columns are cross-correlations).</span>
+0184             [mc,nc] = size(c);
+0185             jkl = reshape(1:nc,sqrt(nc),sqrt(nc))';
+0186             tmp = sqrt(c(maxlag+1,diag(jkl)));
+0187             tmp = tmp(:)*tmp; 
+0188             cdiv = repmat(tmp(:).',mc,1);
+0189             c = c ./ cdiv; <span class="comment">% The autocorrelations at zero-lag are normalized to</span>
+0190             <span class="comment">% one</span>
+0191         <span class="keyword">end</span>
+0192     <span class="keyword">end</span>
+0193 <span class="keyword">end</span>    
+0194 
+0195 <span class="comment">%----------------------------------------------------------------</span>
+0196 <a name="_sub4" href="#_subfunctions" class="code">function [xIsMatrix,autoFlag,maxlag,scaleType,msg] = parseinput(x,varargin)</a>
+0197 <span class="comment">%    Parse the input and determine optional parameters:</span>
+0198 <span class="comment">%</span>
+0199 <span class="comment">%    Outputs:</span>
+0200 <span class="comment">%       xIsMatrix - flag indicating if x is a matrix</span>
+0201 <span class="comment">%       AUTOFLAG  - 1 if autocorrelation, 0 if xcorrelation</span>
+0202 <span class="comment">%       maxlag    - Number or lags to compute</span>
+0203 <span class="comment">%       scaleType - String with the type of scaling wanted</span>
+0204 <span class="comment">%       msg       - possible error message</span>
+0205 
+0206 <span class="comment">% Set some defaults</span>
+0207 msg = <span class="string">''</span>;
+0208 scaleType = <span class="string">''</span>;
+0209 autoFlag = 1; <span class="comment">% Assume autocorrelation until proven otherwise</span>
+0210 maxlag = []; 
+0211 
+0212 errMsg = <span class="string">'Input argument is not recognized.'</span>;
+0213 
+0214 <span class="keyword">switch</span> nargin,
+0215 <span class="keyword">case</span> 2,
+0216     <span class="comment">% Can be (x,y), (x,maxlag), or (x,scaleType)</span>
+0217     <span class="keyword">if</span> ischar(varargin{1}),
+0218         <span class="comment">% Second arg is scaleType</span>
+0219         scaleType = varargin{1};
+0220         
+0221     <span class="keyword">elseif</span> isnumeric(varargin{1}),
+0222         <span class="comment">% Can be y or maxlag</span>
+0223         <span class="keyword">if</span> length(varargin{1}) == 1,
+0224             maxlag = varargin{1};
+0225         <span class="keyword">else</span>
+0226             autoFlag = 0;
+0227             y = varargin{1};
+0228         <span class="keyword">end</span>
+0229     <span class="keyword">else</span>
+0230         <span class="comment">% Not recognized</span>
+0231         msg = errMsg;
+0232         <span class="keyword">return</span>
+0233     <span class="keyword">end</span>
+0234 <span class="keyword">case</span> 3,
+0235     <span class="comment">% Can be (x,y,maxlag), (x,maxlag,scaleType) or (x,y,scaleType)</span>
+0236     maxlagflag = 0; <span class="comment">% By default, assume 3rd arg is not maxlag</span>
+0237     <span class="keyword">if</span> ischar(varargin{2}),
+0238         <span class="comment">% Must be scaletype</span>
+0239         scaleType = varargin{2};
+0240         
+0241     <span class="keyword">elseif</span> isnumeric(varargin{2}),
+0242         <span class="comment">% Must be maxlag</span>
+0243         maxlagflag = 1;
+0244         maxlag = varargin{2};
+0245         
+0246     <span class="keyword">else</span>
+0247         <span class="comment">% Not recognized</span>
+0248         msg = errMsg;
+0249         <span class="keyword">return</span>
+0250     <span class="keyword">end</span>
+0251     
+0252     <span class="keyword">if</span> isnumeric(varargin{1}),
+0253         <span class="keyword">if</span> maxlagflag,
+0254             autoFlag = 0;
+0255             y = varargin{1};
+0256         <span class="keyword">else</span>
+0257             <span class="comment">% Can be y or maxlag</span>
+0258             <span class="keyword">if</span> length(varargin{1}) == 1,
+0259                 maxlag = varargin{1};
+0260             <span class="keyword">else</span>
+0261                 autoFlag = 0;
+0262                 y = varargin{1};
+0263             <span class="keyword">end</span>
+0264         <span class="keyword">end</span>
+0265     <span class="keyword">else</span>
+0266         <span class="comment">% Not recognized</span>
+0267         msg = errMsg;
+0268         <span class="keyword">return</span>
+0269     <span class="keyword">end</span>
+0270     
+0271 <span class="keyword">case</span> 4,
+0272     <span class="comment">% Must be (x,y,maxlag,scaleType)</span>
+0273     autoFlag = 0;
+0274     y = varargin{1};
+0275     
+0276     maxlag = varargin{2};
+0277     
+0278     scaleType = varargin{3};
+0279 <span class="keyword">end</span>
+0280 
+0281 <span class="comment">% Determine if x is a matrix or a vector</span>
+0282 [xIsMatrix,m] = <a href="#_sub5" class="code" title="subfunction [xIsMatrix,m] = parse_x(x)">parse_x</a>(x);
+0283 
+0284 
+0285 
+0286 <span class="keyword">if</span> ~autoFlag,
+0287     <span class="comment">% Test y for correctness</span>
+0288     [maxlag,msg] = <a href="#_sub6" class="code" title="subfunction [maxlag,msg] = parse_y(y,m,xIsMatrix,maxlag)">parse_y</a>(y,m,xIsMatrix,maxlag);
+0289     <span class="keyword">if</span> ~isempty(msg),
+0290         <span class="keyword">return</span>
+0291     <span class="keyword">end</span>
+0292 <span class="keyword">end</span>
+0293 
+0294 [maxlag,msg] = <a href="#_sub7" class="code" title="subfunction [maxlag,msg] = parse_maxlag(maxlag,m)">parse_maxlag</a>(maxlag,m);
+0295 <span class="keyword">if</span> ~isempty(msg),
+0296     <span class="keyword">return</span>
+0297 <span class="keyword">end</span>
+0298 
+0299 
+0300 <span class="comment">% Test the scaleType validity</span>
+0301 [scaleType,msg] = <a href="#_sub9" class="code" title="subfunction [scaleType,msg] = parse_scaleType(scaleType,errMsg,autoFlag,m,varargin)">parse_scaleType</a>(scaleType,errMsg,autoFlag,m,varargin{:});
+0302 <span class="keyword">if</span> ~isempty(msg),
+0303     <span class="keyword">return</span>
+0304 <span class="keyword">end</span>
+0305 
+0306     
+0307 <span class="comment">%-------------------------------------------------------------------</span>
+0308 <a name="_sub5" href="#_subfunctions" class="code">function [xIsMatrix,m] = parse_x(x)</a>
+0309 
+0310 
+0311 xIsMatrix = (size(x,2) &gt; 1);
+0312 
+0313 m = size(x,1);
+0314 
+0315 
+0316 <span class="comment">%-------------------------------------------------------------------</span>
+0317 <a name="_sub6" href="#_subfunctions" class="code">function [maxlag,msg] = parse_y(y,m,xIsMatrix,maxlag)</a>
+0318 msg = <span class="string">''</span>;
+0319 [my,ny] = size(y);
+0320 <span class="keyword">if</span> ~any([my,ny] == 1),
+0321     <span class="comment">% Second arg is a matrix, error</span>
+0322     msg = <span class="string">'B must be a vector (min(size(B))==1).'</span>;
+0323     <span class="keyword">return</span>
+0324 <span class="keyword">end</span>
+0325 
+0326 <span class="keyword">if</span> xIsMatrix,
+0327     <span class="comment">% Can't do crosscorr(matrix,vector)</span>
+0328     msg = <span class="string">'When B is a vector, A must be a vector.'</span>;
+0329     <span class="keyword">return</span>
+0330 <span class="keyword">end</span>
+0331 <span class="keyword">if</span> (length(y) &gt; m) &amp; isempty(maxlag),
+0332     <span class="comment">% Compute the default maxlag based on the length of y</span>
+0333     maxlag = length(y) - 1;
+0334 <span class="keyword">end</span>
+0335 
+0336 <span class="comment">%-------------------------------------------------------------------</span>
+0337 <a name="_sub7" href="#_subfunctions" class="code">function [maxlag,msg] = parse_maxlag(maxlag,m)</a>
+0338 msg = <span class="string">''</span>;
+0339 <span class="keyword">if</span> isempty(maxlag),
+0340     <span class="comment">% Defaul hasn't been assigned yet, do so</span>
+0341     maxlag = m-1;
+0342 <span class="keyword">else</span>    
+0343     <span class="comment">% Test maxlag for correctness</span>
+0344     <span class="keyword">if</span>  length(maxlag)&gt;1
+0345         msg = <span class="string">'Maximum lag must be a scalar.'</span>;
+0346         <span class="keyword">return</span>
+0347     <span class="keyword">end</span>    
+0348     <span class="keyword">if</span> maxlag &lt; 0,
+0349         maxlag = abs(maxlag);
+0350     <span class="keyword">end</span>
+0351     <span class="keyword">if</span> maxlag ~= round(maxlag),
+0352         msg = <span class="string">'Maximum lag must be an integer.'</span>;
+0353     <span class="keyword">end</span>
+0354 <span class="keyword">end</span>
+0355 
+0356 <span class="comment">%--------------------------------------------------------------------</span>
+0357 <a name="_sub8" href="#_subfunctions" class="code">function c = forceRealCorr(c,x,autoFlag,varargin)</a>
+0358 <span class="comment">% Force correlation to be real when inputs are real</span>
+0359 
+0360 forceReal = 0; <span class="comment">% Flag to determine whether we should force real corr</span>
+0361 
+0362 <span class="keyword">if</span> (isreal(x) &amp; autoFlag) | (isreal(x) &amp; isreal(varargin{1})),
+0363     forceReal = 1;
+0364 <span class="keyword">end</span>
+0365 
+0366 
+0367 <span class="keyword">if</span> forceReal,
+0368     c = real(c);
+0369 <span class="keyword">end</span>
+0370 
+0371 <span class="comment">%--------------------------------------------------------------------</span>
+0372 <a name="_sub9" href="#_subfunctions" class="code">function [scaleType,msg] = parse_scaleType(scaleType,errMsg,autoFlag,m,varargin)</a>
+0373 msg = <span class="string">''</span>;
+0374 <span class="keyword">if</span> isempty(scaleType),
+0375     scaleType = <span class="string">'none'</span>;
+0376 <span class="keyword">else</span>
+0377     scaleOpts = {<span class="string">'biased'</span>,<span class="string">'unbiased'</span>,<span class="string">'coeff'</span>,<span class="string">'none'</span>};
+0378     indx = strmatch(lower(scaleType),scaleOpts);
+0379     
+0380     <span class="keyword">if</span> isempty(indx),
+0381         msg = errMsg;
+0382         <span class="keyword">return</span>
+0383     <span class="keyword">else</span>
+0384         scaleType = scaleOpts{indx};
+0385     <span class="keyword">end</span>
+0386     
+0387     <span class="keyword">if</span> ~autoFlag &amp; ~strcmpi(scaleType,<span class="string">'none'</span>) &amp;(m ~= length(varargin{1})),
+0388         msg = <span class="string">'Scale option must be ''none'' for different length vectors A and B.'</span>;
+0389         <span class="keyword">return</span>
+0390     <span class="keyword">end</span>
+0391 <span class="keyword">end</span>
+0392 
+0393 <span class="comment">% EOF</span>
+0394</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

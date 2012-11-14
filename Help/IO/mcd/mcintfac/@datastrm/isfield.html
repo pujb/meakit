@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of isfield</title>
+  <meta name="keywords" content="isfield">
+  <meta name="description" content="ISFIELD True if field is in structure array.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>isfield
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ISFIELD True if field is in structure array.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function tf = isfield(s,f) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ISFIELD True if field is in structure array.
+   F = ISFIELD(S,'field') returns true if 'field' is the name of a field
+   in the structure array S.
+
+   See also <a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">GETFIELD</a>, <a href="setfield.html" class="code" title="function a=setfield(d,name,value)">SETFIELD</a>, FIELDNAMES.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Calculation/util_calc_energy.html" class="code" title="function [ sum_e mean_e sem_e ] = util_calc_energy( spif, chlist, active_thres )">util_calc_energy</a>	UTIL_CALC_ENERGY Calculate the neural energy from spike trains</li><li><a href="../../../../Calculation/util_detect_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin )">util_detect_avalanche</a>	UTIL_DETECT_AVALANCHE Detecting the neural avalanches</li><li><a href="../../../../Convertion/util_convert_spif_with_amplitude.html" class="code" title="function [ spif ] = util_convert_spif_with_amplitude( d, spif )">util_convert_spif_with_amplitude</a>	UTIL_CONVERT_SPIF_WITH_AMPLITUDE Process the spike amplitude values in the</li><li><a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="../../../../IO/util_load_spike_trigger_mcdstream_from_multiple_files.html" class="code" title="function [ spif triggerif ] = util_load_spike_trigger_mcdstream_from_multiple_files( varargin )">util_load_spike_trigger_mcdstream_from_multiple_files</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM_WHOLE_LENGTH_FROM_MULTIPLE_FILES 工具函数：从多个MCD文件中获取SPIF/TRIGGERIF信息</li><li><a href="../../../../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>	</li><li><a href="../../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../../Otherbox/drtoolbox/techniques/cca.html" class="code" title="function [Z, ccaEigen, ccaDetails] = cca(X, Y, EDGES, OPTS)">cca</a>	</li><li><a href="../../../../Otherbox/drtoolbox/techniques/csdp.html" class="code" title="function [x,y,z,info]=csdp(At,b,c,K,pars)">csdp</a>	CSDP Uses CSDP to solve a problem in SeDuMi format</li><li><a href="../../../../Otherbox/drtoolbox/techniques/readsol.html" class="code" title="function [x,y,z]=readsol(fname,K,m)">readsol</a>	READSOL Read solution from CSDP</li><li><a href="../../../../Otherbox/drtoolbox/techniques/writesdpa.html" class="code" title="function ret=writesdpa(fname,A,b,c,K,pars)">writesdpa</a>	WRITESDPA Take a problem in SeDuMi format and writes it in SDPA format</li><li><a href="../../../../Otherbox/lightspeed/graphics/labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li><li><a href="../../../../Otherbox/lightspeed/maxdiff.html" class="code" title="function e = maxdiff(a,b,rel)">maxdiff</a>	MAXDIFF(A,B) returns the maximum difference in any field or element.</li><li><a href="../../../../Otherbox/lsm/utilities/record_movie.html" class="code" title="function M = record_movie(response, frameSize, optFrameTimes, optFilter, optMakeColorBar, optMakeTimeIndex)">record_movie</a>	RECORD_MOVIE Play/Record a 2D movie of a given response (or stimulus)</li><li><a href="../../../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../../../Otherbox/panel/@panel/private/getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="../../../../Otherbox/panel/@panel/private/setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="../../../../Otherbox/panel/@panel/private/subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="../../../../Otherbox/panel/@panel/subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function tf = isfield(s,f)</a>
+0002 <span class="comment">%ISFIELD True if field is in structure array.</span>
+0003 <span class="comment">%   F = ISFIELD(S,'field') returns true if 'field' is the name of a field</span>
+0004 <span class="comment">%   in the structure array S.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   See also GETFIELD, SETFIELD, FIELDNAMES.</span>
+0007 
+0008 
+0009 <span class="keyword">if</span> isa(s,<span class="string">'struct'</span>) | isa(s, <span class="string">'datastrm'</span>) 
+0010   tf = any(strcmp(<a href="../../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(s),f));
+0011 <span class="keyword">else</span>
+0012   tf = logical(0);
+0013 <span class="keyword">end</span>
+0014 
+0015</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

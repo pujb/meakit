@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_sti_calc_test_score_arraywide</title>
+  <meta name="keywords" content="util_sti_calc_test_score_arraywide">
+  <meta name="description" content="UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_sti_calc_test_score_arraywide
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ score_vector ] = util_sti_calc_test_score_arraywide( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩
+   计算一个皿内的刺激响应成绩。本程序依赖于util_sti_calc_test_score.m
+   同时依赖于提供spif和trif的函数util_load_spike_trigger_mcdstream.m(或其多文件版本)
+
+   传入参数：
+       stimulating_chid：施加刺激的电极（例如12,87)，可选。如果给定，则刺激电极可以保证为0分
+                         否则因为伪迹的存在，不一定是0分
+       calculating_range：计算的时间，ms为单位，该参数传递给util_sti_calc_test_score
+       filename：要打开的文件，若不提供，则会提示对话框
+
+   传出参数：
+       score_vector：将util_sti_calc_test_score返回的平均成绩列成一个序列。
+       这个序列中同样包含那些一定没有信号的电极，可以用util_convert64to8s变成8*8阵，然后用来绘图
+       e.g. util_convert_64to8s(s)
+
+   蒲江波 2009年11月21日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="util_sti_calc_test_score.html" class="code" title="function [ score avg_score max_score min_score median_score] = util_sti_calc_test_score ( spif,trif,obs_chid,calculating_range,isManualTrigger,isPrintInfo)">util_sti_calc_test_score</a>	UTIL_STI_CALC_TEST_SCORE 工具函数：计算测试电极成绩</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ score_vector ] = util_sti_calc_test_score_arraywide( varargin )</a>
+0002 <span class="comment">%UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩</span>
+0003 <span class="comment">%   计算一个皿内的刺激响应成绩。本程序依赖于util_sti_calc_test_score.m</span>
+0004 <span class="comment">%   同时依赖于提供spif和trif的函数util_load_spike_trigger_mcdstream.m(或其多文件版本)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   传入参数：</span>
+0007 <span class="comment">%       stimulating_chid：施加刺激的电极（例如12,87)，可选。如果给定，则刺激电极可以保证为0分</span>
+0008 <span class="comment">%                         否则因为伪迹的存在，不一定是0分</span>
+0009 <span class="comment">%       calculating_range：计算的时间，ms为单位，该参数传递给util_sti_calc_test_score</span>
+0010 <span class="comment">%       filename：要打开的文件，若不提供，则会提示对话框</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   传出参数：</span>
+0013 <span class="comment">%       score_vector：将util_sti_calc_test_score返回的平均成绩列成一个序列。</span>
+0014 <span class="comment">%       这个序列中同样包含那些一定没有信号的电极，可以用util_convert64to8s变成8*8阵，然后用来绘图</span>
+0015 <span class="comment">%       e.g. util_convert_64to8s(s)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   蒲江波 2009年11月21日</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0021 
+0022 <span class="comment">% 参数分析</span>
+0023 
+0024 <span class="keyword">if</span> ~exist(<span class="string">'calculating_range'</span>, <span class="string">'var'</span>)
+0025     <span class="comment">% 不指定calculating_range参数则程序退出</span>
+0026     error(<span class="string">'The CALCULATING_RANGE must be set.'</span>);
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="keyword">if</span> ~exist(<span class="string">'stimulating_chid'</span>, <span class="string">'var'</span>)
+0030     disp(<span class="string">'Stimulting Elec: NOT SET'</span>);
+0031     have_set_stimulating_elec = 0;
+0032 <span class="keyword">else</span>
+0033     disp([<span class="string">'Stimulating Elec: '</span> num2str(stimulating_chid)]);
+0034     have_set_stimulating_elec = 1;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">% 打开文件</span>
+0038 <span class="keyword">if</span> ~exist(<span class="string">'filename'</span>, <span class="string">'var'</span>)
+0039     [D spif trif] = <a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>();
+0040 <span class="keyword">else</span>
+0041     [D spif trif] = <a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>(<span class="string">'filename'</span>, filename);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% 在所有电极中遍历，将每个电极上的成绩汇总到一个向量里面</span>
+0045 hwID = 1;
+0046 score_vector = zeros( 1,64 );
+0047 <span class="keyword">while</span> hwID &lt; 65
+0048     <span class="comment">% 排除电极</span>
+0049     <span class="keyword">if</span> hwID == 1 || hwID == 8 || hwID == 57 || hwID == 64
+0050         hwID = hwID + 1;
+0051         <span class="keyword">continue</span>;
+0052     <span class="keyword">end</span>
+0053     
+0054     <span class="comment">% 排除刺激电极（不排除的话，可能会有本不该有的成绩）</span>
+0055     <span class="keyword">if</span> have_set_stimulating_elec
+0056         <span class="keyword">if</span> hwID == <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(stimulating_chid)
+0057             <span class="keyword">continue</span>;
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">end</span>
+0060     
+0061     <span class="comment">% 计算本电极分数</span>
+0062     [s a ma mi mid] = <a href="util_sti_calc_test_score.html" class="code" title="function [ score avg_score max_score min_score median_score] = util_sti_calc_test_score ( spif,trif,obs_chid,calculating_range,isManualTrigger,isPrintInfo)">util_sti_calc_test_score</a>(spif, trif, <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwID), calculating_range, 1, 0);
+0063     score_vector(hwID) = a;
+0064     
+0065     hwID = hwID + 1;
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="keyword">end</span>
+0069</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

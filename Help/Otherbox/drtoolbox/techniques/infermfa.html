@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of infermfa</title>
+  <meta name="keywords" content="infermfa">
+  <meta name="description" content="INFERMFA Infer MoFA using information from EM algorithm in MPPCA">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>infermfa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>INFERMFA Infer MoFA using information from EM algorithm in MPPCA</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [R, Z] = infermfa(X, LX, MX, PX) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">INFERMFA Infer MoFA using information from EM algorithm in MPPCA
+ 
+   [R, Z] = infermfa(X, LX, MX, PX)
+
+ Computes local data representations and responsibilities of the datapoints 
+ to the clusters specified by LX, MX, and PX. Basically, this method performs
+ an additional E-step of the EM-algorithm executed in MPPCA.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/out_of_sample.html" class="code" title="function t_point = out_of_sample(point, mapping)">out_of_sample</a>	TRANSFORM_SAMPLE_EST Performs out-of-sample extension of new datapoints</li><li><a href="charting.html" class="code" title="function [mappedX, mapping] = charting(X, no_dims, no_analyzers, max_iterations, eig_impl)">charting</a>	CHARTING Performs manifold charting on dataset X</li><li><a href="run_llc.html" class="code" title="function mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations, eig_impl)">run_llc</a>	RUN_LLC Performs the LLC algorithm for dimensionality reduction</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [R, Z] = infermfa(X, LX, MX, PX)</a>
+0002 <span class="comment">%INFERMFA Infer MoFA using information from EM algorithm in MPPCA</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [R, Z] = infermfa(X, LX, MX, PX)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Computes local data representations and responsibilities of the datapoints</span>
+0007 <span class="comment">% to the clusters specified by LX, MX, and PX. Basically, this method performs</span>
+0008 <span class="comment">% an additional E-step of the EM-algorithm executed in MPPCA.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0013 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0014 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0015 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0016 <span class="comment">% maintain the name of the original author.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0019 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0020 
+0021 
+0022     <span class="comment">% Initialize some variables</span>
+0023     [D N] = size(X);
+0024     [D no_dims no_analyzers] = size(LX);
+0025     const = -D / 2 * log(2 * pi);
+0026     R  = zeros(no_analyzers, N);
+0027     Z  = zeros(no_dims, N, no_analyzers);
+0028 
+0029     <span class="comment">% Estimate the cluster centers based on input (= E-step)</span>
+0030     pii = 1 ./ PX;
+0031     <span class="keyword">for</span> kk=1:no_analyzers
+0032         l        = LX(:,:,kk);
+0033         ltpi     = (repmat(pii, [1 no_dims]) .* l)';
+0034         ltpil    = ltpi * l;
+0035         iltpil   = eye(no_dims) + ltpil;
+0036         cc       = chol(iltpil);
+0037         cci      = inv(cc);
+0038         covz     = cci * cci';
+0039         delta    = X - MX(:,kk * ones(1, N));
+0040         meanz    = ((eye(no_dims) - ltpil * covz) * ltpi) * delta;
+0041 
+0042         Z(:,:,kk)  = meanz;
+0043         R(kk,:)    = -.5 * (pii' * (delta .* delta) - sum(meanz .* (iltpil * meanz), 1)) - <span class="keyword">...</span>
+0044                       sum(log(diag(cc)));
+0045     <span class="keyword">end</span>
+0046 
+0047     <span class="comment">% Compute responsibilities of clusters to points</span>
+0048     R = R + const + .5 * sum(log(pii));
+0049     R = exp(R - repmat(max(R, [], 1), [no_analyzers 1]));
+0050     R = R ./ repmat(sum(R, 1), [no_analyzers 1]);
+0051</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

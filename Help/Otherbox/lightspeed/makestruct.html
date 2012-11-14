@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of makestruct</title>
+  <meta name="keywords" content="makestruct">
+  <meta name="description" content="MAKESTRUCT   Cell-friendly alternative to STRUCT.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>makestruct
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MAKESTRUCT   Cell-friendly alternative to STRUCT.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s = makestruct(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MAKESTRUCT   Cell-friendly alternative to STRUCT.
+ MAKESTRUCT('field1',value1,...) is similar to STRUCT but allows values to
+ be specified directly, i.e. cell arrays do not need to be wrapped.
+ If a field is specified more than once, the last value is taken.
+ You can also use MAKESTRUCT(C) where C is a cell array of fields/values.
+ 
+ MAKESTRUCT is very useful for parsing argument lists.
+ Example:
+ function f(varargin)
+   args = makestruct(varargin);
+   default_args = struct('width',4,'height',4);
+   args = setfields(default_args,args);
+
+ See also STRUCT.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/graphics/color_plot.html" class="code" title="function color_plot(x,colors,varargin)">color_plot</a>	COLOR_PLOT    Scatterplot with colored points.</li><li><a href="../../Otherbox/lightspeed/graphics/labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s = makestruct(varargin)</a>
+0002 <span class="comment">%MAKESTRUCT   Cell-friendly alternative to STRUCT.</span>
+0003 <span class="comment">% MAKESTRUCT('field1',value1,...) is similar to STRUCT but allows values to</span>
+0004 <span class="comment">% be specified directly, i.e. cell arrays do not need to be wrapped.</span>
+0005 <span class="comment">% If a field is specified more than once, the last value is taken.</span>
+0006 <span class="comment">% You can also use MAKESTRUCT(C) where C is a cell array of fields/values.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% MAKESTRUCT is very useful for parsing argument lists.</span>
+0009 <span class="comment">% Example:</span>
+0010 <span class="comment">% function f(varargin)</span>
+0011 <span class="comment">%   args = makestruct(varargin);</span>
+0012 <span class="comment">%   default_args = struct('width',4,'height',4);</span>
+0013 <span class="comment">%   args = setfields(default_args,args);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% See also STRUCT.</span>
+0016 
+0017 <span class="comment">% Written by Tom Minka</span>
+0018 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0019 
+0020 args = varargin;
+0021 <span class="keyword">if</span> length(args) == 1 &amp;&amp; iscell(args{1})
+0022   args = args{1};
+0023 <span class="keyword">end</span>
+0024 s = struct;
+0025 <span class="keyword">for</span> i = 1:2:length(args)
+0026   <span class="comment">% this is much faster than 'setfield'</span>
+0027   s.(args{i}) = args{i+1};
+0028   <span class="comment">%s = setfield(s,args{i},args{i+1});</span>
+0029 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

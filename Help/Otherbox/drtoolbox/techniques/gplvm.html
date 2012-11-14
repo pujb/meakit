@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gplvm</title>
+  <meta name="keywords" content="gplvm">
+  <meta name="description" content="GPLVM Gaussian Process Latent Variable Model">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>gplvm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GPLVM Gaussian Process Latent Variable Model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Y = gplvm(X, no_dims, sigma) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">GPLVM Gaussian Process Latent Variable Model
+
+   Y = gplvm(X, no_dims, sigma)
+
+ Simple implementation of the Gaussian Process Latent Variable Model using 
+ a Gaussian kernel with bandwidth alpha. The function reduces the
+ dimenisonality of the dataset X to no_dims dimensions. The resulting
+ low-dimensional dataset is returned in Y.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>	Minimize a continuous differentialble multivariate function. Starting point</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Y = gplvm(X, no_dims, sigma)</a>
+0002 <span class="comment">%GPLVM Gaussian Process Latent Variable Model</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   Y = gplvm(X, no_dims, sigma)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Simple implementation of the Gaussian Process Latent Variable Model using</span>
+0007 <span class="comment">% a Gaussian kernel with bandwidth alpha. The function reduces the</span>
+0008 <span class="comment">% dimenisonality of the dataset X to no_dims dimensions. The resulting</span>
+0009 <span class="comment">% low-dimensional dataset is returned in Y.</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0013 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0014 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0015 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0016 <span class="comment">% maintain the name of the original author.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0019 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0020 
+0021 
+0022     <span class="keyword">if</span> ~exist(<span class="string">'sigma'</span>, <span class="string">'var'</span>) || isempty(sigma)
+0023         sigma = 1;
+0024     <span class="keyword">end</span>
+0025 
+0026     <span class="comment">% Initialize some variables</span>
+0027     n = size(X, 1);
+0028     
+0029     <span class="comment">% Initialize solution using PCA</span>
+0030     disp(<span class="string">'Preprocessing data using PCA...'</span>);
+0031     X = bsxfun(@minus, X, mean(X, 1));
+0032     [M, lambda] = eig(X' * X);
+0033     [lambda, ind] = sort(diag(lambda), <span class="string">'descend'</span>);
+0034     M = M(:,ind(1:no_dims));
+0035     Y = X * M;
+0036     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> M lambda ind
+0037     
+0038     <span class="comment">% Check gradient</span>
+0039     disp(<span class="string">'Learn GPLVM model...'</span>);
+0040     Y = <a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>(Y(:), <span class="string">'gplvm_grad'</span>, -500, X, sigma);
+0041     Y = reshape(Y, [n no_dims]);
+0042</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

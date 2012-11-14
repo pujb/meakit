@@ -1,0 +1,500 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cca</title>
+  <meta name="keywords" content="cca">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>cca
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Z, ccaEigen, ccaDetails] = cca(X, Y, EDGES, OPTS) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">
+ Function [Z, CCAEIGEN, CCADETAILS] = CCA(X, Y, EDGES, OPTS) computes a low
+ dimensional embedding Z in R^d that maximally preserves angles among  input 
+ data X that lives in R^D, with the algorithm Conformal Component Analysis.
+
+ The embedding Z is constrained to be Z = L*Y where Y is a partial basis that 
+ spans the space of R^d. Such Y can be computed from graph Laplacian (such as 
+ the outputs of Laplacian eigenmap and Locally Linear Embedding, ie, LLE). 
+ The parameterization matrix L is found by this function as to maximally
+ prserve angles between edges coded in the sparse matrix EDGES.
+
+ A basic usage of this function is given below:
+
+ Inputs:
+   X: input data stored in matrix  (D x N) where D is the dimensionality
+
+   Y: partial basis stored in matrix (d x N)
+
+   EDGES: a sparse matrix of (N x N). In each column i, the row indices j to
+   nonzero entrices define data points that are in the nearest neighbors of
+   data point i.
+
+   OPTS:
+     OPTS.method: 'CCA' 
+
+ Outputs:
+   Z: low dimensional embedding (d X N)
+   CCAEIGN: eigenspectra of the matrix P = L'*L. If P is low-rank (say d' &lt; d),
+   then Z can be cutoff at d' dimension as dimensionality reduced further.
+
+ The CCA() function is fairly versatile. For more details, consult the file
+ README.
+
+  by feisha@cs.berkeley.edu Aug 18, 2006
+  Feel free to use it for educational and research purpose.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="csdp.html" class="code" title="function [x,y,z,info]=csdp(At,b,c,K,pars)">csdp</a>	CSDP Uses CSDP to solve a problem in SeDuMi format</li><li><a href="sparse_nn.html" class="code" title="function [edgesrow, edgescol,edgesdist] = sparse_nn(snn)">sparse_nn</a>	SPARSE_NN</li><li><a href="../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [A, b, c] = formulateSDP(S, D, bb, TRACE)</a></li><li><a href="#_sub2" class="code">function [F0, FI, c] = localformulateSDP(S, D, b, TRACE)</a></li><li><a href="#_sub3" class="code">function [A, b, c] = sdpToSeDuMi(F0, FI, cc)</a></li><li><a href="#_sub4" class="code">function OPTS = check_opt(OPTS)</a></li><li><a href="#_sub5" class="code">function [tnn vidx]= triangNN(snn, TRI)</a></li><li><a href="#_sub6" class="code">function [edgesrow, edgescol, value] = sparse_nn(snn)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Z, ccaEigen, ccaDetails] = cca(X, Y, EDGES, OPTS)</a>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Function [Z, CCAEIGEN, CCADETAILS] = CCA(X, Y, EDGES, OPTS) computes a low</span>
+0004 <span class="comment">% dimensional embedding Z in R^d that maximally preserves angles among  input</span>
+0005 <span class="comment">% data X that lives in R^D, with the algorithm Conformal Component Analysis.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% The embedding Z is constrained to be Z = L*Y where Y is a partial basis that</span>
+0008 <span class="comment">% spans the space of R^d. Such Y can be computed from graph Laplacian (such as</span>
+0009 <span class="comment">% the outputs of Laplacian eigenmap and Locally Linear Embedding, ie, LLE).</span>
+0010 <span class="comment">% The parameterization matrix L is found by this function as to maximally</span>
+0011 <span class="comment">% prserve angles between edges coded in the sparse matrix EDGES.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% A basic usage of this function is given below:</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Inputs:</span>
+0016 <span class="comment">%   X: input data stored in matrix  (D x N) where D is the dimensionality</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   Y: partial basis stored in matrix (d x N)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   EDGES: a sparse matrix of (N x N). In each column i, the row indices j to</span>
+0021 <span class="comment">%   nonzero entrices define data points that are in the nearest neighbors of</span>
+0022 <span class="comment">%   data point i.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   OPTS:</span>
+0025 <span class="comment">%     OPTS.method: 'CCA'</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Outputs:</span>
+0028 <span class="comment">%   Z: low dimensional embedding (d X N)</span>
+0029 <span class="comment">%   CCAEIGN: eigenspectra of the matrix P = L'*L. If P is low-rank (say d' &lt; d),</span>
+0030 <span class="comment">%   then Z can be cutoff at d' dimension as dimensionality reduced further.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% The CCA() function is fairly versatile. For more details, consult the file</span>
+0033 <span class="comment">% README.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%  by feisha@cs.berkeley.edu Aug 18, 2006</span>
+0036 <span class="comment">%  Feel free to use it for educational and research purpose.</span>
+0037 
+0038 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0039 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0040 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0041 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0042 <span class="comment">% maintain the name of the original author.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0045 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0046 
+0047 
+0048     <span class="comment">% sanity check</span>
+0049     <span class="keyword">if</span> nargin ~= 4
+0050         error(<span class="string">'Incorrect number of inputs supplied to cca().'</span>);
+0051     <span class="keyword">end</span>
+0052     N = size(X,2);
+0053     <span class="keyword">if</span> (N~=size(Y,2)) || (N ~= size(EDGES,1)) || (N~=size(EDGES,2))
+0054         disp(<span class="string">'Unmatched matrix dimensions in cca().'</span>);
+0055         fprintf(<span class="string">'# of data points: %d\n'</span>, N);
+0056         fprintf(<span class="string">'# of data points in Y: %d\n'</span>, size(Y,2));
+0057         fprintf(<span class="string">'Size of the sparse matrix for edges: %d x %d\n'</span>, size(EDGES,1), size(EDGES,2));
+0058         error(<span class="string">'All above 4 numbers should be the same.'</span>);
+0059     <span class="keyword">end</span>
+0060     <span class="comment">% check necessary programs</span>
+0061     <span class="keyword">if</span> exist(<span class="string">'mexCCACollectData'</span>) ~= 3
+0062         error(<span class="string">'Missing mexCCACollectData mex file on the path'</span>);
+0063     <span class="keyword">end</span>
+0064     <span class="keyword">if</span> exist(<span class="string">'csdp'</span>) ~= 2
+0065         error(<span class="string">'You will need CSDP solver to run cca(). Please make sure csdp.m is in your path'</span>);
+0066     <span class="keyword">end</span>
+0067     <span class="comment">% check options</span>
+0068     OPTS = <a href="#_sub4" class="code" title="subfunction OPTS = check_opt(OPTS)">check_opt</a>(OPTS);
+0069 
+0070     D = size(X, 1); 
+0071     d = size(Y, 1);
+0072 
+0073     <span class="comment">%disp('Step I.  collect data needed for SDP formulation');</span>
+0074     [tnn, vidx] = <a href="#_sub5" class="code" title="subfunction [tnn vidx]= triangNN(snn, TRI)">triangNN</a>(EDGES, OPTS.CCA);
+0075     [erow, ecol, evalue] = <a href="sparse_nn.html" class="code" title="function [edgesrow, edgescol,edgesdist] = sparse_nn(snn)">sparse_nn</a>(tnn);
+0076 
+0077     irow = int32(erow); icol = int32(ecol);
+0078     ividx = int32(vidx); ivalue = int32(evalue);
+0079     [A,B, g] = mexCCACollectData(X,Y, irow, icol, int32(OPTS.relative), ivalue, ividx );
+0080     <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> erow ecol irow icol tnn ividx ivalue evalue vidx;
+0081     lst = find(g~=0);
+0082     g = g(lst); B = B(:, lst);
+0083     <span class="keyword">if</span> OPTS.CCA == 1
+0084         BG = B*spdiags(1./sqrt(g),0, length(g),length(g));
+0085         Q = A - BG*BG';
+0086         BIAS = OPTS.regularizer*reshape(eye(d), d^2,1);
+0087     <span class="keyword">else</span>
+0088         Q = A; BIAS = 2*sum(B,2)+OPTS.regularizer*reshape(eye(d), d^2,1);
+0089     <span class="keyword">end</span>
+0090     [V, E] = eig(Q+eye(size(Q))); <span class="comment">% adding an identity matrix to Q for numerical</span>
+0091     E = E-eye(size(Q));           <span class="comment">% stability</span>
+0092     E(E&lt;0) = 0;
+0093     <span class="keyword">if</span> ~isreal(diag(E))
+0094         warning(<span class="string">'\tThe quadratic matrix is not positive definite..forced to be positive definite...\n'</span>);
+0095         E=real(E);
+0096         V = real(V);
+0097         S = sqrt(E)*V';
+0098     <span class="keyword">else</span>
+0099         S = sqrt(E)*V';
+0100     <span class="keyword">end</span>
+0101 
+0102     <span class="comment">% Formulate the SDP problem</span>
+0103     [AA, bb, cc] = <a href="#_sub1" class="code" title="subfunction [A, b, c] = formulateSDP(S, D, bb, TRACE)">formulateSDP</a>(S, d, BIAS, (OPTS.CCA==1));
+0104     sizeSDP = d^2+1 + d + 2*(OPTS.CCA==1);
+0105     csdppars.s = sizeSDP;
+0106     csdpopts.printlevel = 0;
+0107     
+0108     <span class="comment">% Solve it using CSDP</span>
+0109     [xx, yy, zz, info] = <a href="csdp.html" class="code" title="function [x,y,z,info]=csdp(At,b,c,K,pars)">csdp</a>(AA, bb, cc, csdppars,csdpopts);
+0110     ccaDetails.sdpflag = info;
+0111     
+0112     <span class="comment">% The negate of yy is our solution</span>
+0113     yy = -yy;
+0114     idx = 0;
+0115     P = zeros(d);
+0116     <span class="keyword">for</span> col=1:d
+0117         <span class="keyword">for</span> row = col:d
+0118             idx=idx+1;
+0119             P(row, col) = yy(idx);
+0120         <span class="keyword">end</span>
+0121     <span class="keyword">end</span>
+0122     
+0123     <span class="comment">% Convert P to a positive definite matrix</span>
+0124     P = P + P' - diag(diag(P));
+0125 
+0126     <span class="comment">% Transform the original projection to the new projection</span>
+0127     [V, E] = eig(P);
+0128     E(E &lt; 0) = 0;
+0129     L = diag(sqrt(diag(E))) * V';
+0130     newY = L * Y;
+0131 
+0132     <span class="comment">% Eigenvalue of the new projection, doing PCA using covariance matrix</span>
+0133     [newV, newE] = eig(newY * newY');
+0134     newE = diag(newE);
+0135     [dummy, idx] = sort(newE);
+0136     newE = newE(idx(end:-1:1));
+0137     newY = newV' * newY;
+0138     Z = newY(idx(end:-1:1),:);
+0139 
+0140     ccaEigen = newE;
+0141     ccaDetails.cost = P(:)'*Q*P(:) - BIAS'*P(:) + sum(g(:))*(OPTS.MVU==1);
+0142     <span class="keyword">if</span> OPTS.CCA == 1
+0143         ccaDetails.c = spdiags(1./sqrt(g),0, length(g),length(g))*B'*P(:);
+0144     <span class="keyword">else</span>
+0145         ccaDetails.c = [];
+0146     <span class="keyword">end</span>
+0147     ccaDetails.P = P;
+0148     ccaDetails.opts = OPTS;
+0149 
+0150 
+0151 <span class="comment">%%%%%%%%%%%%%%%%%%%% FOLLOWING IS SUPPORTING MATLAB FUNCTIONS</span>
+0152 <a name="_sub1" href="#_subfunctions" class="code">function [A, b, c] = formulateSDP(S, D, bb, TRACE)</a>
+0153     [F0, FI, c] = <a href="#_sub2" class="code" title="subfunction [F0, FI, c] = localformulateSDP(S, D, b, TRACE)">localformulateSDP</a>(S, D, bb, TRACE);
+0154     [A, b, c] = <a href="#_sub3" class="code" title="subfunction [A, b, c] = sdpToSeDuMi(F0, FI, cc)">sdpToSeDuMi</a>(F0, FI, c);
+0155     
+0156 
+0157 <a name="_sub2" href="#_subfunctions" class="code">function [F0, FI, c] = localformulateSDP(S, D, b, TRACE)</a>
+0158 <span class="comment">% formulate SDP problem</span>
+0159 <span class="comment">% each FI that corresponds to the LMI for the quadratic cost function has</span>
+0160 <span class="comment">% precisely 2*D^2 nonzero elements. But we need only D^2 storage for</span>
+0161 <span class="comment">% indexing these elements since the FI are symmetric</span>
+0162         tempFidx = zeros(D^2, 3);
+0163         dimF = (D^2+1) + D + 2*TRACE;
+0164         idx= 0;
+0165         tracearray = ones(TRACE,1);
+0166         <span class="keyword">for</span> col=1:D
+0167             <span class="keyword">for</span> row=col:D
+0168                 idx = idx+1;
+0169                 lindx1 = sub2ind([D D], row, col);
+0170                 lindx2 = sub2ind([D D], col, row);
+0171                 tempFidx(:,1) = [1:D^2]';
+0172                 tempFidx(:,2) = D^2+1;
+0173                 <span class="keyword">if</span> col==row
+0174                     tempFidx(:,3) = S(:, lindx1) ;
+0175                     FI{idx} = sparse([tempFidx(:,1); <span class="keyword">...</span><span class="comment">  % for cost function</span>
+0176                                         tempFidx(:,2); <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0177                                         row+D^2+1; <span class="keyword">...</span><span class="comment"> % for P being p.s.d</span>
+0178                                         tracearray*(D^2+1+D+1); <span class="comment">% for trace</span>
+0179                                         tracearray*(D^2+1+D+2); <span class="comment">% for negate trace</span>
+0180                                     ], <span class="keyword">...</span>
+0181                                     [tempFidx(:,2); <span class="keyword">...</span><span class="comment">  % for cost function</span>
+0182                                         tempFidx(:,1); <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0183                                         row+D^2+1; <span class="keyword">...</span><span class="comment"> % for P being p.s.d</span>
+0184                                         tracearray*(D^2+1+D+1); <span class="comment">% for trace</span>
+0185                                         tracearray*(D^2+1+D+2); <span class="comment">% for negate trace</span>
+0186                                     ],<span class="keyword">...</span>
+0187                                     [tempFidx(:,3); <span class="keyword">...</span><span class="comment"> % for cost function</span>
+0188                                         tempFidx(:,3); <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0189                                         1;                  <span class="comment">% for P being p.s.d</span>
+0190                                         tracearray*1; <span class="comment">% for trace</span>
+0191                                         tracearray*(-1); <span class="comment">% for negate trace</span>
+0192                                     ], dimF, dimF);
+0193                 <span class="keyword">else</span>
+0194 
+0195                     tempFidx(:,3) = S(:, lindx1) + S(:, lindx2);
+0196                     FI{idx} = sparse([tempFidx(:,1); <span class="keyword">...</span><span class="comment">  % for cost function</span>
+0197                                         tempFidx(:,2); <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0198                                         row+D^2+1; <span class="keyword">...</span><span class="comment"> % for P being p.s.d</span>
+0199                                         col+D^2+1; <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0200                                     ], <span class="keyword">...</span>
+0201                                     [tempFidx(:,2); <span class="keyword">...</span><span class="comment">  % for cost function</span>
+0202                                         tempFidx(:,1); <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0203                                         col+D^2+1; <span class="keyword">...</span><span class="comment"> % for P being p.s.d</span>
+0204                                         row+D^2+1; <span class="keyword">...</span><span class="comment"> % being symmetric</span>
+0205                                     ],<span class="keyword">...</span>
+0206                                     [tempFidx(:,3); <span class="keyword">...</span><span class="comment"> % for cost function</span>
+0207                                         tempFidx(:,3); <span class="keyword">...</span><span class="comment"> % symmetric</span>
+0208                                         1;                  <span class="comment">% for P being p.s.d</span>
+0209                                         1;                  <span class="comment">% symmetric</span>
+0210                                     ], dimF, dimF);
+0211 
+0212                 <span class="keyword">end</span>
+0213             <span class="keyword">end</span>
+0214         <span class="keyword">end</span>
+0215         idx=idx+1;
+0216         <span class="comment">% for the F matrix corresponding to t</span>
+0217         FI{idx} = sparse(D^2+1, D^2+1, 1, dimF, dimF);
+0218 
+0219         <span class="comment">% now for F0</span>
+0220         <span class="keyword">if</span> TRACE==1
+0221             F0 = sparse( [[1:D^2] dimF-1 dimF], [[1:D^2] dimF-1 dimF], [ones(1, D^2) -1 1], dimF, dimF);
+0222         <span class="keyword">else</span>
+0223             F0 = sparse( [[1:D^2]], [[1:D^2]], [ones(1, D^2)], dimF, dimF);
+0224         <span class="keyword">end</span>
+0225 
+0226         <span class="comment">% now for c</span>
+0227         b = reshape(-b, D, D);
+0228         b = b*2 - diag(diag(b)); 
+0229         c = zeros(idx-1,1);
+0230         kdx=0;
+0231         <span class="comment">%keyboard;</span>
+0232         <span class="keyword">for</span> col=1:D
+0233             <span class="keyword">for</span> row=col:D
+0234               kdx = kdx+1;
+0235               c(kdx) = b(row, col);
+0236             <span class="keyword">end</span>
+0237         <span class="keyword">end</span>
+0238         <span class="comment">%keyboard;</span>
+0239         c = [c; 1]; <span class="comment">% remember: we use only half of P</span>
+0240     <span class="keyword">return</span>;
+0241 
+0242 
+0243 <a name="_sub3" href="#_subfunctions" class="code">function [A, b, c] = sdpToSeDuMi(F0, FI, cc)</a>
+0244 <span class="comment">% convert the canonical SDP dual formulation:</span>
+0245 <span class="comment">% (see  Vandenberche and Boyd 1996, SIAM Review)</span>
+0246 <span class="comment">%  max -Tr(F0 Z)</span>
+0247 <span class="comment">% s.t. Tr(Fi Z) = cci and Z is positive definite</span>
+0248 <span class="comment">%</span>
+0249 <span class="comment">% in which cc = (cc1, cc2, cc3,..) and FI = {F1, F2, F3,...}</span>
+0250 <span class="comment">%</span>
+0251 <span class="comment">% to SeDuMi format (formulated as vector decision variables ):</span>
+0252 <span class="comment">% min c'x</span>
+0253 <span class="comment">% s.t. Ax = b and x is positive definite (x is a vector, so SeDuMi</span>
+0254 <span class="comment">% really means that vec2mat(x) is positive definite)</span>
+0255 <span class="comment">%</span>
+0256 <span class="comment">% by feisha@cis.upenn.edu, June, 10, 2004</span>
+0257 
+0258         <span class="keyword">if</span> nargin &lt; 3
+0259             error(<span class="string">'Cannot convert SDP formulation to SeDuMi formulation in sdpToSeDumi!'</span>);
+0260         <span class="keyword">end</span>
+0261 
+0262         [m, n] = size(F0);
+0263         <span class="keyword">if</span> m ~= n
+0264             error(<span class="string">'F0 matrix must be squared matrix in sdpToSeDumi(F0, FI, b)'</span>);
+0265         <span class="keyword">end</span>
+0266 
+0267         p = length(cc);
+0268         <span class="keyword">if</span> p ~= length(FI)
+0269             error(<span class="string">'FI matrix cellarray must have the same length as b in sdpToSeDumi(F0,FI,b)'</span>);
+0270         <span class="keyword">end</span>
+0271 
+0272         <span class="comment">% should check every element in the cell array FI...later..</span>
+0273 
+0274         <span class="comment">% x = reshape(Z, n*n, 1);  % optimization variables from matrix to vector</span>
+0275 
+0276         <span class="comment">% converting objective function of the canonical SDP</span>
+0277         c = reshape(F0', n*n,1);
+0278 
+0279         <span class="comment">% converting equality constraints of the canonical SDP</span>
+0280         zz= 0;
+0281         <span class="keyword">for</span> idx=1:length(FI)
+0282             zz= zz + nnz(FI{idx});
+0283         <span class="keyword">end</span>
+0284         A = spalloc( n*n, p, zz);
+0285         <span class="keyword">for</span> idx = 1:p
+0286             temp = reshape(FI{idx}, n*n,1);
+0287             lst = find(temp~=0);
+0288             A(lst, idx) = temp(lst);
+0289         <span class="keyword">end</span>
+0290         <span class="comment">% The SeDuMi solver actually expects the transpose of A as in following</span>
+0291         <span class="comment">% dual problem</span>
+0292         <span class="comment">% max b'y</span>
+0293         <span class="comment">% s.t. c - A'y is positive definite</span>
+0294         <span class="comment">% Therefore, we transpose A</span>
+0295         <span class="comment">% A = A';</span>
+0296 
+0297         <span class="comment">% b doesn't need to be changed</span>
+0298         b = cc;
+0299     <span class="keyword">return</span>;
+0300 
+0301 
+0302     <span class="comment">% Check OPTS that is passed into</span>
+0303     <a name="_sub4" href="#_subfunctions" class="code">function OPTS = check_opt(OPTS)</a>
+0304         <span class="keyword">if</span> <a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(OPTS,<span class="string">'method'</span>) == 0  
+0305             OPTS.method = <span class="string">'cca'</span>;
+0306             disp(<span class="string">'Options does''t have method field, so running CCA'</span>);
+0307         <span class="keyword">end</span>
+0308 
+0309         <span class="keyword">if</span> strncmpi(OPTS.method, <span class="string">'MVU'</span>,3)==1
+0310             OPTS.CCA = 0; OPTS.MVU = 1;
+0311         <span class="keyword">else</span>
+0312             OPTS.CCA = 1; OPTS.MVU = 0;
+0313         <span class="keyword">end</span>
+0314 
+0315         <span class="keyword">if</span> <a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(OPTS, <span class="string">'relative'</span>)==0
+0316             OPTS.relative = 0;
+0317         <span class="keyword">end</span>
+0318 
+0319         <span class="keyword">if</span> OPTS.CCA==1 &amp;&amp; OPTS.relative ==1
+0320             disp(<span class="string">'Running CCA, so the .relative flag set to 0'</span>);
+0321             OPTS.relative = 0;
+0322         <span class="keyword">end</span>
+0323 
+0324         <span class="keyword">if</span> <a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(OPTS, <span class="string">'regularizer'</span>)==0
+0325             OPTS.regularizer = 0;
+0326         <span class="keyword">end</span>
+0327     <span class="keyword">return</span>
+0328 
+0329 
+0330 
+0331     <a name="_sub5" href="#_subfunctions" class="code">function [tnn vidx]= triangNN(snn, TRI)</a>
+0332     <span class="comment">% function [TNN VIDX]= triangNN(SNN) triangulates a sparse graph coded by spare matrix</span>
+0333     <span class="comment">% SNN. TNN records the original edges in SNN as well as those that are</span>
+0334     <span class="comment">% triangulated. Each edge is associated with a scaling factor that is specific</span>
+0335     <span class="comment">% to a vertex. And VIDX records the id of the vertex.</span>
+0336     <span class="comment">%</span>
+0337     <span class="comment">% by feisha@cs.berkeley.edu  Aug. 15, 2006.</span>
+0338 
+0339         N = size(snn,1);
+0340         <span class="comment">%fprintf('The graph has %d vertices\n', N);</span>
+0341         <span class="comment">% figure out maximum degree a vertex has</span>
+0342         connectivs = sum(snn,1);
+0343         maxDegree =  max(connectivs);
+0344         tnn = spalloc(N, N, round(maxDegree*N)); <span class="comment">% prealloc estimated storage for speedup</span>
+0345 
+0346         <span class="comment">% triangulation</span>
+0347         <span class="keyword">for</span> idx=1:N
+0348             lst = find(snn(:, idx)&gt;0);
+0349             <span class="keyword">for</span> jdx=1:length(lst)
+0350                 col = min (idx, lst(jdx));
+0351                 row = max(idx, lst(jdx));
+0352                 tnn(row, col) = tnn(row, col)+1;
+0353                 <span class="keyword">if</span> TRI == 1
+0354                     <span class="keyword">for</span> kdx = jdx+1:length(lst)
+0355                         col = min(lst(jdx), lst(kdx));
+0356                         row = max(lst(jdx), lst(kdx));
+0357                         tnn(row, col) = tnn(row, col)+1;
+0358                     <span class="keyword">end</span>
+0359                 <span class="keyword">end</span>
+0360             <span class="keyword">end</span>
+0361         <span class="keyword">end</span>
+0362 
+0363         numVertexIdx = full(sum(tnn(:)));
+0364         <span class="comment">%fprintf('%d vertex entries are needed\n', numVertexIdx);</span>
+0365 
+0366         rowIdx = zeros(numVertexIdx,1);
+0367         colIdx = zeros(numVertexIdx,1);
+0368         vidx = zeros(numVertexIdx,1);
+0369 
+0370         whichEdge = 0;
+0371         <span class="keyword">for</span> idx=1:N
+0372             lst = find(snn(:, idx)&gt;0);
+0373             <span class="keyword">for</span> jdx=1:length(lst)
+0374                 col = min(lst(jdx), idx);
+0375                 row  = max(lst(jdx), idx);
+0376                 whichEdge = whichEdge+1;
+0377                 rowIdx(whichEdge) = row;
+0378                 colIdx(whichEdge) = col;
+0379                 vidx(whichEdge)  = idx;
+0380                 <span class="keyword">if</span> TRI==1
+0381                     <span class="keyword">for</span> kdx = jdx+1:length(lst)
+0382                         col = min(lst(jdx), lst(kdx));
+0383                         row = max(lst(jdx), lst(kdx));
+0384                         whichEdge = whichEdge+1;
+0385                         rowIdx(whichEdge) = row;
+0386                         colIdx(whichEdge) = col;
+0387                         vidx(whichEdge)  = idx;
+0388                     <span class="keyword">end</span>
+0389                 <span class="keyword">end</span>
+0390             <span class="keyword">end</span>
+0391         <span class="keyword">end</span>
+0392         linearIdx  = sub2ind([N N],rowIdx, colIdx);
+0393         [sa, sIdx] = sort(linearIdx);
+0394         vidx = vidx(sIdx);
+0395     <span class="keyword">return</span>
+0396 
+0397 
+0398     <span class="comment">% turn sparse graph snn into row and col indices</span>
+0399     <a name="_sub6" href="#_subfunctions" class="code">function [edgesrow, edgescol, value] = sparse_nn(snn)</a>
+0400         N = size(snn,1);
+0401         edgescol = zeros(N+1,1);
+0402         nnzer = nnz(snn);
+0403         edgesrow = zeros(nnzer,1);
+0404         value = zeros(nnzer,1);
+0405 
+0406         edgescol(1) = 0;
+0407         <span class="keyword">for</span> jdx=1:N
+0408             lst = find(snn(:, jdx)&gt;0);
+0409             <span class="comment">%lst = lst(find(lst&gt;jdx));</span>
+0410             edgescol(jdx+1) = edgescol(jdx)+length(lst);
+0411             edgesrow(edgescol(jdx)+1:edgescol(jdx+1)) = lst-1;
+0412             value(edgescol(jdx)+1:edgescol(jdx+1)) = snn(lst, jdx);
+0413         <span class="keyword">end</span>
+0414     <span class="keyword">return</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

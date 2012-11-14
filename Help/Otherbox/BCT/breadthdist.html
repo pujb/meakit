@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of breadthdist</title>
+  <meta name="keywords" content="breadthdist">
+  <meta name="description" content="BREADTHDIST      Reachability and distance matrices">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>breadthdist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>BREADTHDIST      Reachability and distance matrices</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function  [R,D] = breadthdist(CIJ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">BREADTHDIST      Reachability and distance matrices
+
+   [R,D] = breadthdist(CIJ);
+
+   The binary reachability matrix describes reachability between all pairs
+   of nodes. An entry (u,v)=1 means that there exists a path from node u
+   to node v; alternatively (u,v)=0.
+
+   The distance matrix contains lengths of shortest paths between all
+   pairs of nodes. An entry (u,v) represents the length of shortest path 
+   from node u to  node v. The average shortest path length is the 
+   characteristic path length of the network.
+
+   Input:      CIJ,     binary (directed/undirected) connection matrix
+
+   Outputs:    R,       reachability matrix
+               D,       distance matrix
+
+   Note: slower but less memory intensive than &quot;reachdist.m&quot;.
+
+   Algorithm: Breadth-first search.
+
+
+   Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="breadth.html" class="code" title="function [distance,branch] = breadth(CIJ,source)">breadth</a>	BREADTH        Auxiliary function for breadthdist.m</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function  [R,D] = breadthdist(CIJ)</a>
+0002 <span class="comment">%BREADTHDIST      Reachability and distance matrices</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [R,D] = breadthdist(CIJ);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   The binary reachability matrix describes reachability between all pairs</span>
+0007 <span class="comment">%   of nodes. An entry (u,v)=1 means that there exists a path from node u</span>
+0008 <span class="comment">%   to node v; alternatively (u,v)=0.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   The distance matrix contains lengths of shortest paths between all</span>
+0011 <span class="comment">%   pairs of nodes. An entry (u,v) represents the length of shortest path</span>
+0012 <span class="comment">%   from node u to  node v. The average shortest path length is the</span>
+0013 <span class="comment">%   characteristic path length of the network.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Input:      CIJ,     binary (directed/undirected) connection matrix</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Outputs:    R,       reachability matrix</span>
+0018 <span class="comment">%               D,       distance matrix</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Note: slower but less memory intensive than &quot;reachdist.m&quot;.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Algorithm: Breadth-first search.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0026 
+0027 N = size(CIJ,1);
+0028 
+0029 D = zeros(N);
+0030 <span class="keyword">for</span> i=1:N
+0031    D(i,:) = <a href="breadth.html" class="code" title="function [distance,branch] = breadth(CIJ,source)">breadth</a>(CIJ,i);
+0032 <span class="keyword">end</span>;
+0033 
+0034 <span class="comment">% replace zeros with 'Inf's</span>
+0035 D(D==0) = Inf;
+0036 
+0037 <span class="comment">% construct R</span>
+0038 R = double(D~=Inf);
+0039</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

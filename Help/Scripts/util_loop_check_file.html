@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_loop_check_file</title>
+  <meta name="keywords" content="util_loop_check_file">
+  <meta name="description" content="UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Scripts -->
+<h1>util_loop_check_file
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function util_loop_check_file( data_filename ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski
+Dimension of each file.
+util_perform_op_in_directory( 'E:\pu\Data', '[cc_matrix xc_matrix
+mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi bc_sync] =
+util_loop_calc_topo( %file, %dir, 28 )', 'F:\Pu\Ava', '*.mcd', 'cc_matrix
+xc_matrix mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi
+bc_sync', 'is_recursive', 1, 'verbose', 1, 'sorttype', 'byRecAsc' );   
+   Created on Apr/08/2011 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function util_loop_check_file( data_filename )</a>
+0002 <span class="comment">%UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski</span>
+0003 <span class="comment">%Dimension of each file.</span>
+0004 <span class="comment">%util_perform_op_in_directory( 'E:\pu\Data', '[cc_matrix xc_matrix</span>
+0005 <span class="comment">%mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi bc_sync] =</span>
+0006 <span class="comment">%util_loop_calc_topo( %file, %dir, 28 )', 'F:\Pu\Ava', '*.mcd', 'cc_matrix</span>
+0007 <span class="comment">%xc_matrix mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi</span>
+0008 <span class="comment">%bc_sync', 'is_recursive', 1, 'verbose', 1, 'sorttype', 'byRecAsc' );</span>
+0009 <span class="comment">%   Created on Apr/08/2011 By Pu Jiangbo</span>
+0010 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0011 
+0012 <a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>(<span class="string">'isCompact'</span>, 1, <span class="string">'filename'</span>, data_filename);
+0013 
+0014 
+0015 <span class="keyword">end</span>
+0016 
+0017</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

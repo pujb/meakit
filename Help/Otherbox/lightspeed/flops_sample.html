@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_sample</title>
+  <meta name="keywords" content="flops_sample">
+  <meta name="description" content="FLOPS_SAMPLE   Flops for sample(p,n)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_sample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_SAMPLE   Flops for sample(p,n)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_sample(p,n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_SAMPLE   Flops for sample(p,n)
+ Flopcount based on systematic sampling.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_sample(p,n)</a>
+0002 <span class="comment">% FLOPS_SAMPLE   Flops for sample(p,n)</span>
+0003 <span class="comment">% Flopcount based on systematic sampling.</span>
+0004 
+0005 <span class="comment">% old algorithm:</span>
+0006 <span class="comment">% The flopcount for sample is the same as the value returned by sample,</span>
+0007 <span class="comment">% so the expected flops is E[x].</span>
+0008 <span class="comment">% Note that the result is typically not an integer.</span>
+0009 
+0010 <span class="keyword">if</span> nargin == 1
+0011   n = 1;
+0012 <span class="keyword">end</span>
+0013 <span class="comment">%f = n*sum((1:length(p)).*p);</span>
+0014 f = 2*(n + length(p));</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

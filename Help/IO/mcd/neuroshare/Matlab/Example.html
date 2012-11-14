@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Example</title>
+  <meta name="keywords" content="Example">
+  <meta name="description" content="Prompt for the correct DLL">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>Example
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Prompt for the correct DLL</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function Example() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> Prompt for the correct DLL</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="ns_CloseFile.html" class="code" title="function ns_RESULT = ns_CloseFile(hFile);">ns_CloseFile</a>	ns_CloseFile   Closes a neural data file</li><li><a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>	ns_GetEntityInfo   Retrieves general entity information and type</li><li><a href="ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>	ns_GetFileInfo   Retrieves file information and entity counts</li><li><a href="ns_GetNeuralData.html" class="code" title="function [ns_RESULT, Data] = ns_GetNeuralData(hFile, EntityID, StartIndex, IndexCount);">ns_GetNeuralData</a>	ns_GetNeuralData   Retrieves neural event data by index</li><li><a href="ns_GetNeuralInfo.html" class="code" title="function [ns_RESULT, nsNeuralInfo] = ns_GetNeuralInfo(hFile, EntityID);">ns_GetNeuralInfo</a>	ns_GetNeuralInfo   Retrieves information for neural event entities</li><li><a href="ns_GetSegmentData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = ns_GetSegmentData(hFile, EntityID, Index);">ns_GetSegmentData</a>	ns_GetSegmentData   Retrieves segment data by index</li><li><a href="ns_GetSegmentInfo.html" class="code" title="function [ns_RESULT, nsSegmentInfo] = ns_GetSegmentInfo(hFile, EntityID);">ns_GetSegmentInfo</a>	ns_GetSegmentInfo   Retrieves information specific to segment entities</li><li><a href="ns_GetSegmentSourceInfo.html" class="code" title="function [ns_RESULT, nsSegmentSourceInfo] = ns_GetSegmentSourceInfo(hFile, EntityID, SourceID);">ns_GetSegmentSourceInfo</a>	ns_GetSegmentSourceInfo   Retrieves information about the sources that</li><li><a href="ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>	ns_OpenFile   Opens a neural data file</li><li><a href="ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>	ns_SetDLL   Opens a Neuroshare Shared Library (.DLL or .so) in prepearation for other work</li><li><a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>	RMFIELD Remove fields from a mutable structure.</li><li><a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Example()</a>
+0002 
+0003 <span class="comment">% Prompt for the correct DLL</span>
+0004 disp(<span class="string">' '</span>);  <span class="comment">% Blank line</span>
+0005 DLLName = input(<span class="string">'DLL Name: '</span>, <span class="string">'s'</span>);
+0006 
+0007 <span class="comment">% Load the appropriate DLL</span>
+0008 [nsresult] = <a href="ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>(DLLName);
+0009 <span class="keyword">if</span> (nsresult ~= 0)
+0010     disp(<span class="string">'DLL was not found!'</span>);
+0011     <span class="keyword">return</span>
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="comment">% Find out the data file from user</span>
+0015 disp(<span class="string">' '</span>);  <span class="comment">% Blank line</span>
+0016 filename = input(<span class="string">'Data file: '</span>, <span class="string">'s'</span>);
+0017 
+0018 
+0019 <span class="comment">% Load data file and display some info about the file</span>
+0020 <span class="comment">% Open data file</span>
+0021 [nsresult, hfile] = <a href="ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>(filename);
+0022 <span class="keyword">if</span> (nsresult ~= 0)
+0023     disp(<span class="string">'Data file did not open!'</span>);
+0024     <span class="keyword">return</span>
+0025 <span class="keyword">end</span>
+0026 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> filename;
+0027 
+0028 <span class="comment">% Get file information</span>
+0029 [nsresult, FileInfo] = <a href="ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>(hfile);
+0030 <span class="comment">% Gives you EntityCount, TimeStampResolution and TimeSpan</span>
+0031 <span class="keyword">if</span> (nsresult ~= 0)
+0032     disp(<span class="string">'Data file information did not load!'</span>);
+0033     <span class="keyword">return</span>
+0034 <span class="keyword">end</span>
+0035    
+0036 <span class="comment">% Define some variables needed for firing rates</span>
+0037 stepsize = 0.02; <span class="comment">% seconds</span>
+0038 stepsize1 = 0.1; <span class="comment">% seconds</span>
+0039 <span class="keyword">if</span> FileInfo.TimeSpan &gt; 150  <span class="comment">% Limit the timespan shown in the graphs to 150 seconds</span>
+0040     totaltime = 150;
+0041 <span class="keyword">else</span>
+0042     totaltime = FileInfo.TimeSpan; <span class="comment">% seconds</span>
+0043 <span class="keyword">end</span>
+0044 time = 0 : stepsize : totaltime;   <span class="comment">% Initialize time axis for gaussian plot</span>
+0045 
+0046 <span class="comment">% Build catalogue of entities</span>
+0047 [nsresult, EntityInfo] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile, [1 : 1 : FileInfo.EntityCount]);
+0048 
+0049 NeuralList = find([EntityInfo.EntityType] == 4);    <span class="comment">% List of EntityIDs needed to retrieve the information and data</span>
+0050 SegmentList = find([EntityInfo.EntityType] == 3);
+0051 AnalogList = find([EntityInfo.EntityType] == 2);
+0052 EventList = find([EntityInfo.EntityType] == 1);
+0053 
+0054 <span class="comment">% How many of a particular entity do we have</span>
+0055 cNeural = length(NeuralList);       
+0056 cSegment = length(SegmentList);
+0057 cAnalog = length(AnalogList);
+0058 cEvent = length(EventList);
+0059 
+0060 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> FileInfo;
+0061 
+0062 <span class="keyword">if</span> (cNeural == 0)
+0063     disp(<span class="string">'No neural events available!'</span>);
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="keyword">if</span> (cSegment == 0)
+0067     disp(<span class="string">'No segment entities available!'</span>);
+0068     <span class="keyword">return</span>;     <span class="comment">% It does not make sense to continue in this particular analysis</span>
+0069                 <span class="comment">% if there are no segment entities.</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">if</span> (cAnalog == 0)
+0073     disp(<span class="string">'No analog entities available!'</span>);
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="keyword">if</span> (cEvent == 0)
+0077     disp(<span class="string">'No event entities available!'</span>);
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% Have user pick a channels or channels for further analysis</span>
+0081 <span class="comment">% Show the user how many channels are available</span>
+0082 disp(<span class="string">' '</span>);
+0083 disp([<span class="string">'There are '</span> num2str(cSegment) <span class="string">' channels.'</span>]);
+0084 disp(<span class="string">' '</span>);
+0085 
+0086 channel = input(<span class="string">'Which data channels would you like to display? (e.g. 1 or [1 2 3])'</span>);
+0087 <span class="keyword">if</span> (channel &gt; cSegment)  <span class="comment">% Have to check that the selected channel actually exists</span>
+0088     disp(<span class="string">'Channel does not exist'</span>);
+0089     <span class="keyword">return</span>
+0090 <span class="keyword">end</span>
+0091 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> cNeural cSegment;
+0092 
+0093 <span class="comment">% Throw away entity infos we don't need to save memory</span>
+0094 EntityInfo = <a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>(EntityInfo, <span class="string">'EntityType'</span>);
+0095 
+0096 <span class="comment">%</span>
+0097 <span class="comment">% Load the waveform data and do the analysis</span>
+0098 <span class="comment">%</span>
+0099 
+0100 <span class="comment">% These three functions are for demonstration purposes</span>
+0101 [nsresult, nsSegmentInfo] = <a href="ns_GetSegmentInfo.html" class="code" title="function [ns_RESULT, nsSegmentInfo] = ns_GetSegmentInfo(hFile, EntityID);">ns_GetSegmentInfo</a>(hfile, SegmentList(channel));
+0102 [nsresult, nsSegmentSourceInfo] = <a href="ns_GetSegmentSourceInfo.html" class="code" title="function [ns_RESULT, nsSegmentSourceInfo] = ns_GetSegmentSourceInfo(hFile, EntityID, SourceID);">ns_GetSegmentSourceInfo</a>(hfile, SegmentList(channel), 1);
+0103 
+0104 <span class="comment">% Load the first 100 waveforms on each selected channel</span>
+0105 [nsresult, timestamps_wf, waveforms, sampleCount, unitIDs] = <a href="ns_GetSegmentData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = ns_GetSegmentData(hFile, EntityID, Index);">ns_GetSegmentData</a>(hfile, SegmentList(channel), [1 : 1 : 100]);
+0106 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> timestamps_wf sampleCount;
+0107 
+0108 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> nsSegmentInfo;
+0109 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> nsSegmentSourceInfo;
+0110 
+0111 <span class="comment">%</span>
+0112 <span class="comment">% Reduce the data set to only the first 150 seconds of data</span>
+0113 <span class="comment">%</span>
+0114 
+0115 NeuralLabels = strvcat(EntityInfo(NeuralList).EntityLabel);
+0116 
+0117 <span class="keyword">for</span> cChannel = 1 : 1 : length(channel),
+0118     <span class="comment">% Have to figure out which Neural entities correspond with the selected segment entities</span>
+0119     list = strmatch(EntityInfo(SegmentList(channel(cChannel))).EntityLabel, NeuralLabels, <span class="string">'exact'</span>);
+0120     
+0121     <span class="comment">% Retrieve the data</span>
+0122     [nsresult, NeuralInfo] = <a href="ns_GetNeuralInfo.html" class="code" title="function [ns_RESULT, nsNeuralInfo] = ns_GetNeuralInfo(hFile, EntityID);">ns_GetNeuralInfo</a>(hfile, NeuralList(list));
+0123     [nsresult, NeuralData] = <a href="ns_GetNeuralData.html" class="code" title="function [ns_RESULT, Data] = ns_GetNeuralData(hFile, EntityID, StartIndex, IndexCount);">ns_GetNeuralData</a>(hfile, NeuralList(list), 1, max([EntityInfo(NeuralList(list)).ItemCount]));
+0124 
+0125     <span class="keyword">if</span> (totaltime == 150)
+0126         ind = find(NeuralData &lt;= 150);
+0127     <span class="keyword">else</span>
+0128         ind = [1:1:size(NeuralData, 1) * size(NeuralData, 2)];
+0129     <span class="keyword">end</span>
+0130     
+0131     <span class="comment">% Get the neural timestamps</span>
+0132     NeuralData = reshape(NeuralData, size(NeuralData, 1) * size(NeuralData, 2), 1);
+0133     timestamps(cChannel) = {NeuralData(ind)};
+0134     <span class="comment">% Match the neural events with their unit ID</span>
+0135     temp = ones(length(ind) / length(list), 1) * [NeuralInfo(:).SourceUnitID];
+0136     units(cChannel) = {temp(:)};
+0137     <span class="comment">% Remember how many neural events were found</span>
+0138     ItemCount(cChannel) = length(timestamps{cChannel});
+0139     
+0140     NeuralData(:) = [];
+0141 <span class="keyword">end</span>
+0142 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> NeuralData SegmentLabels NeuralLabels NeuralInfo;
+0143 EntityInfo = <a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>(EntityInfo, <span class="string">'ItemCount'</span>);
+0144 
+0145 <span class="comment">% Close data file. Should be done by the library but just in case.</span>
+0146 <a href="ns_CloseFile.html" class="code" title="function ns_RESULT = ns_CloseFile(hFile);">ns_CloseFile</a>(hfile);
+0147 
+0148 <span class="comment">% Unload DLL</span>
+0149 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> mexprog;
+0150 
+0151 <span class="keyword">for</span> cChannel = 1 : 1 : length(channel),    
+0152     <span class="comment">% Plot neural activity on that channel</span>
+0153     figure;
+0154     subplot(4, 1, 1);
+0155     <span class="comment">% Plot the first 100 waveforms on that channel and apply different</span>
+0156     <span class="comment">% colors for different unitIDs</span>
+0157     <span class="comment">% Unclassified units</span>
+0158     ind = find(unitIDs(:, cChannel) == 0);
+0159     <span class="keyword">if</span> (~isempty(ind))
+0160         plot(waveforms(:, ind, cChannel), <span class="string">'Color'</span>, [.8 .8 .8]); <span class="comment">% in grey</span>
+0161         hold on;
+0162     <span class="keyword">end</span>
+0163     <span class="comment">% Classified Units</span>
+0164     Colors = [<span class="string">'y'</span> <span class="string">'m'</span> <span class="string">'c'</span> <span class="string">'r'</span> <span class="string">'g'</span>];
+0165     
+0166     <span class="keyword">for</span> cUnit = 1 : 1 : 5,
+0167         ind = find(unitIDs(:, cChannel) == cUnit);
+0168         <span class="keyword">if</span> (~isempty(ind))
+0169             plot(waveforms(:, ind, cChannel), Colors(cUnit));
+0170             hold on;
+0171         <span class="keyword">end</span>
+0172     <span class="keyword">end</span>
+0173  
+0174     axis tight;
+0175     title([<span class="string">'Waveforms - '</span> EntityInfo(SegmentList(channel(cChannel))).EntityLabel]);
+0176     ylabel(<span class="string">'Voltage (uV)'</span>);
+0177     
+0178     subplot(4, 1, 2);
+0179     <span class="comment">% This creates lines for the unit</span>
+0180     a = repmat(timestamps{cChannel}', 2, 1);          <span class="comment">% X Values don't change so just two rows with the same values</span>
+0181     b = repmat([0.6; 1.4], 1, ItemCount(cChannel));   <span class="comment">% Start and end points of each line</span>
+0182     <span class="comment">% This plots the lines for each unit</span>
+0183     <span class="comment">% Unclassified units</span>
+0184     ind = find(units{cChannel} == 0);
+0185     hold on;
+0186     <span class="keyword">if</span> (~isempty(ind))
+0187         plot(a(:, ind), b(:, ind), <span class="string">'Color'</span>, [.8 .8 .8]); <span class="comment">% in grey</span>
+0188     <span class="keyword">end</span>
+0189     
+0190     <span class="comment">% Classified Units</span>
+0191     <span class="keyword">for</span> cUnit = 1 : 1 : 5,
+0192         ind = find(unitIDs(:, cChannel) == cUnit);
+0193         <span class="keyword">if</span> (~isempty(ind))
+0194             plot(a(:, ind), b(:, ind), Colors(cUnit));
+0195         <span class="keyword">end</span>
+0196     <span class="keyword">end</span>
+0197     
+0198     title([<span class="string">'Raster plot - '</span> EntityInfo(SegmentList(channel(cChannel))).EntityLabel]);
+0199     xlabel(<span class="string">'Time [s]'</span>);
+0200     <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'ytick'</span>, []);
+0201     xlim([0 round(totaltime)]);
+0202     <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> a b;
+0203     
+0204     <span class="comment">% Use a sliding window 100 ms (delta t) long (equivalent to linear kernel)</span>
+0205     dt = 0.1; <span class="comment">% ms</span>
+0206     <span class="keyword">for</span> i = totaltime : -stepsize : 0,
+0207         gaussdata(round(i / stepsize + 1)) = sum(exp(-(i - timestamps{cChannel}(find((timestamps{cChannel} &gt; i - 4 * dt) &amp; (timestamps{cChannel} &lt; i + 4 * dt)))').^2 / (2 * dt^2))) / sqrt(2 * 3.1415) / dt;
+0208     <span class="keyword">end</span>
+0209     
+0210     <span class="comment">% Throw away firing rates higher than 200 because they are not real and show up at the beginning</span>
+0211     gaussdata(find(gaussdata &gt; 200)) = 0;
+0212     
+0213     subplot(4, 1, 3);
+0214     plot(time, gaussdata(1 : length(time)));
+0215     title([<span class="string">'Approximated firing rate (Gaussian) - '</span> EntityInfo(SegmentList(channel(cChannel))).EntityLabel]);
+0216     xlabel(<span class="string">'Time [s]'</span>);
+0217     ylabel(<span class="string">'Rate [Hz]'</span>);
+0218     <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> gaussdata;
+0219     
+0220     <span class="comment">% Interspike Interval Distribution (1 ms resolution)</span>
+0221     <span class="keyword">if</span> (length(timestamps{cChannel}) &gt; 1)  <span class="comment">% Have to make sure that we have at least two data points</span>
+0222         nbins = 500; <span class="comment">% ms</span>
+0223         dtime = (timestamps{cChannel}(2 : end) - timestamps{cChannel}(1 : end - 1)) * 1000;
+0224         
+0225         subplot(4, 1, 4);
+0226         bar(histc(dtime, 1 : 1 : nbins));
+0227         axis tight;
+0228         title([<span class="string">'Interspike Interval Histogram - '</span> EntityInfo(SegmentList(channel(cChannel))).EntityLabel]);
+0229         xlabel(<span class="string">'Time [ms]'</span>);
+0230         ylabel(<span class="string">'# Spikes'</span>);
+0231         <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> dtime;
+0232     <span class="keyword">end</span>    
+0233 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

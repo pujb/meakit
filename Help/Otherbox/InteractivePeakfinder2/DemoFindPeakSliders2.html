@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DemoFindPeakSliders2</title>
+  <meta name="keywords" content="DemoFindPeakSliders2">
+  <meta name="description" content="A self-contained interactive demonstration of FindPeakSliders applied">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>DemoFindPeakSliders2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>A self-contained interactive demonstration of FindPeakSliders applied</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> A self-contained interactive demonstration of FindPeakSliders applied 
+ to a data set containing four simple peaks with increasing peak height 
+ and peak width. Use this to understand the difference between the 
+ variables SlopeThreshold (SlopeT), which discriminates on the basis 
+ of peak width, and AmpThreshold (AmpT), which discriminates on the 
+ basis of peak amplitude. Peak number and the estimated position, height, 
+ and width of each peak is returned in the matrix P.
+ Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>	Interactive findpeaks script for pre-defined data in x,y.</li><li><a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>	gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% A self-contained interactive demonstration of FindPeakSliders applied</span>
+0002 <span class="comment">% to a data set containing four simple peaks with increasing peak height</span>
+0003 <span class="comment">% and peak width. Use this to understand the difference between the</span>
+0004 <span class="comment">% variables SlopeThreshold (SlopeT), which discriminates on the basis</span>
+0005 <span class="comment">% of peak width, and AmpThreshold (AmpT), which discriminates on the</span>
+0006 <span class="comment">% basis of peak amplitude. Peak number and the estimated position, height,</span>
+0007 <span class="comment">% and width of each peak is returned in the matrix P.</span>
+0008 <span class="comment">% Tom O'Haver (toh@umd.edu). Version 1.6 October 26, 2006</span>
+0009 warning off MATLAB:polyfit:RepeatedPointsOrRescale
+0010 format compact
+0011 close
+0012 <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>
+0013 <span class="keyword">global</span> x
+0014 <span class="keyword">global</span> y
+0015 <span class="keyword">global</span> SlopeThreshold 
+0016 <span class="keyword">global</span> AmpThreshold  
+0017 <span class="keyword">global</span> SmoothWidth
+0018 <span class="keyword">global</span> FitWidth
+0019 <span class="keyword">global</span> PeakNumber 
+0020 <span class="keyword">global</span> P
+0021 figure(1);clf
+0022 
+0023 <span class="comment">% Simulate data set</span>
+0024 increment=1;
+0025 x=[1:increment:400];
+0026 <span class="comment">% For each simulated peak, enter the amplitude, position, and width below</span>
+0027 amp=[2 3 4 5];  <span class="comment">% Amplitudes of the peaks</span>
+0028 pos=[50 125 200 300];   <span class="comment">% Positions of the peaks</span>
+0029 wid=[20 40 60 80];   <span class="comment">% Widths of the peaks</span>
+0030 Noise=.04;
+0031 <span class="comment">% A = matrix containing one of the unit-amplidude peak in each of its srow</span>
+0032 A = zeros(length(pos),length(x));
+0033 <span class="keyword">for</span> k=1:length(pos)
+0034   <span class="keyword">if</span> amp(k)&gt;0, A(k,:)=<a href="gaussian.html" class="code" title="function g = gaussian(x,pos,wid)">gaussian</a>(x,pos(k),wid(k)); <span class="keyword">end</span>; <span class="comment">% Or you can use any other peak function</span>
+0035 <span class="keyword">end</span>
+0036 z=amp*A;  <span class="comment">% Multiplies each row by the corresponding amplitude and adds them up</span>
+0037 y=z+Noise.*randn(size(z));
+0038 
+0039 <span class="comment">% Call the interactive findpeaks script</span>
+0040 <a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>;
+0041 
+0042 <span class="comment">%Print out peak table in Matlab Command window</span>
+0043 P</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

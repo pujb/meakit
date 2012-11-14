@@ -1,0 +1,448 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of subrender</title>
+  <meta name="keywords" content="subrender">
+  <meta name="description" content="% SUBRENDER">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html panel --><!-- ../menu.html @panel --><!-- menu.html private -->
+<h1>subrender
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>% SUBRENDER</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function subrender(p, P, renderer, is_print_mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">% SUBRENDER</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>	RMFIELD Remove fields from a mutable structure.</li><li><a href="../../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>	q = pack(p, varargin)</li><li><a href="getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>	get a panel object from the panel reference</li><li><a href="setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>	set a panel object from the panel reference</li><li><a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="tofrac.html" class="code" title="function f = tofrac(val, space_mm, units)">tofrac</a>	convert a value as a percentage or in some</li><li><a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>	user can insert "$" character to be replaced by</li><li><a href="../../../../Otherbox/panel/@panel/subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>	% SUBRENDER</li><li><a href="../../../../Otherbox/panel/@panel/render.html" class="code" title="function render(p)">render</a>	render(p)</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function subrender_axis(p, P, renderer, is_print_mode)</a></li><li><a href="#_sub2" class="code">function subrender_parent(p, P, renderer, is_print_mode)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 
+0002 
+0003 
+0004 
+0005 <span class="comment">%% SUBRENDER</span>
+0006 
+0007 <a name="_sub0" href="#_subfunctions" class="code">function subrender(p, P, renderer, is_print_mode)</a>
+0008 
+0009 
+0010 
+0011 <span class="comment">% get specific margin</span>
+0012 <span class="keyword">if</span> P.panel.axis
+0013     margin = <a href="../../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>(p, <span class="string">'axismargin'</span>);
+0014 <span class="keyword">else</span>
+0015     margin = <a href="../../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>(p, <span class="string">'parentmargin'</span>);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="comment">% root has extra margin</span>
+0019 <span class="keyword">if</span> ~P.panel.parent
+0020     rootmargin = <a href="../../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>(p, <span class="string">'rootmargin'</span>);
+0021     margin = margin + rootmargin;
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% expand</span>
+0025 <span class="keyword">if</span> numel(margin) == 1
+0026     margin = margin * [1 1 1 1];
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% get fractional margin</span>
+0030 size_panel_mm = renderer.size_fig_mm .* renderer.into(3:4); <span class="comment">% size in mm of the panel we're rendering into</span>
+0031 margin_as_panel_frac = <a href="tofrac.html" class="code" title="function f = tofrac(val, space_mm, units)">tofrac</a>(margin, size_panel_mm, renderer.units);
+0032 
+0033 <span class="comment">% reduce &quot;into&quot; by margin</span>
+0034 renderer.into(1:2) = renderer.into(1:2) <span class="keyword">...</span>
+0035     + margin_as_panel_frac(1:2) .* renderer.into(3:4);
+0036 renderer.into(3:4) = renderer.into(3:4) <span class="keyword">...</span>
+0037     - margin_as_panel_frac(1:2) .* renderer.into(3:4) <span class="keyword">...</span>
+0038     - margin_as_panel_frac(3:4) .* renderer.into(3:4);
+0039 
+0040 <span class="comment">% handle separately parent panels and axis panels</span>
+0041 <span class="keyword">if</span> P.panel.axis
+0042     <a href="#_sub1" class="code" title="subfunction subrender_axis(p, P, renderer, is_print_mode)">subrender_axis</a>(p, P, renderer, is_print_mode);
+0043 <span class="keyword">else</span>
+0044     <a href="#_sub2" class="code" title="subfunction subrender_parent(p, P, renderer, is_print_mode)">subrender_parent</a>(p, P, renderer, is_print_mode);
+0045 <span class="keyword">end</span>
+0046 
+0047 
+0048 
+0049 
+0050 
+0051 
+0052 
+0053 
+0054 
+0055 <span class="comment">%% SUBRENDER_AXIS</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% function returns the amount of space this axis needs</span>
+0058 <span class="comment">% on each side (in mm) to render all its parts (labels,</span>
+0059 <span class="comment">% etc.) in addition, it does all the layout for those</span>
+0060 <span class="comment">% labels. returns margin as [l b r t].</span>
+0061 
+0062 <a name="_sub1" href="#_subfunctions" class="code">function subrender_axis(p, P, renderer, is_print_mode)</a>
+0063 
+0064 
+0065 
+0066 <span class="comment">% user may have cleared figure (e.g.) or otherwise deleted</span>
+0067 <span class="comment">% this axis, so fail silently if it's no longer present</span>
+0068 <span class="keyword">if</span> ~ishandle(P.panel.axis)
+0069     <span class="keyword">return</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% assume zero</span>
+0073 margin = [0 0 0 0];
+0074 
+0075 <span class="comment">% do font characteristics</span>
+0076 font = <a href="../../../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>(p, <span class="string">'font'</span>);
+0077 h_title = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, <span class="string">'title'</span>);
+0078 <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>([P.panel.axis h_title], <span class="keyword">...</span>
+0079     <span class="string">'fontname'</span>, font.fontname, <span class="keyword">...</span>
+0080     <span class="string">'fontsize'</span>, font.fontsize, <span class="keyword">...</span>
+0081     <span class="string">'fontweight'</span>, font.fontweight);
+0082 
+0083 <span class="comment">% set axis position (or fail)</span>
+0084 <span class="keyword">try</span>
+0085     <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, <span class="string">'position'</span>, renderer.into);
+0086 <span class="keyword">catch</span>
+0087     disp(<span class="string">'WARNING (panel): failed to render an axis due to size limitations'</span>)
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">% modified</span>
+0091 modified = false;
+0092 
+0093 <span class="comment">% do tick labels</span>
+0094 <span class="keyword">for</span> xy = <span class="string">'xy'</span>
+0095 
+0096     <span class="comment">% get engineering scale mode</span>
+0097     eng_scale_mode = P.render_notinh.([xy <span class="string">'scale'</span>]);
+0098 
+0099     <span class="comment">% get specified ticklabels, if mode is manual</span>
+0100     specified_ticklabel = {};
+0101     is_specified_ticklabel = false;
+0102     <span class="keyword">if</span> strcmp(<a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, [xy <span class="string">'ticklabelmode'</span>]) , <span class="string">'manual'</span>)
+0103         specified_ticklabel = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, [xy <span class="string">'ticklabel'</span>]);
+0104         is_specified_ticklabel = true;
+0105         <span class="keyword">if</span> iscell(specified_ticklabel) &amp;&amp; length(specified_ticklabel) &amp;&amp; ischar(specified_ticklabel{end}) &amp;&amp; strcmp(specified_ticklabel{end}, <span class="string">'eng_scale_mode'</span>)
+0106             <span class="comment">% this is auto ticklabels, set below, so we ignore</span>
+0107             <span class="comment">% them as &quot;specified_ticklabel&quot;</span>
+0108             is_specified_ticklabel = false;
+0109         <span class="keyword">end</span>
+0110     <span class="keyword">end</span>
+0111     
+0112     <span class="comment">% get actual ticks (numbers) - panel does not allow the</span>
+0113     <span class="comment">% user to set these, currently, so the values returned</span>
+0114     <span class="comment">% here will be those manually set by the user using</span>
+0115     <span class="comment">% set(gca, 'xtick', ...) or automatically set by matlab</span>
+0116     <span class="comment">% based on the figure size</span>
+0117     tick = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, [xy <span class="string">'tick'</span>]);
+0118     
+0119     <span class="comment">% get tick mode so we know if the user wants these ticks</span>
+0120     <span class="comment">% set manually, or automatically. we need to know this</span>
+0121     <span class="comment">% because if we're preparing for print, we're going to</span>
+0122     <span class="comment">% force them to manual for the duration so that they don't</span>
+0123     <span class="comment">% get re-chosen by matlab during the export operation.</span>
+0124     tick_mode = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, [xy, <span class="string">'tickmode'</span>]);
+0125     
+0126     <span class="comment">% if we are printing, store that tick mode, and make sure</span>
+0127     <span class="comment">% the current mode is manual. if not, restore the last</span>
+0128     <span class="comment">% tick mode if present.</span>
+0129     <span class="keyword">if</span> is_print_mode
+0130         
+0131         <span class="keyword">if</span> ~<a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(P.panel.export, [xy <span class="string">'tickmode'</span>])
+0132             P.panel.export.([xy <span class="string">'tickmode'</span>]) = tick_mode;
+0133         <span class="keyword">end</span>
+0134         <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, [xy <span class="string">'tick'</span>], tick); <span class="comment">% set to manual mode</span>
+0135         modified = true;
+0136         
+0137     <span class="keyword">else</span>
+0138         
+0139         <span class="keyword">if</span> <a href="../../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(P.panel.export, [xy <span class="string">'tickmode'</span>])
+0140             tick_mode = P.panel.export.([xy <span class="string">'tickmode'</span>]);
+0141             <span class="keyword">if</span> strcmp(tick_mode, <span class="string">'auto'</span>)
+0142                 <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, [xy <span class="string">'tickmode'</span>], <span class="string">'auto'</span>);
+0143             <span class="keyword">end</span>
+0144             P.panel.export = <a href="../../../../Otherbox/lightspeed/@mutable/rmfield.html" class="code" title="function s = rmfield(s,field)">rmfield</a>(P.panel.export, [xy <span class="string">'tickmode'</span>]);
+0145             modified = true;
+0146         <span class="keyword">end</span>
+0147         
+0148     <span class="keyword">end</span>
+0149     
+0150     <span class="comment">% assume no explicit ticklabels</span>
+0151     ticklabel = {};
+0152     is_ticklabel = false;
+0153 
+0154     <span class="comment">% if not using engineering scale mode, multiplier is unity</span>
+0155     <span class="keyword">if</span> isempty(eng_scale_mode)
+0156 
+0157         mult = 1;
+0158 
+0159     <span class="keyword">else</span>
+0160         
+0161         <span class="comment">% take off suffix $</span>
+0162         suffix_tick_labels = any(eng_scale_mode == <span class="string">'$'</span>);
+0163         eng_scale_mode = eng_scale_mode(eng_scale_mode ~= <span class="string">'$'</span>);
+0164 
+0165         <span class="comment">% engineering scale mode should be now exactly one character</span>
+0166         <span class="keyword">if</span> length(eng_scale_mode) ~= 1
+0167             error([<span class="string">'error in scale argument &quot;'</span> eng_scale_mode <span class="string">'&quot;'</span>]);
+0168         <span class="keyword">end</span>
+0169 
+0170         <span class="comment">% engineering scale mode translation</span>
+0171         eng_scale_mode_list = <span class="string">'yzafpnum kMGTPEZY'</span>;
+0172 
+0173         <span class="comment">% handle auto scale char</span>
+0174         <span class="keyword">if</span> eng_scale_mode == <span class="string">'?'</span>
+0175 
+0176             <span class="comment">% auto scale</span>
+0177             m = floor(log10(max(abs(tick))) / 3);
+0178             m = m + 9;
+0179             <span class="keyword">if</span> m &lt; 1 m = 1; <span class="keyword">end</span>
+0180             <span class="keyword">if</span> m &gt; length(eng_scale_mode_list) m = length(eng_scale_mode_list); <span class="keyword">end</span>
+0181             eng_scale_mode = eng_scale_mode_list(m);
+0182 
+0183         <span class="keyword">end</span>
+0184 
+0185         <span class="comment">% translate char to scale multiplier</span>
+0186         i = find(eng_scale_mode_list == eng_scale_mode);
+0187         <span class="keyword">if</span> isempty(i)
+0188             error([<span class="string">'error in scale argument &quot;'</span> eng_scale_mode <span class="string">'&quot;'</span>]);
+0189         <span class="keyword">end</span>
+0190         mult = 1000 ^ (i - 9);
+0191 
+0192         <span class="comment">% handle suffix</span>
+0193         <span class="keyword">if</span> suffix_tick_labels
+0194             suffix_tick_labels = eng_scale_mode;
+0195         <span class="keyword">else</span>
+0196             suffix_tick_labels = <span class="string">''</span>;
+0197         <span class="keyword">end</span>
+0198         
+0199         <span class="comment">% get ticks, using factor</span>
+0200         tick = tick / mult;
+0201          <span class="keyword">for</span> n = 1:length(tick)
+0202              ticklabel{n} = [sprintf(<span class="string">'%g'</span>, tick(n)) suffix_tick_labels];
+0203         <span class="keyword">end</span>
+0204         is_ticklabel = true;
+0205         
+0206         <span class="comment">% convert to a recognisable, but equivalent, form, so we</span>
+0207         <span class="comment">% can tell it's automatically set when we read it back</span>
+0208         ticklabel{end+1} = <span class="string">'eng_scale_mode'</span>;
+0209 
+0210     <span class="keyword">end</span>
+0211 
+0212     <span class="comment">% override ticklabels with specifically set ones</span>
+0213     <span class="keyword">if</span> is_specified_ticklabel
+0214         ticklabel = specified_ticklabel;
+0215         is_ticklabel = true;
+0216     <span class="keyword">end</span>
+0217     
+0218     <span class="comment">% set ticklabel if specified, else set mode to auto</span>
+0219     <span class="keyword">if</span> is_ticklabel
+0220         <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, [xy <span class="string">'ticklabel'</span>], ticklabel);
+0221     <span class="keyword">else</span>
+0222         <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.axis, [xy <span class="string">'ticklabelmode'</span>], <span class="string">'auto'</span>);
+0223     <span class="keyword">end</span>
+0224 
+0225     
+0226     
+0227     <span class="comment">%% set x/y axis label</span>
+0228     
+0229     <span class="comment">% get current label string</span>
+0230     h = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(P.panel.axis, [xy <span class="string">'label'</span>]);
+0231     label = <a href="../../../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(h, <span class="string">'String'</span>);
+0232 
+0233     <span class="comment">% reverse translation (&quot;m&quot; ==&gt; &quot;$&quot;)</span>
+0234     label = <a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>(label);
+0235     
+0236     <span class="comment">% forward translation (&quot;$&quot; ==&gt; &quot;k&quot;)</span>
+0237     label = <a href="translatelabel.html" class="code" title="function s = translatelabel(s, eng_scale_mode)">translatelabel</a>(label, eng_scale_mode);
+0238     
+0239     <span class="comment">% now, do the forward replacement</span>
+0240     <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h, <span class="string">'FontName'</span>, font.fontname, <span class="keyword">...</span>
+0241                  <span class="string">'FontSize'</span>, font.fontsize, <span class="keyword">...</span>
+0242                  <span class="string">'FontWeight'</span>, font.fontweight, <span class="keyword">...</span>
+0243                  <span class="string">'string'</span>, label);
+0244 
+0245 <span class="keyword">end</span>
+0246 
+0247 <span class="comment">% modified</span>
+0248 <span class="keyword">if</span> modified
+0249     <a href="setpanel.html" class="code" title="function out = setpanel(p, P, panelroot, special)">setpanel</a>(p, P);
+0250 <span class="keyword">end</span>
+0251 
+0252 
+0253 
+0254 
+0255 
+0256 
+0257 
+0258 
+0259 <span class="comment">%% SUBRENDER_PARENT</span>
+0260 
+0261 <a name="_sub2" href="#_subfunctions" class="code">function subrender_parent(p, P, renderer, is_print_mode)</a>
+0262 
+0263 <span class="comment">% user may have cleared figure (e.g.) or otherwise deleted</span>
+0264 <span class="comment">% the hiddenaxis, so fail silently if it's no longer present</span>
+0265 <span class="keyword">if</span> P.panel.hiddenaxis &amp;&amp; ishandle(P.panel.hiddenaxis)
+0266 
+0267     <span class="comment">% set axis position (or fail)</span>
+0268     <span class="keyword">try</span>
+0269         <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(P.panel.hiddenaxis, <span class="string">'position'</span>, renderer.into);
+0270     <span class="keyword">catch</span>
+0271         disp(<span class="string">'WARNING (panel): failed to render an axis due to size limitations'</span>)
+0272     <span class="keyword">end</span>
+0273     
+0274 <span class="keyword">end</span>
+0275 
+0276 <span class="comment">% if any child uses absolute positioning, all must</span>
+0277 used_abs = false;
+0278 used_rel = false;
+0279 N = length(P.panel.children);
+0280 c = p;
+0281 C = {};
+0282 <span class="keyword">for</span> n = 1:N
+0283     c.id = P.panel.children(n);
+0284     C{n} = <a href="getpanel.html" class="code" title="function [P, panelroot] = getpanel(p)">getpanel</a>(c);
+0285     <span class="keyword">if</span> isscalar(C{n}.panel.pack)
+0286         used_rel = true;
+0287     <span class="keyword">else</span>
+0288         used_abs = true;
+0289     <span class="keyword">end</span>
+0290 <span class="keyword">end</span>
+0291 <span class="keyword">if</span> used_rel &amp;&amp; used_abs
+0292     error(<span class="string">'cannot use relative and absolute positioning amongst the children of a single panel'</span>);
+0293 <span class="keyword">end</span>
+0294 
+0295 <span class="comment">% assign space to each of its children</span>
+0296 <span class="keyword">if</span> used_abs
+0297 
+0298     <span class="comment">% do assignments</span>
+0299     renderer2 = renderer;
+0300     <span class="keyword">for</span> n = 1:N
+0301         <a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a> = <a href="tofrac.html" class="code" title="function f = tofrac(val, space_mm, units)">tofrac</a>(C{n}.panel.pack, renderer.size_fig_mm, renderer.units); <span class="comment">% convert percentage to fraction</span>
+0302         packed = [];
+0303         packed(1:2) = renderer.into(1:2) + <a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(1:2) .* renderer.into(3:4);
+0304         packed(3:4) = renderer.into(3:4) .* <a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>(3:4);
+0305         c.id = P.panel.children(n);
+0306         renderer2.into = packed;
+0307         <a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>(c, C{n}, renderer2, is_print_mode)
+0308     <span class="keyword">end</span>
+0309     
+0310 <span class="keyword">end</span>
+0311 
+0312 <span class="keyword">if</span> used_rel
+0313 
+0314     <span class="comment">% convert edge to axis and end</span>
+0315     edges = <span class="string">'lbrt'</span>;
+0316     edge = find(P.render_inh.edge == edges);
+0317     <span class="keyword">if</span> isempty(edge)
+0318         error([<span class="string">'unrecognised packing edge &quot;'</span> P.render_inh.edge <span class="string">'&quot; (use l, r, t or b)'</span>]);
+0319     <span class="keyword">end</span>
+0320     axs = [1 2 1 2];
+0321     ax = axs(edge);
+0322     eds = [1 1 2 2];
+0323     ed = eds(edge);
+0324     
+0325 <span class="comment">%     % ask each axis child to render (first pass)</span>
+0326 <span class="comment">%     % maximise margins that match up (if packing on top or</span>
+0327 <span class="comment">%     % bottom edge, that's the left and right margins, and vice</span>
+0328 <span class="comment">%     % versa).</span>
+0329 <span class="comment">%     max_margin = [0 0];</span>
+0330 <span class="comment">%     margins = {};</span>
+0331 <span class="comment">%     match_indices = {[2 4] [1 3]};</span>
+0332 <span class="comment">%     for n = 1:N</span>
+0333 <span class="comment">%         if C{n}.panel.axis</span>
+0334 <span class="comment">%             margin = subrender_axis_first(c, C{n});</span>
+0335 <span class="comment">%             margins{n} = margin;</span>
+0336 <span class="comment">%             match_margin = margin(match_indices{ax});</span>
+0337 <span class="comment">%             max_margin = max(max_margin, match_margin);</span>
+0338 <span class="comment">%         else</span>
+0339 <span class="comment">%             margins{n} = [0 0 0 0];</span>
+0340 <span class="comment">%         end</span>
+0341 <span class="comment">%     end</span>
+0342     
+0343     <span class="comment">% size in mm of the &quot;into&quot; space we're rendering into</span>
+0344     size_into_mm = renderer.size_fig_mm .* renderer.into(3:4);
+0345     
+0346     <span class="comment">% assignments</span>
+0347     assignments = zeros(1,N);
+0348     
+0349     <span class="comment">% assign to each child</span>
+0350     <span class="keyword">for</span> n = 1:N
+0351         <a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a> = C{n}.panel.pack;
+0352         assignments(n) = <a href="tofrac.html" class="code" title="function f = tofrac(val, space_mm, units)">tofrac</a>(<a href="../../../../Otherbox/panel/@panel/pack.html" class="code" title="function q = pack(p, varargin)">pack</a>, renderer.size_fig_mm(ax), renderer.units);
+0353     <span class="keyword">end</span>
+0354 
+0355     <span class="comment">% divvy up remaining space</span>
+0356     n = find(assignments == 0);
+0357     <span class="keyword">if</span> ~isempty(n)
+0358         S = sum(assignments);
+0359         M = length(n);
+0360         <span class="keyword">if</span> S &gt;= 1
+0361             warning(<span class="string">'no space left to divvy up'</span>);
+0362         <span class="keyword">else</span>
+0363             assignments(n) = (1 - S) / M;
+0364         <span class="keyword">end</span>
+0365     <span class="keyword">end</span>
+0366 
+0367     <span class="comment">% convert to scale of parent position</span>
+0368     assignments = assignments * renderer.into(ax + 2);
+0369 
+0370     <span class="comment">% pack from near edge</span>
+0371     <span class="keyword">if</span> ed == 1
+0372         <span class="keyword">for</span> n = 1:N
+0373             renderer.into(ax + 2) = assignments(n);
+0374             c.id = P.panel.children(n);
+0375             <a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>(c, C{n}, renderer, is_print_mode);
+0376             renderer.into(ax) = renderer.into(ax) + assignments(n);
+0377         <span class="keyword">end</span>
+0378     <span class="keyword">end</span>
+0379     
+0380     <span class="comment">% pack from far edge</span>
+0381     <span class="keyword">if</span> ed == 2
+0382         renderer.into(ax) = renderer.into(ax) + renderer.into(ax + 2);
+0383         <span class="keyword">for</span> n = 1:N
+0384             renderer.into(ax) = renderer.into(ax) - assignments(n);
+0385             renderer.into(ax + 2) = assignments(n);
+0386             c.id = P.panel.children(n);
+0387             <a href="subrender.html" class="code" title="function subrender(p, P, renderer, is_print_mode)">subrender</a>(c, C{n}, renderer, is_print_mode);
+0388         <span class="keyword">end</span>
+0389     <span class="keyword">end</span>
+0390     
+0391 <span class="keyword">end</span>
+0392 
+0393 
+0394 
+0395 
+0396</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

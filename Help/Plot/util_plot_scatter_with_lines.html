@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_plot_scatter_with_lines</title>
+  <meta name="keywords" content="util_plot_scatter_with_lines">
+  <meta name="description" content="UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Plot -->
+<h1>util_plot_scatter_with_lines
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = util_plot_scatter_with_lines( x, y, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.
+   Input:
+           x,y:    data points
+           z:      if axis z is exist, the program will call scatter3 and
+                   plot3 to get a 3d view
+           labels:  x,y,z lables. e.g. {'PCA 1' 'PCA 2'}
+           dot_size:   The size of scatter dots, [default]: 60
+           dot_color:  e.g. [0.5 0.5 0.5], if not provided, the dots will
+                       be colored by the indice of colormap.
+           lineoff:    If true, dont draw lines, [default]: false
+           texton:     If true, label each data point with its subscript,
+                       [default]: off
+           holdon:     If true, we will not create new figure on each
+                       calling.
+                       [default]: off
+   Example:
+           util_plot_scatter_with_lines(mappedX(:,1),mappedX(:,2), 'z',
+           mappedX(:,3),'labels', {'PC 1', 'PC 2', 'PC 3'}, 'lineoff', 1)
+
+   Created on Jul/24/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-07-14  Adding 'holdon' switch.
+       PJB#2011-07-15  Adding 'dot_color' switch.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_get_datapoint_potential.html" class="code" title="function [ pot ] = util_get_datapoint_potential( datax, datay, bin_table)">util_get_datapoint_potential</a>	UNTITLED Summary of this function goes here</li><li><a href="util_animate_dots.html" class="code" title="function [] = util_animate_dots( x, y, steps )">util_animate_dots</a>	UNTITLED Summary of this function goes here</li><li><a href="../Scripts/network_states.html" class="code" title="">network_states</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = util_plot_scatter_with_lines( x, y, varargin )</a>
+0002 <span class="comment">%UTIL_PLOT_SCATTER_WITH_LINES Plot scatter graphs with lines between them.</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           x,y:    data points</span>
+0005 <span class="comment">%           z:      if axis z is exist, the program will call scatter3 and</span>
+0006 <span class="comment">%                   plot3 to get a 3d view</span>
+0007 <span class="comment">%           labels:  x,y,z lables. e.g. {'PCA 1' 'PCA 2'}</span>
+0008 <span class="comment">%           dot_size:   The size of scatter dots, [default]: 60</span>
+0009 <span class="comment">%           dot_color:  e.g. [0.5 0.5 0.5], if not provided, the dots will</span>
+0010 <span class="comment">%                       be colored by the indice of colormap.</span>
+0011 <span class="comment">%           lineoff:    If true, dont draw lines, [default]: false</span>
+0012 <span class="comment">%           texton:     If true, label each data point with its subscript,</span>
+0013 <span class="comment">%                       [default]: off</span>
+0014 <span class="comment">%           holdon:     If true, we will not create new figure on each</span>
+0015 <span class="comment">%                       calling.</span>
+0016 <span class="comment">%                       [default]: off</span>
+0017 <span class="comment">%   Example:</span>
+0018 <span class="comment">%           util_plot_scatter_with_lines(mappedX(:,1),mappedX(:,2), 'z',</span>
+0019 <span class="comment">%           mappedX(:,3),'labels', {'PC 1', 'PC 2', 'PC 3'}, 'lineoff', 1)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Created on Jul/24/2010 By Pu Jiangbo</span>
+0022 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   $Revision:</span>
+0025 <span class="comment">%       PJB#2011-07-14  Adding 'holdon' switch.</span>
+0026 <span class="comment">%       PJB#2011-07-15  Adding 'dot_color' switch.</span>
+0027 
+0028 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0029 
+0030 <span class="comment">% dot-size</span>
+0031 <span class="keyword">if</span> ~exist(<span class="string">'dot_size'</span>, <span class="string">'var'</span>)
+0032     dot_size = 60;
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">if</span> ~exist(<span class="string">'dot_color'</span>, <span class="string">'var'</span>)
+0036     dot_color = [];
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> ~exist(<span class="string">'lineoff'</span>, <span class="string">'var'</span>)
+0040     lineoff = false;
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> ~exist(<span class="string">'texton'</span>, <span class="string">'var'</span>)
+0044     texton = false;
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="keyword">if</span> ~exist(<span class="string">'holdon'</span>, <span class="string">'var'</span>)
+0048     holdon = false;
+0049 <span class="keyword">end</span>
+0050 
+0051 
+0052 <span class="keyword">if</span> ~holdon
+0053     figure
+0054 <span class="keyword">else</span>
+0055     hold on
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% determine the z-axis</span>
+0059 <span class="keyword">if</span> ~exist(<span class="string">'z'</span>, <span class="string">'var'</span>)
+0060     <span class="keyword">if</span> ~lineoff
+0061         plot(x, y, <span class="string">'Color'</span>, [0.5 0.5 0.5]); hold on 
+0062     <span class="keyword">end</span>
+0063     <span class="keyword">if</span> length(x) == 3
+0064         <span class="keyword">if</span> isempty(dot_color)
+0065             scatter(x, y, dot_size, [1:length(x)]', <span class="string">'filled'</span>, <span class="string">'MarkerEdgeColor'</span>, [0.5 0.5 0.5]); cbar_axes = colorbar();
+0066         <span class="keyword">else</span>
+0067             scatter(x, y, dot_size, [1:length(x)]', <span class="string">'filled'</span>, <span class="string">'MarkerEdgeColor'</span>, [0.5 0.5 0.5], <span class="string">'MarkerFaceColor'</span>, dot_color); cbar_axes = colorbar();
+0068         <span class="keyword">end</span>
+0069     <span class="keyword">else</span>
+0070         <span class="keyword">if</span> isempty(dot_color)
+0071             scatter(x, y, dot_size, [1:length(x)], <span class="string">'filled'</span>, <span class="string">'MarkerEdgeColor'</span>, [0.5 0.5 0.5]); cbar_axes = colorbar();
+0072         <span class="keyword">else</span>
+0073             scatter(x, y, dot_size, [1:length(x)], <span class="string">'filled'</span>, <span class="string">'MarkerEdgeColor'</span>, [0.5 0.5 0.5], <span class="string">'MarkerFaceColor'</span>, dot_color); cbar_axes = colorbar();
+0074         <span class="keyword">end</span>
+0075     <span class="keyword">end</span>
+0076     <span class="keyword">if</span> texton
+0077         textlabel = cell(1,length(x));
+0078         <span class="keyword">for</span> i = 1:length(x)
+0079             textlabel{i} = num2str(i);
+0080         <span class="keyword">end</span>
+0081         text(x, y, textlabel);
+0082     <span class="keyword">end</span>
+0083     hold off
+0084 <span class="keyword">else</span>
+0085     <span class="keyword">if</span> ~lineoff
+0086         plot3(x, y, z, <span class="string">'Color'</span>, [0.5 0.5 0.5]); hold on
+0087     <span class="keyword">end</span>
+0088     <span class="keyword">if</span> isempty(dot_color)
+0089         scatter3(x, y, z, dot_size, [1:length(x)], <span class="string">'filled'</span>, <span class="string">'MarkerEdgeColor'</span>, [0.5 0.5 0.5]); cbar_axes = colorbar(<span class="string">'location'</span>, <span class="string">'EastOutside'</span>);
+0090     <span class="keyword">else</span>
+0091         scatter3(x, y, z, dot_size, [1:length(x)], <span class="string">'filled'</span>, <span class="string">'MarkerEdgeColor'</span>, [0.5 0.5 0.5], <span class="string">'MarkerFaceColor'</span>, dot_color); cbar_axes = colorbar(<span class="string">'location'</span>, <span class="string">'EastOutside'</span>);
+0092     <span class="keyword">end</span>
+0093     hold off
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="keyword">if</span> exist(<span class="string">'labels'</span>, <span class="string">'var'</span>)
+0097     xlabel(labels{1});
+0098     ylabel(labels{2});
+0099     <span class="keyword">if</span> exist(<span class="string">'z'</span>, <span class="string">'var'</span>)
+0100         zlabel(labels{3});
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 box off;
+0105 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'TickDir'</span>, <span class="string">'out'</span>);
+0106 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(cbar_axes, <span class="string">'box'</span>, <span class="string">'off'</span>);
+0107 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(cbar_axes, <span class="string">'TickDir'</span>, <span class="string">'out'</span>);
+0108 
+0109 
+0110 
+0111 <span class="keyword">end</span>
+0112</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of hillclimber2c</title>
+  <meta name="keywords" content="hillclimber2c">
+  <meta name="description" content="HILLCLIMBER Performs hillclimbing using initial solution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>hillclimber2c
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>HILLCLIMBER Performs hillclimbing using initial solution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [x,obj] = hillclimber2c(DD, x, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">HILLCLIMBER Performs hillclimbing using initial solution 
+
+   function [x, obj] = hillclimber(DD, x, varargin)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>	Minimize a continuous differentialble multivariate function. Starting point</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="fastmvu.html" class="code" title="function [mappedX, mapping] = fastmvu(X, no_dims, k, finetune, eig_impl)">fastmvu</a>	FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x,obj] = hillclimber2c(DD, x, varargin)</a>
+0002 <span class="comment">%HILLCLIMBER Performs hillclimbing using initial solution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   function [x, obj] = hillclimber(DD, x, varargin)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0010 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0011 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0012 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0013 <span class="comment">% maintain the name of the original author.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0016 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0017 
+0018     n = length(DD);
+0019     
+0020     <span class="comment">% Set parameters for the hillclimber</span>
+0021     pars.maxiter = 10000;
+0022     pars.stepsize = 1e-05;
+0023     pars.ETA = 1e0-5;
+0024     pars.truex = [];
+0025     pars.verbose = 1;
+0026     pars.acc = 1.01;
+0027     pars.printevery = 100;
+0028     pars.othresh = 1e-10;
+0029     pars.eta = 0;
+0030 
+0031     <span class="comment">% Initialize variables</span>
+0032     ii = find(DD);
+0033     dd = full(DD(ii));
+0034     [i2,i1] = ind2sub(size(DD), ii);
+0035     dims = size(x);
+0036 
+0037     <span class="comment">% Perform hill-climbing</span>
+0038     [x, obj, i] = <a href="minimize.html" class="code" title="function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);">minimize</a>(x(:), <span class="string">'hill_obj'</span>, -pars.maxiter, dims, [i1 i2], dd, pars);
+0039     x = reshape(x, dims);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

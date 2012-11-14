@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_load_spike_trigger_mcdstream</title>
+  <meta name="keywords" content="util_load_spike_trigger_mcdstream">
+  <meta name="description" content="UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_load_spike_trigger_mcdstream
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流
+   可选参数：
+       filename = 要处理的文件名，默认无
+       segment_size = 如果要分段处理，每段的长度（ms），默认60000
+       isCompact = 1/0 是否压缩SpikeValues表，默认压缩
+       startend = [start end] 起止时间，默认是全程，单位是ms
+
+   蒲江波 - 2009年5月31日
+   蒲江波 - 2009年6月15日
+       增加一个能够自动的将长文件分割成几段分别读取的功能
+   蒲江波 - 2009年6月17日
+       修改长文件分段读取功能，部分解决Out of memory问题（32位系统还可以用PAE和3GB、4GT参数调整操作系统）
+       增加利用PVPMOD处理参数问题
+       增加waitbar提示处理进度
+   蒲江波 - 2009年6月23日
+       去除一定要读取全长的限制，可以由用户指定读取的时间范围（ms）
+       将函数改名，去掉whole_length的尾缀。
+   蒲江波 - 2009年6月26日
+       修复Bug，未输入isCompact参数时出错问题。
+   蒲江波 - 2009年7月3日
+       修复Bug，修复segment_size判断为假时，忽略isCompact参数的问题。
+   蒲江波 - 2009年12月26日
+       修复Bug，修复时间计算中，错误将已经输入的时间长度*1000来得到ms，其已经为ms。
+   蒲江波 - 2010年5月7日
+       修正冗余显示的问题（evalc）
+   蒲江波 - 2010年5月13日
+       修复Bug，当读取某种特定长度的SPK文件时，会多读取末尾的几毫秒（原因是自动拼接部分）；
+       当读入的Trigger数据流其实没有包含任何Trigger时，给出提示。
+   蒲江波 - 2010年7月15日
+       修改isCompact的默认值为压缩。
+   蒲江波 - 2010年7月23日
+       修改进度条显示模式，更节约资源，加快速度，不弹出窗口便于在集群等环境使用。
+   蒲江波 - 2010年9月7日
+       修改找不到Spike数据流时退出的方式，改为Warning，不用Error，便于在批处理等环境中的Elegant reporting.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>	UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-</li><li><a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="util_compact_spif_spikevalues.html" class="code" title="function [ compacted ] = util_compact_spif_spikevalues( spv )">util_compact_spif_spikevalues</a>	UTIL_COMPACT_SPIF_SPIKEVALUES 工具函数：将SPIF中SPIKEVALUE信息压缩</li><li><a href="util_connect_spif_spiketimes.html" class="code" title="function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin )">util_connect_spif_spiketimes</a>	UTIL_CONNECT_SPIF_SPIKETIMES 工具函数：将两个Spiketimes连接成一个</li><li><a href="util_connect_spif_spikevalues.html" class="code" title="function [ connected ] = util_connect_spif_spikevalues( spv1, spv2 )">util_connect_spif_spikevalues</a>	UTIL_CONNECT_SPIF_SPIKEVALUES 工具函数：将两个Spikevalues连接成一个</li><li><a href="util_find_spikestream.html" class="code" title="function [ number spike_stream ] = util_find_spikestream( D )">util_find_spikestream</a>	UTIL_FIND_SPIKESTREAM 工具函数：找到MCD文件中的Spike数据流</li><li><a href="util_find_triggerstream.html" class="code" title="function [ number trigger_stream ] = util_find_triggerstream( D )">util_find_triggerstream</a>	UTIL_FIND_TRIGGERSTREAM 工具函数：找到MCD文件中的Trigger数据流</li><li><a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>	CPRINTF displays styled formatted text in the Command Window</li><li><a href="../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_load_spike_trigger_mcdstream_from_multiple_files.html" class="code" title="function [ spif triggerif ] = util_load_spike_trigger_mcdstream_from_multiple_files( varargin )">util_load_spike_trigger_mcdstream_from_multiple_files</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM_WHOLE_LENGTH_FROM_MULTIPLE_FILES 工具函数：从多个MCD文件中获取SPIF/TRIGGERIF信息</li><li><a href="../Scripts/avalanche.html" class="code" title="">avalanche</a>	</li><li><a href="../Scripts/network_states.html" class="code" title="">network_states</a>	</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter.html" class="code" title="function [ sizes alpha bp bp_1 mean_isi mean_rate ] = util_loop_calc_avalanche_parameter( filename, gnd, result_dir )">util_loop_calc_avalanche_parameter</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETER Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_calc_avalanche_parameter2.html" class="code" title="function [sizes lengths vectors] = util_loop_calc_avalanche_parameter2( data_filename, result_dirname, gnd )">util_loop_calc_avalanche_parameter2</a>	UTIL_LOOP_CALC_AVALANCHE_PARAMETERS2 Get avalanche parameters and save</li><li><a href="../Scripts/util_loop_calc_topo.html" class="code" title="function [cc_matrix xc_matrix mi_matrix nmi_matrix bc_cc bc_xc bc_mi bc_nmi] = util_loop_calc_topo( data_filename, result_dirname, gnd )">util_loop_calc_topo</a>	UTIL_LOOP_CALC_TOPO Get Topology parameters</li><li><a href="../Scripts/util_loop_check_file.html" class="code" title="function util_loop_check_file( data_filename )">util_loop_check_file</a>	UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski</li><li><a href="../Scripts/util_loop_find_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq spks amps ] = util_loop_find_avalanche( filename, gnd, result_dir )">util_loop_find_avalanche</a>	UTIL_LOOP_FIND_AVALANCHE Loop func, used for finding avalanches in a</li><li><a href="../Scripts/util_loop_get_fractal_parameters.html" class="code" title="function util_loop_get_fractal_parameters( data_filename, result_dirname, gnd )">util_loop_get_fractal_parameters</a>	UTIL_LOOP_GET_FRACTAL_PARAMETERS Get DFA/Hurst Exponent/Minkowski</li><li><a href="../Scripts/util_loop_plot_spsa.html" class="code" title="function util_loop_plot_spsa( filename )">util_loop_plot_spsa</a>	UNTITLED Summary of this function goes here</li><li><a href="../Stimulation/script_trigger_psth_amplitude_distribution.html" class="code" title="function [] = script_trigger_psth_amplitude_distribution()">script_trigger_psth_amplitude_distribution</a>	SCRIPT_TRIGGER_PSTH_AMPLITUDE_DISTRIBUTION 脚本：处理刺激Trigger后的Spike统计信息</li><li><a href="../Stimulation/util_sti_calc_test_response_count_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_response_count_multiple_arraywide( varargin )">util_sti_calc_test_response_count_multiple_arraywide</a>	UTIL_STI_CALC_RESPONSE_COUNT_MULTIPLE_ARRAYWIDE 计算每个电极在刺激期间的响应Spike数目</li><li><a href="../Stimulation/util_sti_calc_test_score_arraywide.html" class="code" title="function [ score_vector ] = util_sti_calc_test_score_arraywide( varargin )">util_sti_calc_test_score_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩</li><li><a href="../Stimulation/util_sti_calc_test_score_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_score_multiple_arraywide( varargin )">util_sti_calc_test_score_multiple_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE 计算每个电极在刺激期间的Score</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )</a>
+0002 <span class="comment">%UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</span>
+0003 <span class="comment">%   可选参数：</span>
+0004 <span class="comment">%       filename = 要处理的文件名，默认无</span>
+0005 <span class="comment">%       segment_size = 如果要分段处理，每段的长度（ms），默认60000</span>
+0006 <span class="comment">%       isCompact = 1/0 是否压缩SpikeValues表，默认压缩</span>
+0007 <span class="comment">%       startend = [start end] 起止时间，默认是全程，单位是ms</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   蒲江波 - 2009年5月31日</span>
+0010 <span class="comment">%   蒲江波 - 2009年6月15日</span>
+0011 <span class="comment">%       增加一个能够自动的将长文件分割成几段分别读取的功能</span>
+0012 <span class="comment">%   蒲江波 - 2009年6月17日</span>
+0013 <span class="comment">%       修改长文件分段读取功能，部分解决Out of memory问题（32位系统还可以用PAE和3GB、4GT参数调整操作系统）</span>
+0014 <span class="comment">%       增加利用PVPMOD处理参数问题</span>
+0015 <span class="comment">%       增加waitbar提示处理进度</span>
+0016 <span class="comment">%   蒲江波 - 2009年6月23日</span>
+0017 <span class="comment">%       去除一定要读取全长的限制，可以由用户指定读取的时间范围（ms）</span>
+0018 <span class="comment">%       将函数改名，去掉whole_length的尾缀。</span>
+0019 <span class="comment">%   蒲江波 - 2009年6月26日</span>
+0020 <span class="comment">%       修复Bug，未输入isCompact参数时出错问题。</span>
+0021 <span class="comment">%   蒲江波 - 2009年7月3日</span>
+0022 <span class="comment">%       修复Bug，修复segment_size判断为假时，忽略isCompact参数的问题。</span>
+0023 <span class="comment">%   蒲江波 - 2009年12月26日</span>
+0024 <span class="comment">%       修复Bug，修复时间计算中，错误将已经输入的时间长度*1000来得到ms，其已经为ms。</span>
+0025 <span class="comment">%   蒲江波 - 2010年5月7日</span>
+0026 <span class="comment">%       修正冗余显示的问题（evalc）</span>
+0027 <span class="comment">%   蒲江波 - 2010年5月13日</span>
+0028 <span class="comment">%       修复Bug，当读取某种特定长度的SPK文件时，会多读取末尾的几毫秒（原因是自动拼接部分）；</span>
+0029 <span class="comment">%       当读入的Trigger数据流其实没有包含任何Trigger时，给出提示。</span>
+0030 <span class="comment">%   蒲江波 - 2010年7月15日</span>
+0031 <span class="comment">%       修改isCompact的默认值为压缩。</span>
+0032 <span class="comment">%   蒲江波 - 2010年7月23日</span>
+0033 <span class="comment">%       修改进度条显示模式，更节约资源，加快速度，不弹出窗口便于在集群等环境使用。</span>
+0034 <span class="comment">%   蒲江波 - 2010年9月7日</span>
+0035 <span class="comment">%       修改找不到Spike数据流时退出的方式，改为Warning，不用Error，便于在批处理等环境中的Elegant reporting.</span>
+0036 
+0037 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0038 
+0039 <span class="keyword">if</span> exist(<span class="string">'filename'</span>, <span class="string">'var'</span>)
+0040     [~] = evalc(<span class="string">'D = datastrm(filename)'</span>);
+0041 <span class="keyword">else</span>
+0042     [~] = evalc(<span class="string">'D = datastrm(''open'')'</span>);
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> isempty(D)
+0046     error(<span class="string">'A MCD file must be selected.'</span>);
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">if</span> ~exist(<span class="string">'isCompact'</span>, <span class="string">'var'</span>)
+0050     isCompact = 1;
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="comment">% 起止时间</span>
+0054 <span class="keyword">if</span> exist(<span class="string">'startend'</span>, <span class="string">'var'</span>)
+0055     start_time = startend(1); <span class="comment">% ms</span>
+0056     stop_time = startend(2);  <span class="comment">% ms</span>
+0057         
+0058     <span class="keyword">if</span> start_time &lt; <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStartTime'</span>)
+0059         warning(<span class="string">'Start time must be bigger than sweepStartTime, is automatically set to sweepStartTime.'</span>);
+0060         start_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStartTime'</span>);
+0061     <span class="keyword">end</span>
+0062     <span class="keyword">if</span> stop_time &gt; <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0063         warning(<span class="string">'Stop time must be smaller than sweepStopTime, is automatically set to sweepStopTime.'</span>);
+0064         stop_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0065     <span class="keyword">end</span>
+0066 <span class="keyword">else</span>
+0067     start_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStartTime'</span>);
+0068     stop_time = <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">% 显示文件信息</span>
+0072 disp([<span class="string">'Start:'</span> datestr(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingdate'</span>)) <span class="string">', Stop: '</span>  datestr(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingStopDate'</span>)) <span class="string">', Length: '</span> num2str(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>)) <span class="string">' ms.'</span>]);
+0073 
+0074 <span class="comment">% 读取数据流</span>
+0075 <span class="comment">% 找到Spike数据流</span>
+0076 [stream_number spike_streamname] = <a href="util_find_spikestream.html" class="code" title="function [ number spike_stream ] = util_find_spikestream( D )">util_find_spikestream</a>(D);
+0077 <span class="keyword">if</span> stream_number &lt; 1
+0078     warning(<span class="string">'UTIL:FILEERR'</span>,<span class="string">'No spike stream is detected. File ignored.'</span>);
+0079     <span class="keyword">return</span>;
+0080 <span class="keyword">elseif</span> stream_number &gt; 1
+0081     <span class="comment">% 有多于一个的Spike数据流</span>
+0082     <span class="comment">% 列出Spike数据流的名称，让用户选择</span>
+0083     <span class="keyword">for</span> i = 1:stream_number
+0084         disp(spike_streamname{i});
+0085     <span class="keyword">end</span>
+0086     user_entry = input(<span class="string">'请输入想要计算的序号：'</span>);
+0087     
+0088     spike_streamname_selected = spike_streamname{user_entry};
+0089 <span class="keyword">else</span>
+0090     spike_streamname_selected = spike_streamname{1};
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="comment">% 找到Trigger数据流</span>
+0094 [stream_number trigger_streamname] = <a href="util_find_triggerstream.html" class="code" title="function [ number trigger_stream ] = util_find_triggerstream( D )">util_find_triggerstream</a>(D);
+0095 <span class="keyword">if</span> stream_number &lt; 1
+0096     <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'Red'</span>,<span class="string">'Note: No trigger stream is detected.\n'</span>);
+0097 <span class="keyword">elseif</span> stream_number &gt; 1
+0098     <span class="comment">% 有多于一个的Trigger数据流</span>
+0099     <span class="comment">% 列出Trigger数据流的名称，让用户选择</span>
+0100     <span class="keyword">for</span> i = 1:stream_number
+0101         disp(trigger_streamname{i});
+0102     <span class="keyword">end</span>
+0103     user_entry = input(<span class="string">'请输入想要计算的序号：'</span>);
+0104     
+0105     trigger_streamname_selected = trigger_streamname{user_entry};
+0106 <span class="keyword">else</span>
+0107     trigger_streamname_selected = trigger_streamname{1};
+0108 <span class="keyword">end</span>    
+0109 
+0110 <span class="comment">% 至此，获得了Spike数据流和Trigger数据流的名字，分别存在</span>
+0111 <span class="comment">% spike_streamname_selected 和 trigger_streamname_selected里面</span>
+0112 
+0113 <span class="comment">% 读取SPIF和TRIGGERIF</span>
+0114 
+0115 <span class="comment">% 判断数据流的长度</span>
+0116 <span class="keyword">if</span> exist(<span class="string">'segment_size'</span>, <span class="string">'var'</span>)
+0117     limited_size = segment_size;
+0118 <span class="keyword">else</span>
+0119     limited_size = 60000; <span class="comment">% 1min</span>
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="keyword">if</span> (stop_time - start_time) &gt; limited_size;
+0123     <span class="comment">% 太长，分段读取，拼合</span>
+0124     
+0125     <span class="comment">% 处理SPIKE流部分</span>
+0126     <span class="comment">% h = waitbar(100, 'Processing SPIF data...');</span>
+0127     fprintf(<span class="string">'Processing spike data...'</span>);
+0128     
+0129     <span class="comment">% 建立用于存放最终结果的SPIF结构体，cell外面围的{}很重要，去掉会出错。</span>
+0130     spif = struct(<span class="string">'spiketimes'</span>, {cell(64,1)}, <span class="string">'spikevalues'</span>, {cell(64,1)}, <span class="string">'startend'</span>, [start_time stop_time]);
+0131     
+0132     <span class="comment">% 首先循环（即，可以用limited_size整除的）</span>
+0133     <span class="keyword">for</span> i = start_time:limited_size:stop_time
+0134         spif_segment = <a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(D, <span class="string">'streamname'</span>, spike_streamname_selected, <span class="string">'startend'</span>, [i i+limited_size]);
+0135         spif.spiketimes = <a href="util_connect_spif_spiketimes.html" class="code" title="function [ connected ] = util_connect_spif_spiketimes( spt1, spt2, varargin )">util_connect_spif_spiketimes</a>(spif.spiketimes, spif_segment.spiketimes);
+0136         <span class="comment">% 如果指定了compact参数，则会压缩spikevalue表</span>
+0137         <span class="keyword">if</span> (isCompact)
+0138             spif_segment.spikevalues = <a href="util_compact_spif_spikevalues.html" class="code" title="function [ compacted ] = util_compact_spif_spikevalues( spv )">util_compact_spif_spikevalues</a>(spif_segment.spikevalues);
+0139         <span class="keyword">end</span>
+0140         spif.spikevalues = <a href="util_connect_spif_spikevalues.html" class="code" title="function [ connected ] = util_connect_spif_spikevalues( spv1, spv2 )">util_connect_spif_spikevalues</a>(spif.spikevalues, spif_segment.spikevalues);
+0141         
+0142         <span class="comment">% waitbar(i/(stop_time - start_time), h, ['Processed SPIF: ' num2str(fix(i/1000/60)) ' minutes']);</span>
+0143         <span class="keyword">if</span> ~mod(i, 50000)
+0144             <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(100 * i/(stop_time - start_time));
+0145         <span class="keyword">end</span>
+0146         <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> spif_segment;
+0147     <span class="keyword">end</span>
+0148     <span class="comment">% close(h);</span>
+0149     <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(100);
+0150     fprintf(<span class="string">'\n'</span>);
+0151     
+0152     <span class="comment">% BUGFIX</span>
+0153     <span class="comment">% 不需要计算剩余部分的，因为在最后一次i里面，虽然i+limited_size是&gt;stop_time的，但是nextdata会自动读</span>
+0154     <span class="comment">% 到stoptime为止，还计算剩余部分是一个冗余</span>
+0155     <span class="comment">% 计算残余的部分</span>
+0156     <span class="comment">% spif_segment = nextdata(D, 'streamname', spike_streamname_selected, 'startend', [i stop_time]);</span>
+0157     <span class="comment">% spif.spiketimes = util_connect_spif_spiketimes(spif.spiketimes, spif_segment.spiketimes);</span>
+0158     <span class="comment">% 如果指定了compact参数，则会压缩spikevalue表（残余部分）</span>
+0159     <span class="comment">% if (isCompact)</span>
+0160     <span class="comment">%    spif_segment.spikevalues = util_compact_spif_spikevalues(spif_segment.spikevalues);</span>
+0161     <span class="comment">% end</span>
+0162     <span class="comment">% spif.spikevalues = util_connect_spif_spikevalues(spif.spikevalues, spif_segment.spikevalues);</span>
+0163     
+0164     
+0165     <span class="comment">% 处理Trigger流部分</span>
+0166     <span class="comment">% (这里使用的stream_number虽然在spif和trif中都有用，但是最后一次是检测trigger数据流，所以保存的是trigger数据流的个数)</span>
+0167     <span class="keyword">if</span> stream_number &lt; 1
+0168         triggerif = NaN;
+0169     <span class="keyword">else</span>
+0170         <span class="comment">% h = waitbar(100, 'Processing TRIGGERIF data...');</span>
+0171         fprintf(<span class="string">'Processing trigger data...'</span>);
+0172 
+0173         <span class="comment">% 建立用于存放最终结果的TRIGGERIF结构体</span>
+0174         triggerif = struct(<span class="string">'times'</span>, [], <span class="string">'values'</span>, [], <span class="string">'startend'</span>, [start_time stop_time]);
+0175         
+0176         <span class="comment">% 循环整数部分</span>
+0177         <span class="keyword">for</span> i = start_time:limited_size:stop_time
+0178             trif_segment = <a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(D, <span class="string">'streamname'</span>, trigger_streamname_selected, <span class="string">'startend'</span>, [i i+limited_size]);
+0179             triggerif.times = [triggerif.times trif_segment.times];
+0180             triggerif.values = [triggerif.values trif_segment.values];
+0181             
+0182             <span class="comment">% waitbar(i/(stop_time - start_time), h, ['Processed TRIGGERIF: ' num2str(fix(i/1000/60)) ' minutes']);</span>
+0183             <span class="keyword">if</span> ~mod(i, 50000)
+0184                 <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(100 * i/(stop_time - start_time));
+0185             <span class="keyword">end</span>
+0186             <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> trif_segment;
+0187         <span class="keyword">end</span>
+0188         <span class="comment">% close(h);</span>
+0189         <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(100);
+0190         fprintf(<span class="string">'\n'</span>);
+0191         
+0192         <span class="comment">% BUGFIX</span>
+0193         <span class="comment">% 不需要计算剩余部分的，因为在最后一次i里面，虽然i+limited_size是&gt;stop_time的，但是nextdata会自动读</span>
+0194         <span class="comment">% 到stoptime为止，还计算剩余部分是一个冗余</span>
+0195         <span class="comment">%</span>
+0196         <span class="comment">% 计算剩余部分</span>
+0197         <span class="comment">% trif_segment = nextdata(D, 'streamname', trigger_streamname_selected, 'startend', [i stop_time]);</span>
+0198         <span class="comment">% triggerif.times = [triggerif.times trif_segment.times];</span>
+0199         <span class="comment">% triggerif.values = [triggerif.values trif_segment.values];</span>
+0200     <span class="keyword">end</span>
+0201 <span class="keyword">else</span>
+0202     <span class="comment">% 正常读取</span>
+0203     spif = <a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(D,<span class="string">'streamname'</span>, spike_streamname_selected,<span class="string">'startend'</span>,[start_time stop_time]);   
+0204     
+0205     <span class="comment">% 如果指定了compact参数，则会压缩spikevalue表</span>
+0206     <span class="keyword">if</span> isCompact
+0207        spif.spikevalues = <a href="util_compact_spif_spikevalues.html" class="code" title="function [ compacted ] = util_compact_spif_spikevalues( spv )">util_compact_spif_spikevalues</a>(spif.spikevalues);
+0208     <span class="keyword">end</span>
+0209     
+0210     <span class="comment">% 判断是否有trigger流</span>
+0211     <span class="comment">% (这里使用的stream_number虽然在spif和trif中都有用，但是最后一次是检测trigger数据流，所以保存的是trigger数据流的个数)</span>
+0212     <span class="keyword">if</span> stream_number &lt; 1
+0213         triggerif = NaN;
+0214     <span class="keyword">else</span>
+0215         triggerif = <a href="../IO/mcd/mcintfac/@datastrm/nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(D,<span class="string">'streamname'</span>, trigger_streamname_selected,<span class="string">'startend'</span>,[start_time stop_time]);        
+0216     <span class="keyword">end</span>
+0217 <span class="keyword">end</span>
+0218 
+0219 <span class="comment">% 显示Trigger的个数(这里使用的stream_number虽然在spif和trif中都有用，但是最后一次是检测trigger数据流，所以保存的是trigger数据流的个数)</span>
+0220 <span class="keyword">if</span> stream_number &gt;= 1
+0221     disp([<span class="string">'Triggers: '</span> num2str(length(triggerif.times))]);
+0222     <span class="keyword">if</span> (isempty(triggerif.times))
+0223         <a href="../Otherbox/cprintf/cprintf.html" class="code" title="function count = cprintf(style,format,varargin)">cprintf</a>(<span class="string">'red'</span>,<span class="string">'The file has a trigger stream, but no trigger is detected. \n Maybe you had made a mistake while recording.\n'</span>);
+0224     <span class="keyword">end</span>
+0225 <span class="keyword">end</span>
+0226 
+0227 <span class="keyword">end</span>
+0228</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

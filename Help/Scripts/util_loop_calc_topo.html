@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_loop_calc_topo</title>
+  <meta name="keywords" content="util_loop_calc_topo">
+  <meta name="description" content="UTIL_LOOP_CALC_TOPO Get Topology parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Scripts -->
+<h1>util_loop_calc_topo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOOP_CALC_TOPO Get Topology parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [cc_matrix xc_matrix mi_matrix nmi_matrix bc_cc bc_xc bc_mi bc_nmi] = util_loop_calc_topo( data_filename, result_dirname, gnd ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOOP_CALC_TOPO Get Topology parameters
+util_perform_op_in_directory( 'E:\pu\Data', '[cc_matrix xc_matrix mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi bc_sync] = util_loop_calc_topo( %file, %dir, 28 )', 'F:\Pu\Ava', '*.mcd', 'cc_matrix xc_matrix mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi bc_sync', 'is_recursive', 1, 'verbose', 1, 'sorttype', 'byRecAsc' );   
+
+   Created on Apr/08/2011 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li><li><a href="../Calculation/util_get_assortativity.html" class="code" title="function A = util_get_assortativity( network_connection_matrix, varargin )">util_get_assortativity</a>	UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network</li><li><a href="../Calculation/util_get_betweenness.html" class="code" title="function bc = util_get_betweenness( network_connection_matrix, varargin )">util_get_betweenness</a>	UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network</li><li><a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [cc_matrix xc_matrix mi_matrix nmi_matrix bc_cc bc_xc bc_mi bc_nmi] = util_loop_calc_topo( data_filename, result_dirname, gnd )</a>
+0002 <span class="comment">%UTIL_LOOP_CALC_TOPO Get Topology parameters</span>
+0003 <span class="comment">%util_perform_op_in_directory( 'E:\pu\Data', '[cc_matrix xc_matrix mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi bc_sync] = util_loop_calc_topo( %file, %dir, 28 )', 'F:\Pu\Ava', '*.mcd', 'cc_matrix xc_matrix mi_matrix nmi_matrix sync_matrix bc_cc bc_xc bc_mi bc_nmi bc_sync', 'is_recursive', 1, 'verbose', 1, 'sorttype', 'byRecAsc' );</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Created on Apr/08/2011 By Pu Jiangbo</span>
+0006 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0007 
+0008 [ d, spif ] = <a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>(<span class="string">'isCompact'</span>, 1, <span class="string">'filename'</span>, data_filename);
+0009 
+0010 <span class="comment">% MATRIX</span>
+0011 <span class="comment">%[ cc_matrix ] = util_calc_corr_matrix( spif, gnd, 'threshold', 1, 'method', 'cc-hist');</span>
+0012 <span class="comment">%[ xc_matrix ] = util_calc_corr_matrix( spif, gnd, 'threshold', 1, 'method', 'cc-xcorr');</span>
+0013 <span class="comment">%[ mi_matrix ] = util_calc_corr_matrix( spif, gnd, 'threshold', 1, 'method', 'migram', 'bin', 5);</span>
+0014 [ nmi_matrix ] = <a href="../Calculation/util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>( spif, gnd, <span class="string">'threshold'</span>, 1, <span class="string">'method'</span>, <span class="string">'nmi'</span>);
+0015 
+0016 <span class="comment">%A_cc = util_get_assortativity( cc_matrix, 'thresholding', 0.1, 'thresholding_method', 'percent' );</span>
+0017 <span class="comment">%A_xc = util_get_assortativity( xc_matrix, 'thresholding', 0.1, 'thresholding_method', 'percent' );</span>
+0018 <span class="comment">%A_mi = util_get_assortativity( mi_matrix, 'thresholding', 0.1, 'thresholding_method', 'percent' );</span>
+0019 A_nmi = <a href="../Calculation/util_get_assortativity.html" class="code" title="function A = util_get_assortativity( network_connection_matrix, varargin )">util_get_assortativity</a>( nmi_matrix, <span class="string">'thresholding'</span>, 0.1, <span class="string">'thresholding_method'</span>, <span class="string">'percent'</span> );
+0020 
+0021 <span class="comment">%bc_cc = util_get_betweenness( cc_matrix, 'thresholding', 0.1, 'thresholding_method', 'percent', 'betweenness_threshold', 50 );</span>
+0022 <span class="comment">%bc_xc = util_get_betweenness( xc_matrix, 'thresholding', 0.1, 'thresholding_method', 'percent', 'betweenness_threshold', 50 );</span>
+0023 <span class="comment">%bc_mi = util_get_betweenness( mi_matrix, 'thresholding', 0.1, 'thresholding_method', 'percent', 'betweenness_threshold', 50 );</span>
+0024 bc_nmi = <a href="../Calculation/util_get_betweenness.html" class="code" title="function bc = util_get_betweenness( network_connection_matrix, varargin )">util_get_betweenness</a>( nmi_matrix, <span class="string">'thresholding'</span>, 0.1, <span class="string">'thresholding_method'</span>, <span class="string">'percent'</span>, <span class="string">'betweenness_threshold'</span>, 50 );
+0025 
+0026 cc_matrix = []; xc_matrix = []; mi_matrix = [];
+0027 A_cc = 0; A_xc = 0; A_mi = 0;
+0028 bc_cc = 0; bc_xc = 0; bc_mi = 0;
+0029 
+0030 <span class="comment">% DIV</span>
+0031 fid = fopen([fileparts(data_filename) filesep <span class="string">'culdate.txt'</span>], <span class="string">'r'</span>);
+0032 culdate = fscanf(fid, <span class="string">'%s'</span>);
+0033 fclose(fid);
+0034 DIV = fix(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d, <span class="string">'recordingdate'</span>) - datenum(culdate));
+0035 
+0036 <span class="comment">% save</span>
+0037 fid = fopen([result_dirname filesep <span class="string">'A_cc.csv'</span>], <span class="string">'a+'</span>);
+0038 fprintf(fid, <span class="string">'%f \r\n'</span>, A_cc); 
+0039 fclose(fid);
+0040 
+0041 fid = fopen([result_dirname filesep <span class="string">'A_xc.csv'</span>], <span class="string">'a+'</span>);
+0042 fprintf(fid, <span class="string">'%f \r\n'</span>, A_xc); 
+0043 fclose(fid);
+0044 
+0045 fid = fopen([result_dirname filesep <span class="string">'A_mi.csv'</span>], <span class="string">'a+'</span>);
+0046 fprintf(fid, <span class="string">'%f \r\n'</span>, A_mi); 
+0047 fclose(fid);
+0048 
+0049 fid = fopen([result_dirname filesep <span class="string">'A_nmi.csv'</span>], <span class="string">'a+'</span>);
+0050 fprintf(fid, <span class="string">'%f \r\n'</span>, A_nmi); 
+0051 fclose(fid);
+0052 
+0053 
+0054 
+0055 
+0056 
+0057 <span class="keyword">end</span>
+0058 
+0059</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

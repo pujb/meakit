@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  movie2gif -> aRGB2IND;
+
+  aRGB2IND [URL="aRGB2IND.html"];
+  movie2gif [URL="movie2gif.html"];
+}

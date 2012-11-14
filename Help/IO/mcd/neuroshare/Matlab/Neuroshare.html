@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Neuroshare</title>
+  <meta name="keywords" content="Neuroshare">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>Neuroshare
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>	ns_GetAnalogData   Retrieves analog data by index</li><li><a href="ns_GetAnalogInfo.html" class="code" title="function [ns_RESULT, nsAnalogInfo] = ns_GetAnalogInfo(hFile, EntityID);">ns_GetAnalogInfo</a>	ns_GetAnalogInfo   Retrieves information specific to analog entities</li><li><a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>	ns_GetEntityInfo   Retrieves general entity information and type</li><li><a href="ns_GetEventData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, DataSize] = ns_GetEventData(hFile, EntityID, Index);">ns_GetEventData</a>	ns_GetEventData   Retrieves event data by index</li><li><a href="ns_GetEventInfo.html" class="code" title="function [ns_RESULT, nsEventInfo] = ns_GetEventInfo(hFile, EntityID);">ns_GetEventInfo</a>	ns_GetEventInfo   Retrieves information specific to event entities</li><li><a href="ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>	ns_GetFileInfo   Retrieves file information and entity counts</li><li><a href="ns_GetLibraryInfo.html" class="code" title="function [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo();">ns_GetLibraryInfo</a>	ns_GetLibraryInfo   Get library version information</li><li><a href="ns_GetSegmentData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = ns_GetSegmentData(hFile, EntityID, Index);">ns_GetSegmentData</a>	ns_GetSegmentData   Retrieves segment data by index</li><li><a href="ns_GetSegmentInfo.html" class="code" title="function [ns_RESULT, nsSegmentInfo] = ns_GetSegmentInfo(hFile, EntityID);">ns_GetSegmentInfo</a>	ns_GetSegmentInfo   Retrieves information specific to segment entities</li><li><a href="ns_GetSegmentSourceInfo.html" class="code" title="function [ns_RESULT, nsSegmentSourceInfo] = ns_GetSegmentSourceInfo(hFile, EntityID, SourceID);">ns_GetSegmentSourceInfo</a>	ns_GetSegmentSourceInfo   Retrieves information about the sources that</li><li><a href="ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>	ns_OpenFile   Opens a neural data file</li><li><a href="ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>	ns_SetDLL   Opens a Neuroshare Shared Library (.DLL or .so) in prepearation for other work</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 examplepath = pwd
+0002 <span class="comment">% remember the current path where Neuroshare.m is located</span>
+0003 
+0004 cd <span class="string">'c:\Program Files\FIND\'</span>
+0005 <span class="comment">% or include FIND into the search path</span>
+0006 
+0007 [nsresult] = <a href="ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>(<span class="string">'nsMCDlibrary.dll'</span>)
+0008 [nsresult,info] = <a href="ns_GetLibraryInfo.html" class="code" title="function [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo();">ns_GetLibraryInfo</a>()
+0009 [nsresult, hfile] = <a href="ns_OpenFile.html" class="code" title="function [ns_RESULT, hFile] = ns_OpenFile(filename);">ns_OpenFile</a>([examplepath <span class="string">'/../ExampleMCD/NeuroshareExample.mcd'</span>])
+0010 [nsresult,info]=<a href="ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>(hfile)
+0011 
+0012 <span class="comment">% Find out about the Entity types</span>
+0013 <span class="comment">% Then read specific entity info and data</span>
+0014 
+0015 <span class="comment">% Trigger</span>
+0016 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,1)
+0017 [nsresult,event] = <a href="ns_GetEventInfo.html" class="code" title="function [ns_RESULT, nsEventInfo] = ns_GetEventInfo(hFile, EntityID);">ns_GetEventInfo</a>(hfile,1)
+0018 [nsresult,timestamp,data,datasize] = <a href="ns_GetEventData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, DataSize] = ns_GetEventData(hFile, EntityID, Index);">ns_GetEventData</a>(hfile,1,1)
+0019 
+0020 <span class="comment">% Digital data</span>
+0021 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,6)
+0022 [nsresult,analog] = <a href="ns_GetAnalogInfo.html" class="code" title="function [ns_RESULT, nsAnalogInfo] = ns_GetAnalogInfo(hFile, EntityID);">ns_GetAnalogInfo</a>(hfile,6)
+0023 [nsresult,count,data]=<a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>(hfile,6,1,entity.ItemCount);
+0024 plot(data)
+0025 
+0026 <span class="comment">% Digital event</span>
+0027 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,8)
+0028 [nsresult,event] = <a href="ns_GetEventInfo.html" class="code" title="function [ns_RESULT, nsEventInfo] = ns_GetEventInfo(hFile, EntityID);">ns_GetEventInfo</a>(hfile,8)
+0029 [nsresult,timestamp,data,datasize] = <a href="ns_GetEventData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, DataSize] = ns_GetEventData(hFile, EntityID, Index);">ns_GetEventData</a>(hfile,8,1)
+0030 
+0031 <span class="comment">% spike data</span>
+0032 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,4)
+0033 [nsresult,segment] = <a href="ns_GetSegmentInfo.html" class="code" title="function [ns_RESULT, nsSegmentInfo] = ns_GetSegmentInfo(hFile, EntityID);">ns_GetSegmentInfo</a>(hfile,4)
+0034 [nsresult, segmentsource] = <a href="ns_GetSegmentSourceInfo.html" class="code" title="function [ns_RESULT, nsSegmentSourceInfo] = ns_GetSegmentSourceInfo(hFile, EntityID, SourceID);">ns_GetSegmentSourceInfo</a>(hfile,4,1)
+0035 [nsresult,timestamp,data,samplecount,unitid] = <a href="ns_GetSegmentData.html" class="code" title="function [ns_RESULT, TimeStamp, Data, SampleCount, UnitID] = ns_GetSegmentData(hFile, EntityID, Index);">ns_GetSegmentData</a>(hfile,4,1)
+0036 plot(data)
+0037 
+0038 <span class="comment">% raw electrode data</span>
+0039 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,25)
+0040 [nsresult,analog] = <a href="ns_GetAnalogInfo.html" class="code" title="function [ns_RESULT, nsAnalogInfo] = ns_GetAnalogInfo(hFile, EntityID);">ns_GetAnalogInfo</a>(hfile,25)
+0041 [nsresult,count,data]=<a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>(hfile,25,1,entity.ItemCount);
+0042 plot(data)
+0043 
+0044 <span class="comment">% filteres data entity</span>
+0045 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,23)
+0046 [nsresult,analog] = <a href="ns_GetAnalogInfo.html" class="code" title="function [ns_RESULT, nsAnalogInfo] = ns_GetAnalogInfo(hFile, EntityID);">ns_GetAnalogInfo</a>(hfile,23)
+0047 [nsresult,count,data]=<a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>(hfile,23,1,entity.ItemCount);
+0048 plot(data)
+0049 
+0050 <span class="comment">% channel tool  data entity</span>
+0051 [nsresult,entity] = <a href="ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(hfile,2)
+0052 [nsresult,analog] = <a href="ns_GetAnalogInfo.html" class="code" title="function [ns_RESULT, nsAnalogInfo] = ns_GetAnalogInfo(hFile, EntityID);">ns_GetAnalogInfo</a>(hfile,2)
+0053 [nsresult,count,data]=<a href="ns_GetAnalogData.html" class="code" title="function [ns_RESULT, ContCount, Data] = ns_GetAnalogData(hFile, EntityID, StartIndex, IndexCount);">ns_GetAnalogData</a>(hfile,2,1,entity.ItemCount);
+0054 plot(data)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

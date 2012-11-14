@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_load_nsdll</title>
+  <meta name="keywords" content="util_load_nsdll">
+  <meta name="description" content="UTIL_LOAD_NSDLL Load the corresponding Neuroshare dll according to the filetype">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_load_nsdll
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOAD_NSDLL Load the corresponding Neuroshare dll according to the filetype</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ dllpath dllname ] = util_load_nsdll( filetype, dodisp ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOAD_NSDLL Load the corresponding Neuroshare dll according to the filetype
+   Because Neuroshare requires the path to a specific dll while reading,
+   this function simply returns the dll path according to the file type.
+   Input:
+       filetype:   MCD or RAW or SPK.
+           MCD is for Multichannel Systems' data type.
+           RAW/SPK is reserved for MEAKIT's data type.
+       dodisp:     True then the function will display the information.
+
+   Returns:
+       dllpath:    The absolute path of the dll.
+       dllname:    The name of the dll.
+
+   Created on Jun/10/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/neuroshare/Matlab/ns_GetLibraryInfo.html" class="code" title="function [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo();">ns_GetLibraryInfo</a>	ns_GetLibraryInfo   Get library version information</li><li><a href="../IO/mcd/neuroshare/Matlab/ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>	ns_SetDLL   Opens a Neuroshare Shared Library (.DLL or .so) in prepearation for other work</li><li><a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>	UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_load_raw.html" class="code" title="function [ rawif ] = util_load_raw( varargin )">util_load_raw</a>	UTIL_LOAD_RAW Get the raw data stream from a data file.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ dllpath dllname ] = util_load_nsdll( filetype, dodisp )</a>
+0002 <span class="comment">%UTIL_LOAD_NSDLL Load the corresponding Neuroshare dll according to the filetype</span>
+0003 <span class="comment">%   Because Neuroshare requires the path to a specific dll while reading,</span>
+0004 <span class="comment">%   this function simply returns the dll path according to the file type.</span>
+0005 <span class="comment">%   Input:</span>
+0006 <span class="comment">%       filetype:   MCD or RAW or SPK.</span>
+0007 <span class="comment">%           MCD is for Multichannel Systems' data type.</span>
+0008 <span class="comment">%           RAW/SPK is reserved for MEAKIT's data type.</span>
+0009 <span class="comment">%       dodisp:     True then the function will display the information.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Returns:</span>
+0012 <span class="comment">%       dllpath:    The absolute path of the dll.</span>
+0013 <span class="comment">%       dllname:    The name of the dll.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Created on Jun/10/2010 By Pu Jiangbo</span>
+0016 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0017 
+0018 <span class="comment">% Get path</span>
+0019 
+0020 <span class="keyword">if</span> strcmpi(filetype, <span class="string">'MCD'</span>)
+0021     dllpath = <span class="string">'D:\'</span>;
+0022     dllname = <span class="string">'nsMCDLibrary.dll'</span>;
+0023 <span class="keyword">elseif</span> strcmpi(filetype, <span class="string">'RAW'</span>)
+0024     disp(<span class="string">'Not yet implemented.'</span>);
+0025 <span class="keyword">elseif</span> strcmpi(filetype, <span class="string">'SPK'</span>)
+0026     disp(<span class="string">'Not yet implemented.'</span>);
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% Load Neuroshare DLL</span>
+0030 
+0031 <span class="comment">% Because ns_SetLibrary cannot receive a path with a space like this:</span>
+0032 <span class="comment">%   D:\Software Profiles\matlab\util\IO\mcd\neuroshare\nsMCDLibrary\nsMCDLibrary.dll</span>
+0033 <span class="comment">% So we have to change the current directory to the dll path, then do the</span>
+0034 <span class="comment">% loading.</span>
+0035 
+0036 current_directory = pwd;
+0037 cd(dllpath);
+0038 [nsresult] = <a href="../IO/mcd/neuroshare/Matlab/ns_SetLibrary.html" class="code" title="function [ns_RESULT] = ns_SetLibrary(filename);">ns_SetLibrary</a>(dllname);
+0039 cd(current_directory);
+0040 
+0041 <span class="comment">% Check the library</span>
+0042 <span class="keyword">if</span> nsresult ~= 0
+0043     <a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>(nsresult, true);
+0044     error(<span class="string">'Loading DLL failed.'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% Display Library Version (depends on dodisp)</span>
+0048 <span class="keyword">if</span> dodisp
+0049     [nsresult nsLibraryInfo] = <a href="../IO/mcd/neuroshare/Matlab/ns_GetLibraryInfo.html" class="code" title="function [ns_RESULT, nsLibraryInfo] = ns_GetLibraryInfo();">ns_GetLibraryInfo</a>();
+0050     <span class="keyword">if</span> nsresult ~= 0
+0051         <a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>(nsresult, true);
+0052         error(<span class="string">'Reading DLL failed.'</span>);
+0053     <span class="keyword">end</span>
+0054 
+0055     disp([<span class="string">'Successfully loaded library: '</span> dllname]);
+0056     disp([<span class="string">'v.'</span> num2str(nsLibraryInfo.LibVersionMaj) <span class="string">'.'</span> num2str(nsLibraryInfo.LibVersionMin) <span class="keyword">...</span>
+0057           <span class="string">' for API v.'</span> num2str(nsLibraryInfo.APIVersionMaj) <span class="string">'.'</span> num2str(nsLibraryInfo.APIVersionMin) <span class="keyword">...</span>
+0058           <span class="string">' on '</span> num2str(nsLibraryInfo.Time_Year) <span class="string">'/'</span> num2str(nsLibraryInfo.Time_Month) <span class="string">'/'</span> num2str(nsLibraryInfo.Time_Day)]);
+0059     disp(<span class="string">' '</span>);
+0060 <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of erange</title>
+  <meta name="keywords" content="erange">
+  <meta name="description" content="ERANGE     Shortcuts">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>erange
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ERANGE     Shortcuts</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function  [Erange,eta,Eshort,fs] = erange(CIJ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">ERANGE     Shortcuts
+
+   [Erange,eta,Eshort,fs] = erange(CIJ);
+
+   Shorcuts are central edges which significantly reduce the
+   characteristic path length in the network.
+
+   Input:      CIJ,        binary directed connection matrix
+
+   Outputs:    Erange,     range for each edge, i.e. the length of the 
+                           shortest path from i to j for edge c(i,j) AFTER
+                           the edge has been removed from the graph.
+               eta         average range for entire graph.
+               Eshort      entries are ones for shortcut edges.
+               fs          fraction of shortcuts in the graph.
+
+   Follows the treatment of 'shortcuts' by Duncan Watts
+
+
+   Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="reachdist.html" class="code" title="function  [R,D] = reachdist(CIJ)">reachdist</a>	REACHDIST      Reachability and distance matrices</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function  [Erange,eta,Eshort,fs] = erange(CIJ)</a>
+0002 <span class="comment">%ERANGE     Shortcuts</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [Erange,eta,Eshort,fs] = erange(CIJ);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Shorcuts are central edges which significantly reduce the</span>
+0007 <span class="comment">%   characteristic path length in the network.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Input:      CIJ,        binary directed connection matrix</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Outputs:    Erange,     range for each edge, i.e. the length of the</span>
+0012 <span class="comment">%                           shortest path from i to j for edge c(i,j) AFTER</span>
+0013 <span class="comment">%                           the edge has been removed from the graph.</span>
+0014 <span class="comment">%               eta         average range for entire graph.</span>
+0015 <span class="comment">%               Eshort      entries are ones for shortcut edges.</span>
+0016 <span class="comment">%               fs          fraction of shortcuts in the graph.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   Follows the treatment of 'shortcuts' by Duncan Watts</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0022 
+0023 
+0024 N = size(CIJ,1);
+0025 K = length(nonzeros(CIJ));
+0026 Erange = zeros(N,N);
+0027 [i,j] = find(CIJ==1);
+0028 
+0029 <span class="keyword">for</span> c=1:length(i)
+0030    CIJcut = CIJ;
+0031    CIJcut(i(c),j(c)) = 0;
+0032    [R,D] = <a href="reachdist.html" class="code" title="function  [R,D] = reachdist(CIJ)">reachdist</a>(CIJcut);
+0033    Erange(i(c),j(c)) = D(i(c),j(c));
+0034 <span class="keyword">end</span>;
+0035 
+0036 <span class="comment">% average range (ignore Inf)</span>
+0037 eta = sum(Erange((Erange&gt;0)&amp;(Erange&lt;Inf)))/length(Erange((Erange&gt;0)&amp;(Erange&lt;Inf)));
+0038 
+0039 <span class="comment">% Original entries of D are ones, thus entries of Erange</span>
+0040 <span class="comment">% must be two or greater.</span>
+0041 <span class="comment">% If Erange(i,j) &gt; 2, then the edge is a shortcut.</span>
+0042 <span class="comment">% 'fshort' is the fraction of shortcuts over the entire graph.</span>
+0043 
+0044 Eshort = Erange&gt;2;
+0045 fs = length(nonzeros(Eshort))/K;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

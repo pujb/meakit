@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of setfields</title>
+  <meta name="keywords" content="setfields">
+  <meta name="description" content="SETFIELDS   Set multiple fields of a structure.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>setfields
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SETFIELDS   Set multiple fields of a structure.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function ab = setfields(a, b, newfield_flag) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">SETFIELDS   Set multiple fields of a structure.
+ SETFIELDS(A,B), where A and B are structures, returns a copy of A where
+ the fields named in B have the values specified in B.  If B contains fields
+ not in A, signals an error.
+ SETFIELDS(A,B,'create') allows B to contain new fields, which are added to A.
+ SETFIELDS(A,B,'ignore') ignores new fields in B.
+
+ Examples:
+   a.a = 1
+   b.b = 2
+   setfields(a,b)   % error
+   setfields(a,b,'create')  % ans = struct('a',1,'b',2)
+   setfields(a,b,'ignore')  % ans = struct('a',1)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>	setfield - sets any field in datastream objects (datastream method)</li><li><a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../Otherbox/lightspeed/@mutable/setfield.html" class="code" title="function s = setfield(s,field,v)">setfield</a>	SETFIELD Set mutable structure field contents.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/graphics/color_plot.html" class="code" title="function color_plot(x,colors,varargin)">color_plot</a>	COLOR_PLOT    Scatterplot with colored points.</li><li><a href="../../Otherbox/lightspeed/graphics/labeled_curves.html" class="code" title="function h = labeled_curves(x,y,varargin)">labeled_curves</a>	LABELED_CURVES   Draw multiple curves in different colors with labels.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ab = setfields(a, b, newfield_flag)</a>
+0002 <span class="comment">%SETFIELDS   Set multiple fields of a structure.</span>
+0003 <span class="comment">% SETFIELDS(A,B), where A and B are structures, returns a copy of A where</span>
+0004 <span class="comment">% the fields named in B have the values specified in B.  If B contains fields</span>
+0005 <span class="comment">% not in A, signals an error.</span>
+0006 <span class="comment">% SETFIELDS(A,B,'create') allows B to contain new fields, which are added to A.</span>
+0007 <span class="comment">% SETFIELDS(A,B,'ignore') ignores new fields in B.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Examples:</span>
+0010 <span class="comment">%   a.a = 1</span>
+0011 <span class="comment">%   b.b = 2</span>
+0012 <span class="comment">%   setfields(a,b)   % error</span>
+0013 <span class="comment">%   setfields(a,b,'create')  % ans = struct('a',1,'b',2)</span>
+0014 <span class="comment">%   setfields(a,b,'ignore')  % ans = struct('a',1)</span>
+0015 
+0016 <span class="comment">% Written by Tom Minka,</span>
+0017 <span class="comment">% based on mergestruct.m by Martin Szummer and Yuan Qi.</span>
+0018 <span class="comment">% (The arguments are flipped with respect to mergestruct.)</span>
+0019 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0020 
+0021 <span class="keyword">if</span> nargin &lt; 3
+0022   newfield_flag = <span class="string">''</span>;
+0023 <span class="keyword">end</span>
+0024 ab = a;
+0025 <span class="keyword">if</span> isempty(b)
+0026   <span class="keyword">return</span>
+0027 <span class="keyword">end</span>
+0028 bfields = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(b);
+0029 <span class="keyword">switch</span> newfield_flag
+0030   <span class="keyword">case</span> <span class="string">'create'</span>
+0031     <span class="comment">% do nothing</span>
+0032   <span class="keyword">case</span> <span class="string">'ignore'</span>
+0033     existing = ismember(bfields, <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(a));
+0034     bfields = bfields(find(existing));
+0035   <span class="keyword">case</span> <span class="string">''</span>
+0036     existing = ismember(bfields, <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(a));
+0037     <span class="keyword">if</span> any(~existing)
+0038       a
+0039       b
+0040       error(<span class="string">'attempt to set non-existent fields'</span>);
+0041     <span class="keyword">end</span>
+0042   <span class="keyword">otherwise</span>
+0043     error(<span class="string">'unrecognized option'</span>);
+0044 <span class="keyword">end</span>
+0045    
+0046 <span class="keyword">for</span> i = 1:length(bfields)
+0047   ab = <a href="../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>(ab, bfields{i}, <a href="../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(b, bfields{i}));
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

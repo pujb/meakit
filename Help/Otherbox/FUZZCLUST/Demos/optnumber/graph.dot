@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  optnumber -> modvalidity;
+
+  modvalidity [URL="modvalidity.html"];
+  optnumber [URL="optnumber.html"];
+}

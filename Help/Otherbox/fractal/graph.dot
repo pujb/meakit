@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  estimate_hurst_exponent -> hurst;
+  hurst -> ar1;
+
+  RSana [URL="RSana.html"];
+  ar1 [URL="ar1.html"];
+  estimate_hurst_exponent [URL="estimate_hurst_exponent.html"];
+  genhurst [URL="genhurst.html"];
+  hurst [URL="hurst.html"];
+}

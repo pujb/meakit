@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_loadstimulation_fromxml</title>
+  <meta name="keywords" content="util_loadstimulation_fromxml">
+  <meta name="description" content="UTIL_LOADSTIMULATION_FROMXML 工具函数：从给定的XML文件中载入刺激方案">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_loadstimulation_fromxml
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_LOADSTIMULATION_FROMXML 工具函数：从给定的XML文件中载入刺激方案</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ sti_seq ] = util_loadstimulation_fromxml( filename ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_LOADSTIMULATION_FROMXML 工具函数：从给定的XML文件中载入刺激方案
+   从给定的XML文件中载入刺激方案
+   输入参数：Filename，指定的刺激方案文件，一般是由RBS生成
+   输出刺激方案结构体：sti_seq
+
+   蒲江波 2010年5月3日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [result] = parse_node_byname(node)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ sti_seq ] = util_loadstimulation_fromxml( filename )</a>
+0002 <span class="comment">%UTIL_LOADSTIMULATION_FROMXML 工具函数：从给定的XML文件中载入刺激方案</span>
+0003 <span class="comment">%   从给定的XML文件中载入刺激方案</span>
+0004 <span class="comment">%   输入参数：Filename，指定的刺激方案文件，一般是由RBS生成</span>
+0005 <span class="comment">%   输出刺激方案结构体：sti_seq</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   蒲江波 2010年5月3日</span>
+0008 
+0009 <span class="comment">% 打开XML文件</span>
+0010 xDoc = xmlread(filename);
+0011 
+0012 <span class="comment">% 获取节点</span>
+0013 all_items = xDoc.getElementsByTagName(<span class="string">'node'</span>);
+0014 
+0015 <span class="comment">% 初始化进度条</span>
+0016 h = waitbar(0, <span class="string">'Please wait...'</span>);
+0017 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,<span class="string">'Name'</span>,<span class="string">'Please wait while reading:'</span>);
+0018 
+0019 <span class="comment">% Note that the item list index is zero-based.</span>
+0020 <span class="keyword">for</span> i = 0:all_items.getLength - 1
+0021     sti_seq(i+1) = <a href="#_sub1" class="code" title="subfunction [result] = parse_node_byname(node)">parse_node_byname</a>(all_items.item(i));
+0022     waitbar(i/(all_items.getLength - 1), h, strrep(filename, <span class="string">'\'</span>, <span class="string">'\\'</span>));
+0023     <span class="comment">% strrep is used to deal with the TeX intepreter (path\string)</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% 关闭进度条</span>
+0027 close(h);
+0028 
+0029 <span class="keyword">end</span>
+0030 
+0031 <a name="_sub1" href="#_subfunctions" class="code">function [result] = parse_node_byname(node)</a>
+0032 <span class="comment">% PARSE_NODE_BYNAME 分析XML的节点，将节点中的内容作为一个结构体返回</span>
+0033 <span class="comment">%   参数：</span>
+0034 <span class="comment">%       输入：node：节点</span>
+0035 <span class="comment">%       输出：result：返回之包括节点全部信息的结构体</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%   蒲江波 2010年5月3日</span>
+0038 
+0039 
+0040 <span class="comment">%[#text:      1     11:00:34     47            400            300</span>
+0041 <span class="comment">% 3000            PN   ]</span>
+0042 <span class="comment">% getLength-1是因为这个item列表是从0开始的，所以要-1；</span>
+0043 <span class="comment">% 但是第一个是#text，属于无用信息#text。第二个有用，第三个无用，故step=2</span>
+0044 <span class="comment">% 这句可以获取所有的信息并存在结构体中，但是，不能很好的判断那些是数字型信息，哪些是字符型</span>
+0045 <span class="comment">% for i=1:2:node.getLength-1</span>
+0046     <span class="comment">% result.(char(node.getChildNodes.item(i).getNodeName)) = char(node.getChildNodes.item(i).getTextContent)</span>
+0047 <span class="comment">% end</span>
+0048 
+0049 result.index = str2num(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(1).getTextContent));
+0050 result.time = strtrim(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(3).getTextContent));
+0051 result.elec = str2num(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(5).getTextContent));
+0052 result.phase_duration = str2num(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(7).getTextContent));
+0053 result.pulse_amplitude = str2num(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(9).getTextContent));
+0054 result.inter_stimulus_interval = str2num(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(11).getTextContent));
+0055 result.shape = strtrim(<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(node.getChildNodes.item(13).getTextContent));
+0056 
+0057 <span class="keyword">end</span>
+0058</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

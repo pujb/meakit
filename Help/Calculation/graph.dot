@@ -1,0 +1,44 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  util_calc_corr_matrix -> util_calc_rate;
+  util_calc_corr_matrix -> util_calc_raw_spont_cch;
+  util_calc_corr_matrix -> util_calc_synchrony;
+  util_calc_network_vector -> util_calc_rate;
+  util_calc_pcc_from_rate -> util_calc_rate;
+  util_calc_sd_from_rate -> util_calc_rate;
+  util_calc_state_transition_rate -> util_convert_struct_2_vector_cluster;
+  util_detect_avalanche -> util_calc_network_vector;
+  util_get_fractal_DFA -> util_calc_rate;
+  util_get_fractal_dim -> util_calc_rate;
+  util_get_fractal_hurst -> util_calc_rate;
+
+  util_calc_avalanche_branching_parameter [URL="util_calc_avalanche_branching_parameter.html"];
+  util_calc_burstiness_index [URL="util_calc_burstiness_index.html"];
+  util_calc_corr_matrix [URL="util_calc_corr_matrix.html"];
+  util_calc_div_cluster [URL="util_calc_div_cluster.html"];
+  util_calc_energy [URL="util_calc_energy.html"];
+  util_calc_isi [URL="util_calc_isi.html"];
+  util_calc_network_vector [URL="util_calc_network_vector.html"];
+  util_calc_pcc_from_rate [URL="util_calc_pcc_from_rate.html"];
+  util_calc_psd [URL="util_calc_psd.html"];
+  util_calc_rate [URL="util_calc_rate.html"];
+  util_calc_raw_spont_cch [URL="util_calc_raw_spont_cch.html"];
+  util_calc_sd_from_rate [URL="util_calc_sd_from_rate.html"];
+  util_calc_similarity_matrix [URL="util_calc_similarity_matrix.html"];
+  util_calc_state_transition_rate [URL="util_calc_state_transition_rate.html"];
+  util_calc_synchrony [URL="util_calc_synchrony.html"];
+  util_calc_wavelet [URL="util_calc_wavelet.html"];
+  util_convert_struct_2_vector_cluster [URL="util_convert_struct_2_vector_cluster.html"];
+  util_detect_avalanche [URL="util_detect_avalanche.html"];
+  util_evaluate_cluster [URL="util_evaluate_cluster.html"];
+  util_extract_cluster [URL="util_extract_cluster.html"];
+  util_get_assortativity [URL="util_get_assortativity.html"];
+  util_get_betweenness [URL="util_get_betweenness.html"];
+  util_get_datapoint_potential [URL="util_get_datapoint_potential.html"];
+  util_get_fractal_DFA [URL="util_get_fractal_DFA.html"];
+  util_get_fractal_dim [URL="util_get_fractal_dim.html"];
+  util_get_fractal_hurst [URL="util_get_fractal_hurst.html"];
+  util_sub_get_sync [URL="util_sub_get_sync.html"];
+  util_sub_jaccard_index [URL="util_sub_jaccard_index.html"];
+  util_sub_normalized_dot_product [URL="util_sub_normalized_dot_product.html"];
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_normpdfln</title>
+  <meta name="keywords" content="flops_normpdfln">
+  <meta name="description" content="FLOPS_NORMPDFLN   Flops for normpdfln.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_normpdfln
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_NORMPDFLN   Flops for normpdfln.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_normpdfln(x, m, S, V) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_NORMPDFLN   Flops for normpdfln.
+ Arguments are same as normpdf.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>	FLOPS_CHOL    Flops for Cholesky decomposition.</li><li><a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>	FLOPS_DIV   Flops for division.</li><li><a href="flops_log.html" class="code" title="function f = flops_log">flops_log</a>	FLOPS_LOG    Flops for logarithm</li><li><a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>	FLOPS_MUL    Flops for real matrix multiplication.</li><li><a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>	FLOPS_SOLVE_TRI   Flops for triangular left division.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_normpdfln(x, m, S, V)</a>
+0002 <span class="comment">% FLOPS_NORMPDFLN   Flops for normpdfln.</span>
+0003 <span class="comment">% Arguments are same as normpdf.</span>
+0004 
+0005 f = 0;
+0006 <span class="keyword">if</span> nargin == 1
+0007   [d,n] = size(x);
+0008 <span class="keyword">elseif</span> isempty(m)
+0009   [d,n] = size(x);
+0010 <span class="keyword">else</span>
+0011   s = max(size(x),size(m));
+0012   d = s(1);
+0013   n = s(2);
+0014   f = f + d*n;
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">if</span> nargin &lt; 3
+0017   f = f + d*n + (d-1)*n + 2*n;
+0018   <span class="keyword">return</span>
+0019 <span class="keyword">end</span>
+0020 have_inv = 0;
+0021 <span class="keyword">if</span> nargin == 3
+0022   <span class="keyword">if</span> d == 1
+0023     f = f + (3+<a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>)*n + <a href="cols.html" class="code" title="function c = cols(x)">cols</a>(S) + (1+<a href="flops_log.html" class="code" title="function f = flops_log">flops_log</a>)*<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(S);
+0024     <span class="keyword">return</span>;
+0025   <span class="keyword">end</span>
+0026 <span class="keyword">else</span>
+0027   <span class="keyword">if</span> ischar(V)
+0028     <span class="keyword">if</span> strcmp(V,<span class="string">'inv'</span>)
+0029       have_inv = 1;
+0030     <span class="keyword">end</span>
+0031   <span class="keyword">elseif</span> ischar(S)
+0032     <span class="keyword">if</span> strcmp(S,<span class="string">'inv'</span>)
+0033       f = f + <a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>(d);
+0034       have_inv = 1;
+0035     <span class="keyword">end</span>
+0036   <span class="keyword">else</span>
+0037     f = f + <a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>(d);
+0038   <span class="keyword">end</span>
+0039 <span class="keyword">end</span>
+0040 <span class="keyword">if</span> have_inv
+0041   <span class="comment">% count flops for log(prod) instead of sum(log)</span>
+0042   f = f + <a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(d,d,n) + d-1 + <a href="flops_log.html" class="code" title="function f = flops_log">flops_log</a>;
+0043 <span class="keyword">else</span>
+0044   f = f + <a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>(d,d,n) + d-1 + <a href="flops_log.html" class="code" title="function f = flops_log">flops_log</a>;
+0045 <span class="keyword">end</span>
+0046 f = f + 1 + d*n + (d-1)*n + 2*n;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

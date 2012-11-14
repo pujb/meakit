@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fastsmooth</title>
+  <meta name="keywords" content="fastsmooth">
+  <meta name="description" content="fastsmooth(Y,w) smooths vector Y by triangular">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>fastsmooth
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>fastsmooth(Y,w) smooths vector Y by triangular</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function SmoothY=fastsmooth(Y,smoothwidth) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">  fastsmooth(Y,w) smooths vector Y by triangular smooth of width = smoothwidth. Works well with signals up to  100,000 points in length and smooth widths up to 1000 points.  Faster than tsmooth for smooth widths above 600 points. Example: fastsmooth([0 0 0 0 9 0 0 0 0],3) yields [0 0 1 2 3 2 1 0 0]  T. C. O'Haver, 2006.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="findpeaks.html" class="code" title="function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)">findpeaks</a>	function P=findpeaks(x,y,SlopeThreshold,AmpThreshold,smoothwidth,peakgroup)</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function SmoothY=fastsmooth(Y,smoothwidth)</a>
+0002 <span class="comment">%  fastsmooth(Y,w) smooths vector Y by triangular</span>
+0003 <span class="comment">% smooth of width = smoothwidth. Works well with signals up to</span>
+0004 <span class="comment">% 100,000 points in length and smooth widths up to 1000 points.</span>
+0005 <span class="comment">% Faster than tsmooth for smooth widths above 600 points.</span>
+0006 <span class="comment">% Example: fastsmooth([0 0 0 0 9 0 0 0 0],3) yields [0 0 1 2 3 2 1 0 0]</span>
+0007 <span class="comment">%  T. C. O'Haver, 2006.</span>
+0008 w=round(smoothwidth);
+0009 SumPoints=sum(Y(1:w));
+0010 s=zeros(size(Y));
+0011 halfw=round(w/2);
+0012 <span class="keyword">for</span> k=1:length(Y)-w,
+0013    s(k+halfw-1)=SumPoints;
+0014    SumPoints=SumPoints-Y(k);
+0015    SumPoints=SumPoints+Y(k+w);
+0016 <span class="keyword">end</span>
+0017 s=s./w;
+0018 SumPoints=sum(s(1:w));
+0019 SmoothY=zeros(size(s));
+0020 <span class="keyword">for</span> k=1:length(s)-w,
+0021    SmoothY(k+halfw-1)=SumPoints;
+0022    SumPoints=SumPoints-s(k);
+0023    SumPoints=SumPoints+s(k+w);
+0024 <span class="keyword">end</span>
+0025 SmoothY=SmoothY./w;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

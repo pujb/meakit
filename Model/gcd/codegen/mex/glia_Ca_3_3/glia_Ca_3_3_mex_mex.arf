@@ -1,0 +1,8 @@
+libemlrt.lib
+libut.lib
+libmwblascompat32.lib
+libmwmathutil.lib
+/export:mexFunction
+/export:glia_Ca_3_3
+/export:glia_Ca_3_3_initialize
+/export:glia_Ca_3_3_terminate

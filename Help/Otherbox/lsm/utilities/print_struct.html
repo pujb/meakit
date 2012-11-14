@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of print_struct</title>
+  <meta name="keywords" content="print_struct">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>print_struct
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function print_struct(p,b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function print_struct(p,b)</a>
+0002 
+0003 <span class="keyword">if</span> nargin&lt;2,b=<span class="string">''</span>; <span class="keyword">end</span>
+0004 
+0005 an=inputname(1);
+0006 fn=<a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(p);
+0007 [m,n]=size(p);
+0008 <span class="keyword">for</span> i=1:m
+0009   <span class="keyword">for</span> j=1:n
+0010     <span class="keyword">if</span> m&gt;1 &amp; n &gt; 1
+0011       lb=sprintf(<span class="string">'%s%s(%i,%i).'</span>,b,an,i,j);
+0012     <span class="keyword">elseif</span> m &gt; 1 | n &gt; 1
+0013       lb=sprintf(<span class="string">'%s%s(%i).'</span>,b,an,(i-1)*n+j);
+0014     <span class="keyword">else</span>
+0015        lb=sprintf(<span class="string">'%s%s.'</span>,b,an);
+0016      <span class="keyword">end</span>  
+0017     <span class="keyword">for</span> f=1:length(fn)
+0018       eval(sprintf(<span class="string">'x=p(i,j).%s;'</span>,fn{f}));
+0019       <span class="keyword">if</span> isempty(x)
+0020     <span class="comment">% fprintf('%s%s = []\n',lb,fn{f});</span>
+0021       <span class="keyword">elseif</span> isnumeric(x)
+0022     <span class="keyword">if</span> length(x(:))&gt;10
+0023       fprintf(<span class="string">'%s%s = [%ix%i double]\n'</span>,lb,fn{f},size(x,1),size(x,2));
+0024     <span class="keyword">elseif</span> length(x(:))&gt;1
+0025       fprintf(<span class="string">'%s%s = [ %g%s ]\n'</span>,lb,fn{f},x(1),sprintf(<span class="string">' %g'</span>,x(2:end)));
+0026     <span class="keyword">else</span>
+0027       fprintf(<span class="string">'%s%s = %g\n'</span>,lb,fn{f},x);
+0028     <span class="keyword">end</span>
+0029       <span class="keyword">elseif</span> isstruct(x)
+0030     eval(sprintf(<span class="string">'%s=p(i,j).%s;'</span>,fn{f},fn{f}));
+0031     l=length(fn{f});
+0032     eval(sprintf(<span class="string">'print_struct(%s,lb)'</span>,fn{f}));
+0033       <span class="keyword">end</span>
+0034     <span class="keyword">end</span>
+0035   <span class="keyword">end</span>
+0036 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

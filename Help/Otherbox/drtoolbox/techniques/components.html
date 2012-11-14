@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of components</title>
+  <meta name="keywords" content="components">
+  <meta name="description" content="COMPONENTS Finds connected components in a graph defined by a adjacency matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>components
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>COMPONENTS Finds connected components in a graph defined by a adjacency matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function blocks = components(A) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">COMPONENTS Finds connected components in a graph defined by a adjacency matrix
+
+   blocks = components(A)
+
+ Finds connected components in a graph defined by the adjacency matrix A.
+ The function outputs an n-vector of integers 1:k in blocks, meaning that
+ A has k components. The vector blocks labels the vertices of A according 
+ to component.
+ If the adjacency matrix A is undirected (i.e. symmetric), the blocks are 
+ its connected components. If the adjacency matrix A is directed (i.e. 
+ unsymmetric), the blocks are its strongly connected components.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="fastmvu.html" class="code" title="function [mappedX, mapping] = fastmvu(X, no_dims, k, finetune, eig_impl)">fastmvu</a>	FAST_MVU Runs the Fast Maximum Variance Unfolding algorithm</li><li><a href="isomap.html" class="code" title="function [mappedX, mapping] = isomap(X, no_dims, k)">isomap</a>	ISOMAP Runs the Isomap algorithm</li><li><a href="landmark_isomap.html" class="code" title="function [mappedX, mapping] = landmark_isomap(X, no_dims, k, percentage)">landmark_isomap</a>	ISOMAP Runs the Isomap algorithm</li><li><a href="laplacian_eigen.html" class="code" title="function [mappedX, mapping] = laplacian_eigen(X, no_dims, k, sigma, eig_impl)">laplacian_eigen</a>	LAPLACIAN_EIGEN Performs non-linear dimensionality reduction using Laplacian Eigenmaps</li><li><a href="lle.html" class="code" title="function [mappedX, mapping] = lle(X, no_dims, k, eig_impl)">lle</a>	LLE Runs the locally linear embedding algorithm</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function blocks = components(A)</a>
+0002 <span class="comment">%COMPONENTS Finds connected components in a graph defined by a adjacency matrix</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   blocks = components(A)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Finds connected components in a graph defined by the adjacency matrix A.</span>
+0007 <span class="comment">% The function outputs an n-vector of integers 1:k in blocks, meaning that</span>
+0008 <span class="comment">% A has k components. The vector blocks labels the vertices of A according</span>
+0009 <span class="comment">% to component.</span>
+0010 <span class="comment">% If the adjacency matrix A is undirected (i.e. symmetric), the blocks are</span>
+0011 <span class="comment">% its connected components. If the adjacency matrix A is directed (i.e.</span>
+0012 <span class="comment">% unsymmetric), the blocks are its strongly connected components.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0017 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0018 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0019 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0020 <span class="comment">% maintain the name of the original author.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0023 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0024 
+0025 
+0026     <span class="comment">% Check size of adjacency matrix</span>
+0027     [n, m] = size(A);
+0028     <span class="keyword">if</span> n ~= m, error (<span class="string">'Adjacency matrix must be square'</span>), <span class="keyword">end</span>;
+0029 
+0030     <span class="comment">% Compute Dulmage-Mendelsohn permutation on A</span>
+0031     <span class="keyword">if</span> ~all(diag(A)) 
+0032         [foo, p, bar, r] = dmperm(A | speye(size(A)));
+0033     <span class="keyword">else</span>
+0034         [foo, p, bar, r] = dmperm(A);  
+0035     <span class="keyword">end</span>
+0036 
+0037     <span class="comment">% Compute sizes and number of clusters</span>
+0038     sizes = diff(r);
+0039     k = length(sizes);
+0040 
+0041     <span class="comment">% Now compute the array blocks</span>
+0042     blocks = zeros(1, n);
+0043     blocks(r(1:k)) = ones(1, k);
+0044     blocks = cumsum(blocks);
+0045 
+0046     <span class="comment">% Permute blocks so it maps vertices of A to components</span>
+0047     blocks(p) = blocks;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

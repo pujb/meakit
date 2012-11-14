@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distance_wei</title>
+  <meta name="keywords" content="distance_wei">
+  <meta name="description" content="DISTANCE_WEI       Distance matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>distance_wei
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DISTANCE_WEI       Distance matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function D=distance_wei(G) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">DISTANCE_WEI       Distance matrix
+
+   D = distance_wei(W);
+
+   The distance matrix contains lengths of shortest paths between all
+   pairs of nodes. An entry (u,v) represents the length of shortest path 
+   from node u to node v. The average shortest path length is the 
+   characteristic path length of the network.
+
+   Input:      W,      weighted directed/undirected connection matrix
+
+   Output:     D,      distance matrix
+
+   Notes:
+       The input matrix must be a mapping from weight to distance. For 
+   instance, in a weighted correlation network, higher correlations are 
+   more naturally interpreted as shorter distances, and the input matrix 
+   should consequently be some inverse of the connectivity matrix.
+       Lengths between disconnected nodes are set to Inf.
+       Lengths on the main diagonal are set to 0.
+
+   Algorithm: Dijkstra's algorithm.
+
+
+   Mika Rubinov, UNSW, 2007-2010.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D=distance_wei(G)</a>
+0002 <span class="comment">%DISTANCE_WEI       Distance matrix</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   D = distance_wei(W);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   The distance matrix contains lengths of shortest paths between all</span>
+0007 <span class="comment">%   pairs of nodes. An entry (u,v) represents the length of shortest path</span>
+0008 <span class="comment">%   from node u to node v. The average shortest path length is the</span>
+0009 <span class="comment">%   characteristic path length of the network.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Input:      W,      weighted directed/undirected connection matrix</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Output:     D,      distance matrix</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Notes:</span>
+0016 <span class="comment">%       The input matrix must be a mapping from weight to distance. For</span>
+0017 <span class="comment">%   instance, in a weighted correlation network, higher correlations are</span>
+0018 <span class="comment">%   more naturally interpreted as shorter distances, and the input matrix</span>
+0019 <span class="comment">%   should consequently be some inverse of the connectivity matrix.</span>
+0020 <span class="comment">%       Lengths between disconnected nodes are set to Inf.</span>
+0021 <span class="comment">%       Lengths on the main diagonal are set to 0.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Algorithm: Dijkstra's algorithm.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010.</span>
+0027 
+0028 <span class="comment">%Modification history</span>
+0029 <span class="comment">%2007: original</span>
+0030 <span class="comment">%2009-08-04: min() function vectorized</span>
+0031 
+0032 n=length(G);
+0033 D=zeros(n); D(~eye(n))=inf;                 <span class="comment">%distance matrix</span>
+0034 
+0035 <span class="keyword">for</span> u=1:n
+0036     S=true(1,n);                            <span class="comment">%distance permanence (true is temporary)</span>
+0037     G1=G;
+0038     V=u;
+0039     <span class="keyword">while</span> 1
+0040         S(V)=0;                             <span class="comment">%distance u-&gt;V is now permanent</span>
+0041         G1(:,V)=0;                          <span class="comment">%no in-edges as already shortest</span>
+0042         <span class="keyword">for</span> v=V
+0043             W=find(G1(v,:));                <span class="comment">%neighbours of shortest nodes</span>
+0044             D(u,W)=min([D(u,W);D(u,v)+G1(v,W)]); <span class="comment">%smallest of old/new path lengths</span>
+0045         <span class="keyword">end</span>
+0046 
+0047         minD=min(D(u,S));
+0048         <span class="keyword">if</span> isempty(minD)||isinf(minD),      <span class="comment">%isempty: all nodes reached;</span>
+0049             <span class="keyword">break</span>,                          <span class="comment">%isinf: some nodes cannot be reached</span>
+0050         <span class="keyword">end</span>;
+0051 
+0052         V=find(D(u,:)==minD);
+0053     <span class="keyword">end</span>
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

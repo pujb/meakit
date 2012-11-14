@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_parse_para_fromstimulation</title>
+  <meta name="keywords" content="util_parse_para_fromstimulation">
+  <meta name="description" content="UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_parse_para_fromstimulation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围
+   分析刺激方案结构体，得到在该结构体中包含的刺激波形变化信息，如
+   在本文件中包含多少个刺激，在多少个电极（不重复）上施行，幅度、持续时间等方面
+   的变化范围。
+
+   输入参数：
+       stimulation：刺激方案结构体
+   输出参数：
+       n：总刺激个数
+       e：刺激涉及的电极
+       d：Phase Duration
+       a：Pulse Amplitude
+       s：Pulse Shape
+       i：Inter-stimulus Interval
+       t：Time Window [start end]
+
+   蒲江波 2010年5月4日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="process_sti_result_by_stiID_by_amplitudes.html" class="code" title="function [ analysis ] = process_sti_result_by_stiID_by_amplitudes( paraname, result, sti_id, stipro)">process_sti_result_by_stiID_by_amplitudes</a>	PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES</li><li><a href="process_sti_result_by_stiID_by_amplitudes_for_some_electrodes.html" class="code" title="function [ analysis ] = process_sti_result_by_stiID_by_amplitudes_for_some_electrodes( paraname, result, sti_id, stipro, list, isSort, sort_by_n )">process_sti_result_by_stiID_by_amplitudes_for_some_electrodes</a>	PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES_FOR_SOME_ELECTRODES 工具函数：提取部分通道的响应参数</li><li><a href="process_sti_result_by_stiID_by_amplitudes_response_per.html" class="code" title="function [ analysis ] = process_sti_result_by_stiID_by_amplitudes_response_per( result, sti_id, stipro)">process_sti_result_by_stiID_by_amplitudes_response_per</a>	PROCESS_STI_RESULT_BY_STIID_BY_AMPLITUDES</li><li><a href="util_sti_all_responses.html" class="code" title="function [ elecs responses_timing responses_amplitude ] = util_sti_all_responses( varargin )">util_sti_all_responses</a>	UTIL_STI_ALL_RESPONSES 工具函数：提取刺激后指定时间窗内所有电极的响应</li><li><a href="util_sti_responses_elictedby_one_elec.html" class="code" title="function [ result num ] = util_sti_responses_elictedby_one_elec( varargin )">util_sti_responses_elictedby_one_elec</a>	UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation )</a>
+0002 <span class="comment">%UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围</span>
+0003 <span class="comment">%   分析刺激方案结构体，得到在该结构体中包含的刺激波形变化信息，如</span>
+0004 <span class="comment">%   在本文件中包含多少个刺激，在多少个电极（不重复）上施行，幅度、持续时间等方面</span>
+0005 <span class="comment">%   的变化范围。</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   输入参数：</span>
+0008 <span class="comment">%       stimulation：刺激方案结构体</span>
+0009 <span class="comment">%   输出参数：</span>
+0010 <span class="comment">%       n：总刺激个数</span>
+0011 <span class="comment">%       e：刺激涉及的电极</span>
+0012 <span class="comment">%       d：Phase Duration</span>
+0013 <span class="comment">%       a：Pulse Amplitude</span>
+0014 <span class="comment">%       s：Pulse Shape</span>
+0015 <span class="comment">%       i：Inter-stimulus Interval</span>
+0016 <span class="comment">%       t：Time Window [start end]</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   蒲江波 2010年5月4日</span>
+0019 
+0020 <span class="comment">% Get length</span>
+0021 n = length(stimulation);
+0022 
+0023 <span class="comment">% Get time window</span>
+0024 t = [stimulation(1).time stimulation(n).time];
+0025 
+0026 <span class="comment">% Init</span>
+0027 e = [];
+0028 d = [];
+0029 a = [];
+0030 s = [];
+0031 i = [];
+0032 
+0033 <span class="keyword">for</span> j = 1:n
+0034    <span class="comment">% Make sure the current parameters are not in each list.</span>
+0035    <span class="comment">% If they are not repeated, Add into the list.</span>
+0036    <span class="keyword">if</span> (~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(stimulation(j).elec, e))
+0037        e = [e stimulation(j).elec];
+0038    <span class="keyword">end</span>
+0039 
+0040    <span class="keyword">if</span> (~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(stimulation(j).phase_duration, d))
+0041        d = [d stimulation(j).phase_duration];
+0042    <span class="keyword">end</span>
+0043    
+0044    <span class="keyword">if</span> (~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(stimulation(j).pulse_amplitude, a))
+0045        a = [a stimulation(j).pulse_amplitude];
+0046    <span class="keyword">end</span>
+0047    
+0048    <span class="keyword">if</span> (~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(stimulation(j).shape, s))
+0049        s = [s stimulation(j).shape];
+0050    <span class="keyword">end</span>
+0051    
+0052    <span class="keyword">if</span> (~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(stimulation(j).inter_stimulus_interval, i))
+0053        i = [i stimulation(j).inter_stimulus_interval];
+0054    <span class="keyword">end</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 e = sort(e);
+0058 d = sort(d);
+0059 a = sort(a);
+0060 s = sort(s);
+0061 i = sort(i);
+0062 
+0063 
+0064 <span class="keyword">end</span>
+0065</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

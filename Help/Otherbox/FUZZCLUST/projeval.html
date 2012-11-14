@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of projeval</title>
+  <meta name="keywords" content="projeval">
+  <meta name="description" content="function perf =projeval(x,v,m,c,f)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>projeval
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function perf =projeval(x,v,m,c,f)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function perf = projeval(result,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">function perf =projeval(x,v,m,c,f)
+projeval(result.PCAproj.P,result.PCAproj.vp,param.m,param.c,result.data.f);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/FUZZCLUST/Demos/PCAexample/PCAexample.html" class="code" title="">PCAexample</a>	generate PCA example</li><li><a href="../../Otherbox/FUZZCLUST/Demos/projection/visual_call.html" class="code" title="">visual_call</a>	Calling function of the visualization functions</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%function perf =projeval(x,v,m,c,f)</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function perf = projeval(result,param)</a>
+0003 <span class="comment">%projeval(result.PCAproj.P,result.PCAproj.vp,param.m,param.c,result.data.f);</span>
+0004 x = result.proj.P;
+0005 v = result.proj.vp;
+0006 m = param.m;
+0007 c = param.c;
+0008 f = result.data.f;
+0009 
+0010 <span class="comment">%calculation of the membership</span>
+0011  <span class="keyword">for</span> j = 1 : c,                        <span class="comment">% for all clusters</span>
+0012     xv = x - ones(length(x),1)*v(j,:);
+0013     d(:,j) = sum((xv*eye(2).*xv),2);
+0014  <span class="keyword">end</span>;
+0015  d = (d+1e-10).^(-1/(m-1));
+0016  f0 = (d ./ (sum(d,2)*ones(1,c)));
+0017  ff=f0;
+0018  
+0019  perf=[mean(sqrt((ff(:)-f(:)).^2)) sum(mean(f.*f)) sum(mean(ff.*ff))];
+0020 
+0021  
+0022 <span class="comment">%[X,Y] = meshgrid(-4:.1:4, -4:.1:4);</span>
+0023 lower1=min(x(:,1));upper1=max(x(:,1));scale1=(upper1-lower1)/200;
+0024     lower2=min(x(:,2));upper2=max(x(:,2));scale2=(upper2-lower2)/200;
+0025     [X,Y] = meshgrid(lower1:scale1:upper1, lower2:scale2:upper2);
+0026 x=[X(:) Y(:)];
+0027 d=[];
+0028 <span class="comment">%calculation of the membership</span>
+0029  <span class="keyword">for</span> j = 1 : c,                        <span class="comment">% for all clusters</span>
+0030     xv = x - ones(length(x),1)*v(j,:);
+0031     d(:,j) = sum((xv*eye(2).*xv),2);
+0032  <span class="keyword">end</span>;
+0033  d = (d+1e-10).^(-1/(m-1));
+0034  f0 = (d ./ (sum(d,2)*ones(1,c)));
+0035  ff=f0;
+0036  f=max(ff')';
+0037 F= reshape(f,size(X,1),size(X,2));
+0038 hold on
+0039 contour(X,Y,F);
+0040 
+0041</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

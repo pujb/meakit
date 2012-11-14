@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_synchrony</title>
+  <meta name="keywords" content="util_calc_synchrony">
+  <meta name="description" content="UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_synchrony
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ Q q Qn qn ] = util_calc_synchrony( spif, chlist, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels
+   Input:
+           spif:       Spike information structure
+           chlist:     'all' - All channels
+                       [11 22 ... 88] - Selected channels, must &gt;= 2
+           method:     'single' - just calc chlist(1) to chlist(2), useful
+                                  for being called by another function
+                                  like util_calc_corr_matrix. if at this
+                                  mode, progress bar and verbose
+                                  information will not shown.
+                       'matrix' - calc all values between, default.
+           GND:        [11 22 ...] - A list of grounding channels
+                       default: []
+           do_n:       if true, calc time resolved variants of Q/q.
+                       default: false
+   Output:
+           Q/q/Qn/qn, please refer to [PRE] P. Grassberger et. al. (2002)
+           Q:          [0,1]. 1 = Fully synchronized.
+           q:          [-1,1]. 1:means a always precede b.
+           Qn:         Time resolved variants of Q.
+           qn:         Time resolved variants of q.
+
+   Format:
+           1   2  
+       a a-&gt;1 a-&gt;2
+       b b-&gt;1 b-&gt;2
+
+   Created on Nov/06/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-11-08  Bug fix and adding mymin() to speed up.
+       PJB#2011-04-03  Speed up mymin() again, speed up x ~3.
+       PJB#2011-05-16  Make MEX of mymin &amp; get_sync, speed up x ~6.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>	UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function x1 = mymin(x1, x2, x3, x4)</a></li><li><a href="#_sub2" class="code">function [Q q] = get_sync(spiketimesA, spiketimesB, verbose)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ Q q Qn qn ] = util_calc_synchrony( spif, chlist, varargin )</a>
+0002 <span class="comment">%UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%           spif:       Spike information structure</span>
+0005 <span class="comment">%           chlist:     'all' - All channels</span>
+0006 <span class="comment">%                       [11 22 ... 88] - Selected channels, must &gt;= 2</span>
+0007 <span class="comment">%           method:     'single' - just calc chlist(1) to chlist(2), useful</span>
+0008 <span class="comment">%                                  for being called by another function</span>
+0009 <span class="comment">%                                  like util_calc_corr_matrix. if at this</span>
+0010 <span class="comment">%                                  mode, progress bar and verbose</span>
+0011 <span class="comment">%                                  information will not shown.</span>
+0012 <span class="comment">%                       'matrix' - calc all values between, default.</span>
+0013 <span class="comment">%           GND:        [11 22 ...] - A list of grounding channels</span>
+0014 <span class="comment">%                       default: []</span>
+0015 <span class="comment">%           do_n:       if true, calc time resolved variants of Q/q.</span>
+0016 <span class="comment">%                       default: false</span>
+0017 <span class="comment">%   Output:</span>
+0018 <span class="comment">%           Q/q/Qn/qn, please refer to [PRE] P. Grassberger et. al. (2002)</span>
+0019 <span class="comment">%           Q:          [0,1]. 1 = Fully synchronized.</span>
+0020 <span class="comment">%           q:          [-1,1]. 1:means a always precede b.</span>
+0021 <span class="comment">%           Qn:         Time resolved variants of Q.</span>
+0022 <span class="comment">%           qn:         Time resolved variants of q.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   Format:</span>
+0025 <span class="comment">%           1   2</span>
+0026 <span class="comment">%       a a-&gt;1 a-&gt;2</span>
+0027 <span class="comment">%       b b-&gt;1 b-&gt;2</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   Created on Nov/06/2010 By Pu Jiangbo</span>
+0030 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%   $Revision:</span>
+0033 <span class="comment">%       PJB#2010-11-08  Bug fix and adding mymin() to speed up.</span>
+0034 <span class="comment">%       PJB#2011-04-03  Speed up mymin() again, speed up x ~3.</span>
+0035 <span class="comment">%       PJB#2011-05-16  Make MEX of mymin &amp; get_sync, speed up x ~6.</span>
+0036 
+0037 <span class="comment">% Please note, do_n,qn,Qn have not implemented.</span>
+0038 
+0039 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0040 
+0041 <span class="keyword">if</span> ~exist(<span class="string">'GND'</span>, <span class="string">'var'</span>)
+0042     GND = [];
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> ~exist(<span class="string">'do_n'</span>, <span class="string">'var'</span>)
+0046     do_n = false;
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">if</span> ~exist(<span class="string">'method'</span>, <span class="string">'var'</span>)
+0050     method = <span class="string">'matrix'</span>;
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> strcmpi(method, <span class="string">'single'</span>)
+0054     <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a> = 0;
+0055 <span class="keyword">else</span>
+0056     <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a> = 1;
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% Check chlist then convert it into hw format</span>
+0060 <span class="keyword">if</span> ischar(chlist)
+0061     <span class="keyword">if</span> strcmpi(chlist, <span class="string">'all'</span>)
+0062         chlist = (1:64);
+0063     <span class="keyword">else</span>
+0064         error(<span class="string">'Wrong format of CHLIST.'</span>);
+0065     <span class="keyword">end</span>
+0066 <span class="keyword">else</span>
+0067     chlist = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(chlist);
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">% Remove GND(s)</span>
+0071 GND = unique([GND 11 88 18 81]);
+0072 GND = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(GND);
+0073 <span class="keyword">for</span> i = 1:length(GND)
+0074     chlist(chlist == GND(i)) = [];
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">% Check channel number</span>
+0078 <span class="keyword">if</span> length(chlist) &lt; 2
+0079     error(<span class="string">'Too few channels.'</span>)
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0083     disp(<span class="string">'Selected electrodes:'</span>)
+0084     disp(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist))
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">if</span> strcmpi(method, <span class="string">'single'</span>)
+0088     <span class="comment">% Just calc one pair, from chlist(1) to (2)</span>
+0089     spiketimesA = spif.spiketimes{chlist(1)};
+0090     spiketimesB = spif.spiketimes{chlist(2)};
+0091     [Q q] = util_sub_get_sync_mex(spiketimesA, spiketimesB);
+0092     Qn = []; qn = [];   <span class="comment">% not yet implemented</span>
+0093 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'matrix'</span>)
+0094     <span class="comment">% Init (-99 to init all Q, then we know if Q~=-99, this Q has existed)</span>
+0095     Q = ones(length(chlist), length(chlist)) * -99;
+0096     q = zeros(length(chlist), length(chlist));
+0097     Qn = []; qn = [];   <span class="comment">% not yet implemented</span>
+0098     
+0099     <span class="comment">% Loop</span>
+0100     <span class="keyword">for</span> chA = 1:length(chlist)
+0101         spiketimesA = spif.spiketimes{chlist(chA)};
+0102         
+0103         <span class="keyword">for</span> chB = 1:length(chlist)
+0104             <span class="comment">% Check if checking itself</span>
+0105             <span class="keyword">if</span> chA == chB
+0106                 Q(chA, chB) = 1;
+0107                 q(chA, chB) = 0;
+0108                 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0109                     disp([<span class="string">'Between '</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist(chA))) <span class="string">' &amp; '</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist(chB))) <span class="string">':'</span>])
+0110                     fprintf(<span class="string">'\t ... Automatically = 1.\n'</span>);
+0111                 <span class="keyword">end</span>
+0112                 <span class="keyword">continue</span>;
+0113             <span class="keyword">end</span>
+0114             <span class="comment">% Check if checking symmetrical pairs</span>
+0115             <span class="keyword">if</span> Q(chB, chA) ~= -99
+0116                 Q(chA, chB) = Q(chB, chA);
+0117                 q(chA, chB) = -1 * q(chB, chA);
+0118                 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0119                     disp([<span class="string">'Between '</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist(chA))) <span class="string">' &amp; '</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist(chB))) <span class="string">':'</span>])
+0120                     fprintf(<span class="string">'\t ... Automatically get the value.\n'</span>);
+0121                 <span class="keyword">end</span>
+0122                 <span class="keyword">continue</span>;
+0123             <span class="keyword">end</span>
+0124             
+0125             <span class="comment">% J-ij</span>
+0126             <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0127                 disp([<span class="string">'Between '</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist(chA))) <span class="string">' &amp; '</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(chlist(chB))) <span class="string">':'</span>])
+0128                 fprintf(<span class="string">'\t ... '</span>);
+0129             <span class="keyword">end</span>
+0130             spiketimesB = spif.spiketimes{chlist(chB)};
+0131             [Qi qi] = util_sub_get_sync_mex(spiketimesA, spiketimesB);
+0132             
+0133             <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0134                 fprintf(<span class="string">'Done.\n'</span>);
+0135             <span class="keyword">end</span>
+0136             
+0137             Q(chA, chB) = Qi;
+0138             q(chA, chB) = qi;
+0139         <span class="keyword">end</span>
+0140     <span class="keyword">end</span>
+0141 <span class="keyword">end</span>
+0142 
+0143 
+0144 
+0145 <span class="keyword">end</span>
+0146 
+0147 <span class="comment">% This is replaced by mymin in (util_sub_get_sync_mex)</span>
+0148 <a name="_sub1" href="#_subfunctions" class="code">function x1 = mymin(x1, x2, x3, x4)</a>
+0149 <span class="comment">% Use for speeding up the searching of min</span>
+0150 <span class="comment">% Only support length(x) = 4</span>
+0151 <span class="comment">% Pu Jiangbo 2010-11-8</span>
+0152 <span class="comment">% Pu Jiangbo 2011-4-3: Speedup by not using [].</span>
+0153 <span class="keyword">if</span> x1 &gt; x2
+0154     x1 = x2;
+0155 <span class="keyword">end</span>
+0156 <span class="keyword">if</span> x3 &gt; x4
+0157     x3 = x4;
+0158 <span class="keyword">end</span>
+0159 <span class="keyword">if</span> x1 &gt; x3
+0160     x1 = x3;
+0161 <span class="keyword">end</span>
+0162 <span class="keyword">end</span>
+0163 
+0164 <span class="comment">% This is replaced by util_sub_get_sync_mex</span>
+0165 <span class="comment">% But this version keeps the ability to output a progress info. &quot;verbose&quot;</span>
+0166 <a name="_sub2" href="#_subfunctions" class="code">function [Q q] = get_sync(spiketimesA, spiketimesB, verbose)</a>
+0167 <span class="comment">%GET_SYNC The core calculation part.</span>
+0168 <span class="comment">% Pu Jiangbo 2010-11-8 Original</span>
+0169 <span class="comment">% Pu Jiangbo 2011-04-2 Extract this part into a sub-function</span>
+0170 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0171     fprintf(<span class="string">'\t C(x|y)... '</span>);
+0172 <span class="keyword">end</span>
+0173 nx = length(spiketimesA);
+0174 ny = length(spiketimesB);
+0175 <span class="comment">% loop for c_x|y</span>
+0176 cxy = 0;    progress = 0;
+0177 <span class="keyword">for</span> x = 1:nx
+0178     <span class="keyword">if</span> x == 1
+0179         x_t_m1 = 0;
+0180     <span class="keyword">else</span>
+0181         x_t_m1 = spiketimesA(x - 1);
+0182     <span class="keyword">end</span>
+0183     <span class="keyword">if</span> x == nx
+0184         x_t_p1 = spiketimesA(end);
+0185     <span class="keyword">else</span>
+0186         x_t_p1 = spiketimesA(x + 1);
+0187     <span class="keyword">end</span>
+0188     x_t = spiketimesA(x);
+0189     <span class="keyword">for</span> y = 1:ny
+0190         <span class="keyword">if</span> y == 1
+0191             y_t_m1 = 0;
+0192         <span class="keyword">else</span>
+0193             y_t_m1 = spiketimesB(y - 1);
+0194         <span class="keyword">end</span>
+0195         <span class="keyword">if</span> y == ny
+0196             y_t_p1 = spiketimesB(end);
+0197         <span class="keyword">else</span>
+0198             y_t_p1 = spiketimesB(y + 1);
+0199         <span class="keyword">end</span>
+0200         y_t = spiketimesB(y);
+0201         <span class="comment">% Determine Tau</span>
+0202         tau = <a href="#_sub1" class="code" title="subfunction x1 = mymin(x1, x2, x3, x4)">mymin</a>( x_t_p1-x_t, x_t-x_t_m1, y_t_p1-y_t, y_t-y_t_m1 ) / 2;
+0203         <span class="comment">% Determine J-ij</span>
+0204         <span class="keyword">if</span> (x_t - y_t) &gt; 0 &amp;&amp; (x_t - y_t) &lt; tau
+0205             cxy = cxy + 1;
+0206         <span class="keyword">elseif</span> x_t == y_t
+0207             cxy = cxy + 0.5;
+0208         <span class="keyword">end</span>
+0209     <span class="keyword">end</span>
+0210     <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0211         <span class="comment">% Progress</span>
+0212         <span class="keyword">if</span> ~mod(fix(10 * (x / nx)) * 10, 10) &amp;&amp; fix(10 * (x / nx)) * 10 ~= progress
+0213             progress = fix(10 * (x / nx)) * 10;
+0214             <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(progress);
+0215         <span class="keyword">end</span>
+0216     <span class="keyword">end</span>
+0217 <span class="keyword">end</span>
+0218 <span class="comment">% loop end c_x|y</span>
+0219 
+0220 <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0221     fprintf(<span class="string">'\t C(y|x)... '</span>);
+0222 <span class="keyword">end</span>
+0223 <span class="comment">% loop for c_y|x</span>
+0224 cyx = 0;    progress = 0;
+0225 <span class="keyword">for</span> y = 1:ny
+0226     <span class="keyword">if</span> y == 1
+0227         y_t_m1 = 0;
+0228     <span class="keyword">else</span>
+0229         y_t_m1 = spiketimesB(y - 1);
+0230     <span class="keyword">end</span>
+0231     <span class="keyword">if</span> y == ny
+0232         y_t_p1 = spiketimesB(end);
+0233     <span class="keyword">else</span>
+0234         y_t_p1 = spiketimesB(y + 1);
+0235     <span class="keyword">end</span>
+0236     y_t = spiketimesB(y);
+0237     <span class="keyword">for</span> x = 1:nx
+0238         <span class="keyword">if</span> x == 1
+0239             x_t_m1 = 0;
+0240         <span class="keyword">else</span>
+0241             x_t_m1 = spiketimesA(x - 1);
+0242         <span class="keyword">end</span>
+0243         <span class="keyword">if</span> x == nx
+0244             x_t_p1 = spiketimesA(end);
+0245         <span class="keyword">else</span>
+0246             x_t_p1 = spiketimesA(x + 1);
+0247         <span class="keyword">end</span>
+0248         x_t = spiketimesA(x);
+0249         <span class="comment">% Determine Tau</span>
+0250         tau = <a href="#_sub1" class="code" title="subfunction x1 = mymin(x1, x2, x3, x4)">mymin</a>( x_t_p1-x_t, x_t-x_t_m1, y_t_p1-y_t, y_t-y_t_m1 ) / 2;
+0251         <span class="comment">% Determine J-ij</span>
+0252         <span class="keyword">if</span> (y_t - x_t) &gt; 0 &amp;&amp; (y_t - x_t) &lt; tau
+0253             cyx = cyx + 1;
+0254         <span class="keyword">elseif</span> x_t == y_t
+0255             cyx = cyx + 0.5;
+0256         <span class="keyword">end</span>
+0257     <span class="keyword">end</span>
+0258     
+0259     <span class="keyword">if</span> <a href="../Otherbox/lsm/utilities/verbose.html" class="code" title="function verbose(varargin)">verbose</a>
+0260         <span class="comment">% Progress</span>
+0261         <span class="keyword">if</span> ~mod(fix(10 * (y / ny)) * 10, 10) &amp;&amp; fix(10 * (y / ny)) * 10 ~= progress
+0262             progress = fix(10 * (y / ny)) * 10;
+0263             <a href="../Common/util_show_progress_rounding.html" class="code" title="function [] = util_show_progress_rounding( percent )    %#codegen">util_show_progress_rounding</a>(progress);
+0264         <span class="keyword">end</span>
+0265     <span class="keyword">end</span>
+0266 <span class="keyword">end</span>
+0267 <span class="comment">% loop end c_x|y</span>
+0268 
+0269 Q = (cxy + cyx) / sqrt(nx * ny);
+0270 q = (cyx - cxy) / sqrt(nx * ny);
+0271 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

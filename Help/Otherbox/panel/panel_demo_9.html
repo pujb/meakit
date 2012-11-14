@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_9</title>
+  <meta name="keywords" content="panel_demo_9">
+  <meta name="description" content="% PANEL DEMO 9">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_9
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 9</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 9
+%
+% (a) Create an empty panel object
+% (b) Packing a grid of panels into a parent panel
+% (c) Plotting into multiple panels
+% (d) Selecting a panel using an existing axis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 9</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an empty panel object</span>
+0005 <span class="comment">%% (b) Packing a grid of panels into a parent panel</span>
+0006 <span class="comment">%% (c) Plotting into multiple panels</span>
+0007 <span class="comment">%% (d) Selecting a panel using an existing axis</span>
+0008 
+0009 <span class="comment">%% This extended usage of panel.select() was suggested by Arthur</span>
+0010 <span class="comment">%% Ward.</span>
+0011 
+0012 
+0013 
+0014 <span class="comment">%% (a)</span>
+0015 
+0016 <span class="comment">% clear or create figure and create root panel covering</span>
+0017 <span class="comment">% whole figure</span>
+0018 clf
+0019 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0020 p.fontsize = 12;
+0021 
+0022 
+0023 
+0024 <span class="comment">%% (b)</span>
+0025 
+0026 <span class="comment">% add a panel at the right hand side for the colorbar</span>
+0027 p.edge = <span class="string">'r'</span>;
+0028 p_bar = p.pack(12);
+0029 
+0030 <span class="comment">% add four more panels - note that we can pack a regular</span>
+0031 <span class="comment">% grid of panels into the remaining space of root panel &quot;p&quot;,</span>
+0032 <span class="comment">% after the bar has taken up 12% of the space at one side.</span>
+0033 p_fig = p.pack([2 2], 25, 30);
+0034 
+0035 
+0036 
+0037 <span class="comment">%% (c)</span>
+0038 
+0039 <span class="comment">% create test data</span>
+0040 L = 50;
+0041 [x, y] = meshgrid(L:-1:1);
+0042 
+0043 <span class="comment">% create axes for figure panels</span>
+0044 <span class="keyword">for</span> i = [1 2 4 3]
+0045     z = x.^2 + y.^2;
+0046     z = z / max(max(z));
+0047     <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(p_fig{i})
+0048     imagesc(z);
+0049     x = rot90(x);
+0050     y = rot90(y);
+0051     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(p_fig{i}.axis, <span class="string">'xtick'</span>, [], <span class="string">'ytick'</span>, []);
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="comment">% don't need such big margins for most of that</span>
+0055 p.axismargin = [5 5 0 0];
+0056 
+0057 
+0058 
+0059 <span class="comment">%% (d)</span>
+0060 
+0061 <span class="comment">% create a colorbar on figure</span>
+0062 c = colorbar;
+0063 
+0064 <span class="comment">% commit side panel as axis panel, using that colorbar</span>
+0065 <span class="comment">% rather than an axis it creates itself</span>
+0066 p_bar.select(c);
+0067 
+0068 <span class="comment">% reposition it a bit, since colorbar draws its ticks on the</span>
+0069 <span class="comment">% opposite side to usual - add 5mm to right-side margin</span>
+0070 p_bar.axismargin = [5 5 5 0];
+0071 
+0072 <span class="comment">% change colormap</span>
+0073 colormap hot
+0074 
+0075</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

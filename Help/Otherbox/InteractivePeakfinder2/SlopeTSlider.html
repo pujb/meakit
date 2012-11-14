@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SlopeTSlider</title>
+  <meta name="keywords" content="SlopeTSlider">
+  <meta name="description" content="Changes SlopeThreshold when the SlopeThreshold slider is moved.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>SlopeTSlider
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Changes SlopeThreshold when the SlopeThreshold slider is moved.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function SlopeTSlider(n,h) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Changes SlopeThreshold when the SlopeThreshold slider is moved.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="RedrawPeak.html" class="code" title="">RedrawPeak</a>	Redraws graph for FindPeakSliders when Peak slider is moved.</li><li><a href="findpeakslidersRedraw.html" class="code" title="function P=findpeakslidersRedraw(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth)">findpeakslidersRedraw</a>	Redraws graph for FindPeakSliders when slider are moved.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>	Interactive findpeaks script for pre-defined data in x,y.</li><li><a href="FindPeakSlidersG.html" class="code" title="">FindPeakSlidersG</a>	Interactive findpeaks script with peak-zoom feature,</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function SlopeTSlider(n,h)</a>
+0002 <span class="comment">% Changes SlopeThreshold when the SlopeThreshold slider is moved.</span>
+0003 <span class="keyword">global</span> x
+0004 <span class="keyword">global</span> y
+0005 <span class="keyword">global</span> SlopeThreshold 
+0006 <span class="keyword">global</span> AmpThreshold  
+0007 <span class="keyword">global</span> SmoothWidth
+0008 <span class="keyword">global</span> FitWidth
+0009 <span class="keyword">global</span> P
+0010 <span class="keyword">global</span> PeakNumber
+0011 
+0012 SlopeThreshold=10^n;
+0013 <span class="keyword">if</span> PeakNumber==0,
+0014     P=<a href="findpeakslidersRedraw.html" class="code" title="function P=findpeakslidersRedraw(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth)">findpeakslidersRedraw</a>(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth);
+0015 <span class="keyword">else</span>
+0016     <a href="RedrawPeak.html" class="code" title="">RedrawPeak</a>
+0017 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

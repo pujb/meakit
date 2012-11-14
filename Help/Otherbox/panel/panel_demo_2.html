@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_2</title>
+  <meta name="keywords" content="panel_demo_2">
+  <meta name="description" content="% PANEL DEMO 2">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 2</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 2
+%
+% (a) Create an empty panel object
+% (b) Packing multiple panels, using different edges
+% (c) Plotting into those panels, setting axis labels
+% (d) Control render metrics, for a specific panel</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 2</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an empty panel object</span>
+0005 <span class="comment">%% (b) Packing multiple panels, using different edges</span>
+0006 <span class="comment">%% (c) Plotting into those panels, setting axis labels</span>
+0007 <span class="comment">%% (d) Control render metrics, for a specific panel</span>
+0008 
+0009 
+0010 
+0011 <span class="comment">%% (a)</span>
+0012 
+0013 <span class="comment">% clear or create figure and create root panel covering</span>
+0014 <span class="comment">% whole figure</span>
+0015 clf
+0016 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0017 
+0018 
+0019 
+0020 <span class="comment">%% (b)</span>
+0021 
+0022 <span class="comment">% form an upper panel A and a lower panel B where A takes 30% of the</span>
+0023 <span class="comment">% available space, leaving 70% for B</span>
+0024 pA = p.pack(30);
+0025 pB = p.pack();
+0026 
+0027 <span class="comment">% form sub-panels within B</span>
+0028 pB.edge = <span class="string">'l'</span>; <span class="comment">% pack on the left edge (default is to pack on the top edge)</span>
+0029 pBA = pB.pack(25); <span class="comment">% use leftmost 25% of the space for BA</span>
+0030 pBB = pB.pack(25); <span class="comment">% use next 25% of the space for BB</span>
+0031 pBC = pB.pack(); <span class="comment">% use remaining for BC</span>
+0032 pBBA = pBC.pack(1/3); <span class="comment">% values less than 1 are assumed to be fractions rather than percentages</span>
+0033 pBBB = pBC.pack(1/3); <span class="comment">% you don't have to use the 'remainder' space</span>
+0034 pBBC = pBC.pack(1/3); <span class="comment">% here, we've used all the space explicitly anyway</span>
+0035 
+0036 
+0037 
+0038 <span class="comment">%% (c)</span>
+0039 
+0040 <span class="comment">% plot into panel</span>
+0041 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pA)
+0042 x = -100:100;
+0043 plot(x,x.^2/1000,<span class="string">'r'</span>)
+0044 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'xtick'</span>,[-75:25:75])
+0045 pA.xlabel = <span class="string">'x is great'</span>;
+0046 pA.ylabel = <span class="string">'y is better'</span>;
+0047 
+0048 <span class="comment">% plot into panel</span>
+0049 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pBA)
+0050 plot(randn(1000,3))
+0051 pBA.xlabel = <span class="string">'foo'</span>;
+0052 pBA.ylabel = <span class="string">'bar'</span>;
+0053 x = 1:10;
+0054 
+0055 <span class="comment">% plot into panel</span>
+0056 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pBB)
+0057 plot(randn(1000,3))
+0058 pBB.xlabel = <span class="string">'foo'</span>;
+0059 pBB.ylabel = <span class="string">'bar'</span>;
+0060 x = 1:10;
+0061 
+0062 <span class="comment">% plot into panel</span>
+0063 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pBBA)
+0064 plot(x,x)
+0065 pBBA.xlabel = <span class="string">'x'</span>;
+0066 pBBA.ylabel = <span class="string">'x'</span>;
+0067 
+0068 <span class="comment">% plot into panel</span>
+0069 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pBBB)
+0070 plot(x,x.^2)
+0071 pBBB.xlabel = <span class="string">'x'</span>;
+0072 pBBB.ylabel = <span class="string">'x^2'</span>;
+0073 
+0074 <span class="comment">% plot into panel</span>
+0075 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pBBC)
+0076 plot(x,x.^3)
+0077 pBBC.xlabel = <span class="string">'x'</span>;
+0078 pBBC.ylabel = <span class="string">'x^3'</span>;
+0079 
+0080 
+0081 
+0082 <span class="comment">%% (d)</span>
+0083 
+0084 <span class="comment">% need some extra margin (on my monitor, anyway!)</span>
+0085 <span class="comment">% - try it without, see what's different!</span>
+0086 pBC.parentmargin = [8 0 0 0]; <span class="comment">% panel interface is in mm, by default</span>
+0087</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

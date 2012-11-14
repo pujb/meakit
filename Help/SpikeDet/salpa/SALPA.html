@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SALPA</title>
+  <meta name="keywords" content="SALPA">
+  <meta name="description" content="SALPA Filter data with Wagenaar and Potter's SALPA algorithm.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # SpikeDet --><!-- menu.html salpa -->
+<h1>SALPA
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SALPA Filter data with Wagenaar and Potter's SALPA algorithm.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [filtData, myfit] = SALPA(data, N, rails, NPrePeg, NPostPeg, NPostFit, SalpaThresh, StimTimes) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">SALPA Filter data with Wagenaar and Potter's SALPA algorithm.
+    y = SALPA(data, N, rails, NPrePeg, NPostPeg, NPostFit, SalpaThresh, StimTimes)
+    returns the filtered signal 'y'.
+
+    Input arguments are as follows:
+       data: (samples x channels) matrix of data to filter
+       N: half-width of filter (in samples)
+       rails: 2 x channels matrix of filter's rails (negative rail in row
+           1, positive rail in row 2)
+       NPrePeg: number of samples to blank before a rail (peg)
+       NPostPeg: number of samples to blank after a rail
+       NPostFit: number of samples to blank after a successful fit (avoids
+          ringing)
+       SalpaThresh: threshold of data
+       StimTimes: list of indices at which a stim pulse occured
+
+    [filteredData, fit] = SALPA(...) returns the calculated fit in
+    addition to the filtered data.
+ 
+    Created by: John Rolston (rolston2@gmail.com)
+    Created on: June 26, 2007
+    Last modified: May 7, 2009
+    
+    Licensed under the GPL: http://www.gnu.org/licenses/gpl.txt
+
+    Thanks to Jon Erickson for help debugging.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [filtData, myfit] = SALPA(data, N, rails, NPrePeg, NPostPeg, NPostFit, SalpaThresh, StimTimes)</a>
+0002 <span class="comment">%SALPA Filter data with Wagenaar and Potter's SALPA algorithm.</span>
+0003 <span class="comment">%    y = SALPA(data, N, rails, NPrePeg, NPostPeg, NPostFit, SalpaThresh, StimTimes)</span>
+0004 <span class="comment">%    returns the filtered signal 'y'.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    Input arguments are as follows:</span>
+0007 <span class="comment">%       data: (samples x channels) matrix of data to filter</span>
+0008 <span class="comment">%       N: half-width of filter (in samples)</span>
+0009 <span class="comment">%       rails: 2 x channels matrix of filter's rails (negative rail in row</span>
+0010 <span class="comment">%           1, positive rail in row 2)</span>
+0011 <span class="comment">%       NPrePeg: number of samples to blank before a rail (peg)</span>
+0012 <span class="comment">%       NPostPeg: number of samples to blank after a rail</span>
+0013 <span class="comment">%       NPostFit: number of samples to blank after a successful fit (avoids</span>
+0014 <span class="comment">%          ringing)</span>
+0015 <span class="comment">%       SalpaThresh: threshold of data</span>
+0016 <span class="comment">%       StimTimes: list of indices at which a stim pulse occured</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    [filteredData, fit] = SALPA(...) returns the calculated fit in</span>
+0019 <span class="comment">%    addition to the filtered data.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    Created by: John Rolston (rolston2@gmail.com)</span>
+0022 <span class="comment">%    Created on: June 26, 2007</span>
+0023 <span class="comment">%    Last modified: May 7, 2009</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    Licensed under the GPL: http://www.gnu.org/licenses/gpl.txt</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    Thanks to Jon Erickson for help debugging.</span>
+0028 
+0029 n = -N:N;
+0030 T = zeros(1,7);
+0031 <span class="keyword">for</span> k = 0:6
+0032     T(k+1) = sum(n.^k);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">%setup S_kl</span>
+0036 S = zeros(4,4);
+0037 <span class="keyword">for</span> k = 0:3
+0038     <span class="keyword">for</span> l = 0:3
+0039         S(k+1,l+1) = T(k+l+1);
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> (nargout == 1)
+0044     filtData = SALPAmex4(data, N, inv(S), rails, NPrePeg, NPostPeg, NPostFit, SalpaThresh, StimTimes);
+0045 <span class="keyword">elseif</span> (nargout == 2)
+0046     [filtData, myfit] = SALPAmex4(data, N, inv(S), rails, NPrePeg, NPostPeg, NPostFit, SalpaThresh, StimTimes);
+0047 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

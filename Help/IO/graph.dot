@@ -1,0 +1,51 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  util_get_nsfile_info -> util_disp_ns_errcode;
+  util_get_nsfile_info -> util_get_nsentity_typename;
+  util_get_nsfile_info -> util_resolve_nsentity_label;
+  util_load_nsdll -> util_disp_ns_errcode;
+  util_load_nsfile -> util_disp_ns_errcode;
+  util_load_raw -> util_get_nsentity_typecode;
+  util_load_raw -> util_get_nsfile_info;
+  util_load_raw -> util_load_nsdll;
+  util_load_raw -> util_load_nsfile;
+  util_load_raw -> util_resolve_nsentity_label;
+  util_load_spike_from_mcdraw -> util_compact_spif_spikevalues;
+  util_load_spike_from_mcdraw -> util_connect_spif_spiketimes;
+  util_load_spike_from_mcdraw -> util_connect_spif_spikevalues;
+  util_load_spike_from_mcdraw -> util_find_rawstream;
+  util_load_spike_trigger_mcdstream -> util_compact_spif_spikevalues;
+  util_load_spike_trigger_mcdstream -> util_connect_spif_spiketimes;
+  util_load_spike_trigger_mcdstream -> util_connect_spif_spikevalues;
+  util_load_spike_trigger_mcdstream -> util_find_spikestream;
+  util_load_spike_trigger_mcdstream -> util_find_triggerstream;
+  util_load_spike_trigger_mcdstream_from_multiple_files -> util_connect_spif_spiketimes;
+  util_load_spike_trigger_mcdstream_from_multiple_files -> util_connect_spif_spikevalues;
+  util_load_spike_trigger_mcdstream_from_multiple_files -> util_load_spike_trigger_mcdstream;
+  util_load_spike_trigger_mcdstream_from_multiple_files -> util_sort_mcdfile_by_rectime;
+  util_print_bins_with_files -> util_sort_mcdfile_by_rectime;
+  util_rename_datafile_based_on_div -> util_sort_mcdfile_by_rectime;
+  util_sort_mcdfile_by_rectime -> util_check_two_files_are_continuous_recording;
+
+  util_check_two_files_are_continuous_recording [URL="util_check_two_files_are_continuous_recording.html"];
+  util_compact_spif_spikevalues [URL="util_compact_spif_spikevalues.html"];
+  util_connect_spif_spiketimes [URL="util_connect_spif_spiketimes.html"];
+  util_connect_spif_spikevalues [URL="util_connect_spif_spikevalues.html"];
+  util_disp_ns_errcode [URL="util_disp_ns_errcode.html"];
+  util_find_rawstream [URL="util_find_rawstream.html"];
+  util_find_spikestream [URL="util_find_spikestream.html"];
+  util_find_triggerstream [URL="util_find_triggerstream.html"];
+  util_get_nsentity_typecode [URL="util_get_nsentity_typecode.html"];
+  util_get_nsentity_typename [URL="util_get_nsentity_typename.html"];
+  util_get_nsfile_info [URL="util_get_nsfile_info.html"];
+  util_load_nsdll [URL="util_load_nsdll.html"];
+  util_load_nsfile [URL="util_load_nsfile.html"];
+  util_load_raw [URL="util_load_raw.html"];
+  util_load_spike_from_mcdraw [URL="util_load_spike_from_mcdraw.html"];
+  util_load_spike_trigger_mcdstream [URL="util_load_spike_trigger_mcdstream.html"];
+  util_load_spike_trigger_mcdstream_from_multiple_files [URL="util_load_spike_trigger_mcdstream_from_multiple_files.html"];
+  util_print_bins_with_files [URL="util_print_bins_with_files.html"];
+  util_rename_datafile_based_on_div [URL="util_rename_datafile_based_on_div.html"];
+  util_resolve_nsentity_label [URL="util_resolve_nsentity_label.html"];
+  util_sort_mcdfile_by_rectime [URL="util_sort_mcdfile_by_rectime.html"];
+}

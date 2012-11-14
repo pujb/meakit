@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of w_cohere</title>
+  <meta name="keywords" content="w_cohere">
+  <meta name="description" content="This function estimates and plots a wavelet-based magnitude-squared (MS)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html w_cohere -->
+<h1>w_cohere
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This function estimates and plots a wavelet-based magnitude-squared (MS)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function Cohere_w = w_cohere(x,y,fs_o,Dt,t_step,fs_d,w_name,Scale) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> This function estimates and plots a wavelet-based magnitude-squared (MS)
+ coherence &quot;Cohere_w&quot; between two time series &quot;x&quot; and &quot;y&quot; both sampled at
+ &quot;fs_o&quot; Hz.
+
+ Other required input parameters:
+ &quot;Dt&quot; - one half of the time interval in seconds for estimating localized
+ power spectra;
+ &quot;t_step&quot; - time step in samples at which the coherence will be evaluated;
+
+ Optional input parameters:
+ &quot;fs_d&quot; - the desired sampling frequency in Hz; used to downsample the
+ data. If not specified, the data will not be downsampled;
+ &quot;w_name&quot; - the name of a complex wavelet function to be used for the
+ decomposition. If nor given the complex Morlet 'cmor1-2' will be used;
+ &quot;Scale&quot; - maximum scale for the decomposition; it determines the lowest
+ frequency contents. If not specified, the scale from 4 (the finest details)
+ to 200 (the coarsest) will be used.
+
+ Example: 
+ x = 2.4*randn(1,200) + 1*sin(0.4+0.3*(1:200)) + 0.97*sin(0.43*(1:200));
+ y = 1.9*randn(1,200) + 0.85*sin(1.8+0.3*(1:200)) + 0.75*sin(1.3+0.43*(1:200));
+ Ch = w_cohere(x,y,100,0.005,20,100,'cmor1-2',150);
+
+ a modified version of the estimator by Li et al., 2006, &quot;Interaction
+ dynamics of neuronal populations analysed using wavelet transforms&quot;.
+
+ by Gleb Tcheslavski, gleb@vt.edu, February 2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Cohere_w = w_cohere(x,y,fs_o,Dt,t_step,fs_d,w_name,Scale)</a>
+0002 
+0003 <span class="comment">% This function estimates and plots a wavelet-based magnitude-squared (MS)</span>
+0004 <span class="comment">% coherence &quot;Cohere_w&quot; between two time series &quot;x&quot; and &quot;y&quot; both sampled at</span>
+0005 <span class="comment">% &quot;fs_o&quot; Hz.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Other required input parameters:</span>
+0008 <span class="comment">% &quot;Dt&quot; - one half of the time interval in seconds for estimating localized</span>
+0009 <span class="comment">% power spectra;</span>
+0010 <span class="comment">% &quot;t_step&quot; - time step in samples at which the coherence will be evaluated;</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Optional input parameters:</span>
+0013 <span class="comment">% &quot;fs_d&quot; - the desired sampling frequency in Hz; used to downsample the</span>
+0014 <span class="comment">% data. If not specified, the data will not be downsampled;</span>
+0015 <span class="comment">% &quot;w_name&quot; - the name of a complex wavelet function to be used for the</span>
+0016 <span class="comment">% decomposition. If nor given the complex Morlet 'cmor1-2' will be used;</span>
+0017 <span class="comment">% &quot;Scale&quot; - maximum scale for the decomposition; it determines the lowest</span>
+0018 <span class="comment">% frequency contents. If not specified, the scale from 4 (the finest details)</span>
+0019 <span class="comment">% to 200 (the coarsest) will be used.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Example:</span>
+0022 <span class="comment">% x = 2.4*randn(1,200) + 1*sin(0.4+0.3*(1:200)) + 0.97*sin(0.43*(1:200));</span>
+0023 <span class="comment">% y = 1.9*randn(1,200) + 0.85*sin(1.8+0.3*(1:200)) + 0.75*sin(1.3+0.43*(1:200));</span>
+0024 <span class="comment">% Ch = w_cohere(x,y,100,0.005,20,100,'cmor1-2',150);</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% a modified version of the estimator by Li et al., 2006, &quot;Interaction</span>
+0027 <span class="comment">% dynamics of neuronal populations analysed using wavelet transforms&quot;.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% by Gleb Tcheslavski, gleb@vt.edu, February 2010</span>
+0030 
+0031 <span class="keyword">switch</span> nargin
+0032     <span class="keyword">case</span> 7
+0033         Scale = 200;                <span class="comment">%default for the optional Scale parameter</span>
+0034     <span class="keyword">case</span> 6
+0035         Scale = 200;
+0036         w_name = <span class="string">'cmor1-2'</span>;         <span class="comment">%default wavelet name</span>
+0037     <span class="keyword">case</span> 5
+0038         Scale = 200;
+0039         w_name = <span class="string">'cmor1-2'</span>;
+0040         fs_d = fs_o;                <span class="comment">%default - no resampling</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 w_scale = 4:0.5:Scale;            <span class="comment">%scale parameter for wavelet... scale 1 is the finest (HF components); scales less than 4 contradict Nyquist-Shannon theorem</span>
+0044 t_start = 1;                <span class="comment">%the first time instance to be analyzed...</span>
+0045 
+0046 <span class="comment">% downsampling</span>
+0047 Q = round(fs_o/fs_d);            <span class="comment">%downsampling factor</span>
+0048 x = resample(x,1,Q);
+0049 y = resample(y,1,Q);
+0050 
+0051 fs = fs_o/Q;          <span class="comment">%true new sampling frequency</span>
+0052 it = 1/fs;                 <span class="comment">%sampling step (period)</span>
+0053 dt = round(Dt*fs);          <span class="comment">%a half of &quot;digital&quot; time step, samples</span>
+0054 
+0055 <span class="comment">% estimating &quot;cwt&quot;...</span>
+0056 Wx = cwt(x,w_scale,w_name);            <span class="comment">%so called cwt...</span>
+0057 Wy = cwt(y,w_scale,w_name);
+0058 
+0059 t_end = size(Wx,2)-2*dt;    <span class="comment">%the last time instance</span>
+0060 
+0061 <span class="comment">%estimating localized &quot;power spectra&quot;</span>
+0062 <span class="keyword">for</span> t_ind = t_start:t_step:t_end
+0063     wx = Wx(:,t_ind:t_ind+2*dt);              <span class="comment">%time localization of cwts'</span>
+0064     wy = Wy(:,t_ind:t_ind+2*dt);
+0065     <span class="keyword">for</span> s_ind = 1:size(wx,1)
+0066         Sxx = sum(wx(s_ind,:).*conj(wx(s_ind,:)));       <span class="comment">%the normalization by scale is omitted since non-important for soherence</span>
+0067         Syy = sum(wy(s_ind,:).*conj(wy(s_ind,:)));
+0068         Sxy = sum(wx(s_ind,:).*conj(wy(s_ind,:)));
+0069         Cohere_w((t_ind-t_start)/t_step+1,s_ind) = abs(Sxy)^2/(Sxx*Syy);
+0070     <span class="keyword">end</span>
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">% Plotting...</span>
+0074 t_scale = (t_start:t_step:t_end)/fs + Dt;       <span class="comment">%time scale</span>
+0075 f_scale = 2*fs./w_scale;                        <span class="comment">%frequency scale</span>
+0076 figure; surf(t_scale,f_scale,(Cohere_w')); colorbar; shading flat; view(2); xlim([min(t_scale), max(t_scale)]); ylim([min(f_scale), max(f_scale)])
+0077 xlabel(<span class="string">'Time localization, sec'</span>); ylabel(<span class="string">'Freqency localization, Hz'</span>); <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'ydir'</span>,<span class="string">'normal'</span>); <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gcf,<span class="string">'position'</span>,[100,500,900,300]); <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'position'</span>,[.05 .15 .86 .73])
+0078 title([<span class="string">'Wavelet-based MS coherence for time windows of '</span>,num2str(2*dt),<span class="string">' samples ('</span>, num2str(2*Dt),<span class="string">' seconds) length; spaced by '</span>,num2str(t_step),<span class="string">' samples.'</span>])</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

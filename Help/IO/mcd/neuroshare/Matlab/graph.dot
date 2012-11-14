@@ -1,0 +1,52 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  Example -> ns_CloseFile;
+  Example -> ns_GetEntityInfo;
+  Example -> ns_GetFileInfo;
+  Example -> ns_GetNeuralData;
+  Example -> ns_GetNeuralInfo;
+  Example -> ns_GetSegmentData;
+  Example -> ns_GetSegmentInfo;
+  Example -> ns_GetSegmentSourceInfo;
+  Example -> ns_OpenFile;
+  Example -> ns_SetLibrary;
+  ExampleAnalog -> ns_GetAnalogData;
+  ExampleAnalog -> ns_GetEntityInfo;
+  ExampleAnalog -> ns_GetFileInfo;
+  ExampleAnalog -> ns_OpenFile;
+  ExampleAnalog -> ns_SetLibrary;
+  Neuroshare -> ns_GetAnalogData;
+  Neuroshare -> ns_GetAnalogInfo;
+  Neuroshare -> ns_GetEntityInfo;
+  Neuroshare -> ns_GetEventData;
+  Neuroshare -> ns_GetEventInfo;
+  Neuroshare -> ns_GetFileInfo;
+  Neuroshare -> ns_GetLibraryInfo;
+  Neuroshare -> ns_GetSegmentData;
+  Neuroshare -> ns_GetSegmentInfo;
+  Neuroshare -> ns_GetSegmentSourceInfo;
+  Neuroshare -> ns_OpenFile;
+  Neuroshare -> ns_SetLibrary;
+
+  Example [URL="Example.html"];
+  ExampleAnalog [URL="ExampleAnalog.html"];
+  Neuroshare [URL="Neuroshare.html"];
+  ns_CloseFile [URL="ns_CloseFile.html"];
+  ns_GetAnalogData [URL="ns_GetAnalogData.html"];
+  ns_GetAnalogInfo [URL="ns_GetAnalogInfo.html"];
+  ns_GetEntityInfo [URL="ns_GetEntityInfo.html"];
+  ns_GetEventData [URL="ns_GetEventData.html"];
+  ns_GetEventInfo [URL="ns_GetEventInfo.html"];
+  ns_GetFileInfo [URL="ns_GetFileInfo.html"];
+  ns_GetIndexByTime [URL="ns_GetIndexByTime.html"];
+  ns_GetLastErrorMsg [URL="ns_GetLastErrorMsg.html"];
+  ns_GetLibraryInfo [URL="ns_GetLibraryInfo.html"];
+  ns_GetNeuralData [URL="ns_GetNeuralData.html"];
+  ns_GetNeuralInfo [URL="ns_GetNeuralInfo.html"];
+  ns_GetSegmentData [URL="ns_GetSegmentData.html"];
+  ns_GetSegmentInfo [URL="ns_GetSegmentInfo.html"];
+  ns_GetSegmentSourceInfo [URL="ns_GetSegmentSourceInfo.html"];
+  ns_GetTimeByIndex [URL="ns_GetTimeByIndex.html"];
+  ns_OpenFile [URL="ns_OpenFile.html"];
+  ns_SetLibrary [URL="ns_SetLibrary.html"];
+}

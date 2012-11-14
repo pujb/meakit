@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of install_lightspeed</title>
+  <meta name="keywords" content="install_lightspeed">
+  <meta name="description" content="Install_lightspeed">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>install_lightspeed
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Install_lightspeed</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">Install_lightspeed
+ Compiles mex files for the lightspeed library.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mexcompiler.html" class="code" title="function [compiler,options] = mexcompiler">mexcompiler</a>	mexcompiler returns the name of the compiler used by mex.</li><li><a href="randbinom.html" class="code" title="function r = randbinom(p, n)">randbinom</a>	RANDBINOM   Sample from a binomial distribution.</li><li><a href="randgamma.html" class="code" title="function x = randgamma(a)">randgamma</a>	RANDGAMMA   Sample from Gamma distribution</li><li><a href="randomseed.html" class="code" title="function seed = randomseed(seed)">randomseed</a>	RANDOMSEED   Get or set the random seed.</li><li><a href="sample_hist.html" class="code" title="function h = sample_hist(p, n)">sample_hist</a>	SAMPLE_HIST     Sample from a multinomial distribution.</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%Install_lightspeed</span>
+0002 <span class="comment">% Compiles mex files for the lightspeed library.</span>
+0003 
+0004 <span class="comment">% Written by Tom Minka</span>
+0005 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0006 
+0007 <span class="comment">% thanks to Kevin Murphy for suggesting this routine.</span>
+0008 <span class="comment">% thanks to Ruben Martinez-Cantin for UNDERSCORE_LAPACK_CALL</span>
+0009 
+0010 
+0011 fprintf(<span class="string">'Compiling lightspeed 2.4 mex files...\n'</span>);
+0012 fprintf(<span class="string">'Change directory to lightspeed for this to work.\n'</span>);
+0013 
+0014 <span class="comment">% Matlab version</span>
+0015 v = sscanf(version,<span class="string">'%d.%d.%*s (R%d) %*s'</span>);
+0016 <span class="comment">% v(3) is the R number</span>
+0017 <span class="comment">% could also use v(3)&gt;=13</span>
+0018 atleast65 = (v(1)&gt;6 || (v(1)==6 &amp;&amp; v(2)&gt;=5));
+0019 atleast75 = (v(1)&gt;7 || (v(1)==7 &amp;&amp; v(2)&gt;=5));
+0020 atleast76 = (v(1)&gt;7 || (v(1)==7 &amp;&amp; v(2)&gt;=6));
+0021 atleast78 = (v(1)&gt;7 || (v(1)==7 &amp;&amp; v(2)&gt;=8));
+0022 
+0023 <span class="comment">% copy matlab's original repmat.m as xrepmat.m</span>
+0024 <span class="keyword">if</span> exist(<span class="string">'xrepmat.m'</span>) ~= 2
+0025   w = fullfile(matlabroot,<span class="string">'toolbox'</span>,<span class="string">'matlab'</span>,<span class="string">'elmat'</span>,<span class="string">'repmat.m'</span>);
+0026   cmd = [<span class="string">'&quot;'</span> w <span class="string">'&quot; xrepmat.m'</span>];
+0027   <span class="keyword">if</span> ispc
+0028     system([<span class="string">'copy '</span> cmd]);
+0029   <span class="keyword">else</span>
+0030     system([<span class="string">'cp -rp '</span> cmd]);
+0031   <span class="keyword">end</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% these are done first to initialize mex</span>
+0035 mex -c flops.c -largeArrayDims
+0036 mex sameobject.c -largeArrayDims
+0037 mex int_hist.c -largeArrayDims
+0038 mex -c mexutil.c -largeArrayDims
+0039 mex -c util.c -largeArrayDims
+0040 
+0041 libdir = <span class="string">''</span>;
+0042 <span class="keyword">if</span> ispc
+0043     [compiler,options] = <a href="mexcompiler.html" class="code" title="function [compiler,options] = mexcompiler">mexcompiler</a>;
+0044     libdir = options.LIBLOC;
+0045     engmatopts = [compiler <span class="string">'engmatopts.bat'</span>];
+0046 <span class="keyword">elseif</span> ismac
+0047     options = struct;
+0048     options.COMPILER = <span class="string">'gcc-4.0'</span>;
+0049     options.COMPFLAGS = <span class="string">'-fno-common -no-cpp-precomp -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5  -fexceptions -DMX_COMPAT_32'</span>;
+0050     options.OPTIMFLAGS = <span class="string">'-O -DNDEBUG'</span>;
+0051 <span class="keyword">else</span>
+0052     options = struct;
+0053     options.COMPILER = <span class="string">'cc'</span>;
+0054     options.COMPFLAGS = <span class="string">'-fPIC'</span>;
+0055     options.OPTIMFLAGS = <span class="string">'-O'</span>;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% Routines that use LAPACK</span>
+0059 lapacklib = <span class="string">''</span>;
+0060 blaslib = <span class="string">''</span>;
+0061 flags = <span class="string">'-largeArrayDims'</span>;
+0062 <span class="keyword">if</span> ispc
+0063   <span class="keyword">if</span> strncmp(compiler,<span class="string">'MSVC'</span>,4)
+0064     <span class="keyword">if</span> atleast65
+0065       <span class="comment">% version &gt;= 6.5</span>
+0066       lapacklib = fullfile(libdir,<span class="string">'libmwlapack.lib'</span>);
+0067     <span class="keyword">end</span>
+0068   <span class="keyword">else</span>
+0069     lapacklib = fullfile(libdir,<span class="string">'libmwlapack.lib'</span>);
+0070   <span class="keyword">end</span>
+0071   <span class="keyword">if</span> atleast75
+0072     blaslib = fullfile(libdir,<span class="string">'libmwblas.lib'</span>);
+0073   <span class="keyword">end</span>
+0074   <span class="comment">%%% Paste the location of libmwlapack.lib %%%</span>
+0075   <span class="comment">%lapacklib = '';</span>
+0076   <span class="keyword">if</span> ~exist(lapacklib,<span class="string">'file'</span>)
+0077     lapacklib = <span class="string">'dtrsm.c'</span>;
+0078     fprintf(<span class="string">'libmwlapack.lib was not found.  To get additional optimizations, paste its location into install_lightspeed.m\n'</span>);
+0079   <span class="keyword">else</span>
+0080     fprintf(<span class="string">'Using the lapack library at %s\n'</span>,lapacklib);
+0081   <span class="keyword">end</span>
+0082 <span class="keyword">else</span>
+0083   <span class="comment">% in version 7.5, non-PC systems do not need to specify lapacklib,</span>
+0084   <span class="comment">% but they must use an underscore when calling lapack routines</span>
+0085   <span class="comment">% http://www.mathworks.com/access/helpdesk/help/techdoc/matlab_external/f13120.html#f45091</span>
+0086   flags = [flags <span class="string">' -DUNDERSCORE_LAPACK_CALL'</span>];
+0087   <span class="keyword">if</span> atleast76
+0088     lapacklib = <span class="string">'-lmwlapack'</span>;
+0089     blaslib = <span class="string">'-lmwblas'</span>;
+0090   <span class="keyword">end</span>
+0091 <span class="keyword">end</span>
+0092 disp([<span class="string">'mex '</span> flags <span class="string">' solve_triu.c &quot;'</span> lapacklib <span class="string">'&quot; &quot;'</span> blaslib <span class="string">'&quot;'</span>])
+0093 eval([<span class="string">'mex '</span> flags <span class="string">' solve_triu.c &quot;'</span> lapacklib <span class="string">'&quot; &quot;'</span> blaslib <span class="string">'&quot;'</span>]);
+0094 eval([<span class="string">'mex '</span> flags <span class="string">' solve_tril.c &quot;'</span> lapacklib <span class="string">'&quot; &quot;'</span> blaslib <span class="string">'&quot;'</span>]);
+0095 
+0096 <span class="keyword">if</span> ispc
+0097   <span class="comment">% Windows</span>
+0098   <span class="comment">%if exist('util.obj','file')</span>
+0099   mex addflops.c flops.obj -largeArrayDims
+0100   mex gammaln.c util.obj -largeArrayDims -outdir @double
+0101   mex digamma.c util.obj -largeArrayDims
+0102   mex trigamma.c util.obj -largeArrayDims
+0103   mex tetragamma.c util.obj -largeArrayDims
+0104     mex setnonzeros.c -largeArrayDims
+0105   <span class="keyword">if</span> strncmp(compiler,<span class="string">'MSVC'</span>,4)
+0106         <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> random.dll <a href="randomseed.html" class="code" title="function seed = randomseed(seed)">randomseed</a> <a href="randbinom.html" class="code" title="function r = randbinom(p, n)">randbinom</a> <a href="randgamma.html" class="code" title="function x = randgamma(a)">randgamma</a> <a href="sample_hist.html" class="code" title="function h = sample_hist(p, n)">sample_hist</a>
+0107     disp([<span class="string">'install_random.bat &quot;'</span> options.VSINSTALLDIR <span class="string">'&quot; '</span> options.vcvarsopts]);
+0108     system([<span class="string">'install_random.bat &quot;'</span> options.VSINSTALLDIR <span class="string">'&quot; '</span> options.vcvarsopts]);
+0109     mex randomseed.c util.obj random.lib -largeArrayDims
+0110     mex randbinom.c mexutil.obj util.obj random.lib -largeArrayDims
+0111     mex randgamma.c mexutil.obj util.obj random.lib -largeArrayDims
+0112     mex sample_hist.c util.obj random.lib -largeArrayDims
+0113   <span class="keyword">else</span>
+0114     fprintf(<span class="string">'mexcompiler is not MSVC. The randomseed() function will have no effect.'</span>);
+0115     mex randomseed.c util.obj random.c -largeArrayDims
+0116     mex randbinom.c mexutil.obj util.obj random.c -largeArrayDims
+0117     mex randgamma.c mexutil.obj util.obj random.c -largeArrayDims
+0118     mex sample_hist.c util.obj random.c -largeArrayDims
+0119   <span class="keyword">end</span>
+0120   mex repmat.c mexutil.obj -largeArrayDims
+0121   <span class="keyword">try</span>
+0122     <span class="comment">% standalone programs</span>
+0123     <span class="comment">% compilation instructions are described at:</span>
+0124     <span class="comment">% http://www.mathworks.com/access/helpdesk/help/techdoc/matlab_external/ch1_im15.html#27765</span>
+0125     <span class="keyword">if</span> atleast78
+0126             disp(<span class="string">'lightspeed''s matfile utility is not supported for this version of Matlab'</span>);
+0127         <span class="keyword">elseif</span> atleast65
+0128       <span class="comment">% -V5 is required for Matlab &gt;=6.5</span>
+0129       mex(<span class="string">'-f'</span>,engmatopts,<span class="string">'matfile.c'</span>,<span class="string">'-V5'</span>);
+0130     <span class="keyword">else</span>
+0131       mex(<span class="string">'-f'</span>,engmatopts,<span class="string">'matfile.c'</span>);
+0132     <span class="keyword">end</span>
+0133     <span class="comment">% uncomment the line below if you want to build test_flops.exe</span>
+0134     <span class="comment">% This program lets you check the flop counts on your processor.</span>
+0135     <span class="comment">% mex('-f',engmatopts,'tests/test_flops.c');</span>
+0136   <span class="keyword">catch</span>
+0137     disp(<span class="string">'Could not install the standalone programs.'</span>);
+0138     disp(lasterr)
+0139   <span class="keyword">end</span>
+0140 <span class="keyword">else</span>
+0141   <span class="comment">% UNIX</span>
+0142   mex addflops.c flops.o -largeArrayDims
+0143   mex gammaln.c util.o -lm -largeArrayDims -outdir @double
+0144   mex digamma.c util.o -lm -largeArrayDims
+0145   mex trigamma.c util.o -lm -largeArrayDims
+0146   mex tetragamma.c util.o -lm -largeArrayDims
+0147     mex setnonzeros.c -largeArrayDims
+0148   <span class="keyword">if</span> ismac
+0149     <span class="comment">% thanks to Nicholas Butko for these mac-specific lines</span>
+0150         <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> librandom.dylib <a href="randomseed.html" class="code" title="function seed = randomseed(seed)">randomseed</a> <a href="randbinom.html" class="code" title="function r = randbinom(p, n)">randbinom</a> <a href="randgamma.html" class="code" title="function x = randgamma(a)">randgamma</a> <a href="sample_hist.html" class="code" title="function h = sample_hist(p, n)">sample_hist</a>
+0151         system([options.COMPILER <span class="string">' '</span> options.COMPFLAGS <span class="string">' '</span> options.OPTIMFLAGS <span class="string">' -fPIC -c random.c; '</span> options.COMPILER <span class="string">' -dynamiclib -Wl,-install_name,`pwd`/librandom.dylib -o librandom.dylib random.o'</span>])
+0152     mex randomseed.c util.o librandom.dylib -lm -largeArrayDims
+0153     mex randbinom.c mexutil.o util.o librandom.dylib -lm -largeArrayDims
+0154     mex randgamma.c mexutil.o util.o librandom.dylib -lm -largeArrayDims
+0155     mex sample_hist.c util.o librandom.dylib -lm -largeArrayDims
+0156   <span class="keyword">else</span>
+0157     <span class="comment">% this command only works on linux</span>
+0158         <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> librandom.so <a href="randomseed.html" class="code" title="function seed = randomseed(seed)">randomseed</a> <a href="randbinom.html" class="code" title="function r = randbinom(p, n)">randbinom</a> <a href="randgamma.html" class="code" title="function x = randgamma(a)">randgamma</a> <a href="sample_hist.html" class="code" title="function h = sample_hist(p, n)">sample_hist</a>
+0159     system([options.COMPILER <span class="string">' '</span> options.COMPFLAGS <span class="string">' '</span> options.OPTIMFLAGS <span class="string">' -fPIC -c random.c; '</span> options.COMPILER <span class="string">' -shared -Wl,-E -Wl,-soname,`pwd`/librandom.so -o librandom.so random.o'</span>])
+0160     mex randomseed.c util.o librandom.so -lm -largeArrayDims
+0161     mex randbinom.c mexutil.o util.o librandom.so -lm -largeArrayDims
+0162     mex randgamma.c mexutil.o util.o librandom.so -lm -largeArrayDims
+0163     mex sample_hist.c util.o librandom.so -lm -largeArrayDims
+0164   <span class="keyword">end</span>
+0165   mex repmat.c mexutil.o -largeArrayDims
+0166   <span class="keyword">try</span>
+0167     <span class="comment">% standalone programs</span>
+0168     <span class="keyword">if</span> atleast78
+0169             disp(<span class="string">'lightspeed''s matfile utility is not supported for this version of Matlab'</span>);
+0170         <span class="keyword">elseif</span> atleast65
+0171       <span class="comment">% -V5 is required only for Matlab &gt;=6.5</span>
+0172       mex -f matopts.sh matfile.c -V5
+0173     <span class="keyword">else</span>
+0174       mex -f matopts.sh matfile.c
+0175     <span class="keyword">end</span>  
+0176     <span class="comment">% uncomment the line below if you want to build test_flops.exe</span>
+0177     <span class="comment">% This program lets you check the flop counts on your processor.</span>
+0178     <span class="comment">% mex -f matopts.sh tests/test_flops.c</span>
+0179   <span class="keyword">catch</span>
+0180     disp(<span class="string">'Could not install the standalone programs.'</span>);
+0181     disp(lasterr);
+0182     fprintf(<span class="string">'Note: if matlab cannot find matopts.sh, your installation of matlab is faulty.\nIf you get this error, don''t worry, lightspeed should still work.'</span>);
+0183   <span class="keyword">end</span>
+0184 <span class="keyword">end</span>
+0185 
+0186 addpath(genpath(pwd))
+0187 fprintf(<span class="string">'Done.\n'</span>);
+0188 fprintf(<span class="string">'Type &quot;test_lightspeed&quot; to verify the installation.\n'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

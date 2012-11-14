@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of d2p</title>
+  <meta name="keywords" content="d2p">
+  <meta name="description" content="D2P Identifies appropriate sigma's to get kk NNs up to some tolerance">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>d2p
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>D2P Identifies appropriate sigma's to get kk NNs up to some tolerance</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [P, beta] = d2p(D, u, tol) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">D2P Identifies appropriate sigma's to get kk NNs up to some tolerance 
+
+   [P, beta] = d2p(D, kk, tol)
+ 
+ Identifies the required precision (= 1 / variance^2) to obtain a Gaussian
+ kernel with a certain uncertainty for every datapoint. The desired
+ uncertainty can be specified through the perplexity u (default = 15). The
+ desired perplexity is obtained up to some tolerance that can be specified
+ by tol (default = 1e-4).
+ The function returns the final Gaussian kernel in P, as well as the 
+ employed precisions per instance in beta.
+
+
+ (C) Laurens van der Maaten, 2008
+ Maastricht University</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="tsne.html" class="code" title="function ydata = tsne(X, labels, no_dims, initial_dims, perplexity)">tsne</a>	TSNE Performs symmetric t-SNE on dataset X</li><li><a href="tsne_d.html" class="code" title="function ydata = tsne_d(D, labels, no_dims, perplexity)">tsne_d</a>	TSNE_D Performs symmetric t-SNE on the pairwise Euclidean distance matrix D</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [H, P] = Hbeta(D, beta)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [P, beta] = d2p(D, u, tol)</a>
+0002 <span class="comment">%D2P Identifies appropriate sigma's to get kk NNs up to some tolerance</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [P, beta] = d2p(D, kk, tol)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Identifies the required precision (= 1 / variance^2) to obtain a Gaussian</span>
+0007 <span class="comment">% kernel with a certain uncertainty for every datapoint. The desired</span>
+0008 <span class="comment">% uncertainty can be specified through the perplexity u (default = 15). The</span>
+0009 <span class="comment">% desired perplexity is obtained up to some tolerance that can be specified</span>
+0010 <span class="comment">% by tol (default = 1e-4).</span>
+0011 <span class="comment">% The function returns the final Gaussian kernel in P, as well as the</span>
+0012 <span class="comment">% employed precisions per instance in beta.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% (C) Laurens van der Maaten, 2008</span>
+0016 <span class="comment">% Maastricht University</span>
+0017 
+0018 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0019 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0020 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0021 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0022 <span class="comment">% maintain the name of the original author.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0025 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0026 
+0027     
+0028     <span class="keyword">if</span> ~exist(<span class="string">'u'</span>, <span class="string">'var'</span>) || isempty(u)
+0029         u = 15;
+0030     <span class="keyword">end</span>
+0031     <span class="keyword">if</span> ~exist(<span class="string">'tol'</span>, <span class="string">'var'</span>) || isempty(tol)
+0032         tol = 1e-4; 
+0033     <span class="keyword">end</span>
+0034     
+0035     <span class="comment">% Initialize some variables</span>
+0036     n = size(D, 1);                     <span class="comment">% number of instances</span>
+0037     P = zeros(n, n);                    <span class="comment">% empty probability matrix</span>
+0038     beta = ones(n, 1);                  <span class="comment">% empty precision vector</span>
+0039     logU = log(u);                      <span class="comment">% log of perplexity (= entropy)</span>
+0040 
+0041     <span class="comment">% Run over all datapoints</span>
+0042     <span class="keyword">for</span> i=1:n
+0043         
+0044         <span class="keyword">if</span> ~rem(i, 500)
+0045             disp([<span class="string">'Computed P-values '</span> num2str(i) <span class="string">' of '</span> num2str(n) <span class="string">' datapoints...'</span>]);
+0046         <span class="keyword">end</span>
+0047         
+0048         <span class="comment">% Set minimum and maximum values for precision</span>
+0049         betamin = -Inf; 
+0050         betamax = Inf;
+0051 
+0052         <span class="comment">% Compute the Gaussian kernel and entropy for the current precision</span>
+0053         [H, thisP] = <a href="#_sub1" class="code" title="subfunction [H, P] = Hbeta(D, beta)">Hbeta</a>(D(i, [1:i - 1, i + 1:end]), beta(i));
+0054         
+0055         <span class="comment">% Evaluate whether the perplexity is within tolerance</span>
+0056         Hdiff = H - logU;
+0057         tries = 0;
+0058         <span class="keyword">while</span> abs(Hdiff) &gt; tol &amp;&amp; tries &lt; 50
+0059             
+0060             <span class="comment">% If not, increase or decrease precision</span>
+0061             <span class="keyword">if</span> Hdiff &gt; 0
+0062                 betamin = beta(i);
+0063                 <span class="keyword">if</span> isinf(betamax)
+0064                     beta(i) = beta(i) * 2;
+0065                 <span class="keyword">else</span>
+0066                     beta(i) = (beta(i) + betamax) / 2;
+0067                 <span class="keyword">end</span>
+0068             <span class="keyword">else</span>
+0069                 betamax = beta(i);
+0070                 <span class="keyword">if</span> isinf(betamin) 
+0071                     beta(i) = beta(i) / 2;
+0072                 <span class="keyword">else</span>
+0073                     beta(i) = (beta(i) + betamin) / 2;
+0074                 <span class="keyword">end</span>
+0075             <span class="keyword">end</span>
+0076             
+0077             <span class="comment">% Recompute the values</span>
+0078             [H, thisP] = <a href="#_sub1" class="code" title="subfunction [H, P] = Hbeta(D, beta)">Hbeta</a>(D(i, [1:i - 1, i + 1:end]), beta(i));
+0079             Hdiff = H - logU;
+0080             tries = tries + 1;
+0081         <span class="keyword">end</span>
+0082         
+0083         <span class="comment">% Set the final row of P</span>
+0084         P(i, [1:i - 1, i + 1:end]) = thisP;
+0085     <span class="keyword">end</span>    
+0086     disp([<span class="string">'Mean value of sigma: '</span> num2str(mean(sqrt(1 ./ beta)))]);
+0087     disp([<span class="string">'Minimum value of sigma: '</span> num2str(min(sqrt(1 ./ beta)))]);
+0088     disp([<span class="string">'Maximum value of sigma: '</span> num2str(max(sqrt(1 ./ beta)))]);
+0089 <span class="keyword">end</span>
+0090     
+0091 
+0092 
+0093 <span class="comment">% Function that computes the Gaussian kernel values given a vector of</span>
+0094 <span class="comment">% squared Euclidean distances, and the precision of the Gaussian kernel.</span>
+0095 <span class="comment">% The function also computes the perplexity of the distribution.</span>
+0096 <a name="_sub1" href="#_subfunctions" class="code">function [H, P] = Hbeta(D, beta)</a>
+0097     P = exp(-D * beta);
+0098     sumP = sum(P);
+0099     H = log(sumP) + beta * sum(D .* P) / sumP;
+0100     <span class="comment">% why not: H = exp(-sum(P(P &gt; 1e-5) .* log(P(P &gt; 1e-5)))); ???</span>
+0101     P = P / sumP;
+0102 <span class="keyword">end</span>
+0103</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

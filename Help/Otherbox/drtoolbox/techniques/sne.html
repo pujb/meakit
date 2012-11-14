@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sne</title>
+  <meta name="keywords" content="sne">
+  <meta name="description" content="SNE Implementation of Stochastic Neighbor Embedding">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>sne
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SNE Implementation of Stochastic Neighbor Embedding</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Y = sne(X, d, perplexity) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">SNE Implementation of Stochastic Neighbor Embedding
+
+   mappedX = sne(X, no_dims, perplexity)
+
+ Runs the Stochastic Neighbor Embedding algorithm using a Gaussian kernel 
+ with fixed perplexity. The high-dimensional datapoints are specified by X. 
+ The target dimensionality is specified in no_dims, and the variance of 
+ the Gaussian kernel may be specified through perplexity (default = 30).
+ The function returns the embedded points in Y.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="x2p.html" class="code" title="function [P, beta] = x2p(X, u, tol)">x2p</a>	X2P Identifies appropriate sigma's to get kk NNs up to some tolerance</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Y = sne(X, d, perplexity)</a>
+0002 <span class="comment">%SNE Implementation of Stochastic Neighbor Embedding</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = sne(X, no_dims, perplexity)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Runs the Stochastic Neighbor Embedding algorithm using a Gaussian kernel</span>
+0007 <span class="comment">% with fixed perplexity. The high-dimensional datapoints are specified by X.</span>
+0008 <span class="comment">% The target dimensionality is specified in no_dims, and the variance of</span>
+0009 <span class="comment">% the Gaussian kernel may be specified through perplexity (default = 30).</span>
+0010 <span class="comment">% The function returns the embedded points in Y.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0015 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0016 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0017 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0018 <span class="comment">% maintain the name of the original author.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0021 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0022 
+0023 
+0024     <span class="keyword">if</span> ~exist(<span class="string">'d'</span>, <span class="string">'var'</span>) || isempty(d)
+0025         d = 2;
+0026     <span class="keyword">end</span>
+0027     <span class="keyword">if</span> ~exist(<span class="string">'perplexity'</span>, <span class="string">'var'</span>) || isempty(perplexity)
+0028         perplexity = 30;
+0029     <span class="keyword">end</span>
+0030 
+0031     <span class="comment">% Initialize some variables</span>
+0032     n = size(X, 1);                 <span class="comment">% number of instances</span>
+0033     eta = .05;                      <span class="comment">% learning rate</span>
+0034     max_iter = 2000;                <span class="comment">% maximum number of iterations</span>
+0035     jitter = 0.3;                   <span class="comment">% initial jitter</span>
+0036     jitter_decay = 0.99;            <span class="comment">% jitter decay</span>
+0037     momentum = 0.5;                 <span class="comment">% initial momentum</span>
+0038     final_momentum = 0.8;           <span class="comment">% final momentum</span>
+0039     mom_switch_iter = 750;          <span class="comment">% iteration where momentum changes</span>
+0040     
+0041     <span class="comment">% Initialize embedding coordinates randomly (close to origin)</span>
+0042     Y = 0.0001 * rand(n, d);
+0043     dC = zeros(n, d);
+0044     y_incs = zeros(n, d);
+0045     
+0046     <span class="comment">% Compute Gaussian kernel for high-dimensional data representation</span>
+0047     P = <a href="x2p.html" class="code" title="function [P, beta] = x2p(X, u, tol)">x2p</a>(X, perplexity, 1e-5);                                        <span class="comment">% use fixed perplexity</span>
+0048     P = max(P, eps);
+0049         
+0050     <span class="comment">% Iterating loop</span>
+0051     <span class="keyword">for</span> iter=1:max_iter
+0052 
+0053         <span class="comment">% Compute Gaussian kernel for low-dimensional data representation</span>
+0054         sum_Y = sum(Y .^ 2, 2);                                                     <span class="comment">% precomputation for pairwise distances</span>
+0055         Q = exp(-bsxfun(@plus, sum_Y, bsxfun(@plus, sum_Y', -2 * Y * Y')) ./ 2);    <span class="comment">% Gaussian probabilities</span>
+0056         Q(1:n+1:end) = 0;
+0057         Q = Q ./ repmat(sum(Q, 2), [1 n]);
+0058         Q = max(Q, eps);
+0059         
+0060         <span class="comment">% Compute cost function between P and Q</span>
+0061         <span class="keyword">if</span> ~rem(iter, 20)
+0062             costs = sum(P .* log((P + eps) ./ (Q + eps)), 2) ./ n;              <span class="comment">% division by n corrects for # of datapoints</span>
+0063             cost = sum(costs);
+0064             disp([<span class="string">'Iteration '</span> num2str(iter) <span class="string">': error is '</span> num2str(cost)]);
+0065         <span class="keyword">end</span>
+0066         
+0067         <span class="comment">% Compute gradient</span>
+0068         PQ = P - Q + P' - Q';
+0069         <span class="keyword">for</span> i=1:n
+0070             dC(i,:) = sum(bsxfun(@times, bsxfun(@minus, Y(i,:), Y), PQ(i,:)'), 1);
+0071         <span class="keyword">end</span>
+0072             
+0073         <span class="comment">% Perform the gradient search</span>
+0074         y_incs = momentum * y_incs - eta * dC;
+0075         Y = Y + y_incs;
+0076         Y = Y + jitter * randn(size(Y));
+0077         Y = bsxfun(@minus, Y, mean(Y, 1));
+0078         
+0079         <span class="comment">% Reduce jitter over time and change momentum</span>
+0080         jitter = jitter * jitter_decay;
+0081         <span class="keyword">if</span> iter == mom_switch_iter
+0082             momentum = final_momentum;
+0083         <span class="keyword">end</span>
+0084     <span class="keyword">end</span>
+0085</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

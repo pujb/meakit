@@ -1,0 +1,539 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_evaluate_cluster</title>
+  <meta name="keywords" content="util_evaluate_cluster">
+  <meta name="description" content="UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_evaluate_cluster
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering
+method and different clustering numbers.
+   Input:
+           data:   Input data.
+           method: Clustering method.
+                   'k' / 'km' / 'fcm' / 'gk' / 'gg'
+           minmax: Clustering number range. [min max] / 3.
+                   If minmax is a scalar, the program will do clustering
+                   once.
+           normal:   If true, data will be normalized. [default]: false.
+           ktimes:   It is recommended to run Kmeans / KMedoid several times to
+                     achieve the correct results. [default]:1
+   Output:
+           PC:     Partition Coefficient (PC).
+           CE:     Classification Entropy (CE).
+           SC:     Partition Index (SC).
+           S:      Separation Index (S).
+           XB:     Xie and Beni Index (XB).
+           DI:     Dunn Index (DI).
+           ADI:    Alternative Dunn Index (ADI).
+           result: Results from clustering method.
+           eval:   Results from clusteval
+
+   Example:
+           [ ~, ~, ~, ~, ~, ~, ~, result, eval ] =
+           util_evaluate_cluster(mappedX(:, 1:2), 'gk', 3);
+
+   Created on Jul/26/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>	modified validation function for clustering, it calculates all the</li><li><a href="../Otherbox/FUZZCLUST/Demos/optnumber/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>	modified validation function for clustering, it calculates all the</li><li><a href="../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>	data normalization</li><li><a href="../Otherbox/FUZZCLUST/GGclust.html" class="code" title="function result = GGclust(data,param)">GGclust</a>	checking the parameters given</li><li><a href="../Otherbox/FUZZCLUST/GKclust.html" class="code" title="function result = GKclust(data,param)">GKclust</a>	checking the parameters given</li><li><a href="../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>	checking the parameters given</li><li><a href="../Otherbox/FUZZCLUST/Kmedoid.html" class="code" title="function result=Kmedoid(data,param);">Kmedoid</a>	</li><li><a href="../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/network_states.html" class="code" title="">network_states</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function result = modvalidity(result,data,param)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)</a>
+0002 <span class="comment">%UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</span>
+0003 <span class="comment">%method and different clustering numbers.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           data:   Input data.</span>
+0006 <span class="comment">%           method: Clustering method.</span>
+0007 <span class="comment">%                   'k' / 'km' / 'fcm' / 'gk' / 'gg'</span>
+0008 <span class="comment">%           minmax: Clustering number range. [min max] / 3.</span>
+0009 <span class="comment">%                   If minmax is a scalar, the program will do clustering</span>
+0010 <span class="comment">%                   once.</span>
+0011 <span class="comment">%           normal:   If true, data will be normalized. [default]: false.</span>
+0012 <span class="comment">%           ktimes:   It is recommended to run Kmeans / KMedoid several times to</span>
+0013 <span class="comment">%                     achieve the correct results. [default]:1</span>
+0014 <span class="comment">%   Output:</span>
+0015 <span class="comment">%           PC:     Partition Coefficient (PC).</span>
+0016 <span class="comment">%           CE:     Classification Entropy (CE).</span>
+0017 <span class="comment">%           SC:     Partition Index (SC).</span>
+0018 <span class="comment">%           S:      Separation Index (S).</span>
+0019 <span class="comment">%           XB:     Xie and Beni Index (XB).</span>
+0020 <span class="comment">%           DI:     Dunn Index (DI).</span>
+0021 <span class="comment">%           ADI:    Alternative Dunn Index (ADI).</span>
+0022 <span class="comment">%           result: Results from clustering method.</span>
+0023 <span class="comment">%           eval:   Results from clusteval</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   Example:</span>
+0026 <span class="comment">%           [ ~, ~, ~, ~, ~, ~, ~, result, eval ] =</span>
+0027 <span class="comment">%           util_evaluate_cluster(mappedX(:, 1:2), 'gk', 3);</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   Created on Jul/26/2010 By Pu Jiangbo</span>
+0030 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0031 
+0032 <span class="comment">% Analyze parameter</span>
+0033 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0034 
+0035 <span class="keyword">if</span> ~exist(<span class="string">'normal'</span>)
+0036     normal = false;
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">% Load data</span>
+0040 cludata.X = data;
+0041 
+0042 <span class="keyword">if</span> normal
+0043     cludata = <a href="../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(cludata,<span class="string">'range'</span>);
+0044 <span class="keyword">end</span>
+0045 
+0046 figure;
+0047 
+0048 <span class="comment">% init</span>
+0049 ment = [];  <span class="comment">% The place for saving PC/XB...</span>
+0050 
+0051 <span class="comment">% parameters and clustering</span>
+0052 <span class="keyword">if</span> strcmpi(method, <span class="string">'gk'</span>)
+0053     param.m = 2;    <span class="comment">% Fuzziness</span>
+0054     param.e = 1e-3; <span class="comment">% Termination Tolrance</span>
+0055     
+0056     <span class="comment">% If the user just want to get one clustering result but not the</span>
+0057     <span class="comment">% comparing results</span>
+0058     <span class="keyword">if</span> ~isscalar(minmax)
+0059         <span class="comment">% Loop</span>
+0060         <span class="keyword">for</span> cln = minmax(1) : minmax(2)
+0061             param.c = cln;  <span class="comment">% Number of clustering</span>
+0062             param.ro = ones(1, param.c);    <span class="comment">% Cluster volumes</span>
+0063             result = <a href="../Otherbox/FUZZCLUST/GKclust.html" class="code" title="function result = GKclust(data,param)">GKclust</a>(cludata, param);
+0064             
+0065             <span class="comment">% Visualization</span>
+0066             clf
+0067             plot(cludata.X(:, 1), cludata.X(:, 2), <span class="string">'b.'</span>, result.cluster.v(:, 1), result.cluster.v(:, 2), <span class="string">'r*'</span>);
+0068             <span class="keyword">if</span> ~normal
+0069                 xlim([min(cludata.X(:, 1)), max(cludata.X(:, 1))]);
+0070                 ylim([min(cludata.X(:, 2)), max(cludata.X(:, 2))]);
+0071             <span class="keyword">end</span>
+0072             hold on
+0073             new.X = cludata.X;
+0074             eval = <a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new, result, param);
+0075             
+0076             <span class="comment">% Validation</span>
+0077             result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0078             ment{cln} = result.validity;
+0079         <span class="keyword">end</span>
+0080     <span class="keyword">else</span>
+0081         <span class="comment">% Only once</span>
+0082         param.c = minmax;                  <span class="comment">% Number of clustering</span>
+0083         param.ro = ones(1, param.c);       <span class="comment">% Cluster volumes</span>
+0084         result = <a href="../Otherbox/FUZZCLUST/GKclust.html" class="code" title="function result = GKclust(data,param)">GKclust</a>(cludata, param);
+0085         
+0086         <span class="comment">% Visualization</span>
+0087         clf
+0088         plot(cludata.X(:, 1), cludata.X(:, 2), <span class="string">'b.'</span>, result.cluster.v(:, 1), result.cluster.v(:, 2), <span class="string">'r*'</span>);
+0089         <span class="keyword">if</span> ~normal
+0090             xlim([min(cludata.X(:, 1)), max(cludata.X(:, 1))]);
+0091             ylim([min(cludata.X(:, 2)), max(cludata.X(:, 2))]);
+0092         <span class="keyword">end</span>
+0093         hold on
+0094         new.X = cludata.X;
+0095         eval = <a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new, result, param);
+0096         
+0097         <span class="comment">% Validation</span>
+0098         result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0099         ment{1} = result.validity;
+0100     <span class="keyword">end</span>
+0101 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'k'</span>)
+0102     param.val = 3;  <span class="comment">% Dunn Index is chosen</span>
+0103     param.vis = 1;  <span class="comment">% Show animation</span>
+0104     
+0105     <span class="comment">% If the user just want to get one clustering result but not the</span>
+0106     <span class="comment">% comparing results</span>
+0107     <span class="keyword">if</span> ~isscalar(minmax)
+0108         <span class="comment">% Loop</span>
+0109         <span class="keyword">for</span> cln = minmax(1) : minmax(2)
+0110             param.c = cln;  <span class="comment">% Number of clustering</span>
+0111             
+0112             <span class="keyword">if</span> ~exist(<span class="string">'ktimes'</span>, <span class="string">'var'</span>)
+0113                 ktimes = 1;
+0114                 <span class="keyword">if</span> cln == minmax(1)
+0115                     disp(<span class="string">'Note: It is recommeneded to run KMeans more than one time.'</span>);
+0116                 <span class="keyword">end</span>
+0117             <span class="keyword">end</span>
+0118             
+0119             <span class="keyword">for</span> i = 1:ktimes
+0120                 result = <a href="../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>(cludata, param);
+0121             <span class="keyword">end</span>
+0122             
+0123             eval = [];
+0124             
+0125             <span class="comment">% Validation</span>
+0126             result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0127             ment{cln} = result.validity;
+0128         <span class="keyword">end</span>
+0129     <span class="keyword">else</span>
+0130         <span class="comment">% Only once</span>
+0131         param.c = minmax;    <span class="comment">% Number of clustering</span>
+0132         
+0133         <span class="keyword">if</span> ~exist(<span class="string">'ktimes'</span>, <span class="string">'var'</span>)
+0134             ktimes = 1;
+0135             disp(<span class="string">'Note: It is recommeneded to run KMeans more than one time.'</span>);
+0136         <span class="keyword">end</span>
+0137         
+0138         <span class="keyword">for</span> i = 1:ktimes
+0139             result = <a href="../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>(cludata, param);
+0140         <span class="keyword">end</span>
+0141         
+0142         eval = [];
+0143         
+0144         <span class="comment">% Validation</span>
+0145         result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0146         ment{1} = result.validity;
+0147     <span class="keyword">end</span>
+0148 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'km'</span>)
+0149     param.val = 3;  <span class="comment">% Dunn Index is chosen</span>
+0150     param.vis = 1;  <span class="comment">% Show animation</span>
+0151     
+0152     <span class="comment">% If the user just want to get one clustering result but not the</span>
+0153     <span class="comment">% comparing results</span>
+0154     <span class="keyword">if</span> ~isscalar(minmax)
+0155         <span class="comment">% Loop</span>
+0156         <span class="keyword">for</span> cln = minmax(1) : minmax(2)
+0157             param.c = cln;  <span class="comment">% Number of clustering</span>
+0158             
+0159             <span class="keyword">if</span> ~exist(<span class="string">'ktimes'</span>, <span class="string">'var'</span>)
+0160                 ktimes = 1;
+0161                 <span class="keyword">if</span> cln == minmax(1)
+0162                     disp(<span class="string">'Note: It is recommeneded to run KMedoid more than one time.'</span>);
+0163                 <span class="keyword">end</span>
+0164             <span class="keyword">end</span>
+0165             
+0166             <span class="keyword">for</span> i = 1:ktimes
+0167                 result = <a href="../Otherbox/FUZZCLUST/Kmedoid.html" class="code" title="function result=Kmedoid(data,param);">Kmedoid</a>(cludata, param);
+0168             <span class="keyword">end</span>
+0169             
+0170             eval = [];
+0171             
+0172             <span class="comment">% Validation</span>
+0173             result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0174             ment{cln} = result.validity;
+0175         <span class="keyword">end</span>
+0176     <span class="keyword">else</span>
+0177         <span class="comment">% Only once</span>
+0178         param.c = minmax;    <span class="comment">% Number of clustering</span>
+0179         
+0180         <span class="keyword">if</span> ~exist(<span class="string">'ktimes'</span>, <span class="string">'var'</span>)
+0181             ktimes = 1;
+0182             disp(<span class="string">'Note: It is recommeneded to run KMedoid more than one time.'</span>);
+0183         <span class="keyword">end</span>
+0184         
+0185         <span class="keyword">for</span> i = 1:ktimes
+0186             result = <a href="../Otherbox/FUZZCLUST/Kmedoid.html" class="code" title="function result=Kmedoid(data,param);">Kmedoid</a>(cludata, param);
+0187         <span class="keyword">end</span>
+0188         
+0189         eval = [];
+0190         
+0191         <span class="comment">% Validation</span>
+0192         result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0193         ment{1} = result.validity;
+0194     <span class="keyword">end</span>
+0195 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'fcm'</span>)
+0196     param.m = 2;    <span class="comment">% Fuzziness</span>
+0197     param.e = 1e-3; <span class="comment">% Termination Tolrance</span>
+0198     param.val = 3;  <span class="comment">% Dunn Index is chosen</span>
+0199     
+0200     <span class="comment">% If the user just want to get one clustering result but not the</span>
+0201     <span class="comment">% comparing results</span>
+0202     <span class="keyword">if</span> ~isscalar(minmax)
+0203         <span class="comment">% Loop</span>
+0204         <span class="keyword">for</span> cln = minmax(1) : minmax(2)
+0205             param.c = cln;  <span class="comment">% Number of clustering</span>
+0206             result = <a href="../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>(cludata, param);
+0207             
+0208             <span class="comment">% Visualization</span>
+0209             clf
+0210             plot(cludata.X(:, 1), cludata.X(:, 2), <span class="string">'b.'</span>, result.cluster.v(:, 1), result.cluster.v(:, 2), <span class="string">'r*'</span>);
+0211             <span class="keyword">if</span> ~normal
+0212                 xlim([min(cludata.X(:, 1)), max(cludata.X(:, 1))]);
+0213                 ylim([min(cludata.X(:, 2)), max(cludata.X(:, 2))]);
+0214             <span class="keyword">end</span>
+0215             hold on
+0216             new.X = cludata.X;
+0217             eval = <a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new, result, param);
+0218             
+0219             <span class="comment">% Validation</span>
+0220             result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0221             ment{cln} = result.validity;
+0222         <span class="keyword">end</span>
+0223     <span class="keyword">else</span>
+0224         <span class="comment">% Only once</span>
+0225         param.c = minmax;                  <span class="comment">% Number of clustering</span>
+0226         result = <a href="../Otherbox/FUZZCLUST/FCMclust.html" class="code" title="function result = FCMclust(data,param)">FCMclust</a>(cludata, param);
+0227         
+0228         <span class="comment">% Visualization</span>
+0229         clf
+0230         plot(cludata.X(:, 1), cludata.X(:, 2), <span class="string">'b.'</span>, result.cluster.v(:, 1), result.cluster.v(:, 2), <span class="string">'r*'</span>);
+0231         <span class="keyword">if</span> ~normal
+0232             xlim([min(cludata.X(:, 1)), max(cludata.X(:, 1))]);
+0233             ylim([min(cludata.X(:, 2)), max(cludata.X(:, 2))]);
+0234         <span class="keyword">end</span>
+0235         hold on
+0236         new.X = cludata.X;
+0237         eval = <a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new, result, param);
+0238         
+0239         <span class="comment">% Validation</span>
+0240         result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0241         ment{1} = result.validity;
+0242     <span class="keyword">end</span>
+0243 <span class="keyword">elseif</span> strcmpi(method, <span class="string">'gg'</span>)
+0244     param.m = 2;    <span class="comment">% Fuzziness</span>
+0245     param.e = 1e-3; <span class="comment">% Termination Tolrance</span>
+0246     param.val = 3;  <span class="comment">% Dunn Index is chosen</span>
+0247     param.vis = 0;  <span class="comment">% Don't show KMeans animation</span>
+0248     
+0249     <span class="comment">% If the user just want to get one clustering result but not the</span>
+0250     <span class="comment">% comparing results</span>
+0251     <span class="keyword">if</span> ~isscalar(minmax)
+0252         <span class="comment">% Loop</span>
+0253         <span class="keyword">for</span> cln = minmax(1) : minmax(2)
+0254             param.c = cln;                      <span class="comment">% Number of clustering</span>
+0255             result = <a href="../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>(cludata, param);    <span class="comment">% Use Kmeans to init GG</span>
+0256             param.c = result.data.f;
+0257             result = <a href="../Otherbox/FUZZCLUST/GGclust.html" class="code" title="function result = GGclust(data,param)">GGclust</a>(cludata, param);
+0258             
+0259             <span class="comment">% Visualization</span>
+0260             clf
+0261             plot(cludata.X(:, 1), cludata.X(:, 2), <span class="string">'b.'</span>, result.cluster.v(:, 1), result.cluster.v(:, 2), <span class="string">'r*'</span>);
+0262             <span class="keyword">if</span> ~normal
+0263                 xlim([min(cludata.X(:, 1)), max(cludata.X(:, 1))]);
+0264                 ylim([min(cludata.X(:, 2)), max(cludata.X(:, 2))]);
+0265             <span class="keyword">end</span>
+0266             hold on
+0267             new.X = cludata.X;
+0268             eval = <a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new, result, param);
+0269             
+0270             <span class="comment">% Validation</span>
+0271             result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0272             ment{cln} = result.validity;
+0273         <span class="keyword">end</span>
+0274     <span class="keyword">else</span>
+0275         <span class="comment">% Only once</span>
+0276         param.c = minmax;                  <span class="comment">% Number of clustering</span>
+0277         result = <a href="../Otherbox/FUZZCLUST/Kmeans.html" class="code" title="function result=Kmeans(data,param);">Kmeans</a>(cludata, param);   <span class="comment">% Use Kmeans to init GG</span>
+0278         param.c = result.data.f;
+0279         result = <a href="../Otherbox/FUZZCLUST/GGclust.html" class="code" title="function result = GGclust(data,param)">GGclust</a>(cludata, param);
+0280         
+0281         <span class="comment">% Visualization</span>
+0282         clf
+0283         plot(cludata.X(:, 1), cludata.X(:, 2), <span class="string">'b.'</span>, result.cluster.v(:, 1), result.cluster.v(:, 2), <span class="string">'r*'</span>);
+0284         <span class="keyword">if</span> ~normal
+0285             xlim([min(cludata.X(:, 1)), max(cludata.X(:, 1))]);
+0286             ylim([min(cludata.X(:, 2)), max(cludata.X(:, 2))]);
+0287         <span class="keyword">end</span>
+0288         hold on
+0289         new.X = cludata.X;
+0290         eval = <a href="../Otherbox/FUZZCLUST/clusteval.html" class="code" title="function eval = clusteval(new,result,param)">clusteval</a>(new, result, param);
+0291         
+0292         <span class="comment">% Validation</span>
+0293         result = <a href="../Otherbox/FUZZCLUST/Demos/comparing/modvalidity.html" class="code" title="function result = modvalidity(result,data,param)">modvalidity</a>(result, cludata, param);
+0294         ment{1} = result.validity;
+0295     <span class="keyword">end</span>
+0296 <span class="keyword">else</span>
+0297     error(<span class="string">'Not supported yet.'</span>);
+0298 <span class="keyword">end</span>
+0299 
+0300 <span class="comment">% Show results</span>
+0301 PC=[];CE=[];SC=[];S=[];XB=[];DI=[];ADI=[];
+0302 
+0303 <span class="keyword">if</span> ~isscalar(minmax)
+0304     <span class="keyword">for</span> i = minmax(1) : minmax(2)
+0305         PC=[PC ment{i}.PC];
+0306         CE=[CE ment{i}.CE];
+0307         SC=[SC ment{i}.SC];
+0308         S=[S ment{i}.S];
+0309         XB=[XB ment{i}.XB];
+0310         DI=[DI ment{i}.DI];
+0311         ADI=[ADI ment{i}.ADI];
+0312     <span class="keyword">end</span>
+0313     
+0314     figure
+0315     subplot(2,1,1), plot([minmax(1) : minmax(2)], PC)
+0316     title(<span class="string">'Partition Coefficient (PC)'</span>)
+0317     subplot(2,1,2), plot([minmax(1) : minmax(2)], CE, <span class="string">'r'</span>)
+0318     title(<span class="string">'Classification Entropy (CE)'</span>)
+0319     
+0320     figure
+0321     subplot(3,1,1), plot([minmax(1) : minmax(2)], SC, <span class="string">'g'</span>)
+0322     title(<span class="string">'Partition Index (SC)'</span>)
+0323     subplot(3,1,2), plot([minmax(1) : minmax(2)], S, <span class="string">'m'</span>)
+0324     title(<span class="string">'Separation Index (S)'</span>)
+0325     subplot(3,1,3), plot([minmax(1) : minmax(2)], XB)
+0326     title(<span class="string">'Xie and Beni Index (XB)'</span>)
+0327     
+0328     figure
+0329     subplot(2,1,1), plot([minmax(1) : minmax(2)], DI)
+0330     title(<span class="string">'Dunn Index (DI)'</span>)
+0331     subplot(2,1,2), plot([minmax(1) : minmax(2)], ADI)
+0332     title(<span class="string">'Alternative Dunn Index (ADI)'</span>)
+0333 <span class="keyword">else</span>
+0334     PC = ment{1}.PC;
+0335     CE = ment{1}.CE;
+0336     SC = ment{1}.SC;
+0337     S = ment{1}.S;
+0338     XB = ment{1}.XB;
+0339     DI = ment{1}.DI;
+0340     ADI = ment{1}.ADI;
+0341 <span class="keyword">end</span>
+0342 
+0343 <span class="keyword">end</span>
+0344 
+0345 
+0346 
+0347 
+0348 
+0349 
+0350 
+0351 <a name="_sub1" href="#_subfunctions" class="code">function result = modvalidity(result,data,param)</a>
+0352 <span class="comment">%modified validation function for clustering, it calculates all the</span>
+0353 <span class="comment">%validity measures, so param.val is not needed</span>
+0354 
+0355 N = size(result.data.f,1);
+0356 c = size(result.cluster.v,1);
+0357 n = size(result.cluster.v,2);
+0358 v = result.cluster.v;
+0359 
+0360 <span class="keyword">if</span> exist(<span class="string">'param.m'</span>)==1, m = param.m;<span class="keyword">else</span> m = 2;<span class="keyword">end</span>;
+0361 
+0362 <span class="comment">%partition coefficient (PC)</span>
+0363 fm = (result.data.f).^m;
+0364 PC = 1/N*sum(sum(fm));
+0365 
+0366 <span class="comment">%classification entropy (CE)</span>
+0367 fm = (result.data.f).*log(result.data.f);
+0368 CE = -1/N*sum(sum(fm));
+0369      
+0370 <span class="comment">%results</span>
+0371 result.validity.PC = PC;
+0372 result.validity.CE = CE;   
+0373         
+0374         
+0375         
+0376 
+0377 <span class="comment">%partition index(SC)</span>
+0378 ni = sum(result.data.f);                        <span class="comment">%calculate fuzzy cardinality</span>
+0379 si = sum(result.data.d.*result.data.f.^(m/2));  <span class="comment">%calculate fuzzy variation</span>
+0380 pii=si./ni;
+0381 mask = zeros(c,n,c);                            <span class="comment">%calculate separation of clusters</span>
+0382 <span class="keyword">for</span> i = 1:c
+0383     <span class="keyword">for</span> j =1:c
+0384          mask(j,:,i) = v(i,:);
+0385     <span class="keyword">end</span>
+0386     dist(i) = sum(sum((mask(:,:,i) - v).^2));
+0387 <span class="keyword">end</span>
+0388 s = dist;
+0389 SC = sum(pii./s);
+0390 
+0391 <span class="comment">%separation index (S)</span>
+0392 S = sum(pii)./(N*min(dist));
+0393 
+0394 <span class="comment">%Xie and Beni's index (XB)</span>
+0395 XB = sum((sum(result.data.d.*result.data.f.^2))./(N*min(result.data.d)));
+0396 <span class="comment">%results</span>
+0397 result.validity.SC = SC;
+0398 result.validity.S = S;
+0399 result.validity.XB = XB;    
+0400         
+0401         
+0402         
+0403 
+0404 <span class="comment">%Dunn's index (DI)</span>
+0405 <span class="comment">%for identification of compact and well separated clusters</span>
+0406 [m,label] = min(result.data.d');<span class="comment">%crisp clustering(Kmeans)</span>
+0407 
+0408 <span class="keyword">for</span> i = 1:c
+0409      index=find(label == i);
+0410      dat{i}=data.X(index,:);
+0411      meret(i)= size(dat{i},1);
+0412 <span class="keyword">end</span>
+0413 mindistmatrix =ones(c,c)*inf;
+0414 mindistmatrix2 =ones(c,c)*inf;
+0415         
+0416         <span class="keyword">for</span> cntrCurrentClust = 1:c
+0417            <span class="keyword">for</span> cntrOtherClust = (cntrCurrentClust+1):c
+0418                <span class="keyword">for</span> cntrCurrentPoints = 1:meret(cntrCurrentClust)
+0419                    dd = min(sqrt(sum([(repmat(dat{cntrCurrentClust}(cntrCurrentPoints,:),meret(cntrOtherClust),1) <span class="keyword">...</span>
+0420                    -dat{cntrOtherClust}).^2]')));
+0421                                        <span class="comment">%calculate distances for an alternative Dunn index</span>
+0422                    dd2 = min(abs(result.data.d(cntrCurrentClust,:)-result.data.d(cntrOtherClust,:)));
+0423                        
+0424                    <span class="keyword">if</span> mindistmatrix(cntrCurrentClust,cntrOtherClust) &gt; dd
+0425                       mindistmatrix(cntrCurrentClust,cntrOtherClust) = dd;
+0426                    <span class="keyword">end</span>
+0427                    <span class="keyword">if</span> mindistmatrix2(cntrCurrentClust,cntrOtherClust) &gt; dd2
+0428                       mindistmatrix2(cntrCurrentClust,cntrOtherClust) = dd2;
+0429                    <span class="keyword">end</span>
+0430                <span class="keyword">end</span>
+0431             <span class="keyword">end</span>
+0432         <span class="keyword">end</span>
+0433 
+0434         minimalDist = min(min(mindistmatrix));
+0435         minimalDist2 = min(min(mindistmatrix2));
+0436         
+0437         maxDispersion = 0;
+0438         <span class="keyword">for</span> cntrCurrentClust = 1:c
+0439             actualDispersion = 0;
+0440             <span class="keyword">for</span> cntrCurrentPoints1 = 1:meret(cntrCurrentClust)
+0441               dd = max(sqrt(sum([(repmat(dat{cntrCurrentClust}(cntrCurrentPoints1,:),meret(cntrCurrentClust),1) <span class="keyword">...</span>
+0442                            -dat{cntrCurrentClust}).^2]')));
+0443               <span class="keyword">if</span> actualDispersion &lt; dd
+0444                  actualDispersion = dd;
+0445               <span class="keyword">end</span>
+0446               <span class="keyword">if</span> maxDispersion &lt; actualDispersion
+0447                maxDispersion = actualDispersion;
+0448               <span class="keyword">end</span>
+0449            <span class="keyword">end</span>
+0450         <span class="keyword">end</span>
+0451 
+0452         DI = minimalDist/maxDispersion;
+0453         <span class="comment">%alternative Dunn index</span>
+0454         ADI = minimalDist2/maxDispersion;
+0455     <span class="comment">%results</span>
+0456     result.validity.DI = DI;
+0457     result.validity.ADI = ADI;   
+0458 <span class="keyword">end</span>
+0459</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

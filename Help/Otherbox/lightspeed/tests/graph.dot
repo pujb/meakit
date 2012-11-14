@@ -1,0 +1,57 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  test_lightspeed -> test_digamma;
+  test_lightspeed -> test_gammaln;
+  test_lightspeed -> test_int_hist;
+  test_lightspeed -> test_java;
+  test_lightspeed -> test_logmulexp;
+  test_lightspeed -> test_logsumexp;
+  test_lightspeed -> test_mutable;
+  test_lightspeed -> test_normpdf;
+  test_lightspeed -> test_randbeta;
+  test_lightspeed -> test_randbinom;
+  test_lightspeed -> test_randgamma;
+  test_lightspeed -> test_randwishart;
+  test_lightspeed -> test_repmat;
+  test_lightspeed -> test_row_sum;
+  test_lightspeed -> test_sameobject;
+  test_lightspeed -> test_scale;
+  test_lightspeed -> test_solve_tri;
+  test_lightspeed -> test_sorted;
+  test_lightspeed -> test_sparse;
+  test_lightspeed -> test_sqdist;
+  test_lightspeed -> test_trigamma;
+
+  test_digamma [URL="test_digamma.html"];
+  test_duplicated [URL="test_duplicated.html"];
+  test_flops [URL="test_flops.html"];
+  test_flops2 [URL="test_flops2.html"];
+  test_gammaln [URL="test_gammaln.html"];
+  test_int_hist [URL="test_int_hist.html"];
+  test_inv_posdef [URL="test_inv_posdef.html"];
+  test_java [URL="test_java.html"];
+  test_lightspeed [URL="test_lightspeed.html"];
+  test_logmulexp [URL="test_logmulexp.html"];
+  test_logsumexp [URL="test_logsumexp.html"];
+  test_max [URL="test_max.html"];
+  test_mutable [URL="test_mutable.html"];
+  test_ndsum [URL="test_ndsum.html"];
+  test_normcdf [URL="test_normcdf.html"];
+  test_normpdf [URL="test_normpdf.html"];
+  test_randbeta [URL="test_randbeta.html"];
+  test_randbinom [URL="test_randbinom.html"];
+  test_randgamma [URL="test_randgamma.html"];
+  test_randomseed [URL="test_randomseed.html"];
+  test_randwishart [URL="test_randwishart.html"];
+  test_repmat [URL="test_repmat.html"];
+  test_repmat_struct [URL="test_repmat_struct.html"];
+  test_row_sum [URL="test_row_sum.html"];
+  test_sameobject [URL="test_sameobject.html"];
+  test_sample [URL="test_sample.html"];
+  test_scale [URL="test_scale.html"];
+  test_solve_tri [URL="test_solve_tri.html"];
+  test_sorted [URL="test_sorted.html"];
+  test_sparse [URL="test_sparse.html"];
+  test_sqdist [URL="test_sqdist.html"];
+  test_trigamma [URL="test_trigamma.html"];
+}

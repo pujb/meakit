@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_disp_ns_errcode</title>
+  <meta name="keywords" content="util_disp_ns_errcode">
+  <meta name="description" content="UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_disp_ns_errcode
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [errmsg] = util_disp_ns_errcode( errcode, dodisp ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code
+   According to
+   http://neuroshare.sourceforge.net/Matlab-Import-Filter/NeuroshareMatlabAPI-2-2.htm#Installation
+   
+   if 'dodisp' is true, the function will display the error message, or you
+   can display for yourself using the returned 'errmsg'.
+   
+   Created on Jun/10/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_get_nsfile_info.html" class="code" title="function [ info ] = util_get_nsfile_info( handle, property_name, varargin )">util_get_nsfile_info</a>	UTIL_GET_NSFILE_INFO Get file info from a opened handle</li><li><a href="util_load_nsdll.html" class="code" title="function [ dllpath dllname ] = util_load_nsdll( filetype, dodisp )">util_load_nsdll</a>	UTIL_LOAD_NSDLL Load the corresponding Neuroshare dll according to the filetype</li><li><a href="util_load_nsfile.html" class="code" title="function [ handle ] = util_load_nsfile( filename )">util_load_nsfile</a>	UTIL_LOAD_NSFILE Read a data file in Neuroshare format then returns a handle.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [errmsg] = util_disp_ns_errcode( errcode, dodisp )</a>
+0002 <span class="comment">%UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code</span>
+0003 <span class="comment">%   According to</span>
+0004 <span class="comment">%   http://neuroshare.sourceforge.net/Matlab-Import-Filter/NeuroshareMatlabAPI-2-2.htm#Installation</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   if 'dodisp' is true, the function will display the error message, or you</span>
+0007 <span class="comment">%   can display for yourself using the returned 'errmsg'.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Created on Jun/10/2010 By Pu Jiangbo</span>
+0010 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0011 
+0012 <span class="keyword">switch</span> errcode
+0013     <span class="keyword">case</span> 0
+0014         errmsg = <span class="string">'Function successful.'</span>;
+0015     <span class="keyword">case</span> -1
+0016         errmsg = <span class="string">'Generic linked library error.'</span>;
+0017     <span class="keyword">case</span> -2
+0018         errmsg = <span class="string">'Library unable to open file type.'</span>;
+0019     <span class="keyword">case</span> -3
+0020         errmsg = <span class="string">'File access or read error.'</span>;
+0021     <span class="keyword">case</span> -4
+0022         errmsg = <span class="string">'Invalid file handle passed to function'</span>;
+0023     <span class="keyword">case</span> -5
+0024         errmsg = <span class="string">'Invalid or inappropriate entity identifier specified'</span>;
+0025     <span class="keyword">case</span> -6
+0026         errmsg = <span class="string">'Invalid source identifier specified'</span>;
+0027     <span class="keyword">case</span> -7
+0028         errmsg = <span class="string">'Invalid entity index specified'</span>;
+0029     <span class="keyword">otherwise</span>
+0030         errmsg = <span class="string">'Unexpected error.'</span>;
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="keyword">if</span> dodisp == true
+0034     disp(errmsg);
+0035 <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

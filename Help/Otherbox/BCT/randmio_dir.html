@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randmio_dir</title>
+  <meta name="keywords" content="randmio_dir">
+  <meta name="description" content="RANDMIO_DIR    Random graph with preserved in/out degree distribution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>randmio_dir
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RANDMIO_DIR    Random graph with preserved in/out degree distribution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function R=randmio_dir(R, ITER) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RANDMIO_DIR    Random graph with preserved in/out degree distribution
+
+   R = randmio_dir(A,ITER);
+
+   This function randomizes a directed network, while preserving the in-
+   and out-degree distributions. In weighted networks, the function
+   preserves the out-strength but not the in-strength distributions.
+
+   Input:      A,      directed (binary/weighted) connection matrix
+               ITER,   rewiring parameter
+                       (each edge is rewired approximately ITER times)
+
+   Output:     R,      randomized network
+
+   References: Maslov and Sneppen (2002) Science 296:910
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function R=randmio_dir(R, ITER)</a>
+0002 <span class="comment">%RANDMIO_DIR    Random graph with preserved in/out degree distribution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   R = randmio_dir(A,ITER);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function randomizes a directed network, while preserving the in-</span>
+0007 <span class="comment">%   and out-degree distributions. In weighted networks, the function</span>
+0008 <span class="comment">%   preserves the out-strength but not the in-strength distributions.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Input:      A,      directed (binary/weighted) connection matrix</span>
+0011 <span class="comment">%               ITER,   rewiring parameter</span>
+0012 <span class="comment">%                       (each edge is rewired approximately ITER times)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Output:     R,      randomized network</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   References: Maslov and Sneppen (2002) Science 296:910</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0020 
+0021 
+0022 [i j]=find(R);
+0023 K=length(i);
+0024 ITER=K*ITER;
+0025 
+0026 <span class="keyword">for</span> iter=1:ITER
+0027     <span class="keyword">while</span> 1                                     <span class="comment">%while not rewired</span>
+0028         <span class="keyword">while</span> 1
+0029             e1=ceil(K*rand);
+0030             e2=ceil(K*rand);
+0031             <span class="keyword">while</span> (e2==e1),
+0032                 e2=ceil(K*rand);
+0033             <span class="keyword">end</span>
+0034             a=i(e1); b=j(e1);
+0035             c=i(e2); d=j(e2);
+0036 
+0037             <span class="keyword">if</span> all(a~=[c d]) &amp;&amp; all(b~=[c d]);
+0038                 <span class="keyword">break</span>           <span class="comment">%all four vertices must be different</span>
+0039             <span class="keyword">end</span>
+0040         <span class="keyword">end</span>
+0041 
+0042         <span class="comment">%rewiring condition</span>
+0043         <span class="keyword">if</span> ~(R(a,d) || R(c,b))
+0044             R(a,d)=R(a,b); R(a,b)=0;
+0045             R(c,b)=R(c,d); R(c,d)=0;
+0046 
+0047             j(e1) = d;          <span class="comment">%reassign edge indices</span>
+0048             j(e2) = b;
+0049             <span class="keyword">break</span>;
+0050         <span class="keyword">end</span> <span class="comment">%rewiring condition</span>
+0051     <span class="keyword">end</span> <span class="comment">%while not rewired</span>
+0052 <span class="keyword">end</span> <span class="comment">%iterations</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

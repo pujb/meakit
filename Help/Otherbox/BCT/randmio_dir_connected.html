@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randmio_dir_connected</title>
+  <meta name="keywords" content="randmio_dir_connected">
+  <meta name="description" content="RANDMIO_DIR_CONNECTED    Random graph with preserved in/out degree distribution">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>randmio_dir_connected
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RANDMIO_DIR_CONNECTED    Random graph with preserved in/out degree distribution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function R=randmio_dir_connected(R, ITER) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RANDMIO_DIR_CONNECTED    Random graph with preserved in/out degree distribution
+
+   R = randmio_dir_connected(A,ITER);
+
+   This function randomizes a directed network, while preserving the in-
+   and out-degree distributions. In weighted networks, the function
+   preserves the out-strength but not the in-strength distributions. The 
+   function also ensures that the randomized network maintains 
+   connectedness: the input network for this function must be connected.
+
+   Input:      A,      directed (binary/weighted) connection matrix
+               ITER,   rewiring parameter
+                       (each edge is rewired approximately ITER times)
+
+   Output:     R,      randomized network
+
+   References: Maslov and Sneppen (2002) Science 296:910
+
+
+   Mika Rubinov, UNSW, 2007-2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function R=randmio_dir_connected(R, ITER)</a>
+0002 <span class="comment">%RANDMIO_DIR_CONNECTED    Random graph with preserved in/out degree distribution</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   R = randmio_dir_connected(A,ITER);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function randomizes a directed network, while preserving the in-</span>
+0007 <span class="comment">%   and out-degree distributions. In weighted networks, the function</span>
+0008 <span class="comment">%   preserves the out-strength but not the in-strength distributions. The</span>
+0009 <span class="comment">%   function also ensures that the randomized network maintains</span>
+0010 <span class="comment">%   connectedness: the input network for this function must be connected.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Input:      A,      directed (binary/weighted) connection matrix</span>
+0013 <span class="comment">%               ITER,   rewiring parameter</span>
+0014 <span class="comment">%                       (each edge is rewired approximately ITER times)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Output:     R,      randomized network</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   References: Maslov and Sneppen (2002) Science 296:910</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Mika Rubinov, UNSW, 2007-2010</span>
+0022 
+0023 
+0024 [i j]=find(R);
+0025 K=length(i);
+0026 ITER=K*ITER;
+0027 
+0028 <span class="keyword">for</span> iter=1:ITER
+0029     <span class="keyword">while</span> 1                                     <span class="comment">%while not rewired</span>
+0030         rewire=1;
+0031         <span class="keyword">while</span> 1
+0032             e1=ceil(K*rand);
+0033             e2=ceil(K*rand);
+0034             <span class="keyword">while</span> (e2==e1),
+0035                 e2=ceil(K*rand);
+0036             <span class="keyword">end</span>
+0037             a=i(e1); b=j(e1);
+0038             c=i(e2); d=j(e2);
+0039 
+0040             <span class="keyword">if</span> all(a~=[c d]) &amp;&amp; all(b~=[c d]);
+0041                 <span class="keyword">break</span>           <span class="comment">%all four vertices must be different</span>
+0042             <span class="keyword">end</span>
+0043         <span class="keyword">end</span>
+0044 
+0045         <span class="comment">%rewiring condition</span>
+0046         <span class="keyword">if</span> ~(R(a,d) || R(c,b))
+0047             <span class="comment">%connectedness condition</span>
+0048             <span class="keyword">if</span> ~(any([R(a,c) R(d,b) R(d,c)]) &amp;&amp; any([R(c,a) R(b,d) R(b,a)]))
+0049                 P=R([a c],:);
+0050                 P(1,b)=0; P(1,d)=1;
+0051                 P(2,d)=0; P(2,b)=1;
+0052                 PN=P;
+0053                 PN(1,a)=1; PN(2,c)=1;
+0054                 
+0055                 <span class="keyword">while</span> 1
+0056                     P(1,:)=any(R(P(1,:)~=0,:),1);
+0057                     P(2,:)=any(R(P(2,:)~=0,:),1);
+0058                     P=P.*(~PN);
+0059                     PN=PN+P;
+0060                     <span class="keyword">if</span> ~all(any(P,2))
+0061                         rewire=0;
+0062                         <span class="keyword">break</span>
+0063                     <span class="keyword">elseif</span> any(PN(1,[b c])) &amp;&amp; any(PN(2,[d a]))
+0064                         <span class="keyword">break</span>
+0065                     <span class="keyword">end</span>
+0066                 <span class="keyword">end</span>
+0067             <span class="keyword">end</span> <span class="comment">%connectedness testing</span>
+0068 
+0069             <span class="keyword">if</span> rewire               <span class="comment">%reassign edges</span>
+0070                 R(a,d)=R(a,b); R(a,b)=0; 
+0071                 R(c,b)=R(c,d); R(c,d)=0;
+0072                 
+0073                 j(e1) = d;          <span class="comment">%reassign edge indices</span>
+0074                 j(e2) = b;
+0075                 <span class="keyword">break</span>;
+0076             <span class="keyword">end</span> <span class="comment">%edge reassignment</span>
+0077         <span class="keyword">end</span> <span class="comment">%rewiring condition</span>
+0078     <span class="keyword">end</span> <span class="comment">%while not rewired</span>
+0079 <span class="keyword">end</span> <span class="comment">%iterations</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

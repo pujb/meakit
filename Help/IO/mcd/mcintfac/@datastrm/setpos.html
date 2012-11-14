@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of setpos</title>
+  <meta name="keywords" content="setpos">
+  <meta name="description" content="setpos - set the file position in a datastream (datastream method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>setpos
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>setpos - set the file position in a datastream (datastream method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function a = setpos(d,posType,posValue); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> setpos - set the file position in a datastream (datastream method)
+ a = setpos(d,posType,posValue) takes an datastrm object and 
+ the position type ('time','sweep','segment') and the
+ position value (time in ms, sweep for triggered raw date 
+ and segment for spike data as integer) return value is the 
+ updated datastrm.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="getfileindex.html" class="code" title="function a = getfileindex(d);">getfileindex</a>	getfileindex - generate an index of entries in datastream objects (datastrm method)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="datastrm.html" class="code" title="function d = datastrm(a,varargin)">datastrm</a>	DATASTRM		- data object constructor for opening data recorded with MC Rack</li><li><a href="nextraw.html" class="code" title="function c = nextraw(d,startTime,endTime,varargin);">nextraw</a>	nextraw - calls nextsweep to read in continous raw (datastream method)</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a = setpos(d,posType,posValue);</a>
+0002 <span class="comment">% setpos - set the file position in a datastream (datastream method)</span>
+0003 <span class="comment">% a = setpos(d,posType,posValue) takes an datastrm object and</span>
+0004 <span class="comment">% the position type ('time','sweep','segment') and the</span>
+0005 <span class="comment">% position value (time in ms, sweep for triggered raw date</span>
+0006 <span class="comment">% and segment for spike data as integer) return value is the</span>
+0007 <span class="comment">% updated datastrm.</span>
+0008 
+0009 <span class="keyword">if</span> (strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0010     <span class="keyword">if</span> not(strcmp(posType,<span class="string">'sweep'</span>))
+0011         error([<span class="string">'with OLE-Object the second argument for setpos must be ''sweep'''</span>]);
+0012     <span class="keyword">end</span>
+0013 <span class="keyword">else</span>
+0014     <span class="keyword">if</span> not(strcmp(posType,<span class="string">'time'</span>) | strcmp(posType,<span class="string">'sweep'</span>) | strcmp(posType,<span class="string">'segment'</span>))
+0015         error(<span class="string">'the second argument for setpos must be ''time'' or ''sweep'' or ''segment'''</span>);
+0016     <span class="keyword">end</span>
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> (strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0020     a=d;
+0021     <span class="keyword">if</span> posValue &gt; length(d.sweepStartTime)
+0022         warning([<span class="string">'sweep '</span> num2str(posValue) <span class="string">' is beyond file scope'</span>]);
+0023         <span class="keyword">return</span>
+0024     <span class="keyword">end</span>
+0025     tmp.function=<span class="string">'SetSweepNumber'</span>;
+0026     tmp.SweepNumber=posValue;
+0027     test=mcstreammex(tmp);
+0028     <span class="keyword">return</span>
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> d.sweepStartPointer == 0
+0032     disp(<span class="string">'now reading sweep/segment indexes'</span>);
+0033     drawnow
+0034     <span class="keyword">if</span> strcmp(d.DataType,<span class="string">'spike continous'</span>)
+0035         tmp=d.sorterleft(d.HardwareChannelID);
+0036         sortedChannelID=[tmp setdiff([1:68],tmp)]';    <span class="comment">%not recorded channel are appended!</span>
+0037         y=GetFileEntries(d.filename,d.offset_to_data,sortedChannelID,d.BitFlipRemoveFactor);
+0038         d.sweepStartPointer = y(1,:)';
+0039         d.sweepStartTime = ((y(2,:)*2^32+y(3,:))*d.MicrosecondsPerTick/1000)';
+0040         d.maxSpkPerSegmPerChanl = y(4,:)';
+0041         d.nSpikesPerSegement = y(5,:)';
+0042         d.nSpkPerSegPerChanl = y(6,:)'; <span class="comment">%eg. plot(bitand(y(3:8:size(y,2)),16*16*16*16*15))</span>
+0043     <span class="keyword">else</span> <span class="comment">%raw triggered up to now</span>
+0044         d=<a href="getfileindex.html" class="code" title="function a = getfileindex(d);">getfileindex</a>(d);
+0045     <span class="keyword">end</span>;
+0046 <span class="keyword">end</span>;
+0047 
+0048 <span class="keyword">if</span> strcmp(posType,<span class="string">'sweep'</span>) | strcmp(posType,<span class="string">'segment'</span>)
+0049     <span class="keyword">if</span> floor(posValue) &gt; size(d.sweepStartPointer,1)
+0050         warning([<span class="string">'sweep/segment '</span> num2str(posValue) <span class="string">' is beyond file scope'</span>]);
+0051     <span class="keyword">else</span>
+0052         pos=floor(posValue);    <span class="comment">%be sure to have an integer</span>
+0053         fseek(d.fid,d.sweepStartPointer(pos),-1);
+0054     <span class="keyword">end</span>;
+0055 <span class="keyword">else</span>
+0056     t=find(d.sweepStartTime&gt;=posValue);
+0057     <span class="keyword">if</span> isempty(t)
+0058         warning([<span class="string">'time '</span> num2str(posValue) <span class="string">' ms is beyond file scope'</span>]);
+0059     <span class="keyword">else</span>
+0060         pos=t(1);
+0061         fseek(d.fid,d.sweepStartPointer(pos),-1);
+0062     <span class="keyword">end</span>;
+0063 <span class="keyword">end</span>;
+0064 
+0065 a=d;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

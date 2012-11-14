@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_show_progress_rounding</title>
+  <meta name="keywords" content="util_show_progress_rounding">
+  <meta name="description" content="UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_show_progress_rounding
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = util_show_progress_rounding( percent )    %#codegen </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-
+   Input:
+       percent: 0 - 100
+
+   Created on Jul/22/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2011-03-28  Bug fix, dont show 'done' twice.
+       PJB#2011-05-16  Changed to MEX format.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li><li><a href="../Calculation/util_calc_similarity_matrix.html" class="code" title="function [ matrix ] = util_calc_similarity_matrix( network_vectors, varargin )">util_calc_similarity_matrix</a>	UTIL_CALC_SIMILARITY_MATRIX Get the similarity matrix from network firing</li><li><a href="../Calculation/util_calc_synchrony.html" class="code" title="function [ Q q Qn qn ] = util_calc_synchrony( spif, chlist, varargin )">util_calc_synchrony</a>	UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels</li><li><a href="../Calculation/util_detect_avalanche.html" class="code" title="function [ locations sizes lengths vectors network_vectors seq sizes_spk sizes_amp] = util_detect_avalanche( spif, gnds, varargin )">util_detect_avalanche</a>	UTIL_DETECT_AVALANCHE Detecting the neural avalanches</li><li><a href="util_perform_op_in_directory.html" class="code" title="function [ varargout ] = util_perform_op_in_directory( given_dir, op, result_dir, filematch, var_to_save, varargin )">util_perform_op_in_directory</a>	UTIL_PERFORM_OP_IN_DIRECTORY Perform the same operation on each file in</li><li><a href="../IO/util_load_spike_trigger_mcdstream.html" class="code" title="function [ D spif triggerif ] = util_load_spike_trigger_mcdstream ( varargin )">util_load_spike_trigger_mcdstream</a>	UTIL_LOAD_SPIKE_TRIGGER_MCDSTREAM 工具函数，载入spike和trigger的mcd数据流</li><li><a href="../Model/util_generate_neurons.html" class="code" title="function [csim_electrodes csim_neurons csim_synapses] = util_generate_neurons( varargin )">util_generate_neurons</a>	UNTITLED Summary of this function goes here</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = util_show_progress_rounding( percent )    </a><span class="comment">%#codegen</span>
+0002 <span class="comment">%UTIL_SHOW_PROGRESS_ROUNDING Show the progress using \|/-</span>
+0003 <span class="comment">%   Input:</span>
+0004 <span class="comment">%       percent: 0 - 100</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Created on Jul/22/2010 By Pu Jiangbo</span>
+0007 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   $Revision:</span>
+0010 <span class="comment">%       PJB#2011-03-28  Bug fix, dont show 'done' twice.</span>
+0011 <span class="comment">%       PJB#2011-05-16  Changed to MEX format.</span>
+0012 
+0013 coder.extrinsic(<span class="string">'fprintf'</span>, <span class="string">'clear'</span>);
+0014 
+0015 <span class="keyword">persistent</span> style;   <span class="comment">% style of the cycling</span>
+0016 
+0017 <span class="keyword">if</span> isempty(style)
+0018     <span class="keyword">if</span> percent == 100
+0019         <span class="keyword">return</span>;
+0020     <span class="keyword">end</span>
+0021     <span class="comment">% First time</span>
+0022     fprintf(<span class="string">'        '</span>);
+0023     style = 1;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">switch</span> style
+0027     <span class="keyword">case</span> 1
+0028         fprintf(1, <span class="string">'\b\b\b\b\b\b\b'</span>);
+0029         fprintf(1, <span class="string">'\\ %3.0f %%'</span>, percent);
+0030         style = 2;
+0031     <span class="keyword">case</span> 2
+0032         fprintf(1, <span class="string">'\b\b\b\b\b\b\b'</span>);
+0033         fprintf(1, <span class="string">'| %3.0f %%'</span>, percent);
+0034         style = 3;
+0035     <span class="keyword">case</span> 3
+0036         fprintf(1, <span class="string">'\b\b\b\b\b\b\b'</span>);
+0037         fprintf(1, <span class="string">'/ %3.0f %%'</span>, percent);
+0038         style = 4;
+0039     <span class="keyword">case</span> 4
+0040         fprintf(1, <span class="string">'\b\b\b\b\b\b\b'</span>);
+0041         fprintf(1, <span class="string">'- %3.0f %%'</span>, percent);
+0042         style = 1;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> percent == 100
+0046     <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> style;
+0047     fprintf(1, <span class="string">'\b\b\b\b\b\b\b'</span>);
+0048     fprintf(<span class="string">'Done.\n'</span>);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">end</span>
+0052</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

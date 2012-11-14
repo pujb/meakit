@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of run_llc</title>
+  <meta name="keywords" content="run_llc">
+  <meta name="description" content="RUN_LLC Performs the LLC algorithm for dimensionality reduction">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>run_llc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>RUN_LLC Performs the LLC algorithm for dimensionality reduction</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">RUN_LLC Performs the LLC algorithm for dimensionality reduction
+
+   mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations)
+
+ Performs the Locally Linear Coordination (LLC) algorithm to reduce the
+ dimensionality of dataset X to no_dims dimensions. The variable k
+ indicates the number of neighbors that is used in the nieghborhood graph.
+ The variable no_analyzers indicates the number of factor analyzers that
+ is used, and max_iterations indicates the maximum number of iterations of
+ the EM-algorithm that estimates the factor analyzers.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="infermfa.html" class="code" title="function [R, Z] = infermfa(X, LX, MX, PX)">infermfa</a>	INFERMFA Infer MoFA using information from EM algorithm in MPPCA</li><li><a href="llc.html" class="code" title="function mappedX = llc(X, neighbor, no_dims, R, Z, eig_impl)">llc</a>	LLC Runs the LLC algorithm (given information on the formed factor analyzers)</li><li><a href="mppca.html" class="code" title="function [LX, MX, PX] = mppca(X, no_dims, no_analyzers, tol, maxiter, minstd)">mppca</a>	MPPCA Runs EM algorithm and computes local factor analyzers</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations, eig_impl)</a>
+0002 <span class="comment">%RUN_LLC Performs the LLC algorithm for dimensionality reduction</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Performs the Locally Linear Coordination (LLC) algorithm to reduce the</span>
+0007 <span class="comment">% dimensionality of dataset X to no_dims dimensions. The variable k</span>
+0008 <span class="comment">% indicates the number of neighbors that is used in the nieghborhood graph.</span>
+0009 <span class="comment">% The variable no_analyzers indicates the number of factor analyzers that</span>
+0010 <span class="comment">% is used, and max_iterations indicates the maximum number of iterations of</span>
+0011 <span class="comment">% the EM-algorithm that estimates the factor analyzers.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%</span>
+0014 
+0015 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0016 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0017 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0018 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0019 <span class="comment">% maintain the name of the original author.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0022 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0023 
+0024 
+0025     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0026         no_dims = 2;
+0027     <span class="keyword">end</span>
+0028     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0029         k = 12;
+0030     <span class="keyword">end</span>
+0031     <span class="keyword">if</span> ~exist(<span class="string">'no_analyzers'</span>, <span class="string">'var'</span>)
+0032         no_analyzers = 40;
+0033     <span class="keyword">end</span>
+0034     <span class="keyword">if</span> ~exist(<span class="string">'max_iterations'</span>, <span class="string">'var'</span>)
+0035         max_iterations = 200;
+0036     <span class="keyword">end</span>
+0037 
+0038     <span class="comment">% Initialize some parameters</span>
+0039     tol = 1e-10;                        <span class="comment">% regularization parameter</span>
+0040     min_std = 1e-3;                     <span class="comment">% minimum STD of Gaussians</span>
+0041 
+0042     <span class="comment">% Computes mixture of factor analyzers (using EM and PCA)</span>
+0043     disp(<span class="string">'Running EM algorithm and compute local factor analyzers...'</span>);
+0044     [LX, MX, PX] = <a href="mppca.html" class="code" title="function [LX, MX, PX] = mppca(X, no_dims, no_analyzers, tol, maxiter, minstd)">mppca</a>(X, no_dims, no_analyzers, tol, max_iterations, min_std);
+0045     <span class="comment">% Variables contain respectively:</span>
+0046     <span class="comment">%  - LX     Lowdimensional representations of X of all factor analyzers</span>
+0047     <span class="comment">%  - MX     Means of factor analyzers of X</span>
+0048     <span class="comment">%  - PX     Noise covariance of X</span>
+0049     
+0050     <span class="comment">% Construct Mixture of Factor Analyzers based on results</span>
+0051     disp(<span class="string">'Constructing mixture of factor analyzers...'</span>);
+0052     [R, Z] = <a href="infermfa.html" class="code" title="function [R, Z] = infermfa(X, LX, MX, PX)">infermfa</a>(X, LX, MX, PX);
+0053     <span class="comment">% Variables contain respectively:</span>
+0054     <span class="comment">%   - R    Responsibilities of components of MFA</span>
+0055     <span class="comment">%   - Z    Mean of posteriors over latent variables of MFA</span>
+0056  
+0057     <span class="comment">% Run the Local Linear Coordination algorithm on the MoFA</span>
+0058     mappedX = <a href="llc.html" class="code" title="function mappedX = llc(X, neighbor, no_dims, R, Z, eig_impl)">llc</a>(X, k, no_dims, R, Z, eig_impl);
+0059</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

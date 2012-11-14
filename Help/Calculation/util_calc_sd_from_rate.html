@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_sd_from_rate</title>
+  <meta name="keywords" content="util_calc_sd_from_rate">
+  <meta name="description" content="UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_sd_from_rate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike
+rate)
+   Input:
+           spif:   Spike information structure
+           bin:    Bin width, default = 1000 ms.
+           bin_int:Bin width, for counting spike rate, default = 100 ms.
+           gnd:    Grounding electrode. default = [].
+                   If you provide [15], it will automatically add four
+                   corner electrodes.
+           threshold: 
+                   if spike per bin of any channel &lt; threshold, the
+                   channel will be removed (not an active channel).
+                   THIS WILL NOT AFFECT THE OUTPUT OF electrode*
+
+
+   Output:
+          elec_sd: S.D. per electrode v.s Time
+
+   Created on Jun/08/2012 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2012-06-10 CHG: Remove normalization: Rate normalization
+                      should be performed using mean rate of each
+                      recording session.
+       PJB#2012-06-11 CHG: Add Multi-core support.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Common/util_moving_window.html" class="code" title="function [ result ] = util_moving_window( x, window_length, mode, func, varargin )">util_moving_window</a>	UTIL_MOVING_WINDOW Applying a @func handle to window-ed data</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/util_script_print_channel_firing_rate_sd.html" class="code" title="function [] = util_script_print_channel_firing_rate_sd( spif, output_folder )">util_script_print_channel_firing_rate_sd</a>	UTIL_SCRIPT_PRINT_CHANNEL_FIRING__RATE_SD A Script that prints out PNGs.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ elec_sd ] = util_calc_sd_from_rate( spif, varargin )</a>
+0002 <span class="comment">%UTIL_CALC_SD_FROM_RATE Get the S.D. of every electrode (based on Spike</span>
+0003 <span class="comment">%rate)</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           spif:   Spike information structure</span>
+0006 <span class="comment">%           bin:    Bin width, default = 1000 ms.</span>
+0007 <span class="comment">%           bin_int:Bin width, for counting spike rate, default = 100 ms.</span>
+0008 <span class="comment">%           gnd:    Grounding electrode. default = [].</span>
+0009 <span class="comment">%                   If you provide [15], it will automatically add four</span>
+0010 <span class="comment">%                   corner electrodes.</span>
+0011 <span class="comment">%           threshold:</span>
+0012 <span class="comment">%                   if spike per bin of any channel &lt; threshold, the</span>
+0013 <span class="comment">%                   channel will be removed (not an active channel).</span>
+0014 <span class="comment">%                   THIS WILL NOT AFFECT THE OUTPUT OF electrode*</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Output:</span>
+0018 <span class="comment">%          elec_sd: S.D. per electrode v.s Time</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Created on Jun/08/2012 By Pu Jiangbo</span>
+0021 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   $Revision:</span>
+0024 <span class="comment">%       PJB#2012-06-10 CHG: Remove normalization: Rate normalization</span>
+0025 <span class="comment">%                      should be performed using mean rate of each</span>
+0026 <span class="comment">%                      recording session.</span>
+0027 <span class="comment">%       PJB#2012-06-11 CHG: Add Multi-core support.</span>
+0028 
+0029 
+0030 <span class="comment">% Analyzing parameters</span>
+0031 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0032 
+0033 <span class="keyword">if</span> ~exist(<span class="string">'bin'</span>, <span class="string">'var'</span>)
+0034     bin = 1000;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">if</span> ~exist(<span class="string">'bin_int'</span>, <span class="string">'var'</span>)
+0038     bin_int = 100;
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> ~exist(<span class="string">'gnd'</span>, <span class="string">'var'</span>)
+0042     gnd = [];
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> ~exist(<span class="string">'threshold'</span>, <span class="string">'var'</span>)
+0046     threshold = 0;
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% Get firing rate</span>
+0050 [ ~,~,~,~, rate, ~,~,~ ] = <a href="util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>( spif, <span class="string">'bin'</span>, bin_int, <span class="string">'gnd'</span>, gnd, <span class="string">'threshold'</span>, threshold, <span class="string">'mode'</span>, <span class="string">'electrode'</span> );
+0051 
+0052 n_elec = size(rate, 2);
+0053 n_bins = size(rate, 1);
+0054 
+0055 <span class="comment">% Get sliding window length</span>
+0056 w_len = fix(bin/bin_int);
+0057 elec_sd = zeros(n_bins-w_len+2, n_elec);
+0058 
+0059 fprintf(<span class="string">'Working...Elec.'</span>)
+0060 
+0061 <span class="comment">% Matlabpool</span>
+0062 <span class="comment">% If we didn't start multiple workers, start them now</span>
+0063 <span class="keyword">if</span> matlabpool(<span class="string">'size'</span>) == 0
+0064     matlabpool;
+0065 <span class="keyword">end</span>
+0066 
+0067 parfor i = 1:n_elec
+0068     <span class="comment">% Don't Normalize by simply using mean rate, Because the firing rate in</span>
+0069     <span class="comment">% the long-term recording is always near 1 or just NaN</span>
+0070     <span class="comment">% rate(:,i) = rate(:,i) / mean(rate(:,i));</span>
+0071     <span class="comment">% util_show_workinfo(['elec.' num2str(util_convert_hw2ch(i)) ' rate bin [' num2str(bin_int) ' ms], window [' num2str(w_len) '/' num2str(n_bins) ']'], 0);</span>
+0072     fprintf([num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(i)) <span class="string">'.'</span>]);
+0073     elec_sd(:,i) = <a href="../Common/util_moving_window.html" class="code" title="function [ result ] = util_moving_window( x, window_length, mode, func, varargin )">util_moving_window</a>(rate(:,i), w_len, <span class="string">'cont'</span>, @std);
+0074 <span class="keyword">end</span>
+0075 
+0076 fprintf(<span class="string">'Done.\n'</span>)
+0077 
+0078 
+0079 <span class="keyword">end</span>
+0080</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

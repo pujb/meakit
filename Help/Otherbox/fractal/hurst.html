@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of hurst</title>
+  <meta name="keywords" content="hurst">
+  <meta name="description" content="Unbiased estimator of the Hurst exponent.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html fractal -->
+<h1>hurst
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Unbiased estimator of the Hurst exponent.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [H,sigma]=hurst(d, k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Unbiased estimator of the Hurst exponent.
+
+ Usage: 
+     [H,sigma]=hurst(d [,k])
+
+ INPUTS:
+ .    d: data
+ .    k: scales which will be used in the determination.
+ .       (k may also be of the form [mink maxk] or simly [maxk] which will
+ .        run faster than explicitly specifying the scales)
+  
+ INPUTS:
+ .    H: hurst exponent estimate.
+ .    sigma: standard dev estimate.
+  
+ Will make a plot if called with no output arguments.
+
+ Author: Aslak Grinsted 2007
+
+ using iterative method described in Koutsoyiannis 2003:
+ &lt;a href=&quot;http://dx.doi.org/10.1623/hysj.48.1.3.43481&quot;&gt;http://dx.doi.org/10.1623/hysj.48.1.3.43481&lt;/a&gt;
+ &lt;a href=&quot;http://www.itia.ntua.gr/getfile/537/2/2003HSJHurstSuppl.pdf&quot;&gt;suppl&lt;/a&gt;
+ &lt;a href=&quot;http://www.itia.ntua.gr/getfile/537/3/2003HSJHurstPP.pdf&quot;&gt;preprint&lt;/a&gt;
+
+ I also really recommend reading this &lt;a href=&quot;http://tamino.wordpress.com/2008/06/10/hurst/&quot;&gt;blog&lt;/a&gt; entry on Hurst exponents.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ar1.html" class="code" title="function [g,a,mu2]=ar1(x)">ar1</a>	AR1 - Allen and Smith AR(1) model estimation.</li><li><a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="estimate_hurst_exponent.html" class="code" title="function [hurst] = estimate_hurst_exponent(data0)   % data set">estimate_hurst_exponent</a>	% The Hurst exponent</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [H,sigma]=hurst(d, k)</a>
+0002 <span class="comment">% Unbiased estimator of the Hurst exponent.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%     [H,sigma]=hurst(d [,k])</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% INPUTS:</span>
+0008 <span class="comment">% .    d: data</span>
+0009 <span class="comment">% .    k: scales which will be used in the determination.</span>
+0010 <span class="comment">% .       (k may also be of the form [mink maxk] or simly [maxk] which will</span>
+0011 <span class="comment">% .        run faster than explicitly specifying the scales)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% INPUTS:</span>
+0014 <span class="comment">% .    H: hurst exponent estimate.</span>
+0015 <span class="comment">% .    sigma: standard dev estimate.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Will make a plot if called with no output arguments.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Author: Aslak Grinsted 2007</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% using iterative method described in Koutsoyiannis 2003:</span>
+0022 <span class="comment">% &lt;a href=&quot;http://dx.doi.org/10.1623/hysj.48.1.3.43481&quot;&gt;http://dx.doi.org/10.1623/hysj.48.1.3.43481&lt;/a&gt;</span>
+0023 <span class="comment">% &lt;a href=&quot;http://www.itia.ntua.gr/getfile/537/2/2003HSJHurstSuppl.pdf&quot;&gt;suppl&lt;/a&gt;</span>
+0024 <span class="comment">% &lt;a href=&quot;http://www.itia.ntua.gr/getfile/537/3/2003HSJHurstPP.pdf&quot;&gt;preprint&lt;/a&gt;</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% I also really recommend reading this &lt;a href=&quot;http://tamino.wordpress.com/2008/06/10/hurst/&quot;&gt;blog&lt;/a&gt; entry on Hurst exponents.</span>
+0027 
+0028 <span class="comment">% return</span>
+0029 <span class="keyword">if</span> nargin==0
+0030     fprintf(<span class="string">'No input arguments for hurst. -Loading stockreturns as an example!...\n'</span>)
+0031     d=load(<span class="string">'stockreturns.mat'</span>);d=d.stocks(:,1);
+0032 <span class="comment">%    d=loadproxy('nautadata.txt');d=d(:,2);%hurst(d(:,2))</span>
+0033 <span class="keyword">end</span>
+0034 d=d(:);
+0035 
+0036 N=length(d);
+0037 
+0038 <span class="keyword">if</span> nargin&lt;2
+0039     k=[1 floor(N/10)];
+0040 <span class="keyword">end</span>
+0041 k=k(:);
+0042 <span class="keyword">if</span> length(k)&gt;2
+0043     sk=zeros(size(k));
+0044     <span class="keyword">for</span> jj=1:length(k) <span class="comment">%slow method but works always....</span>
+0045         <span class="comment">%      ds2=moving(d,k(jj));ds2(isnan(ds2))=[];</span>
+0046         <span class="comment">%      sk(jj,2)=std(ds2(~isnan(ds2)))*k(jj);</span>
+0047         ds=filter(ones(k(jj),1),1,d); <span class="comment">%moving</span>
+0048         ds(1:k(jj)-1)=[];
+0049         sk(jj)=std(ds); <span class="comment">%dont need to multiply because filter is summing</span>
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">else</span>
+0052     <span class="keyword">if</span> length(k)&lt;2
+0053         k=[1 k];
+0054     <span class="keyword">end</span>
+0055     <span class="keyword">if</span> k(1)==1
+0056         ds=zeros(size(d,1)+1,1);
+0057     <span class="keyword">else</span>
+0058         ds=filter(ones(k(1)-1,1),1,d); <span class="comment">%moving</span>
+0059         ds(1:k(1)-2)=[];
+0060     <span class="keyword">end</span>
+0061     k=(k(1):k(2))';
+0062     sk=zeros(size(k));
+0063     <span class="keyword">for</span> jj=1:length(k)
+0064         ds(end)=[];
+0065         ds=ds+d(k(jj):end); <span class="comment">%moving</span>
+0066         <span class="comment">%sk(jj)=std(ds(1:end-2)+ds(3:end)-ds(2:end-1)*2);</span>
+0067         sk(jj)=std(ds); 
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 lnsk=log(sk);
+0071 p=2;
+0072 kp=k.^p; <span class="comment">%weight from paper</span>
+0073 lnk=log(k);
+0074 a11=sum(1./kp);
+0075 a12=sum(lnk./kp);
+0076 <span class="comment">%H=polyfit(lnk,lnsk,1); H=H(1); %traditional simplistic estimate</span>
+0077 H=0.5; lastH=inf;
+0078 itercount=0;
+0079 <span class="keyword">while</span> abs(H-lastH)&gt;0.00001
+0080     lastH=H;
+0081     H=min(H,1);
+0082     ck=sqrt((N./k-(N./k).^(2*H-1))./(N./k-.5));
+0083     lnck=log(ck);
+0084     dk=lnk+log(N./k)./(1-(N./k).^(2-2*H));
+0085     b1=sum(lnsk./kp)-sum(lnck./kp);
+0086     b2=sum(dk.*lnsk./kp)-sum(dk.*lnck./kp);
+0087     a21=sum(dk./kp);
+0088     a22=sum(dk.*lnk./kp);
+0089     H=(a11*b2-a21*b1)/(a11*a22-a21*a12);
+0090     itercount=itercount+1;
+0091     <span class="keyword">if</span> itercount&gt;50
+0092         error(<span class="string">'Hurst.m failed to converge.'</span>)
+0093     <span class="keyword">end</span>
+0094 <span class="keyword">end</span>
+0095 
+0096 sigma=exp((b1-a12*H)/a11);
+0097 
+0098 <span class="keyword">if</span> nargout==0
+0099     <span class="comment">%p=[H log(sigma)];</span>
+0100     [g,a]=<a href="ar1.html" class="code" title="function [g,a,mu2]=ar1(x)">ar1</a>(d); vv=a^2/(1-g^2);
+0101     g0k=vv * (k.*(1-g^2)-2*g*(1-g.^k))/((1-g)^2) ; <span class="comment">%theoretical ar1 .. eq10 (hurst made easy paper)</span>
+0102     fit=ck.*(k.^H)*sigma; <span class="comment">%eq.14</span>
+0103     loglog(k,sk,<span class="string">'.-'</span>,k,fit,<span class="string">'k-'</span>,k,sqrt(g0k),<span class="string">'r:'</span>)
+0104     
+0105     text(k(round(end*.7)),sk(round(end*.7)),<span class="string">'Empirical'</span>,<span class="string">'horiz'</span>,<span class="string">'right'</span>,<span class="string">'vert'</span>,<span class="string">'bottom'</span>,<span class="string">'color'</span>,[0 0 1])
+0106     text(k(end),fit(end),sprintf(<span class="string">'SSS, H=%.2f \\sigma=%s'</span>,H,num2str(sigma,4)),<span class="string">'horiz'</span>,<span class="string">'right'</span>,<span class="string">'vert'</span>,<span class="string">'bottom'</span>)
+0107     text(k(end),sqrt(g0k(end)),sprintf(<span class="string">'AR1, \\gamma=%.2f'</span>,g),<span class="string">'horiz'</span>,<span class="string">'right'</span>,<span class="string">'color'</span>,[1 0 0],<span class="string">'vert'</span>,<span class="string">'top'</span>)
+0108     
+0109 <span class="comment">%    text(0.5,0.6,sprintf('H=%.2f \\sigma=%s',H,num2str(sigma,4)),'horiz','right','units','normalized')</span>
+0110     xlabel(<span class="string">'k'</span>)
+0111     ylabel(<span class="string">'s_k'</span>)
+0112     <a href="../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> H avgsigma sigma
+0113     axis tight
+0114 <span class="keyword">end</span>
+0115</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

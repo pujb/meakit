@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of labeled_curves</title>
+  <meta name="keywords" content="labeled_curves">
+  <meta name="description" content="LABELED_CURVES   Draw multiple curves in different colors with labels.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>labeled_curves
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LABELED_CURVES   Draw multiple curves in different colors with labels.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function h = labeled_curves(x,y,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">LABELED_CURVES   Draw multiple curves in different colors with labels.
+ LABELED_CURVES(X,Y) plots multiples curves in different colors, with
+ a legend and good axes (using AXIS_PCT).
+ There are multiple ways to specify X and Y.
+
+ In the simplest case, every curve has the same x-coordinates, so X is
+ just a vector and Y is a matrix.  Y can also be a structure where each
+ field is a vector of y-coordinates (of equal lengths).
+
+ If curves have different x-coordinates then X should be a structure where 
+ each field is a vector of x-coordinates, and Y is a corresponding structure 
+ where each field is a vector of y-coordinates.
+
+ LABELED_CURVES(X,Y,'color',COLOR) uses the given colors.
+ COLOR is either a cell array of linespec strings (as in PLOT),
+ a matrix of RGB triples (as in COLORMAP), or a structure where each field
+ is either a linespec string or RGB triple. 
+
+ If you are making multiple plots, you can collect all the color 
+ specifications into a single color structure, which ensures the coloring 
+ of a particular curve is consistent among plots.
+
+ By default, the structure field names are used as labels.  Alternatively,
+ you can specify labels as an optional argument:
+
+ LABELED_CURVES(X,Y,...,'labels',LABELS) uses the given labels for the legend 
+ (LABELS is a cell array of strings). Otherwise the field names are used.  
+
+ LABELED_CURVES(X,Y,...,'plotfun',PLOTFUN) uses PLOTFUN instead of 'plot' to 
+ draw the curves.  For example, 'semilogx', 'semilogy', or 'loglog'.
+
+ LABELED_CURVES(X,Y,...,'mobile',1) uses MOBILE_TEXT instead of 
+ LEGEND, for more accurate placement of labels.
+
+ Example:
+   x = linspace(0,6,100);
+   y = [sin(x); cos(x)];
+   labeled_curves(x,y,'labels',{'sin' 'cos'})
+   color = {'g' 'b'};
+   labeled_curves(x,y,'color',color,'labels',{'sin' 'cos'})
+   color = [0 1 0; 0 0 1];
+   labeled_curves(x,y,'color',color,'labels',{'sin' 'cos'})
+
+   y=struct;color=struct;
+   y.sin = sin(x);
+   y.cos = cos(x);
+   color.sin = 'g';
+   color.cos = 'b';
+   labeled_curves(x,y,'color',color)
+   labeled_curves(x,y,'color',color,'plotfun','semilogx','mobile',1)
+
+   xcoord = struct;
+   xcoord.sin = x;
+   xcoord.cos = x;
+   xcoord.tan = linspace(2,4,100);
+   y.tan = tan(xcoord.tan);
+   color.tan = [1 0 0];
+   labeled_curves(xcoord,y,'color',color)
+
+ See also PLOT, LEGEND, <a href="mobile_text.html" class="code" title="function h = mobile_text(varargin)">MOBILE_TEXT</a>, <a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">AXIS_PCT</a>, <a href="linechart.html" class="code" title="function linechart(y,color,varargin)">LINECHART</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in structure array.</li><li><a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../../Otherbox/lightspeed/@mutable/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>	ISFIELD True if field is in mutable structure.</li><li><a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>	AXIS_PCT       Set reasonable axis limits.</li><li><a href="mobile_text.html" class="code" title="function h = mobile_text(varargin)">mobile_text</a>	MOBILE_TEXT('str1', 'str2', ...) places each string in a random position</li><li><a href="../../../Otherbox/lightspeed/makestruct.html" class="code" title="function s = makestruct(varargin)">makestruct</a>	MAKESTRUCT   Cell-friendly alternative to STRUCT.</li><li><a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li><li><a href="../../../Otherbox/lightspeed/setfields.html" class="code" title="function ab = setfields(a, b, newfield_flag)">setfields</a>	SETFIELDS   Set multiple fields of a structure.</li><li><a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="linechart.html" class="code" title="function linechart(y,color,varargin)">linechart</a>	LINECHART(Y,COLOR,VARARGIN) provides extra arguments to LABELED_CURVES.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = labeled_curves(x,y,varargin)</a>
+0002 <span class="comment">%LABELED_CURVES   Draw multiple curves in different colors with labels.</span>
+0003 <span class="comment">% LABELED_CURVES(X,Y) plots multiples curves in different colors, with</span>
+0004 <span class="comment">% a legend and good axes (using AXIS_PCT).</span>
+0005 <span class="comment">% There are multiple ways to specify X and Y.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% In the simplest case, every curve has the same x-coordinates, so X is</span>
+0008 <span class="comment">% just a vector and Y is a matrix.  Y can also be a structure where each</span>
+0009 <span class="comment">% field is a vector of y-coordinates (of equal lengths).</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% If curves have different x-coordinates then X should be a structure where</span>
+0012 <span class="comment">% each field is a vector of x-coordinates, and Y is a corresponding structure</span>
+0013 <span class="comment">% where each field is a vector of y-coordinates.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% LABELED_CURVES(X,Y,'color',COLOR) uses the given colors.</span>
+0016 <span class="comment">% COLOR is either a cell array of linespec strings (as in PLOT),</span>
+0017 <span class="comment">% a matrix of RGB triples (as in COLORMAP), or a structure where each field</span>
+0018 <span class="comment">% is either a linespec string or RGB triple.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% If you are making multiple plots, you can collect all the color</span>
+0021 <span class="comment">% specifications into a single color structure, which ensures the coloring</span>
+0022 <span class="comment">% of a particular curve is consistent among plots.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% By default, the structure field names are used as labels.  Alternatively,</span>
+0025 <span class="comment">% you can specify labels as an optional argument:</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% LABELED_CURVES(X,Y,...,'labels',LABELS) uses the given labels for the legend</span>
+0028 <span class="comment">% (LABELS is a cell array of strings). Otherwise the field names are used.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% LABELED_CURVES(X,Y,...,'plotfun',PLOTFUN) uses PLOTFUN instead of 'plot' to</span>
+0031 <span class="comment">% draw the curves.  For example, 'semilogx', 'semilogy', or 'loglog'.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% LABELED_CURVES(X,Y,...,'mobile',1) uses MOBILE_TEXT instead of</span>
+0034 <span class="comment">% LEGEND, for more accurate placement of labels.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% Example:</span>
+0037 <span class="comment">%   x = linspace(0,6,100);</span>
+0038 <span class="comment">%   y = [sin(x); cos(x)];</span>
+0039 <span class="comment">%   labeled_curves(x,y,'labels',{'sin' 'cos'})</span>
+0040 <span class="comment">%   color = {'g' 'b'};</span>
+0041 <span class="comment">%   labeled_curves(x,y,'color',color,'labels',{'sin' 'cos'})</span>
+0042 <span class="comment">%   color = [0 1 0; 0 0 1];</span>
+0043 <span class="comment">%   labeled_curves(x,y,'color',color,'labels',{'sin' 'cos'})</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   y=struct;color=struct;</span>
+0046 <span class="comment">%   y.sin = sin(x);</span>
+0047 <span class="comment">%   y.cos = cos(x);</span>
+0048 <span class="comment">%   color.sin = 'g';</span>
+0049 <span class="comment">%   color.cos = 'b';</span>
+0050 <span class="comment">%   labeled_curves(x,y,'color',color)</span>
+0051 <span class="comment">%   labeled_curves(x,y,'color',color,'plotfun','semilogx','mobile',1)</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%   xcoord = struct;</span>
+0054 <span class="comment">%   xcoord.sin = x;</span>
+0055 <span class="comment">%   xcoord.cos = x;</span>
+0056 <span class="comment">%   xcoord.tan = linspace(2,4,100);</span>
+0057 <span class="comment">%   y.tan = tan(xcoord.tan);</span>
+0058 <span class="comment">%   color.tan = [1 0 0];</span>
+0059 <span class="comment">%   labeled_curves(xcoord,y,'color',color)</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% See also PLOT, LEGEND, MOBILE_TEXT, AXIS_PCT, LINECHART</span>
+0062 
+0063 <span class="comment">% Written by Tom Minka</span>
+0064 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0065 
+0066 args = <a href="../../../Otherbox/lightspeed/makestruct.html" class="code" title="function s = makestruct(varargin)">makestruct</a>(varargin);
+0067 default_args = struct(<span class="string">'color'</span>,[],<span class="string">'labels'</span>,[],<span class="string">'plotfun'</span>,<span class="string">'plot'</span>,<span class="string">'mobile'</span>,0,<span class="string">'dotstyle'</span>,<span class="string">'.'</span>);
+0068 args = <a href="../../../Otherbox/lightspeed/setfields.html" class="code" title="function ab = setfields(a, b, newfield_flag)">setfields</a>(default_args,args);
+0069 color = args.color;
+0070 labels = args.labels;
+0071 plotfun = args.plotfun;
+0072 mobile_flag = args.mobile;
+0073 dotstyle = args.dotstyle;
+0074 
+0075 <span class="keyword">if</span> ~isstruct(y)
+0076   a = y;
+0077   y = struct;
+0078   <span class="keyword">for</span> i = 1:<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(a)
+0079     y.(sprintf(<span class="string">'V%d'</span>,i)) = a(i,:);
+0080   <span class="keyword">end</span>
+0081 <span class="keyword">end</span>
+0082 fields = <a href="../../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(y);
+0083 <span class="keyword">if</span> isempty(color)
+0084   n = length(fields);
+0085   color = jet(n);
+0086   color = hsv(n);
+0087 <span class="keyword">end</span>
+0088 <span class="keyword">if</span> ~isstruct(color)
+0089   a = color;
+0090   color = struct;
+0091   <span class="keyword">if</span> iscellstr(a)
+0092     <span class="keyword">for</span> i = 1:length(a)
+0093       color.(fields{i}) = a{i};
+0094     <span class="keyword">end</span>
+0095   <span class="keyword">else</span>
+0096     <span class="keyword">for</span> i = 1:<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(a)
+0097       color.(fields{i}) = a(i,:);
+0098     <span class="keyword">end</span>
+0099   <span class="keyword">end</span>
+0100 <span class="keyword">else</span>
+0101   <span class="comment">%fields = fields(ismember(fields, fieldnames(color)));</span>
+0102 <span class="keyword">end</span>
+0103 <span class="keyword">if</span> isempty(labels)
+0104   labels = fields;
+0105 <span class="keyword">end</span>
+0106 
+0107 lastx = struct;
+0108 lasty = struct;
+0109 h = [];
+0110 <span class="keyword">for</span> f = fields'
+0111   field = <a href="../../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f);
+0112   <span class="keyword">if</span> isstruct(x)
+0113     thisx = x.(field);
+0114   <span class="keyword">else</span>
+0115     thisx = x;
+0116   <span class="keyword">end</span>
+0117   thisy = y.(field);
+0118     <span class="keyword">if</span> ~<a href="../../../IO/mcd/mcintfac/@datastrm/isfield.html" class="code" title="function tf = isfield(s,f)">isfield</a>(color,field)
+0119         thiscolor = <span class="string">'k'</span>;
+0120     <span class="keyword">else</span>
+0121         thiscolor = color.(field);
+0122     <span class="keyword">end</span>
+0123   <span class="keyword">if</span> ischar(thiscolor)
+0124     h(end+1) = feval(plotfun,thisx,thisy,thiscolor);
+0125     hold on
+0126     <span class="keyword">if</span> ~isempty(dotstyle)
+0127       feval(plotfun,thisx,thisy,[thiscolor dotstyle]);
+0128     <span class="keyword">end</span>
+0129   <span class="keyword">else</span>
+0130     h(end+1) = feval(plotfun,thisx,thisy);
+0131     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h(end),<span class="string">'Color'</span>,thiscolor);
+0132     hold on
+0133     <span class="keyword">if</span> ~isempty(dotstyle)
+0134       hh = feval(plotfun,thisx,thisy,dotstyle);
+0135       <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hh,<span class="string">'Color'</span>,thiscolor);
+0136     <span class="keyword">end</span>
+0137   <span class="keyword">end</span>
+0138   lastx.(field) = thisx(end);
+0139   lasty.(field) = thisy(end);
+0140 <span class="keyword">end</span>
+0141 hold off
+0142 <a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>;
+0143 legend(h,labels,<span class="string">'location'</span>,<span class="string">'best'</span>)
+0144 <span class="keyword">if</span> mobile_flag
+0145   legend off
+0146   hlab = <a href="mobile_text.html" class="code" title="function h = mobile_text(varargin)">mobile_text</a>(labels{:});
+0147   <span class="keyword">for</span> i = 1:length(hlab)
+0148     <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hlab(i),<span class="string">'Position'</span>,[lastx.(fields{i}) lasty.(fields{i})]);
+0149   <span class="keyword">end</span>
+0150 <span class="keyword">end</span>
+0151 <span class="keyword">if</span> nargout == 0
+0152   <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> h
+0153 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

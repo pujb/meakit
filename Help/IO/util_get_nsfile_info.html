@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_nsfile_info</title>
+  <meta name="keywords" content="util_get_nsfile_info">
+  <meta name="description" content="UTIL_GET_NSFILE_INFO Get file info from a opened handle">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_get_nsfile_info
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_NSFILE_INFO Get file info from a opened handle</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ info ] = util_get_nsfile_info( handle, property_name, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_NSFILE_INFO Get file info from a opened handle
+   Using the provided file handle, the user can use this function to
+   retrieve the named property from the data file.
+   Input:
+       handle:         file handle provided by ns_OpenFile
+       property_name:  the name of the property you want to access
+           if property_name = 'MCDStreamNumber'
+           then you have to give the other parameter &quot;name&quot;.
+   Output:
+       info:           the value of the property
+
+   Usage:
+   (1)
+   Find out how many types of entities in the data file.
+       entity_types = util_get_nsfile_info(hfile, 'EntityTypes');
+       disp('Entity types:');
+       disp(entity_types);
+   (2)
+   Find out how many types of streams in the data file.
+       stream_types = util_get_nsfile_info(hfile, [upper(filetype) 'StreamTypes']);
+       disp('Stream types and numbers (Index: 1-based):');
+       for i = 1:length(stream_types)
+           stream_numbers(i) = util_get_nsfile_info(hfile, [upper(filetype) 'StreamNumber'], 'name', stream_types{i});
+           disp(['    ' stream_types{i} ': ' num2str(stream_numbers(i))]);
+       end
+
+   Created on Jun/10/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>	UTIL_FIND_A_IN_B Find whether one element of B equals each element of A</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../IO/mcd/neuroshare/Matlab/ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>	ns_GetEntityInfo   Retrieves general entity information and type</li><li><a href="../IO/mcd/neuroshare/Matlab/ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>	ns_GetFileInfo   Retrieves file information and entity counts</li><li><a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>	UTIL_DISP_NS_ERRCODE Display the meaning of Neuroshare error code</li><li><a href="util_get_nsentity_typename.html" class="code" title="function [ type_name ] = util_get_nsentity_typename( type_code )">util_get_nsentity_typename</a>	UTIL_GET_NSENTITY_TYPENAME Translate the Neuroshare entity type code into</li><li><a href="util_resolve_nsentity_label.html" class="code" title="function [ stream_name stream_number hwid chidx chid sub_digi_ch ] = util_resolve_nsentity_label( entity_label, label_type )">util_resolve_nsentity_label</a>	UTIL_RESOLVE_NSENTITY_LABEL Resolve the Neuroshare entity label</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_load_raw.html" class="code" title="function [ rawif ] = util_load_raw( varargin )">util_load_raw</a>	UTIL_LOAD_RAW Get the raw data stream from a data file.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ info ] = util_get_nsfile_info( handle, property_name, varargin )</a>
+0002 <span class="comment">%UTIL_GET_NSFILE_INFO Get file info from a opened handle</span>
+0003 <span class="comment">%   Using the provided file handle, the user can use this function to</span>
+0004 <span class="comment">%   retrieve the named property from the data file.</span>
+0005 <span class="comment">%   Input:</span>
+0006 <span class="comment">%       handle:         file handle provided by ns_OpenFile</span>
+0007 <span class="comment">%       property_name:  the name of the property you want to access</span>
+0008 <span class="comment">%           if property_name = 'MCDStreamNumber'</span>
+0009 <span class="comment">%           then you have to give the other parameter &quot;name&quot;.</span>
+0010 <span class="comment">%   Output:</span>
+0011 <span class="comment">%       info:           the value of the property</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   Usage:</span>
+0014 <span class="comment">%   (1)</span>
+0015 <span class="comment">%   Find out how many types of entities in the data file.</span>
+0016 <span class="comment">%       entity_types = util_get_nsfile_info(hfile, 'EntityTypes');</span>
+0017 <span class="comment">%       disp('Entity types:');</span>
+0018 <span class="comment">%       disp(entity_types);</span>
+0019 <span class="comment">%   (2)</span>
+0020 <span class="comment">%   Find out how many types of streams in the data file.</span>
+0021 <span class="comment">%       stream_types = util_get_nsfile_info(hfile, [upper(filetype) 'StreamTypes']);</span>
+0022 <span class="comment">%       disp('Stream types and numbers (Index: 1-based):');</span>
+0023 <span class="comment">%       for i = 1:length(stream_types)</span>
+0024 <span class="comment">%           stream_numbers(i) = util_get_nsfile_info(hfile, [upper(filetype) 'StreamNumber'], 'name', stream_types{i});</span>
+0025 <span class="comment">%           disp(['    ' stream_types{i} ': ' num2str(stream_numbers(i))]);</span>
+0026 <span class="comment">%       end</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   Created on Jun/10/2010 By Pu Jiangbo</span>
+0029 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0030 
+0031 <span class="comment">%   $Revision:</span>
+0032 <span class="comment">%       PJB#2010-06-11  Adding 'MCDStreamTypes'</span>
+0033 <span class="comment">%                       Adding 'MCDStreamNumber'</span>
+0034 
+0035 <span class="comment">% Get parameter</span>
+0036 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0037 
+0038 <span class="comment">% Get file information</span>
+0039 [nsresult, FileInfo] = <a href="../IO/mcd/neuroshare/Matlab/ns_GetFileInfo.html" class="code" title="function [ns_RESULT, nsFileInfo] = ns_GetFileInfo(hFile);">ns_GetFileInfo</a>(handle);
+0040 
+0041 <span class="comment">% Check if success</span>
+0042 <span class="keyword">if</span> (nsresult ~= 0)
+0043     <a href="util_disp_ns_errcode.html" class="code" title="function [errmsg] = util_disp_ns_errcode( errcode, dodisp )">util_disp_ns_errcode</a>(nsresult, true);
+0044     error(<span class="string">'Accessing data file failed.'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% Retrieve the property by request</span>
+0048 <span class="keyword">switch</span> upper(property_name)
+0049     <span class="keyword">case</span> upper(<span class="string">'FileType'</span>)
+0050         info = FileInfo.FileType;
+0051     <span class="keyword">case</span> upper(<span class="string">'EntityCount'</span>)
+0052         info = FileInfo.EntityCount;
+0053     <span class="keyword">case</span> upper(<span class="string">'EntityTypes'</span>)
+0054         <span class="comment">% Get info of all entities</span>
+0055         [~, entity_info] = <a href="../IO/mcd/neuroshare/Matlab/ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(handle, (1 : 1 : FileInfo.EntityCount));
+0056         entity_types = arrayfun(@(x)(x.EntityType), entity_info);
+0057         <span class="comment">% Find different types</span>
+0058         info_code(1) = entity_types(1);
+0059         <span class="keyword">for</span> i = 2:length(entity_types)
+0060             <span class="keyword">if</span> ~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>(entity_types(i), info_code)
+0061                 info_code(end+1) = entity_types(i);
+0062             <span class="keyword">end</span>
+0063         <span class="keyword">end</span>
+0064         <span class="comment">% Translate type codes into type names</span>
+0065         <span class="keyword">for</span> i = 1:length(info_code)
+0066             info{i} = <a href="util_get_nsentity_typename.html" class="code" title="function [ type_name ] = util_get_nsentity_typename( type_code )">util_get_nsentity_typename</a>(info_code(i));
+0067         <span class="keyword">end</span>
+0068     <span class="keyword">case</span> upper(<span class="string">'MCDStreamTypes'</span>)
+0069         <span class="comment">% Get info of all entities</span>
+0070         [~, entity_info] = <a href="../IO/mcd/neuroshare/Matlab/ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(handle, (1 : 1 : FileInfo.EntityCount));
+0071         entity_labels = arrayfun(@(x)(x.EntityLabel), entity_info, <span class="string">'UniformOutput'</span>, false);
+0072         <span class="comment">% Find different types</span>
+0073         [ firstone, ~, ~, ~, ~, ~ ] = <a href="util_resolve_nsentity_label.html" class="code" title="function [ stream_name stream_number hwid chidx chid sub_digi_ch ] = util_resolve_nsentity_label( entity_label, label_type )">util_resolve_nsentity_label</a>( entity_labels{1}, <span class="string">'MCD'</span> );
+0074         info{1} = firstone;
+0075         <span class="keyword">for</span> i = 2:length(entity_labels)
+0076             [ curr, ~, ~, ~, ~, ~ ] = <a href="util_resolve_nsentity_label.html" class="code" title="function [ stream_name stream_number hwid chidx chid sub_digi_ch ] = util_resolve_nsentity_label( entity_label, label_type )">util_resolve_nsentity_label</a>( entity_labels{i}, <span class="string">'MCD'</span> );
+0077             <span class="keyword">if</span> ~<a href="../Common/util_find_a_in_b.html" class="code" title="function [ isFind loc_a loc_b ] = util_find_a_in_b( a, b, varargin )">util_find_a_in_b</a>({curr}, info, <span class="string">'string_mode'</span>, true)
+0078                 info{end+1} = curr;
+0079             <span class="keyword">end</span>
+0080         <span class="keyword">end</span>
+0081     <span class="keyword">case</span> upper(<span class="string">'MCDStreamNumber'</span>)
+0082         <span class="comment">% Check input</span>
+0083         <span class="keyword">if</span> ~exist(<span class="string">'name'</span>, <span class="string">'var'</span>)
+0084             error(<span class="string">'MCDStreamNumber requires the stream name.'</span>);
+0085         <span class="keyword">end</span>
+0086         <span class="comment">% Get info of all entities</span>
+0087         [~, entity_info] = <a href="../IO/mcd/neuroshare/Matlab/ns_GetEntityInfo.html" class="code" title="function [ns_RESULT, nsEntityInfo] = ns_GetEntityInfo(hFile, EntityID);">ns_GetEntityInfo</a>(handle, (1 : 1 : FileInfo.EntityCount));
+0088         entity_labels = arrayfun(@(x)(x.EntityLabel), entity_info, <span class="string">'UniformOutput'</span>, false);
+0089         info = 0;
+0090         <span class="keyword">for</span> i = 1:length(entity_labels)
+0091             [ stream_name, stream_number, ~, ~, ~, ~ ] = <a href="util_resolve_nsentity_label.html" class="code" title="function [ stream_name stream_number hwid chidx chid sub_digi_ch ] = util_resolve_nsentity_label( entity_label, label_type )">util_resolve_nsentity_label</a>( entity_labels{i}, <span class="string">'MCD'</span> );
+0092             <span class="keyword">if</span> strcmpi(stream_name, name)
+0093                 <span class="keyword">if</span> info &lt; stream_number
+0094                     info = stream_number;
+0095                 <span class="keyword">end</span>
+0096             <span class="keyword">end</span>
+0097         <span class="keyword">end</span>
+0098     <span class="keyword">case</span> upper(<span class="string">'TimeRes'</span>)   <span class="comment">% ms</span>
+0099         info = FileInfo.TimeStampResolution * 1000;
+0100     <span class="keyword">case</span> upper(<span class="string">'SamplFreq'</span>) <span class="comment">% Hz</span>
+0101         info = 1/FileInfo.TimeStampResolution;
+0102     <span class="keyword">case</span> upper(<span class="string">'TimeSpan'</span>)  <span class="comment">% ms</span>
+0103         info = FileInfo.TimeSpan * 1000;
+0104     <span class="keyword">case</span> upper(<span class="string">'AppName'</span>)
+0105         info = FileInfo.AppName;
+0106     <span class="keyword">case</span> upper(<span class="string">'StartTime'</span>)
+0107         info = datenum( FileInfo.Time_Year, <span class="keyword">...</span>
+0108                         FileInfo.Time_Month, <span class="keyword">...</span>
+0109                         FileInfo.Time_Day, <span class="keyword">...</span>
+0110                         FileInfo.Time_Hour, <span class="keyword">...</span>
+0111                         FileInfo.Time_Min, <span class="keyword">...</span>
+0112                         FileInfo.Time_Sec + (FileInfo.Time_MilliSec / 1000));
+0113     <span class="keyword">case</span> upper(<span class="string">'Comment'</span>)
+0114         info = FileInfo.FileComment;
+0115     <span class="keyword">otherwise</span>
+0116         info = FileInfo;
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="keyword">end</span>
+0120</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

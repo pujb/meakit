@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of global_definitions</title>
+  <meta name="keywords" content="global_definitions">
+  <meta name="description" content="definitions for csim_net.c">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>global_definitions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>definitions for csim_net.c</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">
+ definitions for csim_net.c</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lsm/lsm_startup.html" class="code" title="">lsm_startup</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">%</span>
+0002 <span class="comment">% definitions for csim_net.c</span>
+0003 <span class="comment">%</span>
+0004 
+0005 <span class="comment">%</span>
+0006 <span class="comment">% fundamental parameters</span>
+0007 <span class="comment">%</span>
+0008 
+0009 SPIKING = 1;
+0010 SIGMOID = 2;
+0011 
+0012 <span class="comment">% this sets the type of the liquid !!!</span>
+0013 LIQUID = SPIKING;
+0014 
+0015 <span class="comment">%</span>
+0016 <span class="comment">% neuron models and flags</span>
+0017 <span class="comment">%</span>
+0018 INPUT            =     1;    <span class="comment">%-&gt;csim_net.c</span>
+0019 SPIKE_INPUT      = INPUT;    <span class="comment">%-&gt;csim_net.c</span>
+0020 SRM_ABS          =     2;    <span class="comment">%-&gt;csim_net.c</span>
+0021 SRM_LTM          =     4;    <span class="comment">%-&gt;csim_net.c</span>
+0022 SRM_STM          =     8;    <span class="comment">%-&gt;csim_net.c</span>
+0023 LIF_NEURON       =    16;    <span class="comment">%-&gt;csim_net.c</span>
+0024 OUTPUT           =    32;    <span class="comment">%-&gt;csim_net.c</span>
+0025 ANALOG_INPUT     =    64;    <span class="comment">%-&gt;csim_net.c</span>
+0026 SIG_NEURON       =   128;
+0027 KHEP_PROX_INPUT  =   256;
+0028 KHEP_MOT_INPUT   =   512;
+0029 KHEP_LIGHT_INPUT =  1024;
+0030 TRACKER_INPUT    =  2048;
+0031 
+0032 OUTPUT_bitnmr = log(OUTPUT)/log(2)+1;
+0033 
+0034 <span class="comment">%</span>
+0035 <span class="comment">% synapse models and flags</span>
+0036 <span class="comment">%</span>
+0037 STATIC           =       1;  <span class="comment">%-&gt;csim_net.c</span>
+0038 MARKRAM          =       2;  <span class="comment">%-&gt;csim_net.c</span>
+0039 DYNAMIC          = MARKRAM;  <span class="comment">%-&gt;csim_net.c</span>
+0040 STOCHASTIC       =       4;  <span class="comment">%-&gt;csim_net.c</span>
+0041 DETERMININSTIC   =       8;  <span class="comment">%-&gt;csim_net.c</span>
+0042 NOISY            =      16;  <span class="comment">%-&gt;csim_net.c</span>
+0043 LEARN            =      64;  <span class="comment">%-&gt;csim_net.c</span>
+0044 ANA_DYN_SYN      =     128;
+0045 ANALOG           =     256;
+0046 ANA_STAT_SYN     =  ANALOG;
+0047 ANALOG_SYNAPSE   =  ANALOG;
+0048 SPIKE_SYNAPSE    =     512;
+0049 
+0050 <span class="comment">%</span>
+0051 <span class="comment">% some constant definitions</span>
+0052 <span class="comment">%</span>
+0053 INH = 1;
+0054 EXC = 2;
+0055 
+0056 <span class="comment">%</span>
+0057 <span class="comment">% synapse types</span>
+0058 <span class="comment">%</span>
+0059 II = (INH-1) * 2 + INH;
+0060 IE = (INH-1) * 2 + EXC;
+0061 EI = (EXC-1) * 2 + INH;
+0062 EE = (EXC-1) * 2 + EXC;
+0063 syn_type_str = { <span class="string">'II'</span> <span class="string">'IE'</span> <span class="string">'EI'</span> <span class="string">'EE'</span> };
+0064 
+0065 <span class="comment">%</span>
+0066 <span class="comment">% regions</span>
+0067 <span class="comment">%</span>
+0068 ALL=[];
+0069 
+0070 <span class="comment">%</span>
+0071 <span class="comment">% for reading out the state</span>
+0072 <span class="comment">%</span>
+0073 
+0074 READ_CURRENT   = 1;
+0075 READ_POTENTIAL = 2;
+0076 PROBABILITY    = 1;
+0077 FRACTION       = 2;
+0078 
+0079 <span class="comment">%</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% for learning</span>
+0082 <span class="comment">%</span>
+0083 NO_LEARN       =   0; <span class="comment">%-&gt;csim_net.c</span>
+0084 ON_SHOT_LEARN  =   1; <span class="comment">%-&gt;csim_net.c</span>
+0085 BATCH_LEARN    =   2; <span class="comment">%-&gt;csim_net.c</span>
+0086 LEARN_TRACE    = 128; <span class="comment">%-&gt;csim_net.c</span>
+0087 
+0088 <span class="comment">% used to define which synapses are learnable</span>
+0089 EXC_INPUT_SYN  = 1;
+0090 INH_INPUT_SYN  = 2;
+0091 II_LIQUID_SYN  = 3;
+0092 IE_LIQUID_SYN  = 4;
+0093 EI_LIQUID_SYN  = 5;
+0094 EE_LIQUID_SYN  = 6;
+0095 EXC_OUTPUT_SYN = 7;
+0096 INH_OUTPUT_SYN = 8;
+0097 
+0098 <span class="comment">%</span>
+0099 <span class="comment">% for plotting and printing</span>
+0100 <span class="comment">%</span>
+0101 <span class="keyword">global</span> VERBOSE_LEVEL
+0102 <span class="keyword">global</span> PLOTTING_LEVEL
+0103 
+0104 <span class="keyword">if</span> isempty(VERBOSE_LEVEL), VERBOSE_LEVEL   = 2; <span class="keyword">end</span>;
+0105 <span class="keyword">if</span> isempty(PLOTTING_LEVEL), PLOTTING_LEVEL = 2; <span class="keyword">end</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

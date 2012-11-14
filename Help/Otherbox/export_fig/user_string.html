@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of user_string</title>
+  <meta name="keywords" content="user_string">
+  <meta name="description" content="USER_STRING  Get/set a user specific string">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html export_fig -->
+<h1>user_string
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>USER_STRING  Get/set a user specific string</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function string = user_string(string_name, string) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">USER_STRING  Get/set a user specific string
+
+ Examples:
+   string = user_string(string_name)
+   saved = user_string(string_name, new_string)
+
+ Function to get and set a string in a system or user specific file. This
+ enables, for example, system specific paths to binaries to be saved.
+
+ IN:
+   string_name - String containing the name of the string required. The
+                 string is extracted from a file called (string_name).txt,
+                 stored in the same directory as user_string.m.
+   new_string - The new string to be saved under the name given by
+                string_name.
+
+ OUT:
+   string - The currently saved string. Default: ''.
+   saved - Boolean indicating whether the save was succesful</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li><li><a href="pdftops.html" class="code" title="function varargout = pdftops(cmd)">pdftops</a>	PDFTOPS  Calls a local pdftops executable with the input command</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%USER_STRING  Get/set a user specific string</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   string = user_string(string_name)</span>
+0005 <span class="comment">%   saved = user_string(string_name, new_string)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Function to get and set a string in a system or user specific file. This</span>
+0008 <span class="comment">% enables, for example, system specific paths to binaries to be saved.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% IN:</span>
+0011 <span class="comment">%   string_name - String containing the name of the string required. The</span>
+0012 <span class="comment">%                 string is extracted from a file called (string_name).txt,</span>
+0013 <span class="comment">%                 stored in the same directory as user_string.m.</span>
+0014 <span class="comment">%   new_string - The new string to be saved under the name given by</span>
+0015 <span class="comment">%                string_name.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% OUT:</span>
+0018 <span class="comment">%   string - The currently saved string. Default: ''.</span>
+0019 <span class="comment">%   saved - Boolean indicating whether the save was succesful</span>
+0020 
+0021 <span class="comment">% Copyright (C) Oliver Woodford 2011</span>
+0022 
+0023 <span class="comment">% This method of saving paths avoids changing .m files which might be in a</span>
+0024 <span class="comment">% version control system. Instead it saves the user dependent paths in</span>
+0025 <span class="comment">% separate files with a .txt extension, which need not be checked in to</span>
+0026 <span class="comment">% the version control system. Thank you to Jonas Dorn for suggesting this</span>
+0027 <span class="comment">% approach.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function string = user_string(string_name, string)</a>
+0030 <span class="keyword">if</span> ~ischar(string_name)
+0031     error(<span class="string">'string_name must be a string.'</span>);
+0032 <span class="keyword">end</span>
+0033 <span class="comment">% Create the full filename</span>
+0034 string_name = fullfile(fileparts(mfilename(<span class="string">'fullpath'</span>)), <span class="string">'.ignore'</span>, [string_name <span class="string">'.txt'</span>]);
+0035 <span class="keyword">if</span> nargin &gt; 1
+0036     <span class="comment">% Set string</span>
+0037     <span class="keyword">if</span> ~ischar(string)
+0038         error(<span class="string">'new_string must be a string.'</span>);
+0039     <span class="keyword">end</span>
+0040     <span class="comment">% Make sure the save directory exists</span>
+0041     dname = fileparts(string_name);
+0042     <span class="keyword">if</span> ~exist(dname, <span class="string">'dir'</span>)
+0043         <span class="comment">% Create the directory</span>
+0044         <span class="keyword">try</span>
+0045             <span class="keyword">if</span> ~mkdir(dname)                
+0046                 string = false;
+0047                 <span class="keyword">return</span>
+0048             <span class="keyword">end</span>
+0049         <span class="keyword">catch</span>
+0050             string = false;
+0051             <span class="keyword">return</span>
+0052         <span class="keyword">end</span>
+0053         <span class="comment">% Make it hidden</span>
+0054         <span class="keyword">try</span>
+0055             fileattrib(dname, <span class="string">'+h'</span>);
+0056         <span class="keyword">catch</span>
+0057         <span class="keyword">end</span>
+0058     <span class="keyword">end</span>
+0059     <span class="comment">% Write the file</span>
+0060     fid = fopen(string_name, <span class="string">'w'</span>);
+0061     <span class="keyword">if</span> fid == -1
+0062         string = false;
+0063         <span class="keyword">return</span>
+0064     <span class="keyword">end</span>
+0065     <span class="keyword">try</span>
+0066         fwrite(fid, string, <span class="string">'*char'</span>);
+0067     <span class="keyword">catch</span>
+0068         fclose(fid);
+0069         string = false;
+0070         <span class="keyword">return</span>
+0071     <span class="keyword">end</span>
+0072     fclose(fid);
+0073     string = true;
+0074 <span class="keyword">else</span>
+0075     <span class="comment">% Get string</span>
+0076     fid = fopen(string_name, <span class="string">'r'</span>);
+0077     <span class="keyword">if</span> fid == -1
+0078         string = <span class="string">''</span>;
+0079         <span class="keyword">return</span>
+0080     <span class="keyword">end</span>
+0081     string = fread(fid, <span class="string">'*char'</span>);
+0082     fclose(fid);
+0083 <span class="keyword">end</span>
+0084 <span class="keyword">return</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

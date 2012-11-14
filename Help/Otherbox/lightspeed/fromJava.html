@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fromJava</title>
+  <meta name="keywords" content="fromJava">
+  <meta name="description" content="fromJava    Convert from Java to Matlab.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>fromJava
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>fromJava    Convert from Java to Matlab.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function v = fromJava(jv) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">fromJava    Convert from Java to Matlab.
+ fromJava(jv) converts a Java object back into a matlab object, reversing
+ the action of toJava.
+
+ See also <a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>	setfield - sets any field in datastream objects (datastream method)</li><li><a href="../../Otherbox/lightspeed/@mutable/setfield.html" class="code" title="function s = setfield(s,field,v)">setfield</a>	SETFIELD Set mutable structure field contents.</li><li><a href="../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>	fromJava    Convert from Java to Matlab.</li><li><a href="ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>	IND2SUBV   Subscript vector from linear index.</li><li><a href="sizeJava.html" class="code" title="function sz = sizeJava(jv)">sizeJava</a>	sizeJava(jv) returns the size of a java array, in a manner corresponding</li><li><a href="vec.html" class="code" title="function v = vec(a)">vec</a>	</li><li><a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../../Otherbox/panel/@panel/subsref.html" class="code" title="function val = subsref(p, s)">subsref</a>	% extract panel</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../Otherbox/lightspeed/@mutable/immutable.html" class="code" title="function v = immutable(mut)">immutable</a>	IMMUTABLE     Convert to an ordinary (immutable) object.</li><li><a href="../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>	Written by Tom Minka</li><li><a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>	fromJava    Convert from Java to Matlab.</li><li><a href="../../Otherbox/lightspeed/tests/test_java.html" class="code" title="">test_java</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function v = fromJava(jv)</a>
+0002 <span class="comment">%fromJava    Convert from Java to Matlab.</span>
+0003 <span class="comment">% fromJava(jv) converts a Java object back into a matlab object, reversing</span>
+0004 <span class="comment">% the action of toJava.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% See also toJava.</span>
+0007 
+0008 <span class="comment">% Written by Thomas Minka</span>
+0009 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0010 
+0011 <span class="keyword">if</span> ~isjava(jv)
+0012   v = jv;
+0013   <span class="keyword">return</span>
+0014 <span class="keyword">end</span>
+0015 <span class="comment">% class(jv) is expensive, so we do it only once</span>
+0016 cl = class(jv);
+0017 <span class="comment">% common cases first</span>
+0018 <span class="keyword">if</span> strncmp(cl,<span class="string">'java.lang.Double'</span>,16)
+0019   v = double(jv);
+0020   <span class="keyword">return</span>
+0021 <span class="keyword">end</span>
+0022 <span class="keyword">if</span> strncmp(cl,<span class="string">'java.lang.String'</span>,16)
+0023   v = <a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(jv);
+0024   <span class="keyword">return</span>
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">if</span> strncmp(cl,<span class="string">'java.lang.Object[]'</span>,18)
+0027   sz = <a href="sizeJava.html" class="code" title="function sz = sizeJava(jv)">sizeJava</a>(jv);
+0028   v = cell(1,prod(sz));  
+0029   <span class="keyword">for</span> i = 1:length(v)
+0030     index = substruct(<span class="string">'()'</span>,num2cell(<a href="ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>(sz,i)));
+0031     elt = <a href="../../Otherbox/lightspeed/@mutable/subsref.html" class="code" title="function v = subsref(mut,index)">subsref</a>(jv,index);
+0032     v{i} = <a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>(elt);
+0033     <span class="comment">% this also works:</span>
+0034     <span class="comment">%v = subsasgn(v,index,elt);</span>
+0035   <span class="keyword">end</span>
+0036   v = reshape(v,sz);
+0037   <span class="keyword">return</span>
+0038 <span class="keyword">end</span>
+0039 <span class="keyword">if</span> strcmp(cl,<span class="string">'java.util.Hashtable'</span>)
+0040   v = struct;
+0041   fields = jv.get(<span class="string">'_fields'</span>);
+0042   <span class="keyword">if</span> ~isempty(fields)
+0043     <span class="comment">% create the fields in the right order</span>
+0044     ke = fields.elements;
+0045   <span class="keyword">else</span>
+0046     <span class="comment">% create the fields in random order</span>
+0047     ke = jv.keys;
+0048   <span class="keyword">end</span>
+0049   <span class="keyword">while</span> ke.hasMoreElements
+0050     f = ke.nextElement;
+0051     v = <a href="../../IO/mcd/mcintfac/@datastrm/setfield.html" class="code" title="function a=setfield(d,name,value)">setfield</a>(v,<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f),<a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>(jv.get(f)));
+0052   <span class="keyword">end</span>
+0053   c = jv.get(<span class="string">'_class'</span>);
+0054   <span class="keyword">if</span> ~isempty(c)
+0055     <span class="comment">% call the class constructor with the structure as argument</span>
+0056     <span class="comment">% (doesn't work for all classes)</span>
+0057     v = feval(c,v);
+0058   <span class="keyword">end</span>
+0059   <span class="keyword">return</span>
+0060 <span class="keyword">end</span>
+0061 <span class="keyword">if</span> strcmp(cl,<span class="string">'java.util.Vector'</span>)
+0062   v = [];
+0063   <span class="keyword">return</span>
+0064 <span class="keyword">end</span>
+0065 <span class="keyword">if</span> strcmp(cl,<span class="string">'java.util.BitSet'</span>)
+0066   v = {};
+0067   <span class="keyword">return</span>
+0068 <span class="keyword">end</span>
+0069 <span class="comment">% use matlab's builtin converter from java.lang.Object</span>
+0070 <a href="vec.html" class="code" title="function v = vec(a)">vec</a> = java.util.Vector;
+0071 vec.addElement(jv);
+0072 v = vec.elementAt(0);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,6 @@
+util_sub_get_sync_mex.mexw32
+_emlrtMexFcnProperties		_emlrtMexFcnProperties
+_mexFunction		_mexFunction
+_util_sub_get_sync		_util_sub_get_sync
+_util_sub_get_sync_initialize		_util_sub_get_sync_initialize
+_util_sub_get_sync_terminate		_util_sub_get_sync_terminate

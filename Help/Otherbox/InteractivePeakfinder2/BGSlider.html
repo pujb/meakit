@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of BGSlider</title>
+  <meta name="keywords" content="BGSlider">
+  <meta name="description" content="Called when the BG slider is clicked.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>BGSlider
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Called when the BG slider is clicked.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function BGSlider(n,h) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> Called when the BG slider is clicked.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="RedrawPeak.html" class="code" title="">RedrawPeak</a>	Redraws graph for FindPeakSliders when Peak slider is moved.</li><li><a href="findpeakslidersRedraw.html" class="code" title="function P=findpeakslidersRedraw(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth)">findpeakslidersRedraw</a>	Redraws graph for FindPeakSliders when slider are moved.</li><li><a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>	Returns the index and the value of the element of vector x that is closest to val</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="FindPeakSliders.html" class="code" title="">FindPeakSliders</a>	Interactive findpeaks script for pre-defined data in x,y.</li><li><a href="FindPeakSlidersG.html" class="code" title="">FindPeakSlidersG</a>	Interactive findpeaks script with peak-zoom feature,</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [index,closestval]=val2ind(x,val)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BGSlider(n,h)</a>
+0002 <span class="comment">% Called when the BG slider is clicked.</span>
+0003 
+0004 <span class="keyword">global</span> x
+0005 <span class="keyword">global</span> y
+0006 <span class="keyword">global</span> SlopeThreshold 
+0007 <span class="keyword">global</span> AmpThreshold  
+0008 <span class="keyword">global</span> SmoothWidth
+0009 <span class="keyword">global</span> FitWidth
+0010 <span class="keyword">global</span> P
+0011 <span class="keyword">global</span> PeakNumber
+0012 
+0013 warning off MATLAB:divideByZero
+0014 
+0015 BaselinePoints=8;  <span class="comment">% Change as you wish</span>
+0016 
+0017 <span class="comment">% Acquire background points from user mouse clicks</span>
+0018 title([<span class="string">'Click on '</span> num2str(BaselinePoints) <span class="string">' points on the baseline between the peaks.'</span>])
+0019 X=[];Y=[];
+0020 <span class="keyword">for</span> g=1:BaselinePoints;
+0021    [clickX,clickY] = ginput(1);
+0022    X(g)=clickX;
+0023    Y(g)=clickY;
+0024    xlabel([<span class="string">'Baseline point '</span>  num2str(g) ])
+0025 <span class="keyword">end</span>
+0026 yy=y;
+0027 <span class="keyword">for</span> k=1:length(X)-1,
+0028    fp=<a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>(x,X(k));
+0029    lp=<a href="val2ind.html" class="code" title="function [index,closestval]=val2ind(x,val)">val2ind</a>(x,X(k+1));
+0030    yy(fp:lp)=y(fp:lp)-((Y(k+1)-Y(k))/(X(k+1)-X(k))*(x(fp:lp)-X(k))+Y(k));
+0031 <span class="keyword">end</span>
+0032 y=yy;
+0033 <span class="keyword">if</span> PeakNumber==0,
+0034     P=<a href="findpeakslidersRedraw.html" class="code" title="function P=findpeakslidersRedraw(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth)">findpeakslidersRedraw</a>(x,y,SlopeThreshold,AmpThreshold,SmoothWidth,FitWidth);
+0035 <span class="keyword">else</span>
+0036     <a href="RedrawPeak.html" class="code" title="">RedrawPeak</a>
+0037 <span class="keyword">end</span>
+0038 
+0039 <a name="_sub1" href="#_subfunctions" class="code">function [index,closestval]=val2ind(x,val)</a>
+0040 <span class="comment">% Returns the index and the value of the element of vector x that is closest to val</span>
+0041 <span class="comment">% If more than one element is equally close, returns vectors of indicies and values</span>
+0042 <span class="comment">% Tom O'Haver (toh@umd.edu) October 2006</span>
+0043 <span class="comment">% Examples: If x=[1 2 4 3 5 9 6 4 5 3 1], then val2ind(x,6)=7 and val2ind(x,5.1)=[5 9]</span>
+0044 <span class="comment">% [indices values]=val2ind(x,3.3) returns indices = [4 10] and values = [3 3]</span>
+0045 dif=abs(x-val);
+0046 index=find((dif-min(dif))==0);
+0047 closestval=x(index);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

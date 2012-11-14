@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of x2p</title>
+  <meta name="keywords" content="x2p">
+  <meta name="description" content="X2P Identifies appropriate sigma's to get kk NNs up to some tolerance">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>x2p
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>X2P Identifies appropriate sigma's to get kk NNs up to some tolerance</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [P, beta] = x2p(X, u, tol) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">X2P Identifies appropriate sigma's to get kk NNs up to some tolerance 
+
+   [P, beta] = x2p(xx, kk, tol)
+ 
+ Identifies the required precision (= 1 / variance^2) to obtain a Gaussian
+ kernel with a certain uncertainty for every datapoint. The desired
+ uncertainty can be specified through the perplexity u (default = 15). The
+ desired perplexity is obtained up to some tolerance that can be specified
+ by tol (default = 1e-4).
+ The function returns the final Gaussian kernel in P, as well as the 
+ employed precisions per instance in beta.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="sne.html" class="code" title="function Y = sne(X, d, perplexity)">sne</a>	SNE Implementation of Stochastic Neighbor Embedding</li><li><a href="sym_sne.html" class="code" title="function Y = sym_sne(X, d, perplexity)">sym_sne</a>	SNE Implementation of symmetric Stochastic Neighbor Embedding</li></ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [H, P] = Hbeta(D, beta)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [P, beta] = x2p(X, u, tol)</a>
+0002 <span class="comment">%X2P Identifies appropriate sigma's to get kk NNs up to some tolerance</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [P, beta] = x2p(xx, kk, tol)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Identifies the required precision (= 1 / variance^2) to obtain a Gaussian</span>
+0007 <span class="comment">% kernel with a certain uncertainty for every datapoint. The desired</span>
+0008 <span class="comment">% uncertainty can be specified through the perplexity u (default = 15). The</span>
+0009 <span class="comment">% desired perplexity is obtained up to some tolerance that can be specified</span>
+0010 <span class="comment">% by tol (default = 1e-4).</span>
+0011 <span class="comment">% The function returns the final Gaussian kernel in P, as well as the</span>
+0012 <span class="comment">% employed precisions per instance in beta.</span>
+0013 <span class="comment">%</span>
+0014 
+0015     
+0016     <span class="keyword">if</span> ~exist(<span class="string">'u'</span>, <span class="string">'var'</span>) || isempty(u)
+0017         u = 15;
+0018     <span class="keyword">end</span>
+0019     <span class="keyword">if</span> ~exist(<span class="string">'tol'</span>, <span class="string">'var'</span>) || isempty(tol)
+0020         tol = 1e-4; 
+0021     <span class="keyword">end</span>
+0022     
+0023     <span class="comment">% Initialize some variables</span>
+0024     n = size(X, 1);                     <span class="comment">% number of instances</span>
+0025     P = zeros(n, n);                    <span class="comment">% empty probability matrix</span>
+0026     beta = ones(n, 1);                  <span class="comment">% empty precision vector</span>
+0027     logU = log(u);                      <span class="comment">% log of perplexity (= entropy)</span>
+0028     
+0029     <span class="comment">% Compute pairwise distances</span>
+0030 <span class="comment">%     disp('Computing pairwise distances...');</span>
+0031     D = squareform(pdist(X, <span class="string">'euclidean'</span>) .^ 2);
+0032 
+0033     <span class="comment">% Run over all datapoints</span>
+0034 <span class="comment">%     disp('Computing P-values...');</span>
+0035     <span class="keyword">for</span> i=1:n
+0036         
+0037 <span class="comment">%         if ~rem(i, 500)</span>
+0038 <span class="comment">%             disp(['Computed P-values ' num2str(i) ' of ' num2str(n) ' datapoints...']);</span>
+0039 <span class="comment">%         end</span>
+0040         
+0041         <span class="comment">% Set minimum and maximum values for precision</span>
+0042         betamin = -Inf; 
+0043         betamax = Inf;
+0044         
+0045         <span class="comment">% Compute the Gaussian kernel and entropy for the current precision</span>
+0046         Di = D(i, [1:i-1 i+1:end]);
+0047         [H, thisP] = <a href="#_sub1" class="code" title="subfunction [H, P] = Hbeta(D, beta)">Hbeta</a>(Di, beta(i));
+0048         
+0049         <span class="comment">% Evaluate whether the perplexity is within tolerance</span>
+0050         Hdiff = H - logU;
+0051         tries = 0;
+0052         <span class="keyword">while</span> abs(Hdiff) &gt; tol &amp;&amp; tries &lt; 50
+0053             
+0054             <span class="comment">% If not, increase or decrease precision</span>
+0055             <span class="keyword">if</span> Hdiff &gt; 0
+0056                 betamin = beta(i);
+0057                 <span class="keyword">if</span> isinf(betamax)
+0058                     beta(i) = beta(i) * 2;
+0059                 <span class="keyword">else</span>
+0060                     beta(i) = (beta(i) + betamax) / 2;
+0061                 <span class="keyword">end</span>
+0062             <span class="keyword">else</span>
+0063                 betamax = beta(i);
+0064                 <span class="keyword">if</span> isinf(betamin) 
+0065                     beta(i) = beta(i) / 2;
+0066                 <span class="keyword">else</span>
+0067                     beta(i) = (beta(i) + betamin) / 2;
+0068                 <span class="keyword">end</span>
+0069             <span class="keyword">end</span>
+0070             
+0071             <span class="comment">% Recompute the values</span>
+0072             [H, thisP] = <a href="#_sub1" class="code" title="subfunction [H, P] = Hbeta(D, beta)">Hbeta</a>(Di, beta(i));
+0073             Hdiff = H - logU;
+0074             tries = tries + 1;
+0075         <span class="keyword">end</span>
+0076         
+0077         <span class="comment">% Set the final row of P</span>
+0078         P(i, [1:i - 1, i + 1:end]) = thisP;
+0079     <span class="keyword">end</span>    
+0080 <span class="comment">%     disp(['Mean value of sigma: ' num2str(mean(sqrt(1 ./ beta)))]);</span>
+0081 <span class="comment">%     disp(['Minimum value of sigma: ' num2str(min(sqrt(1 ./ beta)))]);</span>
+0082 <span class="comment">%     disp(['Maximum value of sigma: ' num2str(max(sqrt(1 ./ beta)))]);</span>
+0083 <span class="keyword">end</span>
+0084     
+0085 
+0086 
+0087 <span class="comment">% Function that computes the Gaussian kernel values given a vector of</span>
+0088 <span class="comment">% squared Euclidean distances, and the precision of the Gaussian kernel.</span>
+0089 <span class="comment">% The function also computes the perplexity of the distribution.</span>
+0090 <a name="_sub1" href="#_subfunctions" class="code">function [H, P] = Hbeta(D, beta)</a>
+0091     P = exp(-D * beta);
+0092     sumP = sum(P);
+0093     H = log(sumP) + beta * sum(D .* P) / sumP;
+0094     P = P / sumP;
+0095 <span class="keyword">end</span>
+0096</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_digamma</title>
+  <meta name="keywords" content="test_digamma">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_digamma
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>	DIGAMMA   Digamma function.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(9) - 2.140641477955609996536345
+0002 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(2.5) - 0.7031566406452431872257
+0003 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(0.1) - (-10.42375494041107679516822)
+0004 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(7e-4) - (-1429.147493371120205005198)
+0005 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(7e-5) - (-14286.29138623969227538398)
+0006 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(7e-6) - (-142857.7200612932791081972)
+0007 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(2e-6) - (-500000.5772123750382073831)
+0008 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(1e-6) - (-1000000.577214019968668068)
+0009 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(7e-7) - (-1428572.005785942019703646)
+0010 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(-0.5) - (.03648997397857652055902367)
+0011 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(-1.1) - 10.15416395914385769902271
+0012 <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(-1)
+0013 <span class="keyword">if</span> <a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(0) ~= -Inf
+0014   error(<span class="string">'digamma(0) should be -Inf'</span>);
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">if</span> ~isnan(<a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(-Inf))
+0017   error(<span class="string">'digamma(-Inf) should be NaN'</span>);
+0018 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

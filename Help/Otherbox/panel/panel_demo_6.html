@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_6</title>
+  <meta name="keywords" content="panel_demo_6">
+  <meta name="description" content="% PANEL DEMO 6">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_6
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 6</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 6
+%
+% (a) Create an empty panel object
+% (b) Packing some panels
+% (c) Plotting into those panels, setting axis labels
+% (d) Using engineering scales</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 6</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an empty panel object</span>
+0005 <span class="comment">%% (b) Packing some panels</span>
+0006 <span class="comment">%% (c) Plotting into those panels, setting axis labels</span>
+0007 <span class="comment">%% (d) Using engineering scales</span>
+0008 
+0009 
+0010 
+0011 <span class="comment">%% (a)</span>
+0012 
+0013 <span class="comment">% clear or create figure and create root panel covering</span>
+0014 <span class="comment">% whole figure</span>
+0015 clf
+0016 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0017 
+0018 
+0019 
+0020 <span class="comment">%% (b)</span>
+0021 
+0022 <span class="comment">% form an upper panel A and a lower panel B where A takes 30% of the</span>
+0023 <span class="comment">% available space, leaving 70% for B</span>
+0024 pA = p.pack(50);
+0025 pB = p.pack();
+0026 
+0027 
+0028 
+0029 <span class="comment">%% (c)</span>
+0030 
+0031 <span class="comment">% plot into panel A</span>
+0032 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pA)
+0033 x = 1e-6 * (-10:10);
+0034 y = (x * 1e7).^2 * 8;
+0035 plot(x, y, <span class="string">'r'</span>)
+0036 
+0037 <span class="comment">% set axis labels through panel, for control over metrics</span>
+0038 pA.xlabel = <span class="string">'foo'</span>;
+0039 pA.ylabel = <span class="string">'bar'</span>;
+0040 
+0041 <span class="comment">% plot into panel B</span>
+0042 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pB)
+0043 plot(x, y, <span class="string">'r'</span>)
+0044 
+0045 <span class="comment">% set axis labels through panel, for control over metrics</span>
+0046 pB.xlabel = <span class="string">'foo'</span>;
+0047 pB.ylabel = <span class="string">'bar'</span>;
+0048 
+0049 
+0050 
+0051 <span class="comment">%% (d)</span>
+0052 
+0053 <span class="comment">% in this case, our axis labels are a bit wacky, and we've</span>
+0054 <span class="comment">% overflowed the standard margins as a result</span>
+0055 
+0056 <span class="comment">% we can fix both things by using engineering scales on both</span>
+0057 <span class="comment">% axes of the plot (we'll adjust the lower plot only)</span>
+0058 pB.xscale = <span class="string">'?'</span>;
+0059 pB.yscale = <span class="string">'?'</span>;
+0060 
+0061 <span class="comment">% but now we're left with no indication that the scales are</span>
+0062 <span class="comment">% not unitary! we can fix this by using the symbol &quot;$&quot; in</span>
+0063 <span class="comment">% the corresponding labels</span>
+0064 pB.xlabel = <span class="string">'foo ($m)'</span>;
+0065 pB.ylabel = <span class="string">'bar ($m/s)'</span>;
+0066 
+0067 <span class="comment">% additionally, if we wanted, though it's a little</span>
+0068 <span class="comment">% unconventional, we can have the tick labels suffixed</span>
+0069 <span class="comment">% appropriately</span>
+0070 <span class="comment">% pB.yscale = '?$';</span>
+0071 
+0072 
+0073</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

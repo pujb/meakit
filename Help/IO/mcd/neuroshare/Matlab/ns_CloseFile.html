@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_CloseFile</title>
+  <meta name="keywords" content="ns_CloseFile">
+  <meta name="description" content="ns_CloseFile   Closes a neural data file">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_CloseFile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_CloseFile   Closes a neural data file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function ns_RESULT = ns_CloseFile(hFile); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_CloseFile   Closes a neural data file
+
+   Usage:
+      ns_RESULT = ns_CloseFile(hFile)
+
+   Description:
+       Closes a previously opened file specified by the file handle hFile.
+
+   Parameters:
+       hFile        Handle/Indentification number to an open file.
+
+   Return Values:
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_BADFILE    Invalid file handle passed to function.
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 2/4/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Example.html" class="code" title="function Example()">Example</a>	Prompt for the correct DLL</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ns_RESULT = ns_CloseFile(hFile);</a>
+0002 
+0003 <span class="comment">%ns_CloseFile   Closes a neural data file</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%      ns_RESULT = ns_CloseFile(hFile)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Description:</span>
+0009 <span class="comment">%       Closes a previously opened file specified by the file handle hFile.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Parameters:</span>
+0012 <span class="comment">%       hFile        Handle/Indentification number to an open file.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Return Values:</span>
+0015 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0016 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0017 <span class="comment">%                   generated:</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%                       ns_BADFILE    Invalid file handle passed to function.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0022 <span class="comment">%   Author: Almut Branner</span>
+0023 <span class="comment">%   Last modification: 2/4/2003</span>
+0024 
+0025 ns_RESULT = mexprog(14, hFile);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

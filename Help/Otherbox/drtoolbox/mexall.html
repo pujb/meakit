@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mexall</title>
+  <meta name="keywords" content="mexall">
+  <meta name="description" content="MEXALL Compiles all MEX-files of the Matlab Toolbox for Dimensionality Reduction">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html drtoolbox -->
+<h1>mexall
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MEXALL Compiles all MEX-files of the Matlab Toolbox for Dimensionality Reduction</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function mexall </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MEXALL Compiles all MEX-files of the Matlab Toolbox for Dimensionality Reduction
+
+   mexall
+
+ Compiles all MEX-files of the Matlab Toolbox for Dimensionality Reduction.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mexall</a>
+0002 <span class="comment">%MEXALL Compiles all MEX-files of the Matlab Toolbox for Dimensionality Reduction</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mexall</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Compiles all MEX-files of the Matlab Toolbox for Dimensionality Reduction.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0011 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0012 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0013 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0014 <span class="comment">% maintain the name of the original author.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0017 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0018 
+0019 
+0020     disp(<span class="string">'Compiling...'</span>);
+0021     cd techniques    
+0022     <span class="keyword">try</span> 
+0023         mex -O computegr.c
+0024     <span class="keyword">catch</span>
+0025         warning(<span class="string">'Compiling failed. FastMVU might not work properly.'</span>);
+0026     <span class="keyword">end</span>
+0027     <span class="keyword">try</span> 
+0028         mex -O mexCCACollectData2.c
+0029     <span class="keyword">catch</span>
+0030         warning(<span class="string">'Compiling failed. FastMVU might not work properly.'</span>);
+0031     <span class="keyword">end</span>
+0032     <span class="keyword">try</span> 
+0033         mex -O mexCCACollectData.c
+0034     <span class="keyword">catch</span>
+0035         warning(<span class="string">'Compiling failed. CCA might not work properly.'</span>);
+0036     <span class="keyword">end</span>
+0037     <span class="keyword">try</span>
+0038         <span class="keyword">if</span> any(strcmpi(computer, {<span class="string">'MACI64'</span>, <span class="string">'PCWIN64'</span>, <span class="string">'GLNXA64'</span>, <span class="string">'SOL64'</span>}))
+0039             mex -O -largeArrayDims dijkstra.cpp
+0040         <span class="keyword">else</span>
+0041             mex -O dijkstra.cpp
+0042         <span class="keyword">end</span>            
+0043     <span class="keyword">catch</span>
+0044         warning(<span class="string">'Compiling failed. Isomap and LandmarkIsomap might not work properly.'</span>);
+0045         <span class="keyword">if</span> ispc
+0046             warning(<span class="string">'This error may be resolved by using the MinGW compiler instead of your current compiler.'</span>);
+0047         <span class="keyword">end</span>
+0048     <span class="keyword">end</span>
+0049     cd ..
+0050     disp(<span class="string">'Compilation completed.'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

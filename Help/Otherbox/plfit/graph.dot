@@ -1,0 +1,23 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  deta -> deta;
+  plfit -> zeta;
+  plplot -> zeta;
+  plpva -> zeta;
+  plvar -> zeta;
+  zeta -> deta;
+  zeta -> zeta;
+
+  ._plfit [URL="._plfit.html"];
+  ._plplot [URL="._plplot.html"];
+  ._plpva [URL="._plpva.html"];
+  ._plvar [URL="._plvar.html"];
+  ._randht [URL="._randht.html"];
+  deta [URL="deta.html"];
+  plfit [URL="plfit.html"];
+  plplot [URL="plplot.html"];
+  plpva [URL="plpva.html"];
+  plvar [URL="plvar.html"];
+  randht [URL="randht.html"];
+  zeta [URL="zeta.html"];
+}

@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  util_connect_var_in_multi_matfiles [URL="util_connect_var_in_multi_matfiles.html"];
+  util_convert_bintable_to_divsection [URL="util_convert_bintable_to_divsection.html"];
+  util_convert_ptsd_result2spif [URL="util_convert_ptsd_result2spif.html"];
+  util_convert_spif_with_amplitude [URL="util_convert_spif_with_amplitude.html"];
+  util_locate_index_by_millisecond [URL="util_locate_index_by_millisecond.html"];
+}

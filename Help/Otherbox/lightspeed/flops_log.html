@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_log</title>
+  <meta name="keywords" content="flops_log">
+  <meta name="description" content="FLOPS_LOG    Flops for logarithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_log
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_LOG    Flops for logarithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_log </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_LOG    Flops for logarithm
+ FLOPS_LOG returns the number of flops needed to compute the logarithm
+ of a scalar.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="flops_digamma.html" class="code" title="function fl = flops_digamma">flops_digamma</a>	FLOPS_DIGAMMA   Flops for gammaln, digamma, and trigamma</li><li><a href="flops_normpdfln.html" class="code" title="function f = flops_normpdfln(x, m, S, V)">flops_normpdfln</a>	FLOPS_NORMPDFLN   Flops for normpdfln.</li><li><a href="ndlogsumexp.html" class="code" title="function x = ndlogsumexp(x,dim)">ndlogsumexp</a>	NDLOGSUMEXP    Sum over multiple dimensions in the log domain.</li><li><a href="../../Otherbox/lightspeed/tests/test_flops.html" class="code" title="">test_flops</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_log</a>
+0002 <span class="comment">% FLOPS_LOG    Flops for logarithm</span>
+0003 <span class="comment">% FLOPS_LOG returns the number of flops needed to compute the logarithm</span>
+0004 <span class="comment">% of a scalar.</span>
+0005 
+0006 <span class="comment">% This flop count is based on timing the Pentium 4.</span>
+0007 <span class="comment">% A neutral flop count is based on source code for C log() function at</span>
+0008 <span class="comment">% http://www.opencores.org/cvsweb.shtml/or1k/newlib/newlib/libm/mathfp/s_log.c</span>
+0009 <span class="comment">% s_sine.c is 23 flops.</span>
+0010 
+0011 <span class="comment">% if you change this, you should also change flops_pow.</span>
+0012 f = 20;  <span class="comment">% P4</span>
+0013 <span class="comment">%f = 20;  % neutral</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MutualInformation</title>
+  <meta name="keywords" content="MutualInformation">
+  <meta name="description" content="MutualInformation: returns mutual information (in bits) of the 'X' and 'Y'">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html nmi -->
+<h1>MutualInformation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MutualInformation: returns mutual information (in bits) of the 'X' and 'Y'</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function I = MutualInformation(X,Y); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> MutualInformation: returns mutual information (in bits) of the 'X' and 'Y'
+ by Will Dwinnell
+
+ I = MutualInformation(X,Y);
+
+ I  = calculated mutual information (in bits)
+ X  = variable(s) to be analyzed (column vector)
+ Y  = variable to be analyzed (column vector)
+
+ Note: Multiple variables may be handled jointly as columns in matrix 'X'.
+ Note: Requires the 'Entropy' and 'JointEntropy' functions.
+
+ Last modified: Nov-12-2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Entropy.html" class="code" title="function H = Entropy(X)">Entropy</a>	Entropy: Returns entropy (in bits) of each column of 'X'</li><li><a href="JointEntropy.html" class="code" title="function H = JointEntropy(X)">JointEntropy</a>	JointEntropy: Returns joint entropy (in bits) of each column of 'X'</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ConditionalEntropy.html" class="code" title="function H = ConditionalEntropy(Y,X)">ConditionalEntropy</a>	ConditionalEntropy: Calculates conditional entropy (in bits) of Y, given X</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% MutualInformation: returns mutual information (in bits) of the 'X' and 'Y'</span>
+0002 <span class="comment">% by Will Dwinnell</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% I = MutualInformation(X,Y);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% I  = calculated mutual information (in bits)</span>
+0007 <span class="comment">% X  = variable(s) to be analyzed (column vector)</span>
+0008 <span class="comment">% Y  = variable to be analyzed (column vector)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Note: Multiple variables may be handled jointly as columns in matrix 'X'.</span>
+0011 <span class="comment">% Note: Requires the 'Entropy' and 'JointEntropy' functions.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Last modified: Nov-12-2006</span>
+0014 
+0015 <a name="_sub0" href="#_subfunctions" class="code">function I = MutualInformation(X,Y);</a>
+0016 
+0017 <span class="keyword">if</span> (size(X,2) &gt; 1)  <span class="comment">% More than one predictor?</span>
+0018     <span class="comment">% Axiom of information theory</span>
+0019     I = <a href="JointEntropy.html" class="code" title="function H = JointEntropy(X)">JointEntropy</a>(X) + <a href="Entropy.html" class="code" title="function H = Entropy(X)">Entropy</a>(Y) - <a href="JointEntropy.html" class="code" title="function H = JointEntropy(X)">JointEntropy</a>([X Y]);
+0020 <span class="keyword">else</span>
+0021     <span class="comment">% Axiom of information theory</span>
+0022     I = <a href="Entropy.html" class="code" title="function H = Entropy(X)">Entropy</a>(X) + <a href="Entropy.html" class="code" title="function H = Entropy(X)">Entropy</a>(Y) - <a href="JointEntropy.html" class="code" title="function H = JointEntropy(X)">JointEntropy</a>([X Y]);
+0023 <span class="keyword">end</span>
+0024 
+0025 
+0026 <span class="comment">% God bless Claude Shannon.</span>
+0027 
+0028 <span class="comment">% EOF</span>
+0029 
+0030</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nca_lin_grad</title>
+  <meta name="keywords" content="nca_lin_grad">
+  <meta name="description" content="NCA_LIN_GRAD Computes NCA gradient on the specified dataset">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>nca_lin_grad
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NCA_LIN_GRAD Computes NCA gradient on the specified dataset</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [F, dF] = nca_lin_grad(x, X, labels, no_dims, lambda) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">NCA_LIN_GRAD Computes NCA gradient on the specified dataset
+
+   [C, dC] = nca_lin_grad(x, X, labels, no_dims, lambda)
+
+ Computes the linear Neighborhood Components Analysis (NCA) gradient 
+ on the dataset specified through X and labels to reduce the data 
+ dimensionality to no_dims dimensions. The current solutions is specified 
+ in x. The function returns the current value of the cost function in C 
+ and the gradient in dC.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [F, dF] = nca_lin_grad(x, X, labels, no_dims, lambda)</a>
+0002 <span class="comment">%NCA_LIN_GRAD Computes NCA gradient on the specified dataset</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [C, dC] = nca_lin_grad(x, X, labels, no_dims, lambda)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Computes the linear Neighborhood Components Analysis (NCA) gradient</span>
+0007 <span class="comment">% on the dataset specified through X and labels to reduce the data</span>
+0008 <span class="comment">% dimensionality to no_dims dimensions. The current solutions is specified</span>
+0009 <span class="comment">% in x. The function returns the current value of the cost function in C</span>
+0010 <span class="comment">% and the gradient in dC.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0015 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0016 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0017 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0018 <span class="comment">% maintain the name of the original author.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0021 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0022 
+0023     
+0024     <span class="keyword">if</span> ~exist(<span class="string">'lambda'</span>, <span class="string">'var'</span>) || isempty(lambda)
+0025         lambda = 0;
+0026     <span class="keyword">end</span>
+0027 
+0028     <span class="comment">% Initialize some variables</span>
+0029     n = size(X, 1);
+0030     A = reshape(x, [numel(x) / no_dims no_dims]);
+0031     F = 0;
+0032     dF = zeros(size(A));
+0033 
+0034     <span class="comment">% Transform the data</span>
+0035     Y = X * A;
+0036     
+0037     <span class="comment">% Compute conditional probabilities for current solution</span>
+0038     sumY = sum(Y .^ 2, 2);
+0039     P = exp(bsxfun(@minus, bsxfun(@minus, 2 * (Y * Y'), sumY'), sumY));
+0040     P(1:n+1:end) = 0;
+0041     P = bsxfun(@rdivide, P, sum(P, 2));
+0042     P = max(P, eps);
+0043 
+0044     <span class="comment">% Compute value of cost function and gradient</span>
+0045     <span class="keyword">for</span> i=1:n
+0046         
+0047         <span class="comment">% Sum cost function</span>
+0048         inds = (labels == labels(i));
+0049         Pi = sum(P(i, inds));
+0050         F = F + Pi;
+0051 
+0052         <span class="comment">% Sum gradient</span>
+0053         <span class="keyword">if</span> nargout &gt; 1
+0054             xikA = bsxfun(@minus, Y(i,:), Y);
+0055             xik  = bsxfun(@minus, X(i,:), X);
+0056             dF = dF + Pi * (bsxfun(@times, xik,         P(i,:)')'     * xikA) - <span class="keyword">...</span>
+0057                             bsxfun(@times, xik(inds,:), P(i, inds)')' * xikA(inds,:);
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">end</span>
+0060     
+0061     <span class="comment">% Include regularization term</span>
+0062     F = F - lambda .* sum(A(:) .^ 2) ./ numel(A);
+0063     dF = 2 * dF - 2 * lambda .* A ./ numel(A);
+0064 
+0065     <span class="comment">% Prepare to pass to minimize</span>
+0066     F = -F;
+0067     dF = -dF(:);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

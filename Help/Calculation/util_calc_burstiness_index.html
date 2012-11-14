@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_burstiness_index</title>
+  <meta name="keywords" content="util_calc_burstiness_index">
+  <meta name="description" content="UTIL_CALC_BURSTINESS_INDEX 工具函数：计算给定数据的BI值">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_burstiness_index
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CALC_BURSTINESS_INDEX 工具函数：计算给定数据的BI值</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ bi ] = util_calc_burstiness_index( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CALC_BURSTINESS_INDEX 工具函数：计算给定数据的BI值
+   根据Daniel Wagenaar，Controlling Burst文章定义，计算BI值
+   This program is derived from Jon Newman's bindex function
+   BI = BINDEX(ASDR) calculates the burstiness index of a given ASDR by
+   finding the percent of total spikes that are accounted for by the highest 15%
+   of bins in the ASDR series. If BI = 1, all spikes occur in bursts, if
+   BI = 0 then there is perfect tonic firing with no variation in firing
+
+   BI = BINDEX(ASDR,TOP) provide a top-end ASRD percentage to define
+   burstiness. If not defined, top = 15%.
+
+   输入参数：
+       spb，SPSA（应指定bin = 1000ms）
+       top，指定的百分比，默认为15（15%）
+   输出参数：
+       bi，Burstiness Index
+
+   蒲江波 2010年5月20日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ bi ] = util_calc_burstiness_index( varargin )</a>
+0002 <span class="comment">%UTIL_CALC_BURSTINESS_INDEX 工具函数：计算给定数据的BI值</span>
+0003 <span class="comment">%   根据Daniel Wagenaar，Controlling Burst文章定义，计算BI值</span>
+0004 <span class="comment">%   This program is derived from Jon Newman's bindex function</span>
+0005 <span class="comment">%   BI = BINDEX(ASDR) calculates the burstiness index of a given ASDR by</span>
+0006 <span class="comment">%   finding the percent of total spikes that are accounted for by the highest 15%</span>
+0007 <span class="comment">%   of bins in the ASDR series. If BI = 1, all spikes occur in bursts, if</span>
+0008 <span class="comment">%   BI = 0 then there is perfect tonic firing with no variation in firing</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   BI = BINDEX(ASDR,TOP) provide a top-end ASRD percentage to define</span>
+0011 <span class="comment">%   burstiness. If not defined, top = 15%.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   输入参数：</span>
+0014 <span class="comment">%       spb，SPSA（应指定bin = 1000ms）</span>
+0015 <span class="comment">%       top，指定的百分比，默认为15（15%）</span>
+0016 <span class="comment">%   输出参数：</span>
+0017 <span class="comment">%       bi，Burstiness Index</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   蒲江波 2010年5月20日</span>
+0020 
+0021 <span class="comment">% 形参分析</span>
+0022 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0023 
+0024 <span class="keyword">if</span> ~exist(<span class="string">'spb'</span>, <span class="string">'var'</span>)
+0025     error(<span class="string">'SPB must be provided.'</span>);
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> ~exist(<span class="string">'top'</span>, <span class="string">'var'</span>)
+0029     top = 15;
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">% 转换为百分比</span>
+0033 top = 15 / 100;
+0034 
+0035 <span class="comment">% 给定SPB中，所有的Spike总数</span>
+0036 total_spikes = sum(spb);
+0037 
+0038 <span class="comment">% 将SPB排序（高-&gt;低）</span>
+0039 sorted_list = sort(spb, <span class="string">'descend'</span>);
+0040 
+0041 <span class="comment">% F15 or F-top</span>
+0042 f15 = sum(sorted_list(1:round(top*length(spb))))/total_spikes;
+0043 
+0044 <span class="comment">% BI</span>
+0045 bi = (f15 - top) / (1 - top);
+0046 
+0047 <span class="keyword">end</span>
+0048</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

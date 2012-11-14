@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_sti_calc_test_score</title>
+  <meta name="keywords" content="util_sti_calc_test_score">
+  <meta name="description" content="UTIL_STI_CALC_TEST_SCORE 工具函数：计算测试电极成绩">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_sti_calc_test_score
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_STI_CALC_TEST_SCORE 工具函数：计算测试电极成绩</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ score avg_score max_score min_score median_score] = util_sti_calc_test_score ( spif,trif,obs_chid,calculating_range,isManualTrigger,isPrintInfo) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_STI_CALC_TEST_SCORE 工具函数：计算测试电极成绩
+   读入spif和triggerif，根据每次trigger给定的时间，判断观察电极(obs_chid)
+   上在指定的时间范围(calculating_range)上的测试成绩(score)。
+   计算方法，如，指定100ms内，则第0-1ms发生的Spike计分100分，第99-100ms发生的Spike计分0分
+
+   参数：
+   spif,trif = spike time table and trigger table read from a mcd file
+   obs_chid = 观察电极号，也就是要计算成绩的电极号(11-88)
+   calculating_range = 观察范围，以ms计，建议100，需要注意不能大于两次刺激的时间间隔（会有提示，但不会自动帮用户设定）
+   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike（+/- 0.5 ms）
+   isPrintInfo = 是否将信息输出到控制台
+
+   输出参数：
+   score = 成绩向量
+   avg,max,min,median = 平均分，最大，最小，中位数
+
+   蒲江波 2009年11月20日
+   蒲江波 2009年11月21日
+       添加isPrintInfo参数，提高程序可用性</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>	UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</li><li><a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_sti_calc_test_score_arraywide.html" class="code" title="function [ score_vector ] = util_sti_calc_test_score_arraywide( varargin )">util_sti_calc_test_score_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ score avg_score max_score min_score median_score] = util_sti_calc_test_score ( spif, </a><span class="keyword">...</span>
+0002     trif, <span class="keyword">...</span>
+0003     obs_chid, <span class="keyword">...</span>
+0004     calculating_range, <span class="keyword">...</span>
+0005     isManualTrigger, <span class="keyword">...</span>
+0006     isPrintInfo)
+0007 <span class="comment">%UTIL_STI_CALC_TEST_SCORE 工具函数：计算测试电极成绩</span>
+0008 <span class="comment">%   读入spif和triggerif，根据每次trigger给定的时间，判断观察电极(obs_chid)</span>
+0009 <span class="comment">%   上在指定的时间范围(calculating_range)上的测试成绩(score)。</span>
+0010 <span class="comment">%   计算方法，如，指定100ms内，则第0-1ms发生的Spike计分100分，第99-100ms发生的Spike计分0分</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   参数：</span>
+0013 <span class="comment">%   spif,trif = spike time table and trigger table read from a mcd file</span>
+0014 <span class="comment">%   obs_chid = 观察电极号，也就是要计算成绩的电极号(11-88)</span>
+0015 <span class="comment">%   calculating_range = 观察范围，以ms计，建议100，需要注意不能大于两次刺激的时间间隔（会有提示，但不会自动帮用户设定）</span>
+0016 <span class="comment">%   isManualTrigger = 是否是手动提的Trigger，手动Trigger可能会造成Trigger误判为Spike（+/- 0.5 ms）</span>
+0017 <span class="comment">%   isPrintInfo = 是否将信息输出到控制台</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   输出参数：</span>
+0020 <span class="comment">%   score = 成绩向量</span>
+0021 <span class="comment">%   avg,max,min,median = 平均分，最大，最小，中位数</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   蒲江波 2009年11月20日</span>
+0024 <span class="comment">%   蒲江波 2009年11月21日</span>
+0025 <span class="comment">%       添加isPrintInfo参数，提高程序可用性</span>
+0026 
+0027 <span class="comment">% 参数分析</span>
+0028 <span class="keyword">if</span> isPrintInfo
+0029     disp([<a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(10) <a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(10) <span class="string">'=== Calculating Test Score ==='</span>]);
+0030     disp([<span class="string">'Observation Elec# '</span> num2str(obs_chid)]);
+0031     disp([<span class="string">'Time Range: '</span> num2str(calculating_range)]);
+0032     <span class="keyword">if</span> isManualTrigger
+0033         disp(<span class="string">'Delayed detecting is ON.'</span>);
+0034     <span class="keyword">else</span>
+0035         disp(<span class="string">'Delayed detecting is OFF.'</span>);
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">% 通道序号转换</span>
+0040 obs_hwid = <a href="../Common/util_convert_ch2hw.html" class="code" title="function [results] = util_convert_ch2hw(input)">util_convert_ch2hw</a>(obs_chid);
+0041 
+0042 <span class="comment">% 处理的基本思路</span>
+0043 <span class="comment">% 在trigger事件中循环，找到在obs_hwid中，每个trigger后指定范围内的Spike，并对其计分</span>
+0044 
+0045 <span class="comment">% 为提高运行速度，预先创建FOR循环中反复用的变量</span>
+0046 this_spif_spiketime = spif.spiketimes{ obs_hwid }; <span class="comment">% 评分通道的SPIF信息复制本</span>
+0047 
+0048 <span class="comment">% 读入Trigger的总个数</span>
+0049 number_of_triggers = size( trif.times, 2 );
+0050 <span class="keyword">if</span> isPrintInfo
+0051     disp([<span class="string">'Number of Triggers: '</span> num2str(number_of_triggers)]);
+0052 <span class="keyword">end</span>
+0053 
+0054 score = [];
+0055 number_of_candidate_spikes = 0;
+0056 
+0057 <span class="comment">% 计算权值序列</span>
+0058 <span class="comment">% 例如1:100，则1代表0-1 ms区段，2代表1-2 ms区段</span>
+0059 weights = 100:-(99/(calculating_range-1)):1;
+0060 edges = 1:1:calculating_range;
+0061 
+0062 <span class="comment">% 在Trigger中遍历</span>
+0063 <span class="keyword">for</span> i = 1:number_of_triggers
+0064     <span class="comment">% 获得本次trigger发生时间</span>
+0065     this_trigger_time = trif.times(i);
+0066     
+0067     <span class="comment">% 获得下次trigger发生时间</span>
+0068     <span class="keyword">if</span> i &lt; (number_of_triggers - 1)
+0069         next_trigger_time = trif.times(i+1);
+0070     <span class="keyword">else</span>
+0071         <span class="comment">% 没有下次trigger，则该时间设置为最大时间</span>
+0072         next_trigger_time = trif.startend(2);
+0073     <span class="keyword">end</span>
+0074     
+0075     <span class="comment">% 若为手动提的Trigger（或者需要一个延迟的情况）</span>
+0076     <span class="comment">% 则将开始扫描的时间延迟0.5 ms</span>
+0077     <span class="keyword">if</span> isManualTrigger
+0078         scan_start_point = this_trigger_time + 0.5;
+0079         scan_end_point = next_trigger_time - 0.5;
+0080     <span class="keyword">else</span>
+0081         scan_start_point = this_trigger_time;
+0082         scan_end_point = next_trigger_time - 0.5;
+0083     <span class="keyword">end</span>
+0084 
+0085     <span class="comment">% 判断计算范围是否过大，以致于涵盖了下次trigger的发生时间</span>
+0086     <span class="keyword">if</span> scan_end_point &lt;= scan_start_point + calculating_range
+0087         error([<span class="string">'Wrong CALCULATING_RANGE'</span> <a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(10) <span class="string">'Current setting makes it includes the next trigger.'</span> <a href="../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(10) <span class="string">'Possible reason: The trigger is not so precisely timed as we thought.'</span>]);
+0088     <span class="keyword">end</span>
+0089     
+0090     <span class="comment">% 比scan_start_point还大的第一个spiketime就是第一个spike发生的时间</span>
+0091     <span class="comment">% 找到在指定时间范围内的spikes</span>
+0092     candidate_spikes = this_spif_spiketime( this_spif_spiketime &gt; scan_start_point <span class="keyword">...</span>
+0093         &amp; this_spif_spiketime &lt; scan_start_point + calculating_range);
+0094     
+0095     <span class="comment">% 计算这个时间范围内的测试成绩 &lt;=== begin</span>
+0096     
+0097     <span class="comment">% 候选spike的总数目</span>
+0098     number_of_candidate_spikes = number_of_candidate_spikes + length( candidate_spikes );
+0099     <span class="comment">% disp(['Number of Candidate Spikes: ' num2str(number_of_candidate_spikes)]);</span>
+0100     
+0101     <span class="comment">% 将候选spike按照Calculating_Range进行分布</span>
+0102     candidate_spikes = candidate_spikes - scan_start_point;
+0103     <span class="comment">% 经过histc得到每个区段的spike计数，越早期的权值越高，越末期的权值越低</span>
+0104     sorted_candidate_spikes = histc(candidate_spikes, edges);
+0105     
+0106     <span class="comment">% 计算成绩</span>
+0107     <span class="keyword">if</span> size(sorted_candidate_spikes,1) == size(weights,1)
+0108         score = [score sum(sorted_candidate_spikes .* weights)];
+0109     <span class="keyword">elseif</span> size(sorted_candidate_spikes,1) == size(weights,2)
+0110         score = [score sum(sorted_candidate_spikes .* weights')];
+0111     <span class="keyword">end</span>
+0112     
+0113     <span class="comment">% 计算这个时间范围内的测试成绩 ===&gt; end</span>
+0114 <span class="keyword">end</span>
+0115 
+0116 avg_score = mean( score );
+0117 max_score = max( score );
+0118 min_score = min( score );
+0119 median_score = median( score );
+0120 
+0121 <span class="keyword">if</span> isPrintInfo
+0122     disp([<span class="string">'Total Candidate Spikes: '</span> num2str(number_of_candidate_spikes)]);
+0123     disp([<span class="string">'Mean Score: '</span> num2str(avg_score)]);
+0124 <span class="keyword">end</span>
+0125 <span class="comment">%disp(['Max Score: ' num2str(max_score)]);</span>
+0126 <span class="comment">%disp(['Min Score: ' num2str(min_score)]);</span>
+0127 <span class="comment">%disp(['Median Score: ' num2str(median_score)]);</span>
+0128 
+0129 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

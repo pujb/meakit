@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_randwishart</title>
+  <meta name="keywords" content="test_randwishart">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html tests -->
+<h1>test_randwishart
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>	DIGAMMA   Digamma function.</li><li><a href="../../../Otherbox/lightspeed/logdet.html" class="code" title="function y = logdet(A)">logdet</a>	LOGDET  Logarithm of determinant for positive-definite matrix</li><li><a href="../../../Otherbox/lightspeed/randwishart.html" class="code" title="function cholX = randwishart(a,d)">randwishart</a>	RANDWISHART    Sample from Wishart distribution.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_lightspeed.html" class="code" title="">test_lightspeed</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 N = 10000;
+0002 a = 2.7;
+0003 d = 3;
+0004 m = zeros(d,d);
+0005 m2 = zeros(d,d);
+0006 s = 0;
+0007 <span class="keyword">for</span> i = 1:N
+0008   L = <a href="../../../Otherbox/lightspeed/randwishart.html" class="code" title="function cholX = randwishart(a,d)">randwishart</a>(a,d);
+0009   X = L'*L;
+0010   m = m + X;
+0011   s = s + <a href="../../../Otherbox/lightspeed/logdet.html" class="code" title="function y = logdet(A)">logdet</a>(X);
+0012   m2 = m2 + X.*X;
+0013 <span class="keyword">end</span>
+0014 i = 0:(d-1);
+0015 sTrue = sum(<a href="../../../Otherbox/lightspeed/digamma.html" class="code" title="function y = digamma(x)">digamma</a>(a - i*0.5));
+0016 m = m/N;
+0017 s = s/N;
+0018 v = m2/N - m.*m;
+0019 fprintf(<span class="string">'Wishart(%g) mean: (should be %g*I)\n'</span>, a, a);
+0020 disp(m)
+0021 fprintf(<span class="string">'  E[logdet]: %g (should be %g)\n'</span>, s, sTrue);
+0022 vTrue = a*(eye(d) + 1)/2;
+0023 fprintf(<span class="string">'variance:\t\t\t\t\t\t\t\t\ttrue:\n'</span>);
+0024 disp([v vTrue])</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

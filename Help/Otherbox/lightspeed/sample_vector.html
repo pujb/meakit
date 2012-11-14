@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sample_vector</title>
+  <meta name="keywords" content="sample_vector">
+  <meta name="description" content="SAMPLE_VECTOR    Sample from multiple categorical distributions.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>sample_vector
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SAMPLE_VECTOR    Sample from multiple categorical distributions.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = sample_vector(p,col) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">SAMPLE_VECTOR    Sample from multiple categorical distributions.
+ X = SAMPLE_VECTOR(P) returns a row vector of cols(P) integers, where
+ X(I) = SAMPLE(P(:,I)).
+
+ X = SAMPLE_VECTOR(P,COL) returns a row vector of length(COL) integers, where
+ X(I) = SAMPLE(P(:,COL(I))).
+ This is equivalent to SAMPLE_VECTOR(P(:,COL)), but faster.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>	COL_SUM   Sum for each column.</li><li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function x = sample_vector(p,col)</a>
+0002 <span class="comment">%SAMPLE_VECTOR    Sample from multiple categorical distributions.</span>
+0003 <span class="comment">% X = SAMPLE_VECTOR(P) returns a row vector of cols(P) integers, where</span>
+0004 <span class="comment">% X(I) = SAMPLE(P(:,I)).</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% X = SAMPLE_VECTOR(P,COL) returns a row vector of length(COL) integers, where</span>
+0007 <span class="comment">% X(I) = SAMPLE(P(:,COL(I))).</span>
+0008 <span class="comment">% This is equivalent to SAMPLE_VECTOR(P(:,COL)), but faster.</span>
+0009 
+0010 <span class="comment">% Written by Tom Minka</span>
+0011 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0012 
+0013 cdf = cumsum(p);
+0014 <span class="keyword">if</span> nargin &gt;= 2
+0015   cdf = cdf(:,col);
+0016 <span class="keyword">end</span>
+0017 <span class="keyword">if</span> any(cdf(<span class="keyword">end</span>,:) &lt;= 0)
+0018   error(<span class="string">'distribution is all zeros'</span>);
+0019 <span class="keyword">end</span>
+0020 u = rand(1,<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(cdf)).*cdf(<span class="keyword">end</span>,:);
+0021 x = <a href="col_sum.html" class="code" title="function s = col_sum(x)">col_sum</a>(cdf &lt; repmat(u,<a href="rows.html" class="code" title="function r = rows(x)">rows</a>(cdf),1)) + 1;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

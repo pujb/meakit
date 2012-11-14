@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_print_bins_with_files</title>
+  <meta name="keywords" content="util_print_bins_with_files">
+  <meta name="description" content="UTIL_PRINT_BINS_WITH_FILES Print out how many bins in each data file.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_print_bins_with_files
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_PRINT_BINS_WITH_FILES Print out how many bins in each data file.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function bin_table = util_print_bins_with_files( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_PRINT_BINS_WITH_FILES Print out how many bins in each data file.
+   This function is helpful when you are counting bins from multiple
+   files. It is also very helpful to count DIVs (days in vitro) from
+   multiple recordings.
+
+   Input:
+           filenames:  You can provide a list of filename, or the program
+                       will popup a dialog.
+           binwidth:   (ms), default: 1 ms
+           culdate:    Culture date, in such format '2007-11-1'.
+   Output:
+           bin_table:  e.g.
+                       COL 1      COL 2       COL 3       COL 4 (if any)
+               ROW 1   filename   start_bin   end_bin     DIV
+   Example:
+           bin_table = util_print_bins_with_files('binwidth', 10000,
+           'culdate', '2007-07-10');
+ 
+   Created on Sep/07/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-09-08  Adding a new function to calc DIV
+                       Enabling couting only one file, as well as multiple
+                       files</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>	UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time</li><li><a href="../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Scripts/network_states.html" class="code" title="">network_states</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function bin_table = util_print_bins_with_files( varargin )</a>
+0002 <span class="comment">%UTIL_PRINT_BINS_WITH_FILES Print out how many bins in each data file.</span>
+0003 <span class="comment">%   This function is helpful when you are counting bins from multiple</span>
+0004 <span class="comment">%   files. It is also very helpful to count DIVs (days in vitro) from</span>
+0005 <span class="comment">%   multiple recordings.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Input:</span>
+0008 <span class="comment">%           filenames:  You can provide a list of filename, or the program</span>
+0009 <span class="comment">%                       will popup a dialog.</span>
+0010 <span class="comment">%           binwidth:   (ms), default: 1 ms</span>
+0011 <span class="comment">%           culdate:    Culture date, in such format '2007-11-1'.</span>
+0012 <span class="comment">%   Output:</span>
+0013 <span class="comment">%           bin_table:  e.g.</span>
+0014 <span class="comment">%                       COL 1      COL 2       COL 3       COL 4 (if any)</span>
+0015 <span class="comment">%               ROW 1   filename   start_bin   end_bin     DIV</span>
+0016 <span class="comment">%   Example:</span>
+0017 <span class="comment">%           bin_table = util_print_bins_with_files('binwidth', 10000,</span>
+0018 <span class="comment">%           'culdate', '2007-07-10');</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Created on Sep/07/2010 By Pu Jiangbo</span>
+0021 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   $Revision:</span>
+0024 <span class="comment">%       PJB#2010-09-08  Adding a new function to calc DIV</span>
+0025 <span class="comment">%                       Enabling couting only one file, as well as multiple</span>
+0026 <span class="comment">%                       files</span>
+0027 
+0028 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0029 
+0030 <span class="comment">% filenames</span>
+0031 <span class="keyword">if</span> ~exist(<span class="string">'filenames'</span>, <span class="string">'var'</span>)
+0032     <span class="comment">% Popup a dialog</span>
+0033     [filenames, pathname, ~] = uigetfile(<span class="string">'*.mcd'</span>, <span class="string">'MultiSelect'</span>, <span class="string">'On'</span>);
+0034     
+0035     <span class="keyword">if</span> ~iscell(filenames) || size(filenames,2) &lt; 2
+0036         <span class="comment">% Only one files been selected</span>
+0037         num_of_files = 1;
+0038         <span class="comment">% Create a cell array to put together filename and its timestamp</span>
+0039         filenames_tmp = cell( num_of_files, 2 );   <span class="comment">% col1: Filename, col2: Timestamp</span>
+0040         filenames_tmp{1,1} = [pathname filenames];
+0041     <span class="keyword">else</span>
+0042         <span class="comment">% Multiple files</span>
+0043         num_of_files = size( filenames, 2 );
+0044         <span class="comment">% Create a cell array to put together filename and its timestamp</span>
+0045         filenames_tmp = cell( num_of_files, 2 );   <span class="comment">% col1: Filename, col2: Timestamp</span>
+0046         <span class="keyword">for</span> i = 1:num_of_files
+0047             filenames_tmp{i,1} = [pathname filenames{i}];
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">end</span>
+0050     
+0051     filenames = filenames_tmp;
+0052     <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> filenames_tmp;
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% Sort</span>
+0056 fprintf(<span class="string">'Sorting... \n'</span>);
+0057 [filenames(:,1) filenames(:,2) isOverlapped] = <a href="util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>( filenames(:,1), num_of_files );
+0058 
+0059 <span class="keyword">if</span> isOverlapped
+0060     error(<span class="string">'File overlapped, please double check the recording start/end time'</span>);
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="comment">% binwidth</span>
+0064 <span class="keyword">if</span> ~exist(<span class="string">'binwidth'</span>, <span class="string">'var'</span>)
+0065     binwidth = 1;
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">% main loop</span>
+0069 disp(<span class="string">'_____________________________________________________________________'</span>);
+0070 disp([<span class="string">'FILENAME:                             START/END BIN_WIDTH = '</span> num2str(binwidth) <span class="string">' ms'</span>]);
+0071 
+0072 <span class="keyword">if</span> exist(<span class="string">'culdate'</span>, <span class="string">'var'</span>)
+0073     bin_table = cell(num_of_files, 4);
+0074 <span class="keyword">else</span>
+0075     bin_table = cell(num_of_files, 3);
+0076 <span class="keyword">end</span>
+0077 
+0078 sweepTotalTime = 0;
+0079 <span class="comment">% Make output more elegant by couting spaces</span>
+0080 maxlength = 0;
+0081 <span class="keyword">for</span> i = 1:num_of_files
+0082     [~, filename, ~] = fileparts(filenames{i,1});
+0083     <span class="keyword">if</span> maxlength &lt; length(filename)
+0084         maxlength = length(filename);
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087     
+0088 <span class="keyword">for</span> i = 1:num_of_files
+0089     <span class="comment">% filename</span>
+0090     bin_table{i, 1} = filenames{i,1};
+0091     [~, filename, ~] = fileparts(filenames{i,1});
+0092     fprintf([<span class="string">'['</span> num2str(i) <span class="string">'] '</span> filename]);
+0093     
+0094     <span class="comment">% read mcd</span>
+0095     [~] = evalc(<span class="string">'D = datastrm(filenames{i,1})'</span>);
+0096     
+0097     <span class="comment">% Start</span>
+0098     bin_table{i, 2} = fix(sweepTotalTime / binwidth) + 1;
+0099     sweepTotalTime = sweepTotalTime + <a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'sweepStopTime'</span>);
+0100     
+0101     <span class="comment">% End</span>
+0102     bin_table{i, 3} = fix(sweepTotalTime / binwidth);
+0103 
+0104     <span class="comment">% Output spaces</span>
+0105     spaces = repmat(<span class="string">' '</span>, 1, maxlength - length(filename) + 2);    
+0106     fprintf(spaces);
+0107     
+0108     fprintf([<span class="string">'['</span> num2str(bin_table{i, 2}) <span class="string">':'</span> num2str(bin_table{i, 3}) <span class="string">']'</span>]);
+0109     
+0110     <span class="comment">% DIV</span>
+0111     <span class="keyword">if</span> exist(<span class="string">'culdate'</span>, <span class="string">'var'</span>)
+0112         bin_table{i, 4} = fix(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingdate'</span>) - datenum(culdate));
+0113         fprintf([<span class="string">'\t\t'</span> num2str( bin_table{i, 4} ) <span class="string">' DIV\n'</span>]);
+0114     <span class="keyword">else</span>
+0115         fprintf(<span class="string">'\n'</span>);
+0116     <span class="keyword">end</span>
+0117     
+0118     <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> D;
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="keyword">end</span>
+0122</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

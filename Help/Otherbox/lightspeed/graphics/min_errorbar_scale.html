@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of min_errorbar_scale</title>
+  <meta name="keywords" content="min_errorbar_scale">
+  <meta name="description" content="c = min_errorbar_scale(stderrs,significance)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>min_errorbar_scale
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>c = min_errorbar_scale(stderrs,significance)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function c = min_errorbar_scale(stderrs,significance) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> c = min_errorbar_scale(stderrs,significance) 
+ returns the minimum scale factor c such that any pair of non-overlapping
+ error bars represents statistical significance exceeding the given level.
+ stderrs is a vector.
+ significance is a scalar.
+
+ See &quot;Judging significance from error bars&quot; by Tom Minka (2002) 
+ http://research.microsoft.com/~minka/papers/minka-errorbars.pdf
+
+ Examples:
+   min_errorbar_scale(ones(10,1))  % returns 1.16
+   min_errorbar_scale(0:10)        % returns 1.64</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = min_errorbar_scale(stderrs,significance)</a>
+0002 <span class="comment">% c = min_errorbar_scale(stderrs,significance)</span>
+0003 <span class="comment">% returns the minimum scale factor c such that any pair of non-overlapping</span>
+0004 <span class="comment">% error bars represents statistical significance exceeding the given level.</span>
+0005 <span class="comment">% stderrs is a vector.</span>
+0006 <span class="comment">% significance is a scalar.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See &quot;Judging significance from error bars&quot; by Tom Minka (2002)</span>
+0009 <span class="comment">% http://research.microsoft.com/~minka/papers/minka-errorbars.pdf</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Examples:</span>
+0012 <span class="comment">%   min_errorbar_scale(ones(10,1))  % returns 1.16</span>
+0013 <span class="comment">%   min_errorbar_scale(0:10)        % returns 1.64</span>
+0014 
+0015 <span class="comment">% Written by Tom Minka</span>
+0016 
+0017 <span class="comment">% Algorithm:</span>
+0018 <span class="comment">% We want c*(stderr(i)+stderr(j)) &gt;= z*sqrt(stderr(i)^2+stderr(j)^2)</span>
+0019 <span class="comment">% for all pairs (i,j).  Therefore</span>
+0020 <span class="comment">% c = max_(i,j)  z*sqrt(stderr(i)^2+stderr(j)^2)/(stderr(i) + stderr(j));</span>
+0021 
+0022 <span class="keyword">if</span> nargin &lt; 2
+0023   significance = 0.95;
+0024 <span class="keyword">end</span>
+0025 
+0026 z = erfinv(2*significance - 1)*sqrt(2);
+0027 
+0028 n = length(stderrs);
+0029 ratio = zeros(n,1);
+0030 <span class="keyword">for</span> i = 1:length(stderrs)
+0031   exact = sqrt(stderrs(i).^2 + stderrs.^2);
+0032   approx = stderrs(i) + stderrs;
+0033   ratio(i) = max(exact./approx);
+0034 <span class="keyword">end</span>
+0035 c = z*max(ratio);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

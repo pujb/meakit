@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of kldivergence</title>
+  <meta name="keywords" content="kldivergence">
+  <meta name="description" content="KLDIVERGENCE redundancy measure for categorical-discrete data">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html itt -->
+<h1>kldivergence
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>KLDIVERGENCE redundancy measure for categorical-discrete data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function kl = kldivergence (x,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">KLDIVERGENCE redundancy measure for categorical-discrete data
+   KL = KLDIVERGENCE(X,Y) returns the redundancy between the two column
+   vectors X and Y containing categorical measures.
+
+   KLDIVERGENCE [1] also known as information divergence, information gain, 
+   or relative entropy is a measure of the difference between two 
+   probability distributions: from a &quot;true&quot; probability distribution P to 
+   an arbitrary probability distribution Q. 
+
+   It is important to remark that the implementation introduced in this 
+   script allows to compute the KL divergence directly on two column 
+   vectors containing categorical data instead of requiring their 
+   probability distributions as inputs. The number of categories (distinct
+   values) per vector must be the same (but not the same values needed).
+
+   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp; 
+   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;
+   Centre for Applied Medical Research. Pamplona (Spain).
+ 
+   December 13th, 2007. Information Theory Toolbox v1.0
+
+   Example:
+   
+    x = [1;2;2;2;0;0;1;0;1;2];
+    y = [1;2;2;2;2;1;0;2;1;0];
+    kl = kldivergence(x,y);
+
+   Citation:
+
+   If you use them for your academic research work,please kindly cite this 
+   toolbox as: 
+   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.  
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp; 
+   Centre for Applied Medical Research. Pamplona (Spain).
+
+   References
+   [1] Kullback, S., and Leibler, R. A., 1951, On information and 
+   sufficiency, Annals of Mathematical Statistics 22: 79-86.
+   [2] http://en.wikipedia.org/wiki/Kullback-Leibler_divergence</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="klsymdivergence.html" class="code" title="function klsym = klsymdivergence (x,y)">klsymdivergence</a>	KLSYMDIVERGENCE symmetric Jensen-Shannon redundancy measure for</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%KLDIVERGENCE redundancy measure for categorical-discrete data</span>
+0002 <span class="comment">%   KL = KLDIVERGENCE(X,Y) returns the redundancy between the two column</span>
+0003 <span class="comment">%   vectors X and Y containing categorical measures.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   KLDIVERGENCE [1] also known as information divergence, information gain,</span>
+0006 <span class="comment">%   or relative entropy is a measure of the difference between two</span>
+0007 <span class="comment">%   probability distributions: from a &quot;true&quot; probability distribution P to</span>
+0008 <span class="comment">%   an arbitrary probability distribution Q.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   It is important to remark that the implementation introduced in this</span>
+0011 <span class="comment">%   script allows to compute the KL divergence directly on two column</span>
+0012 <span class="comment">%   vectors containing categorical data instead of requiring their</span>
+0013 <span class="comment">%   probability distributions as inputs. The number of categories (distinct</span>
+0014 <span class="comment">%   values) per vector must be the same (but not the same values needed).</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp;</span>
+0017 <span class="comment">%   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;</span>
+0018 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0019 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   December 13th, 2007. Information Theory Toolbox v1.0</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Example:</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    x = [1;2;2;2;0;0;1;0;1;2];</span>
+0026 <span class="comment">%    y = [1;2;2;2;2;1;0;2;1;0];</span>
+0027 <span class="comment">%    kl = kldivergence(x,y);</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   Citation:</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   If you use them for your academic research work,please kindly cite this</span>
+0032 <span class="comment">%   toolbox as:</span>
+0033 <span class="comment">%   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.</span>
+0034 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0035 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%   References</span>
+0038 <span class="comment">%   [1] Kullback, S., and Leibler, R. A., 1951, On information and</span>
+0039 <span class="comment">%   sufficiency, Annals of Mathematical Statistics 22: 79-86.</span>
+0040 <span class="comment">%   [2] http://en.wikipedia.org/wiki/Kullback-Leibler_divergence</span>
+0041 
+0042 <a name="_sub0" href="#_subfunctions" class="code">function kl = kldivergence (x,y)</a>
+0043 
+0044 <span class="keyword">if</span> ~(isvector(x) &amp;&amp; isvector(y))
+0045     disp(<span class="string">'Error: input data must be one dimensional vectors'</span>)
+0046     kl = nan;
+0047 
+0048 <span class="keyword">elseif</span> size(x)~=size(y) <span class="comment">%vectors must have the same size</span>
+0049     disp(<span class="string">'Error: input vectors must have the same size'</span>)
+0050     kl = nan;
+0051 <span class="keyword">elseif</span> numel(unique(x))~=numel(unique(y))
+0052     disp(<span class="string">'Error: range of discretizations must be the same for both vectors'</span>)
+0053     kl = nan;
+0054 <span class="keyword">else</span>
+0055     valuesX = unique(x);    <span class="comment">%distinct values for vector x</span>
+0056     valuesY = unique(y);    <span class="comment">%distinct values for vector y</span>
+0057     numValues = numel(x);   
+0058     numDistinctValues = numel(unique(x));  
+0059     kl = 0; <span class="comment">%KL initialization</span>
+0060 
+0061     <span class="keyword">for</span> i=1:numDistinctValues   <span class="comment">%for each possible value i</span>
+0062         ipOcurrences = numel(find(x==valuesX(i)));  <span class="comment">%computes i-ocurrences at x</span>
+0063         iqOcurrences = numel(find(y==valuesY(i)));  <span class="comment">%computes i-ocurrences at y</span>
+0064         pi = ipOcurrences/numValues;    <span class="comment">%computes p(i)</span>
+0065         qi = iqOcurrences/numValues;    <span class="comment">%computes q(i)</span>
+0066         klCurrent = pi*log2(pi/qi); <span class="comment">%partial computation of Kullback-Leibler</span>
+0067         kl = kl + klCurrent;  <span class="comment">%cumulative Kullback-Leibler divergence</span>
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

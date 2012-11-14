@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of rentian_scaling</title>
+  <meta name="keywords" content="rentian_scaling">
+  <meta name="description" content="RENTIAN_SCALING    Physical Rentian scaling">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>rentian_scaling
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>RENTIAN_SCALING    Physical Rentian scaling</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [N E] = rentian_scaling(A,XYZ,n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">RENTIAN_SCALING    Physical Rentian scaling
+
+ [N E] = rentian_scaling(A,XYZ,n)
+
+ Physical Rentian scaling (or more simply Rentian scaling) is a property 
+ of systems that are cost-efficiently embedded into physical space. It is 
+ what is called a &quot;topo-physical&quot; property because it combines information 
+ regarding the topological organization of the graph with information 
+ about the physical placement of connections. Rentian scaling is present 
+ in very large scale integrated circuits, the C. elegans neuronal network, 
+ and morphometric and diffusion-based graphs of human anatomical networks.
+ Rentian scaling is determined by partitioning the system into cubes, 
+ counting the number of nodes inside of each cube (N), and the number of 
+ edges traversing the boundary of each cube (E). If the system displays 
+ Rentian scaling, these two variables N and E will scale with one another 
+ in loglog space. The Rent's exponent is given by the slope of log10(E) 
+ vs. log10(N), and can be reported alone or can be compared to the 
+ theoretical minimum Rent's exponent to determine how cost efficiently the 
+ network has been embedded into physical space. Note: if a system displays 
+ Rentian scaling, it does not automatically mean that the system is 
+ cost-efficiently embedded (although it does suggest that). Validation 
+ occurs when comparing to the theoretical minimum Rent's exponent for that
+ system.
+
+ Inputs:
+     A is the MxM adjacency matrix which must be unweighted, binary, and symmetric.
+     XYZ is the vector of node placement coordinates - must be Mx3 matrix.
+        where M is the number of nodes.
+     n is a scalar - the number of partitions to compute
+        Each partition is a data point.
+       You want a large enough number to adequately estimate the Rent's exponent.
+
+ Outputs:
+    N is an nx1 vector of the number of nodes in each of the n partitions
+    E is an nx1 vector of the number of edges crossing the boundary of each partition
+
+ Subsequent Analysis:
+     Rentian scaling plots are then created by: figure; loglog(E,N,'*');
+    To determine the Rent's exponent, p, it is important not to use partitions which may 
+        be affected by boundary conditions. In Bassett et al. 2010 PLoS CB, only 
+        partitions with N&lt;M/2 were used in the estimation of the Rent's exponent. 
+        Thus, we can define N_prime = N(find(N&lt;M/2)) and E_prime = E(find(N&lt;M/2)). Next we 
+        need to determine the slope of Eprime vs. Nprime in loglog space, which is the Rent's 
+        exponent. There are many ways of doing this with more or less statistical 
+        rigor. Robustfit in MATLAB is one such option:
+       [b,stats] = robustfit(log10(N_prime),log10(E_prime))
+       Then the Rent's exponent is b(1,2) and the standard error of the
+       estimation is given by stats.se(1,2).
+
+ Note: n=5000 was used in Bassett et al. 2010 in PLoS CB.
+
+
+ Reference: Danielle S. Bassett, Daniel L. Greenfield, Andreas Meyer-Lindenberg, Daniel 
+    R. Weinberger, Simon W. Moore, Edward T. Bullmore. Efficient physical embedding 
+     of topologically complex information processing networks in brains and computer 
+     circuits. PLoS Comput Biol, 2010, 6(4):e1000748.
+
+
+ Danielle Bassett, UCSB, 2010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [N E] = rentian_scaling(A,XYZ,n)</a>
+0002 <span class="comment">%RENTIAN_SCALING    Physical Rentian scaling</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% [N E] = rentian_scaling(A,XYZ,n)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Physical Rentian scaling (or more simply Rentian scaling) is a property</span>
+0007 <span class="comment">% of systems that are cost-efficiently embedded into physical space. It is</span>
+0008 <span class="comment">% what is called a &quot;topo-physical&quot; property because it combines information</span>
+0009 <span class="comment">% regarding the topological organization of the graph with information</span>
+0010 <span class="comment">% about the physical placement of connections. Rentian scaling is present</span>
+0011 <span class="comment">% in very large scale integrated circuits, the C. elegans neuronal network,</span>
+0012 <span class="comment">% and morphometric and diffusion-based graphs of human anatomical networks.</span>
+0013 <span class="comment">% Rentian scaling is determined by partitioning the system into cubes,</span>
+0014 <span class="comment">% counting the number of nodes inside of each cube (N), and the number of</span>
+0015 <span class="comment">% edges traversing the boundary of each cube (E). If the system displays</span>
+0016 <span class="comment">% Rentian scaling, these two variables N and E will scale with one another</span>
+0017 <span class="comment">% in loglog space. The Rent's exponent is given by the slope of log10(E)</span>
+0018 <span class="comment">% vs. log10(N), and can be reported alone or can be compared to the</span>
+0019 <span class="comment">% theoretical minimum Rent's exponent to determine how cost efficiently the</span>
+0020 <span class="comment">% network has been embedded into physical space. Note: if a system displays</span>
+0021 <span class="comment">% Rentian scaling, it does not automatically mean that the system is</span>
+0022 <span class="comment">% cost-efficiently embedded (although it does suggest that). Validation</span>
+0023 <span class="comment">% occurs when comparing to the theoretical minimum Rent's exponent for that</span>
+0024 <span class="comment">% system.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Inputs:</span>
+0027 <span class="comment">%     A is the MxM adjacency matrix which must be unweighted, binary, and symmetric.</span>
+0028 <span class="comment">%     XYZ is the vector of node placement coordinates - must be Mx3 matrix.</span>
+0029 <span class="comment">%        where M is the number of nodes.</span>
+0030 <span class="comment">%     n is a scalar - the number of partitions to compute</span>
+0031 <span class="comment">%        Each partition is a data point.</span>
+0032 <span class="comment">%       You want a large enough number to adequately estimate the Rent's exponent.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Outputs:</span>
+0035 <span class="comment">%    N is an nx1 vector of the number of nodes in each of the n partitions</span>
+0036 <span class="comment">%    E is an nx1 vector of the number of edges crossing the boundary of each partition</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% Subsequent Analysis:</span>
+0039 <span class="comment">%     Rentian scaling plots are then created by: figure; loglog(E,N,'*');</span>
+0040 <span class="comment">%    To determine the Rent's exponent, p, it is important not to use partitions which may</span>
+0041 <span class="comment">%        be affected by boundary conditions. In Bassett et al. 2010 PLoS CB, only</span>
+0042 <span class="comment">%        partitions with N&lt;M/2 were used in the estimation of the Rent's exponent.</span>
+0043 <span class="comment">%        Thus, we can define N_prime = N(find(N&lt;M/2)) and E_prime = E(find(N&lt;M/2)). Next we</span>
+0044 <span class="comment">%        need to determine the slope of Eprime vs. Nprime in loglog space, which is the Rent's</span>
+0045 <span class="comment">%        exponent. There are many ways of doing this with more or less statistical</span>
+0046 <span class="comment">%        rigor. Robustfit in MATLAB is one such option:</span>
+0047 <span class="comment">%       [b,stats] = robustfit(log10(N_prime),log10(E_prime))</span>
+0048 <span class="comment">%       Then the Rent's exponent is b(1,2) and the standard error of the</span>
+0049 <span class="comment">%       estimation is given by stats.se(1,2).</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Note: n=5000 was used in Bassett et al. 2010 in PLoS CB.</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Reference: Danielle S. Bassett, Daniel L. Greenfield, Andreas Meyer-Lindenberg, Daniel</span>
+0055 <span class="comment">%    R. Weinberger, Simon W. Moore, Edward T. Bullmore. Efficient physical embedding</span>
+0056 <span class="comment">%     of topologically complex information processing networks in brains and computer</span>
+0057 <span class="comment">%     circuits. PLoS Comput Biol, 2010, 6(4):e1000748.</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Danielle Bassett, UCSB, 2010</span>
+0061 
+0062 
+0063 
+0064 <span class="comment">% determine the number of nodes in the system</span>
+0065 M = numel(XYZ(:,1)); 
+0066 <span class="comment">% rescale coordinates so that they are all greater than unity</span>
+0067 XYZn = XYZ-repmat(min(XYZ)-1,M,1);
+0068 <span class="comment">% find the absolute minimum and maximum over all directions</span>
+0069 nmax = max(max(XYZn));
+0070 nmin = min(min(XYZn));
+0071 
+0072 <span class="comment">% initialize variables</span>
+0073 count = 0;
+0074 N = zeros(n,1); 
+0075 E = zeros(n,1);
+0076 
+0077 <span class="comment">% create partitions, and count the number of nodes inside the partition (N) and the number of % edges traversing the boundary of the partition  (E)</span>
+0078 <span class="keyword">while</span> count&lt;(n+1);
+0079     <span class="comment">% define cube end points</span>
+0080     randx = sort((1+nmax-nmin).*rand(2,1),<span class="string">'ascend'</span>);
+0081     <span class="comment">% find nodes in cube</span>
+0082     L = find(XYZn(:,1)&gt;randx(1) &amp; XYZn(:,1)&lt;randx(2) &amp; XYZn(:,2)&gt;randx(1) &amp; XYZn(:,2)&lt;randx(2) &amp; XYZn(:,3)&gt;randx(1) &amp; XYZn(:,3)&lt;randx(2));
+0083     <span class="keyword">if</span> ~isempty(L)
+0084         count = count+1;
+0085         <span class="comment">% count edges crossing the boundary of the cube</span>
+0086         E(count,1) = sum(sum(A(L,setdiff(1:M,L))));
+0087         <span class="comment">% count nodes inside of the cube</span>
+0088         N(count,1) = numel(L);
+0089     <span class="keyword">end</span>
+0090 <span class="keyword">end</span>
+0091 
+0092</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

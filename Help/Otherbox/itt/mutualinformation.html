@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mutualinformation</title>
+  <meta name="keywords" content="mutualinformation">
+  <meta name="description" content="MUTUALINFORMATION mutual information for categorical-discrete data with">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html itt -->
+<h1>mutualinformation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MUTUALINFORMATION mutual information for categorical-discrete data with</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [mi,estSignif] = mutualinformation(x,y,numSim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">MUTUALINFORMATION mutual information for categorical-discrete data with 
+estimated significance.
+   mutual information (I) is a quantity that measures the mutual 
+   dependence of two variables [1][2]. The lack of significance can be 
+   addressed adding a permutation test [3]. Given a number of simulations, 
+   the permutation test reorders vectors x and y and evaluate 
+   I(xReordered,yReordered). Finally, one minus the percentil where 
+   I(x,y) is found at the obtained I-distribution is assumed as estimated 
+   significance.
+
+   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp; 
+   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;
+   Centre for Applied Medical Research. Pamplona (Spain).
+   
+   December 13th, 2007. Information Theory Toolbox v1.0
+
+   [mi,estSignif] = mutualinformation(x,y,numSim) for x,y being column 
+   vectors with categorical measures, it computes the mutual information 
+   found between x and y and reports the estimated significance estSignif 
+   based on a MonteCarlo sampling. The number of samples is the input 
+   argument numSim. When numSim equals 0, significance is not estimated. 
+   Intuitively, the higher numSim, the better significance estimation.
+   
+   x,y variables must be column vectors with categorical data. The number
+   of categories per variable can be different.
+
+   Example:
+       x = [1;2;2;2;0;0;1;0;1;2];
+       y = [1;2;2;2;2;1;0;2;1;0];
+
+       [mi,estSignif] = mutualinformation(x,y,0) returns de mutual
+       information between vectors x and y with no significance
+       (estSignif equals nan and is optional)
+
+       if you do not mean to estimate significance, you can also type
+       mi = mutualinformation(x,y)       
+
+       [mi,estSignif] = mutualinformation(x,y,1000) returns de mutual
+       information between vectors x and y and the significance obtained
+       from 1000 simulations of permutation test
+   
+   Citation:
+
+   If you use them for your academic research work,please kindly cite this 
+   toolbox as: 
+   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.  
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp; 
+   Centre for Applied Medical Research. Pamplona (Spain).
+
+   References
+   [1] C. E. Shannon, A mathematical theory of communication, Bell System 
+   Technical Journal, vol. 27, pp. 379-423 and 623-656, July and October, 
+   1948.
+   [2] http://en.wikipedia.org/wiki/Mutual_information
+   [3] D. Francois et al. ESANN'2006 proceedings -The permutation test for 
+   feature selection by mutual information. European Symposium on 
+   Artificial Neural Networks Bruges (Belgium), 26-28 April 2006, d-side 
+   publi., ISBN 2-930307-06-4.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="condentropy.html" class="code" title="function h = condentropy(x,y)">condentropy</a>	CONDENTROPY conditional entropy between two categorical-discrete variables</li><li><a href="entropy.html" class="code" title="function h = gonientropy(v)">entropy</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="redundancy.html" class="code" title="function r = redundancy(x,y)">redundancy</a>	REDUNDANCY redundancy measure for categorical-discrete data</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%MUTUALINFORMATION mutual information for categorical-discrete data with</span>
+0002 <span class="comment">%estimated significance.</span>
+0003 <span class="comment">%   mutual information (I) is a quantity that measures the mutual</span>
+0004 <span class="comment">%   dependence of two variables [1][2]. The lack of significance can be</span>
+0005 <span class="comment">%   addressed adding a permutation test [3]. Given a number of simulations,</span>
+0006 <span class="comment">%   the permutation test reorders vectors x and y and evaluate</span>
+0007 <span class="comment">%   I(xReordered,yReordered). Finally, one minus the percentil where</span>
+0008 <span class="comment">%   I(x,y) is found at the obtained I-distribution is assumed as estimated</span>
+0009 <span class="comment">%   significance.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp;</span>
+0012 <span class="comment">%   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;</span>
+0013 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0014 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   December 13th, 2007. Information Theory Toolbox v1.0</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   [mi,estSignif] = mutualinformation(x,y,numSim) for x,y being column</span>
+0019 <span class="comment">%   vectors with categorical measures, it computes the mutual information</span>
+0020 <span class="comment">%   found between x and y and reports the estimated significance estSignif</span>
+0021 <span class="comment">%   based on a MonteCarlo sampling. The number of samples is the input</span>
+0022 <span class="comment">%   argument numSim. When numSim equals 0, significance is not estimated.</span>
+0023 <span class="comment">%   Intuitively, the higher numSim, the better significance estimation.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   x,y variables must be column vectors with categorical data. The number</span>
+0026 <span class="comment">%   of categories per variable can be different.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   Example:</span>
+0029 <span class="comment">%       x = [1;2;2;2;0;0;1;0;1;2];</span>
+0030 <span class="comment">%       y = [1;2;2;2;2;1;0;2;1;0];</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%       [mi,estSignif] = mutualinformation(x,y,0) returns de mutual</span>
+0033 <span class="comment">%       information between vectors x and y with no significance</span>
+0034 <span class="comment">%       (estSignif equals nan and is optional)</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%       if you do not mean to estimate significance, you can also type</span>
+0037 <span class="comment">%       mi = mutualinformation(x,y)</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%       [mi,estSignif] = mutualinformation(x,y,1000) returns de mutual</span>
+0040 <span class="comment">%       information between vectors x and y and the significance obtained</span>
+0041 <span class="comment">%       from 1000 simulations of permutation test</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%   Citation:</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   If you use them for your academic research work,please kindly cite this</span>
+0046 <span class="comment">%   toolbox as:</span>
+0047 <span class="comment">%   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.</span>
+0048 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0049 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%   References</span>
+0052 <span class="comment">%   [1] C. E. Shannon, A mathematical theory of communication, Bell System</span>
+0053 <span class="comment">%   Technical Journal, vol. 27, pp. 379-423 and 623-656, July and October,</span>
+0054 <span class="comment">%   1948.</span>
+0055 <span class="comment">%   [2] http://en.wikipedia.org/wiki/Mutual_information</span>
+0056 <span class="comment">%   [3] D. Francois et al. ESANN'2006 proceedings -The permutation test for</span>
+0057 <span class="comment">%   feature selection by mutual information. European Symposium on</span>
+0058 <span class="comment">%   Artificial Neural Networks Bruges (Belgium), 26-28 April 2006, d-side</span>
+0059 <span class="comment">%   publi., ISBN 2-930307-06-4.</span>
+0060 
+0061 
+0062 <a name="_sub0" href="#_subfunctions" class="code">function [mi,estSignif] = mutualinformation(x,y,numSim)</a>
+0063 
+0064 <span class="keyword">if</span> nargin == 2  <span class="comment">%if number of simulations is not specified</span>
+0065     numSim=0;   
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="keyword">if</span> ~(isvector(x) &amp;&amp; isvector(y))
+0069     disp(<span class="string">'Error: input data must be one dimensional vectors'</span>)
+0070     mi = nan;
+0071     estSignif = nan;
+0072 
+0073 <span class="keyword">elseif</span> size(x)~=size(y) <span class="comment">%vectors must have the same size</span>
+0074     disp(<span class="string">'Error: input vectors must have the same size'</span>)
+0075     h = nan;
+0076     estSignif = nan;
+0077 <span class="keyword">else</span>
+0078     numElem = numel(x);
+0079     hx = <a href="entropy.html" class="code" title="function h = gonientropy(v)">entropy</a>(x);    <span class="comment">%h(x)</span>
+0080     mi = hx - <a href="condentropy.html" class="code" title="function h = condentropy(x,y)">condentropy</a>(y,x); <span class="comment">%I(x,y) = h(x) - h(x|y)</span>
+0081 
+0082     miSim=zeros(1,numSim);  <span class="comment">%Initialization of the structure with results</span>
+0083                             <span class="comment">%permutation tests</span>
+0084     <span class="keyword">if</span> numSim &gt; 0   <span class="comment">%if there are simulations to be done</span>
+0085         <span class="keyword">for</span> i=1:numSim   <span class="comment">%for each simulation</span>
+0086             xSim = x(randperm(numElem));    <span class="comment">%permutation of vector x</span>
+0087             ySim = y(randperm(numElem));    <span class="comment">%permutation of vector y</span>
+0088             miSim(i) = hx - <a href="condentropy.html" class="code" title="function h = condentropy(x,y)">condentropy</a>(ySim,xSim); <span class="comment">%H(X) is not affected by permutation</span>
+0089         <span class="keyword">end</span>
+0090         estSignif = numel(find(miSim &gt;= mi))/numSim;    <span class="comment">%percent of simulated values higher than obtained mi</span>
+0091                                                         <span class="comment">%it is equivalent</span>
+0092                                                         <span class="comment">%to (1-percentil)</span>
+0093     <span class="keyword">elseif</span> numSim == 0
+0094         estSignif = nan;    <span class="comment">%estimation of significance is not carried out</span>
+0095     <span class="keyword">else</span>
+0096         estSignif = nan;
+0097         disp(<span class="string">'Warning: number of simulations must be a positive value'</span>)
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

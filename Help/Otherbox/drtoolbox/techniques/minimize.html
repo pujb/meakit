@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of minimize</title>
+  <meta name="keywords" content="minimize">
+  <meta name="description" content="Minimize a continuous differentialble multivariate function. Starting point">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>minimize
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Minimize a continuous differentialble multivariate function. Starting point</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> Minimize a continuous differentialble multivariate function. Starting point
+ is given by &quot;X&quot; (D by 1), and the function named in the string &quot;f&quot;, must
+ return a function value and a vector of partial derivatives. The Polack-
+ Ribiere flavour of conjugate gradients is used to compute search directions,
+ and a line search using quadratic and cubic polynomial approximations and the
+ Wolfe-Powell stopping criteria is used together with the slope ratio method
+ for guessing initial step sizes. Additionally a bunch of checks are made to
+ make sure that exploration is taking place and that extrapolation will not
+ be unboundedly large. The &quot;length&quot; gives the length of the run: if it is
+ positive, it gives the maximum number of line searches, if negative its
+ absolute gives the maximum allowed number of function evaluations. You can
+ (optionally) give &quot;length&quot; a second component, which will indicate the
+ reduction in function value to be expected in the first line-search (defaults
+ to 1.0). The function returns when either its length is up, or if no further
+ progress can be made (ie, we are at a minimum, or so close that due to
+ numerical problems, we cannot get any closer). If the function terminates
+ within a few iterations, it could be an indication that the function value
+ and derivatives are not consistent (ie, there may be a bug in the
+ implementation of your &quot;f&quot; function). The function returns the found
+ solution &quot;X&quot;, a vector of function values &quot;fX&quot; indicating the progress made
+ and &quot;i&quot; the number of iterations (line searches or function evaluations,
+ depending on the sign of &quot;length&quot;) used.
+
+ Usage: [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5)
+
+ See also: <a href="checkgrad.html" class="code" title="function d = check(f, X, e, P1, P2, P3, P4, P5, P6);">checkgrad</a>
+
+ Copyright (C) 2001 and 2002 by Carl Edward Rasmussen. Date 2002-02-13</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/reconstruction_error.html" class="code" title="function err = reconstruction_error(O, R)">reconstruction_error</a>	RECONSTRUCTION_ERROR Computes the reconstruction error up to affine transformations</li><li><a href="backprop.html" class="code" title="function network = backprop(network, X, T, max_iter)">backprop</a>	BACKPROP Trains a network on a dataset using backpropagation</li><li><a href="gplvm.html" class="code" title="function Y = gplvm(X, no_dims, sigma)">gplvm</a>	GPLVM Gaussian Process Latent Variable Model</li><li><a href="hillclimber2c.html" class="code" title="function [x,obj] = hillclimber2c(DD, x, varargin)">hillclimber2c</a>	HILLCLIMBER Performs hillclimbing using initial solution</li><li><a href="mcml.html" class="code" title="function mapping = mcml(X, labels, no_dims)">mcml</a>	MCML Performs MCML on the specified dataset</li><li><a href="nca.html" class="code" title="function [mappedX, mapping] = nca(X, labels, no_dims, lambda)">nca</a>	NCA Performs NCA on the specified dataset</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5);</a>
+0002 
+0003 <span class="comment">% Minimize a continuous differentialble multivariate function. Starting point</span>
+0004 <span class="comment">% is given by &quot;X&quot; (D by 1), and the function named in the string &quot;f&quot;, must</span>
+0005 <span class="comment">% return a function value and a vector of partial derivatives. The Polack-</span>
+0006 <span class="comment">% Ribiere flavour of conjugate gradients is used to compute search directions,</span>
+0007 <span class="comment">% and a line search using quadratic and cubic polynomial approximations and the</span>
+0008 <span class="comment">% Wolfe-Powell stopping criteria is used together with the slope ratio method</span>
+0009 <span class="comment">% for guessing initial step sizes. Additionally a bunch of checks are made to</span>
+0010 <span class="comment">% make sure that exploration is taking place and that extrapolation will not</span>
+0011 <span class="comment">% be unboundedly large. The &quot;length&quot; gives the length of the run: if it is</span>
+0012 <span class="comment">% positive, it gives the maximum number of line searches, if negative its</span>
+0013 <span class="comment">% absolute gives the maximum allowed number of function evaluations. You can</span>
+0014 <span class="comment">% (optionally) give &quot;length&quot; a second component, which will indicate the</span>
+0015 <span class="comment">% reduction in function value to be expected in the first line-search (defaults</span>
+0016 <span class="comment">% to 1.0). The function returns when either its length is up, or if no further</span>
+0017 <span class="comment">% progress can be made (ie, we are at a minimum, or so close that due to</span>
+0018 <span class="comment">% numerical problems, we cannot get any closer). If the function terminates</span>
+0019 <span class="comment">% within a few iterations, it could be an indication that the function value</span>
+0020 <span class="comment">% and derivatives are not consistent (ie, there may be a bug in the</span>
+0021 <span class="comment">% implementation of your &quot;f&quot; function). The function returns the found</span>
+0022 <span class="comment">% solution &quot;X&quot;, a vector of function values &quot;fX&quot; indicating the progress made</span>
+0023 <span class="comment">% and &quot;i&quot; the number of iterations (line searches or function evaluations,</span>
+0024 <span class="comment">% depending on the sign of &quot;length&quot;) used.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Usage: [X, fX, i] = minimize(X, f, length, P1, P2, P3, P4, P5)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% See also: checkgrad</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Copyright (C) 2001 and 2002 by Carl Edward Rasmussen. Date 2002-02-13</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0035 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0036 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0037 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0038 <span class="comment">% maintain the name of the original author.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0041 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0042 
+0043 
+0044 RHO = 0.01;                            <span class="comment">% a bunch of constants for line searches</span>
+0045 SIG = 0.5;       <span class="comment">% RHO and SIG are the constants in the Wolfe-Powell conditions</span>
+0046 INT = 0.1;    <span class="comment">% don't reevaluate within 0.1 of the limit of the current bracket</span>
+0047 EXT = 3.0;                    <span class="comment">% extrapolate maximum 3 times the current bracket</span>
+0048 MAX = 20;                         <span class="comment">% max 20 function evaluations per line search</span>
+0049 RATIO = 100;                                      <span class="comment">% maximum allowed slope ratio</span>
+0050 
+0051 argstr = [f, <span class="string">'(X'</span>];                      <span class="comment">% compose string used to call function</span>
+0052 <span class="keyword">for</span> i = 1:(nargin - 3)
+0053   argstr = [argstr, <span class="string">',P'</span>, int2str(i)];
+0054 <span class="keyword">end</span>
+0055 argstr = [argstr, <span class="string">')'</span>];
+0056 
+0057 <span class="keyword">if</span> max(size(length)) == 2, red=length(2); length=length(1); <span class="keyword">else</span> red=1; <span class="keyword">end</span>
+0058 <span class="keyword">if</span> length&gt;0, S=[<span class="string">'Linesearch'</span>]; <span class="keyword">else</span> S=[<span class="string">'Function evaluation'</span>]; <span class="keyword">end</span> 
+0059 
+0060 i = 0;                                            <span class="comment">% zero the run length counter</span>
+0061 ls_failed = 0;                             <span class="comment">% no previous line search has failed</span>
+0062 fX = [];
+0063 [f1 df1] = eval(argstr);                      <span class="comment">% get function value and gradient</span>
+0064 i = i + (length&lt;0);                                            <span class="comment">% count epochs?!</span>
+0065 s = -df1;                                        <span class="comment">% search direction is steepest</span>
+0066 d1 = -s'*s;                                                 <span class="comment">% this is the slope</span>
+0067 z1 = red/(1-d1);                                  <span class="comment">% initial step is red/(|s|+1)</span>
+0068 
+0069 <span class="keyword">while</span> i &lt; abs(length)                                      <span class="comment">% while not finished</span>
+0070   i = i + (length&gt;0);                                      <span class="comment">% count iterations?!</span>
+0071 
+0072   X0 = X; f0 = f1; df0 = df1;                   <span class="comment">% make a copy of current values</span>
+0073   X = X + z1*s;                                             <span class="comment">% begin line search</span>
+0074   [f2 df2] = eval(argstr);
+0075   i = i + (length&lt;0);                                          <span class="comment">% count epochs?!</span>
+0076   d2 = df2'*s;
+0077   f3 = f1; d3 = d1; z3 = -z1;             <span class="comment">% initialize point 3 equal to point 1</span>
+0078   <span class="keyword">if</span> length&gt;0, M = MAX; <span class="keyword">else</span> M = min(MAX, -length-i); <span class="keyword">end</span>
+0079   success = 0; limit = -1;                     <span class="comment">% initialize quanteties</span>
+0080   <span class="keyword">while</span> 1
+0081     <span class="keyword">while</span> ((f2 &gt; f1+z1*RHO*d1) | (d2 &gt; -SIG*d1)) &amp; (M &gt; 0) 
+0082       limit = z1;                                         <span class="comment">% tighten the bracket</span>
+0083       <span class="keyword">if</span> f2 &gt; f1
+0084         z2 = z3 - (0.5*d3*z3*z3)/(d3*z3+f2-f3);                 <span class="comment">% quadratic fit</span>
+0085       <span class="keyword">else</span>
+0086         A = 6*(f2-f3)/z3+3*(d2+d3);                                 <span class="comment">% cubic fit</span>
+0087         B = 3*(f3-f2)-z3*(d3+2*d2);
+0088         z2 = (sqrt(B*B-A*d2*z3*z3)-B)/A;       <span class="comment">% numerical error possible - ok!</span>
+0089       <span class="keyword">end</span>
+0090       <span class="keyword">if</span> isnan(z2) | isinf(z2)
+0091         z2 = z3/2;                  <span class="comment">% if we had a numerical problem then bisect</span>
+0092       <span class="keyword">end</span>
+0093       z2 = max(min(z2, INT*z3),(1-INT)*z3);  <span class="comment">% don't accept too close to limits</span>
+0094       z1 = z1 + z2;                                           <span class="comment">% update the step</span>
+0095       X = X + z2*s;
+0096       [f2 df2] = eval(argstr);
+0097       M = M - 1; i = i + (length&lt;0);                           <span class="comment">% count epochs?!</span>
+0098       d2 = df2'*s;
+0099       z3 = z3-z2;                    <span class="comment">% z3 is now relative to the location of z2</span>
+0100     <span class="keyword">end</span>
+0101     <span class="keyword">if</span> f2 &gt; f1+z1*RHO*d1 | d2 &gt; -SIG*d1
+0102       <span class="keyword">break</span>;                                                <span class="comment">% this is a failure</span>
+0103     <span class="keyword">elseif</span> d2 &gt; SIG*d1
+0104       success = 1; <span class="keyword">break</span>;                                             <span class="comment">% success</span>
+0105     <span class="keyword">elseif</span> M == 0
+0106       <span class="keyword">break</span>;                                                          <span class="comment">% failure</span>
+0107     <span class="keyword">end</span>
+0108     A = 6*(f2-f3)/z3+3*(d2+d3);                      <span class="comment">% make cubic extrapolation</span>
+0109     B = 3*(f3-f2)-z3*(d3+2*d2);
+0110     z2 = -d2*z3*z3/(B+sqrt(B*B-A*d2*z3*z3));        <span class="comment">% num. error possible - ok!</span>
+0111     <span class="keyword">if</span> ~isreal(z2) | isnan(z2) | isinf(z2) | z2 &lt; 0   <span class="comment">% num prob or wrong sign?</span>
+0112       <span class="keyword">if</span> limit &lt; -0.5                               <span class="comment">% if we have no upper limit</span>
+0113         z2 = z1 * (EXT-1);                 <span class="comment">% the extrapolate the maximum amount</span>
+0114       <span class="keyword">else</span>
+0115         z2 = (limit-z1)/2;                                   <span class="comment">% otherwise bisect</span>
+0116       <span class="keyword">end</span>
+0117     <span class="keyword">elseif</span> (limit &gt; -0.5) &amp; (z2+z1 &gt; limit)          <span class="comment">% extraplation beyond max?</span>
+0118       z2 = (limit-z1)/2;                                               <span class="comment">% bisect</span>
+0119     <span class="keyword">elseif</span> (limit &lt; -0.5) &amp; (z2+z1 &gt; z1*EXT)       <span class="comment">% extrapolation beyond limit</span>
+0120       z2 = z1*(EXT-1.0);                           <span class="comment">% set to extrapolation limit</span>
+0121     <span class="keyword">elseif</span> z2 &lt; -z3*INT
+0122       z2 = -z3*INT;
+0123     <span class="keyword">elseif</span> (limit &gt; -0.5) &amp; (z2 &lt; (limit-z1)*(1.0-INT))   <span class="comment">% too close to limit?</span>
+0124       z2 = (limit-z1)*(1.0-INT);
+0125     <span class="keyword">end</span>
+0126     f3 = f2; d3 = d2; z3 = -z2;                  <span class="comment">% set point 3 equal to point 2</span>
+0127     z1 = z1 + z2; X = X + z2*s;                      <span class="comment">% update current estimates</span>
+0128     [f2 df2] = eval(argstr);
+0129     M = M - 1; i = i + (length&lt;0);                             <span class="comment">% count epochs?!</span>
+0130     d2 = df2'*s;
+0131   <span class="keyword">end</span>                                                      <span class="comment">% end of line search</span>
+0132 
+0133   <span class="keyword">if</span> success                                         <span class="comment">% if line search succeeded</span>
+0134     f1 = f2; fX = [fX' f1]';
+0135     fprintf(<span class="string">'%s %6i;  Value %4.6e\r'</span>, S, i, f1);
+0136     s = (df2'*df2-df1'*df2)/(df1'*df1)*s - df2;      <span class="comment">% Polack-Ribiere direction</span>
+0137     tmp = df1; df1 = df2; df2 = tmp;                         <span class="comment">% swap derivatives</span>
+0138     d2 = df1'*s;
+0139     <span class="keyword">if</span> d2 &gt; 0                                      <span class="comment">% new slope must be negative</span>
+0140       s = -df1;                              <span class="comment">% otherwise use steepest direction</span>
+0141       d2 = -s'*s;    
+0142     <span class="keyword">end</span>
+0143     z1 = z1 * min(RATIO, d1/(d2-realmin));          <span class="comment">% slope ratio but max RATIO</span>
+0144     d1 = d2;
+0145     ls_failed = 0;                              <span class="comment">% this line search did not fail</span>
+0146   <span class="keyword">else</span>
+0147     X = X0; f1 = f0; df1 = df0;  <span class="comment">% restore point from before failed line search</span>
+0148     <span class="keyword">if</span> ls_failed | i &gt; abs(length)          <span class="comment">% line search failed twice in a row</span>
+0149       <span class="keyword">break</span>;                             <span class="comment">% or we ran out of time, so we give up</span>
+0150     <span class="keyword">end</span>
+0151     tmp = df1; df1 = df2; df2 = tmp;                         <span class="comment">% swap derivatives</span>
+0152     s = -df1;                                                    <span class="comment">% try steepest</span>
+0153     d1 = -s'*s;
+0154     z1 = 1/(1-d1);                     
+0155     ls_failed = 1;                                    <span class="comment">% this line search failed</span>
+0156   <span class="keyword">end</span>
+0157 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

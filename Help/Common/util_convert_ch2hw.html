@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_convert_ch2hw</title>
+  <meta name="keywords" content="util_convert_ch2hw">
+  <meta name="description" content="UTIL_CONVERT_CH2HW Convert channel ID into hardware ID">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_convert_ch2hw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [results] = util_convert_ch2hw(input) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_CONVERT_CH2HW Convert channel ID into hardware ID
+   Accept locations in 8*8,return serials as in 64 channels
+   Input:
+       input:      Channel ID (12 ~ 87)
+   Output:
+       results:    Hardware ID (1 ~ 64)
+
+   Created on Apr/15/2008 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_calc_corr_matrix.html" class="code" title="function [ matrix ] = util_calc_corr_matrix( spif, gnds, varargin)">util_calc_corr_matrix</a>	UTIL_CALC_CORR_MATRIX Calculate peak correlation values between channel pairs in the</li><li><a href="../Calculation/util_calc_energy.html" class="code" title="function [ sum_e mean_e sem_e ] = util_calc_energy( spif, chlist, active_thres )">util_calc_energy</a>	UTIL_CALC_ENERGY Calculate the neural energy from spike trains</li><li><a href="../Calculation/util_calc_network_vector.html" class="code" title="function [ network_vectors seq ] = util_calc_network_vector( spif, excluded_ch, varargin )">util_calc_network_vector</a>	UTIL_CALC_NETWORK_VECTOR Get the network activity vectors</li><li><a href="../Calculation/util_calc_rate.html" class="code" title="function [ array_spike_count_per_binarray_mean_spike_count_per_binarray_mean_spike_count_per_bin_stdarray_mean_spike_count_per_bin_semelec_spike_counts_per_binelec_spike_counts_per_bin_meanelec_spike_counts_per_bin_mean_stdelec_spike_counts_per_bin_mean_sem ] = util_calc_rate( spif, varargin )">util_calc_rate</a>	UTIL_CALC_RATE Get firing rate from spif</li><li><a href="../Calculation/util_calc_raw_spont_cch.html" class="code" title="function [ lags cch peak] = util_calc_raw_spont_cch( varargin )">util_calc_raw_spont_cch</a>	UTIL_CALC_RAW_SPONT_CCH 工具函数：从SPIF中计算自发活动的相关直方图（Raw）</li><li><a href="../Calculation/util_calc_synchrony.html" class="code" title="function [ Q q Qn qn ] = util_calc_synchrony( spif, chlist, varargin )">util_calc_synchrony</a>	UTIL_CALC_SYNCHRONY Measure the synchrony between selected channels</li><li><a href="../Calculation/util_get_fractal_DFA.html" class="code" title="function [DFA_mean DFA_std DFA_sem DFA_list] = util_get_fractal_DFA( spif, gnds, varargin )">util_get_fractal_DFA</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li><li><a href="../Calculation/util_get_fractal_dim.html" class="code" title="function [DF_mean DF_std DF_sem DF_list] = util_get_fractal_dim( spif, gnds, varargin )">util_get_fractal_dim</a>	UTIL_GET_FRACTAL_DIM Get the fractal dimension of the array.</li><li><a href="../Calculation/util_get_fractal_hurst.html" class="code" title="function [H_mean H_std H_sem H_list] = util_get_fractal_hurst( spif, gnds, varargin )">util_get_fractal_hurst</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li><li><a href="../Plot/util_plot_raster_image.html" class="code" title="function [] = util_plot_raster_image( spif, gnd, bin, def_colormap)">util_plot_raster_image</a>	UTIL_PLOT_RASTER_IMAGE Plot the RASTER PLOT using imagesc method</li><li><a href="../Plot/util_plot_state_trans.html" class="code" title="function [ elec_cluster ] = util_plot_state_trans( network_vector, seq, clu_sub, elec, varargin )">util_plot_state_trans</a>	UTIL_PLOT_STATE_TRANS Plot the state transitions of the selected</li><li><a href="../Plot/util_plot_topo.html" class="code" title="function [ degree ] = util_plot_topo( w_elec, w_link, gnds, varargin )">util_plot_topo</a>	UTIL_PLOT_TOPO Plot a topology graph based on electrode mapping</li><li><a href="../Stimulation/util_ps_amplitude_by_time_by_trigger.html" class="code" title="function [ ax_x spike_number_in_each_bin spike_amplitude_mean spike_amplitude_std] = util_ps_amplitude_by_time_by_trigger( triggerif,spif,D,chid,binsize,timescope,trigger_range,isManualTrigger,peakType)">util_ps_amplitude_by_time_by_trigger</a>	UTIL_PS_AMPLITUDE_BY_TIME_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的幅度随时间轴的分布</li><li><a href="../Stimulation/util_ps_first_response_spike_profile.html" class="code" title="function [ timing timing_std timing_all amp amp_std amp_all ] = util_ps_first_response_spike_profile( triggerif,spif,D,chid,trigger_range,isManualTrigger,peakType)">util_ps_first_response_spike_profile</a>	UTIL_PS_FIRST_RESPONSE_SPIKE_PROFILE 工具函数：处理刺激后第一个响应Spike的位置和幅度</li><li><a href="../Stimulation/util_psth_amplitude_by_trigger.html" class="code" title="function [ ax_x result ] = util_psth_amplitude_by_trigger( triggerif,spif,D,chid,binsize,timescope,trigger_range,isManualTrigger,isNormalized,peakType)">util_psth_amplitude_by_trigger</a>	UTIL_PSTH_AMPLITUDE_BY_TRIGGER 工具函数：利用MCS的信息，计算PS的Spike幅度分布</li><li><a href="../Stimulation/util_psth_by_trigger.html" class="code" title="function [ ax_x result ] = util_psth_by_trigger( triggerif,spif,chid,binsize,timescope,trigger_range,isManualTrigger,isNormalized)">util_psth_by_trigger</a>	UTIL_PSTH_BY_TRIGGER 工具函数：利用MCS的信息，计算PSTH</li><li><a href="../Stimulation/util_sti_calc_test_response_count_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_response_count_multiple_arraywide( varargin )">util_sti_calc_test_response_count_multiple_arraywide</a>	UTIL_STI_CALC_RESPONSE_COUNT_MULTIPLE_ARRAYWIDE 计算每个电极在刺激期间的响应Spike数目</li><li><a href="../Stimulation/util_sti_calc_test_score.html" class="code" title="function [ score avg_score max_score min_score median_score] = util_sti_calc_test_score ( spif,trif,obs_chid,calculating_range,isManualTrigger,isPrintInfo)">util_sti_calc_test_score</a>	UTIL_STI_CALC_TEST_SCORE 工具函数：计算测试电极成绩</li><li><a href="../Stimulation/util_sti_calc_test_score_arraywide.html" class="code" title="function [ score_vector ] = util_sti_calc_test_score_arraywide( varargin )">util_sti_calc_test_score_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_ARRAYWIDE 计算一个皿内的刺激响应成绩</li><li><a href="../Stimulation/util_sti_calc_test_score_multiple_arraywide.html" class="code" title="function [ varargout ] = util_sti_calc_test_score_multiple_arraywide( varargin )">util_sti_calc_test_score_multiple_arraywide</a>	UTIL_STI_CALC_TEST_SCORE_MULTIPLE_ARRAYWIDE 计算每个电极在刺激期间的Score</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [results] = util_convert_ch2hw(input)</a>
+0002 <span class="comment">%UTIL_CONVERT_CH2HW Convert channel ID into hardware ID</span>
+0003 <span class="comment">%   Accept locations in 8*8,return serials as in 64 channels</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%       input:      Channel ID (12 ~ 87)</span>
+0006 <span class="comment">%   Output:</span>
+0007 <span class="comment">%       results:    Hardware ID (1 ~ 64)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Created on Apr/15/2008 By Pu Jiangbo</span>
+0010 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0011 
+0012 <span class="comment">%   $Revision:</span>
+0013 <span class="comment">%       PJB#2010-07-22  Make this function to accept a vector, not only a</span>
+0014 <span class="comment">%                       number.</span>
+0015 <span class="comment">%</span>
+0016 results = zeros(1, length(input));
+0017 
+0018 <span class="keyword">for</span> i = 1:length(input)
+0019     tmp = num2str(input(i));
+0020     a = str2num(tmp(1));
+0021     b = str2num(tmp(2));
+0022     
+0023     results(i) = (a-1)*8 + b;
+0024 <span class="keyword">end</span>
+0025 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  PCAexample -> nDexample;
+
+  PCAexample [URL="PCAexample.html"];
+  nDexample [URL="nDexample.html"];
+}

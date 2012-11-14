@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of llc</title>
+  <meta name="keywords" content="llc">
+  <meta name="description" content="LLC Runs the LLC algorithm (given information on the formed factor analyzers)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>llc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LLC Runs the LLC algorithm (given information on the formed factor analyzers)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = llc(X, neighbor, no_dims, R, Z, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">LLC Runs the LLC algorithm (given information on the formed factor analyzers)
+
+   mappedX = llc(X, k, no_dims, R, Z, eig_impl)
+
+ Runs the LLC algorithm (given information on the formed factor
+ analyzers). The variable X contains the dataset (transposed), and
+ neighbor contains the neighborhood indices for every datapoint. The
+ matrices R and Z indicate repectively the responsisbiities of clusters to
+ points and the cluster centers. The variable eig_impl determines the
+ eigenanalysis method that is used. Possible values are 'Matlab' and
+ 'JDQR' (default = 'Matlab').</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="run_llc.html" class="code" title="function mappedX = run_llc(X, no_dims, k, no_analyzers, max_iterations, eig_impl)">run_llc</a>	RUN_LLC Performs the LLC algorithm for dimensionality reduction</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = llc(X, neighbor, no_dims, R, Z, eig_impl)</a>
+0002 <span class="comment">%LLC Runs the LLC algorithm (given information on the formed factor analyzers)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = llc(X, k, no_dims, R, Z, eig_impl)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Runs the LLC algorithm (given information on the formed factor</span>
+0007 <span class="comment">% analyzers). The variable X contains the dataset (transposed), and</span>
+0008 <span class="comment">% neighbor contains the neighborhood indices for every datapoint. The</span>
+0009 <span class="comment">% matrices R and Z indicate repectively the responsisbiities of clusters to</span>
+0010 <span class="comment">% points and the cluster centers. The variable eig_impl determines the</span>
+0011 <span class="comment">% eigenanalysis method that is used. Possible values are 'Matlab' and</span>
+0012 <span class="comment">% 'JDQR' (default = 'Matlab').</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0017 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0018 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0019 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0020 <span class="comment">% maintain the name of the original author.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0023 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0024 
+0025     <span class="keyword">if</span> ~exist(<span class="string">'eig_impl'</span>, <span class="string">'var'</span>)
+0026         eig_impl = <span class="string">'Matlab'</span>;
+0027     <span class="keyword">end</span>
+0028     
+0029     <span class="comment">% Initialize some variables</span>
+0030     [no_dims N no_analyzers] = size(Z);
+0031     <span class="keyword">if</span> numel(neighbor) == 1 || ischar(neighbor)
+0032         nn = neighbor;
+0033     <span class="keyword">else</span>
+0034         nn = size(neighbor, 1);
+0035     <span class="keyword">end</span>
+0036     kf = no_analyzers * (no_dims + 1);
+0037     
+0038     <span class="comment">% Compute pairwise distances and store neighbor indices</span>
+0039     disp([<span class="string">'Find '</span> num2str(nn) <span class="string">' nearest neighbors...'</span>]);
+0040     [foo, neighbor] = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X', nn);
+0041     max_k = size(neighbor, 2);
+0042     neighbor = neighbor';    
+0043 
+0044     <span class="comment">% Solve for reconstruction weights of the datapoints</span>
+0045     disp(<span class="string">'Solving for reconstruction weights...'</span>);
+0046     tol = 1e-5;
+0047     W = zeros(max_k, N);
+0048     <span class="keyword">for</span> ii=1:N
+0049         tmp_ind = neighbor(:,ii);
+0050         tmp_ind = tmp_ind(tmp_ind ~= 0);
+0051         kt = numel(tmp_ind);
+0052         z = X(:,tmp_ind) - X(:,ii * ones(kt, 1));            <span class="comment">% shift ith pt to origin</span>
+0053         C = z' * z;                                          <span class="comment">% local covariance</span>
+0054         C = C + eye(kt, kt) * tol * trace(C);                <span class="comment">% regularization (n &gt; D)</span>
+0055         wii = C \ ones(kt, 1);                               <span class="comment">% solve Cw=1</span>
+0056         wii = wii / sum(wii);                                <span class="comment">% enforce sum(w)=1</span>
+0057         W(:,ii) = [wii; nan(max_k - kt, 1)];
+0058     <span class="keyword">end</span>
+0059 
+0060     <span class="comment">% Compute embedding from bottom eigenvectors of cost matrix M=(I-W)'(I-W)</span>
+0061     disp(<span class="string">'Computing lowdimensional embeddings...'</span>);
+0062     M = sparse(1:N, 1:N, ones(1, N), N, N, 4 * max_k * N);
+0063     <span class="keyword">for</span> i=1:N
+0064        w = W(:,i);
+0065        w(~isnan(w)) = 0;
+0066        j = neighbor(:,i);
+0067        w = w(j ~= 0);
+0068        j = j(j ~= 0);
+0069        M(i, j) = M(i, j) - w';
+0070        M(j, i) = M(j, i) - w;
+0071        M(j, j) = M(j, j) + w * w';
+0072     <span class="keyword">end</span>
+0073 
+0074     <span class="comment">% Adds last entry = 1 in posterior mean to handle means of factor analyzers</span>
+0075     Z(no_dims + 1,:,:) = 1;
+0076     Z = permute(Z, [1 3 2]);
+0077 
+0078     <span class="comment">% Construct responsibility weighted local representation matrix U</span>
+0079     R = reshape(R, [1 no_analyzers N]);
+0080     U = reshape(repmat(R, [no_dims + 1 1 1]) .* Z, [kf N])';
+0081     
+0082     <span class="comment">% Construct generalized eigenproblem A*LY = lambda*B*LY</span>
+0083     A = M' * U;
+0084     A = A' * A;
+0085     B = U' * U;
+0086 
+0087     <span class="comment">% Eigenanalysis of generalized eigenproblem</span>
+0088     <span class="keyword">if</span> condest(A) &gt; 1e5 || condest(B) &gt; 1e5
+0089         warning(<span class="string">'Matrix badly scaled: results may be inaccurate. Maybe you should use more iterations in the EM-algorithm. Using a lower number of factor analyzers might also overcome this problem.'</span>);
+0090     <span class="keyword">end</span>
+0091     <span class="keyword">if</span> strcmp(eig_impl, <span class="string">'JDQR'</span>)
+0092         options.Disp = 0;
+0093         options.LSolver = <span class="string">'bicgstab'</span>;
+0094         [LY, evals] = <a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>(A, B, no_dims + 1, <span class="string">'SM'</span>, options);
+0095     <span class="keyword">else</span>
+0096         options.disp = 0; 
+0097         options.isreal = 1; 
+0098         options.issym = 1;
+0099         [LY, evals] = eigs(A, B, no_dims + 1, <span class="string">'SM'</span>, options);
+0100     <span class="keyword">end</span>
+0101     
+0102     <span class="comment">% Sort eigenvectors and eigenvalues in ascending order</span>
+0103     [evals, ind] = sort(diag(evals), <span class="string">'ascend'</span>);
+0104     LY = LY(:,ind(2:end));
+0105     
+0106     <span class="comment">% Normalize eigenvectors</span>
+0107     s = sqrt(diag(LY' * B * LY) / N)';
+0108     LY = LY ./ repmat(s, [kf 1]);                      <span class="comment">% normalize LY so that cov(mappedX) = I</span>
+0109 
+0110     <span class="comment">% Final lowdimensional data representation</span>
+0111     mappedX = (U * LY)';
+0112</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

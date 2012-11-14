@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gammarnd</title>
+  <meta name="keywords" content="gammarnd">
+  <meta name="description" content="GAMMARND Random matrices from gamma distribution.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>gammarnd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GAMMARND Random matrices from gamma distribution.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function r = gammarnd(a,b,m,n); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">GAMMARND Random matrices from gamma distribution.
+   R = GAMMARND(A,B) returns a matrix of random numbers chosen   
+   from the gamma distribution with parameters A and B.
+   The size of R is the common size of A and B if both are matrices.
+   If either parameter is a scalar, the size of R is the size of the other
+   parameter. Alternatively, R = GAMMARND(A,B,M,N) returns an M by N matrix. 
+
+   Some references refer to the gamma distribution
+   with a single parameter. This corresponds to GAMMARND
+   with B = 1. (See Devroye, pages 401-402.)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="bnd_gammarnd.html" class="code" title="function Y = bnd_gammarnd(mu,cv,ub,m,n,msg)">bnd_gammarnd</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r = gammarnd(a,b,m,n);</a>
+0002 <span class="comment">%GAMMARND Random matrices from gamma distribution.</span>
+0003 <span class="comment">%   R = GAMMARND(A,B) returns a matrix of random numbers chosen</span>
+0004 <span class="comment">%   from the gamma distribution with parameters A and B.</span>
+0005 <span class="comment">%   The size of R is the common size of A and B if both are matrices.</span>
+0006 <span class="comment">%   If either parameter is a scalar, the size of R is the size of the other</span>
+0007 <span class="comment">%   parameter. Alternatively, R = GAMMARND(A,B,M,N) returns an M by N matrix.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Some references refer to the gamma distribution</span>
+0010 <span class="comment">%   with a single parameter. This corresponds to GAMMARND</span>
+0011 <span class="comment">%   with B = 1. (See Devroye, pages 401-402.)</span>
+0012 
+0013 <span class="comment">%   GAMMARND uses a rejection or an inversion method depending on the</span>
+0014 <span class="comment">%   value of A.</span>
+0015 
+0016 <span class="comment">%   References:</span>
+0017 <span class="comment">%      [1]  L. Devroye, &quot;Non-Uniform Random Variate Generation&quot;,</span>
+0018 <span class="comment">%      Springer-Verlag, 1986</span>
+0019 
+0020 <span class="comment">%   B.A. Jones 2-1-93</span>
+0021 <span class="comment">%   Copyright (c) 1993-98 by The MathWorks, Inc.</span>
+0022 <span class="comment">%   $Revision: 1.1.1.1 $  $Date: 2002/11/14 14:35:31 $</span>
+0023 
+0024 <span class="keyword">if</span> nargin &lt; 2, 
+0025    error(<span class="string">'Requires at least two input arguments.'</span>); 
+0026 <span class="keyword">end</span>
+0027 <a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a> = m;
+0028 columns = n;
+0029 
+0030 <span class="comment">% Initialize r to zero.</span>
+0031 lth = <a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>*columns;
+0032 r = zeros(lth,1);
+0033 a = a(:); b = b(:);
+0034 
+0035 scalara = (length(a) == 1);
+0036 <span class="keyword">if</span> scalara 
+0037    a = a*ones(lth,1);
+0038 <span class="keyword">end</span>
+0039 
+0040 scalarb = (length(b) == 1);
+0041 <span class="keyword">if</span> scalarb 
+0042    b = b*ones(lth,1);
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% If a == 1, then gamma is exponential. (Devroye, page 405).</span>
+0046 k = find(a == 1);
+0047 <span class="keyword">if</span> any(k)
+0048    r(k) = -b(k) .* log(rand(size(k)));
+0049 <span class="keyword">end</span> 
+0050 
+0051 
+0052 k = find(a &lt; 1 &amp; a &gt; 0);
+0053 <span class="comment">% (Devroye, page 418 Johnk's generator)</span>
+0054 <span class="keyword">if</span> any(k)
+0055   c = zeros(lth,1);
+0056   d = zeros(lth,1);
+0057   c(k) = 1 ./ a(k);
+0058   d(k) = 1 ./ (1 - a(k));
+0059   accept = k;
+0060   <span class="keyword">while</span> ~isempty(accept)
+0061     u = rand(size(accept));
+0062     v = rand(size(accept));
+0063     x = u .^ c(accept);
+0064     y = v .^ d(accept);
+0065     k1 = find((x + y) &lt;= 1); 
+0066     <span class="keyword">if</span> ~isempty(k1)
+0067       e = -log(rand(size(k1))); 
+0068       r(accept(k1)) = e .* x(k1) ./ (x(k1) + y(k1));
+0069       accept(k1) = [];
+0070     <span class="keyword">end</span>
+0071   <span class="keyword">end</span>
+0072   r(k) = r(k) .* b(k);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% Use a rejection method for a &gt; 1.</span>
+0076 k = find(a &gt; 1);
+0077 <span class="comment">% (Devroye, page 410 Best's algorithm)</span>
+0078 bb = zeros(size(a));
+0079 c  = bb;
+0080 <span class="keyword">if</span> any(k)
+0081   bb(k) = a(k) - 1;
+0082   c(k) = 3 * a(k) - 3/4;
+0083   accept = k; 
+0084   count = 1;
+0085   <span class="keyword">while</span> ~isempty(accept)
+0086     m = length(accept);
+0087     u = rand(m,1);
+0088     v = rand(m,1);
+0089     w = u .* (1 - u);
+0090     y = sqrt(c(accept) ./ w) .* (u - 0.5);
+0091     x = bb(accept) + y;
+0092     k1 = find(x &gt;= 0);
+0093     <span class="keyword">if</span> ~isempty(k1)
+0094       z = 64 * (w .^ 3) .* (v .^ 2);
+0095       k2 = (z(k1) &lt;= (1 - 2 * (y(k1) .^2) ./ x(k1)));
+0096       k3 = k1(find(k2));
+0097       r(accept(k3)) = x(k3); 
+0098       k4 = k1(find(~k2));
+0099       k5 = k4(find(log(z(k4)) &lt;= (2*(bb(accept(k4)).*log(x(k4)./bb(accept(k4)))-y(k4)))));
+0100       r(accept(k5)) = x(k5);
+0101       omit = [k3; k5];
+0102       accept(omit) = [];
+0103     <span class="keyword">end</span>
+0104   <span class="keyword">end</span>
+0105   r(k) = r(k) .* b(k);
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="comment">% Return NaN if a or b is not positive.</span>
+0109 r(b &lt;= 0 | a &lt;= 0) = NaN;
+0110 
+0111 r = reshape(r,<a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>,columns);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

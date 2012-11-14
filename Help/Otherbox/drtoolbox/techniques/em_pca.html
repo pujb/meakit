@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of em_pca</title>
+  <meta name="keywords" content="em_pca">
+  <meta name="description" content="EMPCA Run an EM-based implementation of (probabilistic) PCA">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>em_pca
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>EMPCA Run an EM-based implementation of (probabilistic) PCA</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = em_pca(X, no_dims, max_iter) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">EMPCA Run an EM-based implementation of (probabilistic) PCA
+
+   [mappedX, mapping] = em_pca(X, no_dims)
+
+ Performs probabilistic PCA on dataset X in order to reduce its
+ dimensionality to no_dims. The dimensionality reduction is performed by
+ means of an EM algorithm. The resulting low-dimensional counterpart of X
+ is returned in mappedX. Information on the applied mapping (allowing for,
+ e.g., out-of-sample extension) is returned in mapping.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = em_pca(X, no_dims, max_iter)</a>
+0002 <span class="comment">%EMPCA Run an EM-based implementation of (probabilistic) PCA</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = em_pca(X, no_dims)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Performs probabilistic PCA on dataset X in order to reduce its</span>
+0007 <span class="comment">% dimensionality to no_dims. The dimensionality reduction is performed by</span>
+0008 <span class="comment">% means of an EM algorithm. The resulting low-dimensional counterpart of X</span>
+0009 <span class="comment">% is returned in mappedX. Information on the applied mapping (allowing for,</span>
+0010 <span class="comment">% e.g., out-of-sample extension) is returned in mapping.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0015 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0016 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0017 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0018 <span class="comment">% maintain the name of the original author.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0021 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0022 
+0023 
+0024     <span class="keyword">if</span> ~exist(<span class="string">'max_iter'</span>, <span class="string">'var'</span>)
+0025         max_iter = 200;
+0026     <span class="keyword">end</span>
+0027 
+0028     <span class="comment">% Initialize some variables</span>
+0029     [n D] = size(X);                        <span class="comment">% data dimensions</span>
+0030     Ez = zeros(no_dims, n);                 <span class="comment">% expectation of latent vars</span>
+0031     Ezz = zeros(no_dims, no_dims, n);       <span class="comment">% expectation of cov(z)</span>
+0032     Q = Inf;                                <span class="comment">% log-likelihood</span>
+0033     mapping = struct;
+0034 
+0035     <span class="comment">% Randomly initialize W and sigma</span>
+0036     W = rand(D, no_dims) * 2;               <span class="comment">% factor loadings</span>
+0037     sigma2 = rand(1) * 2;                   <span class="comment">% variance ^ 2</span>
+0038     <span class="comment">% The covariance of the Gaussian is: C = W * W' + sigma2 * eye(D);</span>
+0039     
+0040     <span class="comment">% Make data zero-mean (possible because data mean is ML estimate for mu)</span>
+0041     mapping.mean = mean(X, 1);
+0042     X = bsxfun(@minus, X, mapping.mean);
+0043     
+0044     <span class="comment">% Compute data covariance and transpose data</span>
+0045     S = cov(X);
+0046     X = X';
+0047     
+0048     <span class="comment">% Perform EM iterations</span>
+0049     converged = 0;
+0050     iter = 0;
+0051     inW = W' * W;
+0052     <span class="keyword">while</span> ~converged &amp;&amp; iter &lt;= max_iter
+0053             
+0054         <span class="comment">% Update iteration number</span>
+0055         iter = iter + 1;
+0056         <span class="keyword">if</span> rem(iter, 5) == 0
+0057             fprintf(<span class="string">'.'</span>);
+0058         <span class="keyword">end</span>
+0059         
+0060         <span class="comment">% Perform E-step</span>
+0061         invM = inv(inW + sigma2 * eye(no_dims));
+0062         <span class="keyword">for</span> i=1:n
+0063             Ez(:,i)    = invM * W' * X(:,i);         
+0064             Ezz(:,:,i) = sigma2 * invM + Ez(:,i) * Ez(:,i)';
+0065         <span class="keyword">end</span>
+0066         
+0067         <span class="comment">% Perform M-step (maximize mapping W)</span>
+0068         Wp1 = zeros(D, no_dims);
+0069         Wp2 = zeros(no_dims, no_dims);
+0070         <span class="keyword">for</span> i=1:n
+0071             Wp1 = Wp1 + X(:,i) * Ez(:,i)';
+0072             Wp2 = Wp2 + Ezz(:,:,i);
+0073         <span class="keyword">end</span>
+0074         W = Wp1 * inv(Wp2);
+0075         inW = W' * W;
+0076         
+0077         <span class="comment">% Perform M-step (maximize discarded variance sigma)</span>
+0078         normX = sum(X, 1);
+0079         sigma2 = 0;
+0080         <span class="keyword">for</span> i=1:n
+0081             sigma2 = sigma2 + (normX(i).^2 - 2 * Ez(:,i)' * W' * X(:,i) + trace(Ezz(:,:,i) * inW));
+0082         <span class="keyword">end</span>
+0083         sigma2 = (1 / (n * D)) * sigma2;
+0084         
+0085         <span class="comment">% Compute likelihood of new model</span>
+0086         oldQ = Q;
+0087         <span class="keyword">if</span> iter &gt; 1
+0088             invC = ((1 / sigma2) * eye(D)) - ((1 / sigma2) * W * invM * W');
+0089             detC = det(sigma2 * eye(D)) * det(eye(no_dims) + W' * ((sigma2 .^ -1) * eye(D)) * W);
+0090             Q = (-n / 2) * (D * log(2 * pi) + log(detC) + trace(invC * S));
+0091         <span class="keyword">end</span>
+0092         
+0093         <span class="comment">% Stop condition to detect convergence</span>
+0094         <span class="keyword">if</span> abs(oldQ - Q) &lt; 1e-3
+0095             converged = 1;
+0096         <span class="keyword">end</span>
+0097     <span class="keyword">end</span>
+0098     
+0099     <span class="comment">% Compute mapped data</span>
+0100     disp(<span class="string">' '</span>);
+0101     mapping.M = (inv(inW) * W')';
+0102     mappedX = X' * mapping.M;
+0103     
+0104</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

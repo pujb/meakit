@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tsne_p</title>
+  <meta name="keywords" content="tsne_p">
+  <meta name="description" content="TSNE_P Performs symmetric t-SNE on affinity matrix P">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>tsne_p
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>TSNE_P Performs symmetric t-SNE on affinity matrix P</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function ydata = tsne_p(P, labels, no_dims) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">TSNE_P Performs symmetric t-SNE on affinity matrix P
+
+   mappedX = tsne_p(P, labels, no_dims)
+
+ The function performs symmetric t-SNE on pairwise similarity matrix P 
+ to create a low-dimensional map of no_dims dimensions (default = 2).
+ The matrix P is assumed to be symmetric, sum up to 1, and have zeros
+ on the diagonal.
+ The labels of the data are not used by t-SNE itself, however, they 
+ are used to color intermediate plots. Please provide an empty labels
+ matrix [] if you don't want to plot results during the optimization.
+ The low-dimensional data representation is returned in mappedX.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="tsne.html" class="code" title="function ydata = tsne(X, labels, no_dims, initial_dims, perplexity)">tsne</a>	TSNE Performs symmetric t-SNE on dataset X</li><li><a href="tsne_d.html" class="code" title="function ydata = tsne_d(D, labels, no_dims, perplexity)">tsne_d</a>	TSNE_D Performs symmetric t-SNE on the pairwise Euclidean distance matrix D</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ydata = tsne_p(P, labels, no_dims)</a>
+0002 <span class="comment">%TSNE_P Performs symmetric t-SNE on affinity matrix P</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = tsne_p(P, labels, no_dims)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The function performs symmetric t-SNE on pairwise similarity matrix P</span>
+0007 <span class="comment">% to create a low-dimensional map of no_dims dimensions (default = 2).</span>
+0008 <span class="comment">% The matrix P is assumed to be symmetric, sum up to 1, and have zeros</span>
+0009 <span class="comment">% on the diagonal.</span>
+0010 <span class="comment">% The labels of the data are not used by t-SNE itself, however, they</span>
+0011 <span class="comment">% are used to color intermediate plots. Please provide an empty labels</span>
+0012 <span class="comment">% matrix [] if you don't want to plot results during the optimization.</span>
+0013 <span class="comment">% The low-dimensional data representation is returned in mappedX.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0018 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0019 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0020 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0021 <span class="comment">% maintain the name of the original author.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0024 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0025 
+0026 
+0027 
+0028     <span class="keyword">if</span> ~exist(<span class="string">'labels'</span>, <span class="string">'var'</span>)
+0029         labels = [];
+0030     <span class="keyword">end</span>
+0031     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>) || isempty(no_dims)
+0032         no_dims = 2;
+0033     <span class="keyword">end</span>
+0034     
+0035     <span class="comment">% First check whether we already have an initial solution</span>
+0036     <span class="keyword">if</span> numel(no_dims) &gt; 1
+0037         initial_solution = true;
+0038         ydata = no_dims;
+0039         no_dims = size(ydata, 2);
+0040     <span class="keyword">else</span>
+0041         initial_solution = false;
+0042     <span class="keyword">end</span>
+0043     
+0044     <span class="comment">% Initialize some variables</span>
+0045     n = size(P, 1);                                     <span class="comment">% number of instances</span>
+0046     momentum = 0.5;                                     <span class="comment">% initial momentum</span>
+0047     final_momentum = 0.8;                               <span class="comment">% value to which momentum is changed</span>
+0048     mom_switch_iter = 250;                              <span class="comment">% iteration at which momentum is changed</span>
+0049     stop_lying_iter = 100;                              <span class="comment">% iteration at which lying about P-values is stopped</span>
+0050     max_iter = 1000;                                    <span class="comment">% maximum number of iterations</span>
+0051     epsilon = 500;                                      <span class="comment">% initial learning rate</span>
+0052     min_gain = .01;                                     <span class="comment">% minimum gain for delta-bar-delta</span>
+0053     
+0054     <span class="comment">% Make sure P-vals are set properly</span>
+0055     P(1:n + 1:end) = 0;                                 <span class="comment">% set diagonal to zero</span>
+0056     P = 0.5 * (P + P');                                 <span class="comment">% symmetrize P-values</span>
+0057     P = max(P ./ sum(P(:)), realmin);                   <span class="comment">% make sure P-values sum to one</span>
+0058     const = sum(P(:) .* log(P(:)));                     <span class="comment">% constant in KL divergence</span>
+0059     <span class="keyword">if</span> ~initial_solution
+0060         P = P * 4;                                      <span class="comment">% lie about the P-vals to find better local minima</span>
+0061     <span class="keyword">end</span>
+0062     
+0063     <span class="comment">% Initialize the solution</span>
+0064     <span class="keyword">if</span> ~initial_solution
+0065         ydata = .0001 * randn(n, no_dims);
+0066     <span class="keyword">end</span>
+0067     y_incs  = zeros(size(ydata));
+0068     gains = ones(size(ydata));
+0069     
+0070     <span class="comment">% Run the iterations</span>
+0071     <span class="keyword">for</span> iter=1:max_iter
+0072         
+0073         <span class="comment">% Compute joint probability that point i and j are neighbors</span>
+0074         sum_ydata = sum(ydata .^ 2, 2);
+0075         num = 1 ./ (1 + bsxfun(@plus, sum_ydata, bsxfun(@plus, sum_ydata', -2 * (ydata * ydata')))); <span class="comment">% Student-t distribution</span>
+0076         num(1:n+1:end) = 0;                                                 <span class="comment">% set diagonal to zero</span>
+0077         Q = max(num ./ sum(num(:)), realmin);                               <span class="comment">% normalize to get probabilities</span>
+0078         
+0079         <span class="comment">% Compute the gradients (faster implementation)</span>
+0080         L = (P - Q) .* num;
+0081         y_grads = 4 * (diag(sum(L, 1)) - L) * ydata;
+0082             
+0083         <span class="comment">% Update the solution</span>
+0084         gains = (gains + .2) .* (sign(y_grads) ~= sign(y_incs)) <span class="keyword">...</span><span class="comment">         % note that the y_grads are actually -y_grads</span>
+0085               + (gains * .8) .* (sign(y_grads) == sign(y_incs));
+0086         gains(gains &lt; min_gain) = min_gain;
+0087         y_incs = momentum * y_incs - epsilon * (gains .* y_grads);
+0088         ydata = ydata + y_incs;
+0089         ydata = bsxfun(@minus, ydata, mean(ydata, 1));
+0090         
+0091         <span class="comment">% Update the momentum if necessary</span>
+0092         <span class="keyword">if</span> iter == mom_switch_iter
+0093             momentum = final_momentum;
+0094         <span class="keyword">end</span>
+0095         <span class="keyword">if</span> iter == stop_lying_iter &amp;&amp; ~initial_solution
+0096             P = P ./ 4;
+0097         <span class="keyword">end</span>
+0098         
+0099         <span class="comment">% Print out progress</span>
+0100         <span class="keyword">if</span> ~rem(iter, 10)
+0101             cost = const - sum(P(:) .* log(Q(:)));
+0102             disp([<span class="string">'Iteration '</span> num2str(iter) <span class="string">': error is '</span> num2str(cost)]);
+0103         <span class="keyword">end</span>
+0104         
+0105         <span class="comment">% Display scatter plot (maximally first three dimensions)</span>
+0106         <span class="keyword">if</span> ~rem(iter, 10) &amp;&amp; ~isempty(labels)
+0107             <span class="keyword">if</span> no_dims == 1
+0108                 scatter(ydata, ydata, 9, labels, <span class="string">'filled'</span>);
+0109             <span class="keyword">elseif</span> no_dims == 2
+0110                 scatter(ydata(:,1), ydata(:,2), 9, labels, <span class="string">'filled'</span>);
+0111             <span class="keyword">else</span>
+0112                 scatter3(ydata(:,1), ydata(:,2), ydata(:,3), 40, labels, <span class="string">'filled'</span>);
+0113             <span class="keyword">end</span>
+0114             axis tight
+0115             axis off
+0116             drawnow
+0117         <span class="keyword">end</span>
+0118     <span class="keyword">end</span>
+0119</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

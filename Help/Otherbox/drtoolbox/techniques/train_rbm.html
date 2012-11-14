@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of train_rbm</title>
+  <meta name="keywords" content="train_rbm">
+  <meta name="description" content="TRAIN_RBM Trains a Restricted Boltzmann Machine using CD1">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>train_rbm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>TRAIN_RBM Trains a Restricted Boltzmann Machine using CD1</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function machine = train_rbm(X, h, eta, max_iter, weight_cost) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">TRAIN_RBM Trains a Restricted Boltzmann Machine using CD1
+
+   machine = train_rbm(X, h, eta, max_iter, weight_cost)
+
+ Trains a first-order Restricted Boltzmann Machine on dataset X. The RBM
+ has h hidden nodes (default = 30). The training is performed by means of
+ the contrastive divergence algorithm. The activation functions that
+ is applied in the visible and hidden layers are binary stochastic.
+ In the training of the RBM, the learning rate is determined by eta 
+ (default = 0.1). The maximum number of iterations can be specified 
+ through max_iter (default = 10). The variable weight_cost sets the amount 
+ of weight decay that is employed (default = 0.0002).
+ The trained RBM is returned in the machine struct.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="compute_recon_err.html" class="code" title="function err = compute_recon_err(machine, X)">compute_recon_err</a>	COMPUTE_RECON_ERROR Computes reconstruction error of RBM on dataset X</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="train_autoencoder.html" class="code" title="function [mappedX, network] = train_autoencoder(X, layers)">train_autoencoder</a>	TRAIN_AUTOENCODER Trains an autoencoder using RBM pretraining</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function machine = train_rbm(X, h, eta, max_iter, weight_cost)</a>
+0002 <span class="comment">%TRAIN_RBM Trains a Restricted Boltzmann Machine using CD1</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   machine = train_rbm(X, h, eta, max_iter, weight_cost)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Trains a first-order Restricted Boltzmann Machine on dataset X. The RBM</span>
+0007 <span class="comment">% has h hidden nodes (default = 30). The training is performed by means of</span>
+0008 <span class="comment">% the contrastive divergence algorithm. The activation functions that</span>
+0009 <span class="comment">% is applied in the visible and hidden layers are binary stochastic.</span>
+0010 <span class="comment">% In the training of the RBM, the learning rate is determined by eta</span>
+0011 <span class="comment">% (default = 0.1). The maximum number of iterations can be specified</span>
+0012 <span class="comment">% through max_iter (default = 10). The variable weight_cost sets the amount</span>
+0013 <span class="comment">% of weight decay that is employed (default = 0.0002).</span>
+0014 <span class="comment">% The trained RBM is returned in the machine struct.</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0018 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0019 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0020 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0021 <span class="comment">% maintain the name of the original author.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0024 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0025 
+0026 
+0027     <span class="comment">% Process inputs</span>
+0028     <span class="keyword">if</span> ischar(X)
+0029         load(X);
+0030     <span class="keyword">end</span>
+0031     <span class="keyword">if</span> ~exist(<span class="string">'h'</span>, <span class="string">'var'</span>) || isempty(h)
+0032         h = 30;
+0033     <span class="keyword">end</span>
+0034     <span class="keyword">if</span> ~exist(<span class="string">'eta'</span>, <span class="string">'var'</span>) || isempty(eta)
+0035         eta = 0.1;       
+0036     <span class="keyword">end</span>
+0037     <span class="keyword">if</span> ~exist(<span class="string">'max_iter'</span>, <span class="string">'var'</span>) || isempty(max_iter)
+0038         max_iter = 30;        
+0039     <span class="keyword">end</span>
+0040     <span class="keyword">if</span> ~exist(<span class="string">'weight_cost'</span>, <span class="string">'var'</span>) || isempty(weight_cost)
+0041         weight_cost = 0.0002;
+0042     <span class="keyword">end</span>  
+0043     
+0044     <span class="comment">% Other parameters</span>
+0045     initial_momentum = 0.5;                 <span class="comment">% momentum for first five iterations</span>
+0046     final_momentum = 0.9;                   <span class="comment">% momentum for remaining iterations</span>
+0047     
+0048     <span class="comment">% Initialize some variables</span>
+0049     [n, v] = size(X);
+0050     batch_size = 100;
+0051     machine.W = randn(v, h) * 0.1;
+0052     machine.bias_upW = zeros(1, h);
+0053     machine.bias_downW = zeros(1, v);
+0054     deltaW = zeros(v, h);
+0055     deltaBias_upW = zeros(1, h);
+0056     deltaBias_downW = zeros(1, v);
+0057     
+0058     <span class="comment">% Main loop</span>
+0059     ind = randperm(n);
+0060     <span class="keyword">for</span> iter=1:max_iter
+0061         
+0062         <span class="comment">% Set momentum and update batches</span>
+0063         <span class="keyword">if</span> iter &lt;= 5
+0064             momentum = initial_momentum;
+0065         <span class="keyword">else</span>
+0066             momentum = final_momentum;
+0067         <span class="keyword">end</span>
+0068         
+0069         <span class="comment">% Run for all mini-batches</span>
+0070         <span class="keyword">for</span> batch=1:batch_size:n          
+0071             <span class="keyword">if</span> batch + batch_size &lt;= n
+0072             
+0073                 <span class="comment">% Set values of visible nodes</span>
+0074                 vis1 = double(X(ind(batch:min([batch + batch_size - 1 n])),:));
+0075 
+0076                 <span class="comment">% Compute probabilities for hidden nodes</span>
+0077                 hid1 = 1 ./ (1 + exp(-(bsxfun(@plus, vis1 * machine.W, machine.bias_upW))));
+0078 
+0079                 <span class="comment">% Sample states for hidden nodes</span>
+0080                 hid_states = hid1 &gt; rand(size(hid1));
+0081                     
+0082                 <span class="comment">% Compute probabilities for visible nodes</span>
+0083                 vis2 = 1 ./ (1 + exp(-(bsxfun(@plus, hid_states * machine.W', machine.bias_downW))));
+0084 
+0085                 <span class="comment">% Compute probabilities for hidden nodes</span>
+0086                 hid2 = 1 ./ (1 + exp(-(bsxfun(@plus, vis2 * machine.W, machine.bias_upW))));
+0087 
+0088                 <span class="comment">% Now compute the weights update</span>
+0089                 posprods = vis1' * hid1;
+0090                 negprods = vis2' * hid2;
+0091                 deltaW = momentum * deltaW + eta * (((posprods - negprods) ./ batch_size) - (weight_cost * machine.W));
+0092                 deltaBias_upW   = momentum * deltaBias_upW   + (eta ./ batch_size) * (sum(hid1, 1) - sum(hid2, 1));
+0093                 deltaBias_downW = momentum * deltaBias_downW + (eta ./ batch_size) * (sum(vis1, 1) - sum(vis2, 1));
+0094                               
+0095                 <span class="comment">% Update the network weights</span>
+0096                 machine.W          = machine.W          + deltaW;
+0097                 machine.bias_upW   = machine.bias_upW   + deltaBias_upW;
+0098                 machine.bias_downW = machine.bias_downW + deltaBias_downW;
+0099             <span class="keyword">end</span>
+0100         <span class="keyword">end</span> 
+0101         
+0102         <span class="comment">% Estimate error and plot some of the receptive fields</span>
+0103         siz = min([n 5000]);
+0104         err = <a href="compute_recon_err.html" class="code" title="function err = compute_recon_err(machine, X)">compute_recon_err</a>(machine, X(1:siz,:));
+0105         disp([<span class="string">'Iteration '</span> num2str(iter) <span class="string">' (rec. error = '</span> num2str(err) <span class="string">')...'</span>]);
+0106     <span class="keyword">end</span>
+0107     disp(<span class="string">' '</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

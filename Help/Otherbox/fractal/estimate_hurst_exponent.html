@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of estimate_hurst_exponent</title>
+  <meta name="keywords" content="estimate_hurst_exponent">
+  <meta name="description" content="% The Hurst exponent">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html fractal -->
+<h1>estimate_hurst_exponent
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% The Hurst exponent</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [hurst] = estimate_hurst_exponent(data0)   % data set </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> % The Hurst exponent
+ %--------------------------------------------------------------------------
+ % The first 20 lines of code are a small test driver.
+ % You can delete or comment out this part when you are done validating the 
+ % function to your satisfaction.
+ %
+ % Bill Davidson, quellen@yahoo.com
+ % 13 Nov 2005
+ 
+ function []=hurst_exponent()
+ disp('testing Hurst calculation');
+ 
+ n=100;
+ data=rand(1,n);
+ plot(data);
+ 
+ hurst=estimate_hurst_exponent(data);
+ 
+ [s,err]=sprintf('Hurst exponent = %.2f',hurst);disp(s);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="hurst.html" class="code" title="function [H,sigma]=hurst(d, k)">hurst</a>	Unbiased estimator of the Hurst exponent.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_get_fractal_hurst.html" class="code" title="function [H_mean H_std H_sem H_list] = util_get_fractal_hurst( spif, gnds, varargin )">util_get_fractal_hurst</a>	UTIL_GET_FRACTAL_DIM Get the fractal hurst exponent of the array.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">% % The Hurst exponent</span>
+0002 <span class="comment">% %--------------------------------------------------------------------------</span>
+0003 <span class="comment">% % The first 20 lines of code are a small test driver.</span>
+0004 <span class="comment">% % You can delete or comment out this part when you are done validating the</span>
+0005 <span class="comment">% % function to your satisfaction.</span>
+0006 <span class="comment">% %</span>
+0007 <span class="comment">% % Bill Davidson, quellen@yahoo.com</span>
+0008 <span class="comment">% % 13 Nov 2005</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% function []=hurst_exponent()</span>
+0011 <span class="comment">% disp('testing Hurst calculation');</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% n=100;</span>
+0014 <span class="comment">% data=rand(1,n);</span>
+0015 <span class="comment">% plot(data);</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% hurst=estimate_hurst_exponent(data);</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% [s,err]=sprintf('Hurst exponent = %.2f',hurst);disp(s);</span>
+0020 
+0021 <span class="comment">%--------------------------------------------------------------------------</span>
+0022 <span class="comment">% This function does dispersional analysis on a data series, then does a</span>
+0023 <span class="comment">% Matlab polyfit to a log-log plot to estimate the Hurst exponent of the</span>
+0024 <span class="comment">% series.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% This algorithm is far faster than a full-blown implementation of Hurst's</span>
+0027 <span class="comment">% algorithm.  I got the idea from a 2000 PhD dissertation by Hendrik J</span>
+0028 <span class="comment">% Blok, and I make no guarantees whatsoever about the rigor of this approach</span>
+0029 <span class="comment">% or the accuracy of results.  Use it at your own risk.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Bill Davidson</span>
+0032 <span class="comment">% 21 Oct 2003</span>
+0033 
+0034 <a name="_sub0" href="#_subfunctions" class="code">function [hurst] = estimate_hurst_exponent(data0)   </a><span class="comment">% data set</span>
+0035 
+0036 data=data0;         <span class="comment">% make a local copy</span>
+0037 
+0038 [M,npoints]=size(data0);
+0039 
+0040 yvals=zeros(1,npoints);
+0041 xvals=zeros(1,npoints);
+0042 data2=zeros(1,npoints);
+0043 
+0044 index=0;
+0045 binsize=1;
+0046 
+0047 <span class="keyword">while</span> npoints&gt;4
+0048     
+0049     y=std(data);
+0050     index=index+1;
+0051     xvals(index)=binsize;
+0052     yvals(index)=binsize*y;
+0053     
+0054     npoints=fix(npoints/2);
+0055     binsize=binsize*2;
+0056     <span class="keyword">for</span> ipoints=1:npoints <span class="comment">% average adjacent points in pairs</span>
+0057         data2(ipoints)=(data(2*ipoints)+data((2*ipoints)-1))*0.5;
+0058     <span class="keyword">end</span>
+0059     data=data2(1:npoints);
+0060     
+0061 <span class="keyword">end</span> <span class="comment">% while</span>
+0062 
+0063 xvals=xvals(1:index);
+0064 yvals=yvals(1:index);
+0065 
+0066 logx=log(xvals);
+0067 logy=log(yvals);
+0068 
+0069 p2=polyfit(logx,logy,1);
+0070 <a href="hurst.html" class="code" title="function [H,sigma]=hurst(d, k)">hurst</a>=p2(1); <span class="comment">% Hurst exponent is the slope of the linear fit of log-log plot</span>
+0071 
+0072 <span class="keyword">return</span>;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

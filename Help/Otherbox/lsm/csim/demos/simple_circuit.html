@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of simple_circuit</title>
+  <meta name="keywords" content="simple_circuit">
+  <meta name="description" content="This is a short demo which shows how to use CSIM">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html lsm --><!-- ../menu.html csim --><!-- menu.html demos -->
+<h1>simple_circuit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a short demo which shows how to use CSIM</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">
+ This is a short demo which shows how to use CSIM
+
+ We implement a network with one spiking input neuron,
+ one analog input neuron, one exzitatory and
+ one inhibitory neuron with simple connections between them:
+
+                          syn4
+  analog input(4) ------------------------+
+                                          |
+                   syn1           syn2    v
+  spike input(1) ------&gt; exz(2) ------&gt; inh(3) -+
+                           o                    |
+                           |        syn3        |
+                           +--------------------+
+               
+ Author: Thomas Natschlaeger, 15/11/2001</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <span class="comment">%</span>
+0002 <span class="comment">% This is a short demo which shows how to use CSIM</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% We implement a network with one spiking input neuron,</span>
+0005 <span class="comment">% one analog input neuron, one exzitatory and</span>
+0006 <span class="comment">% one inhibitory neuron with simple connections between them:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%                          syn4</span>
+0009 <span class="comment">%  analog input(4) ------------------------+</span>
+0010 <span class="comment">%                                          |</span>
+0011 <span class="comment">%                   syn1           syn2    v</span>
+0012 <span class="comment">%  spike input(1) ------&gt; exz(2) ------&gt; inh(3) -+</span>
+0013 <span class="comment">%                           o                    |</span>
+0014 <span class="comment">%                           |        syn3        |</span>
+0015 <span class="comment">%                           +--------------------+</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Author: Thomas Natschlaeger, 15/11/2001</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0021 
+0022 addpath(<span class="string">'..'</span>);
+0023 
+0024 <span class="comment">%</span>
+0025 <span class="comment">% define the neurons</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% simulation parameters</span>
+0029 <span class="comment">%</span>
+0030 dt_sim  = 1e-4;  <span class="comment">% integration time step [sec]</span>
+0031 Tsim    = 0.6;   <span class="comment">% simulation time [sec]</span>
+0032 dt_out  = 0.005; <span class="comment">% intervals at which VMs and PSCs are recorded [sec]</span>
+0033 noise   = 0.00;   <span class="comment">% the amount of noise [e.g. nA^2]</span>
+0034 mySeed  = 314159;
+0035 
+0036 csim(<span class="string">'destroy'</span>);
+0037 csim(<span class="string">'set'</span>,<span class="string">'dt'</span>,dt_sim);
+0038 csim(<span class="string">'set'</span>,<span class="string">'randSeed'</span>,mySeed);
+0039 
+0040 <span class="comment">% the input neuron</span>
+0041 n1 = csim(<span class="string">'create'</span>,<span class="string">'SpikingInputNeuron'</span>);
+0042 
+0043 <span class="comment">% a leaky integrate and fire neuron</span>
+0044 n2 = csim(<span class="string">'create'</span>,<span class="string">'LifNeuron'</span>);  
+0045 csim(<span class="string">'set'</span>,n2,<span class="string">'Vthresh'</span>,0.015);  <span class="comment">% threshold</span>
+0046 csim(<span class="string">'set'</span>,n2,<span class="string">'Trefract'</span>,0.003); <span class="comment">% refractory period</span>
+0047 csim(<span class="string">'set'</span>,n2,<span class="string">'Cm'</span>,0.03);        <span class="comment">% tau_m = Cm * Rm</span>
+0048 csim(<span class="string">'set'</span>,n2,<span class="string">'Vreset'</span>,0.005);   <span class="comment">% V_reset</span>
+0049 csim(<span class="string">'set'</span>,n2,<span class="string">'Iinject'</span>,0.002);  <span class="comment">% I_back</span>
+0050 csim(<span class="string">'set'</span>,n2,<span class="string">'Vinit'</span>,0.001);    <span class="comment">% V_init</span>
+0051 csim(<span class="string">'set'</span>,n2,<span class="string">'Rm'</span>,1.0);
+0052 csim(<span class="string">'set'</span>,n2,<span class="string">'Inoise'</span>,noise);
+0053 csim(<span class="string">'set'</span>,n2',<span class="string">'Vresting'</span>,0);
+0054 
+0055 <span class="comment">% another leaky integrate and fire neuron (index 3)</span>
+0056 n3 = csim(<span class="string">'create'</span>,<span class="string">'LifNeuron'</span>);      <span class="comment">% type</span>
+0057 csim(<span class="string">'set'</span>,n3,<span class="string">'Vthresh'</span>,0.01,<span class="string">'Trefract'</span>,0.002,<span class="string">'Cm'</span>,0.05,<span class="string">'Vreset'</span>,0.0,<span class="string">'Iinject'</span>,0.0,<span class="string">'Vinit'</span>,0.0,<span class="string">'Rm'</span>,1.0,<span class="string">'Inoise'</span>,noise,<span class="string">'Vresting'</span>,0); <span class="comment">% threshold</span>
+0058 
+0059 <span class="comment">% an analog input wave form unit</span>
+0060 n4 = csim(<span class="string">'create'</span>,<span class="string">'AnalogInputNeuron'</span>);
+0061 
+0062 <span class="comment">%</span>
+0063 <span class="comment">% set up the connections</span>
+0064 <span class="comment">%</span>
+0065 
+0066 <span class="comment">% exzitatory synapse 1 (a static one) connects neuron 1 (the input) to neuron 2;</span>
+0067 syn1 = csim(<span class="string">'create'</span>,<span class="string">'StaticSpikingSynapse'</span>); <span class="comment">% type</span>
+0068 csim(<span class="string">'set'</span>,syn1,<span class="string">'W'</span>,0.5); <span class="comment">% weight</span>
+0069 csim(<span class="string">'set'</span>,syn1,<span class="string">'delay'</span>,0.001); <span class="comment">% delay</span>
+0070 csim(<span class="string">'set'</span>,syn1,<span class="string">'tau'</span>,0.003); <span class="comment">% tau_s</span>
+0071 
+0072 csim(<span class="string">'connect'</span>,n2,n1,syn1);
+0073 
+0074 <span class="comment">% exzitatory synapse 2 (a dynamic one) connects neuron 2 to neuron 3;</span>
+0075 syn2 = csim(<span class="string">'create'</span>,<span class="string">'DynamicSpikingSynapse'</span>); <span class="comment">% type</span>
+0076 csim(<span class="string">'set'</span>,syn2,<span class="string">'W'</span>,0.5);<span class="comment">% weight</span>
+0077 csim(<span class="string">'set'</span>,syn2,<span class="string">'delay'</span>,0.001);<span class="comment">% delay</span>
+0078 csim(<span class="string">'set'</span>,syn2,<span class="string">'tau'</span>,0.003);<span class="comment">% tau_s</span>
+0079 csim(<span class="string">'set'</span>,syn2,<span class="string">'U'</span>,0.2);<span class="comment">% U</span>
+0080 csim(<span class="string">'set'</span>,syn2,<span class="string">'D'</span>,1.0);<span class="comment">% D</span>
+0081 csim(<span class="string">'set'</span>,syn2,<span class="string">'F'</span>,0.3);<span class="comment">% F</span>
+0082 csim(<span class="string">'set'</span>,syn2,<span class="string">'u0'</span>,0.2);
+0083 csim(<span class="string">'set'</span>,syn2,<span class="string">'r0'</span>,1.0);
+0084 
+0085 csim(<span class="string">'connect'</span>,n3,n2,syn2);
+0086 
+0087 <span class="comment">% inhibitory synapse 3 (a dynamic one) connects neuron 3 back to neuron 2;</span>
+0088 syn3 = csim(<span class="string">'create'</span>,<span class="string">'DynamicSpikingSynapse'</span>); <span class="comment">% type</span>
+0089 csim(<span class="string">'set'</span>,syn3,<span class="string">'W'</span>,-0.1);<span class="comment">% weight</span>
+0090 csim(<span class="string">'set'</span>,syn3,<span class="string">'delay'</span>,0.0);<span class="comment">% delay</span>
+0091 csim(<span class="string">'set'</span>,syn3,<span class="string">'tau'</span>,0.03);<span class="comment">% tau_s</span>
+0092 csim(<span class="string">'set'</span>,syn3,<span class="string">'U'</span>,0.7);<span class="comment">% U</span>
+0093 csim(<span class="string">'set'</span>,syn3,<span class="string">'D'</span>,0.1);<span class="comment">% D</span>
+0094 csim(<span class="string">'set'</span>,syn3,<span class="string">'F'</span>,1.0);<span class="comment">% F</span>
+0095 csim(<span class="string">'set'</span>,syn3,<span class="string">'u0'</span>,0.7);
+0096 csim(<span class="string">'set'</span>,syn3,<span class="string">'r0'</span>,1.0);
+0097 
+0098 csim(<span class="string">'connect'</span>,n2,n3,syn3);
+0099                    
+0100 <span class="comment">% exzitatory synapse 4 (an analog onw) connects neuron 3 back to neuron 2;</span>
+0101 syn4 = csim(<span class="string">'create'</span>,<span class="string">'StaticAnalogSynapse'</span>);
+0102 csim(<span class="string">'set'</span>,syn4,<span class="string">'W'</span>,0.018); <span class="comment">% weight</span>
+0103 csim(<span class="string">'set'</span>,syn4,<span class="string">'Inoise'</span>,noise);<span class="comment">% noise</span>
+0104 csim(<span class="string">'connect'</span>,n3,n4,syn4);
+0105 
+0106 
+0107 <span class="comment">%</span>
+0108 <span class="comment">% We want to plot the Vm's and PSC's of nrns 2 and 3 and of all syns</span>
+0109 <span class="comment">%</span>
+0110 
+0111 rec_psc = csim(<span class="string">'create'</span>,<span class="string">'MexRecorder'</span>);
+0112 csim(<span class="string">'set'</span>,rec_psc,<span class="string">'dt'</span>,dt_out);
+0113 csim(<span class="string">'connect'</span>,rec_psc,[syn1 syn2 syn3 syn4],<span class="string">'psr'</span>);
+0114 
+0115 rec_vm = csim(<span class="string">'create'</span>,<span class="string">'MexRecorder'</span>);
+0116 csim(<span class="string">'set'</span>,rec_vm,<span class="string">'dt'</span>,dt_out);
+0117 csim(<span class="string">'connect'</span>,rec_vm,[ n2 n3 ],<span class="string">'Vm'</span>);
+0118 
+0119 rec_sp = csim(<span class="string">'create'</span>,<span class="string">'MexRecorder'</span>);
+0120 csim(<span class="string">'connect'</span>,rec_sp,[ n1 n2 n3 ],<span class="string">'spikes'</span>);
+0121 
+0122 <span class="comment">%</span>
+0123 <span class="comment">% Set up the input</span>
+0124 <span class="comment">%</span>
+0125 input(1).spiking = 1;
+0126 input(1).idx     = n1;
+0127 input(1).data    = cumsum([0.00851522 0.0374612 0.0304122 0.00513629 0.0011292 0.00487756 0.0820378 0.0198986 <span class="keyword">...</span>
+0128                            0.0343706 0.016819 0.0179849 0.0783438 0.0407395 0.0287782 0.028933 0.0271107 <span class="keyword">...</span>
+0129                0.0356939 0.00673942 0.0278204 0.0199695]);
+0130 input(1).dt      = 0;
+0131 
+0132 input(2).spiking = 0;
+0133 input(2).idx     = n4;
+0134 input(2).dt      = 5e-3;
+0135 input(2).data    = 1*(1+sin(2*pi*6*[0:input(2).dt:Tsim])); 
+0136 
+0137 <span class="comment">%</span>
+0138 <span class="comment">% run the simulation</span>
+0139 <span class="comment">%</span>
+0140 tic;
+0141 csim(<span class="string">'reset'</span>);
+0142 csim(<span class="string">'simulate'</span>,Tsim/3,input);
+0143 csim(<span class="string">'simulate'</span>,Tsim/3,input);
+0144 csim(<span class="string">'simulate'</span>,Tsim/3,input);
+0145 vm = csim(<span class="string">'get'</span>,rec_vm,<span class="string">'traces'</span>);
+0146 psc = csim(<span class="string">'get'</span>,rec_psc,<span class="string">'traces'</span>);
+0147 spikes = csim(<span class="string">'get'</span>,rec_sp,<span class="string">'traces'</span>);
+0148 toc
+0149 
+0150 <span class="comment">%</span>
+0151 <span class="comment">% now we plot the output</span>
+0152 <span class="comment">%</span>
+0153 figure(1); clf reset;
+0154 
+0155 subplot(4,1,1); cla reset;
+0156 
+0157 t=spikes.channel(1).data;
+0158 line([t; t],1+[0.3; -0.3]*ones(1,length(t)),<span class="string">'Color'</span>,<span class="string">'k'</span>); hold on
+0159 
+0160 plot([0:input(2).dt:Tsim],2+input(2).data,<span class="string">'r-'</span>);
+0161 
+0162 title(<span class="string">'input'</span>);
+0163 
+0164 subplot(4,1,2); cla reset;
+0165 
+0166 t = spikes.channel(2).data;
+0167 plot(t,1*ones(1,length(t)),<span class="string">'b.'</span>); hold on
+0168 line([t; t],1+[0.3; -0.3]*ones(1,length(t)),<span class="string">'Color'</span>,<span class="string">'b'</span>); 
+0169 
+0170 t = spikes.channel(3).data;
+0171 plot(t,2*ones(1,length(t)),<span class="string">'g.'</span>); hold on
+0172 line([t; t],2+[0.3; -0.3]*ones(1,length(t)),<span class="string">'Color'</span>,<span class="string">'g'</span>); 
+0173 <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'Xlim'</span>,[0 Tsim],<span class="string">'Ylim'</span>,[0.5 2.5]);
+0174 <span class="comment">%legend('neuron 1','neuron 2');</span>
+0175 title(<span class="string">'spike times'</span>);
+0176 
+0177 subplot(4,1,3); cla reset;
+0178 ldt=vm.channel(1).dt;
+0179 t=ldt:ldt:Tsim;
+0180 plot(t,vm.channel(1).data,<span class="string">'b'</span>); hold on
+0181 plot(t,vm.channel(2).data,<span class="string">'g'</span>); hold on
+0182 axis tight
+0183 <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'Xlim'</span>,[0 Tsim]);
+0184 legend(<span class="string">'neuron 1'</span>,<span class="string">'neuron 2'</span>);
+0185 title(<span class="string">'membrane voltage'</span>);
+0186 
+0187 subplot(4,1,4); cla reset;
+0188 ldt=csim(<span class="string">'get'</span>,rec_psc,<span class="string">'dt'</span>);
+0189 t=ldt:ldt:Tsim;
+0190 plot(t,psc.channel(1).data,<span class="string">'k'</span>); hold on
+0191 plot(t,psc.channel(2).data,<span class="string">'b'</span>); hold on
+0192 plot(t,psc.channel(3).data,<span class="string">'g'</span>); hold on
+0193 plot(t,psc.channel(4).data,<span class="string">'r'</span>); hold on
+0194 axis tight
+0195 <a href="../../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'Xlim'</span>,[0 Tsim]);
+0196 legend(<span class="string">'syn 1'</span>,<span class="string">'syn 2'</span>,<span class="string">'syn 3'</span>,<span class="string">'syn 4'</span>);
+0197 xlabel(<span class="string">'time [sec]'</span>);
+0198 title(<span class="string">'synaptic potentials'</span>);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

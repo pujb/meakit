@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of findpaths</title>
+  <meta name="keywords" content="findpaths">
+  <meta name="description" content="FINDPATHS     Network paths">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>findpaths
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FINDPATHS     Network paths</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FINDPATHS     Network paths
+
+   [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths);
+
+   Paths are sequences of linked nodes, that never visit a single node
+   more than once. This function finds all paths that start at a set of 
+   source nodes, up to a specified length. Warning: very memory-intensive.
+
+   Inputs:     CIJ,        binary (directed/undirected) connection matrix
+               qmax,       maximal path length
+               sources,    source units from which paths are grown
+               savepths,   set to 1 if all paths are to be collected in
+                           'allpths'
+
+   Outputs:    Pq,         3D matrix, with P(i,j,q) = number of paths from
+                           'i' to 'j' of length 'q'.
+               tpath,      total number of paths found (lengths 1 to 'qmax')
+               plq,        path length distribution as a function of 'q'
+               qstop,      path length at which 'findpaths' is stopped
+               allpths,    a matrix containing all paths up to 'qmax'
+               util,       node use index
+
+   Notes:
+       Pq(:,:,N) can only carry entries on the diagonal, as all &quot;legal&quot;
+   paths of length N-1 must terminate.  Cycles of length N are possible, 
+   with all vertices visited exactly once (except for source and target).
+   'qmax = N' can wreak havoc (due to memory problems).
+       All weights are discarded.
+       I am fairly certain that this algorithm is rather inefficient -
+   suggestions for improvements are welcome.
+
+
+ Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths)</a>
+0002 <span class="comment">% FINDPATHS     Network paths</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Paths are sequences of linked nodes, that never visit a single node</span>
+0007 <span class="comment">%   more than once. This function finds all paths that start at a set of</span>
+0008 <span class="comment">%   source nodes, up to a specified length. Warning: very memory-intensive.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Inputs:     CIJ,        binary (directed/undirected) connection matrix</span>
+0011 <span class="comment">%               qmax,       maximal path length</span>
+0012 <span class="comment">%               sources,    source units from which paths are grown</span>
+0013 <span class="comment">%               savepths,   set to 1 if all paths are to be collected in</span>
+0014 <span class="comment">%                           'allpths'</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Outputs:    Pq,         3D matrix, with P(i,j,q) = number of paths from</span>
+0017 <span class="comment">%                           'i' to 'j' of length 'q'.</span>
+0018 <span class="comment">%               tpath,      total number of paths found (lengths 1 to 'qmax')</span>
+0019 <span class="comment">%               plq,        path length distribution as a function of 'q'</span>
+0020 <span class="comment">%               qstop,      path length at which 'findpaths' is stopped</span>
+0021 <span class="comment">%               allpths,    a matrix containing all paths up to 'qmax'</span>
+0022 <span class="comment">%               util,       node use index</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   Notes:</span>
+0025 <span class="comment">%       Pq(:,:,N) can only carry entries on the diagonal, as all &quot;legal&quot;</span>
+0026 <span class="comment">%   paths of length N-1 must terminate.  Cycles of length N are possible,</span>
+0027 <span class="comment">%   with all vertices visited exactly once (except for source and target).</span>
+0028 <span class="comment">%   'qmax = N' can wreak havoc (due to memory problems).</span>
+0029 <span class="comment">%       All weights are discarded.</span>
+0030 <span class="comment">%       I am fairly certain that this algorithm is rather inefficient -</span>
+0031 <span class="comment">%   suggestions for improvements are welcome.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0035 
+0036 
+0037 <span class="comment">% ensure CIJ is binary...</span>
+0038 CIJ = double(CIJ~=0);
+0039 
+0040 <span class="comment">% initialize some variables</span>
+0041 N = size(CIJ,1);
+0042 pths = [];
+0043 Pq = zeros(N,N,qmax);
+0044 util = zeros(N,qmax);
+0045 
+0046 <span class="comment">% this code is for pathlength = 1</span>
+0047 <span class="comment">% paths are seeded from 'sources'</span>
+0048 q = 1;
+0049 
+0050 <span class="keyword">for</span> j=1:N
+0051     <span class="keyword">for</span> i=1:length(sources)
+0052         is = sources(i);
+0053         <span class="keyword">if</span> (CIJ(is,j) == 1)
+0054             pths = [pths [is j]'];
+0055         <span class="keyword">end</span>;
+0056     <span class="keyword">end</span>;
+0057 <span class="keyword">end</span>;
+0058 
+0059 <span class="comment">% test: calculate the use index per vertex</span>
+0060 util(1:N,q) = util(1:N,q)+hist(reshape(pths,1,size(pths,1)*size(pths,2)),1:N)';
+0061 <span class="comment">% now enter the found paths of length 1 into the pathmatrix Pq</span>
+0062 <span class="keyword">for</span> np=1:size(pths,2)
+0063     Pq(pths(1,np),pths(q+1,np),q) = Pq(pths(1,np),pths(q+1,np),q) + 1;
+0064 <span class="keyword">end</span>;
+0065 
+0066 <span class="comment">% begin saving all paths</span>
+0067 <span class="keyword">if</span> (savepths==1)
+0068     allpths = pths;
+0069 <span class="keyword">end</span>;
+0070 <span class="keyword">if</span> (savepths~=1)
+0071     allpths = [];
+0072 <span class="keyword">end</span>;
+0073 
+0074 <span class="comment">% &quot;big loop&quot; for all other pathlengths 'q'</span>
+0075 <span class="comment">% ----------------------------------------------------------------------</span>
+0076 <span class="keyword">for</span> q=2:qmax
+0077 
+0078     <span class="comment">% to keep track of time...</span>
+0079     disp([<span class="string">'current pathlength (q) = '</span>,num2str(q),<span class="string">'   number of paths so far (up to q-1)= '</span>,num2str(sum(sum(sum(Pq))))])
+0080 
+0081     <span class="comment">% old paths are now in 'pths'</span>
+0082     <span class="comment">% new paths are about to be collected in 'npths'</span>
+0083     <span class="comment">% the inital assignment of the size of 'npths' should scale with N,K and</span>
+0084     <span class="comment">% needs finessing...  test runs are needed here.</span>
+0085     <span class="keyword">if</span> (N&lt;50)
+0086         len_npths = N*q*10;
+0087     <span class="keyword">end</span>;
+0088     <span class="keyword">if</span> (N&gt;=50)
+0089         len_npths = 10^(q+1);
+0090     <span class="keyword">end</span>;
+0091     len_npths = min(len_npths,10000000);
+0092     npths = zeros(q+1,len_npths);
+0093 
+0094     <span class="comment">% find the unique set of endpoints of 'pths'</span>
+0095     endp = unique(pths(q,:));
+0096     npthscnt = 0;
+0097 
+0098     <span class="keyword">for</span> ii=1:length(endp)  <span class="comment">% set of endpoints of previous paths</span>
+0099         i = endp(ii);
+0100         <span class="comment">% in 'pb' collect all previous paths with 'i' as their endpoint</span>
+0101         [pa,pb] = find(pths(q,:) == i);
+0102         <span class="comment">% find the outgoing connections from 'i' (&quot;breadth-first&quot;)</span>
+0103         nendp = find(CIJ(i,:)==1);
+0104         <span class="comment">% if there 'i' is not a dead end</span>
+0105         <span class="keyword">if</span> (~isempty(nendp))
+0106             <span class="keyword">for</span> jj=1:length(nendp)   <span class="comment">% endpoints of next edge</span>
+0107                 j = nendp(jj);
+0108                 <span class="comment">% find new paths - only &quot;legal&quot; ones, i.e. no vertex is visited twice</span>
+0109                 pb_temp = pb(sum(j==pths(2:q,pb),1)==0);
+0110                 <span class="comment">% add new paths to 'npths'</span>
+0111                 npths(:,npthscnt+1:npthscnt+length(pb_temp)) = [pths(:,pb_temp)' ones(length(pb_temp),1)*j]';
+0112                 npthscnt = npthscnt+length(pb_temp);
+0113                 <span class="comment">% count new paths and add the number to 'P'</span>
+0114                 Pq(1:N,j,q) = Pq(1:N,j,q)+(hist(pths(1,pb_temp),1:N))';
+0115             <span class="keyword">end</span>;
+0116         <span class="keyword">end</span>;
+0117     <span class="keyword">end</span>;
+0118 
+0119     <span class="comment">% note: 'npths' now contains a list of all the paths of length 'q'</span>
+0120 
+0121     <span class="comment">% append the matrix of all paths</span>
+0122     <span class="keyword">if</span> (savepths==1)
+0123         allpths = [allpths; zeros(1,size(allpths,2))];
+0124         allpths = [allpths npths(:,1:npthscnt)];
+0125     <span class="keyword">end</span>;
+0126 
+0127     <span class="comment">% test: calculate the use index per vertex (correct for cycles, count</span>
+0128     <span class="comment">% source/target only once)</span>
+0129     util(1:N,q) = util(1:N,q) + hist(reshape(npths,1,size(npths,1)*size(npths,2)),1:N)' - diag(Pq(:,:,q));
+0130     <span class="comment">% eliminate cycles from &quot;making it&quot; to the next level, so that</span>
+0131     <span class="comment">% 'pths' contains all the paths that have a chance of being continued</span>
+0132     <span class="keyword">if</span> (~isempty(npths))
+0133         pths = npths(:,npths(1,:)~=npths(q+1,:));
+0134     <span class="keyword">else</span>
+0135         pths = [];
+0136     <span class="keyword">end</span>;
+0137 
+0138     <span class="comment">% if there are no 'pths' paths left, end the search</span>
+0139     <span class="keyword">if</span> (isempty(pths))
+0140         qstop = q;
+0141         tpath = sum(sum(sum(Pq)));
+0142         plq = reshape(sum(sum(Pq)),1,qmax);
+0143         <span class="keyword">return</span>;
+0144     <span class="keyword">end</span>;
+0145 
+0146 <span class="keyword">end</span>;  <span class="comment">% q</span>
+0147 <span class="comment">% ----------------------------------------------------------------------</span>
+0148 qstop = q;
+0149 
+0150 <span class="comment">% total number of paths</span>
+0151 tpath = sum(sum(sum(Pq)));
+0152 
+0153 <span class="comment">% path length distribution</span>
+0154 plq = reshape(sum(sum(Pq)),1,qmax);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

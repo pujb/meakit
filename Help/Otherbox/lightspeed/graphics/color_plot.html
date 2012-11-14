@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of color_plot</title>
+  <meta name="keywords" content="color_plot">
+  <meta name="description" content="COLOR_PLOT    Scatterplot with colored points.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>color_plot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>COLOR_PLOT    Scatterplot with colored points.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function color_plot(x,colors,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> COLOR_PLOT    Scatterplot with colored points.
+ color_plot(x) makes a scatterplot of x(:,1) versus x(:,2) with points colored
+ according to quantiles of x(:,3).
+ color_plot(x,n) specifies the number of color quantiles (default 4).
+ color_plot(x,colors) specifies an RGB matrix of colors (the number of rows
+ determines the number of quantiles).  The default is YlGnBu_colors.
+ color_plot(...,'ColorBar',1) adds a color bar with tick marks from the
+ quantile values.
+
+ Example:
+   xy = ndgridmat(linspace(-12,12,20),linspace(-12,12,20));
+   z = sin(sqrt(xy(:,1).^2 + xy(:,2).^2));
+   color_plot([xy z]);
+
+ See also <a href="YlGnBu_colors.html" class="code" title="function colors = YlGnBu_colors(n)">YlGnBu_colors</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="YlGnBu_colors.html" class="code" title="function colors = YlGnBu_colors(n)">YlGnBu_colors</a>	YlGnBu_colors    A good sequential colormap.</li><li><a href="cut_quantile.html" class="code" title="function [c,b] = cut_quantile(x,n)">cut_quantile</a>	CUT_QUANTILE   Index of quantiles.</li><li><a href="../../../Otherbox/lightspeed/makestruct.html" class="code" title="function s = makestruct(varargin)">makestruct</a>	MAKESTRUCT   Cell-friendly alternative to STRUCT.</li><li><a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li><li><a href="../../../Otherbox/lightspeed/setfields.html" class="code" title="function ab = setfields(a, b, newfield_flag)">setfields</a>	SETFIELDS   Set multiple fields of a structure.</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function color_plot(x,colors,varargin)</a>
+0002 <span class="comment">% COLOR_PLOT    Scatterplot with colored points.</span>
+0003 <span class="comment">% color_plot(x) makes a scatterplot of x(:,1) versus x(:,2) with points colored</span>
+0004 <span class="comment">% according to quantiles of x(:,3).</span>
+0005 <span class="comment">% color_plot(x,n) specifies the number of color quantiles (default 4).</span>
+0006 <span class="comment">% color_plot(x,colors) specifies an RGB matrix of colors (the number of rows</span>
+0007 <span class="comment">% determines the number of quantiles).  The default is YlGnBu_colors.</span>
+0008 <span class="comment">% color_plot(...,'ColorBar',1) adds a color bar with tick marks from the</span>
+0009 <span class="comment">% quantile values.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Example:</span>
+0012 <span class="comment">%   xy = ndgridmat(linspace(-12,12,20),linspace(-12,12,20));</span>
+0013 <span class="comment">%   z = sin(sqrt(xy(:,1).^2 + xy(:,2).^2));</span>
+0014 <span class="comment">%   color_plot([xy z]);</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also YlGnBu_colors.</span>
+0017 
+0018 <span class="comment">% Written by Tom Minka and Charles Sutton</span>
+0019 
+0020 args = <a href="../../../Otherbox/lightspeed/makestruct.html" class="code" title="function s = makestruct(varargin)">makestruct</a>(varargin);
+0021 default_args = struct(<span class="string">'ColorBar'</span>,0);
+0022 args = <a href="../../../Otherbox/lightspeed/setfields.html" class="code" title="function ab = setfields(a, b, newfield_flag)">setfields</a>(default_args,args);
+0023 
+0024 <span class="keyword">if</span> nargin &lt; 2
+0025   colors = 4;
+0026 <span class="keyword">end</span>
+0027 <span class="keyword">if</span> length(colors) == 1
+0028   nlevels = colors;
+0029   colors = <a href="YlGnBu_colors.html" class="code" title="function colors = YlGnBu_colors(n)">YlGnBu_colors</a>(nlevels);
+0030 <span class="keyword">else</span>
+0031   nlevels = <a href="../../../Otherbox/lightspeed/rows.html" class="code" title="function r = rows(x)">rows</a>(colors);
+0032 <span class="keyword">end</span>
+0033 <span class="comment">% color groups</span>
+0034 [c,q] = <a href="cut_quantile.html" class="code" title="function [c,b] = cut_quantile(x,n)">cut_quantile</a>(x(:,3),nlevels);
+0035 <span class="keyword">for</span> lev = 1:nlevels
+0036   i = find(c == lev);
+0037   plot(x(i,1),x(i,2),<span class="string">'o'</span>,<span class="string">'Color'</span>,colors(lev,:),<span class="string">'MarkerFaceColor'</span>,colors(lev,:));
+0038   hold on
+0039 <span class="keyword">end</span>
+0040 hold off
+0041 
+0042 colormap(colors);
+0043 
+0044 <span class="keyword">if</span> args.ColorBar 
+0045   caxis ([0,1]);
+0046   
+0047   cTickLbls = cell(numel(q), 1);
+0048   <span class="keyword">for</span> i = 1:length(q)
+0049       cTickLbls{i} = num2str(q(i), <span class="string">'%11.2g'</span>);
+0050   <span class="keyword">end</span>
+0051   
+0052   colorbar(<span class="string">'YTick'</span>, linspace(0,1,nlevels+1), <span class="string">'YTickLabel'</span>, cTickLbls);
+0053 <span class="keyword">end</span>
+0054 
+0055 <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'Color'</span>,<span class="string">'none'</span>)</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

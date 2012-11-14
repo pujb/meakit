@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of generate_gif_for_animation</title>
+  <meta name="keywords" content="generate_gif_for_animation">
+  <meta name="description" content="GENERATE_GIF_FOR_ANIMATION 通过Movie帧生成GIF动画">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>generate_gif_for_animation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>GENERATE_GIF_FOR_ANIMATION 通过Movie帧生成GIF动画</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [] = generate_gif_for_animation( movie_frames ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">GENERATE_GIF_FOR_ANIMATION 通过Movie帧生成GIF动画
+   movie_frames是animation_response_score生成的。
+   gif动画是无限循环的
+
+   See also <a href="animation_response_score.html" class="code" title="function [ movie_frm ] = animation_response_score( result_cell_array )">ANIMATION_RESPONSE_SCORE</a>, MOVIE2GIF,
+   UTIL_PLOT_8S_INTO_DOTSGRAPH
+
+   蒲江波 2009年11月24日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../Otherbox/movie2gif/movie2gif.html" class="code" title="function movie2gif(mov, gifFile, varargin)">movie2gif</a>	Movie2Gif ver. 1.0</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = generate_gif_for_animation( movie_frames )</a>
+0002 <span class="comment">%GENERATE_GIF_FOR_ANIMATION 通过Movie帧生成GIF动画</span>
+0003 <span class="comment">%   movie_frames是animation_response_score生成的。</span>
+0004 <span class="comment">%   gif动画是无限循环的</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   See also ANIMATION_RESPONSE_SCORE, MOVIE2GIF,</span>
+0007 <span class="comment">%   UTIL_PLOT_8S_INTO_DOTSGRAPH</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   蒲江波 2009年11月24日</span>
+0010 
+0011 <span class="comment">% 获取movie的大小，设置movie窗口使之合适(第一帧=所有帧)</span>
+0012 [h w p] = size( movie_frames(1).cdata );
+0013 hf = figure;
+0014 
+0015 <span class="comment">% 重设回放窗口大小</span>
+0016 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf, <span class="string">'position'</span>, [0 0 w h]);
+0017 axis off
+0018 
+0019 movie(hf, movie_frames, 1, 30, [0 0 0 0]);
+0020 
+0021 <span class="comment">% 生成GIF</span>
+0022 [filename pathname] = uiputfile(<span class="string">'*.gif'</span>, <span class="string">'The animated gif filename'</span>);
+0023 <a href="../Otherbox/movie2gif/movie2gif.html" class="code" title="function movie2gif(mov, gifFile, varargin)">movie2gif</a>(movie_frames, [pathname filename]);
+0024 <span class="keyword">end</span>
+0025</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

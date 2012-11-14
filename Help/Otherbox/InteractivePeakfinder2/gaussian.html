@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gaussian</title>
+  <meta name="keywords" content="gaussian">
+  <meta name="description" content="gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html InteractivePeakfinder2 -->
+<h1>gaussian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function g = gaussian(x,pos,wid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">  gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid  x may be scalar, vector, or matrix, pos and wid both scalar  T. C. O'Haver, 1988 Examples: gaussian([0 1 2],1,2) gives result [0.5000    1.0000    0.5000] plot(gaussian([1:100],50,20)) displays gaussian band centered at 50 with width 20.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="DemoFindPeak.html" class="code" title="">DemoFindPeak</a>	A simple self-contained demonstration of the findpeak function (line 48)</li><li><a href="DemoFindPeakSliders.html" class="code" title="">DemoFindPeakSliders</a>	A self-contained interactive demonstration of FindPeakSliders</li><li><a href="DemoFindPeakSliders2.html" class="code" title="">DemoFindPeakSliders2</a>	A self-contained interactive demonstration of FindPeakSliders applied</li><li><a href="DemoFindPeakSlidersG.html" class="code" title="">DemoFindPeakSlidersG</a>	Interactive demo of findpeaks function with peak-zoom feature.</li><li><a href="RedrawPeak.html" class="code" title="">RedrawPeak</a>	Redraws graph for FindPeakSliders when Peak slider is moved.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function g = gaussian(x,pos,wid)</a>
+0002 <span class="comment">%  gaussian(x,pos,wid) = gaussian peak centered on pos, half-width=wid</span>
+0003 <span class="comment">%  x may be scalar, vector, or matrix, pos and wid both scalar</span>
+0004 <span class="comment">%  T. C. O'Haver, 1988</span>
+0005 <span class="comment">% Examples: gaussian([0 1 2],1,2) gives result [0.5000    1.0000    0.5000]</span>
+0006 <span class="comment">% plot(gaussian([1:100],50,20)) displays gaussian band centered at 50 with width 20.</span>
+0007 g = exp(-((x-pos)./(0.6006.*wid)) .^2);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

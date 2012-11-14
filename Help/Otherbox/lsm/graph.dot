@@ -1,0 +1,10 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  install -> install;
+  lsm_startup -> lsm_path;
+
+  condmex [URL="condmex.html"];
+  install [URL="install.html"];
+  lsm_path [URL="lsm_path.html"];
+  lsm_startup [URL="lsm_startup.html"];
+}

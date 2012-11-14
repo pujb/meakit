@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gplvm_grad</title>
+  <meta name="keywords" content="gplvm_grad">
+  <meta name="description" content="GPLVM_GRAD Gradient of the Gaussian Process Latent Variable model">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>gplvm_grad
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GPLVM_GRAD Gradient of the Gaussian Process Latent Variable model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [C, dC] = gplvm_grad(x, X, sigma) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">GPLVM_GRAD Gradient of the Gaussian Process Latent Variable model
+
+   [C, dC] = gplvm_grad(x, no_dims, sigma)
+
+ Computes the gradient of the Gaussian Process Latent Variable model.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [C, dC] = gplvm_grad(x, X, sigma)</a>
+0002 <span class="comment">%GPLVM_GRAD Gradient of the Gaussian Process Latent Variable model</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [C, dC] = gplvm_grad(x, no_dims, sigma)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Computes the gradient of the Gaussian Process Latent Variable model.</span>
+0007 
+0008 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0009 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0010 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0011 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0012 <span class="comment">% maintain the name of the original author.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0015 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0016 
+0017 
+0018     <span class="comment">% Decode solution</span>
+0019     [n, d] = size(X);
+0020     no_dims = numel(x) ./ n;
+0021     Y = reshape(x, [n no_dims]);
+0022 
+0023     <span class="comment">% Compute kernel matrix (in latent space)</span>
+0024     sum_Y = sum(Y .^ 2, 2);
+0025     K = exp(bsxfun(@minus, bsxfun(@minus, 2 * (Y * Y'), sum_Y'), sum_Y) / (2 * sigma ^ 2));
+0026     
+0027     <span class="comment">% Compute gradient with respect to kernel</span>
+0028 <span class="comment">%     invK = inv(K);</span>
+0029 <span class="comment">%     dLdK = invK * X * X' * invK - d * invK;</span>
+0030     tmp = (K \ X) * X';
+0031     dLdK = (tmp - d * eye(n)) / K;
+0032 
+0033     <span class="comment">% Compute gradient with respect to coordinates</span>
+0034     dC = zeros(n, no_dims);
+0035     dLdK = K .* dLdK;
+0036     <span class="keyword">for</span> i=1:n
+0037         dC(i,:) = sum(bsxfun(@times, dLdK(:,i), bsxfun(@minus, Y(i,:), Y)), 1);
+0038     <span class="keyword">end</span>
+0039     dC = (-1 / sigma ^ 2) * dC(:);
+0040     
+0041     <span class="comment">% Compute log-likelihood</span>
+0042     C = -((d * n) / 2) * log(2 * pi) - (d / 2) * log(det(K) + realmin) - .5 * trace(tmp);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

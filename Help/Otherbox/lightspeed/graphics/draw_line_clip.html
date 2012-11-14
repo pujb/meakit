@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of draw_line_clip</title>
+  <meta name="keywords" content="draw_line_clip">
+  <meta name="description" content="DRAW_LINE_CLIP  Draw a line defined by an equation.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>draw_line_clip
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>DRAW_LINE_CLIP  Draw a line defined by an equation.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function h = draw_line_clip(m,b,a, linespec, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">DRAW_LINE_CLIP  Draw a line defined by an equation.
+ DRAW_LINE_CLIP(M,B,A) draws a line, clipped to the current axes, 
+ defined by a*y = m*x + b.
+ DRAW_LINE_CLIP(M,B,A,LINESPEC) also specifies the line style and color.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>	SET_LINESPEC    Set the color and line style of a graphics object.</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = draw_line_clip(m,b,a, linespec, varargin)</a>
+0002 <span class="comment">%DRAW_LINE_CLIP  Draw a line defined by an equation.</span>
+0003 <span class="comment">% DRAW_LINE_CLIP(M,B,A) draws a line, clipped to the current axes,</span>
+0004 <span class="comment">% defined by a*y = m*x + b.</span>
+0005 <span class="comment">% DRAW_LINE_CLIP(M,B,A,LINESPEC) also specifies the line style and color.</span>
+0006 
+0007 <span class="keyword">if</span> nargin &lt; 4
+0008   linespec = <span class="string">'b'</span>;
+0009 <span class="keyword">end</span>
+0010 v = axis;
+0011 x1 = v(1);
+0012 x2 = v(2);
+0013 warning off
+0014 y1 = (m*x1 + b)/a;
+0015 y2 = (m*x2 + b)/a;
+0016 warning on
+0017 <span class="keyword">if</span> y1 &lt; v(3)
+0018   y1 = v(3);
+0019   x1 = (a*y1 - b)/m;
+0020 <span class="keyword">end</span>  
+0021 <span class="keyword">if</span> y1 &gt; v(4)
+0022   y1 = v(4);
+0023   x1 = (a*y1 - b)/m;
+0024 <span class="keyword">end</span>  
+0025 <span class="keyword">if</span> y2 &lt; v(3);
+0026   y2 = v(3);
+0027   x2 = (a*y2 - b)/m;
+0028 <span class="keyword">end</span>
+0029 <span class="keyword">if</span> y2 &gt; v(4);
+0030   y2 = v(4);
+0031   x2 = (a*y2 - b)/m;
+0032 <span class="keyword">end</span>
+0033 h = line([x1 x2], [y1 y2]);
+0034 <a href="set_linespec.html" class="code" title="function set_linespec(h,linespec)">set_linespec</a>(h,linespec);
+0035 <span class="keyword">if</span> length(varargin) &gt; 0
+0036   <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h,varargin{:});
+0037 <span class="keyword">end</span>
+0038 <span class="keyword">if</span> nargout &lt; 1
+0039   <a href="../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> h
+0040 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

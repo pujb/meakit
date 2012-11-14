@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of funfit</title>
+  <meta name="keywords" content="funfit">
+  <meta name="description" content="P=funfit(fun,x,y,P0,DISP) tries to fit the parameters of the function 'fun'">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lsm --><!-- menu.html utilities -->
+<h1>funfit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>P=funfit(fun,x,y,P0,DISP) tries to fit the parameters of the function 'fun'</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [P,yapp,cc]=funfit(fun,x,y,P0,DISP) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">P=funfit(fun,x,y,P0,DISP) tries to fit the parameters of the function 'fun'
+  such that the summed squared error over the data 'x' and 'y' is
+  minimized (uses the function 'fminunc' provided with the optim toolbox).
+  'fun' should be given as a string and each parameter to fit
+  is identified with the two characters '%g'. If 'DISP' is '1'
+  plot is shown and some info at the terminal is printed (if ommited
+  '0' is assumed).
+ 
+  Example if you want to fit a function like '(A+B*exp(-x/tau))' to the
+  data you would write P=fitfun('%g + %g * exp(-x ./ %g)',x,y). Then
+  'P(1)' corresponds to 'A', 'P(2)' corresponds to 'B' and 'P(3)' to
+  'tau'. In general 'P(i)' corresponds to the i-th occurrence of
+  '%g'.
+
+  'yapp(i)' is the value of 'fun' evaluated at 'x(i)' after the parameter
+  search. 'cc' is the correlation coefficient of 'yapp' and 'y'.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [P,yapp,cc]=funfit(fun,x,y,P0,DISP)</a>
+0002 <span class="comment">%P=funfit(fun,x,y,P0,DISP) tries to fit the parameters of the function 'fun'</span>
+0003 <span class="comment">%  such that the summed squared error over the data 'x' and 'y' is</span>
+0004 <span class="comment">%  minimized (uses the function 'fminunc' provided with the optim toolbox).</span>
+0005 <span class="comment">%  'fun' should be given as a string and each parameter to fit</span>
+0006 <span class="comment">%  is identified with the two characters '%g'. If 'DISP' is '1'</span>
+0007 <span class="comment">%  plot is shown and some info at the terminal is printed (if ommited</span>
+0008 <span class="comment">%  '0' is assumed).</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%  Example if you want to fit a function like '(A+B*exp(-x/tau))' to the</span>
+0011 <span class="comment">%  data you would write P=fitfun('%g + %g * exp(-x ./ %g)',x,y). Then</span>
+0012 <span class="comment">%  'P(1)' corresponds to 'A', 'P(2)' corresponds to 'B' and 'P(3)' to</span>
+0013 <span class="comment">%  'tau'. In general 'P(i)' corresponds to the i-th occurrence of</span>
+0014 <span class="comment">%  '%g'.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  'yapp(i)' is the value of 'fun' evaluated at 'x(i)' after the parameter</span>
+0017 <span class="comment">%  search. 'cc' is the correlation coefficient of 'yapp' and 'y'.</span>
+0018 
+0019 <span class="keyword">if</span> nargin &lt; 4, P0 = []; <span class="keyword">end</span>
+0020 <span class="keyword">if</span> nargin &lt; 5, DISP = 0; <span class="keyword">end</span>
+0021 
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Make column vectors</span>
+0024 <span class="comment">%</span>
+0025 x=x(:);
+0026 y=y(:);
+0027 
+0028 <span class="comment">%</span>
+0029 <span class="comment">% Replace all &quot;%g&quot; in fun with 'P(p)' where 'p' increses from</span>
+0030 <span class="comment">% to 'nParams'. The result is 'FUN'.</span>
+0031 <span class="comment">%</span>
+0032 FITFUN = [];
+0033 nParams=0;
+0034 pos=findstr(fun,<span class="string">'%g'</span>);
+0035 <span class="keyword">for</span> i=1:size(pos,2);
+0036   nParams=nParams+1;
+0037   <span class="keyword">if</span> i==1
+0038     FITFUN = [FITFUN fun(1:pos(i)-1) sprintf(<span class="string">'P(%i)'</span>,nParams)];
+0039   <span class="keyword">else</span>
+0040     FITFUN = [FITFUN fun((pos(i-1)+2):(pos(i)-1)) sprintf(<span class="string">'P(%i)'</span>,nParams)];
+0041   <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043 FITFUN = [FITFUN fun((pos(end)+2):end)];
+0044 
+0045 <span class="comment">%</span>
+0046 <span class="comment">% make inline function from FITFUN</span>
+0047 <span class="comment">%</span>
+0048 fitfcn = inline(FITFUN,<span class="string">'P'</span>,<span class="string">'x'</span>);
+0049 
+0050 <span class="comment">%</span>
+0051 <span class="comment">% The error function is defined as the summed squared error.</span>
+0052 <span class="comment">%</span>
+0053 ERRFUN = sprintf(<span class="string">'sum((y-(%s)).^2)'</span>,FITFUN);
+0054 errfcn = inline(ERRFUN,<span class="string">'P'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>);
+0055 
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Random guess of initial values for the parameters.</span>
+0058 <span class="comment">%</span>
+0059 
+0060 <span class="keyword">if</span> isempty(P0)
+0061   P0=rand(1,nParams);
+0062   nIt=20;
+0063 <span class="keyword">else</span>
+0064   nIt=1;
+0065 <span class="keyword">end</span>
+0066 
+0067 ii=1;
+0068 cc=0;
+0069 <span class="keyword">while</span> ( ii &lt;= nIt &amp; cc &lt; 0.9 )
+0070   <span class="keyword">if</span> nIt &gt; 1
+0071     P0=rand(1,nParams);
+0072   <span class="keyword">end</span>
+0073   <span class="comment">%</span>
+0074   <span class="comment">% define options for 'fminu'. Type 'help foptions' for more</span>
+0075   <span class="comment">% information.</span>
+0076   <span class="comment">%</span>
+0077   options=optimset(<span class="string">'LargeScale'</span>,<span class="string">'off'</span>,<span class="string">'Diagnostics'</span>,<span class="string">'off'</span>,<span class="string">'Display'</span>,<span class="string">'off'</span>);
+0078   
+0079   <span class="comment">%</span>
+0080   <span class="comment">% Run 'fminu'. Comes with the MatLab optim toolbox.</span>
+0081   <span class="comment">%</span>
+0082   P=fminunc(errfcn,P0,options,x,y);
+0083   
+0084   yapp=fitfcn(P,x);
+0085   cc=corrcoef(y,yapp);
+0086   cc=cc(1,2);
+0087   
+0088   <span class="keyword">if</span> ( cc &lt; 0.9 )
+0089     warning(<span class="string">'very low correlation coefficient'</span>);
+0090   <span class="keyword">end</span>
+0091   <span class="comment">%</span>
+0092   <span class="comment">% Display the resultin function in a plot and on the terminal.</span>
+0093   <span class="comment">%</span>
+0094   <span class="keyword">if</span> DISP
+0095     xplot=min(x):(max(x)-min(x))/500:max(x);
+0096     yplot=fitfcn(P,xplot);
+0097     
+0098     fmt=[<span class="string">'\ny = '</span> fun <span class="string">'\n'</span>];
+0099     fprintf(fmt,P);
+0100     err=errfcn(P,x,y);
+0101     fprintf(<span class="string">'mse = %g, correlation coefficient = %g\n\n'</span>,err,cc);
+0102     
+0103     figure(gcf); clf reset;
+0104     plot(xplot,yplot,<span class="string">'k'</span>,x,y,<span class="string">'r*'</span>);
+0105     axis tight
+0106     title(sprintf(<span class="string">'function fit: mse=%g, cc=%g'</span>,err,cc));
+0107     xlabel(<span class="string">'x'</span>);
+0108     ylabel(<span class="string">'f(x)'</span>);
+0109     legend(sprintf(fun,P),<span class="string">'data'</span>);
+0110     drawnow; pause(0.1);
+0111   <span class="keyword">end</span>
+0112   ii=ii+1;
+0113 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

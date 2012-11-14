@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of diffusion_maps</title>
+  <meta name="keywords" content="diffusion_maps">
+  <meta name="description" content="DIFFUSION_MAPS Runs the diffusion map algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>diffusion_maps
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>DIFFUSION_MAPS Runs the diffusion map algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mappedX = diffusion_maps(X, no_dims, t, sigma) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">DIFFUSION_MAPS Runs the diffusion map algorithm
+
+   mappedX = diffusion_maps(X, no_dims, t, sigma)
+
+ The functions runs the diffusion map algorithm on dataset X to reduce it 
+ to dimensionality no_dims. The variable sigma is the variance of the Gaussian
+ used in the affinity computation (default = 1). The variable alpha
+ determines the operator that is applied on the graph (default = 1).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mappedX = diffusion_maps(X, no_dims, t, sigma)</a>
+0002 <span class="comment">%DIFFUSION_MAPS Runs the diffusion map algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   mappedX = diffusion_maps(X, no_dims, t, sigma)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The functions runs the diffusion map algorithm on dataset X to reduce it</span>
+0007 <span class="comment">% to dimensionality no_dims. The variable sigma is the variance of the Gaussian</span>
+0008 <span class="comment">% used in the affinity computation (default = 1). The variable alpha</span>
+0009 <span class="comment">% determines the operator that is applied on the graph (default = 1).</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023     <span class="comment">% Give memory warning</span>
+0024     <span class="keyword">if</span> size(X, 1) &gt; 3000
+0025         warning([<span class="string">'Due to the large number of instances ('</span> num2str(size(X, 1)) <span class="string">'), diffusion maps may run out of memory.'</span>]);
+0026     <span class="keyword">end</span>
+0027     
+0028     <span class="comment">% Normalize data</span>
+0029     X = double(X);
+0030     X = X - min(X(:));
+0031     X = X / max(X(:));
+0032 
+0033     <span class="comment">% Compute Gaussian kernel matrix</span>
+0034     disp([<span class="string">'Compute Markov forward transition probability matrix with '</span> num2str(t) <span class="string">' timesteps...'</span>]);
+0035     sumX = sum(X .^ 2, 2);
+0036     K = exp(-bsxfun(@plus, sumX, bsxfun(@plus, sumX', -2 * X * X')) ./ (2 .* sigma ^ 2));
+0037     
+0038     <span class="comment">% Compute Markov probability matrix with t timesteps</span>
+0039     p = sum(K, 1)';
+0040     K = K ./ ((p * p') .^ t);
+0041     p = sqrt(sum(K, 1))';
+0042     K = K ./ (p * p');
+0043     
+0044     <span class="comment">% Perform economy-size SVD</span>
+0045     disp(<span class="string">'Perform eigendecomposition...'</span>);
+0046     [U, S, V] = svd(K, 0);
+0047     U = bsxfun(@rdivide, U, U(:,1));
+0048     mappedX = U(:,2:no_dims + 1);
+0049</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

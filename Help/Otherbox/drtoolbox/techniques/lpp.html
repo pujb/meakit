@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of lpp</title>
+  <meta name="keywords" content="lpp">
+  <meta name="description" content="LPP Perform linearity preserving projection">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>lpp
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LPP Perform linearity preserving projection</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">LPP Perform linearity preserving projection
+
+   [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl)
+
+ Perform the Linearity Preserving Projection on dataset X to reduce it to 
+ dimensionality no_dims. The number of neighbors that is used by LPP is
+ specified by k (default = 12). The variable sigma determines the
+ bandwidth of the Gaussian kernel (default = 1).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl)</a>
+0002 <span class="comment">%LPP Perform linearity preserving projection</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = lpp(X, no_dims, k, sigma, eig_impl)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Perform the Linearity Preserving Projection on dataset X to reduce it to</span>
+0007 <span class="comment">% dimensionality no_dims. The number of neighbors that is used by LPP is</span>
+0008 <span class="comment">% specified by k (default = 12). The variable sigma determines the</span>
+0009 <span class="comment">% bandwidth of the Gaussian kernel (default = 1).</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023     <span class="keyword">if</span> size(X, 2) &gt; size(X, 1)
+0024         error(<span class="string">'Number of samples should be higher than number of dimensions.'</span>);
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0027         no_dims = 2; 
+0028     <span class="keyword">end</span>
+0029     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0030         k = 12;
+0031     <span class="keyword">end</span>
+0032     <span class="keyword">if</span> ~exist(<span class="string">'sigma'</span>, <span class="string">'var'</span>)
+0033         sigma = 1;
+0034     <span class="keyword">end</span>
+0035     <span class="keyword">if</span> ~exist(<span class="string">'eig_impl'</span>, <span class="string">'var'</span>)
+0036         eig_impl = <span class="string">'Matlab'</span>;
+0037     <span class="keyword">end</span>
+0038     
+0039     <span class="comment">% Construct neighborhood graph</span>
+0040     disp(<span class="string">'Constructing neighborhood graph...'</span>);
+0041     <span class="keyword">if</span> size(X, 1) &lt; 4000
+0042         G = <a href="L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(X', X');
+0043         <span class="comment">% Compute neighbourhood graph</span>
+0044         [tmp, ind] = sort(G); 
+0045         <span class="keyword">for</span> i=1:size(G, 1)
+0046             G(i, ind((2 + k):<span class="keyword">end</span>, i)) = 0; 
+0047         <span class="keyword">end</span>
+0048         G = sparse(double(G));
+0049         G = max(G, G');             <span class="comment">% Make sure distance matrix is symmetric</span>
+0050     <span class="keyword">else</span>
+0051         G = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k);
+0052     <span class="keyword">end</span>
+0053     G = G .^ 2;
+0054     G = G ./ max(max(G));
+0055     
+0056     <span class="comment">% Compute weights (W = G)</span>
+0057     disp(<span class="string">'Computing weight matrices...'</span>);
+0058     
+0059     <span class="comment">% Compute Gaussian kernel (heat kernel-based weights)</span>
+0060     G(G ~= 0) = exp(-G(G ~= 0) / (2 * sigma ^ 2));
+0061         
+0062     <span class="comment">% Construct diagonal weight matrix</span>
+0063     D = diag(sum(G, 2));
+0064     
+0065     <span class="comment">% Compute Laplacian</span>
+0066     L = D - G;
+0067     L(isnan(L)) = 0; D(isnan(D)) = 0;
+0068     L(isinf(L)) = 0; D(isinf(D)) = 0;
+0069 
+0070     <span class="comment">% Compute XDX and XLX and make sure these are symmetric</span>
+0071     disp(<span class="string">'Computing low-dimensional embedding...'</span>);
+0072     DP = X' * D * X;
+0073     LP = X' * L * X;
+0074     DP = (DP + DP') / 2;
+0075     LP = (LP + LP') / 2;
+0076 
+0077     <span class="comment">% Perform eigenanalysis of generalized eigenproblem (as in LEM)</span>
+0078     <span class="keyword">if</span> size(X, 1) &gt; 200 &amp;&amp; no_dims &lt; (size(X, 1) / 2)
+0079         <span class="keyword">if</span> strcmp(eig_impl, <span class="string">'JDQR'</span>)
+0080             options.Disp = 0;
+0081             options.LSolver = <span class="string">'bicgstab'</span>;
+0082             [eigvector, eigvalue] = <a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>(LP, DP, no_dims, <span class="string">'SA'</span>, options);
+0083         <span class="keyword">else</span>
+0084             options.disp = 0;
+0085             options.issym = 1;
+0086             options.isreal = 1;
+0087             [eigvector, eigvalue] = eigs(LP, DP, no_dims, <span class="string">'SA'</span>, options);
+0088         <span class="keyword">end</span>
+0089     <span class="keyword">else</span>
+0090         [eigvector, eigvalue] = eig(LP, DP);
+0091     <span class="keyword">end</span>
+0092     
+0093     <span class="comment">% Sort eigenvalues in descending order and get largest eigenvectors</span>
+0094     [eigvalue, ind] = sort(diag(eigvalue), <span class="string">'ascend'</span>);
+0095     eigvector = eigvector(:,ind(1:no_dims));
+0096     
+0097     <span class="comment">% Compute final linear basis and map data</span>
+0098     mappedX = X * eigvector;
+0099     mapping.M = eigvector;
+0100     mapping.mean = mean(X, 1);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

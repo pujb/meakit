@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plfit</title>
+  <meta name="keywords" content="plfit">
+  <meta name="description" content="PLFIT fits a power-law distributional model to data.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html plfit -->
+<h1>plfit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PLFIT fits a power-law distributional model to data.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [alpha, xmin, L]=plfit(x, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> PLFIT fits a power-law distributional model to data.
+    Source: http://www.santafe.edu/~aaronc/powerlaws/
+ 
+    PLFIT(x) estimates x_min and alpha according to the goodness-of-fit
+    based method described in Clauset, Shalizi, Newman (2007). x is a 
+    vector of observations of some quantity to which we wish to fit the 
+    power-law distribution p(x) ~ x^-alpha for x &gt;= xmin.
+    PLFIT automatically detects whether x is composed of real or integer
+    values, and applies the appropriate method. For discrete data, if
+    min(x) &gt; 1000, PLFIT uses the continuous approximation, which is 
+    a reliable in this regime.
+   
+    The fitting procedure works as follows:
+    1) For each possible choice of x_min, we estimate alpha via the 
+       method of maximum likelihood, and calculate the Kolmogorov-Smirnov
+       goodness-of-fit statistic D.
+    2) We then select as our estimate of x_min, the value that gives the
+       minimum value D over all values of x_min.
+
+    Note that this procedure gives no estimate of the uncertainty of the 
+    fitted parameters, nor of the validity of the fit.
+
+    Example:
+       x = (1-rand(10000,1)).^(-1/(2.5-1));
+       [alpha, xmin, L] = plfit(x);
+
+    The output 'alpha' is the maximum likelihood estimate of the scaling
+    exponent, 'xmin' is the estimate of the lower bound of the power-law
+    behavior, and L is the log-likelihood of the data x&gt;=xmin under the
+    fitted power law.
+    
+    For more information, try 'type plfit'
+
+    See also <a href="plvar.html" class="code" title="function [alpha, xmin, n]=plvar(x, varargin)">PLVAR</a>, <a href="plpva.html" class="code" title="function [p,gof]=plpva(x, xmin, varargin)">PLPVA</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>	SAMPLE    Sample from categorical distribution.</li><li><a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>	</li><li><a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>	ZETA  Riemann Zeta function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Plot/util_plot_avalanche_hist.html" class="code" title="function [ prob edges slope fitresult gof] = util_plot_avalanche_hist( x, xname, varargin )">util_plot_avalanche_hist</a>	UTIL_PLOT_AVALANCHE_HIST Plot the probability of avalanche characters like</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [alpha, xmin, L]=plfit(x, varargin)</a>
+0002 <span class="comment">% PLFIT fits a power-law distributional model to data.</span>
+0003 <span class="comment">%    Source: http://www.santafe.edu/~aaronc/powerlaws/</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    PLFIT(x) estimates x_min and alpha according to the goodness-of-fit</span>
+0006 <span class="comment">%    based method described in Clauset, Shalizi, Newman (2007). x is a</span>
+0007 <span class="comment">%    vector of observations of some quantity to which we wish to fit the</span>
+0008 <span class="comment">%    power-law distribution p(x) ~ x^-alpha for x &gt;= xmin.</span>
+0009 <span class="comment">%    PLFIT automatically detects whether x is composed of real or integer</span>
+0010 <span class="comment">%    values, and applies the appropriate method. For discrete data, if</span>
+0011 <span class="comment">%    min(x) &gt; 1000, PLFIT uses the continuous approximation, which is</span>
+0012 <span class="comment">%    a reliable in this regime.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    The fitting procedure works as follows:</span>
+0015 <span class="comment">%    1) For each possible choice of x_min, we estimate alpha via the</span>
+0016 <span class="comment">%       method of maximum likelihood, and calculate the Kolmogorov-Smirnov</span>
+0017 <span class="comment">%       goodness-of-fit statistic D.</span>
+0018 <span class="comment">%    2) We then select as our estimate of x_min, the value that gives the</span>
+0019 <span class="comment">%       minimum value D over all values of x_min.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    Note that this procedure gives no estimate of the uncertainty of the</span>
+0022 <span class="comment">%    fitted parameters, nor of the validity of the fit.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    Example:</span>
+0025 <span class="comment">%       x = (1-rand(10000,1)).^(-1/(2.5-1));</span>
+0026 <span class="comment">%       [alpha, xmin, L] = plfit(x);</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    The output 'alpha' is the maximum likelihood estimate of the scaling</span>
+0029 <span class="comment">%    exponent, 'xmin' is the estimate of the lower bound of the power-law</span>
+0030 <span class="comment">%    behavior, and L is the log-likelihood of the data x&gt;=xmin under the</span>
+0031 <span class="comment">%    fitted power law.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    For more information, try 'type plfit'</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    See also PLVAR, PLPVA</span>
+0036 
+0037 <span class="comment">% Version 1.0    (2007 May)</span>
+0038 <span class="comment">% Version 1.0.2  (2007 September)</span>
+0039 <span class="comment">% Version 1.0.3  (2007 September)</span>
+0040 <span class="comment">% Version 1.0.4  (2008 January)</span>
+0041 <span class="comment">% Version 1.0.5  (2008 March)</span>
+0042 <span class="comment">% Version 1.0.6  (2008 July)</span>
+0043 <span class="comment">% Version 1.0.7  (2008 October)</span>
+0044 <span class="comment">% Version 1.0.8  (2009 February)</span>
+0045 <span class="comment">% Version 1.0.9  (2009 October)</span>
+0046 <span class="comment">% Version 1.0.10 (2010 January)</span>
+0047 <span class="comment">% Copyright (C) 2008-2010 Aaron Clauset (Santa Fe Institute)</span>
+0048 <span class="comment">% Distributed under GPL 2.0</span>
+0049 <span class="comment">% http://www.gnu.org/copyleft/gpl.html</span>
+0050 <span class="comment">% PLFIT comes with ABSOLUTELY NO WARRANTY</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% Notes:</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% 1. In order to implement the integer-based methods in Matlab, the numeric</span>
+0055 <span class="comment">%    maximization of the log-likelihood function was used. This requires</span>
+0056 <span class="comment">%    that we specify the range of scaling parameters considered. We set</span>
+0057 <span class="comment">%    this range to be [1.50 : 0.01 : 3.50] by default. This vector can be</span>
+0058 <span class="comment">%    set by the user like so,</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">%       a = plfit(x,'range',[1.001:0.001:5.001]);</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% 2. PLFIT can be told to limit the range of values considered as estimates</span>
+0063 <span class="comment">%    for xmin in three ways. First, it can be instructed to sample these</span>
+0064 <span class="comment">%    possible values like so,</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%       a = plfit(x,'sample',100);</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">%    which uses 100 uniformly distributed values on the sorted list of</span>
+0069 <span class="comment">%    unique values in the data set. Second, it can simply omit all</span>
+0070 <span class="comment">%    candidates above a hard limit, like so</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">%       a = plfit(x,'limit',3.4);</span>
+0073 <span class="comment">%</span>
+0074 <span class="comment">%    Finally, it can be forced to use a fixed value, like so</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%       a = plfit(x,'xmin',3.4);</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">%    In the case of discrete data, it rounds the limit to the nearest</span>
+0079 <span class="comment">%    integer.</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% 3. When the input sample size is small (e.g., &lt; 100), the continuous</span>
+0082 <span class="comment">%    estimator is slightly biased (toward larger values of alpha). To</span>
+0083 <span class="comment">%    explicitly use an experimental finite-size correction, call PLFIT like</span>
+0084 <span class="comment">%    so</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">%       a = plfit(x,'finite');</span>
+0087 <span class="comment">%</span>
+0088 <span class="comment">%    which does a small-size correction to alpha.</span>
+0089 <span class="comment">%</span>
+0090 <span class="comment">% 4. For continuous data, PLFIT can return erroneously large estimates of</span>
+0091 <span class="comment">%    alpha when xmin is so large that the number of obs x &gt;= xmin is very</span>
+0092 <span class="comment">%    small. To prevent this, we can truncate the search over xmin values</span>
+0093 <span class="comment">%    before the finite-size bias becomes significant by calling PLFIT as</span>
+0094 <span class="comment">%</span>
+0095 <span class="comment">%       a = plfit(x,'nosmall');</span>
+0096 <span class="comment">%</span>
+0097 <span class="comment">%    which skips values xmin with finite size bias &gt; 0.1.</span>
+0098 
+0099 <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>     = [];
+0100 <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>  = [];
+0101 xminx   = [];
+0102 limit   = [];
+0103 finite  = false;
+0104 nosmall = false;
+0105 nowarn  = false;
+0106 
+0107 <span class="comment">% parse command-line parameters; trap for bad input</span>
+0108 i=1; 
+0109 <span class="keyword">while</span> i&lt;=length(varargin), 
+0110   argok = 1; 
+0111   <span class="keyword">if</span> ischar(varargin{i}), 
+0112     <span class="keyword">switch</span> varargin{i},
+0113         <span class="keyword">case</span> <span class="string">'range'</span>,        <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>     = varargin{i+1}; i = i + 1;
+0114         <span class="keyword">case</span> <span class="string">'sample'</span>,       <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>  = varargin{i+1}; i = i + 1;
+0115         <span class="keyword">case</span> <span class="string">'limit'</span>,        limit   = varargin{i+1}; i = i + 1;
+0116         <span class="keyword">case</span> <span class="string">'xmin'</span>,         xminx   = varargin{i+1}; i = i + 1;
+0117         <span class="keyword">case</span> <span class="string">'finite'</span>,       finite  = true;    i = i + 1;
+0118         <span class="keyword">case</span> <span class="string">'nowarn'</span>,       nowarn  = true;    i = i + 1;
+0119         <span class="keyword">case</span> <span class="string">'nosmall'</span>,      nosmall = true;    i = i + 1;
+0120         <span class="keyword">otherwise</span>, argok=0; 
+0121     <span class="keyword">end</span>
+0122   <span class="keyword">end</span>
+0123   <span class="keyword">if</span> ~argok, 
+0124     disp([<span class="string">'(PLFIT) Ignoring invalid argument #'</span> num2str(i+1)]); 
+0125   <span class="keyword">end</span>
+0126   i = i+1; 
+0127 <span class="keyword">end</span>
+0128 <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>) &amp;&amp; (~isvector(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>) || min(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)&lt;=1),
+0129     fprintf(<span class="string">'(PLFIT) Error: ''range'' argument must contain a vector; using default.\n'</span>);
+0130     <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a> = [];
+0131 <span class="keyword">end</span>;
+0132 <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>) &amp;&amp; (~isscalar(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>) || <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>&lt;2),
+0133     fprintf(<span class="string">'(PLFIT) Error: ''sample'' argument must be a positive integer &gt; 1; using default.\n'</span>);
+0134     <a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a> = [];
+0135 <span class="keyword">end</span>;
+0136 <span class="keyword">if</span> ~isempty(limit) &amp;&amp; (~isscalar(limit) || limit&lt;min(x)),
+0137     fprintf(<span class="string">'(PLFIT) Error: ''limit'' argument must be a positive value &gt;= 1; using default.\n'</span>);
+0138     limit = [];
+0139 <span class="keyword">end</span>;
+0140 <span class="keyword">if</span> ~isempty(xminx) &amp;&amp; (~isscalar(xminx) || xminx&gt;=max(x)),
+0141     fprintf(<span class="string">'(PLFIT) Error: ''xmin'' argument must be a positive value &lt; max(x); using default behavior.\n'</span>);
+0142     xminx = [];
+0143 <span class="keyword">end</span>;
+0144 
+0145 <span class="comment">% reshape input vector</span>
+0146 x = reshape(x,numel(x),1);
+0147 
+0148 <span class="comment">% select method (discrete or continuous) for fitting</span>
+0149 <span class="keyword">if</span>     isempty(setdiff(x,floor(x))), f_dattype = <span class="string">'INTS'</span>;
+0150 <span class="keyword">elseif</span> isreal(x),    f_dattype = <span class="string">'REAL'</span>;
+0151 <span class="keyword">else</span>                 f_dattype = <span class="string">'UNKN'</span>;
+0152 <span class="keyword">end</span>;
+0153 <span class="keyword">if</span> strcmp(f_dattype,<span class="string">'INTS'</span>) &amp;&amp; min(x) &gt; 1000 &amp;&amp; length(x)&gt;100,
+0154     f_dattype = <span class="string">'REAL'</span>;
+0155 <span class="keyword">end</span>;
+0156 
+0157 <span class="comment">% estimate xmin and alpha, accordingly</span>
+0158 <span class="keyword">switch</span> f_dattype,
+0159     
+0160     <span class="keyword">case</span> <span class="string">'REAL'</span>,
+0161         xmins = unique(x);
+0162         xmins = xmins(1:end-1);
+0163         <span class="keyword">if</span> ~isempty(xminx),
+0164             xmins = xmins(find(xmins&gt;=xminx,1,<span class="string">'first'</span>));
+0165         <span class="keyword">end</span>;
+0166         <span class="keyword">if</span> ~isempty(limit),
+0167             xmins(xmins&gt;limit) = [];
+0168         <span class="keyword">end</span>;
+0169         <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>),
+0170             xmins = xmins(unique(round(linspace(1,length(xmins),<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>))));
+0171         <span class="keyword">end</span>;
+0172         dat   = zeros(size(xmins));
+0173         z     = sort(x);
+0174         <span class="keyword">for</span> xm=1:length(xmins)
+0175             xmin = xmins(xm);
+0176             z    = z(z&gt;=xmin); 
+0177             n    = length(z);
+0178             <span class="comment">% estimate alpha using direct MLE</span>
+0179             a    = n ./ sum( log(z./xmin) );
+0180             <span class="keyword">if</span> nosmall,
+0181                 <span class="keyword">if</span> (a-1)/sqrt(n) &gt; 0.1
+0182                     dat(xm:end) = [];
+0183                     xm = length(xmins)+1;
+0184                     <span class="keyword">break</span>;
+0185                 <span class="keyword">end</span>;
+0186             <span class="keyword">end</span>;
+0187             <span class="comment">% compute KS statistic</span>
+0188             cx   = (0:n-1)'./n;
+0189             cf   = 1-(xmin./z).^a;
+0190             dat(xm) = max( abs(cf-cx) );
+0191         <span class="keyword">end</span>;
+0192         D     = min(dat);
+0193         xmin  = xmins(find(dat&lt;=D,1,<span class="string">'first'</span>));
+0194         z     = x(x&gt;=xmin);
+0195         n     = length(z); 
+0196         alpha = 1 + n ./ sum( log(z./xmin) );
+0197         <span class="keyword">if</span> finite, alpha = alpha*(n-1)/n+1/n; <span class="keyword">end</span>; <span class="comment">% finite-size correction</span>
+0198         <span class="keyword">if</span> n &lt; 50 &amp;&amp; ~finite &amp;&amp; ~nowarn,
+0199             fprintf(<span class="string">'(PLFIT) Warning: finite-size bias may be present.\n'</span>);
+0200         <span class="keyword">end</span>;
+0201         L = n*log((alpha-1)/xmin) - alpha.*sum(log(z./xmin));
+0202 
+0203     <span class="keyword">case</span> <span class="string">'INTS'</span>,
+0204         
+0205         <span class="keyword">if</span> isempty(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>),
+0206             <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>  = (1.50:0.01:3.50);    <span class="comment">% covers range of most practical</span>
+0207         <span class="keyword">end</span>;                            <span class="comment">% scaling parameters</span>
+0208         zvec = <a href="zeta.html" class="code" title="function [f] = zeta(z)">zeta</a>(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>);
+0209 
+0210         xmins = unique(x);
+0211         xmins = xmins(1:end-1);
+0212         <span class="keyword">if</span> ~isempty(xminx),
+0213             xmins = xmins(find(xmins&gt;=xminx,1,<span class="string">'first'</span>));
+0214         <span class="keyword">end</span>;
+0215         <span class="keyword">if</span> ~isempty(limit),
+0216             limit = round(limit);
+0217             xmins(xmins&gt;limit) = [];
+0218         <span class="keyword">end</span>;
+0219         <span class="keyword">if</span> ~isempty(<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>),
+0220             xmins = xmins(unique(round(linspace(1,length(xmins),<a href="../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>))));
+0221         <span class="keyword">end</span>;
+0222         <span class="keyword">if</span> isempty(xmins)
+0223             fprintf(<span class="string">'(PLFIT) Error: x must contain at least two unique values.\n'</span>);
+0224             alpha = NaN; xmin = x(1); D = NaN;
+0225             <span class="keyword">return</span>;
+0226         <span class="keyword">end</span>;
+0227         xmax   = max(x);
+0228         dat    = zeros(length(xmins),2);
+0229         z      = x;
+0230         fcatch = 0;
+0231 
+0232         <span class="keyword">for</span> xm=1:length(xmins)
+0233             xmin = xmins(xm);
+0234             z    = z(z&gt;=xmin);
+0235             n    = length(z);
+0236             <span class="comment">% estimate alpha via direct maximization of likelihood function</span>
+0237             <span class="keyword">if</span> fcatch==0
+0238                 <span class="keyword">try</span>
+0239                     <span class="comment">% vectorized version of numerical calculation</span>
+0240                     zdiff = sum( repmat((1:xmin-1)',1,length(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)).^-repmat(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>,xmin-1,1) ,1);
+0241                     L = -vec.*sum(log(z)) - n.*log(zvec - zdiff);
+0242                 <span class="keyword">catch</span>
+0243                     <span class="comment">% catch: force loop to default to iterative version for</span>
+0244                     <span class="comment">% remainder of the search</span>
+0245                     fcatch = 1;
+0246                 <span class="keyword">end</span>;
+0247             <span class="keyword">end</span>;
+0248             <span class="keyword">if</span> fcatch==1
+0249                 <span class="comment">% force iterative calculation (more memory efficient, but</span>
+0250                 <span class="comment">% can be slower)</span>
+0251                 L       = -Inf*ones(size(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>));
+0252                 slogz   = sum(log(z));
+0253                 xminvec = (1:xmin-1);
+0254                 <span class="keyword">for</span> k=1:length(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>)
+0255                     L(k) = -<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(k)*slogz - n*log(zvec(k) - sum(xminvec.^-<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(k)));
+0256                 <span class="keyword">end</span>
+0257             <span class="keyword">end</span>;
+0258             [Y,I] = max(L);
+0259             <span class="comment">% compute KS statistic</span>
+0260             fit = cumsum((((xmin:xmax).^-<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(I)))./ (zvec(I) - sum((1:xmin-1).^-<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(I))));
+0261             cdi = cumsum(hist(z,xmin:xmax)./n);
+0262             dat(xm,:) = [max(abs( fit - cdi )) <a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>(I)];
+0263         <span class="keyword">end</span>
+0264         <span class="comment">% select the index for the minimum value of D</span>
+0265         [D,I] = min(dat(:,1));
+0266         xmin  = xmins(I);
+0267         z     = x(x&gt;=xmin);
+0268         n     = length(z);
+0269         alpha = dat(I,2);
+0270         <span class="keyword">if</span> finite, alpha = alpha*(n-1)/n+1/n; <span class="keyword">end</span>; <span class="comment">% finite-size correction</span>
+0271         <span class="keyword">if</span> n &lt; 50 &amp;&amp; ~finite &amp;&amp; ~nowarn,
+0272             fprintf(<span class="string">'(PLFIT) Warning: finite-size bias may be present.\n'</span>);
+0273         <span class="keyword">end</span>;
+0274         L     = -alpha*sum(log(z)) - n*log(zvec(find(<a href="../../Otherbox/lightspeed/vec.html" class="code" title="function v = vec(a)">vec</a>&lt;=alpha,1,<span class="string">'last'</span>)) - sum((1:xmin-1).^-alpha));
+0275 
+0276     <span class="keyword">otherwise</span>,
+0277         fprintf(<span class="string">'(PLFIT) Error: x must contain only reals or only integers.\n'</span>);
+0278         alpha = [];
+0279         xmin  = [];
+0280         L     = [];
+0281         <span class="keyword">return</span>;
+0282 <span class="keyword">end</span>;
+0283</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

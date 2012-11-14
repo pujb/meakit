@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of shadowplot</title>
+  <meta name="keywords" content="shadowplot">
+  <meta name="description" content="SHADOWPLOT    Add a shadow to an existing surface or patch plot">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html shadowplot -->
+<h1>shadowplot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SHADOWPLOT    Add a shadow to an existing surface or patch plot</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varargout = shadowplot(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> SHADOWPLOT    Add a shadow to an existing surface or patch plot
+
+ For some surface plots, it can be helpful to visualize the shadow (2D
+ projection) of the surface.  This can give a quick perspective on the
+ data's variance.
+
+ SHADOWPLOT PLANE   Adds a shadow plot on the PLANE boundary
+  PLANE can be:
+    x, y, or z: Plots on back/top wall of x, y or z
+    1 .. 6    : Plots on Nth wall, numbered as in AXIS:
+                [xmin xmax ymin ymax zmin zmax]
+
+ SHADOWPLOT(HAX,PLANE) Adds a shadow plot on the Nth wall on axes HAX
+ HS = SHADOWPLOT(...) Returns a handle to the shadow (a patch)
+
+ Examples:
+    figure
+    surf(peaks)
+    shading interp
+    shadowplot x   % Back X Wall
+    shadowplot y   % Back Y Wall
+
+    figure
+    surf(peaks);hold on
+    surf(peaks+10)
+    shading interp
+    hs = shadowplot(1);
+    set(hs,'FaceColor','r');     % Red shadow
+    alpha(hs,.1)                 % More transparent
+    set(hs(1),'XData',get(hs(1),'XData')*.9)  % Move farther away
+
+ UPDATE (9/07): Now includes limited support for data encapsulated in
+ HGTRANSFORMS, thanks to Patrick Barney (psbarne@sandia.gov).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function isgrid = ismeshgrid(d)</a></li></ul>
+</div>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = shadowplot(varargin)</a>
+0002 <span class="comment">% SHADOWPLOT    Add a shadow to an existing surface or patch plot</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% For some surface plots, it can be helpful to visualize the shadow (2D</span>
+0005 <span class="comment">% projection) of the surface.  This can give a quick perspective on the</span>
+0006 <span class="comment">% data's variance.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% SHADOWPLOT PLANE   Adds a shadow plot on the PLANE boundary</span>
+0009 <span class="comment">%  PLANE can be:</span>
+0010 <span class="comment">%    x, y, or z: Plots on back/top wall of x, y or z</span>
+0011 <span class="comment">%    1 .. 6    : Plots on Nth wall, numbered as in AXIS:</span>
+0012 <span class="comment">%                [xmin xmax ymin ymax zmin zmax]</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% SHADOWPLOT(HAX,PLANE) Adds a shadow plot on the Nth wall on axes HAX</span>
+0015 <span class="comment">% HS = SHADOWPLOT(...) Returns a handle to the shadow (a patch)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Examples:</span>
+0018 <span class="comment">%    figure</span>
+0019 <span class="comment">%    surf(peaks)</span>
+0020 <span class="comment">%    shading interp</span>
+0021 <span class="comment">%    shadowplot x   % Back X Wall</span>
+0022 <span class="comment">%    shadowplot y   % Back Y Wall</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    figure</span>
+0025 <span class="comment">%    surf(peaks);hold on</span>
+0026 <span class="comment">%    surf(peaks+10)</span>
+0027 <span class="comment">%    shading interp</span>
+0028 <span class="comment">%    hs = shadowplot(1);</span>
+0029 <span class="comment">%    set(hs,'FaceColor','r');     % Red shadow</span>
+0030 <span class="comment">%    alpha(hs,.1)                 % More transparent</span>
+0031 <span class="comment">%    set(hs(1),'XData',get(hs(1),'XData')*.9)  % Move farther away</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% UPDATE (9/07): Now includes limited support for data encapsulated in</span>
+0034 <span class="comment">% HGTRANSFORMS, thanks to Patrick Barney (psbarne@sandia.gov).</span>
+0035 
+0036 
+0037 <span class="comment">% Scott Hirsch</span>
+0038 <span class="comment">% shirsch@mathworks.com</span>
+0039 <span class="comment">% Copyright 2004-2007 The MathWorks, Inc</span>
+0040 
+0041 <span class="comment">%% We define three dimensions.  1=x, 2=y, 3=z</span>
+0042 <span class="comment">% dimplane - dimension that's constant in the projection plane (user-specified)</span>
+0043 <span class="comment">% dimvar - dimension in which data varies (typically 3)</span>
+0044 <span class="comment">% dimother - the other dimension (couldn't come up with a good name!).</span>
+0045 
+0046 <span class="comment">%% Parse input arguments.</span>
+0047 <span class="keyword">if</span> nargin==1
+0048     hAx = gca;
+0049     plane = lower(varargin{1});
+0050 <span class="keyword">elseif</span> nargin==2
+0051     hAx = varargin{1};
+0052     plane = lower(varargin{2});
+0053 <span class="keyword">end</span>;
+0054 
+0055 <span class="comment">%% Convert plane to numeric dimension</span>
+0056 <span class="comment">% plane can be specified as a string (x,y,z) or as a number (1..6)</span>
+0057 <span class="keyword">if</span> ~isstr(plane)
+0058     dimplane = ceil(plane/2);
+0059     axind = plane;  <span class="comment">% Index into AXIS to get boundary plane</span>
+0060 <span class="keyword">else</span>    <span class="comment">% string</span>
+0061     <span class="keyword">switch</span> plane
+0062         <span class="keyword">case</span> <span class="string">'x'</span>
+0063             dimplane = 1;
+0064             axind = 2;  <span class="comment">% Index into AXIS to get boundary plane</span>
+0065         <span class="keyword">case</span> <span class="string">'y'</span>
+0066             dimplane = 2;
+0067             axind = 4;
+0068         <span class="keyword">case</span> <span class="string">'z'</span>
+0069             dimplane = 3;
+0070             axind = 6;
+0071         <span class="keyword">otherwise</span>
+0072             error(<span class="string">'Plane must be one of: ''x'', ''y'', or ''z'' or a number between 1 and 6'</span>);
+0073     <span class="keyword">end</span>;
+0074 <span class="keyword">end</span>;
+0075 
+0076 <span class="comment">%% Get coordinates for placing surface from axis limits</span>
+0077 ax = axis;
+0078 <span class="comment">% ============ force axis into 3d mode =============</span>
+0079 <span class="keyword">if</span> length(axis==4)
+0080   <span class="comment">% axis problem. get the current view, rotate it, then</span>
+0081   <span class="comment">% redo the axis and return to the original view.</span>
+0082   [az,el] = view;
+0083   view(45,45)
+0084   ax = axis;
+0085   view(az,el)
+0086 <span class="keyword">end</span>
+0087 planecoord = ax(axind);     <span class="comment">% Plane Coordinate - back wall</span>
+0088 
+0089 <span class="comment">%% Turn hold on</span>
+0090 hold_current = ishold(hAx);
+0091 <span class="keyword">if</span> hold_current == 0
+0092     hold_current = <span class="string">'off'</span>;
+0093 <span class="keyword">else</span>
+0094     hold_current = <span class="string">'on'</span>;
+0095 <span class="keyword">end</span>;
+0096 
+0097 hold(hAx,<span class="string">'on'</span>)
+0098 
+0099 <span class="comment">%% Get handles to all surfaces</span>
+0100 kids = findobj(hAx,<span class="string">'Type'</span>,<span class="string">'surface'</span>);
+0101 h = [];
+0102 
+0103 <span class="comment">% Also get handles to all patch objects</span>
+0104 kidsp = findobj(hAx,<span class="string">'Type'</span>,<span class="string">'patch'</span>);
+0105 hp = [];
+0106 
+0107 <span class="keyword">for</span> ii=1:length(kids)       <span class="comment">% Do separately for each surface</span>
+0108     hSurf = kids(ii);   <span class="comment">% Current surface</span>
+0109 
+0110     <span class="comment">% We do everything with the X, Y, and ZData of the surface</span>
+0111     surfdata = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hSurf,{<span class="string">'XData'</span>,<span class="string">'YData'</span>,<span class="string">'ZData'</span>});
+0112 
+0113     <span class="comment">% XData and YData might be vectors or matrices.  Force them to be</span>
+0114     <span class="comment">% matrices (a la griddata)</span>
+0115     [Ny,Nx] = size(surfdata{3});
+0116     <span class="keyword">if</span> isvector(surfdata{1})
+0117         surfdata{1} = repmat(surfdata{1},Ny,1);
+0118     <span class="keyword">end</span>;
+0119     <span class="keyword">if</span> isvector(surfdata{2})
+0120         surfdata{2} = repmat(surfdata{2},1,Nx);
+0121     <span class="keyword">end</span>;
+0122 
+0123     <span class="comment">% Figure out which two axes are independent (i.e., monotonic)</span>
+0124     grids = [<a href="#_sub1" class="code" title="subfunction isgrid = ismeshgrid(d)">ismeshgrid</a>(surfdata{1}) <a href="#_sub1" class="code" title="subfunction isgrid = ismeshgrid(d)">ismeshgrid</a>(surfdata{2}) <a href="#_sub1" class="code" title="subfunction isgrid = ismeshgrid(d)">ismeshgrid</a>(surfdata{3})];
+0125     <span class="keyword">if</span> sum(grids)&lt;2, error(<span class="string">'Surface must have at least 2 monotonically increasing dimensions'</span>);<span class="keyword">end</span>
+0126 
+0127     <span class="comment">% The remaining dimension is the one along which data varies</span>
+0128     dimvar  = find(~grids); <span class="comment">% Dimension where data varies</span>
+0129     <span class="keyword">if</span> isempty(dimvar)  <span class="comment">% All 3 dimensions are monotonic.  not sure what to do</span>
+0130         dimvar = max(setdiff(1:3,dimplane));<span class="comment">% pick largest value that isn't dimplane</span>
+0131     <span class="keyword">end</span>;
+0132     
+0133     <span class="keyword">if</span> dimvar==dimplane
+0134         error(<span class="string">'Can not project data in the dimension that varies.  Try another plane'</span>)
+0135     <span class="keyword">end</span>;
+0136 
+0137     <span class="comment">%dimdiff: dimension for taking difference (figure out through trial and error)</span>
+0138     <span class="comment">% dimplane=1, dimvar=3: 2</span>
+0139     <span class="comment">% dimplane=1, dimvar=2: 2</span>
+0140     <span class="comment">% dimplane=2, dimvar=1: 2</span>
+0141     <span class="comment">% dimplane=2, dimvar=3: 1</span>
+0142     <span class="comment">% dimplane=3, dimvar=2: 1</span>
+0143     <span class="comment">% dimplane=3, dimvar=1: 1</span>
+0144     dimdiff = 2;    <span class="comment">% Most cases</span>
+0145     <span class="keyword">if</span> (dimplane==2&amp;&amp;dimvar==3) | (dimplane==3)
+0146         dimdiff = 1;
+0147     <span class="keyword">end</span>;
+0148     
+0149     <span class="comment">% Compute projection</span>
+0150     dmin = min(surfdata{dimvar},[],dimdiff);    <span class="comment">% Min of data projected onto this plane</span>
+0151     dmax = max(surfdata{dimvar},[],dimdiff);    <span class="comment">% Max of data projected onto this plane</span>
+0152 
+0153     dmin = dmin(:); <span class="comment">% Force into row vector</span>
+0154     dmax = dmax(:);
+0155 
+0156     nval = length(dmin)*2 + 1;  <span class="comment">% Total number of values we'll use for shadow</span>
+0157 
+0158     <span class="comment">% Compute shadow coordinates</span>
+0159     <span class="comment">% Pull out independent variable</span>
+0160     dimother = setxor([dimvar dimplane],1:3); <span class="comment">% Remaining dimension</span>
+0161     d1 = surfdata{dimother}(:,1);    <span class="comment">% Not sure if should take row or col. find the dimension that varies</span>
+0162     d2 = surfdata{dimother}(1,:);
+0163     <span class="keyword">if</span> d1(1) ~= d1(end)
+0164         dind = d1;
+0165     <span class="keyword">else</span>
+0166         dind = d2';
+0167     <span class="keyword">end</span>;
+0168 
+0169 
+0170     shadow{dimplane} = repmat(planecoord,nval,1);       <span class="comment">% In the plane</span>
+0171     shadow{dimother} = [dind;flipud(dind);dind(1)];     <span class="comment">% Independent variable</span>
+0172     shadow{dimvar} = [dmin;flipud(dmax);dmin(1)];       <span class="comment">% the varying data</span>
+0173 
+0174     h(ii) = patch(shadow{1},shadow{2},shadow{3},[.3 .3 .3]);
+0175     alpha(h(ii),.3)
+0176     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h(ii),<span class="string">'LineStyle'</span>,<span class="string">'none'</span>)
+0177     <span class="comment">% set a tag, so that a shadow will not try to cast a shadow</span>
+0178     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h(ii),<span class="string">'Tag'</span>,<span class="string">'Shadow'</span>)
+0179 <span class="keyword">end</span>;
+0180 
+0181 <span class="comment">%% Shadow any patches, unless they are already shadows.</span>
+0182 hp = [];
+0183 
+0184 <span class="keyword">for</span> ii=1:length(kidsp)       <span class="comment">% Do separately for each patch object</span>
+0185     hPat = kidsp(ii);   <span class="comment">% Current patch</span>
+0186 
+0187     <span class="comment">% Is this patch already tagged as a Shadow?</span>
+0188     <span class="keyword">if</span> ~strcmpi(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hPat,<span class="string">'Tag'</span>),<span class="string">'Shadow'</span>)
+0189 
+0190       <span class="comment">% We do everything with the X, Y, and ZData of the surface</span>
+0191       patdata = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hPat,{<span class="string">'XData'</span>,<span class="string">'YData'</span>,<span class="string">'ZData'</span>});
+0192 
+0193       <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hPat,<span class="string">'par'</span>),<span class="string">'Type'</span>)
+0194           <span class="keyword">case</span> <span class="string">'hgtransform'</span>
+0195               M=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hPat,<span class="string">'par'</span>),<span class="string">'Matrix'</span>);
+0196               <span class="keyword">try</span>
+0197                   <span class="keyword">switch</span> <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hPat,<span class="string">'par'</span>),<span class="string">'par'</span>),<span class="string">'type'</span>)
+0198                       <span class="keyword">case</span> <span class="string">'hgtransform'</span>
+0199                           M2=<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(hPat,<span class="string">'par'</span>),<span class="string">'par'</span>),<span class="string">'Matrix'</span>);
+0200                           M=M2*M;
+0201                   <span class="keyword">end</span>
+0202               <span class="keyword">end</span>
+0203               M=M(1:3,1:3);
+0204               xyz=[patdata{1}(:),patdata{2}(:),patdata{3}(:)]*M';
+0205               [n,m]=size(patdata{1});
+0206               patdata{1}=reshape(xyz(:,1),n,m);
+0207               patdata{2}=reshape(xyz(:,2),n,m);
+0208               patdata{3}=reshape(xyz(:,3),n,m);
+0209           <span class="keyword">otherwise</span>
+0210       <span class="keyword">end</span>
+0211       <span class="comment">% Just replace the x, y, or z coordinate as indicated by dimplane</span>
+0212       patdata{dimplane} = repmat(planecoord,size(patdata{dimplane}));
+0213 
+0214       <span class="comment">% then its just a call to patch</span>
+0215       hp(ii) = patch(patdata{1},patdata{2},patdata{3},[.3 .3 .3]);
+0216       alpha(hp(ii),.3)
+0217       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hp(ii),<span class="string">'LineStyle'</span>,<span class="string">'none'</span>)
+0218       
+0219       <span class="comment">% set a tag, so that a shadow will not try to cast a shadow</span>
+0220       <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hp(ii),<span class="string">'Tag'</span>,<span class="string">'Shadow'</span>)
+0221     <span class="keyword">end</span>
+0222 <span class="keyword">end</span>;
+0223 h=[h,hp];
+0224 
+0225 hold(hAx,hold_current)  <span class="comment">% Return to original state</span>
+0226 
+0227 <span class="keyword">if</span> nargout
+0228     varargout{1} = h;
+0229 <span class="keyword">end</span>;
+0230 
+0231 <a name="_sub1" href="#_subfunctions" class="code">function isgrid = ismeshgrid(d)</a>
+0232 <span class="comment">% Check if d looks like it came from griddata</span>
+0233 dd = diff(d);
+0234 ddt = diff(d');
+0235 
+0236 <span class="keyword">if</span> all(~dd(:)) | all(~ddt(:))
+0237     isgrid = 1;
+0238 <span class="keyword">else</span>
+0239     isgrid = 0;
+0240 <span class="keyword">end</span>;
+0241 <span class="comment">% if ~any(d(:,1) - d(:,end)) | ~any(d(1,:) - d(end,:))</span>
+0242 <span class="comment">%     isgrid = 1;</span>
+0243 <span class="comment">% else</span>
+0244 <span class="comment">%     isgrid = 0;</span>
+0245 <span class="comment">% end;</span>
+0246 
+0247</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

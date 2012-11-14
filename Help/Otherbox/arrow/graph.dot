@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  plot_arrow -> plot_arrow;
+
+  arrow [URL="arrow.html"];
+  arrowhead [URL="arrowhead.html"];
+  plot_arrow [URL="plot_arrow.html"];
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cut_quantile</title>
+  <meta name="keywords" content="cut_quantile">
+  <meta name="description" content="CUT_QUANTILE   Index of quantiles.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>cut_quantile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CUT_QUANTILE   Index of quantiles.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [c,b] = cut_quantile(x,n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> CUT_QUANTILE   Index of quantiles.
+ cut_quantile(x,n) returns a matrix of quantile numbers, same size as x, 
+ ranging 1..n (n is the desired number of quantiles).  
+ The values with number 1 are in the first quantile, etc.
+ [c,b] = cut_quantile(x,n) returns the quantile values selected
+
+ Example:
+   cut_quantile(1:10,4)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="quantile.html" class="code" title="function b = quantile(x,probs)">quantile</a>	QUANTILE     Quantiles of a data vector.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="color_plot.html" class="code" title="function color_plot(x,colors,varargin)">color_plot</a>	COLOR_PLOT    Scatterplot with colored points.</li><li><a href="cut_diverging.html" class="code" title="function c = cut_diverging(x,n)">cut_diverging</a>	CUT_DIVERGING     Index of sign-balanced quantiles</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,b] = cut_quantile(x,n)</a>
+0002 <span class="comment">% CUT_QUANTILE   Index of quantiles.</span>
+0003 <span class="comment">% cut_quantile(x,n) returns a matrix of quantile numbers, same size as x,</span>
+0004 <span class="comment">% ranging 1..n (n is the desired number of quantiles).</span>
+0005 <span class="comment">% The values with number 1 are in the first quantile, etc.</span>
+0006 <span class="comment">% [c,b] = cut_quantile(x,n) returns the quantile values selected</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Example:</span>
+0009 <span class="comment">%   cut_quantile(1:10,4)</span>
+0010 
+0011 probs = linspace(0,1,n+1);
+0012 b = <a href="quantile.html" class="code" title="function b = quantile(x,probs)">quantile</a>(unique(x(:)),probs);
+0013 
+0014 c = zeros(size(x));
+0015 <span class="keyword">for</span> b_iter = 1:(length(b)-1)
+0016   c(x &gt;= b(b_iter)) = b_iter;
+0017 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

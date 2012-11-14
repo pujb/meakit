@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of print2array</title>
+  <meta name="keywords" content="print2array">
+  <meta name="description" content="PRINT2ARRAY  Exports a figure to an image array">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html export_fig -->
+<h1>print2array
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PRINT2ARRAY  Exports a figure to an image array</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function A = print2array(fig, res, renderer) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">PRINT2ARRAY  Exports a figure to an image array
+
+ Examples:
+   A = print2array
+   A = print2array(figure_handle)
+   A = print2array(figure_handle, resolution)
+   A = print2array(figure_handle, resolution, renderer)
+
+ This function outputs a bitmap image of the given figure, at the desired
+ resolution.
+
+ If renderer is '-painters' then ghostcript needs to be installed. This
+ can be downloaded from: http://www.ghostscript.com
+
+ IN:
+   figure_handle - The handle of the figure to be exported. Default: gcf.
+   resolution - Resolution of the output, as a factor of screen
+                resolution. Default: 1.
+   renderer - string containing the renderer paramater to be passed to
+              print. Default: '-opengl'.
+
+ OUT:
+   A - MxNx3 uint8 image of the figure.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>	datastrm destructor (not necessary)</li><li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li><li><a href="print2eps.html" class="code" title="function print2eps(name, fig, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li><li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="../../Otherbox/panel/@panel/delete.html" class="code" title="function delete(p)">delete</a>	delete(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [im alpha] = export_fig(varargin)">export_fig</a>	EXPORT_FIG  Exports figures suitable for publication</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%PRINT2ARRAY  Exports a figure to an image array</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   A = print2array</span>
+0005 <span class="comment">%   A = print2array(figure_handle)</span>
+0006 <span class="comment">%   A = print2array(figure_handle, resolution)</span>
+0007 <span class="comment">%   A = print2array(figure_handle, resolution, renderer)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% This function outputs a bitmap image of the given figure, at the desired</span>
+0010 <span class="comment">% resolution.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% If renderer is '-painters' then ghostcript needs to be installed. This</span>
+0013 <span class="comment">% can be downloaded from: http://www.ghostscript.com</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% IN:</span>
+0016 <span class="comment">%   figure_handle - The handle of the figure to be exported. Default: gcf.</span>
+0017 <span class="comment">%   resolution - Resolution of the output, as a factor of screen</span>
+0018 <span class="comment">%                resolution. Default: 1.</span>
+0019 <span class="comment">%   renderer - string containing the renderer paramater to be passed to</span>
+0020 <span class="comment">%              print. Default: '-opengl'.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% OUT:</span>
+0023 <span class="comment">%   A - MxNx3 uint8 image of the figure.</span>
+0024 
+0025 <span class="comment">% Copyright (C) Oliver Woodford 2008-2010</span>
+0026 
+0027 <a name="_sub0" href="#_subfunctions" class="code">function A = print2array(fig, res, renderer)</a>
+0028 <span class="comment">% Generate default input arguments, if needed</span>
+0029 <span class="keyword">if</span> nargin &lt; 2
+0030     res = 1;
+0031     <span class="keyword">if</span> nargin &lt; 1
+0032         fig = gcf;
+0033     <span class="keyword">end</span>
+0034 <span class="keyword">end</span>
+0035 <span class="comment">% Warn if output is large</span>
+0036 old_mode = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'Units'</span>);
+0037 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Units'</span>, <span class="string">'pixels'</span>);
+0038 px = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'Position'</span>);
+0039 <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'Units'</span>, old_mode);
+0040 px = prod(px(3:4)*res)/1e6;
+0041 <span class="keyword">if</span> px &gt; 30
+0042     <span class="comment">% 30M pixels or larger!</span>
+0043     warning(<span class="string">'MATLAB:LargeImage'</span>, <span class="string">'print2array generating a %.1fM pixel image. This could be slow and might also cause memory problems.'</span>, px);
+0044 <span class="keyword">end</span>
+0045 <span class="comment">% Set the resolution parameter</span>
+0046 res = [<span class="string">'-r'</span> num2str(ceil(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(0, <span class="string">'ScreenPixelsPerInch'</span>)*res))];
+0047 <span class="comment">% Generate temporary file name</span>
+0048 tmp_nam = [tempname <span class="string">'.tif'</span>];
+0049 <span class="keyword">if</span> nargin &gt; 2 &amp;&amp; strcmp(renderer, <span class="string">'-painters'</span>)
+0050     <span class="comment">% Print to eps file</span>
+0051     tmp_eps = [tempname <span class="string">'.eps'</span>];
+0052     <a href="print2eps.html" class="code" title="function print2eps(name, fig, varargin)">print2eps</a>(tmp_eps, fig, renderer, <span class="string">'-loose'</span>);
+0053     <span class="keyword">try</span>
+0054         <span class="comment">% Export to tiff using ghostscript</span>
+0055         <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>([<span class="string">'-dEPSCrop -q -dNOPAUSE -dBATCH '</span> res <span class="string">' -sDEVICE=tiff24nc -sOutputFile=&quot;'</span> tmp_nam <span class="string">'&quot; &quot;'</span> tmp_eps <span class="string">'&quot;'</span>]);
+0056     <span class="keyword">catch</span>
+0057         <span class="comment">% Delete the intermediate file</span>
+0058         <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_eps);
+0059         rethrow(lasterror);
+0060     <span class="keyword">end</span>
+0061     <span class="comment">% Delete the intermediate file</span>
+0062     <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_eps);
+0063     <span class="comment">% Read in the generated bitmap</span>
+0064     A = imread(tmp_nam);
+0065     <span class="comment">% Delete the temporary bitmap file</span>
+0066     <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0067     <span class="comment">% Retrieve the background colour</span>
+0068     bcol = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'Color'</span>);
+0069     <span class="comment">% Set border pixels to the correct colour</span>
+0070     <span class="keyword">if</span> ~isequal(bcol, <span class="string">'none'</span>) &amp;&amp; ~isequal(bcol, [1 1 1])
+0071         <span class="keyword">for</span> l = 1:size(A, 2)
+0072             <span class="keyword">if</span> ~all(reshape(A(:,l,:) == 255, [], 1))
+0073                 <span class="keyword">break</span>;
+0074             <span class="keyword">end</span>
+0075         <span class="keyword">end</span>
+0076         <span class="keyword">for</span> r = size(A, 2):-1:l
+0077             <span class="keyword">if</span> ~all(reshape(A(:,r,:) == 255, [], 1))
+0078                 <span class="keyword">break</span>;
+0079             <span class="keyword">end</span>
+0080         <span class="keyword">end</span>
+0081         <span class="keyword">for</span> t = 1:size(A, 1)
+0082             <span class="keyword">if</span> ~all(reshape(A(t,:,:) == 255, [], 1))
+0083                 <span class="keyword">break</span>;
+0084             <span class="keyword">end</span>
+0085         <span class="keyword">end</span>
+0086         <span class="keyword">for</span> b = size(A, 1):-1:t
+0087             <span class="keyword">if</span> ~all(reshape(A(b,:,:) == 255, [], 1))
+0088                 <span class="keyword">break</span>;
+0089             <span class="keyword">end</span>
+0090         <span class="keyword">end</span>
+0091         bcol = round(bcol * 255);
+0092         <span class="keyword">for</span> c = 1:size(A, 3)
+0093             A(:,[1:l-1, r+1:end],c) = bcol(c);
+0094             A([1:t-1, b+1:end],:,c) = bcol(c);
+0095         <span class="keyword">end</span>
+0096     <span class="keyword">end</span>
+0097 <span class="keyword">else</span>
+0098     <span class="keyword">if</span> nargin &lt; 3
+0099         renderer = <span class="string">'-opengl'</span>;
+0100     <span class="keyword">end</span>
+0101     <span class="comment">% Set paper size</span>
+0102     old_mode = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(fig, <span class="string">'PaperPositionMode'</span>);
+0103     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'PaperPositionMode'</span>, <span class="string">'auto'</span>);
+0104     <span class="keyword">try</span>
+0105         <span class="comment">% Try hardcopy first - undocumented MATLAB function!</span>
+0106         A = hardcopy(fig, [<span class="string">'-D'</span> renderer(2:end)], res);
+0107     <span class="keyword">catch</span>
+0108         <span class="comment">% Print to tiff file</span>
+0109         print(fig, renderer, res, <span class="string">'-dtiff'</span>, tmp_nam);
+0110         <span class="comment">% Read in the printed file</span>
+0111         A = imread(tmp_nam);
+0112         <span class="comment">% Delete the temporary file</span>
+0113         <a href="../../IO/mcd/mcintfac/@datastrm/delete.html" class="code" title="function d = delete(a)">delete</a>(tmp_nam);
+0114     <span class="keyword">end</span>
+0115     <span class="comment">% Reset paper size</span>
+0116     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(fig, <span class="string">'PaperPositionMode'</span>, old_mode);
+0117 <span class="keyword">end</span>
+0118 <span class="keyword">return</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

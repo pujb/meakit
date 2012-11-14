@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of symmetricuncertainty</title>
+  <meta name="keywords" content="symmetricuncertainty">
+  <meta name="description" content="SYMMETRICUNCERTAINTY symmetric redundancy measure for categorical-discrete">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html itt -->
+<h1>symmetricuncertainty
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SYMMETRICUNCERTAINTY symmetric redundancy measure for categorical-discrete</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function su = symmetricuncertainty(x,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">SYMMETRICUNCERTAINTY symmetric redundancy measure for categorical-discrete 
+data
+   SU = SYMMETRICUNCERTAINTY(X,Y) returns the symmetric uncertainty between
+   the two column vectors X and Y containing categorical measures.
+
+   SYMMETRICUNCERTAINTY [1] computes a symmetric scaled information 
+   measure based on mutual information [2][3] normalized to entropies of 
+   each variable X and Y
+
+   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp; 
+   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;
+   Centre for Applied Medical Research. Pamplona (Spain).
+
+   December 13th, 2007. Information Theory Toolbox v1.0
+
+   Example:
+   
+       x = [1;2;2;2;0;0;1;0;1;2];
+       y = [1;2;2;2;2;1;0;2;1;0];
+       su = symmetricuncertainty(x,y);
+
+   Citation:
+
+   If you use them for your academic research work,please kindly cite this 
+   toolbox as: 
+   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.  
+   University of Navarra - Dpt. of Physics and Applied Mathematics &amp; 
+   Centre for Applied Medical Research. Pamplona (Spain).
+
+   References
+   [1] Witten, Ian H. &amp; Frank, Eibe (2005), Data Mining: Practical Machine 
+   Learning Tools and Techniques, Morgan Kaufmann, Amsterdam.
+   [2] C. E. Shannon, A mathematical theory of communication, Bell System 
+   Technical Journal, vol. 27, pp. 379-423 and 623-656, July and October, 
+   1948.
+   [3] http://en.wikipedia.org/wiki/Mutual_information</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="redundancy.html" class="code" title="function r = redundancy(x,y)">redundancy</a>	REDUNDANCY redundancy measure for categorical-discrete data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <span class="comment">%SYMMETRICUNCERTAINTY symmetric redundancy measure for categorical-discrete</span>
+0002 <span class="comment">%data</span>
+0003 <span class="comment">%   SU = SYMMETRICUNCERTAINTY(X,Y) returns the symmetric uncertainty between</span>
+0004 <span class="comment">%   the two column vectors X and Y containing categorical measures.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   SYMMETRICUNCERTAINTY [1] computes a symmetric scaled information</span>
+0007 <span class="comment">%   measure based on mutual information [2][3] normalized to entropies of</span>
+0008 <span class="comment">%   each variable X and Y</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Joaquin Goñi &lt;jgoni@unav.es&gt; &amp;</span>
+0011 <span class="comment">%   Iñigo Martincorena &lt;imartincore@alumni.unav.es&gt;</span>
+0012 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0013 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   December 13th, 2007. Information Theory Toolbox v1.0</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Example:</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%       x = [1;2;2;2;0;0;1;0;1;2];</span>
+0020 <span class="comment">%       y = [1;2;2;2;2;1;0;2;1;0];</span>
+0021 <span class="comment">%       su = symmetricuncertainty(x,y);</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Citation:</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   If you use them for your academic research work,please kindly cite this</span>
+0026 <span class="comment">%   toolbox as:</span>
+0027 <span class="comment">%   Joaquin Goñi, Iñigo Martincorena. Information Theory Toolbox v1.0.</span>
+0028 <span class="comment">%   University of Navarra - Dpt. of Physics and Applied Mathematics &amp;</span>
+0029 <span class="comment">%   Centre for Applied Medical Research. Pamplona (Spain).</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   References</span>
+0032 <span class="comment">%   [1] Witten, Ian H. &amp; Frank, Eibe (2005), Data Mining: Practical Machine</span>
+0033 <span class="comment">%   Learning Tools and Techniques, Morgan Kaufmann, Amsterdam.</span>
+0034 <span class="comment">%   [2] C. E. Shannon, A mathematical theory of communication, Bell System</span>
+0035 <span class="comment">%   Technical Journal, vol. 27, pp. 379-423 and 623-656, July and October,</span>
+0036 <span class="comment">%   1948.</span>
+0037 <span class="comment">%   [3] http://en.wikipedia.org/wiki/Mutual_information</span>
+0038 
+0039 <a name="_sub0" href="#_subfunctions" class="code">function su = symmetricuncertainty(x,y)</a>
+0040 
+0041 su = 2*<a href="redundancy.html" class="code" title="function r = redundancy(x,y)">redundancy</a>(x,y); <span class="comment">%SU = 2* I(X;Y) / (H(X) + H(Y)) = 2*R see redundancy for more information.</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

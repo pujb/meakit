@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_draw</title>
+  <meta name="keywords" content="test_draw">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>test_draw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="draw_circle.html" class="code" title="function h = draw_circle(x, r, outline_color, fill_color)">draw_circle</a>	draw filled circles at centers x with radii r.</li><li><a href="draw_ellipse.html" class="code" title="function h = draw_ellipse(x, c, outline_color, fill_color)">draw_ellipse</a>	DRAW_ELLIPSE(x, c, outline_color, fill_color)</li><li><a href="draw_ellipse_axes.html" class="code" title="function h = draw_ellipse_axes(x, c, linespec)">draw_ellipse_axes</a>	DRAW_ELLIPSE_AXES(x, c, linespec)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 n = 2;
+0002 <span class="comment">% cov</span>
+0003 c = randn(n);
+0004 c = c'*c;
+0005 c = [1 0.5; 0.5 1];
+0006 
+0007 figure(1);clf
+0008 h = <a href="draw_circle.html" class="code" title="function h = draw_circle(x, r, outline_color, fill_color)">draw_circle</a>(rand(2,n), rand(1,n), <span class="string">'b'</span>, <span class="string">'g'</span>);
+0009 h = <a href="draw_circle.html" class="code" title="function h = draw_circle(x, r, outline_color, fill_color)">draw_circle</a>(rand(2,n), rand(1,n), <span class="string">'c'</span>);
+0010 x = rand(2,n);
+0011 h = <a href="draw_ellipse.html" class="code" title="function h = draw_ellipse(x, c, outline_color, fill_color)">draw_ellipse</a>(x, c, <span class="string">'r'</span>);
+0012 h = <a href="draw_ellipse_axes.html" class="code" title="function h = draw_ellipse_axes(x, c, linespec)">draw_ellipse_axes</a>(x, c, <span class="string">'r:'</span>);
+0013 axis equal</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

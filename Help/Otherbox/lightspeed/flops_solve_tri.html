@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_solve_tri</title>
+  <meta name="keywords" content="flops_solve_tri">
+  <meta name="description" content="FLOPS_SOLVE_TRI   Flops for triangular left division.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_solve_tri
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_SOLVE_TRI   Flops for triangular left division.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_solve_tri(n,m,k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_SOLVE_TRI   Flops for triangular left division.
+ FLOPS_SOLVE_TRI(T,b) returns the number of flops for solve_tri(T,b).
+ FLOPS_SOLVE_TRI(n,m,k) returns the number of flops for 
+ solve_tril(tril(rand(n,m)),rand(n,k)).
+
+ Example:  (n=2,m=2,k=1)
+  [g;h] = [a 0; b c]\[e; f]  has
+  g = e/a
+  h = (f - b*g)/c
+  which is 2 multiply+add and 2 divisions = 18 flops.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>	FLOPS_DIV   Flops for division.</li><li><a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>	FLOPS_SOLVE_TRI   Flops for triangular left division.</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="flops_normpdfln.html" class="code" title="function f = flops_normpdfln(x, m, S, V)">flops_normpdfln</a>	FLOPS_NORMPDFLN   Flops for normpdfln.</li><li><a href="flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>	FLOPS_SOLVE    Flops for matrix left division.</li><li><a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>	FLOPS_SOLVE_TRI   Flops for triangular left division.</li><li><a href="../../Otherbox/lightspeed/tests/test_flops2.html" class="code" title="">test_flops2</a>	test flops for matrix operations</li><li><a href="../../Otherbox/lightspeed/tests/test_solve_tri.html" class="code" title="">test_solve_tri</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_solve_tri(n,m,k)</a>
+0002 <span class="comment">% FLOPS_SOLVE_TRI   Flops for triangular left division.</span>
+0003 <span class="comment">% FLOPS_SOLVE_TRI(T,b) returns the number of flops for solve_tri(T,b).</span>
+0004 <span class="comment">% FLOPS_SOLVE_TRI(n,m,k) returns the number of flops for</span>
+0005 <span class="comment">% solve_tril(tril(rand(n,m)),rand(n,k)).</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Example:  (n=2,m=2,k=1)</span>
+0008 <span class="comment">%  [g;h] = [a 0; b c]\[e; f]  has</span>
+0009 <span class="comment">%  g = e/a</span>
+0010 <span class="comment">%  h = (f - b*g)/c</span>
+0011 <span class="comment">%  which is 2 multiply+add and 2 divisions = 18 flops.</span>
+0012 
+0013 <span class="keyword">if</span> nargin == 2
+0014     T = n;
+0015     b = m;
+0016   f = <a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>(<a href="rows.html" class="code" title="function r = rows(x)">rows</a>(T),<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(T),<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(b));
+0017   <span class="keyword">return</span>;
+0018 <span class="keyword">end</span>
+0019 <span class="keyword">if</span> n ~= m
+0020     error(<span class="string">'n ~= m case is not implemented'</span>);
+0021 <span class="keyword">end</span>
+0022 <span class="comment">% lower triangular case:</span>
+0023 <span class="comment">% number of multiplies+adds is</span>
+0024 <span class="comment">% sum(i=1..n) sum(k=1..i-1) 2 = sum(i=1..n) 2*(i-1) = n^2-n</span>
+0025 <span class="comment">% number of divides is n</span>
+0026 f = (n*n + n*(<a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>-1))*k;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

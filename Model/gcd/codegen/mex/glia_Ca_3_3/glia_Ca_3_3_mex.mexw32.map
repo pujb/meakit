@@ -1,0 +1,279 @@
+ glia_Ca_3_3_mex
+
+ Timestamp is 4dd4e3a6 (Thu May 19 17:32:22 2011)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00004504H .text                   CODE
+ 0002:00000000 00000108H .idata$5                DATA
+ 0002:00000108 00000004H .CRT$XCA                DATA
+ 0002:0000010c 00000004H .CRT$XCZ                DATA
+ 0002:00000110 00000004H .CRT$XIA                DATA
+ 0002:00000114 00000004H .CRT$XIAA               DATA
+ 0002:00000118 00000004H .CRT$XIC                DATA
+ 0002:0000011c 00000004H .CRT$XIZ                DATA
+ 0002:00000120 00000150H .rdata                  DATA
+ 0002:00000270 00000076H .rdata$debug            DATA
+ 0002:000002f0 00000004H .rdata$sxdata           DATA
+ 0002:000002f4 00000004H .rtc$IAA                DATA
+ 0002:000002f8 00000004H .rtc$IZZ                DATA
+ 0002:000002fc 00000004H .rtc$TAA                DATA
+ 0002:00000300 00000004H .rtc$TZZ                DATA
+ 0002:00000308 00000064H .xdata$x                DATA
+ 0002:0000036c 00000078H .idata$2                DATA
+ 0002:000003e4 00000014H .idata$3                DATA
+ 0002:000003f8 00000108H .idata$4                DATA
+ 0002:00000500 00000500H .idata$6                DATA
+ 0002:00000a00 000000acH .edata                  DATA
+ 0003:00000000 00002140H .data                   DATA
+ 0003:00002140 00000350H .bss                    DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000000       __except_list              00000000     <absolute>
+ 0000:00000001       ___safe_se_handler_count   00000001     <absolute>
+ 0000:00009876       __ldused                   00009876     <absolute>
+ 0000:00009876       __fltused                  00009876     <absolute>
+ 0000:00000000       ___ImageBase               10000000     <linker-defined>
+ 0001:00000000       _glia_Ca_3_3               10001000 f   glia_Ca_3_3.obj
+ 0001:00003000       _find                      10004000 f   find.obj
+ 0001:00003290       _length                    10004290 f   length.obj
+ 0001:000032d0       _b_mod                     100042d0 f   mod.obj
+ 0001:00003300       _glia_Ca_3_3_initialize    10004300 f   glia_Ca_3_3_initialize.obj
+ 0001:00003320       _glia_Ca_3_3_atexit        10004320 f   glia_Ca_3_3_terminate.obj
+ 0001:00003340       _glia_Ca_3_3_terminate     10004340 f   glia_Ca_3_3_terminate.obj
+ 0001:00003360       _glia_Ca_3_3_api           10004360 f   glia_Ca_3_3_api.obj
+ 0001:00003940       _mexFunction               10004940 f   glia_Ca_3_3_mex.obj
+ 0001:00003a58       _mxGetPr                   10004a58 f   libmx:libmx.dll
+ 0001:00003a5e       _mxCreateNumericArray_700  10004a5e f   libmx:libmx.dll
+ 0001:00003a64       _mxGetData                 10004a64 f   libmx:libmx.dll
+ 0001:00003a6a       _mxFree                    10004a6a f   libmx:libmx.dll
+ 0001:00003a70       _mxCalloc                  10004a70 f   libmx:libmx.dll
+ 0001:00003a76       _mexAtExit                 10004a76 f   libmex:libmex.dll
+ 0001:00003a7c       _mexErrMsgIdAndTxt         10004a7c f   libmex:libmex.dll
+ 0001:00003a82       _emlrtSubAssignSizeCheckR2011a 10004a82 f   libemlrt:libemlrt.dll
+ 0001:00003a88       _emlrtBreakCheck           10004a88 f   libemlrt:libemlrt.dll
+ 0001:00003a8e       _emlrtBoundsCheckR2011a    10004a8e f   libemlrt:libemlrt.dll
+ 0001:00003a94       _emlrtIntegerCheckR2011a   10004a94 f   libemlrt:libemlrt.dll
+ 0001:00003a9a       _emlrtDynamicBoundsCheckR2011a 10004a9a f   libemlrt:libemlrt.dll
+ 0001:00003aa0       _emlrtPopRtStack           10004aa0 f   libemlrt:libemlrt.dll
+ 0001:00003aa6       _emlrtPushRtStack          10004aa6 f   libemlrt:libemlrt.dll
+ 0001:00003aac       _emlrtVectorVectorIndexCheckR2011a 10004aac f   libemlrt:libemlrt.dll
+ 0001:00003ab2       _emlrtFirstTime            10004ab2 f   libemlrt:libemlrt.dll
+ 0001:00003ab8       _emlrtEnterRtStack         10004ab8 f   libemlrt:libemlrt.dll
+ 0001:00003abe       _emlrtExitTimeCleanup      10004abe f   libemlrt:libemlrt.dll
+ 0001:00003ac4       _emlrtLeaveRtStack         10004ac4 f   libemlrt:libemlrt.dll
+ 0001:00003aca       _emlrtAliasP               10004aca f   libemlrt:libemlrt.dll
+ 0001:00003ad0       _emlrtDestroyArray         10004ad0 f   libemlrt:libemlrt.dll
+ 0001:00003ad6       _emlrtAlias                10004ad6 f   libemlrt:libemlrt.dll
+ 0001:00003adc       _emlrtAssign               10004adc f   libemlrt:libemlrt.dll
+ 0001:00003ae2       _emlrtCheckBuiltInR2011a   10004ae2 f   libemlrt:libemlrt.dll
+ 0001:00003ae8       _emlrtClearAllocCount      10004ae8 f   libemlrt:libemlrt.dll
+ 0001:00003aee       _emlrtReturnArrayR2009a    10004aee f   libemlrt:libemlrt.dll
+ 0001:00003af4       _muDoubleScalarPower       10004af4 f   libmwmathutil:libmwmathutil.dll
+ 0001:00003afa       _muDoubleScalarCeil        10004afa f   libmwmathutil:libmwmathutil.dll
+ 0001:00003b00       _muDoubleScalarFloor       10004b00 f   libmwmathutil:libmwmathutil.dll
+ 0001:00003b10       @__security_check_cookie@4 10004b10 f   MSVCRT:secchk.obj
+ 0001:00003b20       __chkstk                   10004b20 f   MSVCRT:chkstk.obj
+ 0001:00003b20       __alloca_probe             10004b20     MSVCRT:chkstk.obj
+ 0001:00003b50       __ftol2_sse                10004b50 f   MSVCRT:ftol2.obj
+ 0001:00003b59       __ftol2_pentium4           10004b59 f   MSVCRT:ftol2.obj
+ 0001:00003b6c       __ftol2_sse_excpt          10004b6c f   MSVCRT:ftol2.obj
+ 0001:00003b86       __ftol2                    10004b86 f   MSVCRT:ftol2.obj
+ 0001:00003bfb       _NtCurrentTeb              10004bfb f i MSVCRT:crtdll.obj
+ 0001:00003c50       __CRT_INIT@12              10004c50 f   MSVCRT:crtdll.obj
+ 0001:00003f70       __DllMainCRTStartup@12     10004f70 f   MSVCRT:crtdll.obj
+ 0001:00003f95       ___report_gsfailure        10004f95 f   MSVCRT:gs_report.obj
+ 0001:0000409b       ___sse2_available_init     1000509b f   MSVCRT:cpu_disp.obj
+ 0001:000040ab       ___clean_type_info_names   100050ab f   MSVCRT:tncleanup.obj
+ 0001:000040b7       __onexit                   100050b7 f   MSVCRT:atonexit.obj
+ 0001:00004158       _atexit                    10005158 f   MSVCRT:atonexit.obj
+ 0001:0000416f       __RTC_Initialize           1000516f f   MSVCRT:_initsect_.obj
+ 0001:00004195       __RTC_Terminate            10005195 f   MSVCRT:_initsect_.obj
+ 0001:000041bc       __malloc_crt               100051bc f   MSVCRT:MSVCR100.dll
+ 0001:000041c2       _free                      100051c2 f   MSVCRT:MSVCR100.dll
+ 0001:000041c8       __encoded_null             100051c8 f   MSVCRT:MSVCR100.dll
+ 0001:000041d0       __ValidateImageBase        100051d0 f   MSVCRT:pesect.obj
+ 0001:00004210       __FindPESection            10005210 f   MSVCRT:pesect.obj
+ 0001:00004260       __IsNonwritableInCurrentImage 10005260 f   MSVCRT:pesect.obj
+ 0001:0000431c       __initterm                 1000531c f   MSVCRT:MSVCR100.dll
+ 0001:00004322       __initterm_e               10005322 f   MSVCRT:MSVCR100.dll
+ 0001:00004328       __amsg_exit                10005328 f   MSVCRT:MSVCR100.dll
+ 0001:0000432e       ___CppXcptFilter           1000532e f   MSVCRT:MSVCR100.dll
+ 0001:00004334       _DllMain@12                10005334 f   MSVCRT:dllmain.obj
+ 0001:00004360       __SEH_prolog4              10005360 f   MSVCRT:sehprolg4.obj
+ 0001:000043a5       __SEH_epilog4              100053a5 f   MSVCRT:sehprolg4.obj
+ 0001:000043b9       __except_handler4          100053b9 f   MSVCRT:chandler4gs.obj
+ 0001:000043de       ___security_init_cookie    100053de f   MSVCRT:gs_support.obj
+ 0001:0000447a       __crt_debugger_hook        1000547a f   MSVCRT:MSVCR100.dll
+ 0001:00004480       ___clean_type_info_names_internal 10005480 f   MSVCRT:MSVCR100.dll
+ 0001:00004486       __unlock                   10005486 f   MSVCRT:MSVCR100.dll
+ 0001:0000448c       ___dllonexit               1000548c f   MSVCRT:MSVCR100.dll
+ 0001:00004492       __lock                     10005492 f   MSVCRT:MSVCR100.dll
+ 0001:00004498       __except_handler4_common   10005498 f   MSVCRT:MSVCR100.dll
+ 0001:0000449e       _EncodePointer@4           1000549e f   kernel32:KERNEL32.dll
+ 0001:000044a4       _DecodePointer@4           100054a4 f   kernel32:KERNEL32.dll
+ 0001:000044aa       _InterlockedExchange@8     100054aa f   kernel32:KERNEL32.dll
+ 0001:000044b0       _Sleep@4                   100054b0 f   kernel32:KERNEL32.dll
+ 0001:000044b6       _InterlockedCompareExchange@12 100054b6 f   kernel32:KERNEL32.dll
+ 0001:000044bc       _TerminateProcess@8        100054bc f   kernel32:KERNEL32.dll
+ 0001:000044c2       _GetCurrentProcess@0       100054c2 f   kernel32:KERNEL32.dll
+ 0001:000044c8       _UnhandledExceptionFilter@4 100054c8 f   kernel32:KERNEL32.dll
+ 0001:000044ce       _SetUnhandledExceptionFilter@4 100054ce f   kernel32:KERNEL32.dll
+ 0001:000044d4       _IsDebuggerPresent@0       100054d4 f   kernel32:KERNEL32.dll
+ 0001:000044da       _IsProcessorFeaturePresent@4 100054da f   kernel32:KERNEL32.dll
+ 0001:000044e0       _DisableThreadLibraryCalls@4 100054e0 f   kernel32:KERNEL32.dll
+ 0001:000044e6       _QueryPerformanceCounter@4 100054e6 f   kernel32:KERNEL32.dll
+ 0001:000044ec       _GetTickCount@0            100054ec f   kernel32:KERNEL32.dll
+ 0001:000044f2       _GetCurrentThreadId@0      100054f2 f   kernel32:KERNEL32.dll
+ 0001:000044f8       _GetCurrentProcessId@0     100054f8 f   kernel32:KERNEL32.dll
+ 0001:000044fe       _GetSystemTimeAsFileTime@4 100054fe f   kernel32:KERNEL32.dll
+ 0002:00000000       __imp__GetSystemTimeAsFileTime@4 10006000     kernel32:KERNEL32.dll
+ 0002:00000004       __imp__GetCurrentProcessId@0 10006004     kernel32:KERNEL32.dll
+ 0002:00000008       __imp__GetCurrentThreadId@0 10006008     kernel32:KERNEL32.dll
+ 0002:0000000c       __imp__GetTickCount@0      1000600c     kernel32:KERNEL32.dll
+ 0002:00000010       __imp__QueryPerformanceCounter@4 10006010     kernel32:KERNEL32.dll
+ 0002:00000014       __imp__DisableThreadLibraryCalls@4 10006014     kernel32:KERNEL32.dll
+ 0002:00000018       __imp__IsProcessorFeaturePresent@4 10006018     kernel32:KERNEL32.dll
+ 0002:0000001c       __imp__IsDebuggerPresent@0 1000601c     kernel32:KERNEL32.dll
+ 0002:00000020       __imp__SetUnhandledExceptionFilter@4 10006020     kernel32:KERNEL32.dll
+ 0002:00000024       __imp__UnhandledExceptionFilter@4 10006024     kernel32:KERNEL32.dll
+ 0002:00000028       __imp__GetCurrentProcess@0 10006028     kernel32:KERNEL32.dll
+ 0002:0000002c       __imp__TerminateProcess@8  1000602c     kernel32:KERNEL32.dll
+ 0002:00000030       __imp__InterlockedCompareExchange@12 10006030     kernel32:KERNEL32.dll
+ 0002:00000034       __imp__Sleep@4             10006034     kernel32:KERNEL32.dll
+ 0002:00000038       __imp__InterlockedExchange@8 10006038     kernel32:KERNEL32.dll
+ 0002:0000003c       __imp__DecodePointer@4     1000603c     kernel32:KERNEL32.dll
+ 0002:00000040       __imp__EncodePointer@4     10006040     kernel32:KERNEL32.dll
+ 0002:00000044       \177KERNEL32_NULL_THUNK_DATA 10006044     kernel32:KERNEL32.dll
+ 0002:00000048       __imp___except_handler4_common 10006048     MSVCRT:MSVCR100.dll
+ 0002:0000004c       __imp___onexit             1000604c     MSVCRT:MSVCR100.dll
+ 0002:00000050       __imp___lock               10006050     MSVCRT:MSVCR100.dll
+ 0002:00000054       __imp____dllonexit         10006054     MSVCRT:MSVCR100.dll
+ 0002:00000058       __imp___unlock             10006058     MSVCRT:MSVCR100.dll
+ 0002:0000005c       __imp____clean_type_info_names_internal 1000605c     MSVCRT:MSVCR100.dll
+ 0002:00000060       __imp___crt_debugger_hook  10006060     MSVCRT:MSVCR100.dll
+ 0002:00000064       __imp____CppXcptFilter     10006064     MSVCRT:MSVCR100.dll
+ 0002:00000068       __imp___amsg_exit          10006068     MSVCRT:MSVCR100.dll
+ 0002:0000006c       __imp___initterm_e         1000606c     MSVCRT:MSVCR100.dll
+ 0002:00000070       __imp___initterm           10006070     MSVCRT:MSVCR100.dll
+ 0002:00000074       __imp___encoded_null       10006074     MSVCRT:MSVCR100.dll
+ 0002:00000078       __imp__free                10006078     MSVCRT:MSVCR100.dll
+ 0002:0000007c       __imp___malloc_crt         1000607c     MSVCRT:MSVCR100.dll
+ 0002:00000080       \177MSVCR100_NULL_THUNK_DATA 10006080     MSVCRT:MSVCR100.dll
+ 0002:00000084       __imp__emlrtVectorVectorIndexCheckR2011a 10006084     libemlrt:libemlrt.dll
+ 0002:00000088       __imp__emlrtSubAssignSizeCheckR2011a 10006088     libemlrt:libemlrt.dll
+ 0002:0000008c       __imp__emlrtBreakCheck     1000608c     libemlrt:libemlrt.dll
+ 0002:00000090       __imp__emlrtBoundsCheckR2011a 10006090     libemlrt:libemlrt.dll
+ 0002:00000094       __imp__emlrtReturnArrayR2009a 10006094     libemlrt:libemlrt.dll
+ 0002:00000098       __imp__emlrtClearAllocCount 10006098     libemlrt:libemlrt.dll
+ 0002:0000009c       __imp__emlrtCheckBuiltInR2011a 1000609c     libemlrt:libemlrt.dll
+ 0002:000000a0       __imp__emlrtAssign         100060a0     libemlrt:libemlrt.dll
+ 0002:000000a4       __imp__emlrtAlias          100060a4     libemlrt:libemlrt.dll
+ 0002:000000a8       __imp__emlrtDestroyArray   100060a8     libemlrt:libemlrt.dll
+ 0002:000000ac       __imp__emlrtAliasP         100060ac     libemlrt:libemlrt.dll
+ 0002:000000b0       __imp__emlrtLeaveRtStack   100060b0     libemlrt:libemlrt.dll
+ 0002:000000b4       __imp__emlrtExitTimeCleanup 100060b4     libemlrt:libemlrt.dll
+ 0002:000000b8       __imp__emlrtEnterRtStack   100060b8     libemlrt:libemlrt.dll
+ 0002:000000bc       __imp__emlrtFirstTime      100060bc     libemlrt:libemlrt.dll
+ 0002:000000c0       __imp__emlrtIntegerCheckR2011a 100060c0     libemlrt:libemlrt.dll
+ 0002:000000c4       __imp__emlrtPushRtStack    100060c4     libemlrt:libemlrt.dll
+ 0002:000000c8       __imp__emlrtPopRtStack     100060c8     libemlrt:libemlrt.dll
+ 0002:000000cc       __imp__emlrtDynamicBoundsCheckR2011a 100060cc     libemlrt:libemlrt.dll
+ 0002:000000d0       \177libemlrt_NULL_THUNK_DATA 100060d0     libemlrt:libemlrt.dll
+ 0002:000000d4       __imp__mexErrMsgIdAndTxt   100060d4     libmex:libmex.dll
+ 0002:000000d8       __imp__mexAtExit           100060d8     libmex:libmex.dll
+ 0002:000000dc       \177libmex_NULL_THUNK_DATA 100060dc     libmex:libmex.dll
+ 0002:000000e0       __imp__muDoubleScalarFloor 100060e0     libmwmathutil:libmwmathutil.dll
+ 0002:000000e4       __imp__muDoubleScalarCeil  100060e4     libmwmathutil:libmwmathutil.dll
+ 0002:000000e8       __imp__muDoubleScalarPower 100060e8     libmwmathutil:libmwmathutil.dll
+ 0002:000000ec       \177libmwmathutil_NULL_THUNK_DATA 100060ec     libmwmathutil:libmwmathutil.dll
+ 0002:000000f0       __imp__mxCalloc            100060f0     libmx:libmx.dll
+ 0002:000000f4       __imp__mxFree              100060f4     libmx:libmx.dll
+ 0002:000000f8       __imp__mxGetData           100060f8     libmx:libmx.dll
+ 0002:000000fc       __imp__mxCreateNumericArray_700 100060fc     libmx:libmx.dll
+ 0002:00000100       __imp__mxGetPr             10006100     libmx:libmx.dll
+ 0002:00000104       \177libmx_NULL_THUNK_DATA  10006104     libmx:libmx.dll
+ 0002:00000108       ___xc_a                    10006108     MSVCRT:cinitexe.obj
+ 0002:0000010c       ___xc_z                    1000610c     MSVCRT:cinitexe.obj
+ 0002:00000110       ___xi_a                    10006110     MSVCRT:cinitexe.obj
+ 0002:0000011c       ___xi_z                    1000611c     MSVCRT:cinitexe.obj
+ 0002:00000140       __real@3fd0000000000000    10006140     glia_Ca_3_3.obj
+ 0002:00000148       __real@3fac28f5c28f5c2a    10006148     glia_Ca_3_3.obj
+ 0002:00000150       __real@4008000000000000    10006150     glia_Ca_3_3.obj
+ 0002:00000158       __real@40f3240000000000    10006158     glia_Ca_3_3.obj
+ 0002:00000160       __real@3fc5c28f5c28f5c3    10006160     glia_Ca_3_3.obj
+ 0002:00000168       __real@405c000000000001    10006168     glia_Ca_3_3.obj
+ 0002:00000170       __real@3fe8000000000000    10006170     glia_Ca_3_3.obj
+ 0002:00000178       __real@3f50624dd2f1a9fc    10006178     glia_Ca_3_3.obj
+ 0002:00000180       __real@4044000000000000    10006180     glia_Ca_3_3.obj
+ 0002:00000188       __real@4089000000000000    10006188     glia_Ca_3_3.obj
+ 0002:00000190       __real@3fbc6a7ef9db22d1    10006190     glia_Ca_3_3.obj
+ 0002:00000198       __real@4071800000000000    10006198     glia_Ca_3_3.obj
+ 0002:000001a0       __real@3fec72b020c49ba6    100061a0     glia_Ca_3_3.obj
+ 0002:000001a8       __real@40b9500000000000    100061a8     glia_Ca_3_3.obj
+ 0002:000001b0       __real@3fe224dd2f1a9fbe    100061b0     glia_Ca_3_3.obj
+ 0002:000001b8       __real@4099000000000000    100061b8     glia_Ca_3_3.obj
+ 0002:000001c0       __real@3fdbb645a1cac083    100061c0     glia_Ca_3_3.obj
+ 0002:000001c8       __real@3fa999999999999a    100061c8     glia_Ca_3_3.obj
+ 0002:000001d0       __real@4000000000000000    100061d0     glia_Ca_3_3.obj
+ 0002:000001d8       __real@4079000000000000    100061d8     glia_Ca_3_3.obj
+ 0002:000001e0       __real@3f826e978d4fdf3b    100061e0     glia_Ca_3_3.obj
+ 0002:000001e8       __real@4034000000000000    100061e8     glia_Ca_3_3.obj
+ 0002:000001f0       __real@0000000000000000    100061f0     glia_Ca_3_3.obj
+ 0002:000001f8       __real@3ff0000000000000    100061f8     glia_Ca_3_3.obj
+ 0002:00000208       __pDefaultRawDllMain       10006208     MSVCRT:crtdll.obj
+ 0002:00000208       __pRawDllMain              10006208     MSVCRT:crtdll.obj
+ 0002:00000214       ?ProcessDetach@NativeDll@<CrtImplementationDetails>@@0IB 10006214     MSVCRT:tncleanup.obj
+ 0002:00000218       ?ProcessAttach@NativeDll@<CrtImplementationDetails>@@0IB 10006218     MSVCRT:tncleanup.obj
+ 0002:0000021c       ?ThreadAttach@NativeDll@<CrtImplementationDetails>@@0IB 1000621c     MSVCRT:tncleanup.obj
+ 0002:00000220       ?ThreadDetach@NativeDll@<CrtImplementationDetails>@@0IB 10006220     MSVCRT:tncleanup.obj
+ 0002:00000224       ?ProcessVerifier@NativeDll@<CrtImplementationDetails>@@0IB 10006224     MSVCRT:tncleanup.obj
+ 0002:00000228       __load_config_used         10006228     MSVCRT:loadcfg.obj
+ 0002:000002f0       ___safe_se_handler_table   100062f0     <linker-defined>
+ 0002:000002f4       ___rtc_iaa                 100062f4     MSVCRT:_initsect_.obj
+ 0002:000002f8       ___rtc_izz                 100062f8     MSVCRT:_initsect_.obj
+ 0002:000002fc       ___rtc_taa                 100062fc     MSVCRT:_initsect_.obj
+ 0002:00000300       ___rtc_tzz                 10006300     MSVCRT:_initsect_.obj
+ 0002:0000036c       __IMPORT_DESCRIPTOR_libmx  1000636c     libmx:libmx.dll
+ 0002:00000380       __IMPORT_DESCRIPTOR_libmex 10006380     libmex:libmex.dll
+ 0002:00000394       __IMPORT_DESCRIPTOR_libemlrt 10006394     libemlrt:libemlrt.dll
+ 0002:000003a8       __IMPORT_DESCRIPTOR_libmwmathutil 100063a8     libmwmathutil:libmwmathutil.dll
+ 0002:000003bc       __IMPORT_DESCRIPTOR_MSVCR100 100063bc     MSVCRT:MSVCR100.dll
+ 0002:000003d0       __IMPORT_DESCRIPTOR_KERNEL32 100063d0     kernel32:KERNEL32.dll
+ 0002:000003e4       __NULL_IMPORT_DESCRIPTOR   100063e4     libmx:libmx.dll
+ 0003:00000044       _b_emlrtRSI                10007044     glia_Ca_3_3_data.obj
+ 0003:00000094       _emlrtMCI                  10007094     glia_Ca_3_3_data.obj
+ 0003:000000e8       _b_emlrtMCI                100070e8     glia_Ca_3_3_data.obj
+ 0003:00002040       _emlrtContextGlobal        10009040     glia_Ca_3_3_mex.obj
+ 0003:0000211c       ___security_cookie         1000911c     MSVCRT:gs_cookie.obj
+ 0003:00002120       ___security_cookie_complement 10009120     MSVCRT:gs_cookie.obj
+ 0003:00002130       ___native_dllmain_reason   10009130     MSVCRT:natstart.obj
+ 0003:00002134       ___native_vcclrit_reason   10009134     MSVCRT:natstart.obj
+ 0003:0000246c       ?__type_info_root_node@@3U__type_info_node@@A 1000946c     MSVCRT:tncleanup.obj
+ 0003:00002474       _glia_Ca_3_3StackDataLocal 10009474     <common>
+ 0003:00002478       ___native_startup_state    10009478     <common>
+ 0003:0000247c       ___native_startup_lock     1000947c     <common>
+ 0003:00002480       ___onexitend               10009480     <common>
+ 0003:00002484       ___onexitbegin             10009484     <common>
+ 0003:00002488       ___sse2_available          10009488     <common>
+ 0003:0000248c       ___dyn_tls_init_callback   1000948c     <common>
+
+ entry point at        0001:00003f70
+
+ Static symbols
+
+ 0001:00003560       _c_emlrt_marshallIn        10004560 f   glia_Ca_3_3_api.obj
+ 0001:000035a0       _d_emlrt_marshallIn        100045a0 f   glia_Ca_3_3_api.obj
+ 0001:000035d0       _e_emlrt_marshallIn        100045d0 f   glia_Ca_3_3_api.obj
+ 0001:00003620       _emlrt_marshallIn          10004620 f   glia_Ca_3_3_api.obj
+ 0001:00003660       _b_emlrt_marshallIn        10004660 f   glia_Ca_3_3_api.obj
+ 0001:00003690       _emlrt_marshallOut         10004690 f   glia_Ca_3_3_api.obj
+ 0001:00003710       _f_emlrt_marshallIn        10004710 f   glia_Ca_3_3_api.obj
+ 0001:00003750       _g_emlrt_marshallIn        10004750 f   glia_Ca_3_3_api.obj
+ 0001:00003820       _h_emlrt_marshallIn        10004820 f   glia_Ca_3_3_api.obj
+ 0001:000038f0       _i_emlrt_marshallIn        100048f0 f   glia_Ca_3_3_api.obj
+ 0001:00003980       _glia_Ca_3_3_mexFunction   10004980 f   glia_Ca_3_3_mex.obj
+ 0001:00003c02       _pre_c_init                10004c02 f   MSVCRT:crtdll.obj
+ 0001:00003e5a       ___DllMainCRTStartup       10004e5a f   MSVCRT:crtdll.obj

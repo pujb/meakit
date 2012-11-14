@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  can_run_parallel -> pm_available;
+  start_parallel_matlab -> available_hosts;
+
+  available_hosts [URL="available_hosts.html"];
+  blocksize [URL="blocksize.html"];
+  can_run_parallel [URL="can_run_parallel.html"];
+  pm_available [URL="pm_available.html"];
+  start_parallel_matlab [URL="start_parallel_matlab.html"];
+}

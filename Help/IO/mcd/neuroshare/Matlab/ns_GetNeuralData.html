@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_GetNeuralData</title>
+  <meta name="keywords" content="ns_GetNeuralData">
+  <meta name="description" content="ns_GetNeuralData   Retrieves neural event data by index">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_GetNeuralData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_GetNeuralData   Retrieves neural event data by index</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, Data] = ns_GetNeuralData(hFile, EntityID, StartIndex, IndexCount); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_GetNeuralData   Retrieves neural event data by index
+
+   Usage:
+      [ns_RESULT, Data] = 
+               ns_GetNeuralData(hFile, EntityID, StartIndex, IndexCount)
+
+   Description:
+       Returns an array of timestamps for the neural events of the entity
+       specified by EntityID and referenced by the file handle hFile.
+       The index of the first timestamp is StartIndex and the requested
+       number of timestamps is given by IndexCount.  The timestamps are
+       returned in Data.
+
+   Parameters:
+       hFile        Handle/Indentification number to an open file.
+       EntityID    Identification number of the entity in the data file.
+       StartIndex    First index number of the requested Neural Events
+                   timestamp.
+       IndexCount    Number of timestamps to retrieve.
+
+   Return Values:
+       Data        Array of double precision timestamps.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_BADFILE        Invalid file handle passed to 
+                                       function
+                       ns_BADENTITY    Invalid or inappropriate entity 
+                                       identifier specified
+                       ns_BADINDEX        Invalid entity index specified
+                       ns_FILEERROR    File access or read error
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 8/11/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Example.html" class="code" title="function Example()">Example</a>	Prompt for the correct DLL</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, Data] = ns_GetNeuralData(hFile, EntityID, StartIndex, IndexCount);</a>
+0002 
+0003 <span class="comment">%ns_GetNeuralData   Retrieves neural event data by index</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%      [ns_RESULT, Data] =</span>
+0007 <span class="comment">%               ns_GetNeuralData(hFile, EntityID, StartIndex, IndexCount)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Description:</span>
+0010 <span class="comment">%       Returns an array of timestamps for the neural events of the entity</span>
+0011 <span class="comment">%       specified by EntityID and referenced by the file handle hFile.</span>
+0012 <span class="comment">%       The index of the first timestamp is StartIndex and the requested</span>
+0013 <span class="comment">%       number of timestamps is given by IndexCount.  The timestamps are</span>
+0014 <span class="comment">%       returned in Data.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Parameters:</span>
+0017 <span class="comment">%       hFile        Handle/Indentification number to an open file.</span>
+0018 <span class="comment">%       EntityID    Identification number of the entity in the data file.</span>
+0019 <span class="comment">%       StartIndex    First index number of the requested Neural Events</span>
+0020 <span class="comment">%                   timestamp.</span>
+0021 <span class="comment">%       IndexCount    Number of timestamps to retrieve.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Return Values:</span>
+0024 <span class="comment">%       Data        Array of double precision timestamps.</span>
+0025 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0026 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0027 <span class="comment">%                   generated:</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%                       ns_BADFILE        Invalid file handle passed to</span>
+0030 <span class="comment">%                                       function</span>
+0031 <span class="comment">%                       ns_BADENTITY    Invalid or inappropriate entity</span>
+0032 <span class="comment">%                                       identifier specified</span>
+0033 <span class="comment">%                       ns_BADINDEX        Invalid entity index specified</span>
+0034 <span class="comment">%                       ns_FILEERROR    File access or read error</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0037 <span class="comment">%   Author: Almut Branner</span>
+0038 <span class="comment">%   Last modification: 8/11/2003</span>
+0039 
+0040 [ns_RESULT, Data] = mexprog(13, hFile, EntityID - 1, StartIndex - 1, IndexCount);</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

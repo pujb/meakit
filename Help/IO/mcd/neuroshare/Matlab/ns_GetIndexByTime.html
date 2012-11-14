@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ns_GetIndexByTime</title>
+  <meta name="keywords" content="ns_GetIndexByTime">
+  <meta name="description" content="ns_GetIndexByTime   Retrieves an entity index by time">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- # neuroshare --><!-- menu.html Matlab -->
+<h1>ns_GetIndexByTime
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>ns_GetIndexByTime   Retrieves an entity index by time</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [ns_RESULT, Index] = ns_GetIndexByTime(hFile, EntityID, Time, Flag); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment">ns_GetIndexByTime   Retrieves an entity index by time
+
+   Usage:
+      [ns_RESULT, Index] = ns_GetIndexByTime(hFile, EntityID, Time, Flag)
+
+   Description:
+       Searches in the file referenced by hFile for the data item
+       identified by the index EntityID.  The flag specifies whether to
+       locate the data item that starts before or after the time Time.
+       The index of the requested data item is returned in Index.
+
+   Parameters:
+       hFile        Handle/Indentification number to an open file.
+       EntityID    Identification number of the entity in the data file.
+       Time        Time of the data to search for
+       Flag        Flag specifying whether the index to be retrieved
+                   belongs to the data item occurring before or after the
+                   specified time Time.  The flags are defined:
+
+               #define ns_BEFORE     -1    // return the data entry occuring
+                                       // before and inclusive of the time
+                                       // dTime.
+               #define ns_CLOSEST    0    // return the data entry occuring
+                                       // at or closest to the time dTime 
+               #define ns_AFTER     +1    // return the data entry occuring
+                                       // after and inclusive of the time
+                                       //dTime.
+
+   Return Values:
+       Index        Variable to receive the entry index.
+       ns_RESULT   This function returns ns_OK if the file is successfully
+                   opened. Otherwise one of the following error codes is 
+                   generated:
+
+                       ns_BADFILE        Invalid file handle passed to 
+                                       function
+                       ns_BADENTITY    Invalid or inappropriate entity 
+                                       identifier specified
+                       ns_FILEERROR    File access or read error
+                       ns_BADINDEX        Unable to find an valid index given
+                                       the search parameters
+
+   Copyright (C) 2003 Neuroshare Project
+   Author: Almut Branner
+   Last modification: 6/20/2003</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ns_RESULT, Index] = ns_GetIndexByTime(hFile, EntityID, Time, Flag);</a>
+0002 
+0003 <span class="comment">%ns_GetIndexByTime   Retrieves an entity index by time</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Usage:</span>
+0006 <span class="comment">%      [ns_RESULT, Index] = ns_GetIndexByTime(hFile, EntityID, Time, Flag)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Description:</span>
+0009 <span class="comment">%       Searches in the file referenced by hFile for the data item</span>
+0010 <span class="comment">%       identified by the index EntityID.  The flag specifies whether to</span>
+0011 <span class="comment">%       locate the data item that starts before or after the time Time.</span>
+0012 <span class="comment">%       The index of the requested data item is returned in Index.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Parameters:</span>
+0015 <span class="comment">%       hFile        Handle/Indentification number to an open file.</span>
+0016 <span class="comment">%       EntityID    Identification number of the entity in the data file.</span>
+0017 <span class="comment">%       Time        Time of the data to search for</span>
+0018 <span class="comment">%       Flag        Flag specifying whether the index to be retrieved</span>
+0019 <span class="comment">%                   belongs to the data item occurring before or after the</span>
+0020 <span class="comment">%                   specified time Time.  The flags are defined:</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%               #define ns_BEFORE     -1    // return the data entry occuring</span>
+0023 <span class="comment">%                                       // before and inclusive of the time</span>
+0024 <span class="comment">%                                       // dTime.</span>
+0025 <span class="comment">%               #define ns_CLOSEST    0    // return the data entry occuring</span>
+0026 <span class="comment">%                                       // at or closest to the time dTime</span>
+0027 <span class="comment">%               #define ns_AFTER     +1    // return the data entry occuring</span>
+0028 <span class="comment">%                                       // after and inclusive of the time</span>
+0029 <span class="comment">%                                       //dTime.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   Return Values:</span>
+0032 <span class="comment">%       Index        Variable to receive the entry index.</span>
+0033 <span class="comment">%       ns_RESULT   This function returns ns_OK if the file is successfully</span>
+0034 <span class="comment">%                   opened. Otherwise one of the following error codes is</span>
+0035 <span class="comment">%                   generated:</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%                       ns_BADFILE        Invalid file handle passed to</span>
+0038 <span class="comment">%                                       function</span>
+0039 <span class="comment">%                       ns_BADENTITY    Invalid or inappropriate entity</span>
+0040 <span class="comment">%                                       identifier specified</span>
+0041 <span class="comment">%                       ns_FILEERROR    File access or read error</span>
+0042 <span class="comment">%                       ns_BADINDEX        Unable to find an valid index given</span>
+0043 <span class="comment">%                                       the search parameters</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   Copyright (C) 2003 Neuroshare Project</span>
+0046 <span class="comment">%   Author: Almut Branner</span>
+0047 <span class="comment">%   Last modification: 6/20/2003</span>
+0048 
+0049 [ns_RESULT, Index] = mexprog(15, hFile, EntityID - 1, Time, Flag);
+0050 
+0051 Index = Index + 1;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

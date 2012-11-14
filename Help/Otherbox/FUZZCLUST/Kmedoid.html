@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Kmedoid</title>
+  <meta name="keywords" content="Kmedoid">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>Kmedoid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result=Kmedoid(data,param); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result=Kmedoid(data,param);</a>
+0002 
+0003 c = param.c;
+0004 X=data.X;
+0005 
+0006 [N,n]=size(X);
+0007 
+0008 <span class="comment">%initialization</span>
+0009 <span class="keyword">if</span> max(size(param.c))==1,
+0010     c = param.c;
+0011     index=randperm(N);
+0012     v=X(index(1:c),:);v = v + 1e-10;
+0013     v0=X(index(1:c)+1,:);v0 = v0 - 1e-10;
+0014 <span class="keyword">else</span>
+0015     v = param.c;    
+0016     c = size(param.c,1);
+0017     index=randperm(N);
+0018     v0=X(index(1:c)+1,:);v0 = v0 + 1e-10;
+0019 <span class="keyword">end</span>   
+0020 iter=0;  
+0021 <span class="keyword">while</span> prod(max(abs(v - v0))),
+0022       v0 = v;
+0023      iter =iter+1;
+0024       <span class="comment">%mozgat醩</span>
+0025         <span class="comment">%Calculating the distances</span>
+0026          <span class="keyword">for</span> i = 1:c
+0027             dist(:,i) = sum([(X - repmat(v(i,:),N,1)).^2],2);
+0028          <span class="keyword">end</span>
+0029         <span class="comment">%Assigning clusters</span>
+0030       [m,label] = min(dist');
+0031       distout=sqrt(dist);
+0032       
+0033       <span class="comment">%Calculating cluster centers</span>
+0034       <span class="keyword">for</span> i = 1:c
+0035          index=find(label == i);
+0036          <span class="keyword">if</span> ~isempty(index)  
+0037              vtemp = mean(X(index,:));
+0038              temp = sum([(X - repmat(vtemp,N,1)).^2],2);
+0039              inx=find(temp==min(temp));
+0040              inx=min(inx); <span class="comment">%if there are many points with the minimum distance</span>
+0041              v(i,:)=X(inx,:);
+0042          <span class="keyword">else</span> 
+0043            v(i,:)=X(round(rand*N-1),:);
+0044          <span class="keyword">end</span>   
+0045          index=find(label == i);
+0046          f0(index,i)=1;
+0047      <span class="keyword">end</span>
+0048      J(iter) = sum(sum(f0.*dist));           <span class="comment">%calculate objective function</span>
+0049 
+0050 <span class="comment">%            %mozgat醩</span>
+0051 <span class="comment">%         %Calculating the distances</span>
+0052 <span class="comment">%          for i = 1:c</span>
+0053 <span class="comment">%             dist(:,i) = sum([(X - repmat(v(i,:),N,1)).^2]')';</span>
+0054 <span class="comment">%          end</span>
+0055 <span class="comment">%         %Assigning clusters</span>
+0056 <span class="comment">%       [m,label] = min(dist');</span>
+0057     
+0058       <span class="keyword">if</span> param.vis
+0059        clf
+0060        hold on
+0061        colors={<span class="string">'r.'</span> <span class="string">'gx'</span> <span class="string">'b+'</span> <span class="string">'ys'</span> <span class="string">'md'</span> <span class="string">'cv'</span> <span class="string">'k.'</span> <span class="string">'r*'</span> <span class="string">'g*'</span> <span class="string">'b*'</span> <span class="string">'y*'</span> <span class="string">'m*'</span> <span class="string">'c*'</span> <span class="string">'k*'</span> };
+0062        <span class="keyword">for</span> i=1:c
+0063            index = find(label == i);
+0064            <span class="keyword">if</span> ~isempty(index)  
+0065             dat=X(index,:);
+0066             plot(dat(:,1),dat(:,2),colors{i})
+0067            <span class="keyword">end</span>
+0068        <span class="keyword">end</span>    
+0069        plot(v(:,1),v(:,2),<span class="string">'ro'</span>)
+0070        hold on
+0071 
+0072        <span class="comment">%tri=delaunay(v(:,1),v(:,2));</span>
+0073        <span class="comment">%triplot(tri,v(:,1),v(:,2))</span>
+0074        hold off
+0075        pause(0.1)
+0076    <span class="keyword">end</span>  
+0077     
+0078 <span class="keyword">end</span>
+0079 
+0080 
+0081 <span class="comment">%results</span>
+0082 result.cluster.v = v;
+0083 result.data.d = distout;
+0084    <span class="comment">%calculate the partition matrix</span>
+0085 f0=zeros(N,c);
+0086    <span class="keyword">for</span> i=1:c
+0087      index=find(label == i);
+0088      f0(index,i)=1;
+0089    <span class="keyword">end</span>       
+0090 result.data.f=f0;
+0091 result.iter = iter;
+0092 result.cost = J;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

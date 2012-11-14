@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_get_value_by_percent</title>
+  <meta name="keywords" content="util_get_value_by_percent">
+  <meta name="description" content="UTIL_GET_VALUE_BY_PERCENT Get the value level in the input vector or">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_get_value_by_percent
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_GET_VALUE_BY_PERCENT Get the value level in the input vector or</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function value = util_get_value_by_percent( input, percent, isAscending ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_GET_VALUE_BY_PERCENT Get the value level in the input vector or
+matrix by a percentage of the whole.
+   Input:
+           input:      Vector or matrix.
+           percent:    Thresholding percentage.
+           isAscending:    If true, the program returns the value which is
+                           the lower percent% in the input data.
+                           If false, it returns the value which is the top
+                           percent% in the input data.
+   Output:
+           value:      Output level.
+
+   Created on Apr/06/2011 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Calculation/util_get_assortativity.html" class="code" title="function A = util_get_assortativity( network_connection_matrix, varargin )">util_get_assortativity</a>	UTIL_GET_ASSORTATIVITY Calculte the assortativity of the network</li><li><a href="../Calculation/util_get_betweenness.html" class="code" title="function bc = util_get_betweenness( network_connection_matrix, varargin )">util_get_betweenness</a>	UTIL_GET_BETWEENNESS Calculate the betweenness centrality from network</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function value = util_get_value_by_percent( input, percent, isAscending )</a>
+0002 <span class="comment">%UTIL_GET_VALUE_BY_PERCENT Get the value level in the input vector or</span>
+0003 <span class="comment">%matrix by a percentage of the whole.</span>
+0004 <span class="comment">%   Input:</span>
+0005 <span class="comment">%           input:      Vector or matrix.</span>
+0006 <span class="comment">%           percent:    Thresholding percentage.</span>
+0007 <span class="comment">%           isAscending:    If true, the program returns the value which is</span>
+0008 <span class="comment">%                           the lower percent% in the input data.</span>
+0009 <span class="comment">%                           If false, it returns the value which is the top</span>
+0010 <span class="comment">%                           percent% in the input data.</span>
+0011 <span class="comment">%   Output:</span>
+0012 <span class="comment">%           value:      Output level.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   Created on Apr/06/2011 By Pu Jiangbo</span>
+0015 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0016 
+0017 
+0018 unique_values = unique(input); <span class="comment">% Unique values in the network_connection_matrix</span>
+0019 threshold_index = round(length(unique_values) * percent);
+0020 <span class="keyword">if</span> ~isAscending
+0021     unique_values = unique_values(end:-1:1);     <span class="comment">% Revert, now from big to small</span>
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% Check range</span>
+0025 <span class="keyword">if</span> threshold_index &lt; 1
+0026     threshold_index = 1;
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> threshold_index &gt; length(unique_values)
+0029     threshold_index = length(unique_values);
+0030 <span class="keyword">end</span>
+0031 
+0032 value = unique_values(threshold_index);
+0033 
+0034 
+0035 
+0036 
+0037 <span class="keyword">end</span>
+0038</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_sort_matrix_by_indexer</title>
+  <meta name="keywords" content="util_sort_matrix_by_indexer">
+  <meta name="description" content="UTIL_SORT_MATRIX_BY_INDEXER Sort matrix by additional indexing vector">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Common -->
+<h1>util_sort_matrix_by_indexer
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_SORT_MATRIX_BY_INDEXER Sort matrix by additional indexing vector</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function result = util_sort_matrix_by_indexer(additional_vector, matrix, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_SORT_MATRIX_BY_INDEXER Sort matrix by additional indexing vector
+   The matrix and the additional_vector should have the same number of
+   rows. Usually, each row of the matrix shuold correspond to the row of
+   additional_vector.
+
+   Input:
+           additional_vector:      We will sort this vector and get the
+                                   new indexing which will also be used to
+                                   sort the matrix (by its rows) in the
+                                   same way.
+           matrix:                 You want to rearrange this matrix by
+                                   its rows (columns not changed).
+           method:                 'asc' [default] / 'des'.
+
+   Output:
+           result:                 Sorted matrix.
+
+   Example:
+           util_sort_matrix_by_indexer([3 2 1], [1 2 3; 4 5 6; 7 8 9])
+   then, = 
+           7     8     9
+           4     5     6
+           1     2     3
+
+   Created on Dec/08/2008 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics
+
+   $Revision:
+       PJB#2010-08-18  Adding comments and simplify the coding.
+                       Adding 'method' parameter.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = util_sort_matrix_by_indexer(additional_vector, matrix, varargin)</a>
+0002 <span class="comment">%UTIL_SORT_MATRIX_BY_INDEXER Sort matrix by additional indexing vector</span>
+0003 <span class="comment">%   The matrix and the additional_vector should have the same number of</span>
+0004 <span class="comment">%   rows. Usually, each row of the matrix shuold correspond to the row of</span>
+0005 <span class="comment">%   additional_vector.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Input:</span>
+0008 <span class="comment">%           additional_vector:      We will sort this vector and get the</span>
+0009 <span class="comment">%                                   new indexing which will also be used to</span>
+0010 <span class="comment">%                                   sort the matrix (by its rows) in the</span>
+0011 <span class="comment">%                                   same way.</span>
+0012 <span class="comment">%           matrix:                 You want to rearrange this matrix by</span>
+0013 <span class="comment">%                                   its rows (columns not changed).</span>
+0014 <span class="comment">%           method:                 'asc' [default] / 'des'.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Output:</span>
+0017 <span class="comment">%           result:                 Sorted matrix.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Example:</span>
+0020 <span class="comment">%           util_sort_matrix_by_indexer([3 2 1], [1 2 3; 4 5 6; 7 8 9])</span>
+0021 <span class="comment">%   then, =</span>
+0022 <span class="comment">%           7     8     9</span>
+0023 <span class="comment">%           4     5     6</span>
+0024 <span class="comment">%           1     2     3</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   Created on Dec/08/2008 By Pu Jiangbo</span>
+0027 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   $Revision:</span>
+0030 <span class="comment">%       PJB#2010-08-18  Adding comments and simplify the coding.</span>
+0031 <span class="comment">%                       Adding 'method' parameter.</span>
+0032 
+0033 
+0034 <span class="comment">% sort 'additional_vector' and returns the index</span>
+0035 [~, indexer] = sort(additional_vector);
+0036 
+0037 result = matrix(indexer, :);
+0038 
+0039 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of process_sti_result_by_stiID_by_delays_response_per</title>
+  <meta name="keywords" content="process_sti_result_by_stiID_by_delays_response_per">
+  <meta name="description" content="PROCESS_STI_RESULT_BY_STIID_BY_DELAYS_RESPONSE_PER">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>process_sti_result_by_stiID_by_delays_response_per
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>PROCESS_STI_RESULT_BY_STIID_BY_DELAYS_RESPONSE_PER</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">PROCESS_STI_RESULT_BY_STIID_BY_DELAYS_RESPONSE_PER
+工具函数：提取刺激参数中，某个电极各个TBS刺激间隔下，全皿各个通道的统计结果
+   输入参数：
+       paraname：要统计的参数名，例如'num_response'，对应result里面的结构；
+       sti_id：刺激电极；
+
+   输出参数：
+       analysis：分析结果
+
+ 蒲江波 2010年5月17日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li><li><a href="../Plot/util_plot_8s_into_arraymap.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap( data, closed )">util_plot_8s_into_arraymap</a>	UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</li><li><a href="../Plot/util_plot_8s_into_arraymap_bar.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap_bar( data, closed, haveBaseline)">util_plot_8s_into_arraymap_bar</a>	UTIL_PLOT_8S_INTO_ARRAYMAP 工具函数：将数据绘制成8*8的图（类似Daniel文章）</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <span class="comment">%PROCESS_STI_RESULT_BY_STIID_BY_DELAYS_RESPONSE_PER</span>
+0002 <span class="comment">%工具函数：提取刺激参数中，某个电极各个TBS刺激间隔下，全皿各个通道的统计结果</span>
+0003 <span class="comment">%   输入参数：</span>
+0004 <span class="comment">%       paraname：要统计的参数名，例如'num_response'，对应result里面的结构；</span>
+0005 <span class="comment">%       sti_id：刺激电极；</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   输出参数：</span>
+0008 <span class="comment">%       analysis：分析结果</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% 蒲江波 2010年5月17日</span>
+0011 
+0012 <span class="comment">% 计算在指定电极刺激时，总共有多少种变化</span>
+0013 variation_delays = {<span class="string">'control'</span> <span class="string">'50ms'</span> <span class="string">'10ms'</span> <span class="string">'5ms'</span>};
+0014 amplitude = <span class="string">'200'</span>;
+0015 paraname = <span class="string">'num_response'</span>;
+0016 sti_id = 54;
+0017 
+0018 
+0019 <span class="keyword">for</span> hwid = 1:64
+0020     <span class="comment">% 跳过刺激电极</span>
+0021     <span class="keyword">if</span> (sti_id == <a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))
+0022         <span class="keyword">continue</span>;
+0023     <span class="keyword">end</span>
+0024     
+0025     <span class="comment">%创建结果结构体</span>
+0026     analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).x = [1:length(variation_delays)];
+0027     analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y = [];
+0028     analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).e = [];
+0029     
+0030     <span class="comment">% 在不同delay下循环，提取参数，存入结果结构体</span>
+0031     <span class="keyword">for</span> j=1:length(variation_delays)
+0032         temp_str = strcat(<span class="string">'may14_result_'</span>, variation_delays(j), <span class="string">'_sti'</span>, num2str(sti_id));
+0033         result = eval(temp_str{1});
+0034         analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y = [analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y <span class="keyword">...</span>
+0035             result.([<span class="string">'amp'</span> amplitude]).(paraname).([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.mean];
+0036         analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).e = [analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).e <span class="keyword">...</span>
+0037             result.([<span class="string">'amp'</span> amplitude]).(paraname).([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.sem];
+0038     <span class="keyword">end</span>
+0039 <span class="keyword">end</span>
+0040 
+0041 <a href="../Plot/util_plot_8s_into_arraymap.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap( data, closed )">util_plot_8s_into_arraymap</a>(analysis,[15 sti_id])
+0042 <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> variation_delays amplitude paraname hwid j temp_str;
+0043 
+0044 
+0045 <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> analysis
+0046 variation_rate = {<span class="string">'baseline'</span> <span class="string">'finished'</span>};
+0047 gnd = 15;
+0048 
+0049 <span class="keyword">for</span> j = 1:length(variation_rate)
+0050     temp_str = strcat(<span class="string">'may14_'</span>, variation_rate(j), <span class="string">'_spif'</span>);
+0051     [~, avg, ~, ~, avg_sem] = util_calc_spb_avg_elec( <span class="string">'spif'</span>, eval(temp_str{1}), <span class="string">'gnd'</span>, gnd);
+0052 
+0053     <span class="keyword">for</span> hwid = 1:64
+0054         <span class="comment">% 跳过接地电极</span>
+0055         <span class="keyword">if</span> (<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid) == 15)
+0056             <span class="keyword">continue</span>;
+0057         <span class="keyword">end</span>
+0058         
+0059         <span class="comment">% 创建结果结构体</span>
+0060         analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).x = [1:length(variation_rate)];
+0061         
+0062         <span class="comment">% 分别计算Baseline/Finished的参数</span>
+0063         analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).y(j) = avg(hwid);
+0064         analysis.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).e(j) = avg_sem(hwid);
+0065     <span class="keyword">end</span>
+0066 <span class="keyword">end</span>
+0067 
+0068 <a href="../Plot/util_plot_8s_into_arraymap_bar.html" class="code" title="function [ handle ] = util_plot_8s_into_arraymap_bar( data, closed, haveBaseline)">util_plot_8s_into_arraymap_bar</a>(analysis,[gnd],1);
+0069 <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> variation_rate gnd temp_str hwid j;
+0070 
+0071 
+0072 
+0073 
+0074 
+0075</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

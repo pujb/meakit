@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flops_solve</title>
+  <meta name="keywords" content="flops_solve">
+  <meta name="description" content="FLOPS_SOLVE    Flops for matrix left division.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>flops_solve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FLOPS_SOLVE    Flops for matrix left division.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function f = flops_solve(n,m,c) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment"> FLOPS_SOLVE    Flops for matrix left division.
+ FLOPS_SOLVE(a,b) returns the number of flops for a\b.
+ FLOPS_SOLVE(n,m,c) returns the number of flops for rand(n,m)\rand(m,c).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cols.html" class="code" title="function c = cols(x)">cols</a>	COLS    The number of columns.</li><li><a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>	FLOPS_CHOL    Flops for Cholesky decomposition.</li><li><a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>	FLOPS_DIV   Flops for division.</li><li><a href="flops_lu.html" class="code" title="function f = flops_lu(n)">flops_lu</a>	FLOPS_LU   Flops for LU decomposition.</li><li><a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>	FLOPS_MUL    Flops for real matrix multiplication.</li><li><a href="flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>	FLOPS_SOLVE    Flops for matrix left division.</li><li><a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>	FLOPS_SOLVE_TRI   Flops for triangular left division.</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="flops_inv.html" class="code" title="function f = flops_inv(n)">flops_inv</a>	FLOPS_INV    Flops for matrix inversion.</li><li><a href="flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>	FLOPS_SOLVE    Flops for matrix left division.</li><li><a href="../../Otherbox/lightspeed/tests/test_flops2.html" class="code" title="">test_flops2</a>	test flops for matrix operations</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = flops_solve(n,m,c)</a>
+0002 <span class="comment">% FLOPS_SOLVE    Flops for matrix left division.</span>
+0003 <span class="comment">% FLOPS_SOLVE(a,b) returns the number of flops for a\b.</span>
+0004 <span class="comment">% FLOPS_SOLVE(n,m,c) returns the number of flops for rand(n,m)\rand(m,c).</span>
+0005 
+0006 <span class="keyword">if</span> nargin == 2
+0007     a = n;
+0008     b = m;
+0009   f = <a href="flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>(<a href="rows.html" class="code" title="function r = rows(x)">rows</a>(a),<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(a),<a href="cols.html" class="code" title="function c = cols(x)">cols</a>(b));
+0010   <span class="keyword">return</span>;
+0011 <span class="keyword">end</span>
+0012 <span class="keyword">if</span> n == m
+0013   <span class="keyword">if</span> n == 1
+0014     <span class="comment">% scalar division</span>
+0015     f = c*<a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>;
+0016   <span class="keyword">elseif</span> 0
+0017         <span class="comment">% invert using cholesky (see inv_posdef)</span>
+0018         f = <a href="flops_chol.html" class="code" title="function f = flops_chol(n)">flops_chol</a>(n) + 2*<a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>(n,m,c);
+0019     <span class="keyword">else</span>
+0020         <span class="comment">% invert using LU decomposition</span>
+0021         <span class="comment">% L has unit diagonal so n divisions are avoided when back-substituting</span>
+0022         f = <a href="flops_lu.html" class="code" title="function f = flops_lu(n)">flops_lu</a>(n) + 2*<a href="flops_solve_tri.html" class="code" title="function f = flops_solve_tri(n,m,k)">flops_solve_tri</a>(n,m,c) - n*<a href="flops_div.html" class="code" title="function f = flops_div">flops_div</a>;
+0023   <span class="keyword">end</span>
+0024 <span class="keyword">elseif</span> n &gt; m
+0025   <span class="comment">% this comes from Ax=b, x = (A'*A)\(A'*b)</span>
+0026   f = <a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(m,n,m) + <a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(m,n,c) + <a href="flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>(m,m,c);
+0027 <span class="keyword">else</span>
+0028   <span class="comment">% this comes from Ax=b, x = A'*(A*A')\b</span>
+0029   f = <a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(n,m,n) + <a href="flops_mul.html" class="code" title="function f = flops_mul(n,m,c)">flops_mul</a>(m,n,c) + <a href="flops_solve.html" class="code" title="function f = flops_solve(n,m,c)">flops_solve</a>(n,n,c);
+0030 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

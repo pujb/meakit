@@ -1,0 +1,736 @@
+<HTML>
+<HEAD>
+<TITLE>RTW Report - glia_Ca_3_3.c </TITLE>
+</HEAD>
+<BODY BGCOLOR="#eeeeee" TEXT="#1122aa" ONLOAD="if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window);}">
+<P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="6" WIDTH="100%" HEIGHT="100%"><TR><TD WIDTH="100%" VALIGN="top" BGCOLOR="#ffffff">
+<H4>File: <A HREF="file:///E:\Software Profiles\matlab\util\Model\gcd\codegen\mex\glia_Ca_3_3\glia_Ca_3_3.c" TARGET="rtwreport_document_frame">E:\Software Profiles\matlab\util\Model\gcd\codegen\mex\glia_Ca_3_3\glia_Ca_3_3.c</A></H4>
+<PRE id="RTWcode">
+<FONT COLOR="#888888"><I>    1   </I></FONT><FONT COLOR="#117755"><I>/*</I></FONT>
+<FONT COLOR="#888888"><I>    2   </I></FONT><FONT COLOR="#117755"><I> * glia_Ca_3_3.c</I></FONT>
+<FONT COLOR="#888888"><I>    3   </I></FONT><FONT COLOR="#117755"><I> *</I></FONT>
+<FONT COLOR="#888888"><I>    4   </I></FONT><FONT COLOR="#117755"><I> * Code generation for function 'glia_Ca_3_3'</I></FONT>
+<FONT COLOR="#888888"><I>    5   </I></FONT><FONT COLOR="#117755"><I> *</I></FONT>
+<FONT COLOR="#888888"><I>    6   </I></FONT><FONT COLOR="#117755"><I> * C source code generated on: Thu May 19 17:32:19 2011</I></FONT>
+<FONT COLOR="#888888"><I>    7   </I></FONT><FONT COLOR="#117755"><I> *</I></FONT>
+<FONT COLOR="#888888"><I>    8   </I></FONT><FONT COLOR="#117755"><I> */</I></FONT>
+<FONT COLOR="#888888"><I>    9   </I></FONT>
+<FONT COLOR="#888888"><I>   10   </I></FONT><FONT COLOR="#117755"><I>/* Include files */</I></FONT>
+<FONT COLOR="#888888"><I>   11   </I></FONT><FONT COLOR="#992211">#</FONT><FONT COLOR="#992211"><B>include</B></FONT> <FONT COLOR="#992211">&quot;rt_nonfinite.h&quot;</FONT>
+<FONT COLOR="#888888"><I>   12   </I></FONT><FONT COLOR="#992211">#</FONT><FONT COLOR="#992211"><B>include</B></FONT> <FONT COLOR="#992211">&quot;glia_Ca_3_3.h&quot;</FONT>
+<FONT COLOR="#888888"><I>   13   </I></FONT><FONT COLOR="#992211">#</FONT><FONT COLOR="#992211"><B>include</B></FONT> <FONT COLOR="#992211">&quot;mod.h&quot;</FONT>
+<FONT COLOR="#888888"><I>   14   </I></FONT><FONT COLOR="#992211">#</FONT><FONT COLOR="#992211"><B>include</B></FONT> <FONT COLOR="#992211">&quot;length.h&quot;</FONT>
+<FONT COLOR="#888888"><I>   15   </I></FONT><FONT COLOR="#992211">#</FONT><FONT COLOR="#992211"><B>include</B></FONT> <FONT COLOR="#992211">&quot;find.h&quot;</FONT>
+<FONT COLOR="#888888"><I>   16   </I></FONT>
+<FONT COLOR="#888888"><I>   17   </I></FONT><FONT COLOR="#117755"><I>/* Type Definitions */</I></FONT>
+<FONT COLOR="#888888"><I>   18   </I></FONT>
+<FONT COLOR="#888888"><I>   19   </I></FONT><FONT COLOR="#117755"><I>/* Named Constants */</I></FONT>
+<FONT COLOR="#888888"><I>   20   </I></FONT>
+<FONT COLOR="#888888"><I>   21   </I></FONT><FONT COLOR="#117755"><I>/* Variable Declarations */</I></FONT>
+<FONT COLOR="#888888"><I>   22   </I></FONT>
+<FONT COLOR="#888888"><I>   23   </I></FONT><FONT COLOR="#117755"><I>/* Variable Definitions */</I></FONT>
+<FONT COLOR="#888888"><I>   24   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtRSInfo <A NAME="var_emlrtRSI">emlrtRSI</A> = <B>{</B> 32, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   25   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_emlrtBCI">emlrtBCI</A> = <B>{</B> -1, -1, 34, 36, <FONT COLOR="#1122ff">&quot;ip3_rel&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   26   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_b_emlrtBCI">b_emlrtBCI</A> = <B>{</B> -1, -1, 35, 36, <FONT COLOR="#1122ff">&quot;ip3_rel&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   27   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_c_emlrtBCI">c_emlrtBCI</A> = <B>{</B> -1, -1, 36, 43, <FONT COLOR="#1122ff">&quot;ip3_rel&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   28   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_d_emlrtBCI">d_emlrtBCI</A> = <B>{</B> 1, 150, 44, 21, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   29   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_e_emlrtBCI">e_emlrtBCI</A> = <B>{</B> 1, 150, 44, 23, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   30   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_emlrtDCI">emlrtDCI</A> = <B>{</B> 65, 22, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   31   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_f_emlrtBCI">f_emlrtBCI</A> = <B>{</B> 1, 150, 65, 22, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   32   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_b_emlrtDCI">b_emlrtDCI</A> = <B>{</B> 65, 6, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   33   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_g_emlrtBCI">g_emlrtBCI</A> = <B>{</B> 1, 150, 65, 6, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   34   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_emlrtECI">emlrtECI</A> = <B>{</B> -1, 65, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   35   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_h_emlrtBCI">h_emlrtBCI</A> = <B>{</B> 1, 150, 66, 22, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   36   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_c_emlrtDCI">c_emlrtDCI</A> = <B>{</B> 66, 28, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   37   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_i_emlrtBCI">i_emlrtBCI</A> = <B>{</B> 1, 150, 66, 28, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   38   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_d_emlrtDCI">d_emlrtDCI</A> = <B>{</B> 66, 4, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   39   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_j_emlrtBCI">j_emlrtBCI</A> = <B>{</B> 1, 150, 66, 4, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   40   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_e_emlrtDCI">e_emlrtDCI</A> = <B>{</B> 66, 8, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   41   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_k_emlrtBCI">k_emlrtBCI</A> = <B>{</B> 1, 150, 66, 8, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   42   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_b_emlrtECI">b_emlrtECI</A> = <B>{</B> -1, 66, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   43   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_c_emlrtECI">c_emlrtECI</A> = <B>{</B> -1, 67, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   44   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_l_emlrtBCI">l_emlrtBCI</A> = <B>{</B> 1, 150, 68, 33, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   45   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_f_emlrtDCI">f_emlrtDCI</A> = <B>{</B> 68, 14, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   46   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_m_emlrtBCI">m_emlrtBCI</A> = <B>{</B> 1, 150, 68, 14, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   47   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_d_emlrtECI">d_emlrtECI</A> = <B>{</B> -1, 68, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   48   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_e_emlrtECI">e_emlrtECI</A> = <B>{</B> -1, 74, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   49   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_n_emlrtBCI">n_emlrtBCI</A> = <B>{</B> 1, 150, 75, 22, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   50   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_f_emlrtECI">f_emlrtECI</A> = <B>{</B> -1, 75, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   51   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_g_emlrtECI">g_emlrtECI</A> = <B>{</B> -1, 76, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   52   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_o_emlrtBCI">o_emlrtBCI</A> = <B>{</B> 1, 150, 77, 33, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   53   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_h_emlrtECI">h_emlrtECI</A> = <B>{</B> -1, 77, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   54   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_i_emlrtECI">i_emlrtECI</A> = <B>{</B> -1, 83, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   55   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_p_emlrtBCI">p_emlrtBCI</A> = <B>{</B> 1, 150, 84, 22, <FONT COLOR="#1122ff">&quot;H1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   56   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_j_emlrtECI">j_emlrtECI</A> = <B>{</B> -1, 84, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   57   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_k_emlrtECI">k_emlrtECI</A> = <B>{</B> -1, 85, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   58   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_q_emlrtBCI">q_emlrtBCI</A> = <B>{</B> 1, 150, 86, 33, <FONT COLOR="#1122ff">&quot;H1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   59   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtECInfo <A NAME="var_l_emlrtECI">l_emlrtECI</A> = <B>{</B> -1, 86, 1, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT> <B>}</B>;
+<FONT COLOR="#888888"><I>   60   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_r_emlrtBCI">r_emlrtBCI</A> = <B>{</B> 1, 150, 70, 17, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   61   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_s_emlrtBCI">s_emlrtBCI</A> = <B>{</B> 1, 150, 71, 14, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   62   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_t_emlrtBCI">t_emlrtBCI</A> = <B>{</B> 1, 150, 72, 16, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   63   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_u_emlrtBCI">u_emlrtBCI</A> = <B>{</B> 1, 150, 72, 23, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   64   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_v_emlrtBCI">v_emlrtBCI</A> = <B>{</B> 1, 150, 79, 17, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   65   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_w_emlrtBCI">w_emlrtBCI</A> = <B>{</B> 1, 150, 80, 14, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   66   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_x_emlrtBCI">x_emlrtBCI</A> = <B>{</B> 1, 150, 81, 16, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   67   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_y_emlrtBCI">y_emlrtBCI</A> = <B>{</B> 1, 150, 81, 23, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   68   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_ab_emlrtBCI">ab_emlrtBCI</A> = <B>{</B> 1, 150, 88, 17, <FONT COLOR="#1122ff">&quot;H1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   69   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_bb_emlrtBCI">bb_emlrtBCI</A> = <B>{</B> 1, 150, 89, 14, <FONT COLOR="#1122ff">&quot;H1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   70   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_cb_emlrtBCI">cb_emlrtBCI</A> = <B>{</B> 1, 150, 90, 16, <FONT COLOR="#1122ff">&quot;H1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   71   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_db_emlrtBCI">db_emlrtBCI</A> = <B>{</B> 1, 150, 90, 23, <FONT COLOR="#1122ff">&quot;H1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   72   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_eb_emlrtBCI">eb_emlrtBCI</A> = <B>{</B> 1, 150, 47, 39, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   73   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_fb_emlrtBCI">fb_emlrtBCI</A> = <B>{</B> 1, 150, 47, 69, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   74   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_gb_emlrtBCI">gb_emlrtBCI</A> = <B>{</B> 1, 150, 48, 39, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   75   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_hb_emlrtBCI">hb_emlrtBCI</A> = <B>{</B> 1, 150, 48, 69, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   76   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_ib_emlrtBCI">ib_emlrtBCI</A> = <B>{</B> 1, 150, 51, 47, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   77   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_jb_emlrtBCI">jb_emlrtBCI</A> = <B>{</B> 1, 150, 52, 51, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   78   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_kb_emlrtBCI">kb_emlrtBCI</A> = <B>{</B> 1, 150, 52, 16, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   79   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_lb_emlrtBCI">lb_emlrtBCI</A> = <B>{</B> 1, 150, 52, 26, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   80   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_mb_emlrtBCI">mb_emlrtBCI</A> = <B>{</B> 1, 150, 53, 47, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   81   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_nb_emlrtBCI">nb_emlrtBCI</A> = <B>{</B> 1, 150, 54, 51, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   82   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_ob_emlrtBCI">ob_emlrtBCI</A> = <B>{</B> 1, 150, 54, 16, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   83   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_pb_emlrtBCI">pb_emlrtBCI</A> = <B>{</B> 1, 150, 54, 26, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   84   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_qb_emlrtBCI">qb_emlrtBCI</A> = <B>{</B> 1, 150, 57, 49, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   85   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_rb_emlrtBCI">rb_emlrtBCI</A> = <B>{</B> 1, 150, 58, 53, <FONT COLOR="#1122ff">&quot;C&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   86   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_sb_emlrtBCI">sb_emlrtBCI</A> = <B>{</B> 1, 150, 58, 18, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   87   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_tb_emlrtBCI">tb_emlrtBCI</A> = <B>{</B> 1, 150, 58, 28, <FONT COLOR="#1122ff">&quot;C1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   88   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_ub_emlrtBCI">ub_emlrtBCI</A> = <B>{</B> 1, 150, 59, 49, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   89   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_vb_emlrtBCI">vb_emlrtBCI</A> = <B>{</B> 1, 150, 60, 53, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   90   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_wb_emlrtBCI">wb_emlrtBCI</A> = <B>{</B> 1, 150, 60, 18, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   91   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_xb_emlrtBCI">xb_emlrtBCI</A> = <B>{</B> 1, 150, 60, 28, <FONT COLOR="#1122ff">&quot;P1&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   92   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_yb_emlrtBCI">yb_emlrtBCI</A> = <B>{</B> 1, 150, 36, 7, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   93   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_g_emlrtDCI">g_emlrtDCI</A> = <B>{</B> 36, 7, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   94   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_ac_emlrtBCI">ac_emlrtBCI</A> = <B>{</B> 1, 150, 36, 9, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   95   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_h_emlrtDCI">h_emlrtDCI</A> = <B>{</B> 36, 9, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   96   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_bc_emlrtBCI">bc_emlrtBCI</A> = <B>{</B> 1, 150, 36, 14, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   97   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_i_emlrtDCI">i_emlrtDCI</A> = <B>{</B> 36, 14, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>   98   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtBCInfo <A NAME="var_cc_emlrtBCI">cc_emlrtBCI</A> = <B>{</B> 1, 150, 36, 16, <FONT COLOR="#1122ff">&quot;P&quot;</FONT>, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 0 <B>}</B>;
+<FONT COLOR="#888888"><I>   99   </I></FONT><FONT COLOR="#112266"><B>static</B></FONT> emlrtDCInfo <A NAME="var_j_emlrtDCI">j_emlrtDCI</A> = <B>{</B> 36, 16, <FONT COLOR="#1122ff">&quot;glia_Ca_3_3&quot;</FONT>, <FONT COLOR="#1122ff">&quot;E:/Software Profiles/matlab/util/Model/gcd/glia_Ca_3_3.m&quot;</FONT>, 1 <B>}</B>;
+<FONT COLOR="#888888"><I>  100   </I></FONT>
+<FONT COLOR="#888888"><I>  101   </I></FONT><FONT COLOR="#117755"><I>/* Function Declarations */</I></FONT>
+<FONT COLOR="#888888"><I>  102   </I></FONT>
+<FONT COLOR="#888888"><I>  103   </I></FONT><FONT COLOR="#117755"><I>/* Function Definitions */</I></FONT>
+<FONT COLOR="#888888"><I>  104   </I></FONT>
+<FONT COLOR="#888888"><I>  105   </I></FONT><FONT COLOR="#117755"><I>/*</I></FONT>
+<FONT COLOR="#888888"><I>  106   </I></FONT><FONT COLOR="#117755"><I> * function [ C1,P1,H1 ] = glia_Ca_3_3(C,P,H,location_release_amount,Row,Col)</I></FONT>
+<FONT COLOR="#888888"><I>  107   </I></FONT><FONT COLOR="#117755"><I> */</I></FONT>
+<FONT COLOR="#888888"><I>  108   </I></FONT><FONT COLOR="#112266"><B>void</B></FONT> <A NAME="fcn_glia_Ca_3_3">glia_Ca_3_3</A>(real_T C[22500], real_T P[22500], <FONT COLOR="#112266"><B>const</B></FONT> real_T H[22500], <FONT COLOR="#112266"><B>const</B></FONT> real_T location_release_amount[3000], real_T Row, real_T Col, real_T C1[22500], real_T P1[22500], real_T H1[22500])
+<FONT COLOR="#888888"><I>  109   </I></FONT><B>{</B>
+<FONT COLOR="#888888"><I>  110   </I></FONT>    int32_T i0;
+<FONT COLOR="#888888"><I>  111   </I></FONT>    boolean_T b_location_release_amount[1000];
+<FONT COLOR="#888888"><I>  112   </I></FONT>    int32_T ip3_rel_sizes;
+<FONT COLOR="#888888"><I>  113   </I></FONT>    real_T ip3_rel_data[1000];
+<FONT COLOR="#888888"><I>  114   </I></FONT>    real_T loop_ub;
+<FONT COLOR="#888888"><I>  115   </I></FONT>    int32_T i;
+<FONT COLOR="#888888"><I>  116   </I></FONT>    real_T x;
+<FONT COLOR="#888888"><I>  117   </I></FONT>    real_T y;
+<FONT COLOR="#888888"><I>  118   </I></FONT>    real_T b;
+<FONT COLOR="#888888"><I>  119   </I></FONT>    int32_T i1;
+<FONT COLOR="#888888"><I>  120   </I></FONT>    int32_T b_loop_ub;
+<FONT COLOR="#888888"><I>  121   </I></FONT>    int32_T i2;
+<FONT COLOR="#888888"><I>  122   </I></FONT>    int32_T tmp_data[150];
+<FONT COLOR="#888888"><I>  123   </I></FONT>    int32_T iv0[2];
+<FONT COLOR="#888888"><I>  124   </I></FONT>    int32_T C1_sizes[2];
+<FONT COLOR="#888888"><I>  125   </I></FONT>    int32_T b_C1[2];
+<FONT COLOR="#888888"><I>  126   </I></FONT>    real_T C1_data[150];
+<FONT COLOR="#888888"><I>  127   </I></FONT>    int32_T b_Row;
+<FONT COLOR="#888888"><I>  128   </I></FONT>    int32_T b_C1_sizes[2];
+<FONT COLOR="#888888"><I>  129   </I></FONT>    int32_T b_tmp_data[149];
+<FONT COLOR="#888888"><I>  130   </I></FONT>    int32_T iv1[1];
+<FONT COLOR="#888888"><I>  131   </I></FONT>    int32_T c_C1[1];
+<FONT COLOR="#888888"><I>  132   </I></FONT>    real_T b_C1_data[149];
+<FONT COLOR="#888888"><I>  133   </I></FONT>    int32_T P1_sizes[2];
+<FONT COLOR="#888888"><I>  134   </I></FONT>    int32_T b_P1_sizes[2];
+<FONT COLOR="#888888"><I>  135   </I></FONT>    int32_T H1_sizes[2];
+<FONT COLOR="#888888"><I>  136   </I></FONT>    int32_T b_H1_sizes[2];
+<FONT COLOR="#888888"><I>  137   </I></FONT>    <FONT COLOR="#117755"><I>/* GLIA_CA Summary of this function goes here */</I></FONT>
+<FONT COLOR="#888888"><I>  138   </I></FONT>    <FONT COLOR="#117755"><I>/* % Parameters */</I></FONT>
+<FONT COLOR="#888888"><I>  139   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:5' deltaT=0.001; */</I></FONT>
+<FONT COLOR="#888888"><I>  140   </I></FONT>    <FONT COLOR="#117755"><I>/* % Time step interval (s),i.e. 1ms */</I></FONT>
+<FONT COLOR="#888888"><I>  141   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:6' taoh=2.0; */</I></FONT>
+<FONT COLOR="#888888"><I>  142   </I></FONT>    <FONT COLOR="#117755"><I>/* % the time constant for the dynamics of h, unit : s */</I></FONT>
+<FONT COLOR="#888888"><I>  143   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:7' b=0.111; */</I></FONT>
+<FONT COLOR="#888888"><I>  144   </I></FONT>    <FONT COLOR="#117755"><I>/* % Fraction of open IP3 receptors at [Ca2+]=0 */</I></FONT>
+<FONT COLOR="#888888"><I>  145   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:8' V1=0.889; */</I></FONT>
+<FONT COLOR="#888888"><I>  146   </I></FONT>    <FONT COLOR="#117755"><I>/* % the proportion of IP3Rs that are activated by the binding of Ca2+ */</I></FONT>
+<FONT COLOR="#888888"><I>  147   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:9' kp=0.17; */</I></FONT>
+<FONT COLOR="#888888"><I>  148   </I></FONT>    <FONT COLOR="#117755"><I>/* % the linear rate of IP3 breakdown, unit : /s */</I></FONT>
+<FONT COLOR="#888888"><I>  149   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:10' mu0=0.567; */</I></FONT>
+<FONT COLOR="#888888"><I>  150   </I></FONT>    <FONT COLOR="#117755"><I>/* % the proportion of IP3Rs that are activated at [IP3] =0¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  151   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:11' mu1=0.433; */</I></FONT>
+<FONT COLOR="#888888"><I>  152   </I></FONT>    <FONT COLOR="#117755"><I>/* % the proportion of IP3Rs that are activated by bound IP3 */</I></FONT>
+<FONT COLOR="#888888"><I>  153   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:13' kflux=16.2*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  154   </I></FONT>    <FONT COLOR="#117755"><I>/* % the maximum total Ca2+ flux through all IP3Rs, unit : ¦ÌM/s */</I></FONT>
+<FONT COLOR="#888888"><I>  155   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:14' gamma=2.0*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  156   </I></FONT>    <FONT COLOR="#117755"><I>/* % the maximmum rate of Ca2+ pumping from the cytosol, unit : ¦ÌM/s */</I></FONT>
+<FONT COLOR="#888888"><I>  157   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:15' k1=0.7*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  158   </I></FONT>    <FONT COLOR="#117755"><I>/* % Kinetic constant, unit : ¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  159   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:16' k2=0.7*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  160   </I></FONT>    <FONT COLOR="#117755"><I>/* % Kinetic constant, unit : ¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  161   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:17' kgamma=0.1*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  162   </I></FONT>    <FONT COLOR="#117755"><I>/* % Kinetic constant of calcium pumps of ER, unit : ¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  163   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:18' Dp=300/400; */</I></FONT>
+<FONT COLOR="#888888"><I>  164   </I></FONT>    <FONT COLOR="#117755"><I>/* % the cytosolic diffusion coefficients of IP3, unit : (¦Ìm)^2/s */</I></FONT>
+<FONT COLOR="#888888"><I>  165   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:19' Dc=20/400; */</I></FONT>
+<FONT COLOR="#888888"><I>  166   </I></FONT>    <FONT COLOR="#117755"><I>/* % the cytosolic diffusion coefficients of Ca2+, unit : (¦Ìm)^2/s */</I></FONT>
+<FONT COLOR="#888888"><I>  167   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:20' kmu=4*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  168   </I></FONT>    <FONT COLOR="#117755"><I>/* %  Kinetic constant of mu, unit : ¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  169   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:21' peq=0.28*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  170   </I></FONT>    <FONT COLOR="#117755"><I>/* % IP3 resting concentration, unit : uM */</I></FONT>
+<FONT COLOR="#888888"><I>  171   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:23' Fp=5/20; */</I></FONT>
+<FONT COLOR="#888888"><I>  172   </I></FONT>    <FONT COLOR="#117755"><I>/* % IP3 permeability of the cell membrane, unit : ¦Ìm/s */</I></FONT>
+<FONT COLOR="#888888"><I>  173   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:24' Fc=1.1/20; */</I></FONT>
+<FONT COLOR="#888888"><I>  174   </I></FONT>    <FONT COLOR="#117755"><I>/* % Ca2+ permeability of the cell membrane, unit : ¦Ìm/s */</I></FONT>
+<FONT COLOR="#888888"><I>  175   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:26' C1=ones(150,150); */</I></FONT>
+<FONT COLOR="#888888"><I>  176   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt; 22500; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  177   </I></FONT>        C1[i0] = 1.0;
+<FONT COLOR="#888888"><I>  178   </I></FONT>        <FONT COLOR="#117755"><I>/* % the cytosolic free calcium concentration, unit : ¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  179   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:27' P1=ones(150,150); */</I></FONT>
+<FONT COLOR="#888888"><I>  180   </I></FONT>        P1[i0] = 1.0;
+<FONT COLOR="#888888"><I>  181   </I></FONT>        <FONT COLOR="#117755"><I>/* % the cytosolic IP3 concentration, unit : ¦ÌM */</I></FONT>
+<FONT COLOR="#888888"><I>  182   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:28' H1=ones(150,150); */</I></FONT>
+<FONT COLOR="#888888"><I>  183   </I></FONT>        H1[i0] = 1.0;
+<FONT COLOR="#888888"><I>  184   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  185   </I></FONT>    <FONT COLOR="#117755"><I>/* % the proportion of IP3Rs that have not been closed by Ca2+ */</I></FONT>
+<FONT COLOR="#888888"><I>  186   </I></FONT>    <FONT COLOR="#117755"><I>/* % Calculation */</I></FONT>
+<FONT COLOR="#888888"><I>  187   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:32' ip3_rel=find(location_release_amount(:,3)~=0); */</I></FONT>
+<FONT COLOR="#888888"><I>  188   </I></FONT>    EMLRTPUSHRTSTACK(&amp;<A HREF="glia_Ca_3_3_c.html#var_emlrtRSI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtRSI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtRSI</FONT></A>);
+<FONT COLOR="#888888"><I>  189   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt; 1000; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  190   </I></FONT>        b_location_release_amount[i0] = (location_release_amount[2000 + i0] != 0.0);
+<FONT COLOR="#888888"><I>  191   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  192   </I></FONT>    <A HREF="find_c.html#fcn_find" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_find');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">find</FONT></A>(b_location_release_amount, ip3_rel_data, &amp;ip3_rel_sizes);
+<FONT COLOR="#888888"><I>  193   </I></FONT>    EMLRTPOPRTSTACK(&amp;<A HREF="glia_Ca_3_3_c.html#var_emlrtRSI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtRSI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtRSI</FONT></A>);
+<FONT COLOR="#888888"><I>  194   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:33' for i=1:length(ip3_rel) */</I></FONT>
+<FONT COLOR="#888888"><I>  195   </I></FONT>    loop_ub = <A HREF="length_c.html#fcn_length" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_length');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">length</FONT></A>(ip3_rel_data, *(int32_T (*)[1])&amp;ip3_rel_sizes);
+<FONT COLOR="#888888"><I>  196   </I></FONT>    i = 1;
+<FONT COLOR="#888888"><I>  197   </I></FONT>    <FONT COLOR="#112266"><B>while</B></FONT> ((real_T)i &lt;= loop_ub) <B>{</B>
+<FONT COLOR="#888888"><I>  198   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:34' x=ceil(location_release_amount(ip3_rel(i),1)/20); */</I></FONT>
+<FONT COLOR="#888888"><I>  199   </I></FONT>        emlrtDynamicBoundsCheckR2011a(i, 1, ip3_rel_sizes, &amp;<A HREF="glia_Ca_3_3_c.html#var_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  200   </I></FONT>        x = muDoubleScalarCeil(location_release_amount[(int32_T)ip3_rel_data[i - 1] - 1] / 20.0);
+<FONT COLOR="#888888"><I>  201   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:35' y=ceil(location_release_amount(ip3_rel(i),2)/20); */</I></FONT>
+<FONT COLOR="#888888"><I>  202   </I></FONT>        emlrtDynamicBoundsCheckR2011a(i, 1, ip3_rel_sizes, &amp;<A HREF="glia_Ca_3_3_c.html#var_b_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_b_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">b_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  203   </I></FONT>        y = muDoubleScalarCeil(location_release_amount[(int32_T)ip3_rel_data[i - 1] + 999] / 20.0);
+<FONT COLOR="#888888"><I>  204   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:36' P(x,y)=P(x,y)+location_release_amount(ip3_rel(i),3)*0.009; */</I></FONT>
+<FONT COLOR="#888888"><I>  205   </I></FONT>        emlrtDynamicBoundsCheckR2011a(i, 1, ip3_rel_sizes, &amp;<A HREF="glia_Ca_3_3_c.html#var_c_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_c_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">c_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  206   </I></FONT>        P[(emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(x, &amp;<A HREF="glia_Ca_3_3_c.html#var_g_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_g_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">g_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_yb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_yb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">yb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * (emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(y, &amp;<A HREF="glia_Ca_3_3_c.html#var_h_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_h_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">h_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_ac_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_ac_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">ac_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)) - 1] = P[(emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(x, &amp;<A HREF="glia_Ca_3_3_c.html#var_i_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_i_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">i_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_bc_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_bc_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">bc_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * (emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(y, &amp;<A HREF="glia_Ca_3_3_c.html#var_j_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_j_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">j_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_cc_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_cc_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">cc_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)) - 1] + location_release_amount[(int32_T)ip3_rel_data[i - 1] + 1999] * 0.009;
+<FONT COLOR="#888888"><I>  207   </I></FONT>        i++;
+<FONT COLOR="#888888"><I>  208   </I></FONT>        emlrtBreakCheck();
+<FONT COLOR="#888888"><I>  209   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  210   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:39' C=C*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  211   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt; 22500; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  212   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:40' P=P*400; */</I></FONT>
+<FONT COLOR="#888888"><I>  213   </I></FONT>        P[i0] *= 400.0;
+<FONT COLOR="#888888"><I>  214   </I></FONT>        C[i0] *= 400.0;
+<FONT COLOR="#888888"><I>  215   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  216   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:42' for j=2:(Col-1) */</I></FONT>
+<FONT COLOR="#888888"><I>  217   </I></FONT>    loop_ub = Col - 1.0;
+<FONT COLOR="#888888"><I>  218   </I></FONT>    x = 2.0;
+<FONT COLOR="#888888"><I>  219   </I></FONT>    <FONT COLOR="#112266"><B>while</B></FONT> (x &lt;= loop_ub) <B>{</B>
+<FONT COLOR="#888888"><I>  220   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:43' for i=2:(Row-1) */</I></FONT>
+<FONT COLOR="#888888"><I>  221   </I></FONT>        y = Row - 1.0;
+<FONT COLOR="#888888"><I>  222   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  223   </I></FONT>        <FONT COLOR="#112266"><B>while</B></FONT> ((real_T)(i + 1) &lt;= y) <B>{</B>
+<FONT COLOR="#888888"><I>  224   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:44' old_cij = C(i,j); */</I></FONT>
+<FONT COLOR="#888888"><I>  225   </I></FONT>            emlrtBoundsCheckR2011a(i + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_d_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_d_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">d_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  226   </I></FONT>            emlrtBoundsCheckR2011a((int32_T)x, &amp;<A HREF="glia_Ca_3_3_c.html#var_e_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_e_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">e_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  227   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:45' old_pij = P(i,j); */</I></FONT>
+<FONT COLOR="#888888"><I>  228   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:46' old_hij = H(i,j); */</I></FONT>
+<FONT COLOR="#888888"><I>  229   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:47' C1(i,j)=old_cij+deltaT*(Dc*(C(i+1,j)-2*old_cij+C(i-1,j)+C(i,j+1)-2*old_cij+C(i,j-1))+kflux*(mu0+mu1*P(i,j)/(kmu+P(i,j)))*H(i,j)*(b+V1*old_cij/(k1+old_cij))-gamma*old_cij/(kgamma+old_cij)); */</I></FONT>
+<FONT COLOR="#888888"><I>  230   </I></FONT>            b = ((((C[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_eb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_eb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">eb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1] - 2.0 * C[i + 150 * ((int32_T)x - 1)]) + C[(i + 150 * ((int32_T)x - 1)) - 1]) + C[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_fb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_fb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">fb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)]) - 2.0 * C[i + 150 * ((int32_T)x - 1)]) + C[i + 150 * ((int32_T)x - 2)];
+<FONT COLOR="#888888"><I>  231   </I></FONT>            C1[i + 150 * ((int32_T)x - 1)] = C[i + 150 * ((int32_T)x - 1)] + 0.001 * ((0.05 * b + 6480.0 * (0.567 + 0.433 * P[i + 150 * ((int32_T)x - 1)] / (1600.0 + P[i + 150 * ((int32_T)x - 1)])) * H[i + 150 * ((int32_T)x - 1)] * (0.111 + 0.889 * C[i + 150 * ((int32_T)x - 1)] / (280.0 + C[i + 150 * ((int32_T)x - 1)]))) - 800.0 * C[i + 150 * ((int32_T)x - 1)] / (40.0 + C[i + 150 * ((int32_T)x - 1)]));
+<FONT COLOR="#888888"><I>  232   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:48' P1(i,j)=old_pij+deltaT*(Dp*(P(i+1,j)-2*old_pij+P(i-1,j)+P(i,j+1)-2*old_pij+P(i,j-1))+kp*(peq-old_pij)); */</I></FONT>
+<FONT COLOR="#888888"><I>  233   </I></FONT>            b = ((((P[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_gb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_gb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">gb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1] - 2.0 * P[i + 150 * ((int32_T)x - 1)]) + P[(i + 150 * ((int32_T)x - 1)) - 1]) + P[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_hb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_hb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">hb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)]) - 2.0 * P[i + 150 * ((int32_T)x - 1)]) + P[i + 150 * ((int32_T)x - 2)];
+<FONT COLOR="#888888"><I>  234   </I></FONT>            P1[i + 150 * ((int32_T)x - 1)] = P[i + 150 * ((int32_T)x - 1)] + 0.001 * (0.75 * b + 0.17 * (112.00000000000001 - P[i + 150 * ((int32_T)x - 1)]));
+<FONT COLOR="#888888"><I>  235   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:49' H1(i,j)=old_hij+deltaT*(k2^2/(k2^2+old_cij^2)-old_hij)/taoh; */</I></FONT>
+<FONT COLOR="#888888"><I>  236   </I></FONT>            H1[i + 150 * ((int32_T)x - 1)] = H[i + 150 * ((int32_T)x - 1)] + 0.001 * (78400.0 / (78400.0 + muDoubleScalarPower(C[i + 150 * ((int32_T)x - 1)], 2.0)) - H[i + 150 * ((int32_T)x - 1)]) / 2.0;
+<FONT COLOR="#888888"><I>  237   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:50' if(mod(i,3)==0) */</I></FONT>
+<FONT COLOR="#888888"><I>  238   </I></FONT>            <FONT COLOR="#112266"><B>if</B></FONT> (<A HREF="mod_c.html#fcn_b_mod" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_b_mod');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">b_mod</FONT></A>((real_T)(i + 1), 3.0) == 0.0) <B>{</B>
+<FONT COLOR="#888888"><I>  239   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:51' C1(i,j)=C1(i,j)-deltaT*(old_cij-C(i+1,j))*Fc; */</I></FONT>
+<FONT COLOR="#888888"><I>  240   </I></FONT>                b = C[i + 150 * ((int32_T)x - 1)] - C[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_ib_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_ib_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">ib_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1];
+<FONT COLOR="#888888"><I>  241   </I></FONT>                C1[i + 150 * ((int32_T)x - 1)] -= 0.001 * b * 0.055000000000000007;
+<FONT COLOR="#888888"><I>  242   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:52' C1(i+1,j)=C1(i+1,j)+deltaT*(old_cij-C(i+1,j))*Fc; */</I></FONT>
+<FONT COLOR="#888888"><I>  243   </I></FONT>                b = C[i + 150 * ((int32_T)x - 1)] - C[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_jb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_jb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">jb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1];
+<FONT COLOR="#888888"><I>  244   </I></FONT>                C1[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_kb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_kb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">kb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1] = C1[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_lb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_lb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">lb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1] + 0.001 * b * 0.055000000000000007;
+<FONT COLOR="#888888"><I>  245   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:53' P1(i,j)=P1(i,j)-deltaT*(old_pij-P(i+1,j))*Fp; */</I></FONT>
+<FONT COLOR="#888888"><I>  246   </I></FONT>                b = P[i + 150 * ((int32_T)x - 1)] - P[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_mb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_mb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">mb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1];
+<FONT COLOR="#888888"><I>  247   </I></FONT>                P1[i + 150 * ((int32_T)x - 1)] -= 0.001 * b * 0.25;
+<FONT COLOR="#888888"><I>  248   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:54' P1(i+1,j)=P1(i+1,j)+deltaT*(old_pij-P(i+1,j))*Fp; */</I></FONT>
+<FONT COLOR="#888888"><I>  249   </I></FONT>                b = P[i + 150 * ((int32_T)x - 1)] - P[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_nb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_nb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">nb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1];
+<FONT COLOR="#888888"><I>  250   </I></FONT>                P1[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_ob_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_ob_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">ob_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1] = P1[(emlrtBoundsCheckR2011a(i + 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_pb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_pb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">pb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * ((int32_T)x - 1)) - 1] + 0.001 * b * 0.25;
+<FONT COLOR="#888888"><I>  251   </I></FONT>            <B>}</B>
+<FONT COLOR="#888888"><I>  252   </I></FONT>            <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:56' if(mod(j,3)==0) */</I></FONT>
+<FONT COLOR="#888888"><I>  253   </I></FONT>            <FONT COLOR="#112266"><B>if</B></FONT> (<A HREF="mod_c.html#fcn_b_mod" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_b_mod');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">b_mod</FONT></A>(x, 3.0) == 0.0) <B>{</B>
+<FONT COLOR="#888888"><I>  254   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:57' C1(i,j)=C1(i,j)-deltaT*(old_cij-C(i,j+1))*Fc; */</I></FONT>
+<FONT COLOR="#888888"><I>  255   </I></FONT>                b = C[i + 150 * ((int32_T)x - 1)] - C[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_qb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_qb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">qb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  256   </I></FONT>                C1[i + 150 * ((int32_T)x - 1)] -= 0.001 * b * 0.055000000000000007;
+<FONT COLOR="#888888"><I>  257   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:58' C1(i,j+1)=C1(i,j+1)+deltaT*(old_cij-C(i,j+1))*Fc; */</I></FONT>
+<FONT COLOR="#888888"><I>  258   </I></FONT>                b = C[i + 150 * ((int32_T)x - 1)] - C[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_rb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">rb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  259   </I></FONT>                C1[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_sb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_sb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">sb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)] = C1[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_tb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_tb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">tb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)] + 0.001 * b * 0.055000000000000007;
+<FONT COLOR="#888888"><I>  260   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:59' P1(i,j)=P1(i,j)-deltaT*(old_pij-P(i,j+1))*Fp; */</I></FONT>
+<FONT COLOR="#888888"><I>  261   </I></FONT>                b = P[i + 150 * ((int32_T)x - 1)] - P[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_ub_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_ub_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">ub_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  262   </I></FONT>                P1[i + 150 * ((int32_T)x - 1)] -= 0.001 * b * 0.25;
+<FONT COLOR="#888888"><I>  263   </I></FONT>                <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:60' P1(i,j+1)=P1(i,j+1)+deltaT*(old_pij-P(i,j+1))*Fp; */</I></FONT>
+<FONT COLOR="#888888"><I>  264   </I></FONT>                b = P[i + 150 * ((int32_T)x - 1)] - P[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_vb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_vb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">vb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  265   </I></FONT>                P1[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_wb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_wb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">wb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)] = P1[i + 150 * (emlrtBoundsCheckR2011a((int32_T)x + 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_xb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_xb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">xb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)] + 0.001 * b * 0.25;
+<FONT COLOR="#888888"><I>  266   </I></FONT>            <B>}</B>
+<FONT COLOR="#888888"><I>  267   </I></FONT>            i++;
+<FONT COLOR="#888888"><I>  268   </I></FONT>            emlrtBreakCheck();
+<FONT COLOR="#888888"><I>  269   </I></FONT>        <B>}</B>
+<FONT COLOR="#888888"><I>  270   </I></FONT>        x++;
+<FONT COLOR="#888888"><I>  271   </I></FONT>        emlrtBreakCheck();
+<FONT COLOR="#888888"><I>  272   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  273   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:65' C1(1,2:(Col-1))=C1(2,2:(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  274   </I></FONT>    x = Col - 1.0;
+<FONT COLOR="#888888"><I>  275   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2.0 &gt; x) <B>{</B>
+<FONT COLOR="#888888"><I>  276   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  277   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  278   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  279   </I></FONT>        i0 = 1;
+<FONT COLOR="#888888"><I>  280   </I></FONT>        i1 = emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(x, &amp;<A HREF="glia_Ca_3_3_c.html#var_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_f_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_f_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">f_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  281   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  282   </I></FONT>    x = Col - 1.0;
+<FONT COLOR="#888888"><I>  283   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2.0 &gt; x) <B>{</B>
+<FONT COLOR="#888888"><I>  284   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  285   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  286   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  287   </I></FONT>        ip3_rel_sizes = 1;
+<FONT COLOR="#888888"><I>  288   </I></FONT>        i = emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(x, &amp;<A HREF="glia_Ca_3_3_c.html#var_b_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_b_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">b_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_g_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_g_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">g_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  289   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  290   </I></FONT>    b_loop_ub = (i - ip3_rel_sizes) - 1;
+<FONT COLOR="#888888"><I>  291   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  292   </I></FONT>        tmp_data[i2] = ip3_rel_sizes + i2;
+<FONT COLOR="#888888"><I>  293   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  294   </I></FONT>    iv0[0] = 1;
+<FONT COLOR="#888888"><I>  295   </I></FONT>    iv0[1] = i - ip3_rel_sizes;
+<FONT COLOR="#888888"><I>  296   </I></FONT>    C1_sizes[0] = 1;
+<FONT COLOR="#888888"><I>  297   </I></FONT>    C1_sizes[1] = i1 - i0;
+<FONT COLOR="#888888"><I>  298   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (ip3_rel_sizes = 0; ip3_rel_sizes &lt; 2; ip3_rel_sizes++) <B>{</B>
+<FONT COLOR="#888888"><I>  299   </I></FONT>        b_C1[ip3_rel_sizes] = C1_sizes[ip3_rel_sizes];
+<FONT COLOR="#888888"><I>  300   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  301   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv0, 2, b_C1, 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  302   </I></FONT>    ip3_rel_sizes = i1 - i0;
+<FONT COLOR="#888888"><I>  303   </I></FONT>    b_loop_ub = (i1 - i0) - 1;
+<FONT COLOR="#888888"><I>  304   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i1 = 0; i1 &lt;= b_loop_ub; i1++) <B>{</B>
+<FONT COLOR="#888888"><I>  305   </I></FONT>        C1_data[i1] = C1[1 + 150 * (i0 + i1)];
+<FONT COLOR="#888888"><I>  306   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  307   </I></FONT>    b_loop_ub = ip3_rel_sizes - 1;
+<FONT COLOR="#888888"><I>  308   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  309   </I></FONT>        C1[150 * tmp_data[i0]] = C1_data[i0];
+<FONT COLOR="#888888"><I>  310   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  311   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:66' C1(Row,2:(Col-1))=C1(Row-1,2:(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  312   </I></FONT>    x = Col - 1.0;
+<FONT COLOR="#888888"><I>  313   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2.0 &gt; x) <B>{</B>
+<FONT COLOR="#888888"><I>  314   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  315   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  316   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  317   </I></FONT>        i0 = 1;
+<FONT COLOR="#888888"><I>  318   </I></FONT>        i1 = emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(x, &amp;<A HREF="glia_Ca_3_3_c.html#var_c_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_c_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">c_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_i_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_i_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">i_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  319   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  320   </I></FONT>    x = Col - 1.0;
+<FONT COLOR="#888888"><I>  321   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2.0 &gt; x) <B>{</B>
+<FONT COLOR="#888888"><I>  322   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  323   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  324   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  325   </I></FONT>        ip3_rel_sizes = 1;
+<FONT COLOR="#888888"><I>  326   </I></FONT>        i = emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(x, &amp;<A HREF="glia_Ca_3_3_c.html#var_e_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_e_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">e_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_k_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_k_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">k_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  327   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  328   </I></FONT>    i2 = emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(Row, &amp;<A HREF="glia_Ca_3_3_c.html#var_d_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_d_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">d_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_j_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_j_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">j_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1;
+<FONT COLOR="#888888"><I>  329   </I></FONT>    b_loop_ub = (i - ip3_rel_sizes) - 1;
+<FONT COLOR="#888888"><I>  330   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (b_Row = 0; b_Row &lt;= b_loop_ub; b_Row++) <B>{</B>
+<FONT COLOR="#888888"><I>  331   </I></FONT>        tmp_data[b_Row] = ip3_rel_sizes + b_Row;
+<FONT COLOR="#888888"><I>  332   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  333   </I></FONT>    emlrtBoundsCheckR2011a((int32_T)(Row - 1.0), &amp;<A HREF="glia_Ca_3_3_c.html#var_h_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_h_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">h_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  334   </I></FONT>    iv0[0] = 1;
+<FONT COLOR="#888888"><I>  335   </I></FONT>    iv0[1] = i - ip3_rel_sizes;
+<FONT COLOR="#888888"><I>  336   </I></FONT>    b_C1_sizes[0] = 1;
+<FONT COLOR="#888888"><I>  337   </I></FONT>    b_C1_sizes[1] = i1 - i0;
+<FONT COLOR="#888888"><I>  338   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (ip3_rel_sizes = 0; ip3_rel_sizes &lt; 2; ip3_rel_sizes++) <B>{</B>
+<FONT COLOR="#888888"><I>  339   </I></FONT>        b_C1[ip3_rel_sizes] = b_C1_sizes[ip3_rel_sizes];
+<FONT COLOR="#888888"><I>  340   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  341   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv0, 2, b_C1, 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_b_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_b_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">b_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  342   </I></FONT>    b_Row = (int32_T)Row;
+<FONT COLOR="#888888"><I>  343   </I></FONT>    ip3_rel_sizes = i1 - i0;
+<FONT COLOR="#888888"><I>  344   </I></FONT>    b_loop_ub = (i1 - i0) - 1;
+<FONT COLOR="#888888"><I>  345   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i1 = 0; i1 &lt;= b_loop_ub; i1++) <B>{</B>
+<FONT COLOR="#888888"><I>  346   </I></FONT>        C1_data[i1] = C1[(b_Row + 150 * (i0 + i1)) - 2];
+<FONT COLOR="#888888"><I>  347   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  348   </I></FONT>    b_loop_ub = ip3_rel_sizes - 1;
+<FONT COLOR="#888888"><I>  349   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  350   </I></FONT>        C1[i2 + 150 * tmp_data[i0]] = C1_data[i0];
+<FONT COLOR="#888888"><I>  351   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  352   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:67' C1(2:(Row-1),1)=C1(2:(Row-1),2); */</I></FONT>
+<FONT COLOR="#888888"><I>  353   </I></FONT>    i0 = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  354   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  355   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  356   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  357   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  358   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  359   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  360   </I></FONT>    ip3_rel_sizes = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  361   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  362   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  363   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  364   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  365   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  366   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  367   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  368   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  369   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  370   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  371   </I></FONT>    iv1[0] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  372   </I></FONT>    c_C1[0] = i0 - i1;
+<FONT COLOR="#888888"><I>  373   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv1, 1, c_C1, 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_c_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_c_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">c_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  374   </I></FONT>    ip3_rel_sizes = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  375   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  376   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  377   </I></FONT>        b_C1_data[i0] = C1[150 + (i1 + i0)];
+<FONT COLOR="#888888"><I>  378   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  379   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= ip3_rel_sizes; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  380   </I></FONT>        C1[b_tmp_data[i0]] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  381   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  382   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:68' C1(2:(Row-1),Col)=C1(2:(Row-1),(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  383   </I></FONT>    i0 = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  384   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  385   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  386   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  387   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  388   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  389   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  390   </I></FONT>    ip3_rel_sizes = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  391   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  392   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  393   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  394   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  395   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  396   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  397   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  398   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  399   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  400   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  401   </I></FONT>    i2 = emlrtBoundsCheckR2011a((int32_T)emlrtIntegerCheckR2011a(Col, &amp;<A HREF="glia_Ca_3_3_c.html#var_f_emlrtDCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_f_emlrtDCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">f_emlrtDCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>), &amp;<A HREF="glia_Ca_3_3_c.html#var_m_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_m_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">m_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1;
+<FONT COLOR="#888888"><I>  402   </I></FONT>    emlrtBoundsCheckR2011a((int32_T)(Col - 1.0), &amp;<A HREF="glia_Ca_3_3_c.html#var_l_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_l_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">l_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  403   </I></FONT>    iv1[0] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  404   </I></FONT>    c_C1[0] = i0 - i1;
+<FONT COLOR="#888888"><I>  405   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv1, 1, c_C1, 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_d_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_d_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">d_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  406   </I></FONT>    b_Row = (int32_T)Col;
+<FONT COLOR="#888888"><I>  407   </I></FONT>    ip3_rel_sizes = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  408   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  409   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  410   </I></FONT>        b_C1_data[i0] = C1[(i1 + i0) + 150 * (b_Row - 2)];
+<FONT COLOR="#888888"><I>  411   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  412   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= ip3_rel_sizes; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  413   </I></FONT>        C1[b_tmp_data[i0] + 150 * i2] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  414   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  415   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:69' C1(1,1)=C1(2,2); */</I></FONT>
+<FONT COLOR="#888888"><I>  416   </I></FONT>    C1[0] = C1[151];
+<FONT COLOR="#888888"><I>  417   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:70' C1(1,Col)=C1(2,(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  418   </I></FONT>    C1[150 * ((int32_T)Col - 1)] = C1[1 + 150 * (emlrtBoundsCheckR2011a((int32_T)Col - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_r_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_r_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">r_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  419   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:71' C1(Row,1)=C1(Row-1,2); */</I></FONT>
+<FONT COLOR="#888888"><I>  420   </I></FONT>    C1[(int32_T)Row - 1] = C1[emlrtBoundsCheckR2011a((int32_T)Row - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_s_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_s_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">s_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 149];
+<FONT COLOR="#888888"><I>  421   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:72' C1(Row,Col)=C1(Row-1,(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  422   </I></FONT>    C1[((int32_T)Row + 150 * ((int32_T)Col - 1)) - 1] = C1[(emlrtBoundsCheckR2011a((int32_T)Row - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_t_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_t_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">t_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * (emlrtBoundsCheckR2011a((int32_T)Col - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_u_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_u_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">u_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)) - 1];
+<FONT COLOR="#888888"><I>  423   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:74' P1(1,2:(Col-1))=P1(2,2:(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  424   </I></FONT>    i0 = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  425   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  426   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  427   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  428   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  429   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  430   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  431   </I></FONT>    ip3_rel_sizes = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  432   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  433   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  434   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  435   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  436   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  437   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  438   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  439   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  440   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  441   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  442   </I></FONT>    iv0[0] = 1;
+<FONT COLOR="#888888"><I>  443   </I></FONT>    iv0[1] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  444   </I></FONT>    P1_sizes[0] = 1;
+<FONT COLOR="#888888"><I>  445   </I></FONT>    P1_sizes[1] = i0 - i1;
+<FONT COLOR="#888888"><I>  446   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (ip3_rel_sizes = 0; ip3_rel_sizes &lt; 2; ip3_rel_sizes++) <B>{</B>
+<FONT COLOR="#888888"><I>  447   </I></FONT>        C1_sizes[ip3_rel_sizes] = P1_sizes[ip3_rel_sizes];
+<FONT COLOR="#888888"><I>  448   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  449   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv0, 2, C1_sizes, 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_e_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_e_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">e_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  450   </I></FONT>    ip3_rel_sizes = i0 - i1;
+<FONT COLOR="#888888"><I>  451   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  452   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  453   </I></FONT>        b_C1_data[i0] = P1[1 + 150 * (i1 + i0)];
+<FONT COLOR="#888888"><I>  454   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  455   </I></FONT>    b_loop_ub = ip3_rel_sizes - 1;
+<FONT COLOR="#888888"><I>  456   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  457   </I></FONT>        P1[150 * b_tmp_data[i0]] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  458   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  459   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:75' P1(Row,2:(Col-1))=P1(Row-1,2:(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  460   </I></FONT>    i0 = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  461   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  462   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  463   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  464   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  465   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  466   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  467   </I></FONT>    ip3_rel_sizes = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  468   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  469   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  470   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  471   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  472   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  473   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  474   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  475   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  476   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  477   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  478   </I></FONT>    emlrtBoundsCheckR2011a((int32_T)(Row - 1.0), &amp;<A HREF="glia_Ca_3_3_c.html#var_n_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_n_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">n_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  479   </I></FONT>    iv0[0] = 1;
+<FONT COLOR="#888888"><I>  480   </I></FONT>    iv0[1] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  481   </I></FONT>    b_P1_sizes[0] = 1;
+<FONT COLOR="#888888"><I>  482   </I></FONT>    b_P1_sizes[1] = i0 - i1;
+<FONT COLOR="#888888"><I>  483   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (ip3_rel_sizes = 0; ip3_rel_sizes &lt; 2; ip3_rel_sizes++) <B>{</B>
+<FONT COLOR="#888888"><I>  484   </I></FONT>        C1_sizes[ip3_rel_sizes] = b_P1_sizes[ip3_rel_sizes];
+<FONT COLOR="#888888"><I>  485   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  486   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv0, 2, C1_sizes, 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_f_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_f_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">f_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  487   </I></FONT>    b_Row = (int32_T)Row;
+<FONT COLOR="#888888"><I>  488   </I></FONT>    i = (int32_T)Row;
+<FONT COLOR="#888888"><I>  489   </I></FONT>    ip3_rel_sizes = i0 - i1;
+<FONT COLOR="#888888"><I>  490   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  491   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  492   </I></FONT>        b_C1_data[i0] = P1[(i + 150 * (i1 + i0)) - 2];
+<FONT COLOR="#888888"><I>  493   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  494   </I></FONT>    b_loop_ub = ip3_rel_sizes - 1;
+<FONT COLOR="#888888"><I>  495   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  496   </I></FONT>        P1[(b_Row + 150 * b_tmp_data[i0]) - 1] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  497   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  498   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:76' P1(2:(Row-1),1)=P1(2:(Row-1),2); */</I></FONT>
+<FONT COLOR="#888888"><I>  499   </I></FONT>    i0 = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  500   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  501   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  502   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  503   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  504   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  505   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  506   </I></FONT>    ip3_rel_sizes = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  507   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  508   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  509   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  510   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  511   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  512   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  513   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  514   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  515   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  516   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  517   </I></FONT>    iv1[0] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  518   </I></FONT>    c_C1[0] = i0 - i1;
+<FONT COLOR="#888888"><I>  519   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv1, 1, c_C1, 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_g_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_g_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">g_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  520   </I></FONT>    ip3_rel_sizes = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  521   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  522   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  523   </I></FONT>        b_C1_data[i0] = P1[150 + (i1 + i0)];
+<FONT COLOR="#888888"><I>  524   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  525   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= ip3_rel_sizes; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  526   </I></FONT>        P1[b_tmp_data[i0]] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  527   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  528   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:77' P1(2:(Row-1),Col)=P1(2:(Row-1),(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  529   </I></FONT>    i0 = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  530   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  531   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  532   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  533   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  534   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  535   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  536   </I></FONT>    ip3_rel_sizes = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  537   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  538   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  539   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  540   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  541   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  542   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  543   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  544   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  545   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  546   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  547   </I></FONT>    emlrtBoundsCheckR2011a((int32_T)(Col - 1.0), &amp;<A HREF="glia_Ca_3_3_c.html#var_o_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_o_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">o_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  548   </I></FONT>    iv1[0] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  549   </I></FONT>    c_C1[0] = i0 - i1;
+<FONT COLOR="#888888"><I>  550   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv1, 1, c_C1, 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_h_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_h_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">h_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  551   </I></FONT>    b_Row = (int32_T)Col;
+<FONT COLOR="#888888"><I>  552   </I></FONT>    i = (int32_T)Col;
+<FONT COLOR="#888888"><I>  553   </I></FONT>    ip3_rel_sizes = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  554   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  555   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  556   </I></FONT>        b_C1_data[i0] = P1[(i1 + i0) + 150 * (i - 2)];
+<FONT COLOR="#888888"><I>  557   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  558   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= ip3_rel_sizes; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  559   </I></FONT>        P1[b_tmp_data[i0] + 150 * (b_Row - 1)] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  560   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  561   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:78' P1(1,1)=P1(2,2); */</I></FONT>
+<FONT COLOR="#888888"><I>  562   </I></FONT>    P1[0] = P1[151];
+<FONT COLOR="#888888"><I>  563   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:79' P1(1,Col)=P1(2,(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  564   </I></FONT>    P1[150 * ((int32_T)Col - 1)] = P1[1 + 150 * (emlrtBoundsCheckR2011a((int32_T)Col - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_v_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_v_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">v_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  565   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:80' P1(Row,1)=P1(Row-1,2); */</I></FONT>
+<FONT COLOR="#888888"><I>  566   </I></FONT>    P1[(int32_T)Row - 1] = P1[emlrtBoundsCheckR2011a((int32_T)Row - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_w_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_w_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">w_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 149];
+<FONT COLOR="#888888"><I>  567   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:81' P1(Row,Col)=P1(Row-1,(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  568   </I></FONT>    P1[((int32_T)Row + 150 * ((int32_T)Col - 1)) - 1] = P1[(emlrtBoundsCheckR2011a((int32_T)Row - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_x_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_x_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">x_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * (emlrtBoundsCheckR2011a((int32_T)Col - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_y_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_y_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">y_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)) - 1];
+<FONT COLOR="#888888"><I>  569   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:83' H1(1,2:(Col-1))=H1(2,2:(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  570   </I></FONT>    i0 = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  571   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  572   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  573   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  574   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  575   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  576   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  577   </I></FONT>    ip3_rel_sizes = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  578   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  579   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  580   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  581   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  582   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  583   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  584   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  585   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  586   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  587   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  588   </I></FONT>    iv0[0] = 1;
+<FONT COLOR="#888888"><I>  589   </I></FONT>    iv0[1] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  590   </I></FONT>    H1_sizes[0] = 1;
+<FONT COLOR="#888888"><I>  591   </I></FONT>    H1_sizes[1] = i0 - i1;
+<FONT COLOR="#888888"><I>  592   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (ip3_rel_sizes = 0; ip3_rel_sizes &lt; 2; ip3_rel_sizes++) <B>{</B>
+<FONT COLOR="#888888"><I>  593   </I></FONT>        C1_sizes[ip3_rel_sizes] = H1_sizes[ip3_rel_sizes];
+<FONT COLOR="#888888"><I>  594   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  595   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv0, 2, C1_sizes, 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_i_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_i_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">i_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  596   </I></FONT>    ip3_rel_sizes = i0 - i1;
+<FONT COLOR="#888888"><I>  597   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  598   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  599   </I></FONT>        b_C1_data[i0] = H1[1 + 150 * (i1 + i0)];
+<FONT COLOR="#888888"><I>  600   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  601   </I></FONT>    b_loop_ub = ip3_rel_sizes - 1;
+<FONT COLOR="#888888"><I>  602   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  603   </I></FONT>        H1[150 * b_tmp_data[i0]] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  604   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  605   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:84' H1(Row,2:(Col-1))=H1(Row-1,2:(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  606   </I></FONT>    i0 = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  607   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  608   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  609   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  610   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  611   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  612   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  613   </I></FONT>    ip3_rel_sizes = (int32_T)Col - 1;
+<FONT COLOR="#888888"><I>  614   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  615   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  616   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  617   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  618   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  619   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  620   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  621   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  622   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  623   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  624   </I></FONT>    emlrtBoundsCheckR2011a((int32_T)(Row - 1.0), &amp;<A HREF="glia_Ca_3_3_c.html#var_p_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_p_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">p_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  625   </I></FONT>    iv0[0] = 1;
+<FONT COLOR="#888888"><I>  626   </I></FONT>    iv0[1] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  627   </I></FONT>    b_H1_sizes[0] = 1;
+<FONT COLOR="#888888"><I>  628   </I></FONT>    b_H1_sizes[1] = i0 - i1;
+<FONT COLOR="#888888"><I>  629   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (ip3_rel_sizes = 0; ip3_rel_sizes &lt; 2; ip3_rel_sizes++) <B>{</B>
+<FONT COLOR="#888888"><I>  630   </I></FONT>        C1_sizes[ip3_rel_sizes] = b_H1_sizes[ip3_rel_sizes];
+<FONT COLOR="#888888"><I>  631   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  632   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv0, 2, C1_sizes, 2, &amp;<A HREF="glia_Ca_3_3_c.html#var_j_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_j_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">j_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  633   </I></FONT>    b_Row = (int32_T)Row;
+<FONT COLOR="#888888"><I>  634   </I></FONT>    i = (int32_T)Row;
+<FONT COLOR="#888888"><I>  635   </I></FONT>    ip3_rel_sizes = i0 - i1;
+<FONT COLOR="#888888"><I>  636   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  637   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  638   </I></FONT>        b_C1_data[i0] = H1[(i + 150 * (i1 + i0)) - 2];
+<FONT COLOR="#888888"><I>  639   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  640   </I></FONT>    b_loop_ub = ip3_rel_sizes - 1;
+<FONT COLOR="#888888"><I>  641   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  642   </I></FONT>        H1[(b_Row + 150 * b_tmp_data[i0]) - 1] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  643   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  644   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:85' H1(2:(Row-1),1)=H1(2:(Row-1),2); */</I></FONT>
+<FONT COLOR="#888888"><I>  645   </I></FONT>    i0 = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  646   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  647   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  648   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  649   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  650   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  651   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  652   </I></FONT>    ip3_rel_sizes = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  653   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  654   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  655   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  656   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  657   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  658   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  659   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  660   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  661   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  662   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  663   </I></FONT>    iv1[0] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  664   </I></FONT>    c_C1[0] = i0 - i1;
+<FONT COLOR="#888888"><I>  665   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv1, 1, c_C1, 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_k_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_k_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">k_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  666   </I></FONT>    ip3_rel_sizes = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  667   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  668   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  669   </I></FONT>        b_C1_data[i0] = H1[150 + (i1 + i0)];
+<FONT COLOR="#888888"><I>  670   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  671   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= ip3_rel_sizes; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  672   </I></FONT>        H1[b_tmp_data[i0]] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  673   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  674   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:86' H1(2:(Row-1),Col)=H1(2:(Row-1),(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  675   </I></FONT>    i0 = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  676   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; i0) <B>{</B>
+<FONT COLOR="#888888"><I>  677   </I></FONT>        i1 = 0;
+<FONT COLOR="#888888"><I>  678   </I></FONT>        i0 = 0;
+<FONT COLOR="#888888"><I>  679   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  680   </I></FONT>        i1 = 1;
+<FONT COLOR="#888888"><I>  681   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  682   </I></FONT>    ip3_rel_sizes = (int32_T)Row - 1;
+<FONT COLOR="#888888"><I>  683   </I></FONT>    <FONT COLOR="#112266"><B>if</B></FONT> (2 &gt; ip3_rel_sizes) <B>{</B>
+<FONT COLOR="#888888"><I>  684   </I></FONT>        i = 0;
+<FONT COLOR="#888888"><I>  685   </I></FONT>        ip3_rel_sizes = 0;
+<FONT COLOR="#888888"><I>  686   </I></FONT>    <B>}</B> <FONT COLOR="#112266"><B>else</B></FONT> <B>{</B>
+<FONT COLOR="#888888"><I>  687   </I></FONT>        i = 1;
+<FONT COLOR="#888888"><I>  688   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  689   </I></FONT>    b_loop_ub = (ip3_rel_sizes - i) - 1;
+<FONT COLOR="#888888"><I>  690   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i2 = 0; i2 &lt;= b_loop_ub; i2++) <B>{</B>
+<FONT COLOR="#888888"><I>  691   </I></FONT>        b_tmp_data[i2] = i + i2;
+<FONT COLOR="#888888"><I>  692   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  693   </I></FONT>    emlrtBoundsCheckR2011a((int32_T)(Col - 1.0), &amp;<A HREF="glia_Ca_3_3_c.html#var_q_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_q_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">q_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  694   </I></FONT>    iv1[0] = ip3_rel_sizes - i;
+<FONT COLOR="#888888"><I>  695   </I></FONT>    c_C1[0] = i0 - i1;
+<FONT COLOR="#888888"><I>  696   </I></FONT>    emlrtSubAssignSizeCheckR2011a(iv1, 1, c_C1, 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_l_emlrtECI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_l_emlrtECI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">l_emlrtECI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>);
+<FONT COLOR="#888888"><I>  697   </I></FONT>    b_Row = (int32_T)Col;
+<FONT COLOR="#888888"><I>  698   </I></FONT>    i = (int32_T)Col;
+<FONT COLOR="#888888"><I>  699   </I></FONT>    ip3_rel_sizes = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  700   </I></FONT>    b_loop_ub = (i0 - i1) - 1;
+<FONT COLOR="#888888"><I>  701   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= b_loop_ub; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  702   </I></FONT>        b_C1_data[i0] = H1[(i1 + i0) + 150 * (i - 2)];
+<FONT COLOR="#888888"><I>  703   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  704   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt;= ip3_rel_sizes; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  705   </I></FONT>        H1[b_tmp_data[i0] + 150 * (b_Row - 1)] = b_C1_data[i0];
+<FONT COLOR="#888888"><I>  706   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  707   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:87' H1(1,1)=H1(2,2); */</I></FONT>
+<FONT COLOR="#888888"><I>  708   </I></FONT>    H1[0] = H1[151];
+<FONT COLOR="#888888"><I>  709   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:88' H1(1,Col)=H1(2,(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  710   </I></FONT>    H1[150 * ((int32_T)Col - 1)] = H1[1 + 150 * (emlrtBoundsCheckR2011a((int32_T)Col - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_ab_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_ab_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">ab_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)];
+<FONT COLOR="#888888"><I>  711   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:89' H1(Row,1)=H1(Row-1,2); */</I></FONT>
+<FONT COLOR="#888888"><I>  712   </I></FONT>    H1[(int32_T)Row - 1] = H1[emlrtBoundsCheckR2011a((int32_T)Row - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_bb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_bb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">bb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 149];
+<FONT COLOR="#888888"><I>  713   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:90' H1(Row,Col)=H1(Row-1,(Col-1)); */</I></FONT>
+<FONT COLOR="#888888"><I>  714   </I></FONT>    H1[((int32_T)Row + 150 * ((int32_T)Col - 1)) - 1] = H1[(emlrtBoundsCheckR2011a((int32_T)Row - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_cb_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_cb_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">cb_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) + 150 * (emlrtBoundsCheckR2011a((int32_T)Col - 1, &amp;<A HREF="glia_Ca_3_3_c.html#var_db_emlrtBCI" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_db_emlrtBCI');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">db_emlrtBCI</FONT></A>, &amp;<A HREF="glia_Ca_3_3_mex_c.html#var_emlrtContextGlobal" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_emlrtContextGlobal');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">emlrtContextGlobal</FONT></A>) - 1)) - 1];
+<FONT COLOR="#888888"><I>  715   </I></FONT>    <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:92' C1=C1/400; */</I></FONT>
+<FONT COLOR="#888888"><I>  716   </I></FONT>    <FONT COLOR="#112266"><B>for</B></FONT> (i0 = 0; i0 &lt; 22500; i0++) <B>{</B>
+<FONT COLOR="#888888"><I>  717   </I></FONT>        <FONT COLOR="#117755"><I>/* 'glia_Ca_3_3:93' P1=P1/400; */</I></FONT>
+<FONT COLOR="#888888"><I>  718   </I></FONT>        P1[i0] /= 400.0;
+<FONT COLOR="#888888"><I>  719   </I></FONT>        C1[i0] /= 400.0;
+<FONT COLOR="#888888"><I>  720   </I></FONT>    <B>}</B>
+<FONT COLOR="#888888"><I>  721   </I></FONT><B>}</B>
+<FONT COLOR="#888888"><I>  722   </I></FONT><FONT COLOR="#117755"><I>/* End of code generation (glia_Ca_3_3.c) */</I></FONT>
+<FONT COLOR="#888888"><I>  723   </I></FONT></PRE>
+</TD></TR></TABLE>
+</P>
+</BODY>
+</HTML>

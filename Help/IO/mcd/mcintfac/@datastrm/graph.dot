@@ -1,0 +1,50 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ad2muvolt -> getfield;
+  ad2muvolt -> getstreamnumber;
+  datastrm -> getfield;
+  datastrm -> rdrawhd;
+  datastrm -> setfield;
+  datastrm -> setpos;
+  getfield -> getfield;
+  nextdata -> getfield;
+  nextdata -> getstreamnumber;
+  nextdata -> isfield;
+  nextdata -> setfield;
+  nextraw -> getfield;
+  nextraw -> nextdata;
+  nextraw -> nextsweep;
+  nextraw -> setpos;
+  nextspikes -> getfield;
+  nextspikes -> getstreamnumber;
+  nextspikes -> nextdata;
+  nextsweep -> getfield;
+  nextsweep -> getstreamnumber;
+  nextsweep -> nextdata;
+  setpos -> getfileindex;
+  setpos_silent -> getfileindex;
+
+  ad2muvolt [URL="ad2muvolt.html"];
+  contents [URL="contents.html"];
+  datastrm [URL="datastrm.html"];
+  delete [URL="delete.html"];
+  display [URL="display.html"];
+  getfield [URL="getfield.html"];
+  getfileindex [URL="getfileindex.html"];
+  getfileindexspikes [URL="getfileindexspikes.html"];
+  getpos [URL="getpos.html"];
+  getstreamnumber [URL="getstreamnumber.html"];
+  isfield [URL="isfield.html"];
+  nextdata [URL="nextdata.html"];
+  nextraw [URL="nextraw.html"];
+  nextspikes [URL="nextspikes.html"];
+  nextsweep [URL="nextsweep.html"];
+  plotmea [URL="plotmea.html"];
+  rdrawhd [URL="rdrawhd.html"];
+  rdrawhd_silent [URL="rdrawhd_silent.html"];
+  segregate [URL="segregate.html"];
+  setfield [URL="setfield.html"];
+  setid [URL="setid.html"];
+  setpos [URL="setpos.html"];
+  setpos_silent [URL="setpos_silent.html"];
+}

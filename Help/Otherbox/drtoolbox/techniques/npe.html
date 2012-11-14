@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of npe</title>
+  <meta name="keywords" content="npe">
+  <meta name="description" content="NPE Perform the Neighborhood Preserving Embedding algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>npe
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NPE Perform the Neighborhood Preserving Embedding algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = npe(X, no_dims, k, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">NPE Perform the Neighborhood Preserving Embedding algorithm
+
+       [mappedX, mapping] = npe(X, no_dims, k)
+       [mappedX, mapping] = npe(X, no_dims, k, eig_impl)
+ 
+ Runs the Neighborhood Preserving Embedding algorithm on dataset X to 
+ reduce it to dimensionality no_dims. The number of neighbors that is used
+ by LPP is specified by k (default = 12).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = npe(X, no_dims, k, eig_impl)</a>
+0002 <span class="comment">%NPE Perform the Neighborhood Preserving Embedding algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%       [mappedX, mapping] = npe(X, no_dims, k)</span>
+0005 <span class="comment">%       [mappedX, mapping] = npe(X, no_dims, k, eig_impl)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Runs the Neighborhood Preserving Embedding algorithm on dataset X to</span>
+0008 <span class="comment">% reduce it to dimensionality no_dims. The number of neighbors that is used</span>
+0009 <span class="comment">% by LPP is specified by k (default = 12).</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0014 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0015 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0016 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0017 <span class="comment">% maintain the name of the original author.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0020 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0021 
+0022 
+0023     <span class="keyword">if</span> size(X, 2) &gt; size(X, 1)
+0024         error(<span class="string">'Number of samples should be higher than number of dimensions.'</span>);
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0027         no_dims = 2; 
+0028     <span class="keyword">end</span>
+0029     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0030         k = 12;
+0031     <span class="keyword">end</span>
+0032     <span class="keyword">if</span> ~exist(<span class="string">'eig_impl'</span>, <span class="string">'var'</span>)
+0033         eig_impl = <span class="string">'Matlab'</span>;
+0034     <span class="keyword">end</span>
+0035     
+0036     <span class="comment">% Get dimensionality and number of dimensions</span>
+0037     [n, d] = size(X);
+0038     mapping.mean = mean(X, 1);
+0039 
+0040     <span class="comment">% Compute pairwise distances and find nearest neighbours (vectorized implementation)</span>
+0041     disp(<span class="string">'Finding nearest neighbors...'</span>);    
+0042     [distance, neighborhood] = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k);
+0043     max_k = size(neighborhood, 2);
+0044     <span class="keyword">if</span> nargout &gt; 1
+0045         mapping.nbhd = distance;
+0046     <span class="keyword">end</span>
+0047     X = X';
+0048     neighborhood = neighborhood';
+0049         
+0050     <span class="comment">% Find reconstruction weights for all points by solving the MSE problem</span>
+0051     <span class="comment">% of reconstructing a point from each neighbours. A used constraint is</span>
+0052     <span class="comment">% that the sum of the reconstruction weights for a point should be 1.</span>
+0053     disp(<span class="string">'Compute reconstruction weights...'</span>);
+0054     <span class="keyword">if</span> k &gt; d 
+0055         tol = 1e-5;
+0056     <span class="keyword">else</span>
+0057         tol = 0;
+0058     <span class="keyword">end</span>
+0059 
+0060     <span class="comment">% Construct reconstruction weight matrix</span>
+0061     W = zeros(max_k, n);
+0062     <span class="keyword">for</span> i=1:n
+0063         nbhd = neighborhood(:,i);
+0064         <span class="keyword">if</span> ischar(k)
+0065            nbhd = nbhd(nbhd ~= 0);
+0066         <span class="keyword">end</span>
+0067         kt = numel(nbhd);
+0068         z = X(:,nbhd) - repmat(X(:,i), 1, kt);                  <span class="comment">% Shift point to origin</span>
+0069         C = z' * z;                                                <span class="comment">% Compute local covariance</span>
+0070         C = C + eye(kt, kt) * tol * trace(C);                    <span class="comment">% Regularization of covariance (if K &gt; D)</span>
+0071         wi = C \ ones(kt, 1);                                   <span class="comment">% Solve linear system</span>
+0072         wi = wi / sum(wi);                                      <span class="comment">% Make sure that sum is 1</span>
+0073         W(:,i) = [wi; nan(max_k - kt, 1)];
+0074     <span class="keyword">end</span>
+0075 
+0076     <span class="comment">% Now that we have the reconstruction weights matrix, we define the</span>
+0077     <span class="comment">% sparse cost matrix M = (I-W)'*(I-W).</span>
+0078     M = sparse(1:n, 1:n, ones(1, n), n, n, 4 * max_k * n);
+0079     <span class="keyword">for</span> i=1:n
+0080        w = W(:,i);
+0081        ww(~isnan(w)) = 0;
+0082        j = neighborhood(:,i);
+0083        w = w(j ~= 0);
+0084        j = j(j ~= 0);
+0085        M(i, j) = M(i, j) - w';
+0086        M(j, i) = M(j, i) - w;
+0087        M(j, j) = M(j, j) + w * w';
+0088     <span class="keyword">end</span>
+0089     
+0090     <span class="comment">% For sparse datasets, we might end up with NaNs or Infs in M. We just set them to zero for now...</span>
+0091     M(isnan(M)) = 0;
+0092     M(isinf(M)) = 0;
+0093 
+0094     <span class="comment">% Compute XWX and XX and make sure these are symmetric</span>
+0095     X = X';
+0096     WP = X' * M * X;
+0097     DP = X' * X;
+0098     DP = (DP + DP') / 2;
+0099     WP = (WP + WP') / 2;
+0100 
+0101     <span class="comment">% Solve generalized eigenproblem</span>
+0102     <span class="keyword">if</span> size(X, 1) &gt; 1500 &amp;&amp; no_dims &lt; (size(X, 1) / 10)
+0103         <span class="keyword">if</span> strcmp(eig_impl, <span class="string">'JDQR'</span>)
+0104             options.Disp = 0;
+0105             options.LSolver = <span class="string">'bicgstab'</span>;
+0106             [eigvector, eigvalue] = <a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>(WP, DP, no_dims, <span class="string">'SA'</span>, options);
+0107         <span class="keyword">else</span>
+0108             options.disp = 0;
+0109             options.issym = 1;
+0110             options.isreal = 0;
+0111             [eigvector, eigvalue] = eigs(WP, DP, no_dims, <span class="string">'SA'</span>, options);
+0112         <span class="keyword">end</span>
+0113     <span class="keyword">else</span>
+0114         [eigvector, eigvalue] = eig(WP, DP);
+0115     <span class="keyword">end</span>
+0116     
+0117     <span class="comment">% Sort eigenvalues in descending order and get smallest eigenvectors</span>
+0118     [eigvalue, ind] = sort(diag(eigvalue), <span class="string">'ascend'</span>);
+0119     eigvector = eigvector(:,ind(1:no_dims));
+0120     
+0121     <span class="comment">% Compute final linear basis and map data</span>
+0122     mappedX = X * eigvector;
+0123     mapping.M = eigvector;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

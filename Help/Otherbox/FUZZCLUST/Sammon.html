@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Sammon</title>
+  <meta name="keywords" content="Sammon">
+  <meta name="description" content="function P = sammon(D, P, varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>Sammon
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function P = sammon(D, P, varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result = Sammon(proj,data,result,param) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">function P = sammon(D, P, varargin)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/FUZZCLUST/Demos/projection/visual_call.html" class="code" title="">visual_call</a>	Calling function of the visualization functions</li><li><a href="../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = Sammon(proj,data,result,param)</a>
+0002 <span class="comment">%function P = sammon(D, P, varargin)</span>
+0003 
+0004 <span class="comment">%SAMMON Computes Sammon's mapping of a data set.</span>
+0005 
+0006 
+0007 <span class="comment">%  Input and output arguments ([]'s are optional):</span>
+0008 <span class="comment">%   D        (matrix) size dlen x dim, data to be projected</span>
+0009 <span class="comment">%            (struct) data or map struct</span>
+0010 <span class="comment">%   P        (scalar) output dimension</span>
+0011 <span class="comment">%            (matrix) size dlen x odim, initial projection matrix</span>
+0012 <span class="comment">%   [value]  (scalar) all different modes (the next argument) require</span>
+0013 <span class="comment">%                     a value, default = 100</span>
+0014 <span class="comment">%   [mode]   (string) 'steps' or 'errlimit' or 'errchange' or 'seconds',</span>
+0015 <span class="comment">%                     see below, default is 'steps'</span>
+0016 <span class="comment">%   [alpha]  (scalar) iteration step size, default = 0.2</span>
+0017 <span class="comment">%   [Dist]   (matrix) pairwise distance matrix, size dlen x dlen.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   P        (matrix) size dlen x odim, the projections</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% The output dimension must be 2 or higher but (naturally) lower</span>
+0022 <span class="comment">% than data set dimension.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% The mode argument determines the end condition for iteration. If</span>
+0025 <span class="comment">% the mode argument is used, also the value argument has to be</span>
+0026 <span class="comment">% specified. Different mode possibilities are:</span>
+0027 <span class="comment">% 'steps'      the iteration is terminated when it is run &lt;value&gt;</span>
+0028 <span class="comment">% 'errlimit'   steps, the iteration is terminated when projection error</span>
+0029 <span class="comment">%              is lower than &lt;value&gt;,</span>
+0030 <span class="comment">% 'errchange'  the iteration is terminated when change between</span>
+0031 <span class="comment">%              projection error on two successive iteration rounds</span>
+0032 <span class="comment">%           is less than &lt;value&gt; percent of total error, and</span>
+0033 <span class="comment">% 'seconds'    the iteration is terminated after &lt;value&gt; seconds</span>
+0034 <span class="comment">%              of iteration.</span>
+0035 <span class="comment">%</span>
+0036 
+0037 <span class="comment">% Reference: Sammon, J.W. Jr., &quot;A nonlinear mapping for data</span>
+0038 <span class="comment">%   structure analysis&quot;, IEEE Transactions on Computers, vol. C-18,</span>
+0039 <span class="comment">%   no. 5, 1969, pp. 401-409.</span>
+0040 
+0041 
+0042 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0043 <span class="comment">%% check arguments</span>
+0044 <span class="comment">%Adapt the data</span>
+0045 P = proj.P;             <span class="comment">%P projected data or dimension</span>
+0046 D = data.X;
+0047 <span class="comment">%Mdist = result.data.d;      %d distances</span>
+0048 maxstep = param.max;
+0049 alpha = param.alpha;
+0050 m = param.m;
+0051 
+0052 <span class="comment">% compute data dimensions</span>
+0053 orig_si = size(D); 
+0054 dim = orig_si(2); 
+0055 noc = orig_si(1);
+0056 
+0057 <span class="comment">% output dimension / initial projection matrix</span>
+0058 <span class="keyword">if</span> prod(size(P))==1, 
+0059   odim = P; 
+0060   P = rand(noc,odim)-0.5; 
+0061 <span class="keyword">else</span> 
+0062   si = size(P);
+0063   odim = si(end);
+0064   <span class="keyword">if</span> prod(si) ~= noc*odim, 
+0065     error(<span class="string">'Initial projection matrix size does not match data size'</span>);
+0066   <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 <span class="keyword">if</span> odim &gt; dim | odim &lt; 2, 
+0069   error(<span class="string">'Output dimension must be within [2, dimension of data]'</span>);
+0070 <span class="keyword">end</span>
+0071 
+0072 
+0073 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0074 <span class="comment">%% initialization</span>
+0075 
+0076 <span class="comment">% these are used quite frequently</span>
+0077 noc_x_1  = ones(noc, 1); 
+0078 odim_x_1 = ones(odim,1); 
+0079 
+0080 <span class="comment">%compute mutual distances between vectors</span>
+0081 Mdist = [];
+0082 <span class="keyword">if</span> isempty(Mdist) | all(isnan(Mdist(:))),  
+0083   fprintf(2, <span class="string">'computing mutual distances\r'</span>);
+0084   dim_x_1 = ones(dim,1);
+0085   <span class="keyword">for</span> i = 1:noc,
+0086     x = D(i,:); 
+0087     Diff = D - x(noc_x_1,:);
+0088     Mdist(:,i) = sqrt((Diff.^2)*dim_x_1);
+0089   <span class="keyword">end</span>
+0090 <span class="keyword">end</span>
+0091 [np,nc]=size(Mdist);
+0092 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0093 <span class="comment">%% action</span>
+0094 <span class="comment">% sammon iteration</span>
+0095 
+0096 x  = P ;
+0097 xu = zeros(noc, odim);
+0098 xd = zeros(noc, odim);
+0099 dq = zeros(noc, 1);
+0100 dr = zeros(noc, 1);
+0101 
+0102 <span class="keyword">for</span> i=1:maxstep
+0103     
+0104    <span class="comment">% If you want to see the Sammon's projection plotted (in 2-D and 3-D case),</span>
+0105   <span class="comment">% execute the code below; it is not in use by default to speed up</span>
+0106   <span class="comment">% computation.</span>
+0107   <span class="keyword">if</span> 1, 
+0108     clf
+0109     <span class="keyword">if</span> odim == 1,     plot(x(:,1), noc_x_1, <span class="string">'o'</span>);
+0110     <span class="keyword">elseif</span> odim == 2, plot(x(:,1), x(:,2), <span class="string">'o'</span>);
+0111     <span class="keyword">else</span>              plot3(x(:,1), x(:,2), x(:,3), <span class="string">'o'</span>)
+0112     <span class="keyword">end</span>
+0113     drawnow
+0114   <span class="keyword">end</span>
+0115   
+0116   
+0117    
+0118     
+0119     
+0120   <span class="keyword">for</span> j = 1:noc,
+0121     xd      = -x + x(j*noc_x_1,:);
+0122     xd2     = xd.^2;
+0123     dpj     = sqrt(sum(xd2'))';
+0124     dq      = Mdist(:,j) - dpj;
+0125     dr      = Mdist(:,j) .* dpj;
+0126     ind     = find(dr ~= 0);
+0127     term    = dq(ind) ./ dr(ind);
+0128     e1      = sum(xd(ind,:) .* term(:,odim_x_1));
+0129     term2   = ((1.0 + dq(ind) ./ dpj(ind)) ./ dpj(ind)) ./ dr(ind);
+0130     e2      = sum(term) - sum(xd2(ind,:) .* term2(:,odim_x_1));
+0131     xu(j,:) = x(j,:) + alpha * e1 ./ abs(e2);
+0132   <span class="keyword">end</span>
+0133 
+0134   <span class="comment">% move the center of mass to the center</span>
+0135 
+0136   c = sum(xu) / noc;
+0137   x = xu - c(noc_x_1, :);
+0138 
+0139   
+0140   fprintf(2, <span class="string">'\r%d iterations'</span>, i);
+0141   
+0142   
+0143   
+0144   fprintf(2, <span class="string">'        '</span>);
+0145   
+0146   
+0147 <span class="keyword">end</span>
+0148 
+0149 fprintf(2, <span class="string">'\n'</span>);
+0150 
+0151 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0152 <span class="comment">%% clean up</span>
+0153 
+0154 <span class="comment">% reshape</span>
+0155 orig_si(end) = odim; 
+0156 P = reshape(x, orig_si);
+0157 
+0158 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0159 <span class="comment">%computing cluster centers</span>
+0160 fm = result.data.f.^m;
+0161 sumf = sum(fm);
+0162 vs = (fm'*x)./(sumf'*ones(1,2));
+0163 
+0164 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%</span>
+0165 result.proj.vp=vs;
+0166 result.proj.P=x;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

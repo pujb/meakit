@@ -1,0 +1,17 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  display -> display;
+  subsasgn -> subsasgn;
+  subsref -> subsref;
+
+  display [URL="display.html"];
+  fieldnames [URL="fieldnames.html"];
+  getfield [URL="getfield.html"];
+  immutable [URL="immutable.html"];
+  isfield [URL="isfield.html"];
+  mutable [URL="mutable.html"];
+  rmfield [URL="rmfield.html"];
+  setfield [URL="setfield.html"];
+  subsasgn [URL="subsasgn.html"];
+  subsref [URL="subsref.html"];
+}

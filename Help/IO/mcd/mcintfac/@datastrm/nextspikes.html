@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nextspikes</title>
+  <meta name="keywords" content="nextspikes">
+  <meta name="description" content="nextspikes - reads in spike data (datastream method)">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html IO --><!-- # mcd --><!-- ../menu.html mcintfac --><!-- menu.html @datastrm -->
+<h1>nextspikes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>nextspikes - reads in spike data (datastream method)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function c=nextspikes(d,outputType,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> nextspikes - reads in spike data (datastream method)
+ c=nextspikes(datastrn,outputType,varargin) reads in spike data according 
+ to outputType spike: spikes (i.e. 64-cell array with spikes on each channel)
+ timevalue: times(ms)/values of raw data, eliminating overlapping spike data,
+ raw data: spike data filled with zeros to desired raw data array
+
+ Optional arguments: start and end time of desired data (up to now times 
+ will automatically be aligned with enclosing 128ms-segment borders). If 
+ no intervall is choosen, the next segment is given.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="getstreamnumber.html" class="code" title="function streamnumber=getstreamnumber(d,streamname);">getstreamnumber</a>	getstreamnumber - returns streamnumber of streamname (datastream method)</li><li><a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>	NEXTDATA   - read data from an MCRack OLE Object opened with datastrm.m</li><li><a href="../../../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c=nextspikes(d,outputType,varargin)</a>
+0002 <span class="comment">% nextspikes - reads in spike data (datastream method)</span>
+0003 <span class="comment">% c=nextspikes(datastrn,outputType,varargin) reads in spike data according</span>
+0004 <span class="comment">% to outputType spike: spikes (i.e. 64-cell array with spikes on each channel)</span>
+0005 <span class="comment">% timevalue: times(ms)/values of raw data, eliminating overlapping spike data,</span>
+0006 <span class="comment">% raw data: spike data filled with zeros to desired raw data array</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Optional arguments: start and end time of desired data (up to now times</span>
+0009 <span class="comment">% will automatically be aligned with enclosing 128ms-segment borders). If</span>
+0010 <span class="comment">% no intervall is choosen, the next segment is given.</span>
+0011 
+0012 <span class="comment">%configuration</span>
+0013 rawdata=0;
+0014 <span class="comment">%configuration end</span>
+0015 
+0016 <span class="keyword">if</span> (strcmp(outputType,<span class="string">'raw data'</span>))
+0017     rawdata=1;
+0018     outputType=<span class="string">'timevalue'</span>;
+0019 <span class="keyword">end</span>
+0020 
+0021 
+0022 <span class="keyword">if</span> (~strcmp(d.DataType,<span class="string">'spike continous'</span>))
+0023 <span class="comment">%a=setfield(a,'DataType','spike continous');</span>
+0024     error([<span class="string">'nextspikes up to now works only on spike continous not on '</span> d.DataType]);
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">if</span> (~strcmp(outputType,<span class="string">'spike'</span>) &amp; ~strcmp(outputType,<span class="string">'timevalue'</span>))
+0027     error(<span class="string">'second argument must begin with spike, timevalue or raw data'</span>);
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="keyword">if</span> ~(strcmp(d.fileaccess,<span class="string">'ole'</span>)) &amp; (d.sweepStartPointer==0),
+0031     evalin(<span class="string">'base'</span>,<span class="string">'a=setpos(a,''segment'',1)'</span>,<span class="string">'error(''set position first with a=setpos(a...'')'</span>);
+0032     c=0;
+0033     warning(<span class="string">'call last function again now (setpos war automatically called)'</span>);
+0034     <span class="keyword">return</span>;
+0035 <span class="keyword">end</span>
+0036 
+0037 channelSel=ones(68,1);
+0038 <span class="keyword">if</span> size(varargin,2)==0        <span class="comment">%no intervall choosen, just take next segement</span>
+0039     startSegm=min(find(d.sweepStartPointer&gt;=ftell(d.fid)));
+0040     endSegm    =startSegm+1;    <span class="comment">%not to be read!</span>
+0041 <span class="keyword">elseif</span> size(varargin,2)&gt;=2
+0042    startTime=varargin{1};
+0043    endTime    =varargin{2};
+0044    <span class="keyword">if</span> ~(strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0045       startSegm=max(max(find(d.sweepStartTime&lt;=startTime))-1,1); <span class="comment">%begin 1 segment earlier and end 1 later</span>
+0046       endSegm    =min([find(d.sweepStartTime&gt;endTime);length(d.sweepStartTime)])+1; <span class="comment">%not to be read!</span>
+0047    <span class="keyword">end</span>
+0048     <span class="keyword">if</span> size(varargin,2)==3
+0049         channelSel=zeros(68,1);
+0050         channelSel(varargin{3})=1;
+0051     <span class="keyword">end</span>
+0052     <span class="keyword">if</span> size(varargin,2)&gt;3
+0053         error(<span class="string">'nextspikes takes 2,4 or 5 parameters'</span>);
+0054     <span class="keyword">end</span>
+0055 <span class="keyword">else</span> error(<span class="string">'nextspikes takes 2,4 or 5 parameters'</span>);
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> (strcmp(d.fileaccess,<span class="string">'ole'</span>))
+0059    spikestream=<a href="getstreamnumber.html" class="code" title="function streamnumber=getstreamnumber(d,streamname);">getstreamnumber</a>(d,<span class="string">'Spikes 1'</span>);
+0060    <span class="keyword">if</span> (spikestream &gt; 0) &amp; rawdata
+0061       msPerTick=<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'MicrosecondsPerTick'</span>)/1000;
+0062       sinfo=<a href="getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(d,<span class="string">'StreamInfo'</span>);
+0063       pre=sinfo{spikestream}.PreTrigger;
+0064       post=sinfo{spikestream}.PostTrigger; <span class="comment">%not used</span>
+0065       ce=zeros(64,(endTime-startTime+post)/msPerTick)+d.ZeroADValue;    
+0066       cs=<a href="nextdata.html" class="code" title="function c = nextdata(d,varargin);">nextdata</a>(d,<span class="string">'streamname'</span>,<span class="string">'Spikes 1'</span>,<span class="string">'originorder'</span>,<span class="string">'off'</span>,<span class="string">'startend'</span>,[startTime endTime],<span class="string">'warning'</span>,<span class="string">'off'</span>);
+0067       <span class="keyword">for</span> ic=1:64
+0068          spkt=cs.spiketimes{ic};
+0069          spkv=cs.spikevalues{ic};
+0070          <span class="keyword">for</span> is=1:length(spkt)
+0071             spkstart=max(round((spkt(is)-pre-startTime)/msPerTick),1);
+0072             ce(ic,[spkstart:spkstart+size(spkv,1)-1])=spkv(:,is)';
+0073          <span class="keyword">end</span>
+0074       <span class="keyword">end</span>
+0075         c.spiketimes=[];
+0076         c.spikevalues=ce;
+0077       c.startend=[startTime endTime];
+0078       <span class="keyword">return</span>;
+0079    <span class="keyword">else</span>   
+0080       error([<span class="string">'nextspikes can only return outputType raw data for OLE-Object read spikes'</span>]);
+0081    <span class="keyword">end</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 nSegments=endSegm-startSegm;
+0085 startPointer=d.sweepStartPointer(startSegm);
+0086 
+0087 tmp=d.sorterleft(d.HardwareChannelID);
+0088 sortedChannelID=[tmp setdiff([1:68],tmp)]';    <span class="comment">%not recorded channel are appended!</span>
+0089 
+0090 nChannels=68;
+0091 c=cell(nChannels,2);       
+0092 spikeCount=zeros(nChannels,1);
+0093 <span class="keyword">for</span> i1=1:nChannels
+0094     <span class="comment">%highest rate channel defines memory use!</span>
+0095     maxMem=0;
+0096     <span class="keyword">if</span> channelSel(sortedChannelID(i1))
+0097         maxMem=sum(d.maxSpkPerSegmPerChanl(startSegm:endSegm-1));
+0098     <span class="keyword">end</span>
+0099     <span class="keyword">if</span> (strcmp(outputType,<span class="string">'spike'</span>))
+0100         c{i1,1}=zeros(maxMem,1);                 <span class="comment">%spiketimes</span>
+0101         c{i1,2}=zeros(maxMem,d.spikeSize);    <span class="comment">%spikevalues</span>
+0102     <span class="keyword">else</span> <span class="comment">%timevalue</span>
+0103         c{i1,1}=zeros(maxMem*(d.spikeSize+2),1);    <span class="comment">%times</span>
+0104         c{i1,2}=zeros(maxMem*(d.spikeSize+2),1);    <span class="comment">%values</span>
+0105     <span class="keyword">end</span>
+0106 <span class="keyword">end</span>
+0107 lastSpikeEnd=ones(68,1)*d.sweepStartTime(startSegm);
+0108 
+0109 fseek(d.fid,startPointer,<span class="string">'bof'</span>);
+0110 segCount=0;
+0111 msPerT=d.MicrosecondsPerTick/1000;
+0112 <span class="keyword">while</span> segCount&lt;nSegments
+0113     segCount=segCount+1;
+0114     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);                <span class="comment">% Startzeit des Segments</span>
+0115     sweepStartTime = (timebin(2)*2^32+timebin(1))*msPerT;
+0116 
+0117     segmentsamples = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of samples in segment. 3200 (always)</span>
+0118                                                                         <span class="comment">%2 mal? warum?</span>
+0119     timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);                <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0120     sweepStartTime = (timebin(2)*2^32+timebin(1))*msPerT;
+0121     segmentsamples = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">% no. of samples in segment. 3200 (always)</span>
+0122     <span class="keyword">if</span> segmentsamples ~= 3200
+0123         error(<span class="string">'unexpected data-file structure, value segmentsamples2 is not valid (~=3200)'</span>)
+0124     <span class="keyword">end</span>
+0125     lokNChannel = fread(d.fid,1,<span class="string">'ulong'</span>);                    <span class="comment">% number of spike lists in segment (immer 64, je Kanal 1)</span>
+0126     <span class="keyword">if</span> lokNChannel ~= 64
+0127         error(<span class="string">'unexpected data-file structure, value nChannels is not valid (~=64)'</span>)
+0128     <span class="keyword">end</span>
+0129     <span class="keyword">for</span> i1=1:lokNChannel                                                    <span class="comment">% Kanal nummer (0-63) in der ausgew鋒lten Reihenfolge,</span>
+0130         <span class="comment">%read in spike list                                          also gew鋒lte Kan鋖e zuerst, dann alle nicht gew鋒lten mit Eintr鋑en von 0 Spikes!!!</span>
+0131         nSpikes = fread(d.fid,1,<span class="string">'ulong'</span>);            <span class="comment">% number of spikes in list (i.e. spikes auf diesem Kanal in diesem Segment)</span>
+0132         <span class="keyword">for</span> i2=1:nSpikes,                                            <span class="comment">% spike number</span>
+0133             <span class="comment">%read in spike:</span>
+0134             timebin = fread(d.fid, [1,2], <span class="string">'ulong'</span>);        <span class="comment">% Startzeit des Sweeps (bin鋜)</span>
+0135             spiketime = (timebin(2)*2^32+timebin(1))*msPerT;        <span class="comment">% reformat to ms</span>
+0136             ticks_pre_event  = fread(d.fid,1,<span class="string">'ushort'</span>);    <span class="comment">%ticks pre event</span>
+0137             spikeSize  = fread(d.fid,1,<span class="string">'ushort'</span>);            <span class="comment">% window size in ticks, i.e. # of samples in this trace</span>
+0138             tmp= fread(d.fid,[1,spikeSize],<span class="string">'short'</span>);    <span class="comment">%spikevalues</span>
+0139             <span class="keyword">if</span> (spikeSize/2==floor(spikeSize/2))
+0140                 pFac=0;
+0141             <span class="keyword">else</span>
+0142                 pFac=+1;
+0143             <span class="keyword">end</span>
+0144             peak = tmp(ticks_pre_event-1+pFac:ticks_pre_event+1+pFac)-d.ZeroADValue;
+0145             <span class="keyword">if</span> channelSel(sortedChannelID(i1)) &amp; <span class="keyword">...</span>
+0146                 (~d.BitFlipRemoveFactor | <span class="keyword">...</span>
+0147                             ( abs(peak(2))*d.BitFlipRemoveFactor &lt; abs(peak(1)) <span class="keyword">...</span>
+0148                                   &amp; abs(peak(2))*d.BitFlipRemoveFactor &lt; abs(peak(3)) ) )    <span class="comment">%remove peak if very sharp</span>
+0149                 <span class="keyword">if</span> (strcmp(outputType,<span class="string">'spike'</span>))
+0150                     spikeCount(i1)=spikeCount(i1)+1;
+0151                     c{sortedChannelID(i1),1}(spikeCount(i1))=spiketime;                                                        <span class="comment">%spiketimes</span>
+0152                     c{sortedChannelID(i1),2}(spikeCount(i1),1:spikeSize)= tmp;    <span class="comment">%spikevalues</span>
+0153                 <span class="keyword">else</span> <span class="comment">%timevalue</span>
+0154                     spkStartTick=round(((spiketime-d.sweepStartTime(startSegm))/msPerT)-ticks_pre_event+1); <span class="comment">%round for heavens sake</span>
+0155                     ticksSinceLast=round(((spiketime-lastSpikeEnd(i1))/msPerT)-ticks_pre_event+1); <span class="comment">%round for heavens sake</span>
+0156                     <span class="keyword">if</span> ticksSinceLast&gt;2 &amp; spikeCount(i1)&gt;1     <span class="comment">%set two adjacent zero values for drawing!</span>
+0157                         c{sortedChannelID(i1),1}(spikeCount(i1)+1)=lastSpikeEnd(i1)+msPerT;
+0158                         c{sortedChannelID(i1),2}(spikeCount(i1)+1)=d.ZeroADValue;
+0159                         c{sortedChannelID(i1),1}(spikeCount(i1)+2)=d.sweepStartTime(startSegm)+(spkStartTick-1)*msPerT;
+0160                         c{sortedChannelID(i1),2}(spikeCount(i1)+2)=d.ZeroADValue;
+0161                         spikeCount(i1)=spikeCount(i1)+2;
+0162                     <span class="keyword">end</span>
+0163                     <span class="keyword">if</span> ticksSinceLast&lt;1    
+0164                         ticksInPrevSegm=abs(ticksSinceLast)+1;
+0165                         spkStartTick=spkStartTick+ticksInPrevSegm;
+0166                         tmp=tmp(ticksInPrevSegm+1:spikeSize); <span class="comment">%throw away overlap</span>
+0167                         spikeSize=spikeSize-ticksInPrevSegm;
+0168                     <span class="keyword">end</span>
+0169                     c{sortedChannelID(i1),1}(spikeCount(i1)+1:spikeCount(i1)+spikeSize)= <span class="keyword">...</span>
+0170                             d.sweepStartTime(startSegm)+[spkStartTick:spkStartTick+spikeSize-1]*msPerT;    <span class="comment">%times</span>
+0171                     c{sortedChannelID(i1),2}(spikeCount(i1)+1:spikeCount(i1)+spikeSize)= tmp;                <span class="comment">%values</span>
+0172                     spikeCount(i1)=spikeCount(i1)+spikeSize;
+0173                     lastSpikeEnd(i1)=c{sortedChannelID(i1),1}(spikeCount(i1));
+0174                 <span class="keyword">end</span>
+0175             <span class="keyword">end</span>
+0176         <span class="keyword">end</span>
+0177     <span class="keyword">end</span>
+0178 <span class="keyword">end</span>
+0179 
+0180 <span class="keyword">for</span> i1=1:nChannels
+0181     c{sortedChannelID(i1),1}=c{sortedChannelID(i1),1}(1:spikeCount(i1),:);     <span class="comment">%spiketimes, sized as needed</span>
+0182     c{sortedChannelID(i1),2}=c{sortedChannelID(i1),2}(1:spikeCount(i1),:);    <span class="comment">%spikevalues, sized as needed</span>
+0183 <span class="keyword">end</span>
+0184 
+0185 newc.spiketimes={c{:,1}};
+0186 newc.spikevalues={c{:,2}};
+0187 newc.startend=[(startSegm-1) (endSegm-1)]*128;
+0188 
+0189 <span class="keyword">if</span> rawdata
+0190     <span class="comment">%fill timevalue data with zeros</span>
+0191     minT=startTime;
+0192     maxT=endTime;
+0193     maxTick=ceil((maxT-minT)*1000/d.MicrosecondsPerTick);
+0194     val=zeros(sum(channelSel),maxTick)+d.ZeroADValue;
+0195     count=0;
+0196     <span class="keyword">for</span> i1=1:nChannels
+0197       <span class="keyword">if</span> channelSel(i1) 
+0198          count=count+1;
+0199          tmpT=newc.spiketimes{i1};
+0200          minIdx=min(find(tmpT&gt;=minT));
+0201          maxIdx=max(find(tmpT&lt;(maxT-d.MicrosecondsPerTick/1000/2)));
+0202          <span class="keyword">if</span> ~isempty(minIdx)&amp; ~isempty(maxIdx)
+0203             idxT=round((tmpT-startTime)*1000/d.MicrosecondsPerTick)+1;
+0204             idxT=idxT(minIdx:maxIdx);
+0205             val(count,idxT)=newc.spikevalues{i1}(minIdx:maxIdx)';
+0206          <span class="keyword">end</span>
+0207       <span class="keyword">end</span>
+0208    <span class="keyword">end</span>
+0209     newc.spiketimes=[];
+0210     newc.spikevalues=val;
+0211     newc.startend=[startTime endTime];
+0212 <span class="keyword">end</span>
+0213 
+0214 c=newc;
+0215 
+0216 <span class="keyword">return</span>;
+0217</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

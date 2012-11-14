@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_hhist</title>
+  <meta name="keywords" content="test_hhist">
+  <meta name="description" content="demonstrate use of hhist">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html lightspeed --><!-- menu.html graphics -->
+<h1>test_hhist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>demonstrate use of hhist</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> demonstrate use of hhist</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a>	AXIS_PCT       Set reasonable axis limits.</li><li><a href="hhist.html" class="code" title="function [density,test] = hhist(data, resolution)">hhist</a>	HHIST       Locally-adaptive unbiased density estimate.</li><li><a href="../../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>	SAMPLE    Sample from categorical distribution.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% demonstrate use of hhist</span>
+0002 
+0003 figure;
+0004 x = <a href="../../../Otherbox/lightspeed/sample.html" class="code" title="function x = sample(p, n)">sample</a>([0.1 0.2 0.3 0.4], 1000);
+0005 <a href="hhist.html" class="code" title="function [density,test] = hhist(data, resolution)">hhist</a>(x);
+0006 
+0007 figure;
+0008 <span class="comment">% verify density for product of indep normals</span>
+0009 x = prod(randn(2,100000));
+0010 ts = linspace(-1,1,1000);
+0011 z = <a href="hhist.html" class="code" title="function [density,test] = hhist(data, resolution)">hhist</a>(x, ts);
+0012 h = plot(ts, z, ts, besselk(0,abs(ts))*1/pi);
+0013 <span class="comment">%set(h(2),'LineWidth',2)</span>
+0014 <a href="axis_pct.html" class="code" title="function ax = axis_pct(pct)">axis_pct</a></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

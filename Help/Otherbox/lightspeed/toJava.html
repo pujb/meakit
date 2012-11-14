@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of toJava</title>
+  <meta name="keywords" content="toJava">
+  <meta name="description" content="toJava       Convert to Java representation.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html lightspeed -->
+<h1>toJava
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>toJava       Convert to Java representation.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function jv = toJava(v,collection) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">toJava       Convert to Java representation.
+ toJava(v) returns a Java object representing the matlab value v.
+ toJava(v,1) requires the result to be a collection, not a simple object
+ such as java.lang.Double.
+
+ Conversions:
+ scalar           -&gt; java.lang.Double
+ numeric array    -&gt; javaArray of Double
+ character array  -&gt; java.lang.String or array of same
+ empty array      -&gt; java.util.Vector
+ cell array       -&gt; javaArray of Objects
+ empty cell array -&gt; java.util.BitSet
+ structure        -&gt; java.util.HashTable
+ class            -&gt; struct with '_class' property
+
+ See also <a href="fromJava.html" class="code" title="function v = fromJava(jv)">fromJava</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>	FIELDNAMES Get mutable structure field names.</li><li><a href="../../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>	IND2SUBV   Subscript vector from linear index.</li><li><a href="rows.html" class="code" title="function r = rows(x)">rows</a>	ROWS      The number of rows.</li><li><a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li><li><a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li><li><a href="../../Otherbox/panel/@panel/subsasgn.html" class="code" title="function p = subsasgn(p, s, val)">subsasgn</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/lightspeed/@mutable/mutable.html" class="code" title="function mut = mutable(v)">mutable</a>	MUTABLE    Convert to a mutable object.</li><li><a href="../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>	Written by Tom Minka</li><li><a href="../../Otherbox/lightspeed/tests/test_java.html" class="code" title="">test_java</a>	</li><li><a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>	toJava       Convert to Java representation.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function jv = toJava(v,collection)</a>
+0002 <span class="comment">%toJava       Convert to Java representation.</span>
+0003 <span class="comment">% toJava(v) returns a Java object representing the matlab value v.</span>
+0004 <span class="comment">% toJava(v,1) requires the result to be a collection, not a simple object</span>
+0005 <span class="comment">% such as java.lang.Double.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Conversions:</span>
+0008 <span class="comment">% scalar           -&gt; java.lang.Double</span>
+0009 <span class="comment">% numeric array    -&gt; javaArray of Double</span>
+0010 <span class="comment">% character array  -&gt; java.lang.String or array of same</span>
+0011 <span class="comment">% empty array      -&gt; java.util.Vector</span>
+0012 <span class="comment">% cell array       -&gt; javaArray of Objects</span>
+0013 <span class="comment">% empty cell array -&gt; java.util.BitSet</span>
+0014 <span class="comment">% structure        -&gt; java.util.HashTable</span>
+0015 <span class="comment">% class            -&gt; struct with '_class' property</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also fromJava.</span>
+0018 
+0019 <span class="comment">% Written by Tom Minka</span>
+0020 <span class="comment">% (c) Microsoft Corporation. All rights reserved.</span>
+0021 
+0022 <span class="keyword">if</span> nargin &lt; 2
+0023   collection = 0;
+0024 <span class="keyword">end</span>
+0025 <span class="comment">% in case v already is a Java object</span>
+0026 jv = v;
+0027 <span class="keyword">if</span> isnumeric(v)
+0028   <span class="keyword">if</span> isempty(v)
+0029     jv = java.util.Vector;
+0030   <span class="keyword">elseif</span> length(v) == 1
+0031     <span class="keyword">if</span> collection
+0032       jv = javaArray(<span class="string">'java.lang.Double'</span>,1);
+0033       jv(1) = java.lang.Double(v);
+0034     <span class="keyword">else</span>
+0035       jv = java.lang.Double(v);
+0036     <span class="keyword">end</span>
+0037   <span class="keyword">else</span>
+0038     sz = size(v);
+0039     jv = javaArray(<span class="string">'java.lang.Double'</span>,sz);
+0040     v = v(:);
+0041     <span class="keyword">for</span> i = 1:prod(sz)
+0042       index = substruct(<span class="string">'()'</span>,num2cell(<a href="ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>(sz,i)));
+0043       <a href="../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>(jv,index,<a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>(v(i)));
+0044     <span class="keyword">end</span>
+0045   <span class="keyword">end</span>
+0046   <span class="keyword">return</span>
+0047 <span class="keyword">end</span>
+0048 <span class="keyword">if</span> ischar(v)
+0049   n = <a href="rows.html" class="code" title="function r = rows(x)">rows</a>(v);
+0050   <span class="keyword">if</span> n == 1 &amp; ~collection
+0051     jv = java.lang.String(v);
+0052   <span class="keyword">else</span>
+0053     jv = javaArray(<span class="string">'java.lang.String'</span>,n);
+0054     <span class="keyword">for</span> i = 1:n
+0055       jv(i) = java.lang.String(deblank(v(i,:)));
+0056     <span class="keyword">end</span>
+0057   <span class="keyword">end</span>
+0058 <span class="keyword">end</span>
+0059 <span class="keyword">if</span> iscell(v)
+0060   <span class="keyword">if</span> isempty(v)
+0061     jv = java.util.BitSet;
+0062   <span class="keyword">else</span>
+0063     sz = size(v);
+0064     jv = javaArray(<span class="string">'java.lang.Object'</span>,sz);
+0065     v = v(:);
+0066     <span class="keyword">for</span> i = 1:prod(sz)
+0067       index = substruct(<span class="string">'()'</span>,num2cell(<a href="ind2subv.html" class="code" title="function sub = ind2subv(siz,index)">ind2subv</a>(sz,i)));
+0068       <a href="../../Otherbox/lightspeed/@mutable/subsasgn.html" class="code" title="function mut = subsasgn(mut,index,v)">subsasgn</a>(jv,index,<a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>(v{i}));
+0069     <span class="keyword">end</span>
+0070   <span class="keyword">end</span>
+0071   <span class="keyword">return</span>
+0072 <span class="keyword">end</span>
+0073 <span class="keyword">if</span> isobject(v) | isstruct(v)
+0074   jv = java.util.Hashtable;
+0075   <span class="keyword">if</span> isobject(v)
+0076     jv.put(<span class="string">'_class'</span>,class(v));
+0077     v = struct(v);
+0078   <span class="keyword">end</span>
+0079   <span class="comment">% record the order of the fieldnames</span>
+0080   fields = java.util.Vector;
+0081   <span class="keyword">for</span> f = <a href="../../Otherbox/lightspeed/@mutable/fieldnames.html" class="code" title="function names = fieldnames(s)">fieldnames</a>(v)'
+0082     fields.addElement(<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f));
+0083     jv.put(<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f),<a href="toJava.html" class="code" title="function jv = toJava(v,collection)">toJava</a>(<a href="../../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(v,<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(f))));
+0084   <span class="keyword">end</span>
+0085   jv.put(<span class="string">'_fields'</span>,fields);
+0086   <span class="keyword">return</span>
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

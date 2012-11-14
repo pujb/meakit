@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_sti_responses_elictedby_one_elec</title>
+  <meta name="keywords" content="util_sti_responses_elictedby_one_elec">
+  <meta name="description" content="UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Stimulation -->
+<h1>util_sti_responses_elictedby_one_elec
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ result num ] = util_sti_responses_elictedby_one_elec( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应
+   从刺激响应中，挑选出由给定电极刺激后的全皿其他的所有通道上各自的响应。
+   
+   输入参数：
+       responses：各个通道的响应；
+       amplitudes：各个通道的响应对应的幅度值（一般是峰峰值）；
+       elecs：对应responses上，通道的ChID；
+       stipro：刺激方案；
+       sti_id：指定的刺激通道号；
+
+   输出参数：
+       result：分析结果
+       num：是指由STI_ID给定刺激的Trigger的数目
+
+   Eg：
+   [result num] = util_sti_responses_elictedby_one_elec('responses',
+   responses, 'elecs', elecs, 'stipro', stimulation, 'sti_id', 47, 'amplitudes', amplitudes)
+
+   蒲江波 2010年5月4日</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>	UTIL_CONVERT_CH2HW Convert hardware ID into channel ID</li><li><a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>	PVPMOD             - evaluate parameter/value pairs</li><li><a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li><li><a href="util_check_trigger_belongs_elec.html" class="code" title="function [ isMatched ] = util_check_trigger_belongs_elec(stimulation, n, sti_id)">util_check_trigger_belongs_elec</a>	UTIL_CHECK_TRIGGER_BELONGS_ELEC 工具函数：检查本次Trigger是否是指定电极上给定的</li><li><a href="util_parse_para_fromstimulation.html" class="code" title="function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation )">util_parse_para_fromstimulation</a>	UTIL_PARSE_PARA_FROMSTIMULATION 工具函数：从刺激方案结构体中解析出方案所包含的各种刺激波形的变化范围</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ result num ] = util_sti_responses_elictedby_one_elec( varargin )</a>
+0002 <span class="comment">%UTIL_STI_RESPONSES_ELICTEDBY_ONE_ELEC 工具函数：由某一个特定的刺激电极刺激后的全通道响应</span>
+0003 <span class="comment">%   从刺激响应中，挑选出由给定电极刺激后的全皿其他的所有通道上各自的响应。</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   输入参数：</span>
+0006 <span class="comment">%       responses：各个通道的响应；</span>
+0007 <span class="comment">%       amplitudes：各个通道的响应对应的幅度值（一般是峰峰值）；</span>
+0008 <span class="comment">%       elecs：对应responses上，通道的ChID；</span>
+0009 <span class="comment">%       stipro：刺激方案；</span>
+0010 <span class="comment">%       sti_id：指定的刺激通道号；</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   输出参数：</span>
+0013 <span class="comment">%       result：分析结果</span>
+0014 <span class="comment">%       num：是指由STI_ID给定刺激的Trigger的数目</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Eg：</span>
+0017 <span class="comment">%   [result num] = util_sti_responses_elictedby_one_elec('responses',</span>
+0018 <span class="comment">%   responses, 'elecs', elecs, 'stipro', stimulation, 'sti_id', 47, 'amplitudes', amplitudes)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   蒲江波 2010年5月4日</span>
+0021 
+0022 <a href="../IO/mcd/mcintfac/pvpmod.html" class="code" title="function pvpmod(x)">pvpmod</a>(varargin);
+0023 
+0024 <span class="comment">% 检查参数</span>
+0025 
+0026 <span class="keyword">if</span> ~exist(<span class="string">'responses'</span>, <span class="string">'var'</span>)
+0027     error(<span class="string">'RESPONSES must be provided.'</span>);
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="keyword">if</span> ~exist(<span class="string">'amplitudes'</span>, <span class="string">'var'</span>)
+0031     error(<span class="string">'AMPLITUDES must be provided.'</span>);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="keyword">if</span> ~exist(<span class="string">'elecs'</span>, <span class="string">'var'</span>)
+0035     error(<span class="string">'ELECS must be provided.'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> ~exist(<span class="string">'stipro'</span>, <span class="string">'var'</span>)
+0039     error(<span class="string">'STIMULATION PROTOCOL must be provided.'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> ~exist(<span class="string">'sti_id'</span>, <span class="string">'var'</span>)
+0043     error(<span class="string">'STI_ID must be provided.'</span>);
+0044 <span class="keyword">end</span>
+0045 
+0046 h = waitbar(0, <span class="string">'Please wait...'</span>);
+0047 <a href="../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(h, <span class="string">'Name'</span>, <span class="string">'Please wait...'</span>);
+0048 
+0049 num_trigger = length(responses{1});
+0050 
+0051 <span class="comment">% 计算在指定电极刺激时，总共有多少种变化</span>
+0052 [ ~, variation_electrodes variation_duration variation_amplitude variation_shapes variation_isi, ~ ] = <a href="util_parse_para_fromstimulation.html" class="code" title="function [ n e d a s i t ] = util_parse_para_fromstimulation( stimulation )">util_parse_para_fromstimulation</a>(stipro);
+0053 <span class="comment">%</span>
+0054 <span class="comment">% TEMPLATE Put your code here 可根据不同变化情况初始化结果变量</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% TEMPLATE Init result arrays here</span>
+0057 <span class="keyword">for</span> i=1:length(variation_amplitude)
+0058     <span class="keyword">for</span> j = 1:64
+0059         <span class="comment">% TIMING</span>
+0060         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).timing.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all = {};
+0061         <span class="comment">% AMPLITUDE</span>
+0062         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all = {};
+0063         
+0064         <span class="comment">% NUMBER OF RESPONSES</span>
+0065         
+0066         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all = [];
+0067         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.mean = 0;
+0068         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std = 0;
+0069         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.sem = 0;
+0070         <span class="comment">% 该观察电极上在指定刺激电极、指定刺激电压下的Trigger总数</span>
+0071         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num = 0;
+0072         <span class="comment">% 该观察电极上在指定刺激电极、指定刺激电压下的，有Response的Trigger总数</span>
+0073         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num_response = 0;
+0074         
+0075         <span class="comment">% FIRST RESPONSE DELAY</span>
+0076         
+0077         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all = [];
+0078         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.mean = 0;
+0079         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std = 0;
+0080         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.sem = 0;
+0081         <span class="comment">% 该观察电极上在指定刺激电极、指定刺激电压下的Trigger总数</span>
+0082         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num = 0;
+0083         <span class="comment">% 该观察电极上在指定刺激电极、指定刺激电压下的，有Response的Trigger总数</span>
+0084         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num_response = 0;
+0085         
+0086         <span class="comment">% FIRST RESPONSE AMPLITUDE</span>
+0087         
+0088         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all = [];
+0089         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.mean = 0;
+0090         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std = 0;
+0091         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.sem = 0;
+0092         <span class="comment">% 该观察电极上在指定刺激电极、指定刺激电压下的Trigger总数</span>
+0093         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num = 0;
+0094         <span class="comment">% 该观察电极上在指定刺激电极、指定刺激电压下的，有Response的Trigger总数</span>
+0095         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num_response = 0;
+0096     <span class="keyword">end</span>
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">% 在所有Trigger中遍历，如果该Trigger属于指定电极输出的刺激，则纳入计算</span>
+0100 num = 0;    <span class="comment">% 对应电极的刺激个数</span>
+0101 
+0102 <span class="keyword">for</span> trigger = 1:num_trigger
+0103     <span class="keyword">if</span> (<a href="util_check_trigger_belongs_elec.html" class="code" title="function [ isMatched ] = util_check_trigger_belongs_elec(stimulation, n, sti_id)">util_check_trigger_belongs_elec</a>(stipro,trigger,sti_id))
+0104         <span class="comment">% 本次Trigger属于指定的刺激电极发出的刺激</span>
+0105         num = num + 1;
+0106         
+0107         <span class="comment">% 在观察电极中循环</span>
+0108         <span class="keyword">for</span> hwid = 1:64
+0109             <span class="comment">% 计算各种统计量</span>
+0110             <span class="comment">% TEMPLATE Put your code here</span>
+0111             <span class="comment">%</span>
+0112             <span class="comment">% 判断本电压</span>
+0113             i = find(variation_amplitude==stipro(trigger).pulse_amplitude);
+0114             
+0115             <span class="comment">% 本电压下本观察电极下的Trigger数++</span>
+0116             result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num + 1;
+0117             result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num + 1;
+0118             result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num + 1;
+0119 
+0120             <span class="comment">% 判断本次Trigger有无response</span>
+0121             <span class="keyword">if</span> (isempty(responses{hwid}{trigger}))
+0122                 hasResponse = false;
+0123             <span class="keyword">else</span>
+0124                 hasResponse = true;
+0125                 <span class="comment">% 本电压下本观察电极下的诱发出Response的Trigger数++</span>
+0126                 result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num_response = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num_response + 1;
+0127                 result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num_response = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num_response + 1;
+0128                 result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num_response = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).stat.num_response + 1;
+0129             <span class="keyword">end</span>
+0130             
+0131             <span class="comment">% NUMBER OF RESPONSE</span>
+0132             first_response = responses{hwid}{trigger};
+0133             result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all = [result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all length(first_response)];
+0134             
+0135             <span class="comment">% TIMING(放在这里计算的是全部的Trial)</span>
+0136             result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).timing.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all = [result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).timing.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all {first_response}];
+0137             
+0138             <span class="comment">% FIRST RESPONSE DELAY</span>
+0139             <span class="keyword">if</span> (~hasResponse)
+0140                 <span class="comment">% no response = not count</span>
+0141                 <span class="comment">% result.(['amp' num2str(variation_amplitude(i))]).first_response_delay.(['ch' num2str(util_convert_hw2ch(hwid))]).all = [result.(['amp' num2str(variation_amplitude(i))]).first_response_delay.(['ch' num2str(util_convert_hw2ch(hwid))]).all 0];</span>
+0142             <span class="keyword">else</span>
+0143                 result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all = [result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all first_response(1)];
+0144                 <span class="comment">% TIMING(放在这里计算的是有response的Trial)</span>
+0145                 <span class="comment">% result.(['amp' num2str(variation_amplitude(i))]).timing.(['ch' num2str(util_convert_hw2ch(hwid))]).all = [result.(['amp' num2str(variation_amplitude(i))]).timing.(['ch' num2str(util_convert_hw2ch(hwid))]).all {first_response}];</span>
+0146             <span class="keyword">end</span>
+0147             
+0148             first_response = amplitudes{hwid}{trigger};
+0149 
+0150             <span class="comment">% AMPLITUDE(放在这里计算的是全部的Trial)</span>
+0151             result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all = [result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all {first_response}];
+0152             
+0153             <span class="comment">% FIRST RESPONSE AMPLITUDE</span>
+0154             <span class="keyword">if</span> (~hasResponse)
+0155                 <span class="comment">% no response = not count</span>
+0156                 <span class="comment">% result.(['amp' num2str(variation_amplitude(i))]).first_response_amplitude.(['ch' num2str(util_convert_hw2ch(hwid))]).all = [result.(['amp' num2str(variation_amplitude(i))]).first_response_amplitude.(['ch' num2str(util_convert_hw2ch(hwid))]).all 0];</span>
+0157             <span class="keyword">else</span>
+0158                 result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all = [result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(hwid))]).all first_response(1)];
+0159                 <span class="comment">% AMPLITUDE(放在这里计算的是有response的Trial)</span>
+0160                 <span class="comment">% result.(['amp' num2str(variation_amplitude(i))]).amplitude.(['ch' num2str(util_convert_hw2ch(hwid))]).all = [result.(['amp' num2str(variation_amplitude(i))]).amplitude.(['ch' num2str(util_convert_hw2ch(hwid))]).all {first_response}];</span>
+0161             <span class="keyword">end</span>
+0162         <span class="keyword">end</span>
+0163     <span class="keyword">end</span>
+0164     waitbar(trigger/num_trigger, h, [<span class="string">'Triggers '</span> num2str(trigger) <span class="string">' / '</span> num2str(num_trigger)]);
+0165 <span class="keyword">end</span>
+0166 result.total_num = num;
+0167 result.description = <span class="string">'amp(mV), all time in ms'</span>;
+0168 <span class="comment">% 计算各种统计量</span>
+0169 <span class="comment">% TEMPLATE Put your code here</span>
+0170 <span class="keyword">for</span> i=1:length(variation_amplitude)
+0171     <span class="keyword">for</span> j = 1:64
+0172         <span class="comment">% NUMBER OF RESPONSES</span>
+0173         
+0174         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.mean = mean(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all);
+0175         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std = std(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all);
+0176         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.sem = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std / sqrt(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).num_response.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num);
+0177         
+0178         <span class="comment">% FIRST RESPONSE DELAY</span>
+0179 
+0180         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.mean = mean(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all);
+0181         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std = std(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all);
+0182         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.sem = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std / sqrt(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_delay.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num_response);
+0183         
+0184         <span class="comment">% FIRST RESPONSE AMPLITUDE</span>
+0185         
+0186         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.mean = mean(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all);
+0187         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std = std(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).all);
+0188         result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.sem = result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.std / sqrt(result.([<span class="string">'amp'</span> num2str(variation_amplitude(i))]).first_response_amplitude.([<span class="string">'ch'</span> num2str(<a href="../Common/util_convert_hw2ch.html" class="code" title="function [results] = util_convert_hw2ch(input)">util_convert_hw2ch</a>(j))]).stat.num_response);
+0189     <span class="keyword">end</span>
+0190 <span class="keyword">end</span>
+0191 close(h);
+0192 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_rename_datafile_based_on_div</title>
+  <meta name="keywords" content="util_rename_datafile_based_on_div">
+  <meta name="description" content="UTIL_RENAME_DATAFILE_BASED_ON_DIV Rename the data file by DIV">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_rename_datafile_based_on_div
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_RENAME_DATAFILE_BASED_ON_DIV Rename the data file by DIV</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function util_rename_datafile_based_on_div(MEANO, culdate) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_RENAME_DATAFILE_BASED_ON_DIV Rename the data file by DIV
+   Change the name of datafile by the given MEA number and the culture
+   date. Recordings in the same day will be sorted by each recording start
+   time (0001, 0002, etc.)
+
+   Input:
+           MEANO:      MEA No., 'N1272'
+           culdate:    Culture date, '2010-04-01'
+
+   Created on Sep/09/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>	getfield - returns any datastream fields content (datastrm method)</li><li><a href="util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>	UTIL_SORT_MCDFILE_BY_RECTIME Sort the MCS datafile by their recording time</li><li><a href="../Otherbox/lightspeed/@mutable/getfield.html" class="code" title="function v = getfield(s,field)">getfield</a>	GETFIELD Get mutable structure field contents.</li><li><a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function util_rename_datafile_based_on_div(MEANO, culdate)</a>
+0002 <span class="comment">%UTIL_RENAME_DATAFILE_BASED_ON_DIV Rename the data file by DIV</span>
+0003 <span class="comment">%   Change the name of datafile by the given MEA number and the culture</span>
+0004 <span class="comment">%   date. Recordings in the same day will be sorted by each recording start</span>
+0005 <span class="comment">%   time (0001, 0002, etc.)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Input:</span>
+0008 <span class="comment">%           MEANO:      MEA No., 'N1272'</span>
+0009 <span class="comment">%           culdate:    Culture date, '2010-04-01'</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Created on Sep/09/2010 By Pu Jiangbo</span>
+0012 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0013 
+0014 disp(<span class="string">'This operation cannot be undone, please be careful'</span>);
+0015 pause;
+0016 
+0017 <span class="comment">% Get file list</span>
+0018 <span class="comment">% Popup a dialog</span>
+0019 [filenames, pathname, ~] = uigetfile(<span class="string">'*.mcd'</span>, <span class="string">'MultiSelect'</span>, <span class="string">'On'</span>);
+0020 
+0021 <span class="keyword">if</span> ~iscell(filenames) || size(filenames,2) &lt; 2
+0022     <span class="comment">% Only one files been selected</span>
+0023     num_of_files = 1;
+0024     <span class="comment">% Create a cell array to put together filename and its timestamp</span>
+0025     filenames_tmp = cell( num_of_files, 2 );   <span class="comment">% col1: Filename, col2: Timestamp</span>
+0026     filenames_tmp{1,1} = [pathname filenames];
+0027 <span class="keyword">else</span>
+0028     <span class="comment">% Multiple files</span>
+0029     num_of_files = size( filenames, 2 );
+0030     <span class="comment">% Create a cell array to put together filename and its timestamp</span>
+0031     filenames_tmp = cell( num_of_files, 2 );   <span class="comment">% col1: Filename, col2: Timestamp</span>
+0032     <span class="keyword">for</span> i = 1:num_of_files
+0033         filenames_tmp{i,1} = [pathname filenames{i}];
+0034     <span class="keyword">end</span>
+0035 <span class="keyword">end</span>
+0036 
+0037 filenames = filenames_tmp;
+0038 <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> filenames_tmp;
+0039 
+0040 <span class="comment">% Sort</span>
+0041 [filenames(:,1) filenames(:,2) isOverlapped] = <a href="util_sort_mcdfile_by_rectime.html" class="code" title="function [ sorted_filename_list sorted_timestamp_list isOverlapped ] = util_sort_mcdfile_by_rectime( input_list, number_of_files, varargin )">util_sort_mcdfile_by_rectime</a>( filenames(:,1), num_of_files );
+0042 
+0043 <span class="keyword">if</span> isOverlapped
+0044     error(<span class="string">'File overlapped, please double check the recording start/end time'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% Generate the prefix of filenames</span>
+0048 prefix = [MEANO <span class="string">'-'</span> culdate(1:4) culdate(6:7) culdate(9:10) <span class="string">'-'</span>];
+0049 
+0050 <span class="comment">% Change pwd</span>
+0051 current_pwd = pwd();
+0052 cd(pathname);
+0053 
+0054 <span class="comment">% Loop and rename</span>
+0055 <span class="keyword">for</span> i = 1:num_of_files
+0056     
+0057     <span class="comment">% Get old filename</span>
+0058     [~, filename, ext] = fileparts(filenames{i,1});
+0059     quote = <span class="string">'&quot;'</span>;
+0060     old_name = [quote filename ext quote];
+0061     
+0062     <span class="comment">% Read mcd</span>
+0063     [~] = evalc(<span class="string">'D = datastrm(filenames{i,1})'</span>);
+0064     
+0065     <span class="comment">% Get DIV and generate the new name</span>
+0066     div = fix(<a href="../IO/mcd/mcintfac/@datastrm/getfield.html" class="code" title="function field=getfield(d,name, idx)">getfield</a>(D, <span class="string">'recordingdate'</span>) - datenum(culdate));
+0067     new_name = [prefix num2str(div) <span class="string">'D'</span> ext];
+0068     
+0069     <span class="comment">% Close old file</span>
+0070     <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> D;
+0071     <a href="../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> mex;
+0072     
+0073     disp([<span class="string">'['</span> num2str(i) <span class="string">'/'</span> num2str(num_of_files) <span class="string">'] '</span> old_name <span class="string">' --&gt; '</span> quote new_name quote]);
+0074     
+0075     <span class="comment">% Check if already renamed</span>
+0076     <span class="keyword">if</span> strcmpi(old_name, [quote new_name quote])
+0077         <span class="keyword">continue</span>;
+0078     <span class="keyword">end</span>
+0079     
+0080     <span class="comment">% Check if the same name exist</span>
+0081     fileid = 0;
+0082     <span class="keyword">while</span> exist(new_name, <span class="string">'file'</span>)
+0083         <span class="comment">% Exist! Create a new name</span>
+0084         fileid = fileid + 1;
+0085         new_name = [prefix num2str(div) <span class="string">'D '</span> num2str(fileid, <span class="string">'%.4d'</span>) ext];
+0086     <span class="keyword">end</span>
+0087     
+0088     <span class="comment">% Rename</span>
+0089     new_name = [quote new_name quote];
+0090     [status osresult] = system([<span class="string">'ren '</span> old_name <span class="string">' '</span> new_name]);
+0091     <span class="keyword">if</span> ~status
+0092         error(osresult);
+0093     <span class="keyword">end</span>
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="comment">% Restore pwd</span>
+0097 cd(current_pwd);
+0098 
+0099 <span class="keyword">end</span>
+0100</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

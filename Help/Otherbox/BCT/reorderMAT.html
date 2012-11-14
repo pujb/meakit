@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of reorderMAT</title>
+  <meta name="keywords" content="reorderMAT">
+  <meta name="description" content="REORDERMAT         Reorder matrix for visualization">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>reorderMAT
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>REORDERMAT         Reorder matrix for visualization</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [MATreordered,MATindices,MATcost] = reorderMAT(MAT,H,cost); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">REORDERMAT         Reorder matrix for visualization
+
+   [MATreordered,MATindices,MATcost] = reorderMAT(MAT,H,cost);
+
+   This function reorders the connectivity matrix in order to place more
+   edges closer to the diagonal � this often helps in displaying community
+   structure, clusters, etc.
+
+   Inputs:     MAT,            connection matrix
+               H,              number of reordering attempts
+               cost,           'line' or 'circ', for shape of lattice
+                               (linear or ring lattice)
+
+               MATreordered    reordered connection matrix
+               MATindices      reordered indices
+               MATcost         cost of reordered matrix
+   
+
+   Olaf Sporns, Indiana University</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [MATreordered,MATindices,MATcost] = reorderMAT(MAT,H,cost);</a>
+0002 <span class="comment">%REORDERMAT         Reorder matrix for visualization</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [MATreordered,MATindices,MATcost] = reorderMAT(MAT,H,cost);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   This function reorders the connectivity matrix in order to place more</span>
+0007 <span class="comment">%   edges closer to the diagonal � this often helps in displaying community</span>
+0008 <span class="comment">%   structure, clusters, etc.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Inputs:     MAT,            connection matrix</span>
+0011 <span class="comment">%               H,              number of reordering attempts</span>
+0012 <span class="comment">%               cost,           'line' or 'circ', for shape of lattice</span>
+0013 <span class="comment">%                               (linear or ring lattice)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%               MATreordered    reordered connection matrix</span>
+0016 <span class="comment">%               MATindices      reordered indices</span>
+0017 <span class="comment">%               MATcost         cost of reordered matrix</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   Olaf Sporns, Indiana University</span>
+0021 
+0022 
+0023 N = length(MAT);
+0024 diagMAT = diag(diag(MAT));
+0025 MAT = MAT-diagMAT;
+0026 
+0027 <span class="comment">% generate cost function</span>
+0028 <span class="keyword">if</span> (cost==<span class="string">'line'</span>);
+0029     profil = fliplr(normpdf([1:N],0,N/2));
+0030 <span class="keyword">end</span>;
+0031 <span class="keyword">if</span> (cost==<span class="string">'circ'</span>);
+0032     profil = fliplr(normpdf([1:N],N/2,N/4));
+0033 <span class="keyword">end</span>;
+0034 COST = toeplitz(profil,profil);
+0035 
+0036 <span class="comment">% initialize lowCOST</span>
+0037 lowMATcost = sum(sum(COST.*MAT));
+0038 <span class="comment">%[x,y] = find(MAT);</span>
+0039 <span class="comment">%lowMATcost = sum(profil(abs(x-y)));</span>
+0040 
+0041 <span class="comment">% keep track of starting configuration</span>
+0042 MATstart = MAT;
+0043 starta = 1:N;
+0044    
+0045 <span class="comment">% reorder</span>
+0046 <span class="keyword">for</span> h=1:H
+0047     a = 1:N;
+0048     <span class="comment">% choose two positions at random and flip them</span>
+0049     r = randperm(N);
+0050     a(r(1)) = r(2);
+0051     a(r(2)) = r(1);
+0052     MATcostnew = sum(sum(MAT(a,a).*COST));
+0053 <span class="comment">%    [x,y] = find(MAT(a,a));</span>
+0054 <span class="comment">%    MATcostnew = sum(profil(abs(x-y)));</span>
+0055     <span class="comment">% if this reduced the overall cost</span>
+0056     <span class="keyword">if</span> (MATcostnew &lt; lowMATcost)
+0057         MAT = MAT(a,a);
+0058         r2 = starta(r(2));
+0059         r1 = starta(r(1));
+0060         starta(r(1)) = r2;
+0061         starta(r(2)) = r1;
+0062         lowMATcost = MATcostnew;
+0063         am = a;
+0064     <span class="keyword">end</span>;
+0065 <span class="keyword">end</span>;    <span class="comment">% h</span>
+0066 
+0067 MATreordered = MATstart(starta,starta) + diagMAT(starta,starta);
+0068 MATindices = starta;
+0069 MATcost = lowMATcost;
+0070</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

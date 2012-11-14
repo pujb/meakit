@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of panel_demo_7</title>
+  <meta name="keywords" content="panel_demo_7">
+  <meta name="description" content="% PANEL DEMO 7">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html panel -->
+<h1>panel_demo_7
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% PANEL DEMO 7</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">% PANEL DEMO 7
+%
+% (a) Create an empty panel object
+% (b) Packing two panels into one figure
+% (c) Plotting into those panels, setting axis labels
+% (d) Making room for titles</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>	p = panel(...)</li><li><a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>	select(p[, ax])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 
+0002 <span class="comment">%% PANEL DEMO 7</span>
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%% (a) Create an empty panel object</span>
+0005 <span class="comment">%% (b) Packing two panels into one figure</span>
+0006 <span class="comment">%% (c) Plotting into those panels, setting axis labels</span>
+0007 <span class="comment">%% (d) Making room for titles</span>
+0008 
+0009 
+0010 
+0011 <span class="comment">%% (a)</span>
+0012 
+0013 <span class="comment">% clear or create figure and create root panel covering</span>
+0014 <span class="comment">% whole figure</span>
+0015 clf
+0016 p = <a href="../../Otherbox/panel/@panel/panel.html" class="code" title="function p = panel(varargin)">panel</a>;
+0017 p.fontsize = 12;
+0018 
+0019 
+0020 
+0021 <span class="comment">%% (b)</span>
+0022 
+0023 <span class="comment">% form an upper panel A and a lower panel B where A takes 30% of the</span>
+0024 <span class="comment">% available space, leaving 70% for B</span>
+0025 pA = p.pack(30);
+0026 pB = p.pack();
+0027 
+0028 
+0029 
+0030 <span class="comment">%% (c)</span>
+0031 
+0032 <span class="comment">% plot into panel A</span>
+0033 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pA)
+0034 x = -100:100;
+0035 plot(x,x.^2/1000,<span class="string">'r'</span>)
+0036 
+0037 <span class="comment">% set axis labels through panel, for control over metrics</span>
+0038 pA.xlabel = <span class="string">'x is great'</span>;
+0039 pA.ylabel = <span class="string">'y is better'</span>;
+0040 
+0041 <span class="comment">% plot into panel B</span>
+0042 <a href="../../Otherbox/panel/@panel/select.html" class="code" title="function ax_out = select(p, ax)">select</a>(pB)
+0043 plot(randn(1000,3))
+0044 axis([0 1000 -5 5])
+0045 
+0046 <span class="comment">% set axis labels through panel, for control over metrics</span>
+0047 pB.xlabel = <span class="string">'foo'</span>;
+0048 pB.ylabel = <span class="string">'bar'</span>;
+0049 
+0050 
+0051 
+0052 <span class="comment">%% (d)</span>
+0053 
+0054 <span class="comment">% set a title on the lower panel</span>
+0055 pB.title = [<span class="string">'my panel title'</span>];
+0056 
+0057 <span class="comment">% no space is allocated for a title by default in a panel</span>
+0058 <span class="comment">% layout, so this title bangs into the above xlabel. we can</span>
+0059 <span class="comment">% fix this explicitly by setting the margin for the panel to</span>
+0060 <span class="comment">% inclue a space for the title...</span>
+0061 pB.axismargin = [15 15 0 5];
+0062 
+0063</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

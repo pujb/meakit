@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Kmedoidcall</title>
+  <meta name="keywords" content="Kmedoidcall">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html FUZZCLUST --><!-- # Demos --><!-- menu.html comparing -->
+<h1>Kmedoidcall
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Otherbox/FUZZCLUST/Demos/PCAexample/nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/Demos/clusteringexamples/synthetic/nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li><li><a href="../../../../Otherbox/FUZZCLUST/nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>	</li><li><a href="../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>	validation of the clustering</li><li><a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a>	clear(p)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a href="../../../../Otherbox/panel/@panel/clear.html" class="code" title="function clear(p)">clear</a> all
+0002 close all
+0003 path(path,<span class="string">'..\..\FUZZCLUST'</span>)
+0004 colors={<span class="string">'r.'</span> <span class="string">'gx'</span> <span class="string">'b+'</span> <span class="string">'ys'</span> <span class="string">'md'</span> <span class="string">'cv'</span> <span class="string">'k.'</span> <span class="string">'r*'</span> <span class="string">'g*'</span> <span class="string">'b*'</span> <span class="string">'y*'</span> <span class="string">'m*'</span> <span class="string">'c*'</span> <span class="string">'k*'</span> };
+0005 
+0006 <span class="comment">%the data</span>
+0007 data.X=<a href="nDexample.html" class="code" title="function data=nDexample(cx,N,n,seedi)">nDexample</a>(5,250,2,1);
+0008 <span class="comment">%normalization</span>
+0009 data=<a href="../../../../Otherbox/FUZZCLUST/clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>);
+0010 
+0011 <span class="comment">%parameters</span>
+0012 param.c=3;
+0013 param.m=2;
+0014 param.val=1;
+0015 param.vis=1;
+0016 <span class="comment">%Kmeans clustering</span>
+0017 result=kmedoid(data,param);
+0018 
+0019 <span class="comment">%validation</span>
+0020 result = <a href="../../../../Otherbox/FUZZCLUST/validity.html" class="code" title="function result = validity(result,data,param)">validity</a>(result,data,param);
+0021 <span class="comment">%</span>
+0022 result.validity
+0023</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

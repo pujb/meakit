@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plot12n</title>
+  <meta name="keywords" content="plot12n">
+  <meta name="description" content="This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html gui -->
+<h1>plot12n
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function plot12n(name,data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment"> This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.
+ The toolbox can be obtained from http://homepage.tudelft.nl/19j49
+ You are free to use, change, or redistribute this code in any way you
+ want for non-commercial purposes. However, it is appreciated if you 
+ maintain the name of the original author.
+
+ (C) Laurens van der Maaten, 2010
+ University California, San Diego / Delft University of Technology</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="plotn.html" class="code" title="function plotn(name,data)">plotn</a>	This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</li><li><a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0002 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0003 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0004 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0005 <span class="comment">% maintain the name of the original author.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0008 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0009 
+0010 <a name="_sub0" href="#_subfunctions" class="code">function plot12n(name,data)</a>
+0011     ld=length(data(1,:));
+0012     <span class="keyword">if</span> ld==2
+0013         hf=figure;
+0014         <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'name'</span>,name,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0015 <span class="comment">%         if handles.islb</span>
+0016 <span class="comment">%             scatter(data(:,1),data(:,2),5,handles.labels);</span>
+0017 <span class="comment">%         else</span>
+0018             plot(data(:,1),data(:,2),<span class="string">'.r'</span>);
+0019 <span class="comment">%         end</span>
+0020         title(name);
+0021     <span class="keyword">else</span>
+0022         <span class="keyword">if</span> ld==1
+0023             hf=figure;
+0024             <a href="../../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(hf,<span class="string">'name'</span>,name,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0025             <span class="comment">%if handles.islb</span>
+0026                 <span class="comment">%scatter(data(:,1),zeros(length(data(:,1)),1),5,handles.labels);</span>
+0027             <span class="comment">%else</span>
+0028                 plot(data(:,1),zeros(length(data(:,1)),1),<span class="string">'.k'</span>);
+0029             <span class="comment">%end</span>
+0030             title(name);
+0031         <span class="keyword">else</span>
+0032             <span class="comment">%if handles.islb</span>
+0033                <span class="comment">% scattern('Result of dimensionality reduction',data,handles.labels);</span>
+0034             <span class="comment">%else</span>
+0035                 <a href="plotn.html" class="code" title="function plotn(name,data)">plotn</a>(name,data);
+0036             <span class="comment">%end</span>
+0037         <span class="keyword">end</span>
+0038         
+0039     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

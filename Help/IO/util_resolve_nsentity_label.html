@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_resolve_nsentity_label</title>
+  <meta name="keywords" content="util_resolve_nsentity_label">
+  <meta name="description" content="UTIL_RESOLVE_NSENTITY_LABEL Resolve the Neuroshare entity label">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html IO -->
+<h1>util_resolve_nsentity_label
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UTIL_RESOLVE_NSENTITY_LABEL Resolve the Neuroshare entity label</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ stream_name stream_number hwid chidx chid sub_digi_ch ] = util_resolve_nsentity_label( entity_label, label_type ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UTIL_RESOLVE_NSENTITY_LABEL Resolve the Neuroshare entity label
+   The entity label contains all information of the entity, e.g. the
+   channel name and the stream type. 
+   Please refer to the MCS API PDF.
+
+   Input:
+       entity_label:   usually, you can get this label from entity info
+                       structure.
+       label_type:     'MCD' or 'RAW' or 'SPK'
+   Output:
+       stream_name:    Stream name, e.g. elec/digi
+       stream_number:  Stream Number, e.g. 0/1/2
+       hwid:           Hardware ID, this is different from hwid in
+                       util_convert_hwid2chid, because, in the later, the
+                       hwid is actually the serial index in the spif
+                       structure but not the hardware index.
+       chidx:          Index of channel, e.g. 0/1/2
+       chid:           Channel ID, the name of the channel
+       sub_digi_ch:    Only in event entities of digital data, the sub
+                       channel of events of digital data.
+
+   Created on Jun/11/2010 By Pu Jiangbo
+   Britton Chance Center for Biomedical Photonics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="util_get_nsfile_info.html" class="code" title="function [ info ] = util_get_nsfile_info( handle, property_name, varargin )">util_get_nsfile_info</a>	UTIL_GET_NSFILE_INFO Get file info from a opened handle</li><li><a href="util_load_raw.html" class="code" title="function [ rawif ] = util_load_raw( varargin )">util_load_raw</a>	UTIL_LOAD_RAW Get the raw data stream from a data file.</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ stream_name stream_number hwid chidx chid sub_digi_ch ] = util_resolve_nsentity_label( entity_label, label_type )</a>
+0002 <span class="comment">%UTIL_RESOLVE_NSENTITY_LABEL Resolve the Neuroshare entity label</span>
+0003 <span class="comment">%   The entity label contains all information of the entity, e.g. the</span>
+0004 <span class="comment">%   channel name and the stream type.</span>
+0005 <span class="comment">%   Please refer to the MCS API PDF.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Input:</span>
+0008 <span class="comment">%       entity_label:   usually, you can get this label from entity info</span>
+0009 <span class="comment">%                       structure.</span>
+0010 <span class="comment">%       label_type:     'MCD' or 'RAW' or 'SPK'</span>
+0011 <span class="comment">%   Output:</span>
+0012 <span class="comment">%       stream_name:    Stream name, e.g. elec/digi</span>
+0013 <span class="comment">%       stream_number:  Stream Number, e.g. 0/1/2</span>
+0014 <span class="comment">%       hwid:           Hardware ID, this is different from hwid in</span>
+0015 <span class="comment">%                       util_convert_hwid2chid, because, in the later, the</span>
+0016 <span class="comment">%                       hwid is actually the serial index in the spif</span>
+0017 <span class="comment">%                       structure but not the hardware index.</span>
+0018 <span class="comment">%       chidx:          Index of channel, e.g. 0/1/2</span>
+0019 <span class="comment">%       chid:           Channel ID, the name of the channel</span>
+0020 <span class="comment">%       sub_digi_ch:    Only in event entities of digital data, the sub</span>
+0021 <span class="comment">%                       channel of events of digital data.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   Created on Jun/11/2010 By Pu Jiangbo</span>
+0024 <span class="comment">%   Britton Chance Center for Biomedical Photonics</span>
+0025 
+0026 <span class="keyword">if</span> strcmpi(label_type, <span class="string">'MCD'</span>)
+0027     stream_name = entity_label(1:4);
+0028     stream_number = str2double(entity_label(5:8));
+0029     hwid = str2double(entity_label(10:13));
+0030     chidx = str2double(entity_label(15:18));
+0031     
+0032     <span class="comment">% Determine if the channel name is a number</span>
+0033     chid = str2double(strtrim(entity_label(20:27)));
+0034     <span class="keyword">if</span> ~strcmpi(num2str(chid), strtrim(entity_label(20:27)))
+0035         <span class="comment">% If the channel name contains string, then return as a string.</span>
+0036         chid = strtrim(entity_label(20:27));
+0037     <span class="keyword">end</span>
+0038     
+0039     <span class="comment">% If in event entities of digital data (not all digital data contains</span>
+0040     <span class="comment">% these 2 digis.</span>
+0041     <span class="keyword">if</span> strcmpi(stream_name, <span class="string">'digi'</span>) &amp;&amp; (length(entity_label) &gt; 27)
+0042         sub_digi_ch = str2double(entity_label(29:30));
+0043     <span class="keyword">else</span>
+0044         sub_digi_ch = 0;
+0045     <span class="keyword">end</span>
+0046 <span class="keyword">elseif</span> strcmpi(label_type, <span class="string">'RAW'</span>)
+0047     disp(<span class="string">'Not yet implemented.'</span>);
+0048 <span class="keyword">elseif</span> strcmpi(label_type, <span class="string">'SPK'</span>)
+0049     disp(<span class="string">'Not yet implemented.'</span>);
+0050 <span class="keyword">end</span>
+0051 
+0052 
+0053 <span class="keyword">end</span>
+0054</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

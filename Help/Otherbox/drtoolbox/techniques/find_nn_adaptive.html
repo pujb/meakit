@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_nn_adaptive</title>
+  <meta name="keywords" content="find_nn_adaptive">
+  <meta name="description" content="FIND_NN Constructs nearest neighbor graph using adaptive nbhd selection">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>find_nn_adaptive
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FIND_NN Constructs nearest neighbor graph using adaptive nbhd selection</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [D, max_k_val, no_dims] = find_nn_adaptive(X) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">FIND_NN Constructs nearest neighbor graph using adaptive nbhd selection
+
+    [D, max_k_val, no_dims] = find_nn_adaptive(X)
+
+ Constructs nearest neighbor graph on the data in dataset X using adaptive
+ neighborhood selection. In X, rows correspond to the observations and 
+ columns to the dimensions.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/intrinsic_dim.html" class="code" title="function no_dims = intrinsic_dim(X, method)">intrinsic_dim</a>	INTRINSIC_DIM Eestimate the intrinsic dimensionality of dataset X</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [D, max_k_val, no_dims] = find_nn_adaptive(X)</a>
+0002 <span class="comment">%FIND_NN Constructs nearest neighbor graph using adaptive nbhd selection</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    [D, max_k_val, no_dims] = find_nn_adaptive(X)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Constructs nearest neighbor graph on the data in dataset X using adaptive</span>
+0007 <span class="comment">% neighborhood selection. In X, rows correspond to the observations and</span>
+0008 <span class="comment">% columns to the dimensions.</span>
+0009 <span class="comment">%</span>
+0010 
+0011 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0012 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0013 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0014 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0015 <span class="comment">% maintain the name of the original author.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0018 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0019 
+0020 
+0021     <span class="comment">% First, estimate intrinsic dimensionality using the MLE estimator</span>
+0022     no_dims = round(<a href="../../../Otherbox/drtoolbox/intrinsic_dim.html" class="code" title="function no_dims = intrinsic_dim(X, method)">intrinsic_dim</a>(X, <span class="string">'MLE'</span>));
+0023 
+0024     <span class="comment">% Initialize some variables</span>
+0025     n = size(X, 1);
+0026     min_k = no_dims + 1;
+0027     max_k = n;
+0028     max_k_val = 0;
+0029 
+0030     <span class="comment">% Perform some precomputations for speed</span>
+0031     X = X';
+0032     D = sparse([], [], [], n, n, n * 12);           <span class="comment">% Pre-allocate for speed!</span>
+0033     XX = sum(X .* X);
+0034     onez = ones(1,n);
+0035     
+0036     <span class="comment">% For all datapoints</span>
+0037     <span class="keyword">for</span> i=1:n
+0038         <span class="comment">% current data point</span>
+0039         p = X(:,i);
+0040 
+0041         <span class="comment">% Compute Euclidean distance to all other datapoints</span>
+0042         d2 = sum(p.^2).*onez + XX - 2*p'*X;
+0043 
+0044         <span class="comment">% Sort distances</span>
+0045         [d2, ind] = sort(d2);
+0046         
+0047         <span class="comment">% Estimate local tangent space by updating the number of neighbors k</span>
+0048         stop = 0;
+0049         k = min_k;
+0050         <span class="keyword">while</span> ~stop &amp;&amp; k + 1 &lt; max_k
+0051             
+0052             <span class="comment">% Update k</span>
+0053             k = k + 1;
+0054             
+0055             <span class="comment">% Estimate local tangent space (for current value of k)</span>
+0056             tmpX = X(:,ind(2:k + 1)) - repmat(p, 1, k);
+0057             lambda = svd(tmpX);
+0058             [lambda, ind2] = sort(lambda, <span class="string">'descend'</span>);
+0059             <span class="keyword">if</span> length(lambda) &lt; no_dims
+0060                 <span class="keyword">break</span>;
+0061             <span class="keyword">end</span>
+0062 
+0063             <span class="comment">% Estimate T_{1}</span>
+0064             T = (1 / k) ^ (1 / no_dims) * sqrt(d2(k + 1));
+0065 
+0066             <span class="comment">% Check whether stop condition is violated</span>
+0067             <span class="keyword">if</span> lambda(no_dims) &gt;= T
+0068                 stop = true;
+0069             <span class="keyword">end</span>
+0070         <span class="keyword">end</span>
+0071 
+0072         <span class="comment">% Compute tangent space at k - 1 since k failed stop condition</span>
+0073         [U, lambda, M] = svd(tmpX(:,1:k-1));
+0074         [lambda, ind2] = sort(diag(lambda), <span class="string">'descend'</span>);
+0075         U = U(:,ind2(1:no_dims))';
+0076 
+0077         <span class="comment">% Select neighbors that correspond to the local tangent space</span>
+0078         stop = 0;
+0079         <span class="keyword">while</span> ~stop &amp;&amp; k + 1 &lt; max_k
+0080             <span class="comment">% Update k</span>
+0081             k = k + 1;
+0082 
+0083             <span class="comment">% Projection of (x_{k} - x_{i}) onto tangent space</span>
+0084             onto = sum( (U * (X(:,ind(k + 1)) - p)).^2 );
+0085 
+0086             <span class="comment">% Check whether stop condition is violated</span>
+0087             <span class="keyword">if</span> d2(k + 1) - onto &gt; T^2
+0088                 k = k - 1;
+0089                 stop = true;
+0090             <span class="keyword">end</span>
+0091         <span class="keyword">end</span>
+0092         
+0093         <span class="comment">% Update neighborhood graph</span>
+0094         d2(1) = 1e-7;
+0095         D(i, ind(1:k + 1)) = sqrt(d2(1:k + 1));
+0096         <span class="keyword">if</span> max_k_val &lt; k
+0097             max_k_val = k;
+0098         <span class="keyword">end</span>
+0099     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

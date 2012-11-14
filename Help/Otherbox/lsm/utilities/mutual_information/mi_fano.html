@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mi_fano</title>
+  <meta name="keywords" content="mi_fano">
+  <meta name="description" content="MI_FANO Calculate the Fano lower bound on mutual information">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../../menu.html lsm --><!-- ../menu.html utilities --><!-- menu.html mutual_information -->
+<h1>mi_fano
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>MI_FANO Calculate the Fano lower bound on mutual information</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function MIFano = mi_fano(hx,pe,nx) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre class="comment"> MI_FANO Calculate the Fano lower bound on mutual information
+ 
+  Syntax
+
+    MIfano = mi_fano(HX,Pe,NX)
+
+  Arguments
+
+      HX - entropy of the random variable X as returned by mibayes
+      Pe - probability of error; e.g. test or loo error
+      NX - number of different observations; e.g. length(tables.NX)
+
+      MIfano - Fano's lower bound on the mutual information
+
+  Description
+
+    MIfano = mi_fano(HX,Pe,NX) calculates a lower bound on the
+    mutual information by the Fano inequality (see Cover, 1991
+    pp. 38) where as the probability of error Perr the leave-one-out
+    estimate is used:
+
+      MIfano = HX - (H(Pe)+ Pe * ld(NX-1))
+
+    where H(Pe) = -Pe*ld(Pe)-(1-Pe)*ld(1-Pe)) and NX is
+    the number of different observations of the rv. X.
+
+  See also <a href="mibayes.html" class="code" title="">MIBAYES</a>, <a href="mi_from_count.html" class="code" title="function [MI,Hx,Hy,Hxy] = mi_from_count(argNXY)">MI_FROM_COUNT</a>, <a href="mi_infty.html" class="code" title="function [resMIinfty, resMImodel, resCC] = mi_infty(argN,argMI,optOrder)">MI_INFTY</a>
+
+  Author
+
+    Thomas Natschlaeger, Feb. 2002, tnatschl@igi.tu-graz.ac.at</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function MIFano = mi_fano(hx,pe,nx)</a>
+0002 <span class="comment">% MI_FANO Calculate the Fano lower bound on mutual information</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  Syntax</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    MIfano = mi_fano(HX,Pe,NX)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  Arguments</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%      HX - entropy of the random variable X as returned by mibayes</span>
+0011 <span class="comment">%      Pe - probability of error; e.g. test or loo error</span>
+0012 <span class="comment">%      NX - number of different observations; e.g. length(tables.NX)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%      MIfano - Fano's lower bound on the mutual information</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  Description</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    MIfano = mi_fano(HX,Pe,NX) calculates a lower bound on the</span>
+0019 <span class="comment">%    mutual information by the Fano inequality (see Cover, 1991</span>
+0020 <span class="comment">%    pp. 38) where as the probability of error Perr the leave-one-out</span>
+0021 <span class="comment">%    estimate is used:</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%      MIfano = HX - (H(Pe)+ Pe * ld(NX-1))</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    where H(Pe) = -Pe*ld(Pe)-(1-Pe)*ld(1-Pe)) and NX is</span>
+0026 <span class="comment">%    the number of different observations of the rv. X.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%  See also MIBAYES, MI_FROM_COUNT, MI_INFTY</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%  Author</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    Thomas Natschlaeger, Feb. 2002, tnatschl@igi.tu-graz.ac.at</span>
+0033 
+0034 <span class="comment">% $Author: tnatschl $, $Revision: 1.3 $, $Date: 2003/08/22 09:35:14 $</span>
+0035 <span class="comment">% $Cross-Reference$</span>
+0036 
+0037   <span class="keyword">if</span> pe == 1
+0038     MIFano = 0;
+0039   <span class="keyword">elseif</span> pe == 0
+0040     MIFano = hx(end);
+0041   <span class="keyword">else</span>
+0042     MIFano = hx(end)-((-pe*log(pe)-(1-pe)*log(1-pe))+pe*log(nx-1))/log(2);
+0043   <span class="keyword">end</span>
+0044</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

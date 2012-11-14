@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of util_calc_psd</title>
+  <meta name="keywords" content="util_calc_psd">
+  <meta name="description" content="UNTITLED Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Calculation -->
+<h1>util_calc_psd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>UNTITLED Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function util_calc_psd( signal, Fs ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre class="comment">UNTITLED Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function util_calc_psd( signal, Fs )</a>
+0002 <span class="comment">%UNTITLED Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 
+0005 window=rectwin(100); <span class="comment">%矩形窗</span>
+0006 window1=hamming(100); <span class="comment">%海明窗</span>
+0007 window2=blackman(100); <span class="comment">%blackman窗</span>
+0008 
+0009 n = 0:1/Fs:1;
+0010 noverlap = 20; <span class="comment">%数据无重叠</span>
+0011 nfft = 1024;
+0012 range = <span class="string">'onesided'</span>; <span class="comment">%频率间隔为[0 Fs/2]，只计算一半的频率</span>
+0013 
+0014 [Pxx, f] = pwelch(signal, window, noverlap, nfft, Fs, range);
+0015 [Pxx1,f] = pwelch(signal, window1, noverlap, nfft, Fs, range);
+0016 [Pxx2,f] = pwelch(signal, window2, noverlap, nfft, Fs, range);
+0017 
+0018 plot_Pxx=10*log10(Pxx);
+0019 plot_Pxx1=10*log10(Pxx1);
+0020 plot_Pxx2=10*log10(Pxx2);
+0021 
+0022 figure(1)
+0023 plot(f,plot_Pxx);
+0024 
+0025 pause;
+0026 
+0027 figure(2)
+0028 plot(f,plot_Pxx1);
+0029 
+0030 pause;
+0031 
+0032 figure(3)
+0033 plot(f,plot_Pxx2);
+0034 
+0035 
+0036 <span class="keyword">end</span>
+0037</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of imdatsep</title>
+  <meta name="keywords" content="imdatsep">
+  <meta name="description" content="Function to separate data points from 2 sets of x and y vectors, produced by">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html im2dat -->
+<h1>imdatsep
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Function to separate data points from 2 sets of x and y vectors, produced by</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [X,Y]=imdatsep(x,y,x1,y1,sen); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">Function to separate data points from 2 sets of x and y vectors, produced by
+IM2DAT.M.
+
+Data points in the first set of vectors is compared with the second set. Only
+the data point that exist in the first set and not the second will be output.
+
+The fuction also supports and exclusion range for both x and y, any data point
+loacted in the range is automatically excluded from the output.
+
+This fuction is supposed to work with output from im2dat.m and helps in
+separating multiple plots on a single image.
+
+SYNTAX:
+        [X,Y]=imdatsep(xvector,yvector,x1vector or range[xmin xmax],...
+                y1vector or range[ymin ymax],sensitivity);
+If a specific range of data is to be excluded then a range of x maybe
+specified, a range of y can also be specified or both. Note: To specify rangey
+only: rangex must be specified out of data range:
+                 [X,Y]=imdatsep(x,y,[1000,1000],range[ymin ymax]).
+
+SENSITIVITY(scaler): This tell the function how close two data points should be
+before they are taken to be the same. This is important when two sets of
+vectors are being compared. IM2DAT.M
+find approximate points with the help of contour; hence, when two different
+layers of contour are compared the points will rarely ever match. Thus, 
+filtering will not be possible without a given degree of acceptable error.            
+
+(Function tested on MATLAB 5.1)
+            Written by: Sumeet Yamdagni
+            Email: syamdagni@hotmail.com
+------------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>	TEMPLATE Convert a template object in a one line description string</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [X,Y]=imdatsep(x,y,x1,y1,sen);</a>
+0002 <span class="comment">%Function to separate data points from 2 sets of x and y vectors, produced by</span>
+0003 <span class="comment">%IM2DAT.M.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%Data points in the first set of vectors is compared with the second set. Only</span>
+0006 <span class="comment">%the data point that exist in the first set and not the second will be output.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%The fuction also supports and exclusion range for both x and y, any data point</span>
+0009 <span class="comment">%loacted in the range is automatically excluded from the output.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%This fuction is supposed to work with output from im2dat.m and helps in</span>
+0012 <span class="comment">%separating multiple plots on a single image.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%SYNTAX:</span>
+0015 <span class="comment">%        [X,Y]=imdatsep(xvector,yvector,x1vector or range[xmin xmax],...</span>
+0016 <span class="comment">%                y1vector or range[ymin ymax],sensitivity);</span>
+0017 <span class="comment">%If a specific range of data is to be excluded then a range of x maybe</span>
+0018 <span class="comment">%specified, a range of y can also be specified or both. Note: To specify rangey</span>
+0019 <span class="comment">%only: rangex must be specified out of data range:</span>
+0020 <span class="comment">%                 [X,Y]=imdatsep(x,y,[1000,1000],range[ymin ymax]).</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%SENSITIVITY(scaler): This tell the function how close two data points should be</span>
+0023 <span class="comment">%before they are taken to be the same. This is important when two sets of</span>
+0024 <span class="comment">%vectors are being compared. IM2DAT.M</span>
+0025 <span class="comment">%find approximate points with the help of contour; hence, when two different</span>
+0026 <span class="comment">%layers of contour are compared the points will rarely ever match. Thus,</span>
+0027 <span class="comment">%filtering will not be possible without a given degree of acceptable error.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%(Function tested on MATLAB 5.1)</span>
+0030 <span class="comment">%            Written by: Sumeet Yamdagni</span>
+0031 <span class="comment">%            Email: syamdagni@hotmail.com</span>
+0032 <span class="comment">%------------------------------------------------------------------</span>
+0033 
+0034 
+0035 <span class="comment">%Default</span>
+0036 Range=0;
+0037 X=[];
+0038 Y=[];
+0039 <span class="comment">%------------------------------</span>
+0040 <span class="keyword">if</span> nargin&lt;3
+0041     error(<span class="string">'Not enough input arguments'</span>)
+0042 <span class="comment">%==============================</span>
+0043 <span class="keyword">elseif</span> nargin==3
+0044 <span class="comment">%_________________________</span>
+0045     <span class="keyword">if</span> length(x1)~=2
+0046         error(<span class="string">'Vector of invalid range'</span>)
+0047     <span class="keyword">else</span>
+0048         Range=1;
+0049     <span class="keyword">end</span>
+0050 <span class="comment">%__________________________</span>
+0051     <span class="comment">%if isnum(x)&amp;isnum(y)&amp;isnum(x1)</span>
+0052     <span class="comment">%else</span>
+0053     <span class="comment">%error('Invalid arguments')</span>
+0054     <span class="comment">%end</span>
+0055 <span class="comment">%==============================</span>
+0056 <span class="keyword">elseif</span> nargin==4
+0057 <span class="comment">%___________________________________</span>
+0058     <span class="keyword">if</span> length(x1)==2&amp;length(y1)==2;
+0059         Range=2;
+0060     <span class="keyword">end</span>
+0061 <span class="comment">%___________________________________</span>
+0062     <span class="comment">%if isnum(x)&amp;isnum(x1)&amp;isnum(y)&amp;isnum(y1)</span>
+0063     <span class="comment">%else</span>
+0064         <span class="comment">%error('Invalid arguments')</span>
+0065     <span class="comment">%end</span>
+0066 <span class="comment">%==============================</span>
+0067 <span class="keyword">elseif</span> nargin==5
+0068     <span class="keyword">if</span> Range==0&amp;length(sen)==1;
+0069     <span class="keyword">else</span>
+0070     error(<span class="string">'Invalid Sensitvity'</span>)
+0071     <span class="keyword">end</span>
+0072 <span class="comment">%==============================</span>
+0073 <span class="keyword">elseif</span> nargin&gt;5
+0074    error(<span class="string">'Too many input arguments'</span>)
+0075 <span class="keyword">end</span>
+0076 <span class="comment">%---------------------------------</span>
+0077 
+0078 <span class="comment">%No errors</span>
+0079 
+0080 <span class="comment">%------------------------------------</span>
+0081 <span class="keyword">if</span> Range==1|Range==2
+0082     
+0083     Z=[x;y];
+0084     Comp=<a href="../../Otherbox/m2html/@template/char.html" class="code" title="function s = char(tpl)">char</a>(<span class="string">'(x1(1,1)&gt;Z(1,C))|(Z(1,C)&gt;x1(1,2))'</span>,<span class="keyword">...</span>
+0085     <span class="string">'((x1(1,1)&gt;Z(1,C))|(Z(1,C)&gt;x1(1,2)))|((y1(1,1)&gt;Z(2,C))|(Z(2,C)&gt;y1(1,2)))'</span>);
+0086     
+0087     I=length(x);
+0088     
+0089     <span class="keyword">for</span> C=1:I
+0090     
+0091         <span class="keyword">if</span> eval(Comp(Range,:))
+0092             X=[X,Z(1,C)];
+0093             Y=[Y,Z(2,C)];
+0094         <span class="keyword">end</span>
+0095     <span class="keyword">end</span>
+0096 <span class="comment">%-----------------------------------x1 and y1 are data vectors</span>
+0097 <span class="keyword">else</span>
+0098     <span class="comment">%=======================</span>
+0099         I=length(x);
+0100         Z=[x;y];
+0101         J=length(x1);
+0102         Z1=[x1;y1];
+0103 
+0104     <span class="comment">%========================</span>
+0105     <span class="keyword">for</span> C=1:I
+0106         
+0107         flag=0;
+0108         <span class="keyword">for</span> K=1:J
+0109             <span class="keyword">if</span> (-sen&lt;(Z(1,C)-Z1(1,K))&amp;(Z(1,C)-Z1(1,K))&lt;sen)&amp;<span class="keyword">...</span>
+0110             (-sen&lt;(Z(2,C)-Z1(2,K))&amp;(Z(1,C)-Z1(1,K))&lt;sen)
+0111                 flag=1;
+0112             <span class="keyword">end</span>
+0113         <span class="keyword">end</span>
+0114     
+0115     
+0116         <span class="keyword">if</span> flag==0;
+0117             X=[X,Z(1,C)];
+0118             Y=[Y,Z(2,C)];
+0119         <span class="keyword">end</span>
+0120         
+0121     <span class="keyword">end</span>
+0122     <span class="comment">%======================</span>
+0123 <span class="keyword">end</span>
+0124 <span class="comment">%-------------------------------------</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

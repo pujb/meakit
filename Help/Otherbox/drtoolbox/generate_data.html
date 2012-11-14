@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of generate_data</title>
+  <meta name="keywords" content="generate_data">
+  <meta name="description" content="GENERATE_DATA Generates an artificial dataset">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html drtoolbox -->
+<h1>generate_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GENERATE_DATA Generates an artificial dataset</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [X, labels, t] = generate_data(dataname, n, noise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">GENERATE_DATA Generates an artificial dataset
+
+    [X, labels, t] = generate_data(dataname, n, noise)
+
+ Generates an artificial dataset. Possible datasets are: 'swiss' for the Swiss roll
+ dataset, 'helix' for the helix dataset, 'twinpeaks' for the twinpeaks dataset,
+ '3d_clusters' for the 3D clusters dataset, and 'intersect' for the intersecting
+ dataset. The variable n indicates the number of datapoints to generate 
+ (default = 1000). The variable noise indicates the amount of noise that
+ is added to the data (default = 0.05). The function returns the
+ high-dimensional dataset in X, and corresponding labels in labels. In
+ addition, the function returns the coordinates of the datapoints on the
+ underlying manifold in t.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>	L2_DISTANCE - computes Euclidean distance matrix</li><li><a href="../../Otherbox/drtoolbox/techniques/combn.html" class="code" title="function [M,IND] = combn(V,N)">combn</a>	COMBN - all combinations of elements</li><li><a href="../../Otherbox/drtoolbox/techniques/welcome.html" class="code" title="function welcome">welcome</a>	WELCOME Displays DR Toolbox version information</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../Otherbox/drtoolbox/gui/drtool.html" class="code" title="function varargout = drtool(varargin)">drtool</a>	DRTOOL M-file for drtool.fig</li><li><a href="test_toolbox.html" class="code" title="function test_toolbox">test_toolbox</a>	TEST_TOOLBOX Tests all functionalities of the dimension reduction toolbox</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [X, labels, t] = generate_data(dataname, n, noise)</a>
+0002 <span class="comment">%GENERATE_DATA Generates an artificial dataset</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    [X, labels, t] = generate_data(dataname, n, noise)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Generates an artificial dataset. Possible datasets are: 'swiss' for the Swiss roll</span>
+0007 <span class="comment">% dataset, 'helix' for the helix dataset, 'twinpeaks' for the twinpeaks dataset,</span>
+0008 <span class="comment">% '3d_clusters' for the 3D clusters dataset, and 'intersect' for the intersecting</span>
+0009 <span class="comment">% dataset. The variable n indicates the number of datapoints to generate</span>
+0010 <span class="comment">% (default = 1000). The variable noise indicates the amount of noise that</span>
+0011 <span class="comment">% is added to the data (default = 0.05). The function returns the</span>
+0012 <span class="comment">% high-dimensional dataset in X, and corresponding labels in labels. In</span>
+0013 <span class="comment">% addition, the function returns the coordinates of the datapoints on the</span>
+0014 <span class="comment">% underlying manifold in t.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%</span>
+0017 
+0018 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0019 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0020 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0021 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0022 <span class="comment">% maintain the name of the original author.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0025 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0026 
+0027     <a href="../../Otherbox/drtoolbox/techniques/welcome.html" class="code" title="function welcome">welcome</a>;
+0028     
+0029     <span class="keyword">if</span> ~exist(<span class="string">'n'</span>, <span class="string">'var'</span>)
+0030         n = 1000;
+0031     <span class="keyword">end</span>
+0032     <span class="keyword">if</span> ~exist(<span class="string">'noise'</span>, <span class="string">'var'</span>)
+0033         noise = 0.05;
+0034     <span class="keyword">end</span>
+0035 
+0036     <span class="keyword">switch</span> dataname
+0037         <span class="keyword">case</span> <span class="string">'swiss'</span>
+0038             t = (3 * pi / 2) * (1 + 2 * rand(n, 1));  
+0039             height = 30 * rand(n, 1);
+0040             X = [t .* cos(t) height t .* sin(t)] + noise * randn(n, 3);
+0041             <span class="comment">%labels = uint8(t);</span>
+0042             labels = rem(sum([round(t / 2) round(height / 12)], 2), 2);
+0043             t = [t height];
+0044             
+0045         <span class="keyword">case</span> <span class="string">'brokenswiss'</span>
+0046             t = [(3 * pi / 2) * (1 + 2 * rand(ceil(n / 2), 1) * .4); (3 * pi / 2) * (1 + 2 * (rand(floor(n / 2), 1) * .4 + .6))];  
+0047             height = 30 * rand(n, 1);
+0048             X = [t .* cos(t) height t .* sin(t)] + noise * randn(n, 3);
+0049             labels = uint8(t);
+0050             <span class="comment">%labels = rem(sum([round(t / 2) round(height / 12)], 2), 2);</span>
+0051             t = [t height];
+0052             
+0053         <span class="keyword">case</span> <span class="string">'changing_swiss'</span>
+0054             r = zeros(1, n);
+0055             <span class="keyword">for</span> i=1:n
+0056                 pass = 0;
+0057                 <span class="keyword">while</span> ~pass
+0058                     rr = rand(1);
+0059                     <span class="keyword">if</span> rand(1) &gt; rr
+0060                         r(i) = rr;
+0061                         pass = 1;
+0062                     <span class="keyword">end</span>
+0063                 <span class="keyword">end</span>
+0064             <span class="keyword">end</span>
+0065             t = (3 * pi / 2) * (1 + 2 * r);  
+0066             height = 21 * rand(1, n);
+0067             X = [t .* cos(t); height; t .* sin(t)]' + noise * randn(n, 3);
+0068             <span class="comment">%labels = uint8(t)';</span>
+0069             labels = rem(sum([round(t / 2); round(height / 10)], 1), 2)';
+0070             
+0071         <span class="keyword">case</span> <span class="string">'helix'</span>
+0072             t = [1:n]' / n;
+0073             t = t .^ (1.0) * 2 * pi;
+0074             X = [(2 + cos(8 * t)) .* cos(t) (2 + cos(8 * t)) .* sin(t) sin(8 * t)] + noise * randn(n, 3);
+0075             <span class="comment">%labels = uint8(t);</span>
+0076             labels = rem(round(t * 1.5), 2);
+0077             
+0078         <span class="keyword">case</span> <span class="string">'twinpeaks'</span>
+0079             inc = 1.5 / sqrt(n);
+0080             [xx2, yy2] = meshgrid(-1:inc:1);
+0081             xy = 1 - 2 * rand(2, n);
+0082             X = [xy; sin(pi * xy(1,:)) .* tanh(3 * xy(2,:))]' + noise * randn(n, 3);
+0083             X(:,3) = X(:,3) * 10;
+0084             t = xy';
+0085             <span class="comment">%labels = uint8(X(:,3));</span>
+0086             labels = rem(sum(round((X + repmat(min(X, [], 1), [size(X, 1) 1])) ./ 10), 2), 2);
+0087             
+0088         <span class="keyword">case</span> <span class="string">'3d_clusters'</span>
+0089             numClusters = 5;
+0090             centers = 10 * rand(numClusters, 3);
+0091             D = <a href="../../Otherbox/drtoolbox/techniques/L2_distance.html" class="code" title="function d = L2_distance(a, b)">L2_distance</a>(centers', centers');
+0092             minDistance = min(D(D &gt; 0));
+0093             k = 1;
+0094             n2 = n - (numClusters - 1) * 9;
+0095             X = repmat(0, [n 3]);
+0096             labels = repmat(0, [n 1]);
+0097             <span class="keyword">for</span> i=1:numClusters
+0098                 <span class="keyword">for</span> j=1:ceil(n2 / numClusters)
+0099                    X(k, 1:3) = centers(i, 1:3) + (rand(1, 3) - 0.5) * minDistance / sqrt(12);
+0100                    labels(k) = i;
+0101                    k = k + 1;
+0102                 <span class="keyword">end</span>
+0103             <span class="keyword">end</span>
+0104             X = X + noise * randn(size(X, 1), 3);
+0105             t = [];
+0106             
+0107         <span class="keyword">case</span> <span class="string">'intersect'</span>
+0108             t = [1:n]' ./ n .* (2 * pi);
+0109             x = cos(t);
+0110             y = sin(t);
+0111             height = rand(length(x), 1) * 5;
+0112             X = [x x .* y height] + noise * randn(n, 3);
+0113             <span class="comment">%labels = uint8(5 * t);</span>
+0114             labels = rem(sum([round(t / 2) round(height / 2)], 2), 2);
+0115             
+0116         <span class="keyword">case</span> <span class="string">'difficult'</span>            
+0117             <span class="comment">% Generate underlying manifold</span>
+0118             no_dims = 5;
+0119             no_points_per_dim = round(n ^ (1 / no_dims));
+0120             l = linspace(0, 1, no_points_per_dim);
+0121             t = <a href="../../Otherbox/drtoolbox/techniques/combn.html" class="code" title="function [M,IND] = combn(V,N)">combn</a>(l, no_dims);
+0122             
+0123             <span class="comment">% Generate high-dimensional dataset</span>
+0124             X = [cos(t(:,1)) tanh(3 * t(:,2)) t(:,1) + t(:,3) t(:,4) .* sin(t(:,2)) sin(t(:,1) + t(:,5)) t(:,5) .* cos(t(:,2)) t(:,5) + t(:,4) t(:,2) t(:,3) .* t(:,4) t(:,1)];
+0125             X = X + noise * randn(size(X));
+0126             
+0127             <span class="comment">% Generate labels for dataset (2x2x2x2x2 checkerboard pattern)</span>
+0128             tt = 1 + round(t);
+0129             labels = rem(sum(tt, 2), 2);
+0130             
+0131         <span class="keyword">otherwise</span>
+0132             error(<span class="string">'Unknown dataset name.'</span>);
+0133     <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

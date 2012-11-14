@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of breadth</title>
+  <meta name="keywords" content="breadth">
+  <meta name="description" content="BREADTH        Auxiliary function for breadthdist.m">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html BCT -->
+<h1>breadth
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>BREADTH        Auxiliary function for breadthdist.m</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [distance,branch] = breadth(CIJ,source) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">BREADTH        Auxiliary function for breadthdist.m
+
+   [distance,branch] = breadth(CIJ,source);
+
+   Implementation of breadth-first search.
+
+   Input:      CIJ,        binary (directed/undirected) connection matrix
+               source,     source vertex
+
+   Outputs:    distance,   distance between 'source' and i'th vertex
+                           (0 for source vertex)
+               branch,     vertex that precedes i in the breadth-first search tree
+                           (-1 for source vertex)
+        
+   Notes: Breadth-first search tree does not contain all paths (or all 
+   shortest paths), but allows the determination of at least one path with
+   minimum distance. The entire graph is explored, starting from source 
+   vertex 'source'.
+
+
+   Olaf Sporns, Indiana University, 2002/2007/2008</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="breadthdist.html" class="code" title="function  [R,D] = breadthdist(CIJ)">breadthdist</a>	BREADTHDIST      Reachability and distance matrices</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [distance,branch] = breadth(CIJ,source)</a>
+0002 <span class="comment">%BREADTH        Auxiliary function for breadthdist.m</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [distance,branch] = breadth(CIJ,source);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Implementation of breadth-first search.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Input:      CIJ,        binary (directed/undirected) connection matrix</span>
+0009 <span class="comment">%               source,     source vertex</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Outputs:    distance,   distance between 'source' and i'th vertex</span>
+0012 <span class="comment">%                           (0 for source vertex)</span>
+0013 <span class="comment">%               branch,     vertex that precedes i in the breadth-first search tree</span>
+0014 <span class="comment">%                           (-1 for source vertex)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Notes: Breadth-first search tree does not contain all paths (or all</span>
+0017 <span class="comment">%   shortest paths), but allows the determination of at least one path with</span>
+0018 <span class="comment">%   minimum distance. The entire graph is explored, starting from source</span>
+0019 <span class="comment">%   vertex 'source'.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%   Olaf Sporns, Indiana University, 2002/2007/2008</span>
+0023 
+0024 N = size(CIJ,1);
+0025 
+0026 <span class="comment">% colors: white, gray, black</span>
+0027 white = 0; 
+0028 gray = 1; 
+0029 black = 2;
+0030 
+0031 <span class="comment">% initialize colors</span>
+0032 color = zeros(1,N);
+0033 <span class="comment">% initialize distances</span>
+0034 distance = inf*ones(1,N);
+0035 <span class="comment">% initialize branches</span>
+0036 branch = zeros(1,N);
+0037 
+0038 <span class="comment">% start on vertex 'source'</span>
+0039 color(source) = gray;
+0040 distance(source) = 0;
+0041 branch(source) = -1;
+0042 Q = source;
+0043 
+0044 <span class="comment">% keep going until the entire graph is explored</span>
+0045 <span class="keyword">while</span> ~isempty(Q)
+0046    u = Q(1);
+0047    ns = find(CIJ(u,:));
+0048    <span class="keyword">for</span> v=ns
+0049 <span class="comment">% this allows the 'source' distance to itself to be recorded</span>
+0050       <span class="keyword">if</span> (distance(v)==0)
+0051          distance(v) = distance(u)+1;
+0052       <span class="keyword">end</span>;
+0053       <span class="keyword">if</span> (color(v)==white)
+0054          color(v) = gray;
+0055          distance(v) = distance(u)+1;
+0056          branch(v) = u;
+0057          Q = [Q v];
+0058       <span class="keyword">end</span>;
+0059    <span class="keyword">end</span>;
+0060    Q = Q(2:length(Q));
+0061    color(u) = black;
+0062 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

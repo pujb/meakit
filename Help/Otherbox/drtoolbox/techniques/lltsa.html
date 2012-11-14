@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of lltsa</title>
+  <meta name="keywords" content="lltsa">
+  <meta name="description" content="LLTSA Runs the linear local tangent space alignment algorithm">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- ../menu.html drtoolbox --><!-- menu.html techniques -->
+<h1>lltsa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LLTSA Runs the linear local tangent space alignment algorithm</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mappedX, mapping] = lltsa(X, no_dims, k, eig_impl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre class="comment">LLTSA Runs the linear local tangent space alignment algorithm
+
+   [mappedX, mapping] = lltsa(X, no_dims, k, eig_impl)
+
+ The function runs the linear local tangent space alignment algorithm on 
+ dataset% X, reducing the data to dimensionality d. The number of neighbors is
+ specified by k.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>	FIND_NN Finds k nearest neigbors for all datapoints in the dataset</li><li><a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>	JDQZ computes a partial generalized Schur decomposition (or QZ</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Otherbox/drtoolbox/Contents.html" class="code" title="">Contents</a>	</li><li><a href="../../../Otherbox/drtoolbox/compute_mapping.html" class="code" title="function [mappedA, mapping] = compute_mapping(A, type, no_dims, varargin)">compute_mapping</a>	COMPUTE_MAPPING Performs dimensionality reduction on a dataset A</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mappedX, mapping] = lltsa(X, no_dims, k, eig_impl)</a>
+0002 <span class="comment">%LLTSA Runs the linear local tangent space alignment algorithm</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [mappedX, mapping] = lltsa(X, no_dims, k, eig_impl)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% The function runs the linear local tangent space alignment algorithm on</span>
+0007 <span class="comment">% dataset% X, reducing the data to dimensionality d. The number of neighbors is</span>
+0008 <span class="comment">% specified by k.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">% This file is part of the Matlab Toolbox for Dimensionality Reduction v0.7.2b.</span>
+0013 <span class="comment">% The toolbox can be obtained from http://homepage.tudelft.nl/19j49</span>
+0014 <span class="comment">% You are free to use, change, or redistribute this code in any way you</span>
+0015 <span class="comment">% want for non-commercial purposes. However, it is appreciated if you</span>
+0016 <span class="comment">% maintain the name of the original author.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) Laurens van der Maaten, 2010</span>
+0019 <span class="comment">% University California, San Diego / Delft University of Technology</span>
+0020 
+0021     <span class="keyword">if</span> ~exist(<span class="string">'no_dims'</span>, <span class="string">'var'</span>)
+0022         no_dims = 2;
+0023     <span class="keyword">end</span>
+0024     <span class="keyword">if</span> ~exist(<span class="string">'k'</span>, <span class="string">'var'</span>)
+0025         k = 12;
+0026     <span class="keyword">end</span>
+0027     <span class="keyword">if</span> ~exist(<span class="string">'eig_impl'</span>, <span class="string">'var'</span>)
+0028         eig_impl = <span class="string">'Matlab'</span>;
+0029     <span class="keyword">end</span>
+0030     
+0031     <span class="comment">% Make sure data is zero mean</span>
+0032     mapping.mean = mean(X, 1);
+0033     X = X - repmat(mapping.mean, [size(X, 1) 1]);
+0034  
+0035     <span class="comment">% Compute neighborhood indices</span>
+0036     disp(<span class="string">'Find nearest neighbors...'</span>);
+0037     n = size(X, 1);
+0038     [D, ni] = <a href="find_nn.html" class="code" title="function [D, ni] = find_nn(X, k)">find_nn</a>(X, k); 
+0039 
+0040     <span class="comment">% Compute local information matrix for all datapoints</span>
+0041     disp(<span class="string">'Compute local information matrices for all datapoints...'</span>);
+0042     Bi = {}; 
+0043     <span class="keyword">for</span> i=1:n
+0044         
+0045         <span class="comment">% Compute correlation matrix W</span>
+0046         Ii = ni(i,:);
+0047         Ii = Ii(Ii ~= 0);
+0048         kt = numel(Ii);
+0049         Xi = X(Ii,:) - repmat(mean(X(Ii,:), 1), [kt 1]);
+0050         W = Xi * Xi'; 
+0051         W = (W + W') / 2;
+0052         
+0053         <span class="comment">% Compute local information by computing d largest eigenvectors of W</span>
+0054         [Vi, Si] = schur(W);
+0055         [s, Ji] = sort(-diag(Si));
+0056         <span class="keyword">if</span> length(Ji) &lt; no_dims
+0057             no_dims = length(Ji);
+0058             warning([<span class="string">'Target dimensionality reduced to '</span> num2str(no_dims) <span class="string">'...'</span>]);
+0059         <span class="keyword">end</span>
+0060         Vi = Vi(:,Ji(1:no_dims));
+0061         
+0062         <span class="comment">% Store eigenvectors in G (Vi is the space with the maximum variance, i.e. a good approximation of the tangent space at point Xi)</span>
+0063         <span class="comment">% The constant 1/sqrt(k) serves as a centering matrix</span>
+0064         Gi = [repmat(1 / sqrt(kt), [kt 1]) Vi];
+0065         
+0066         <span class="comment">% Compute Bi = I - Gi * Gi'</span>
+0067         Bi{i} = eye(kt) - Gi * Gi';  
+0068     <span class="keyword">end</span>
+0069     
+0070     <span class="comment">% Construct sparse matrix B (= alignment matrix)</span>
+0071     disp(<span class="string">'Construct alignment matrix...'</span>);
+0072     B = speye(n);
+0073     <span class="keyword">for</span> i=1:n
+0074         Ii = ni(i,:);
+0075         Ii = Ii(Ii ~= 0);
+0076         B(Ii, Ii) = B(Ii, Ii) + Bi{i};                            <span class="comment">% sum Bi over all points</span>
+0077         B(i, i) = B(i, i) - 1;
+0078     <span class="keyword">end</span>
+0079     B = (B + B') / 2;                                            <span class="comment">% make sure B is symmetric</span>
+0080     
+0081     <span class="comment">% For sparse datasets, we might end up with NaNs in M. We just set them to zero for now...</span>
+0082     B(isnan(B)) = 0;
+0083     B(isinf(B)) = 0;
+0084     
+0085     <span class="comment">% Solve generalize eigenproblem XBX'v = lambda * XX'v</span>
+0086     disp(<span class="string">'Solve eigenproblem...'</span>);
+0087     <span class="keyword">if</span> strcmp(eig_impl, <span class="string">'JDQR'</span>)
+0088         options.Disp = 0;
+0089         options.LSolver = <span class="string">'bicgstab'</span>;
+0090         [map, D] = <a href="jdqz.html" class="code" title="function varargout=jdqz(varargin)">jdqz</a>(X' * B * X, X' * X, no_dims, <span class="string">'SR'</span>, options);
+0091     <span class="keyword">else</span>
+0092         options.disp = 0;
+0093         options.isreal = 1;
+0094         options.issym = 1;
+0095         [map, D] = eigs(X' * B * X, X' * X, no_dims, <span class="string">'SR'</span>, options);
+0096     <span class="keyword">end</span>
+0097 
+0098     <span class="comment">% Sort eigenvalues and eigenvectors</span>
+0099     [D, ind] = sort(diag(D), <span class="string">'ascend'</span>);
+0100     mapping.M = map(:,ind(1:no_dims));
+0101 
+0102     <span class="comment">% Final embedding coordinates</span>
+0103     mappedX = X * mapping.M;
+0104</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

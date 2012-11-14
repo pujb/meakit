@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of barweb</title>
+  <meta name="keywords" content="barweb">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html barweb -->
+<h1>barweb
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function handles = barweb(barvalues, errors, width, groupnames, bw_title, bw_xlabel, bw_ylabel, bw_colormap, gridstatus, bw_legend, error_sides, legend_type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">
+ Usage: handles = barweb(barvalues, errors, width, groupnames, bw_title, bw_xlabel, bw_ylabel, bw_colormap, gridstatus, bw_legend, error_sides, legend_type)
+
+ Ex: handles = barweb(my_barvalues, my_errors, [], [], [], [], [], bone, [], bw_legend, 1, 'axis')
+
+ barweb is the m-by-n matrix of barvalues to be plotted.
+ barweb calls the MATLAB bar function and plots m groups of n bars using the width and bw_colormap parameters.
+ If you want all the bars to be the same color, then set bw_colormap equal to the RBG matrix value ie. (bw_colormap = [1 0 0] for all red bars)
+ barweb then calls the MATLAB errorbar function to draw barvalues with error bars of length error.
+ groupnames is an m-length cellstr vector of groupnames (i.e. groupnames = {'group 1'; 'group 2'}).  For no groupnames, enter [] or {}
+ The errors matrix is of the same form of the barvalues matrix, namely m group of n errors.
+ Gridstatus is either 'x','xy', 'y', or 'none' for no grid.
+ No legend will be shown if the legend paramter is not provided
+ 'error_sides = 2' plots +/- std while 'error_sides = 1' plots just + std
+ legend_type = 'axis' produces the legend along the x-axis while legend_type = 'plot' produces the standard legend.  See figure for more details
+
+ The following default values are used if parameters are left out or skipped by using [].
+ width = 1 (0 &lt; width &lt; 1; widths greater than 1 will produce overlapping bars)
+ groupnames = '1', '2', ... number_of_groups
+ bw_title, bw_xlabel, bw_ylabel = []
+ bw_color_map = jet
+ gridstatus = 'none'
+ bw_legend = []
+ error_sides = 2;
+ legend_type = 'plot';
+
+ A list of handles are returned so that the user can change the properties of the plot
+ handles.ax: handle to current axis
+ handles.bars: handle to bar plot
+ handles.errors: a vector of handles to the error plots, with each handle corresponding to a column in the error matrix
+ handles.legend: handle to legend
+
+
+ See the MATLAB functions bar and errorbar for more information
+
+ Author: Bolu Ajiboye
+ Created: October 18, 2005 (ver 1.0)
+ Updated: Dec 07, 2006 (ver 2.1)
+ Updated: July 21, 2008 (ver 2.3)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>	TEMPLATE/GET Access data stored in a Template object</li><li><a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>	TEMPLATE/SET Edit data stored in a Template object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function handles = barweb(barvalues, errors, width, groupnames, bw_title, bw_xlabel, bw_ylabel, bw_colormap, gridstatus, bw_legend, error_sides, legend_type)</a>
+0002 
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage: handles = barweb(barvalues, errors, width, groupnames, bw_title, bw_xlabel, bw_ylabel, bw_colormap, gridstatus, bw_legend, error_sides, legend_type)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Ex: handles = barweb(my_barvalues, my_errors, [], [], [], [], [], bone, [], bw_legend, 1, 'axis')</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% barweb is the m-by-n matrix of barvalues to be plotted.</span>
+0009 <span class="comment">% barweb calls the MATLAB bar function and plots m groups of n bars using the width and bw_colormap parameters.</span>
+0010 <span class="comment">% If you want all the bars to be the same color, then set bw_colormap equal to the RBG matrix value ie. (bw_colormap = [1 0 0] for all red bars)</span>
+0011 <span class="comment">% barweb then calls the MATLAB errorbar function to draw barvalues with error bars of length error.</span>
+0012 <span class="comment">% groupnames is an m-length cellstr vector of groupnames (i.e. groupnames = {'group 1'; 'group 2'}).  For no groupnames, enter [] or {}</span>
+0013 <span class="comment">% The errors matrix is of the same form of the barvalues matrix, namely m group of n errors.</span>
+0014 <span class="comment">% Gridstatus is either 'x','xy', 'y', or 'none' for no grid.</span>
+0015 <span class="comment">% No legend will be shown if the legend paramter is not provided</span>
+0016 <span class="comment">% 'error_sides = 2' plots +/- std while 'error_sides = 1' plots just + std</span>
+0017 <span class="comment">% legend_type = 'axis' produces the legend along the x-axis while legend_type = 'plot' produces the standard legend.  See figure for more details</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% The following default values are used if parameters are left out or skipped by using [].</span>
+0020 <span class="comment">% width = 1 (0 &lt; width &lt; 1; widths greater than 1 will produce overlapping bars)</span>
+0021 <span class="comment">% groupnames = '1', '2', ... number_of_groups</span>
+0022 <span class="comment">% bw_title, bw_xlabel, bw_ylabel = []</span>
+0023 <span class="comment">% bw_color_map = jet</span>
+0024 <span class="comment">% gridstatus = 'none'</span>
+0025 <span class="comment">% bw_legend = []</span>
+0026 <span class="comment">% error_sides = 2;</span>
+0027 <span class="comment">% legend_type = 'plot';</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% A list of handles are returned so that the user can change the properties of the plot</span>
+0030 <span class="comment">% handles.ax: handle to current axis</span>
+0031 <span class="comment">% handles.bars: handle to bar plot</span>
+0032 <span class="comment">% handles.errors: a vector of handles to the error plots, with each handle corresponding to a column in the error matrix</span>
+0033 <span class="comment">% handles.legend: handle to legend</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% See the MATLAB functions bar and errorbar for more information</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% Author: Bolu Ajiboye</span>
+0039 <span class="comment">% Created: October 18, 2005 (ver 1.0)</span>
+0040 <span class="comment">% Updated: Dec 07, 2006 (ver 2.1)</span>
+0041 <span class="comment">% Updated: July 21, 2008 (ver 2.3)</span>
+0042 
+0043 <span class="comment">% Get function arguments</span>
+0044 <span class="keyword">if</span> nargin &lt; 2
+0045     error(<span class="string">'Must have at least the first two arguments:  barweb(barvalues, errors, width, groupnames, bw_title, bw_xlabel, bw_ylabel, bw_colormap, gridstatus, bw_legend, barwebtype)'</span>);
+0046 <span class="keyword">elseif</span> nargin == 2
+0047     width = 1;
+0048     groupnames = 1:size(barvalues,1);
+0049     bw_title = [];
+0050     bw_xlabel = [];
+0051     bw_ylabel = [];
+0052     bw_colormap = jet;
+0053     gridstatus = <span class="string">'none'</span>;
+0054     bw_legend = [];
+0055     error_sides = 2;
+0056     legend_type = <span class="string">'plot'</span>;
+0057 <span class="keyword">elseif</span> nargin == 3
+0058     groupnames = 1:size(barvalues,1);
+0059     bw_title = [];
+0060     bw_xlabel = [];
+0061     bw_ylabel = [];
+0062     bw_colormap = jet;
+0063     gridstatus = <span class="string">'none'</span>;
+0064     bw_legend = [];
+0065     error_sides = 2;
+0066     legend_type = <span class="string">'plot'</span>;
+0067 <span class="keyword">elseif</span> nargin == 4
+0068     bw_title = [];
+0069     bw_xlabel = [];
+0070     bw_ylabel = [];
+0071     bw_colormap = jet;
+0072     gridstatus = <span class="string">'none'</span>;
+0073     bw_legend = [];
+0074     error_sides = 2;
+0075     legend_type = <span class="string">'plot'</span>;
+0076 <span class="keyword">elseif</span> nargin == 5
+0077     bw_xlabel = [];
+0078     bw_ylabel = [];
+0079     bw_colormap = jet;
+0080     gridstatus = <span class="string">'none'</span>;
+0081     bw_legend = [];
+0082     error_sides = 2;
+0083     legend_type = <span class="string">'plot'</span>;
+0084 <span class="keyword">elseif</span> nargin == 6
+0085     bw_ylabel = [];
+0086     bw_colormap = jet;
+0087     gridstatus = <span class="string">'none'</span>;
+0088     bw_legend = [];
+0089     error_sides = 2;
+0090     legend_type = <span class="string">'plot'</span>;
+0091 <span class="keyword">elseif</span> nargin == 7
+0092     bw_colormap = jet;
+0093     gridstatus = <span class="string">'none'</span>;
+0094     bw_legend = [];
+0095     error_sides = 2;
+0096     legend_type = <span class="string">'plot'</span>;
+0097 <span class="keyword">elseif</span> nargin == 8
+0098     gridstatus = <span class="string">'none'</span>;
+0099     bw_legend = [];
+0100     error_sides = 2;
+0101     legend_type = <span class="string">'plot'</span>;
+0102 <span class="keyword">elseif</span> nargin == 9
+0103     bw_legend = [];
+0104     error_sides = 2;
+0105     legend_type = <span class="string">'plot'</span>;
+0106 <span class="keyword">elseif</span> nargin == 10
+0107     error_sides = 2;
+0108     legend_type = <span class="string">'plot'</span>;
+0109 <span class="keyword">elseif</span> nargin == 11
+0110     legend_type = <span class="string">'plot'</span>;
+0111 <span class="keyword">end</span>
+0112 
+0113 change_axis = 0;
+0114 ymax = 0;
+0115 
+0116 <span class="keyword">if</span> size(barvalues,1) ~= size(errors,1) || size(barvalues,2) ~= size(errors,2)
+0117     error(<span class="string">'barvalues and errors matrix must be of same dimension'</span>);
+0118 <span class="keyword">else</span>
+0119     <span class="keyword">if</span> size(barvalues,2) == 1
+0120         barvalues = barvalues';
+0121         errors = errors';
+0122     <span class="keyword">end</span>
+0123     <span class="keyword">if</span> size(barvalues,1) == 1
+0124         barvalues = [barvalues; zeros(1,length(barvalues))];
+0125         errors = [errors; zeros(1,size(barvalues,2))];
+0126         change_axis = 1;
+0127     <span class="keyword">end</span>
+0128     numgroups = size(barvalues, 1); <span class="comment">% number of groups</span>
+0129     numbars = size(barvalues, 2); <span class="comment">% number of bars in a group</span>
+0130     <span class="keyword">if</span> isempty(width)
+0131         width = 1;
+0132     <span class="keyword">end</span>
+0133     
+0134     <span class="comment">% Plot bars</span>
+0135     handles.bars = bar(barvalues, width,<span class="string">'edgecolor'</span>,<span class="string">'k'</span>, <span class="string">'linewidth'</span>, 2);
+0136     hold on
+0137     <span class="keyword">if</span> ~isempty(bw_colormap)
+0138         colormap(bw_colormap);
+0139     <span class="keyword">else</span>
+0140         colormap(jet);
+0141     <span class="keyword">end</span>
+0142     <span class="keyword">if</span> ~isempty(bw_legend) &amp;&amp; ~strcmp(legend_type, <span class="string">'axis'</span>)
+0143         handles.legend = legend(bw_legend, <span class="string">'location'</span>, <span class="string">'best'</span>, <span class="string">'fontsize'</span>,12);
+0144         legend boxoff;
+0145     <span class="keyword">else</span>
+0146         handles.legend = [];
+0147     <span class="keyword">end</span>
+0148     
+0149     <span class="comment">% Plot erros</span>
+0150     <span class="keyword">for</span> i = 1:numbars
+0151         x =<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.bars(i),<span class="string">'children'</span>), <span class="string">'xdata'</span>);
+0152         x = mean(x([1 3],:));
+0153         handles.errors(i) = errorbar(x, barvalues(:,i), errors(:,i), <span class="string">'k'</span>, <span class="string">'linestyle'</span>, <span class="string">'none'</span>, <span class="string">'linewidth'</span>, 2);
+0154         ymax = max([ymax; barvalues(:,i)+errors(:,i)]);
+0155     <span class="keyword">end</span>
+0156     
+0157     <span class="keyword">if</span> error_sides == 1
+0158         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'children'</span>, flipud(<a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(gca,<span class="string">'children'</span>)));
+0159     <span class="keyword">end</span>
+0160     
+0161     ylim([0 ymax*1.1]);
+0162     xlim([0.5 numgroups-change_axis+0.5]);
+0163     
+0164     <span class="keyword">if</span> strcmp(legend_type, <span class="string">'axis'</span>)
+0165         <span class="keyword">for</span> i = 1:numbars
+0166             xdata = <a href="../../Otherbox/m2html/@template/get.html" class="code" title="function varargout = get(tpl,action,varargin)">get</a>(handles.errors(i),<span class="string">'xdata'</span>);
+0167             <span class="keyword">for</span> j = 1:length(xdata)
+0168                 text(xdata(j),  -0.03*ymax*1.1, bw_legend(i), <span class="string">'Rotation'</span>, 60, <span class="string">'fontsize'</span>, 12, <span class="string">'HorizontalAlignment'</span>, <span class="string">'right'</span>);
+0169             <span class="keyword">end</span>
+0170         <span class="keyword">end</span>
+0171         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'xaxislocation'</span>,<span class="string">'top'</span>);
+0172     <span class="keyword">end</span>
+0173     
+0174     <span class="keyword">if</span> ~isempty(bw_title)
+0175         title(bw_title, <span class="string">'fontsize'</span>,14);
+0176     <span class="keyword">end</span>
+0177     <span class="keyword">if</span> ~isempty(bw_xlabel)
+0178         xlabel(bw_xlabel, <span class="string">'fontsize'</span>,14);
+0179     <span class="keyword">end</span>
+0180     <span class="keyword">if</span> ~isempty(bw_ylabel)
+0181         ylabel(bw_ylabel, <span class="string">'fontsize'</span>,14);
+0182     <span class="keyword">end</span>
+0183     
+0184     <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca, <span class="string">'xticklabel'</span>, groupnames, <span class="string">'box'</span>, <span class="string">'off'</span>, <span class="string">'ticklength'</span>, [0 0], <span class="string">'fontsize'</span>, 12, <span class="string">'xtick'</span>,1:numgroups, <span class="string">'linewidth'</span>, 2,<span class="string">'xgrid'</span>,<span class="string">'off'</span>,<span class="string">'ygrid'</span>,<span class="string">'off'</span>);
+0185     <span class="keyword">if</span> ~isempty(gridstatus) &amp;&amp; any(gridstatus == <span class="string">'x'</span>)
+0186         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+0187     <span class="keyword">end</span>
+0188     <span class="keyword">if</span> ~isempty(gridstatus) &amp;&amp; any(gridstatus ==  <span class="string">'y'</span>)
+0189         <a href="../../Otherbox/m2html/@template/set.html" class="code" title="function tpl = set(tpl,action,varargin)">set</a>(gca,<span class="string">'ygrid'</span>,<span class="string">'on'</span>);
+0190     <span class="keyword">end</span>
+0191     
+0192     handles.ax = gca;
+0193     
+0194     hold off
+0195 <span class="keyword">end</span></pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>

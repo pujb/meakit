@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Kmeans</title>
+  <meta name="keywords" content="Kmeans">
+  <meta name="description" content="checking the parameters given">
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+    <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Otherbox --><!-- menu.html FUZZCLUST -->
+<h1>Kmeans
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>checking the parameters given</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result=Kmeans(data,param); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre class="comment">checking the parameters given
+if exist('param.c') == 1, c = param.c;else error('Nincs megadva a c, es ez baj...');end;
+if exist('param.vis')~=1, param.vis=0;end;</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)">
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>	method     description</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Calculation/util_evaluate_cluster.html" class="code" title="function [ PC CE SC S XB DI ADI result eval ] = util_evaluate_cluster(data, method, minmax, varargin)">util_evaluate_cluster</a>	UTIL_EVALUATE_CLUSTER Evaluate the performance of differnt clustering</li><li><a href="../../Otherbox/FUZZCLUST/Demos/comparing/Kmeanscall.html" class="code" title="">Kmeanscall</a>	</li><li><a href="../../Otherbox/FUZZCLUST/Demos/projection/visual_call.html" class="code" title="">visual_call</a>	Calling function of the visualization functions</li></ul>
+</div>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment" style="background-image:url(../../brain.png)"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result=Kmeans(data,param);</a>
+0002 
+0003 <span class="comment">%checking the parameters given</span>
+0004 <span class="comment">%if exist('param.c') == 1, c = param.c;else error('Nincs megadva a c, es ez baj...');end;</span>
+0005 <span class="comment">%if exist('param.vis')~=1, param.vis=0;end;</span>
+0006 
+0007 
+0008 <span class="comment">%data normalization</span>
+0009 data=<a href="clust_normalize.html" class="code" title="function data=clust_normalize(data,method);">clust_normalize</a>(data,<span class="string">'range'</span>);
+0010 
+0011 X=data.X;
+0012 [N,n]=size(X);
+0013 
+0014 <span class="comment">%initialization</span>
+0015 <span class="keyword">if</span> max(size(param.c))==1,
+0016     c = param.c;
+0017     index=randperm(N);
+0018     v=X(index(1:c),:);v = v + 1e-10;
+0019     v0=X(index(1:c)+1,:);v0 = v0 - 1e-10;
+0020 <span class="keyword">else</span>
+0021     v = param.c;    
+0022     c = size(param.c,1);
+0023     index=randperm(N);
+0024     v0=X(index(1:c)+1,:);v0 = v0 + 1e-10;
+0025 <span class="keyword">end</span>   
+0026 iter = 0;
+0027 <span class="keyword">while</span> prod(max(abs(v - v0))),
+0028     iter = iter +1;  
+0029     v0 = v;
+0030         <span class="comment">%Calculating the distances</span>
+0031          <span class="keyword">for</span> i = 1:c
+0032             dist(:,i) = sum([(X - repmat(v(i,:),N,1)).^2],2);
+0033         <span class="keyword">end</span>
+0034         <span class="comment">%Assigning clusters</span>
+0035            [m,label] = min(dist');
+0036            distout=sqrt(dist);
+0037       
+0038       <span class="comment">%Calculating cluster centers</span>
+0039       <span class="keyword">for</span> i = 1:c
+0040          index=find(label == i);
+0041          <span class="keyword">if</span> ~isempty(index)  
+0042              v(i,:) = mean(X(index,:));
+0043          <span class="keyword">else</span> 
+0044              ind=round(rand*N-1);
+0045              v(i,:)=X(ind,:);
+0046          <span class="keyword">end</span>   
+0047          f0(index,i)=1;
+0048      <span class="keyword">end</span>
+0049    J(iter) = sum(sum(f0.*dist));           <span class="comment">%calculate objective function</span>
+0050     <span class="keyword">if</span> param.vis
+0051        clf
+0052        hold on
+0053        plot(v(:,1),v(:,2),<span class="string">'ro'</span>)
+0054        colors={<span class="string">'r.'</span> <span class="string">'gx'</span> <span class="string">'b+'</span> <span class="string">'ys'</span> <span class="string">'md'</span> <span class="string">'cv'</span> <span class="string">'k.'</span> <span class="string">'r*'</span> <span class="string">'g*'</span> <span class="string">'b*'</span> <span class="string">'y*'</span> <span class="string">'m*'</span> <span class="string">'c*'</span> <span class="string">'k*'</span> };
+0055        <span class="keyword">for</span> i=1:c
+0056            index = find(label == i);
+0057            <span class="keyword">if</span> ~isempty(index)  
+0058             dat=X(index,:);
+0059             plot(dat(:,1),dat(:,2),colors{i})
+0060            <span class="keyword">end</span>
+0061        <span class="keyword">end</span>    
+0062        hold off
+0063        pause(0.1)
+0064    <span class="keyword">end</span>  
+0065     
+0066 <span class="keyword">end</span>
+0067 
+0068 
+0069 <span class="comment">%results</span>
+0070    
+0071 result.cluster.v = v;
+0072 result.data.d = distout;
+0073    <span class="comment">%calculate the partition matrix</span>
+0074 f0=zeros(N,c);
+0075 <span class="keyword">for</span> i=1:c
+0076   index=find(label == i);
+0077   f0(index,i)=1;
+0078 <span class="keyword">end</span>       
+0079 result.data.f=f0;
+0080 result.iter = iter;
+0081 result.cost = J;</pre></div>
+<hr><address>Copyright (C) 2008-2010 Pu Jiangbo @ Britton Chance Center for Biomedical Photonics<br/>Generated on Fri 22-Jun-2012 16:47:48</address>
+</body>
+</html>
